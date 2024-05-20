@@ -1,7 +1,7 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * TODO Describe this class and its responsibilities.
+ * TODO Describe this class and its responsibilities.  See see https://github.com/phetsims/quantum-measurement/issues/1.
  *
  * @author John Blanco, PhET Interactive Simulations
  */
@@ -14,7 +14,7 @@ import QuantumMeasurementModel from '../model/QuantumMeasurementModel.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 
 type SelfOptions = {
- //TODO add options that are specific to QuantumMeasurementScreenView here
+ //TODO add options that are specific to QuantumMeasurementScreenView here, see https://github.com/phetsims/quantum-measurement/issues/1
 };
 
 type QuantumMeasurementScreenViewOptions = SelfOptions & ScreenViewOptions;
@@ -25,9 +25,9 @@ export default class QuantumMeasurementScreenView extends ScreenView {
 
     const options = optionize<QuantumMeasurementScreenViewOptions, SelfOptions, ScreenViewOptions>()( {
 
-      //TODO add default values for optional SelfOptions here
+      //TODO add default values for optional SelfOptions here, see https://github.com/phetsims/quantum-measurement/issues/1
 
-      //TODO add default values for optional ScreenViewOptions here
+      //TODO add default values for optional ScreenViewOptions here, see https://github.com/phetsims/quantum-measurement/issues/1
     }, providedOptions );
 
     super( options );
@@ -49,7 +49,7 @@ export default class QuantumMeasurementScreenView extends ScreenView {
    * Resets the view.
    */
   public reset(): void {
-    //TODO
+    //TODO, see https://github.com/phetsims/quantum-measurement/issues/1
   }
 
   /**
@@ -57,7 +57,7 @@ export default class QuantumMeasurementScreenView extends ScreenView {
    * @param dt - time step, in seconds
    */
   public override step( dt: number ): void {
-    //TODO
+    // TODO, see https://github.com/phetsims/quantum-measurement/issues/1
   }
 }
 

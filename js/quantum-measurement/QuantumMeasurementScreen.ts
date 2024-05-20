@@ -1,7 +1,7 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * TODO Describe this class and its responsibilities.
+ * TODO Describe this class and its responsibilities, see https://github.com/phetsims/quantum-measurement/issues/1.
  *
  * @author John Blanco, PhET Interactive Simulations
  */
@@ -15,7 +15,7 @@ import QuantumMeasurementScreenView from './view/QuantumMeasurementScreenView.js
 import QuantumMeasurementStrings from '../QuantumMeasurementStrings.js';
 
 type SelfOptions = {
-  //TODO add options that are specific to QuantumMeasurementScreen here
+  //TODO add options that are specific to QuantumMeasurementScreen here, see https://github.com/phetsims/quantum-measurement/issues/1.
 };
 
 type QuantumMeasurementScreenOptions = SelfOptions & ScreenOptions;
@@ -27,9 +27,9 @@ export default class QuantumMeasurementScreen extends Screen<QuantumMeasurementM
     const options = optionize<QuantumMeasurementScreenOptions, SelfOptions, ScreenOptions>()( {
       name: QuantumMeasurementStrings.screen.nameStringProperty,
 
-      //TODO add default values for optional SelfOptions here
+      //TODO add default values for optional SelfOptions here, see https://github.com/phetsims/quantum-measurement/issues/1
 
-      //TODO add default values for optional ScreenOptions here
+      //TODO add default values for optional ScreenOptions here, see https://github.com/phetsims/quantum-measurement/issues/1
       backgroundColorProperty: QuantumMeasurementColors.screenBackgroundColorProperty
     }, providedOptions );
 

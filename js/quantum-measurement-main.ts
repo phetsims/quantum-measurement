@@ -25,7 +25,6 @@ simLauncher.launch( () => {
 
   const options: SimOptions = {
 
-    //TODO fill in credits, all of these fields are optional, see joist.CreditsNode
     credits: {
       leadDesign: '',
       softwareDevelopment: '',

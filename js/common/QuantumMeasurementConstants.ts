@@ -12,8 +12,6 @@ const QuantumMeasurementConstants = {
 
   SCREEN_VIEW_X_MARGIN: 15,
   SCREEN_VIEW_Y_MARGIN: 15
-
-  //TODO
 };
 
 quantumMeasurement.register( 'QuantumMeasurementConstants', QuantumMeasurementConstants );

@@ -11,7 +11,6 @@ import logGlobal from '../../../phet-core/js/logGlobal.js';
 import quantumMeasurement from '../quantumMeasurement.js';
 
 const SCHEMA_MAP = {
-  //TODO add schemas for query parameters
 };
 
 const QuantumMeasurementQueryParameters = QueryStringMachine.getAll( SCHEMA_MAP );
