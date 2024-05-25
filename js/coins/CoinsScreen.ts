@@ -10,8 +10,8 @@ import Screen, { ScreenOptions } from '../../../joist/js/Screen.js';
 import optionize from '../../../phet-core/js/optionize.js';
 import QuantumMeasurementColors from '../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../quantumMeasurement.js';
-import QuantumMeasurementModel from './model/QuantumMeasurementModel.js';
-import QuantumMeasurementScreenView from './view/QuantumMeasurementScreenView.js';
+import CoinsModel from './model/CoinsModel.js';
+import CoinsScreenView from './view/CoinsScreenView.js';
 import QuantumMeasurementStrings from '../QuantumMeasurementStrings.js';
 
 type SelfOptions = {
@@ -20,12 +20,12 @@ type SelfOptions = {
 
 type QuantumMeasurementScreenOptions = SelfOptions & ScreenOptions;
 
-export default class QuantumMeasurementScreen extends Screen<QuantumMeasurementModel, QuantumMeasurementScreenView> {
+export default class CoinsScreen extends Screen<CoinsModel, CoinsScreenView> {
 
   public constructor( providedOptions: QuantumMeasurementScreenOptions ) {
 
     const options = optionize<QuantumMeasurementScreenOptions, SelfOptions, ScreenOptions>()( {
-      name: QuantumMeasurementStrings.screen.nameStringProperty,
+      name: QuantumMeasurementStrings.screen.coinsStringProperty,
 
       //TODO add default values for optional SelfOptions here, see https://github.com/phetsims/quantum-measurement/issues/1
 
@@ -34,11 +34,11 @@ export default class QuantumMeasurementScreen extends Screen<QuantumMeasurementM
     }, providedOptions );
 
     super(
-      () => new QuantumMeasurementModel( { tandem: options.tandem.createTandem( 'model' ) } ),
-      model => new QuantumMeasurementScreenView( model, { tandem: options.tandem.createTandem( 'view' ) } ),
+      () => new CoinsModel( { tandem: options.tandem.createTandem( 'model' ) } ),
+      model => new CoinsScreenView( model, { tandem: options.tandem.createTandem( 'view' ) } ),
       options
     );
   }
 }
 
-quantumMeasurement.register( 'QuantumMeasurementScreen', QuantumMeasurementScreen );
+quantumMeasurement.register( 'CoinsScreen', CoinsScreen );

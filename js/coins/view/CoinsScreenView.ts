@@ -10,7 +10,7 @@ import ScreenView, { ScreenViewOptions } from '../../../../joist/js/ScreenView.j
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import QuantumMeasurementModel from '../model/QuantumMeasurementModel.js';
+import CoinsModel from 'model/CoinsModel.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 
 type SelfOptions = {
@@ -19,9 +19,9 @@ type SelfOptions = {
 
 type QuantumMeasurementScreenViewOptions = SelfOptions & ScreenViewOptions;
 
-export default class QuantumMeasurementScreenView extends ScreenView {
+export default class CoinsScreenView extends ScreenView {
 
-  public constructor( model: QuantumMeasurementModel, providedOptions: QuantumMeasurementScreenViewOptions ) {
+  public constructor( model: CoinsModel, providedOptions: QuantumMeasurementScreenViewOptions ) {
 
     const options = optionize<QuantumMeasurementScreenViewOptions, SelfOptions, ScreenViewOptions>()( {
 
@@ -61,4 +61,4 @@ export default class QuantumMeasurementScreenView extends ScreenView {
   }
 }
 
-quantumMeasurement.register( 'QuantumMeasurementScreenView', QuantumMeasurementScreenView );
+quantumMeasurement.register( 'CoinsScreenView', CoinsScreenView );

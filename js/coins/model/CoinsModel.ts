@@ -6,10 +6,10 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import quantumMeasurement from '../../quantumMeasurement.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import TModel from '../../../../joist/js/TModel.js';
+import quantumMeasurement from '../../quantumMeasurement.js';
 
 type SelfOptions = {
   // TODO add options that are specific to QuantumMeasurementModel here, see see https://github.com/phetsims/quantum-measurement/issues/1.
@@ -17,7 +17,7 @@ type SelfOptions = {
 
 type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
-export default class QuantumMeasurementModel implements TModel {
+export default class CoinsModel implements TModel {
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
     //TODO, see https://github.com/phetsims/quantum-measurement/issues/1
@@ -39,4 +39,4 @@ export default class QuantumMeasurementModel implements TModel {
   }
 }
 
-quantumMeasurement.register( 'QuantumMeasurementModel', QuantumMeasurementModel );
+quantumMeasurement.register( 'CoinsModel', CoinsModel );

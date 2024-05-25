@@ -13,6 +13,10 @@
     "requirejsNamespace": "QUANTUM_MEASUREMENT",
     "simulation": true,
     "runnable": true,
+    "screenNameKeys": [
+      "QUANTUM_MEASUREMENT/screen.coins",
+      "QUANTUM_MEASUREMENT/screen.photons"
+    ],
     "supportedBrands": [
       "phet",
       "adapted-from-phet"
