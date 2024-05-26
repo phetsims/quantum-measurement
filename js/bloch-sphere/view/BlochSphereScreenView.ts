@@ -12,9 +12,13 @@ import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstant
 import quantumMeasurement from '../../quantumMeasurement.js';
 import BlochSphereModel from 'model/BlochSphereModel.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import { Image } from '../../../../scenery/js/imports.js';
+import blochSphereScreenMockup_png from '../../../images/blochSphereScreenMockup_png.js';
+import MockupOpacitySlider from '../../common/MockupOpacitySlider.js';
+import mockupOpacityProperty from '../../common/mockupOpacityProperty.js';
 
 type SelfOptions = {
- //TODO add options that are specific to QuantumMeasurementScreenView here, see https://github.com/phetsims/quantum-measurement/issues/1
+  //TODO add options that are specific to QuantumMeasurementScreenView here, see https://github.com/phetsims/quantum-measurement/issues/1
 };
 
 type QuantumMeasurementScreenViewOptions = SelfOptions & ScreenViewOptions;
@@ -32,6 +36,13 @@ export default class BlochSphereScreenView extends ScreenView {
 
     super( options );
 
+    // Add a screen mockup.  TODO: Remove this eventually, see https://github.com/phetsims/quantum-measurement/issues/3.
+    console.log( `this.layoutBounds.width = ${this.layoutBounds.width}` );
+    const mockup = new Image( blochSphereScreenMockup_png, {
+      scale: this.layoutBounds.width / blochSphereScreenMockup_png.width
+    } );
+    this.addChild( mockup );
+
     const resetAllButton = new ResetAllButton( {
       listener: () => {
         this.interruptSubtreeInput(); // cancel interactions that may be in progress
@@ -43,6 +54,14 @@ export default class BlochSphereScreenView extends ScreenView {
       tandem: options.tandem.createTandem( 'resetAllButton' )
     } );
     this.addChild( resetAllButton );
+
+    // Add slider that controls mockup opacity.
+    this.addChild( new MockupOpacitySlider( resetAllButton.bounds ) );
+
+    // Update the mockup opacity.
+    mockupOpacityProperty.link( opacity => {
+      mockup.opacity = opacity;
+    } );
   }
 
   /**

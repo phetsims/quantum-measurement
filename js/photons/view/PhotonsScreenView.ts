@@ -13,6 +13,9 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import PhotonsModel from '../model/PhotonsModel.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import MockupOpacitySlider from '../../common/MockupOpacitySlider.js';
+import { Image } from '../../../../scenery/js/imports.js';
+import photonsScreenMockup_png from '../../../images/photonsScreenMockup_png.js';
+import mockupOpacityProperty from '../../common/mockupOpacityProperty.js';
 
 type SelfOptions = {
  //TODO add options that are specific to QuantumMeasurementScreenView here, see https://github.com/phetsims/quantum-measurement/issues/1
@@ -33,6 +36,13 @@ export default class PhotonsScreenView extends ScreenView {
 
     super( options );
 
+    // Add a screen mockup.  TODO: Remove this eventually, see https://github.com/phetsims/quantum-measurement/issues/3.
+    console.log( `this.layoutBounds.width = ${this.layoutBounds.width}` );
+    const mockup = new Image( photonsScreenMockup_png, {
+      scale: this.layoutBounds.width / photonsScreenMockup_png.width
+    } );
+    this.addChild( mockup );
+
     const resetAllButton = new ResetAllButton( {
       listener: () => {
         this.interruptSubtreeInput(); // cancel interactions that may be in progress
@@ -47,6 +57,11 @@ export default class PhotonsScreenView extends ScreenView {
 
     // Add slider that controls mockup opacity.
     this.addChild( new MockupOpacitySlider( resetAllButton.bounds ) );
+
+    // Update the mockup opacity.
+    mockupOpacityProperty.link( opacity => {
+      mockup.opacity = opacity;
+    } );
   }
 
   /**
