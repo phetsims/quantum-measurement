@@ -14,6 +14,8 @@ import CoinsModel from 'model/CoinsModel.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import mockupOpacityProperty from '../../common/mockupOpacityProperty.js';
 import MockupOpacitySlider from '../../common/MockupOpacitySlider.js';
+import coinsScreenMockup_png from '../../../images/coinsScreenMockup_png.js';
+import { Image } from '../../../../scenery/js/imports.js';
 
 type SelfOptions = {
   //TODO add options that are specific to QuantumMeasurementScreenView here, see https://github.com/phetsims/quantum-measurement/issues/1
@@ -34,6 +36,13 @@ export default class CoinsScreenView extends ScreenView {
 
     super( options );
 
+    // Add a screen mockup.  TODO: Remove this eventually, see https://github.com/phetsims/quantum-measurement/issues/3.
+    console.log( `this.layoutBounds.width = ${this.layoutBounds.width}` );
+    const mockup = new Image( coinsScreenMockup_png, {
+      scale: this.layoutBounds.width / coinsScreenMockup_png.width
+    } );
+    this.addChild( mockup );
+
     const resetAllButton = new ResetAllButton( {
       listener: () => {
         this.interruptSubtreeInput(); // cancel interactions that may be in progress
@@ -49,8 +58,10 @@ export default class CoinsScreenView extends ScreenView {
     // Add slider that controls mockup opacity.
     this.addChild( new MockupOpacitySlider( resetAllButton.bounds ) );
 
+    // Update the mockup opacity.
     mockupOpacityProperty.link( opacity => {
-      console.log( `opacity = ${opacity}` );
+      mockup.opacity = opacity;
+      console.log( `mockup opacity = ${opacity}` );
     } );
   }
 

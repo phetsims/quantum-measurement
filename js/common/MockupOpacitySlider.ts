@@ -11,7 +11,7 @@ import quantumMeasurement from '../quantumMeasurement.js';
  * Define a slider that can be added to a screen view and will control the opacity of a Property that is used to display
  * mockups for the screens.
  *
- * TODO: This is done for the early development phase and should eventually be removed, see https://github.com/phetsims/quantum-measurement/issues/1.
+ * TODO: This is done for the early development phase and should eventually be removed, see https://github.com/phetsims/quantum-measurement/issues/3.
  *
  * @author John Blanco, PhET Interactive Simulations
  */
