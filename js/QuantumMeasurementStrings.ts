@@ -15,6 +15,8 @@ type StringsType = {
   'screen': {
     'coinsStringProperty': LocalizedStringProperty;
     'photonsStringProperty': LocalizedStringProperty;
+    'spinStringProperty': LocalizedStringProperty;
+    'blochSphereStringProperty': LocalizedStringProperty;
   }
 };
 
