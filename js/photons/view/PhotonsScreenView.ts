@@ -12,6 +12,7 @@ import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstant
 import quantumMeasurement from '../../quantumMeasurement.js';
 import PhotonsModel from '../model/PhotonsModel.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import MockupOpacitySlider from '../../common/MockupOpacitySlider.js';
 
 type SelfOptions = {
  //TODO add options that are specific to QuantumMeasurementScreenView here, see https://github.com/phetsims/quantum-measurement/issues/1
@@ -43,6 +44,9 @@ export default class PhotonsScreenView extends ScreenView {
       tandem: options.tandem.createTandem( 'resetAllButton' )
     } );
     this.addChild( resetAllButton );
+
+    // Add slider that controls mockup opacity.
+    this.addChild( new MockupOpacitySlider( resetAllButton.bounds ) );
   }
 
   /**

@@ -12,9 +12,11 @@ import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstant
 import quantumMeasurement from '../../quantumMeasurement.js';
 import CoinsModel from 'model/CoinsModel.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import mockupOpacityProperty from '../../common/mockupOpacityProperty.js';
+import MockupOpacitySlider from '../../common/MockupOpacitySlider.js';
 
 type SelfOptions = {
- //TODO add options that are specific to QuantumMeasurementScreenView here, see https://github.com/phetsims/quantum-measurement/issues/1
+  //TODO add options that are specific to QuantumMeasurementScreenView here, see https://github.com/phetsims/quantum-measurement/issues/1
 };
 
 type QuantumMeasurementScreenViewOptions = SelfOptions & ScreenViewOptions;
@@ -43,6 +45,13 @@ export default class CoinsScreenView extends ScreenView {
       tandem: options.tandem.createTandem( 'resetAllButton' )
     } );
     this.addChild( resetAllButton );
+
+    // Add slider that controls mockup opacity.
+    this.addChild( new MockupOpacitySlider( resetAllButton.bounds ) );
+
+    mockupOpacityProperty.link( opacity => {
+      console.log( `opacity = ${opacity}` );
+    } );
   }
 
   /**
