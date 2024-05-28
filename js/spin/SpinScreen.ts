@@ -26,16 +26,12 @@ export default class SpinScreen extends Screen<SpinModel, SpinScreenView> {
 
     const options = optionize<QuantumMeasurementScreenOptions, SelfOptions, ScreenOptions>()( {
       name: QuantumMeasurementStrings.screen.spinStringProperty,
-
-      //TODO add default values for optional SelfOptions here, see https://github.com/phetsims/quantum-measurement/issues/1
-
-      //TODO add default values for optional ScreenOptions here, see https://github.com/phetsims/quantum-measurement/issues/1
       backgroundColorProperty: QuantumMeasurementColors.screenBackgroundColorProperty
     }, providedOptions );
 
     super(
       () => new SpinModel( { tandem: options.tandem.createTandem( 'model' ) } ),
-      model => new SpinScreenView( model, { tandem: options.tandem.createTandem( 'view' ) } ),
+      model => new SpinScreenView( model, options.tandem.createTandem( 'view' ) ),
       options
     );
   }

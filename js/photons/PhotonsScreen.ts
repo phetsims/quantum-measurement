@@ -26,16 +26,12 @@ export default class PhotonsScreen extends Screen<PhotonsModel, PhotonsScreenVie
 
     const options = optionize<QuantumMeasurementScreenOptions, SelfOptions, ScreenOptions>()( {
       name: QuantumMeasurementStrings.screen.photonsStringProperty,
-
-      //TODO add default values for optional SelfOptions here, see https://github.com/phetsims/quantum-measurement/issues/1
-
-      //TODO add default values for optional ScreenOptions here, see https://github.com/phetsims/quantum-measurement/issues/1
       backgroundColorProperty: QuantumMeasurementColors.screenBackgroundColorProperty
     }, providedOptions );
 
     super(
       () => new PhotonsModel( { tandem: options.tandem.createTandem( 'model' ) } ),
-      model => new PhotonsScreenView( model, { tandem: options.tandem.createTandem( 'view' ) } ),
+      model => new PhotonsScreenView( model, options.tandem.createTandem( 'view' ) ),
       options
     );
   }

@@ -35,7 +35,7 @@ export default class BlochSphereScreen extends Screen<BlochSphereModel, BlochSph
 
     super(
       () => new BlochSphereModel( { tandem: options.tandem.createTandem( 'model' ) } ),
-      model => new BlochSphereScreenView( model, { tandem: options.tandem.createTandem( 'view' ) } ),
+      model => new BlochSphereScreenView( model, options.tandem.createTandem( 'view' ) ),
       options
     );
   }
