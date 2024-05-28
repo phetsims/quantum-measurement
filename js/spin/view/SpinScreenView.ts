@@ -1,7 +1,7 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * TODO Describe this class and its responsibilities.  See see https://github.com/phetsims/quantum-measurement/issues/1.
+ * Main screen view class for the "Spin" screen.
  *
  * @author John Blanco, PhET Interactive Simulations
  */
