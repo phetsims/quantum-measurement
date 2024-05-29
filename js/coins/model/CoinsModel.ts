@@ -12,7 +12,8 @@ import TModel from '../../../../joist/js/TModel.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Property from '../../../../axon/js/Property.js';
-import SystemType from '../../common/model/SystemType.js';
+import { SystemType, SystemTypeValues } from '../../common/model/SystemType.js';
+import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 
 type SelfOptions = EmptySelfOptions;
 type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
@@ -24,7 +25,8 @@ export default class CoinsModel implements TModel {
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
     this.experimentModeProperty = new Property<SystemType>( 'physical', {
-      tandem: providedOptions.tandem.createTandem( 'experimentModeProperty' )
+      tandem: providedOptions.tandem.createTandem( 'experimentModeProperty' ),
+      phetioValueType: StringUnionIO( SystemTypeValues )
     } );
   }
 

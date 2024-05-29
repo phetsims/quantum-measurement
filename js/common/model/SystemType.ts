@@ -8,6 +8,5 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-type SystemType = 'physical' | 'quantum';
-
-export default SystemType;
+export const SystemTypeValues = [ 'physical', 'quantum' ] as const;
+export type SystemType = ( typeof SystemTypeValues )[number];
