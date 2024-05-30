@@ -17,7 +17,16 @@ type StringsType = {
     'photonsStringProperty': LocalizedStringProperty;
     'spinStringProperty': LocalizedStringProperty;
     'blochSphereStringProperty': LocalizedStringProperty;
-  }
+  };
+  'coinBiasStringProperty': LocalizedStringProperty;
+  'coinToPrepareStringProperty': LocalizedStringProperty;
+  'initialOrientationStringProperty': LocalizedStringProperty;
+  'multipleIdenticalCoinMeasurementsStringProperty': LocalizedStringProperty;
+  'physicalCoinStringProperty': LocalizedStringProperty;
+  'probabilityEquationPatternStringProperty': LocalizedStringProperty;
+  'probabilityOfHeadsFunctionStringProperty': LocalizedStringProperty;
+  'probabilityOfTailsFunctionStringProperty': LocalizedStringProperty;
+  'quantumCoinQuotedStringProperty': LocalizedStringProperty;
 };
 
 const QuantumMeasurementStrings = getStringModule( 'QUANTUM_MEASUREMENT' ) as StringsType;
