@@ -8,6 +8,7 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import Range from '../../../../dot/js/Range.js';
+import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 
 /**
  * TwoStateSystem is a simple model for a system that can be in one of two states, and can be prepared (similar to
@@ -23,7 +24,7 @@ type TwoStateSystemOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'ta
 
 const BIAS_RANGE = new Range( 0, 1 );
 
-export default class TwoStateSystem<T> extends PhetioObject {
+export default class TwoStateSystem<T extends string> extends PhetioObject {
 
   private readonly currentStateProperty: Property<T>;
   private readonly validValues: readonly T[];
@@ -46,6 +47,7 @@ export default class TwoStateSystem<T> extends PhetioObject {
 
     this.currentStateProperty = new Property( initialState, {
       tandem: options.tandem.createTandem( 'currentStateProperty' ),
+      phetioValueType: StringUnionIO( validValues ),
       validValues: validValues
     } );
     this.biasProperty = new NumberProperty( options.initialBias, {

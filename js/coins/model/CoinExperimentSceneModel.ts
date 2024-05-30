@@ -14,9 +14,10 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import Property from '../../../../axon/js/Property.js';
-import { CoinExperimentStates } from './CoinExperimentStates.js';
+import { CoinExperimentStates, CoinExperimentStateValues } from './CoinExperimentStates.js';
 import TwoStateSystem from '../../common/model/TwoStateSystem.js';
 import { PhysicalCoinStates, PhysicalCoinStateValues } from '../../common/model/PhysicalCoinStates.js';
+import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 
 type SelfOptions = {
   initiallyVisible?: boolean;
@@ -53,9 +54,11 @@ export default class CoinExperimentSceneModel extends PhetioObject {
       tandem: options.tandem.createTandem( 'preparingExperimentProperty' )
     } );
     this.singleCoinExperimentStateProperty = new Property<CoinExperimentStates>( 'hiddenAndStill', {
+      phetioValueType: StringUnionIO( CoinExperimentStateValues ),
       tandem: options.tandem.createTandem( 'singleCoinExperimentStateProperty' )
     } );
     this.multiCoinExperimentStateProperty = new Property<CoinExperimentStates>( 'hiddenAndStill', {
+      phetioValueType: StringUnionIO( CoinExperimentStateValues ),
       tandem: options.tandem.createTandem( 'multiCoinExperimentStateProperty' )
     } );
     this.singleCoin = new TwoStateSystem<PhysicalCoinStates>(
