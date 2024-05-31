@@ -18,15 +18,27 @@ type StringsType = {
     'spinStringProperty': LocalizedStringProperty;
     'blochSphereStringProperty': LocalizedStringProperty;
   };
+  'coinStringProperty': LocalizedStringProperty;
   'coinBiasStringProperty': LocalizedStringProperty;
-  'coinToPrepareStringProperty': LocalizedStringProperty;
+  'flipStringProperty': LocalizedStringProperty;
+  'flipAndRevealStringProperty': LocalizedStringProperty;
+  'HStringProperty': LocalizedStringProperty;
   'initialOrientationStringProperty': LocalizedStringProperty;
+  'initialStateStringProperty': LocalizedStringProperty;
+  'itemToPreparePatternStringProperty': LocalizedStringProperty;
   'multipleIdenticalCoinMeasurementsStringProperty': LocalizedStringProperty;
+  'newCoinStringProperty': LocalizedStringProperty;
   'physicalCoinStringProperty': LocalizedStringProperty;
   'probabilityEquationPatternStringProperty': LocalizedStringProperty;
   'probabilityOfHeadsFunctionStringProperty': LocalizedStringProperty;
   'probabilityOfTailsFunctionStringProperty': LocalizedStringProperty;
   'quantumCoinQuotedStringProperty': LocalizedStringProperty;
+  'ReprepareStringProperty': LocalizedStringProperty;
+  'ReprepareAndRevealStringProperty': LocalizedStringProperty;
+  'revealStringProperty': LocalizedStringProperty;
+  'singleCoinMeasurementsStringProperty': LocalizedStringProperty;
+  'stateToPrepareStringProperty': LocalizedStringProperty;
+  'TStringProperty': LocalizedStringProperty;
 };
 
 const QuantumMeasurementStrings = getStringModule( 'QUANTUM_MEASUREMENT' ) as StringsType;
