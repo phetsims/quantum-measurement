@@ -14,7 +14,7 @@ import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Property from '../../../../axon/js/Property.js';
 import { SystemType, SystemTypeValues } from '../../common/model/SystemType.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
-import CoinExperimentSceneModel from './CoinExperimentSceneModel.js';
+import CoinsExperimentSceneModel from './CoinsExperimentSceneModel.js';
 
 type SelfOptions = EmptySelfOptions;
 type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
@@ -22,23 +22,29 @@ type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOpt
 export default class CoinsModel implements TModel {
 
   // the type of experiment being prepared and measured, either physical or quantum
-  public readonly experimentModeProperty: Property<SystemType>;
+  public readonly experimentTypeProperty: Property<SystemType>;
 
-  public readonly physicalCoinExperimentSceneModel: CoinExperimentSceneModel;
-  public readonly quantumCoinExperimentSceneModel: CoinExperimentSceneModel;
+  public readonly physicalCoinExperimentSceneModel: CoinsExperimentSceneModel;
+  public readonly quantumCoinExperimentSceneModel: CoinsExperimentSceneModel;
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
-    this.experimentModeProperty = new Property<SystemType>( 'physical', {
-      tandem: providedOptions.tandem.createTandem( 'experimentModeProperty' ),
+    this.physicalCoinExperimentSceneModel = new CoinsExperimentSceneModel( {
+      tandem: providedOptions.tandem.createTandem( 'physicalCoinExperimentSceneModel' )
+    } );
+    this.quantumCoinExperimentSceneModel = new CoinsExperimentSceneModel( {
+      tandem: providedOptions.tandem.createTandem( 'quantumCoinExperimentSceneModel' )
+    } );
+
+    this.experimentTypeProperty = new Property<SystemType>( 'physical', {
+      tandem: providedOptions.tandem.createTandem( 'experimentTypeProperty' ),
       phetioValueType: StringUnionIO( SystemTypeValues )
     } );
 
-    this.physicalCoinExperimentSceneModel = new CoinExperimentSceneModel( {
-      tandem: providedOptions.tandem.createTandem( 'physicalCoinExperimentSceneModel' )
-    } );
-    this.quantumCoinExperimentSceneModel = new CoinExperimentSceneModel( {
-      tandem: providedOptions.tandem.createTandem( 'quantumCoinExperimentSceneModel' )
+    // Update the active scene model based on the experiment type.
+    this.experimentTypeProperty.link( experimentType => {
+      this.physicalCoinExperimentSceneModel.activeProperty.value = experimentType === 'physical';
+      this.quantumCoinExperimentSceneModel.activeProperty.value = experimentType === 'quantum';
     } );
   }
 
@@ -46,7 +52,7 @@ export default class CoinsModel implements TModel {
    * Resets the model.
    */
   public reset(): void {
-    this.experimentModeProperty.reset();
+    this.experimentTypeProperty.reset();
   }
 }
 

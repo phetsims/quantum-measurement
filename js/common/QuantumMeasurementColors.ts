@@ -22,6 +22,12 @@ const QuantumMeasurementColors = {
   // Background color for screens in this sim
   screenBackgroundColorProperty: new ProfileColorProperty( quantumMeasurement, 'background', {
     default: 'white'
+  } ),
+  selectorButtonSelectedColorProperty: new ProfileColorProperty( quantumMeasurement, 'selectorButtonSelected', {
+    default: 'cyan'
+  } ),
+  selectorButtonDeselectedColorProperty: new ProfileColorProperty( quantumMeasurement, 'selectorButtonDeselected', {
+    default: '#222222'
   } )
 };
 

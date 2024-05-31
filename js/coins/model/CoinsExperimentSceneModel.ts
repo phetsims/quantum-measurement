@@ -20,11 +20,11 @@ import { PhysicalCoinStates, PhysicalCoinStateValues } from '../../common/model/
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 
 type SelfOptions = {
-  initiallyVisible?: boolean;
+  initiallyActive?: boolean;
 };
 type CoinExperimentSceneModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
-export default class CoinExperimentSceneModel extends PhetioObject {
+export default class CoinsExperimentSceneModel extends PhetioObject {
 
   // whether this scene is active, which is mostly about whether it is shown in the view
   public readonly activeProperty: BooleanProperty;
@@ -42,12 +42,12 @@ export default class CoinExperimentSceneModel extends PhetioObject {
   public constructor( providedOptions: CoinExperimentSceneModelOptions ) {
 
     const options = optionize<CoinExperimentSceneModelOptions, SelfOptions, PhetioObjectOptions>()( {
-      initiallyVisible: false
+      initiallyActive: false
     }, providedOptions );
 
     super( options );
 
-    this.activeProperty = new BooleanProperty( options.initiallyVisible, {
+    this.activeProperty = new BooleanProperty( options.initiallyActive, {
       tandem: options.tandem.createTandem( 'activeProperty' )
     } );
     this.preparingExperimentProperty = new BooleanProperty( true, {
@@ -76,4 +76,4 @@ export default class CoinExperimentSceneModel extends PhetioObject {
   }
 }
 
-quantumMeasurement.register( 'CoinExperimentSceneModel', CoinExperimentSceneModel );
+quantumMeasurement.register( 'CoinsExperimentSceneModel', CoinsExperimentSceneModel );
