@@ -7,9 +7,10 @@
  */
 
 import quantumMeasurement from '../quantumMeasurement.js';
+import ScreenView from '../../../joist/js/ScreenView.js';
 
 const QuantumMeasurementConstants = {
-
+  LAYOUT_BOUNDS: ScreenView.DEFAULT_LAYOUT_BOUNDS,
   SCREEN_VIEW_X_MARGIN: 15,
   SCREEN_VIEW_Y_MARGIN: 15
 };

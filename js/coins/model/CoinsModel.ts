@@ -52,6 +52,8 @@ export default class CoinsModel implements TModel {
    * Resets the model.
    */
   public reset(): void {
+    this.physicalCoinExperimentSceneModel.reset();
+    this.quantumCoinExperimentSceneModel.reset();
     this.experimentTypeProperty.reset();
   }
 }

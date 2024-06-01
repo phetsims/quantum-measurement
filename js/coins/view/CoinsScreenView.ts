@@ -23,7 +23,7 @@ import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import LocalizedStringProperty from '../../../../chipper/js/LocalizedStringProperty.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 
-const SCENE_POSITION = new Vector2( 0, 120 ); // empirically determined to look decent
+const SCENE_POSITION = new Vector2( 0, 90 ); // empirically determined to look decent
 const SYSTEM_TYPE_TO_STRING_MAP = new Map<SystemType, LocalizedStringProperty>(
   [
     [ 'physical', QuantumMeasurementStrings.physicalCoinStringProperty ],

@@ -69,7 +69,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
   }
 
   public reset(): void {
-    this.activeProperty.reset();
+    this.preparingExperimentProperty.reset();
     this.singleCoinExperimentStateProperty.reset();
     this.multiCoinExperimentStateProperty.reset();
     this.singleCoin.reset();
