@@ -53,8 +53,8 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
         return new Text(
           SYSTEM_TYPE_TO_STRING_MAP.get( systemType )!,
           {
-            font: new PhetFont( { size: 48, weight: 'bold' } ),
-            maxWidth: 200
+            font: new PhetFont( { size: 28, weight: 'bold' } ),
+            maxWidth: 300
           }
         );
       },
