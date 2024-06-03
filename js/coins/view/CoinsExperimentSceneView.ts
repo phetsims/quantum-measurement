@@ -16,6 +16,11 @@ import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstant
 import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushButton.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import Multilink from '../../../../axon/js/Multilink.js';
+import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
+import ButtonNode from '../../../../sun/js/buttons/ButtonNode.js';
+import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 
 type SelfOptions = EmptySelfOptions;
 export type CoinsExperimentSceneViewOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
@@ -27,10 +32,13 @@ const DIVIDER_HEIGHT = 500; // empirically determined
 
 export default class CoinsExperimentSceneView extends Node {
 
-  // These scenes have two areas, one for preparing the experiment and one for running it a measuring the results.
-  // These are the root nodes for each of these areas.
+  // The coin experiment scene view has two areas, one for preparing the experiment and one for running it and measuring
+  // the results. These are the root nodes for each of these areas.
   protected readonly preparationArea = new VBox();
   protected readonly measurementArea = new VBox();
+
+  // This button is used by the user to start a new experiment by preparing a new coin.
+  protected readonly newCoinButton: ButtonNode;
 
   public constructor( sceneModel: CoinsExperimentSceneModel, providedOptions?: CoinsExperimentSceneViewOptions ) {
 
@@ -67,6 +75,25 @@ export default class CoinsExperimentSceneView extends Node {
       centerY: 245 // empirically determined
     } );
     this.addChild( startMeasurementButton );
+
+    // Create and add the button for starting a new experiment by preparing a new coin.
+    this.newCoinButton = new TextPushButton( QuantumMeasurementStrings.newCoinStringProperty, {
+      visibleProperty: DerivedProperty.not( sceneModel.preparingExperimentProperty ),
+      baseColor: Color.CYAN,
+      font: new PhetFont( 14 ),
+      listener: () => {
+        sceneModel.preparingExperimentProperty.value = true;
+      }
+    } );
+    this.addChild( this.newCoinButton );
+
+    // Position the "New Coin" button below the preparation area.
+    this.preparationArea.boundsProperty.link( prepAreaBounds => {
+      if ( prepAreaBounds.isFinite() && !prepAreaBounds.isEmpty() ) {
+        this.newCoinButton.centerX = prepAreaBounds.centerX;
+        this.newCoinButton.top = prepAreaBounds.bottom + 10;
+      }
+    } );
 
     // Position the dividing line and the two areas based on whether the user is preparing the experiment or running it.
     sceneModel.preparingExperimentProperty.link( preparingExperiment => {
