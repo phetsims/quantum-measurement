@@ -5,21 +5,33 @@
  * is generally wider than text.  It looks something like this:
  *
  *          Coin to Prepare
- *       ------------------------
+ *      -------------------------
  *
  * @author John Blanco, PhET Interactive Simulations
  */
 
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { Color, Line, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Color, Line, Text, TPaint, VBox } from '../../../../scenery/js/imports.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import optionize from '../../../../phet-core/js/optionize.js';
+
+type SceneSectionHeaderOptions = {
+  textColor?: TPaint;
+};
 
 export default class SceneSectionHeader extends VBox {
 
-  public constructor( textProperty: TReadOnlyProperty<string>, lineWidthProperty: TReadOnlyProperty<number> ) {
+  public constructor( textProperty: TReadOnlyProperty<string>,
+                      lineWidthProperty: TReadOnlyProperty<number>,
+                      providedOptions?: SceneSectionHeaderOptions ) {
+
+    const options = optionize<SceneSectionHeaderOptions>()( {
+      textColor: Color.BLACK
+    }, providedOptions );
 
     const heading = new Text( textProperty, {
+      fill: options.textColor,
       font: new PhetFont( 22 )
     } );
     const line = new Line( 0, 0, lineWidthProperty.value, 0, {

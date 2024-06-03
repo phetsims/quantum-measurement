@@ -31,7 +31,7 @@ export default class PhysicalCoinsExperimentSceneView extends CoinsExperimentSce
 
     super( sceneModel, options );
 
-    // Set up the header for the preparation area.  It changes based on the mode and the strings.
+    // Set up the header for the preparation area.
     const prepAreaHeadingTextProperty: TReadOnlyProperty<string> = new DerivedProperty(
       [
         QuantumMeasurementStrings.coinStringProperty,
@@ -61,7 +61,6 @@ export default class PhysicalCoinsExperimentSceneView extends CoinsExperimentSce
       QuantumMeasurementStrings.singleCoinMeasurementsStringProperty,
       measurementAreaHeaderLineWidthProperty
     ) );
-
   }
 }
 
