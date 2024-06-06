@@ -25,7 +25,7 @@ type StringsType = {
   'initialOrientationStringProperty': LocalizedStringProperty;
   'initialStateStringProperty': LocalizedStringProperty;
   'itemToPreparePatternStringProperty': LocalizedStringProperty;
-  'multipleIdenticalCoinMeasurementsStringProperty': LocalizedStringProperty;
+  'multipleCoinMeasurementsStringProperty': LocalizedStringProperty;
   'newCoinStringProperty': LocalizedStringProperty;
   'physicalCoinStringProperty': LocalizedStringProperty;
   'quantumCoinQuotedStringProperty': LocalizedStringProperty;
