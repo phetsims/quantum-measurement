@@ -11,7 +11,7 @@ import CoinsModel from 'model/CoinsModel.js';
 import coinsScreenMockup_png from '../../../images/coinsScreenMockup_png.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import { Image, Text } from '../../../../scenery/js/imports.js';
+import { Color, Image, Text } from '../../../../scenery/js/imports.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
 import PhysicalCoinsExperimentSceneView from './PhysicalCoinsExperimentSceneView.js';
 import QuantumCoinsExperimentSceneView from './QuantumCoinsExperimentSceneView.js';
@@ -54,6 +54,7 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
           SYSTEM_TYPE_TO_STRING_MAP.get( systemType )!,
           {
             font: new PhetFont( { size: 28, weight: 'bold' } ),
+            fill: systemType === 'quantum' ? Color.BLUE : Color.BLACK,
             maxWidth: 300
           }
         );
@@ -62,6 +63,7 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
       tandemName: `${systemType.toLowerCase()}RadioButton`,
       options: { minWidth: 80 }
     } ) );
+    const deselectedRadioButtonOpacity = 0.3;
     const experimentTypeRadioButtonGroup = new RectangularRadioButtonGroup<SystemType>(
       model.experimentTypeProperty,
       experimentTypeItems,
@@ -72,7 +74,13 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
         y: 10,
         radioButtonOptions: {
           xMargin: 10,
-          baseColor: QuantumMeasurementColors.selectorButtonSelectedColorProperty
+          baseColor: QuantumMeasurementColors.selectorButtonSelectedColorProperty,
+          buttonAppearanceStrategyOptions: {
+            deselectedButtonOpacity: deselectedRadioButtonOpacity
+          },
+          contentAppearanceStrategyOptions: {
+            deselectedContentOpacity: deselectedRadioButtonOpacity
+          }
         },
         tandem: tandem.createTandem( 'experimentTypeRadioButtonGroup' )
       }
