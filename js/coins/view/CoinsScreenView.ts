@@ -35,6 +35,10 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
 
   private readonly model: CoinsModel;
 
+  // the two scene views for the experiments
+  private readonly physicalCoinsExperimentSceneView: QuantumCoinsExperimentSceneView;
+  private readonly quantumCoinsExperimentSceneView: QuantumCoinsExperimentSceneView;
+
   public constructor( model: CoinsModel, tandem: Tandem ) {
 
     super( {
@@ -88,19 +92,22 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
     this.addChild( experimentTypeRadioButtonGroup );
 
     // Add the views for the two scenes that can be shown on this screen.
-    this.addChild( new PhysicalCoinsExperimentSceneView( model.physicalCoinExperimentSceneModel, {
+    this.physicalCoinsExperimentSceneView = new PhysicalCoinsExperimentSceneView( model.physicalCoinExperimentSceneModel, {
       translation: SCENE_POSITION,
       tandem: tandem.createTandem( 'physicalCoinsExperimentSceneView' )
-    } ) );
-    this.addChild( new QuantumCoinsExperimentSceneView( model.quantumCoinExperimentSceneModel, {
+    } );
+    this.addChild( this.physicalCoinsExperimentSceneView );
+    this.quantumCoinsExperimentSceneView = new QuantumCoinsExperimentSceneView( model.quantumCoinExperimentSceneModel, {
       translation: SCENE_POSITION,
       tandem: tandem.createTandem( 'quantumCoinsExperimentSceneView' )
-    } ) );
-
+    } );
+    this.addChild( this.quantumCoinsExperimentSceneView );
   }
 
   public override reset(): void {
     this.model.reset();
+    this.physicalCoinsExperimentSceneView.reset();
+    this.quantumCoinsExperimentSceneView.reset();
     super.reset();
   }
 }

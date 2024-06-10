@@ -76,6 +76,9 @@ export default class QuantumCoinsExperimentSceneView extends CoinsExperimentScen
       { textColor: Color.BLUE }
     );
     this.measurementArea.addChild( singleCoinMeasurementsHeader );
+
+    // Update the activity area positions now that the have some content.
+    this.updateActivityAreaPositions();
   }
 }
 

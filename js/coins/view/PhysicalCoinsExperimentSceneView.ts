@@ -61,6 +61,9 @@ export default class PhysicalCoinsExperimentSceneView extends CoinsExperimentSce
       QuantumMeasurementStrings.singleCoinMeasurementsStringProperty,
       measurementAreaHeaderLineWidthProperty
     ) );
+
+    // Update the activity area positions now that the have some content.
+    this.updateActivityAreaPositions();
   }
 }
 

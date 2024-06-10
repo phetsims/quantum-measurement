@@ -15,30 +15,42 @@ import ScreenView from '../../../../joist/js/ScreenView.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushButton.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
-import Multilink from '../../../../axon/js/Multilink.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import ButtonNode from '../../../../sun/js/buttons/ButtonNode.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Range from '../../../../dot/js/Range.js';
+import Animation from '../../../../twixt/js/Animation.js';
+import TProperty from '../../../../axon/js/TProperty.js';
+import Easing from '../../../../twixt/js/Easing.js';
 
 type SelfOptions = EmptySelfOptions;
 export type CoinsExperimentSceneViewOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
 
 const SCENE_WIDTH = QuantumMeasurementConstants.LAYOUT_BOUNDS.width;
-const DIVIDER_X_POSITION_DURING_PREPARATION = ScreenView.DEFAULT_LAYOUT_BOUNDS.width * 0.38;
-const DIVIDER_X_POSITION_DURING_MEASUREMENT = ScreenView.DEFAULT_LAYOUT_BOUNDS.width * 0.2;
+const DIVIDER_X_POSITION_DURING_PREPARATION = Math.floor( ScreenView.DEFAULT_LAYOUT_BOUNDS.width * 0.38 );
+const DIVIDER_X_POSITION_DURING_MEASUREMENT = Math.ceil( ScreenView.DEFAULT_LAYOUT_BOUNDS.width * 0.2 );
 const DIVIDER_HEIGHT = 500; // empirically determined
 
 export default class CoinsExperimentSceneView extends Node {
 
   // The coin experiment scene view has two areas, one for preparing the experiment and one for running it and measuring
-  // the results. These are the root nodes for each of these areas.
+  // the results. These are the root nodes for each of these areas.  They are mostly populated by subclasses.
   protected readonly preparationArea = new VBox();
   protected readonly measurementArea = new VBox();
 
   // This button is used by the user to start a new experiment by preparing a new coin.
   protected readonly newCoinButton: ButtonNode;
+
+  // The X (horizontal) position in screen coordinates where the demarcation between the preparation area and the
+  // measurement area should be.  This moves back and forth when moving between preparation and measurement modes.
+  protected readonly dividerXPositionProperty: TProperty<number>;
+
+  // The animation for the movement of the divider when switching between 'preparation' and 'measurement' modes.  This
+  // will be null when no animation is in progress.
+  private dividerMovementAnimation: Animation | null = null;
 
   public constructor( sceneModel: CoinsExperimentSceneModel, providedOptions?: CoinsExperimentSceneViewOptions ) {
 
@@ -50,6 +62,11 @@ export default class CoinsExperimentSceneView extends Node {
     );
 
     super( options );
+
+    this.dividerXPositionProperty = new NumberProperty( DIVIDER_X_POSITION_DURING_PREPARATION, {
+      tandem: options.tandem.createTandem( 'dividerXPositionProperty' ),
+      range: new Range( DIVIDER_X_POSITION_DURING_MEASUREMENT, DIVIDER_X_POSITION_DURING_PREPARATION )
+    } );
 
     // Add the two areas of activity to the scene view.
     this.addChild( this.preparationArea );
@@ -76,6 +93,42 @@ export default class CoinsExperimentSceneView extends Node {
     } );
     this.addChild( startMeasurementButton );
 
+    // Position the dividing line and the two areas of activity.
+    this.dividerXPositionProperty.link( dividerPositionX => {
+      dividingLine.centerX = dividerPositionX;
+      startMeasurementButton.centerX = dividerPositionX;
+      this.updateActivityAreaPositions();
+    } );
+
+    // Monitor the state of the experiment and update the view when switching between 'preparation' and 'measurement'.
+    sceneModel.preparingExperimentProperty.link( preparingExperiment => {
+
+      // If there was already an animation in progress, stop it.
+      if ( this.dividerMovementAnimation ) {
+        this.dividerMovementAnimation.stop();
+      }
+
+      // Start an animation to move the divider and the center positions of the activity areas.
+      this.dividerMovementAnimation = new Animation( {
+        property: this.dividerXPositionProperty,
+        to: preparingExperiment ? DIVIDER_X_POSITION_DURING_PREPARATION : DIVIDER_X_POSITION_DURING_MEASUREMENT,
+        duration: 0.5,
+        easing: Easing.CUBIC_OUT
+      } );
+
+      // Add a handler for when the animation is ended.  This is here for situations such as a reset occurring during
+      // the animation.
+      this.dividerMovementAnimation.endedEmitter.addListener( () => {
+        this.dividerXPositionProperty.value = preparingExperiment ?
+                                              DIVIDER_X_POSITION_DURING_PREPARATION :
+                                              DIVIDER_X_POSITION_DURING_MEASUREMENT;
+        this.dividerMovementAnimation = null;
+      } );
+
+      // Kick it off.
+      this.dividerMovementAnimation.start();
+    } );
+
     // Create and add the button for starting a new experiment by preparing a new coin.
     this.newCoinButton = new TextPushButton( QuantumMeasurementStrings.newCoinStringProperty, {
       visibleProperty: DerivedProperty.not( sceneModel.preparingExperimentProperty ),
@@ -94,37 +147,18 @@ export default class CoinsExperimentSceneView extends Node {
         this.newCoinButton.top = prepAreaBounds.bottom + 10;
       }
     } );
+  }
 
-    // Position the dividing line and the two areas based on whether the user is preparing the experiment or running it.
-    sceneModel.preparingExperimentProperty.link( preparingExperiment => {
-      const dividerXPosition = preparingExperiment ?
-                               DIVIDER_X_POSITION_DURING_PREPARATION :
-                               DIVIDER_X_POSITION_DURING_MEASUREMENT;
-      dividingLine.centerX = dividerXPosition;
-      startMeasurementButton.centerX = dividerXPosition;
-    } );
+  protected updateActivityAreaPositions(): void {
+    const dividerPositionX = this.dividerXPositionProperty.value;
+    this.preparationArea.centerX = dividerPositionX / 2;
+    this.measurementArea.centerX = dividerPositionX + ( SCENE_WIDTH - dividerPositionX ) / 2;
+  }
 
-    Multilink.multilink(
-      [
-        this.preparationArea.boundsProperty,
-        dividingLine.boundsProperty
-      ],
-      () => {
-        startMeasurementButton.centerX = dividingLine.centerX;
-        this.preparationArea.centerX = dividingLine.centerX / 2;
-      }
-    );
-
-    Multilink.multilink(
-      [
-        this.measurementArea.boundsProperty,
-        dividingLine.boundsProperty
-      ],
-      () => {
-        startMeasurementButton.centerX = dividingLine.centerX;
-        this.measurementArea.centerX = dividingLine.centerX + ( SCENE_WIDTH - dividingLine.centerX ) / 2;
-      }
-    );
+  public reset(): void {
+    if ( this.dividerMovementAnimation ) {
+      this.dividerMovementAnimation.stop();
+    }
   }
 }
 
