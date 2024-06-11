@@ -33,14 +33,13 @@ const SCENE_WIDTH = QuantumMeasurementConstants.LAYOUT_BOUNDS.width;
 const DIVIDER_X_POSITION_DURING_PREPARATION = Math.floor( ScreenView.DEFAULT_LAYOUT_BOUNDS.width * 0.38 );
 const DIVIDER_X_POSITION_DURING_MEASUREMENT = Math.ceil( ScreenView.DEFAULT_LAYOUT_BOUNDS.width * 0.2 );
 const DIVIDER_HEIGHT = 500; // empirically determined
-const AREA_V_SPACING = 20;
 
 export default class CoinsExperimentSceneView extends Node {
 
   // The coin experiment scene view has two areas, one for preparing the experiment and one for running it and measuring
   // the results. These are the root nodes for each of these areas.  They are mostly populated by subclasses.
-  protected readonly preparationArea = new VBox( { spacing: AREA_V_SPACING } );
-  protected readonly measurementArea = new VBox( { spacing: AREA_V_SPACING } );
+  protected readonly preparationArea = new VBox( { spacing: 20 } );
+  protected readonly measurementArea = new VBox( { spacing: 28 } );
 
   // This button is used by the user to start a new experiment by preparing a new coin.
   protected readonly newCoinButton: ButtonNode;

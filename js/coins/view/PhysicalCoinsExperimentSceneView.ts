@@ -7,7 +7,7 @@
  */
 
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { Color, NodeOptions, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Color, LinearGradient, NodeOptions, Rectangle, Text, VBox } from '../../../../scenery/js/imports.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
 import CoinsExperimentSceneView, { CoinsExperimentSceneViewOptions } from './CoinsExperimentSceneView.js';
@@ -115,7 +115,7 @@ export default class PhysicalCoinsExperimentSceneView extends CoinsExperimentSce
       options.tandem.createTandem( 'coinIndicatorNode' )
     ) );
 
-    // Set up the top header for the measurement area.  It changes based on the mode and the strings.
+    // Add the top header for the measurement area.  It changes based on the mode and the strings.
     const measurementAreaHeaderLineWidthProperty = new DerivedProperty(
       [ sceneModel.preparingExperimentProperty ],
 
@@ -127,7 +127,36 @@ export default class PhysicalCoinsExperimentSceneView extends CoinsExperimentSce
       measurementAreaHeaderLineWidthProperty
     ) );
 
-    // Update the activity area positions now that the have some content.
+    // Add the area where the single coin will be hidden and revealed.
+    const singleCoinTestAreaSideLength = 150;
+    const singleCoinMeasurementArea = new Rectangle( 0, 0, singleCoinTestAreaSideLength, singleCoinTestAreaSideLength, {
+      fill: new LinearGradient( 0, 0, singleCoinTestAreaSideLength, 0 )
+        .addColorStop( 0, new Color( '#eeeeee' ) )
+        .addColorStop( 1, new Color( '#cceae8' ) ),
+      lineWidth: 10,
+      stroke: new Color( '#666666' )
+    } );
+    this.measurementArea.addChild( singleCoinMeasurementArea );
+
+    // Add the lower heading for the measurement area.
+    this.measurementArea.addChild( new SceneSectionHeader(
+      QuantumMeasurementStrings.multipleCoinMeasurementsStringProperty,
+      measurementAreaHeaderLineWidthProperty
+    ) );
+
+    // Add the area where the multiple coins will be hidden and revealed.
+    const multipleCoinTestAreaSideLength = 200;
+    const multipleCoinMeasurementArea = new Rectangle( 0, 0, multipleCoinTestAreaSideLength, multipleCoinTestAreaSideLength, {
+      fill: new LinearGradient( 0, 0, multipleCoinTestAreaSideLength, 0 )
+        .addColorStop( 0, new Color( '#eeeeee' ) )
+        .addColorStop( 1, new Color( '#cceae8' ) ),
+      lineWidth: 2,
+      stroke: new Color( '#666666' )
+    } );
+    this.measurementArea.addChild( multipleCoinMeasurementArea );
+
+
+    // Update the activity area positions now that they have some content.
     this.updateActivityAreaPositions();
   }
 }

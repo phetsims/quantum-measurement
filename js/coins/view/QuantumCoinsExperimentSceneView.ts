@@ -77,7 +77,7 @@ export default class QuantumCoinsExperimentSceneView extends CoinsExperimentScen
     );
     this.measurementArea.addChild( singleCoinMeasurementsHeader );
 
-    // Update the activity area positions now that the have some content.
+    // Update the activity area positions now that they have some content.
     this.updateActivityAreaPositions();
   }
 }
