@@ -155,7 +155,6 @@ export default class PhysicalCoinsExperimentSceneView extends CoinsExperimentSce
     } );
     this.measurementArea.addChild( multipleCoinMeasurementArea );
 
-
     // Update the activity area positions now that they have some content.
     this.updateActivityAreaPositions();
   }
