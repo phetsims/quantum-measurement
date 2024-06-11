@@ -7,7 +7,7 @@
  */
 
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { Color, Line, Node, NodeOptions, VBox } from '../../../../scenery/js/imports.js';
+import { Circle, Color, Line, Node, NodeOptions, VBox } from '../../../../scenery/js/imports.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
@@ -143,11 +143,18 @@ export default class CoinsExperimentSceneView extends Node {
 
         // The user has prepared the experiment and wants to now make measurements.  Animate the motion of the prepared
         // coins to the measurement areas.
-        animatingSingleCoinNode = new PhysicalCoinNode(
+        const coinMask = new Circle( 36, {
+          fill: Color.LIGHT_GRAY,
+          opacity: 0.2
+        } );
+        const coinNode = new PhysicalCoinNode(
           sceneModel.singleCoin.currentStateProperty,
           32, // TODO: Make this a shared constant, see https://github.com/phetsims/quantum-measurement/issues/7.
           Tandem.OPT_OUT
         );
+        animatingSingleCoinNode = new Node( {
+          children: [ coinNode, coinMask ]
+        } );
         this.addChild( animatingSingleCoinNode );
         animatingSingleCoinNode.moveToBack();
 
@@ -169,7 +176,10 @@ export default class CoinsExperimentSceneView extends Node {
             easing: Easing.CUBIC_OUT
           } );
           preparedSingleCoinAnimation.start();
-          preparedSingleCoinAnimation.endedEmitter.addListener( () => { preparedSingleCoinAnimation = null; } );
+          preparedSingleCoinAnimation.endedEmitter.addListener( () => {
+            coinMask.opacity = 1;
+            preparedSingleCoinAnimation = null;
+          } );
         }
       }
       else if ( animatingSingleCoinNode ) {

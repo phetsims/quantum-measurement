@@ -134,7 +134,7 @@ export default class PhysicalCoinsExperimentSceneView extends CoinsExperimentSce
       fill: new LinearGradient( 0, 0, singleCoinTestAreaSideLength, 0 )
         .addColorStop( 0, new Color( '#eeeeee' ) )
         .addColorStop( 1, new Color( '#cceae8' ) ),
-      opacity: 0.9,
+      opacity: 0.8,
       lineWidth: 10,
       stroke: new Color( '#666666' )
     } );
