@@ -45,6 +45,7 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
       mockupImage: new Image( coinsScreenMockup_png, {
         scale: ScreenView.DEFAULT_LAYOUT_BOUNDS.width / coinsScreenMockup_png.width
       } ),
+      initialMockupOpacity: 0,
       tandem: tandem
     } );
 

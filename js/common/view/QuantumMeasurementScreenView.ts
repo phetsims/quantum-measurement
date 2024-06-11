@@ -13,11 +13,14 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import MockupOpacitySlider from '../../common/MockupOpacitySlider.js';
 import { Image } from '../../../../scenery/js/imports.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
 
 type SelfOptions = {
 
   // image source for a mockup that will be added to the background if provided
   mockupImage?: Image | null;
+
+  initialMockupOpacity?: number;
 };
 
 type QuantumMeasurementScreenViewOptions = SelfOptions & ScreenViewOptions;
@@ -27,7 +30,8 @@ export default class QuantumMeasurementScreenView extends ScreenView {
   public constructor( providedOptions: QuantumMeasurementScreenViewOptions ) {
 
     const options = optionize<QuantumMeasurementScreenViewOptions, SelfOptions, ScreenViewOptions>()( {
-      mockupImage: null
+      mockupImage: null,
+      initialMockupOpacity: 1
     }, providedOptions );
 
     super( options );
@@ -38,8 +42,11 @@ export default class QuantumMeasurementScreenView extends ScreenView {
 
       this.addChild( options.mockupImage );
 
+      assert && assert( options.initialMockupOpacity >= 0 && options.initialMockupOpacity <= 1 );
+      const mockupOpacityProperty = new NumberProperty( options.initialMockupOpacity );
+
       // Add a slider that can be used to control the mockup opacity.
-      this.addChild( new MockupOpacitySlider( options.mockupImage ) );
+      this.addChild( new MockupOpacitySlider( mockupOpacityProperty, options.mockupImage ) );
     }
 
     const resetAllButton = new ResetAllButton( {

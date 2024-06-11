@@ -1,13 +1,13 @@
 // Copyright 2024, University of Colorado Boulder
 
 import HSlider from '../../../sun/js/HSlider.js';
-import mockupOpacityProperty from './mockupOpacityProperty.js';
 import Range from '../../../dot/js/Range.js';
 import Dimension2 from '../../../dot/js/Dimension2.js';
 import quantumMeasurement from '../quantumMeasurement.js';
 import QuantumMeasurementConstants from './QuantumMeasurementConstants.js';
 import { Image } from '../../../scenery/js/imports.js';
 import ScreenView from '../../../joist/js/ScreenView.js';
+import NumberProperty from '../../../axon/js/NumberProperty.js';
 
 /**
  * Define a slider that can be added to a screen view and will control the opacity of a Property that is used to display
@@ -20,9 +20,9 @@ import ScreenView from '../../../joist/js/ScreenView.js';
 
 export default class MockupOpacitySlider extends HSlider {
 
-  public constructor( mockupImage: Image ) {
+  public constructor( opacityProperty: NumberProperty, mockupImage: Image ) {
 
-    super( mockupOpacityProperty, new Range( 0, 1 ), {
+    super( opacityProperty, new Range( 0, 1 ), {
       left: QuantumMeasurementConstants.SCREEN_VIEW_X_MARGIN,
       bottom: ScreenView.DEFAULT_LAYOUT_BOUNDS.height - QuantumMeasurementConstants.SCREEN_VIEW_Y_MARGIN,
       thumbSize: new Dimension2( 10, 20 ),
@@ -30,7 +30,7 @@ export default class MockupOpacitySlider extends HSlider {
     } );
 
     // Update the mockup opacity.
-    mockupOpacityProperty.link( opacity => {
+    opacityProperty.link( opacity => {
       mockupImage.opacity = opacity;
     } );
   }
