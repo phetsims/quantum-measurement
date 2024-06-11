@@ -23,6 +23,7 @@ import Property from '../../../../axon/js/Property.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import Panel from '../../../../sun/js/Panel.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import ProbabilityEquationNode from './ProbabilityEquationNode.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhysicalCoinsExperimentSceneViewOptions = SelfOptions & CoinsExperimentSceneViewOptions;
@@ -115,6 +116,9 @@ export default class PhysicalCoinsExperimentSceneView extends CoinsExperimentSce
       options.tandem.createTandem( 'coinIndicatorNode' )
     );
     this.preparationArea.addChild( this.orientationIndicatorCoinNode );
+
+    // Add the node that will show the probabilities for the possible outcomes.
+    this.preparationArea.addChild( new ProbabilityEquationNode() );
 
     // Add the top header for the measurement area.  It changes based on the mode and the strings.
     const measurementAreaHeaderLineWidthProperty = new DerivedProperty(
