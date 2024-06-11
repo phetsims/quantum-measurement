@@ -109,11 +109,12 @@ export default class PhysicalCoinsExperimentSceneView extends CoinsExperimentSce
     this.preparationArea.addChild( selectorPanel );
 
     // Add the Node that will indicate the initial orientation of the coin.
-    this.preparationArea.addChild( new PhysicalCoinNode(
+    this.orientationIndicatorCoinNode = new PhysicalCoinNode(
       sceneModel.initialCoinStateProperty,
       32, // TODO: Make this a shared constant, see https://github.com/phetsims/quantum-measurement/issues/7.
       options.tandem.createTandem( 'coinIndicatorNode' )
-    ) );
+    );
+    this.preparationArea.addChild( this.orientationIndicatorCoinNode );
 
     // Add the top header for the measurement area.  It changes based on the mode and the strings.
     const measurementAreaHeaderLineWidthProperty = new DerivedProperty(
@@ -133,6 +134,7 @@ export default class PhysicalCoinsExperimentSceneView extends CoinsExperimentSce
       fill: new LinearGradient( 0, 0, singleCoinTestAreaSideLength, 0 )
         .addColorStop( 0, new Color( '#eeeeee' ) )
         .addColorStop( 1, new Color( '#cceae8' ) ),
+      opacity: 0.9,
       lineWidth: 10,
       stroke: new Color( '#666666' )
     } );

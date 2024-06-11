@@ -25,6 +25,9 @@ import Range from '../../../../dot/js/Range.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import Easing from '../../../../twixt/js/Easing.js';
+import PhysicalCoinNode from './PhysicalCoinNode.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 
 type SelfOptions = EmptySelfOptions;
 export type CoinsExperimentSceneViewOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
@@ -51,6 +54,10 @@ export default class CoinsExperimentSceneView extends Node {
   // The animation for the movement of the divider when switching between 'preparation' and 'measurement' modes.  This
   // will be null when no animation is in progress.
   private dividerMovementAnimation: Animation | null = null;
+
+  // The coin node that will appear in the preparation area and indicate the initially prepared state.  It must be
+  // created by the subclasses, but needs to be available here so that its position is available.
+  protected orientationIndicatorCoinNode: Node | null = null;
 
   public constructor( sceneModel: CoinsExperimentSceneModel, providedOptions?: CoinsExperimentSceneViewOptions ) {
 
@@ -100,6 +107,10 @@ export default class CoinsExperimentSceneView extends Node {
       this.updateActivityAreaPositions();
     } );
 
+    // the Node and animation for the coin that moves from the prep area to the measurement area
+    let animatingSingleCoinNode: PhysicalCoinNode | null = null;
+    let preparedSingleCoinAnimation: Animation | null = null;
+
     // Monitor the state of the experiment and update the view when switching between 'preparation' and 'measurement'.
     sceneModel.preparingExperimentProperty.link( preparingExperiment => {
 
@@ -125,8 +136,52 @@ export default class CoinsExperimentSceneView extends Node {
         this.dividerMovementAnimation = null;
       } );
 
-      // Kick it off.
+      // Kick off the divider animation.
       this.dividerMovementAnimation.start();
+
+      if ( !preparingExperiment ) {
+
+        // The user has prepared the experiment and wants to now make measurements.  Animate the motion of the prepared
+        // coins to the measurement areas.
+        animatingSingleCoinNode = new PhysicalCoinNode(
+          sceneModel.singleCoin.currentStateProperty,
+          32, // TODO: Make this a shared constant, see https://github.com/phetsims/quantum-measurement/issues/7.
+          Tandem.OPT_OUT
+        );
+        this.addChild( animatingSingleCoinNode );
+        animatingSingleCoinNode.moveToBack();
+
+        if ( this.orientationIndicatorCoinNode ) {
+
+          // Figure out where this coin should start - it will animate from here to the measurement area.
+          animatingSingleCoinNode.center =
+            this.globalToLocalBounds( this.orientationIndicatorCoinNode?.getGlobalBounds() ).center;
+
+          // Create and start an animation to move this coin to the top screen in the measurement area.
+          preparedSingleCoinAnimation = new Animation( {
+            setValue: value => { animatingSingleCoinNode!.center = value; },
+            getValue: () => animatingSingleCoinNode!.center,
+
+            // TODO: See https://github.com/phetsims/quantum-measurement/issues/9.  This is hardcoded so that a demo can
+            //       be shown, but it should get the needed value from the measurement area at some point.
+            to: new Vector2( 615, 130 ),
+            duration: 1,
+            easing: Easing.CUBIC_OUT
+          } );
+          preparedSingleCoinAnimation.start();
+          preparedSingleCoinAnimation.endedEmitter.addListener( () => { preparedSingleCoinAnimation = null; } );
+        }
+      }
+      else if ( animatingSingleCoinNode ) {
+        assert && assert(
+          this.hasChild( animatingSingleCoinNode ),
+          'the parent scene view should never have reference to the animating coin unless it is a child'
+        );
+        preparedSingleCoinAnimation && preparedSingleCoinAnimation.stop();
+        this.removeChild( animatingSingleCoinNode );
+        animatingSingleCoinNode.dispose();
+        animatingSingleCoinNode = null;
+      }
     } );
 
     // Create and add the button for starting a new experiment by preparing a new coin.

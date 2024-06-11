@@ -53,7 +53,7 @@ export default class CoinNode<T extends string> extends Node {
     coinState.link( state => {
 
       // Remove previous content node if present.
-      if ( contentNode ) {
+      if ( contentNode && this.hasChild( contentNode ) ) {
         this.removeChild( contentNode );
         contentNode = null;
       }

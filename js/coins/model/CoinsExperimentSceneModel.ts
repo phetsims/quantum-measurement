@@ -3,7 +3,7 @@
 /**
  * TODO: See https://github.com/phetsims/quantum-measurement/issues/1.  At the time of this writing I (jbphet) am not
  *        sure if this will be the base class for the two scenes on the "Coins" screen or a configurable class.  Update
- *        this header when the decision is made.
+ *        this header when that decision is made.
  *
  * @author John Blanco, PhET Interactive Simulations
  */
@@ -18,7 +18,6 @@ import { CoinExperimentStates, CoinExperimentStateValues } from './CoinExperimen
 import TwoStateSystem from '../../common/model/TwoStateSystem.js';
 import { PhysicalCoinStates, PhysicalCoinStateValues } from '../../common/model/PhysicalCoinStates.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
-import PhetioProperty from '../../../../axon/js/PhetioProperty.js';
 
 type SelfOptions = {
   initiallyActive?: boolean;
@@ -41,7 +40,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
   public readonly singleCoin: TwoStateSystem<PhysicalCoinStates>;
 
   // The initial state of the coin(s) before any flipping occurs.
-  public readonly initialCoinStateProperty: PhetioProperty<PhysicalCoinStates>;
+  public readonly initialCoinStateProperty: Property<PhysicalCoinStates>;
 
   public constructor( providedOptions: CoinExperimentSceneModelOptions ) {
 
@@ -70,11 +69,17 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
       'heads',
       { tandem: options.tandem.createTandem( 'singleCoin' ) }
     );
-
     this.initialCoinStateProperty = new Property<PhysicalCoinStates>( 'heads', {
       tandem: options.tandem.createTandem( 'initialCoinStateProperty' ),
       phetioValueType: StringUnionIO( PhysicalCoinStateValues ),
       validValues: PhysicalCoinStateValues
+    } );
+
+    // Set the coins that will be measured into their initial states when transitioning from preparation to measurement.
+    this.preparingExperimentProperty.lazyLink( preparingExperiment => {
+      if ( !preparingExperiment ) {
+        this.singleCoin.currentStateProperty.value = this.initialCoinStateProperty.value;
+      }
     } );
   }
 
@@ -82,6 +87,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
     this.preparingExperimentProperty.reset();
     this.singleCoinExperimentStateProperty.reset();
     this.multiCoinExperimentStateProperty.reset();
+    this.initialCoinStateProperty.reset();
     this.singleCoin.reset();
   }
 }
