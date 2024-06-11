@@ -26,8 +26,8 @@ const BIAS_RANGE = new Range( 0, 1 );
 
 export default class TwoStateSystem<T extends string> extends PhetioObject {
 
-  private readonly currentStateProperty: Property<T>;
-  private readonly validValues: readonly T[];
+  public readonly currentStateProperty: Property<T>;
+  public readonly validValues: readonly T[];
 
   // The bias for this two-state system.  A value of 0.5 indicates no bias, a value of 0 means it is entirely biased in
   // one direction, and so forth.

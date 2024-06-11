@@ -18,6 +18,7 @@ import { CoinExperimentStates, CoinExperimentStateValues } from './CoinExperimen
 import TwoStateSystem from '../../common/model/TwoStateSystem.js';
 import { PhysicalCoinStates, PhysicalCoinStateValues } from '../../common/model/PhysicalCoinStates.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
+import PhetioProperty from '../../../../axon/js/PhetioProperty.js';
 
 type SelfOptions = {
   initiallyActive?: boolean;
@@ -38,6 +39,9 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
 
   // The coins that are flipped/prepared and then measured during the experiment.
   public readonly singleCoin: TwoStateSystem<PhysicalCoinStates>;
+
+  // The initial state of the coin(s) before any flipping occurs.
+  public readonly initialCoinStateProperty: PhetioProperty<PhysicalCoinStates>;
 
   public constructor( providedOptions: CoinExperimentSceneModelOptions ) {
 
@@ -66,6 +70,12 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
       'heads',
       { tandem: options.tandem.createTandem( 'singleCoin' ) }
     );
+
+    this.initialCoinStateProperty = new Property<PhysicalCoinStates>( 'heads', {
+      tandem: options.tandem.createTandem( 'initialCoinStateProperty' ),
+      phetioValueType: StringUnionIO( PhysicalCoinStateValues ),
+      validValues: PhysicalCoinStateValues
+    } );
   }
 
   public reset(): void {
