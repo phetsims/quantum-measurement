@@ -2,7 +2,7 @@
 
 
 /**
- * ProbabilityEquationNode shows the probability settings for the physical and quantum coins.
+ * ProbabilityEquationsNode shows the probability settings (aka the bias) for the physical and quantum coins.
  *
  * @author John Blanco, PhET Interactive Simulations
  */
@@ -11,7 +11,7 @@ import { RichText } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 
-export default class ProbabilityEquationNode extends RichText {
+export default class ProbabilityEquationsNode extends RichText {
 
   public constructor() {
 
@@ -21,4 +21,4 @@ export default class ProbabilityEquationNode extends RichText {
   }
 }
 
-quantumMeasurement.register( 'ProbabilityEquationNode', ProbabilityEquationNode );
+quantumMeasurement.register( 'ProbabilityEquationsNode', ProbabilityEquationsNode );
