@@ -2,7 +2,8 @@
 
 
 /**
- * ProbabilityEquationsNode shows the probability settings (aka the bias) for the physical and quantum coins.
+ * ProbabilityEquationsNode shows the probability settings (aka the bias) for the physical or quantum coins depending on
+ * how it is configured.
  *
  * @author John Blanco, PhET Interactive Simulations
  */
@@ -10,12 +11,28 @@
 import { RichText } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import { SystemType } from '../../common/model/SystemType.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import Utils from '../../../../dot/js/Utils.js';
+
+const UP_ARROW_CHARACTER = '\u2b61';
+const DOWN_ARROW_CHARACTER = '\u2b63';
 
 export default class ProbabilityEquationsNode extends RichText {
 
-  public constructor() {
+  public constructor( biasProperty: TReadOnlyProperty<number>, systemType: SystemType ) {
 
-    super( 'P(<b>H</b>) = 0.50<br>P(<span style="color: magenta;"><b>T</b></span>) = <span style="color: magenta;">0.50</span>', {
+    const upperFunctionParameter = systemType === 'physical' ? 'H' : UP_ARROW_CHARACTER;
+    const lowerFunctionParameter = systemType === 'physical' ? 'T' : DOWN_ARROW_CHARACTER;
+
+    const equationsStringProperty = new DerivedProperty( [ biasProperty ], bias => {
+      const upperEquation = `P(<b>${upperFunctionParameter}</b>) = ${Utils.toFixed( bias, 2 )}`;
+      const lowerEquation = `P(<span style="color: magenta;"><b>${lowerFunctionParameter}</b></span>) = <span style="color: magenta;">${Utils.toFixed( 1 - bias, 2 )}</span>`;
+      return `${upperEquation}<br>${lowerEquation}`;
+    } );
+
+    super( equationsStringProperty, {
       font: new PhetFont( 18 )
     } );
   }

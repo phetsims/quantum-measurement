@@ -117,8 +117,8 @@ export default class PhysicalCoinsExperimentSceneView extends CoinsExperimentSce
     );
     this.preparationArea.addChild( this.orientationIndicatorCoinNode );
 
-    // Add the node that will show the probabilities for the possible outcomes.
-    this.preparationArea.addChild( new ProbabilityEquationsNode() );
+    // Add the node that will show the probabilities for the possible outcomes as equations.
+    this.preparationArea.addChild( new ProbabilityEquationsNode( sceneModel.singleCoin.biasProperty, 'physical' ) );
 
     // Add the top header for the measurement area.  It changes based on the mode and the strings.
     const measurementAreaHeaderLineWidthProperty = new DerivedProperty(
