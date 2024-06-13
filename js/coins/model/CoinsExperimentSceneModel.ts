@@ -16,9 +16,9 @@ import optionize from '../../../../phet-core/js/optionize.js';
 import Property from '../../../../axon/js/Property.js';
 import { CoinExperimentStates, CoinExperimentStateValues } from './CoinExperimentStates.js';
 import TwoStateSystem from '../../common/model/TwoStateSystem.js';
-import { PhysicalCoinStates, PhysicalCoinStateValues } from '../../common/model/PhysicalCoinStates.js';
+import { PhysicalCoinStates, PhysicalCoinStateValues } from './PhysicalCoinStates.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
-import { QuantumCoinStates, QuantumCoinStateValues } from '../../common/model/QuantumCoinStates.js';
+import { QuantumCoinStates, QuantumCoinStateValues } from './QuantumCoinStates.js';
 import { SystemType } from '../../common/model/SystemType.js';
 
 type SelfOptions = {

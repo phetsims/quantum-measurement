@@ -29,9 +29,9 @@ import PhysicalCoinNode from './PhysicalCoinNode.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Property from '../../../../axon/js/Property.js';
-import { PhysicalCoinStates } from '../../common/model/PhysicalCoinStates.js';
+import { PhysicalCoinStates } from '../model/PhysicalCoinStates.js';
 import QuantumCoinNode from './QuantumCoinNode.js';
-import { QuantumCoinStates } from '../../common/model/QuantumCoinStates.js';
+import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
 import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
 
 type SelfOptions = EmptySelfOptions;

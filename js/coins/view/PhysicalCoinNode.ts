@@ -11,7 +11,7 @@ import { Color, Text } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import CoinNode, { CoinFaceOptions } from './CoinNode.js';
-import { PhysicalCoinStates } from '../../common/model/PhysicalCoinStates.js';
+import { PhysicalCoinStates } from '../model/PhysicalCoinStates.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 

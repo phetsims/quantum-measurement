@@ -14,13 +14,13 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
-import { PhysicalCoinStates, PhysicalCoinStateValues } from '../../common/model/PhysicalCoinStates.js';
+import { PhysicalCoinStates, PhysicalCoinStateValues } from '../model/PhysicalCoinStates.js';
 import PhysicalCoinNode from './PhysicalCoinNode.js';
 import Property from '../../../../axon/js/Property.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import RectangularRadioButtonGroup, { RectangularRadioButtonGroupOptions } from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import Panel from '../../../../sun/js/Panel.js';
-import { QuantumCoinStates, QuantumCoinStateValues } from '../../common/model/QuantumCoinStates.js';
+import { QuantumCoinStates, QuantumCoinStateValues } from '../model/QuantumCoinStates.js';
 import QuantumCoinNode from './QuantumCoinNode.js';
 
 const RADIO_BUTTON_COIN_NODE_RADIUS = 16;
