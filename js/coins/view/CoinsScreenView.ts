@@ -103,6 +103,11 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
       tandem: tandem.createTandem( 'quantumCoinsExperimentSceneView' )
     } );
     this.addChild( this.quantumCoinsExperimentSceneView );
+
+    // Move the mockup image to the front of the Z-order for easier comparisons with added UI elements.
+    if ( this.mockupImage ) {
+      this.mockupImage.moveToFront();
+    }
   }
 
   public override reset(): void {

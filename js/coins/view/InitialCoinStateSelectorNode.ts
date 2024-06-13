@@ -23,7 +23,7 @@ import Panel from '../../../../sun/js/Panel.js';
 import { QuantumCoinStates, QuantumCoinStateValues } from '../../common/model/QuantumCoinStates.js';
 import QuantumCoinNode from './QuantumCoinNode.js';
 
-const RADIO_BUTTON_COIN_NODE_RADIUS = 20;
+const RADIO_BUTTON_COIN_NODE_RADIUS = 16;
 const INDICATOR_COIN_NODE_RADIUS = 36;
 
 export default class InitialCoinStateSelectorNode extends VBox {
@@ -45,14 +45,16 @@ export default class InitialCoinStateSelectorNode extends VBox {
                                 QuantumMeasurementStrings.initialOrientationStringProperty :
                                 QuantumMeasurementStrings.initialStateStringProperty;
 
-    const selectionPanelTitle = new Text( titleStringProperty, { font: new PhetFont( 18 ) } );
+    const selectionPanelTitle = new Text( titleStringProperty, {
+      font: new PhetFont( { size: 18, weight: 'bold' } )
+    } );
 
     const radioButtonGroupOptions: RectangularRadioButtonGroupOptions = {
       orientation: 'horizontal',
-      spacing: 10,
+      spacing: 22,
       radioButtonOptions: {
-        xMargin: 1,
-        yMargin: 10,
+        xMargin: 4,
+        yMargin: 4,
         baseColor: Color.WHITE
       },
       tandem: tandem.createTandem( 'initialOrientationRadioButtonGroup' )
@@ -67,8 +69,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
           Tandem.OPT_OUT
         ),
         value: stateValue,
-        tandemName: `${stateValue.toLowerCase()}RadioButton`,
-        options: { minWidth: 80 }
+        tandemName: `${stateValue.toLowerCase()}RadioButton`
       } ) );
       initialOrientationRadioButtonGroup = new RectangularRadioButtonGroup<PhysicalCoinStates>(
         initialCoinStateProperty as Property<PhysicalCoinStates>,
@@ -84,8 +85,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
           Tandem.OPT_OUT
         ),
         value: stateValue,
-        tandemName: `${stateValue.toLowerCase()}RadioButton`,
-        options: { minWidth: 80 }
+        tandemName: `${stateValue.toLowerCase()}RadioButton`
       } ) );
       initialOrientationRadioButtonGroup = new RectangularRadioButtonGroup<QuantumCoinStates>(
         initialCoinStateProperty as Property<QuantumCoinStates>,
@@ -102,7 +102,8 @@ export default class InitialCoinStateSelectorNode extends VBox {
     const selectorPanel = new Panel( selectorPanelContent, {
       fill: new Color( '#eeeeee' ),
       stroke: null,
-      xMargin: 40,
+      yMargin: 10,
+      minWidth: 270,
       visibleProperty: preparingExperimentProperty
     } );
 

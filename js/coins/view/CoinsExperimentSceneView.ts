@@ -46,7 +46,7 @@ export default class CoinsExperimentSceneView extends Node {
 
   // The coin experiment scene view has two areas, one for preparing the experiment and one for running it and measuring
   // the results. These are the root nodes for each of these areas.  They are mostly populated by subclasses.
-  protected readonly preparationArea = new VBox( { spacing: 20 } );
+  protected readonly preparationArea = new VBox( { spacing: 15 } );
   protected readonly measurementArea = new VBox( { spacing: 28 } );
 
   // This button is used by the user to start a new experiment by preparing a new coin.

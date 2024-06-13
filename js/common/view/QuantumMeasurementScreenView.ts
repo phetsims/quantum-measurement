@@ -27,6 +27,9 @@ type QuantumMeasurementScreenViewOptions = SelfOptions & ScreenViewOptions;
 
 export default class QuantumMeasurementScreenView extends ScreenView {
 
+  // Mockup image, made available to subclasses in case they want to adjust the Z-order.
+  protected readonly mockupImage: Image | null = null;
+
   public constructor( providedOptions: QuantumMeasurementScreenViewOptions ) {
 
     const options = optionize<QuantumMeasurementScreenViewOptions, SelfOptions, ScreenViewOptions>()( {
@@ -39,6 +42,8 @@ export default class QuantumMeasurementScreenView extends ScreenView {
     // Add a screen mockup if one has been provided.
     // TODO: This is for early prototyping and should be removed eventually, see https://github.com/phetsims/quantum-measurement/issues/3.
     if ( options.mockupImage !== null ) {
+
+      this.mockupImage = options.mockupImage;
 
       this.addChild( options.mockupImage );
 

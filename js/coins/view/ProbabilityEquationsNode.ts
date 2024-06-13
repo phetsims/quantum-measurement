@@ -34,7 +34,8 @@ export default class ProbabilityEquationsNode extends RichText {
     } );
 
     super( equationsStringProperty, {
-      font: new PhetFont( 18 )
+      font: new PhetFont( 18 ),
+      leading: 7
     } );
   }
 }
