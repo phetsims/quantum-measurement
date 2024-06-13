@@ -32,6 +32,7 @@ import Property from '../../../../axon/js/Property.js';
 import { PhysicalCoinStates } from '../../common/model/PhysicalCoinStates.js';
 import QuantumCoinNode from './QuantumCoinNode.js';
 import { QuantumCoinStates } from '../../common/model/QuantumCoinStates.js';
+import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
 
 type SelfOptions = EmptySelfOptions;
 export type CoinsExperimentSceneViewOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
@@ -155,14 +156,14 @@ export default class CoinsExperimentSceneView extends Node {
         if ( sceneModel.systemType === 'physical' ) {
           coinNode = new PhysicalCoinNode(
             sceneModel.singleCoin.currentStateProperty as Property<PhysicalCoinStates>,
-            32, // TODO: Make this a shared constant, see https://github.com/phetsims/quantum-measurement/issues/7.
+            InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS,
             Tandem.OPT_OUT
           );
         }
         else {
           coinNode = new QuantumCoinNode(
             sceneModel.singleCoin.currentStateProperty as Property<QuantumCoinStates>,
-            32, // TODO: Make this a shared constant, see https://github.com/phetsims/quantum-measurement/issues/7.
+            InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS,
             Tandem.OPT_OUT
           );
         }

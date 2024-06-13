@@ -24,7 +24,7 @@ import { QuantumCoinStates, QuantumCoinStateValues } from '../../common/model/Qu
 import QuantumCoinNode from './QuantumCoinNode.js';
 
 const RADIO_BUTTON_COIN_NODE_RADIUS = 20;
-const INDICATOR_COIN_NODE_RADIUS = 32;
+const INDICATOR_COIN_NODE_RADIUS = 36;
 
 export default class InitialCoinStateSelectorNode extends VBox {
 
@@ -128,6 +128,9 @@ export default class InitialCoinStateSelectorNode extends VBox {
       spacing: 20
     } );
   }
+
+  // radius of the state indicator coin
+  public static readonly INDICATOR_COIN_NODE_RADIUS = INDICATOR_COIN_NODE_RADIUS;
 }
 
 quantumMeasurement.register( 'InitialCoinStateSelectorNode', InitialCoinStateSelectorNode );
