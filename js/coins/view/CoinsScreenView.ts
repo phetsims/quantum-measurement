@@ -36,7 +36,7 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
   private readonly model: CoinsModel;
 
   // the two scene views for the experiments
-  private readonly physicalCoinsExperimentSceneView: QuantumCoinsExperimentSceneView;
+  private readonly physicalCoinsExperimentSceneView: PhysicalCoinsExperimentSceneView;
   private readonly quantumCoinsExperimentSceneView: QuantumCoinsExperimentSceneView;
 
   public constructor( model: CoinsModel, tandem: Tandem ) {
