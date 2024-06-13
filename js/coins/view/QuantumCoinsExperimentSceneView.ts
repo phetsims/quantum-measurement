@@ -17,6 +17,7 @@ import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import ProbabilityEquationsNode from './ProbabilityEquationsNode.js';
+import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
 
 type SelfOptions = EmptySelfOptions;
 type QuantumCoinsExperimentSceneViewOptions = SelfOptions & CoinsExperimentSceneViewOptions;
@@ -63,6 +64,14 @@ export default class QuantumCoinsExperimentSceneView extends CoinsExperimentScen
       { textColor: Color.BLUE }
     );
     this.preparationArea.addChild( preparationAreaHeader );
+
+    // Add the UI element that will allow the user to specify the initial state of the coin.
+    this.preparationArea.addChild( new InitialCoinStateSelectorNode(
+      sceneModel.initialCoinStateProperty,
+      sceneModel.preparingExperimentProperty,
+      'quantum',
+      options.tandem.createTandem( 'coinStateSelectorNode' )
+    ) );
 
     // Add the node that will show the probabilities for the possible outcomes as equations.
     this.preparationArea.addChild( new ProbabilityEquationsNode( sceneModel.singleCoin.biasProperty, 'quantum' ) );

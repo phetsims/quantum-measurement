@@ -28,6 +28,10 @@ import Easing from '../../../../twixt/js/Easing.js';
 import PhysicalCoinNode from './PhysicalCoinNode.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import Property from '../../../../axon/js/Property.js';
+import { PhysicalCoinStates } from '../../common/model/PhysicalCoinStates.js';
+import QuantumCoinNode from './QuantumCoinNode.js';
+import { QuantumCoinStates } from '../../common/model/QuantumCoinStates.js';
 
 type SelfOptions = EmptySelfOptions;
 export type CoinsExperimentSceneViewOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
@@ -147,11 +151,21 @@ export default class CoinsExperimentSceneView extends Node {
           fill: Color.LIGHT_GRAY,
           opacity: 0.2
         } );
-        const coinNode = new PhysicalCoinNode(
-          sceneModel.singleCoin.currentStateProperty,
-          32, // TODO: Make this a shared constant, see https://github.com/phetsims/quantum-measurement/issues/7.
-          Tandem.OPT_OUT
-        );
+        let coinNode;
+        if ( sceneModel.systemType === 'physical' ) {
+          coinNode = new PhysicalCoinNode(
+            sceneModel.singleCoin.currentStateProperty as Property<PhysicalCoinStates>,
+            32, // TODO: Make this a shared constant, see https://github.com/phetsims/quantum-measurement/issues/7.
+            Tandem.OPT_OUT
+          );
+        }
+        else {
+          coinNode = new QuantumCoinNode(
+            sceneModel.singleCoin.currentStateProperty as Property<QuantumCoinStates>,
+            32, // TODO: Make this a shared constant, see https://github.com/phetsims/quantum-measurement/issues/7.
+            Tandem.OPT_OUT
+          );
+        }
         animatingSingleCoinNode = new Node( {
           children: [ coinNode, coinMask ]
         } );

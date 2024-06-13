@@ -18,9 +18,12 @@ import { CoinExperimentStates, CoinExperimentStateValues } from './CoinExperimen
 import TwoStateSystem from '../../common/model/TwoStateSystem.js';
 import { PhysicalCoinStates, PhysicalCoinStateValues } from '../../common/model/PhysicalCoinStates.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
+import { QuantumCoinStates, QuantumCoinStateValues } from '../../common/model/QuantumCoinStates.js';
+import { SystemType } from '../../common/model/SystemType.js';
 
 type SelfOptions = {
   initiallyActive?: boolean;
+  systemType?: SystemType;
 };
 type CoinExperimentSceneModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
@@ -28,6 +31,8 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
 
   // whether this scene is active, which is mostly about whether it is shown in the view
   public readonly activeProperty: BooleanProperty;
+
+  public readonly systemType: SystemType;
 
   // This BooleanProperty is used to control whether the experiment is being prepared (true) or measured (false).
   public readonly preparingExperimentProperty: BooleanProperty;
@@ -37,18 +42,21 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
   public readonly multiCoinExperimentStateProperty: Property<CoinExperimentStates>;
 
   // The coins that are flipped/prepared and then measured during the experiment.
-  public readonly singleCoin: TwoStateSystem<PhysicalCoinStates>;
+  public readonly singleCoin: TwoStateSystem<PhysicalCoinStates> | TwoStateSystem<QuantumCoinStates>;
 
   // The initial state of the coin(s) before any flipping occurs.
-  public readonly initialCoinStateProperty: Property<PhysicalCoinStates>;
+  public readonly initialCoinStateProperty: Property<PhysicalCoinStates> | Property<QuantumCoinStates>;
 
   public constructor( providedOptions: CoinExperimentSceneModelOptions ) {
 
     const options = optionize<CoinExperimentSceneModelOptions, SelfOptions, PhetioObjectOptions>()( {
+      systemType: 'physical',
       initiallyActive: false
     }, providedOptions );
 
     super( options );
+
+    this.systemType = options.systemType;
 
     this.activeProperty = new BooleanProperty( options.initiallyActive, {
       tandem: options.tandem.createTandem( 'activeProperty' )
@@ -64,16 +72,30 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
       phetioValueType: StringUnionIO( CoinExperimentStateValues ),
       tandem: options.tandem.createTandem( 'multiCoinExperimentStateProperty' )
     } );
-    this.singleCoin = new TwoStateSystem<PhysicalCoinStates>(
-      PhysicalCoinStateValues,
-      'heads',
-      { tandem: options.tandem.createTandem( 'singleCoin' ) }
-    );
-    this.initialCoinStateProperty = new Property<PhysicalCoinStates>( 'heads', {
-      tandem: options.tandem.createTandem( 'initialCoinStateProperty' ),
-      phetioValueType: StringUnionIO( PhysicalCoinStateValues ),
-      validValues: PhysicalCoinStateValues
-    } );
+    const singleCoinTandem = options.tandem.createTandem( 'singleCoin' );
+    if ( options.systemType === 'physical' ) {
+      this.singleCoin = new TwoStateSystem<PhysicalCoinStates>(
+        PhysicalCoinStateValues,
+        'heads',
+        { tandem: singleCoinTandem } );
+      this.initialCoinStateProperty = new Property<PhysicalCoinStates>( 'heads', {
+        tandem: options.tandem.createTandem( 'initialCoinStateProperty' ),
+        phetioValueType: StringUnionIO( PhysicalCoinStateValues ),
+        validValues: PhysicalCoinStateValues
+      } );
+    }
+    else {
+      assert && assert( options.systemType === 'quantum', 'unhandled system type' );
+      this.singleCoin = new TwoStateSystem<QuantumCoinStates>(
+        QuantumCoinStateValues,
+        'up',
+        { tandem: singleCoinTandem } );
+      this.initialCoinStateProperty = new Property<QuantumCoinStates>( 'up', {
+        tandem: options.tandem.createTandem( 'initialCoinStateProperty' ),
+        phetioValueType: StringUnionIO( QuantumCoinStateValues ),
+        validValues: QuantumCoinStateValues
+      } );
+    }
 
     // Set the coins that will be measured into their initial states when transitioning from preparation to measurement.
     this.preparingExperimentProperty.lazyLink( preparingExperiment => {

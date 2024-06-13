@@ -15,9 +15,10 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 
-const UP_ARROW_CHARACTER = '\u2b61';
-const DOWN_ARROW_CHARACTER = '\u2b63';
+const UP_ARROW_CHARACTER = QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
+const DOWN_ARROW_CHARACTER = QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER;
 
 export default class ProbabilityEquationsNode extends RichText {
 

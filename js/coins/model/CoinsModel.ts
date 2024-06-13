@@ -33,6 +33,7 @@ export default class CoinsModel implements TModel {
       tandem: providedOptions.tandem.createTandem( 'physicalCoinExperimentSceneModel' )
     } );
     this.quantumCoinExperimentSceneModel = new CoinsExperimentSceneModel( {
+      systemType: 'quantum',
       tandem: providedOptions.tandem.createTandem( 'quantumCoinExperimentSceneModel' )
     } );
 

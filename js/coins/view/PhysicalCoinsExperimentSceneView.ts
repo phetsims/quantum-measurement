@@ -7,7 +7,7 @@
  */
 
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { Color, LinearGradient, NodeOptions, Rectangle, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Color, LinearGradient, NodeOptions, Rectangle } from '../../../../scenery/js/imports.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
 import CoinsExperimentSceneView, { CoinsExperimentSceneViewOptions } from './CoinsExperimentSceneView.js';
@@ -16,20 +16,11 @@ import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import PhysicalCoinNode from './PhysicalCoinNode.js';
-import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
-import { PhysicalCoinStates, PhysicalCoinStateValues } from '../../common/model/PhysicalCoinStates.js';
-import Property from '../../../../axon/js/Property.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
-import Panel from '../../../../sun/js/Panel.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ProbabilityEquationsNode from './ProbabilityEquationsNode.js';
+import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhysicalCoinsExperimentSceneViewOptions = SelfOptions & CoinsExperimentSceneViewOptions;
-
-const RADIO_BUTTON_COIN_NODE_RADIUS = 20;
-const SUBHEADING_FONT = new PhetFont( 18 );
 
 export default class PhysicalCoinsExperimentSceneView extends CoinsExperimentSceneView {
 
@@ -66,56 +57,12 @@ export default class PhysicalCoinsExperimentSceneView extends CoinsExperimentSce
     ) );
 
     // Add the UI element that will allow the user to specify the initial state of the coin.
-    const selectionPanelTitle = new Text( QuantumMeasurementStrings.initialOrientationStringProperty, {
-      font: SUBHEADING_FONT
-    } );
-    // TODO: See https://github.com/phetsims/quantum-measurement/issues/8 - Look at potentially generalizing this for
-    //       use in the Quantum scene as well.
-    const initialCoinStateItems = PhysicalCoinStateValues.map( stateValue => ( {
-      createNode: () => new PhysicalCoinNode(
-        new Property<PhysicalCoinStates>( stateValue ),
-        RADIO_BUTTON_COIN_NODE_RADIUS,
-        Tandem.OPT_OUT
-      ),
-      value: stateValue,
-      tandemName: `${stateValue.toLowerCase()}RadioButton`,
-      options: { minWidth: 80 }
-    } ) );
-    const initialOrientationRadioButtonGroup = new RectangularRadioButtonGroup<PhysicalCoinStates>(
+    this.preparationArea.addChild( new InitialCoinStateSelectorNode(
       sceneModel.initialCoinStateProperty,
-      initialCoinStateItems,
-      {
-        orientation: 'horizontal',
-        spacing: 10,
-        radioButtonOptions: {
-          xMargin: 1,
-          yMargin: 10,
-          baseColor: Color.WHITE
-        },
-        tandem: options.tandem.createTandem( 'initialOrientationRadioButtonGroup' )
-      }
-    );
-
-    const selectorPanelContent = new VBox( {
-      children: [ selectionPanelTitle, initialOrientationRadioButtonGroup ],
-      spacing: 10
-    } );
-
-    const selectorPanel = new Panel( selectorPanelContent, {
-      fill: new Color( '#eeeeee' ),
-      stroke: null,
-      xMargin: 40,
-      visibleProperty: sceneModel.preparingExperimentProperty
-    } );
-    this.preparationArea.addChild( selectorPanel );
-
-    // Add the Node that will indicate the initial orientation of the coin.
-    this.orientationIndicatorCoinNode = new PhysicalCoinNode(
-      sceneModel.initialCoinStateProperty,
-      32, // TODO: Make this a shared constant, see https://github.com/phetsims/quantum-measurement/issues/7.
-      options.tandem.createTandem( 'coinIndicatorNode' )
-    );
-    this.preparationArea.addChild( this.orientationIndicatorCoinNode );
+      sceneModel.preparingExperimentProperty,
+      'physical',
+      options.tandem.createTandem( 'coinStateSelectorNode' )
+    ) );
 
     // Add the node that will show the probabilities for the possible outcomes as equations.
     this.preparationArea.addChild( new ProbabilityEquationsNode( sceneModel.singleCoin.biasProperty, 'physical' ) );
