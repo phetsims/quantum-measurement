@@ -13,8 +13,6 @@ import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementSc
 import Tandem from '../../../../tandem/js/Tandem.js';
 import { Color, Image, Text } from '../../../../scenery/js/imports.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
-import PhysicalCoinsExperimentSceneView from './PhysicalCoinsExperimentSceneView.js';
-import QuantumCoinsExperimentSceneView from './QuantumCoinsExperimentSceneView.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import { SystemType, SystemTypeValues } from '../../common/model/SystemType.js';
@@ -22,6 +20,7 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import LocalizedStringProperty from '../../../../chipper/js/LocalizedStringProperty.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
 
 const SCENE_POSITION = new Vector2( 0, 90 ); // empirically determined to look decent
 const SYSTEM_TYPE_TO_STRING_MAP = new Map<SystemType, LocalizedStringProperty>(
@@ -36,8 +35,8 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
   private readonly model: CoinsModel;
 
   // the two scene views for the experiments
-  private readonly physicalCoinsExperimentSceneView: PhysicalCoinsExperimentSceneView;
-  private readonly quantumCoinsExperimentSceneView: QuantumCoinsExperimentSceneView;
+  private readonly physicalCoinsExperimentSceneView: CoinsExperimentSceneView;
+  private readonly quantumCoinsExperimentSceneView: CoinsExperimentSceneView;
 
   public constructor( model: CoinsModel, tandem: Tandem ) {
 
@@ -93,12 +92,12 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
     this.addChild( experimentTypeRadioButtonGroup );
 
     // Add the views for the two scenes that can be shown on this screen.
-    this.physicalCoinsExperimentSceneView = new PhysicalCoinsExperimentSceneView( model.physicalCoinExperimentSceneModel, {
+    this.physicalCoinsExperimentSceneView = new CoinsExperimentSceneView( model.physicalCoinExperimentSceneModel, {
       translation: SCENE_POSITION,
       tandem: tandem.createTandem( 'physicalCoinsExperimentSceneView' )
     } );
     this.addChild( this.physicalCoinsExperimentSceneView );
-    this.quantumCoinsExperimentSceneView = new QuantumCoinsExperimentSceneView( model.quantumCoinExperimentSceneModel, {
+    this.quantumCoinsExperimentSceneView = new CoinsExperimentSceneView( model.quantumCoinExperimentSceneModel, {
       translation: SCENE_POSITION,
       tandem: tandem.createTandem( 'quantumCoinsExperimentSceneView' )
     } );

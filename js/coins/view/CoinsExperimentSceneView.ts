@@ -1,13 +1,14 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * CoinsExperimentSceneView is the base class for the scene views on the "Coins" screen.
+ * CoinsExperimentSceneView presents the views for the physical or the quantum scene on the "Coins" screen depending
+ * upon how it is configured.
  *
  * @author John Blanco, PhET Interactive Simulations
  */
 
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { Circle, Color, Line, Node, NodeOptions, VBox } from '../../../../scenery/js/imports.js';
+import { Circle, Color, Line, Node, NodeOptions } from '../../../../scenery/js/imports.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
@@ -33,6 +34,7 @@ import { PhysicalCoinStates } from '../model/PhysicalCoinStates.js';
 import QuantumCoinNode from './QuantumCoinNode.js';
 import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
 import CoinExperimentPreparationArea from './CoinExperimentPreparationArea.js';
+import CoinExperimentMeasurementArea from './CoinExperimentMeasurementArea.js';
 
 type SelfOptions = EmptySelfOptions;
 export type CoinsExperimentSceneViewOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
@@ -46,8 +48,8 @@ export default class CoinsExperimentSceneView extends Node {
 
   // The coin experiment scene view has two areas, one for preparing the experiment and one for running it and measuring
   // the results. These are the root nodes for each of these areas.  They are mostly populated by subclasses.
-  protected readonly preparationArea: VBox;
-  protected readonly measurementArea = new VBox( { spacing: 28 } );
+  protected readonly preparationArea: CoinExperimentPreparationArea;
+  protected readonly measurementArea: CoinExperimentMeasurementArea;
 
   // This button is used by the user to start a new experiment by preparing a new coin.
   protected readonly newCoinButton: ButtonNode;
@@ -86,6 +88,11 @@ export default class CoinsExperimentSceneView extends Node {
       options.tandem.createTandem( 'preparationArea' )
     );
     this.addChild( this.preparationArea );
+    this.measurementArea = new CoinExperimentMeasurementArea(
+      sceneModel,
+      options.tandem.createTandem( 'measurementArea' )
+    );
+
     this.addChild( this.measurementArea );
 
     // Add the vertical line that will sit between the preparation and measurement areas.
