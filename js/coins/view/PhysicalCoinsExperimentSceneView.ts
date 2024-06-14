@@ -59,6 +59,7 @@ export default class PhysicalCoinsExperimentSceneView extends CoinsExperimentSce
     // Add the UI element that will allow the user to specify the initial state of the coin.
     this.preparationArea.addChild( new InitialCoinStateSelectorNode(
       sceneModel.initialCoinStateProperty,
+      sceneModel.stateBiasProperty,
       sceneModel.preparingExperimentProperty,
       'physical',
       options.tandem.createTandem( 'coinStateSelectorNode' )

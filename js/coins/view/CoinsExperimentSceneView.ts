@@ -31,7 +31,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Property from '../../../../axon/js/Property.js';
 import { PhysicalCoinStates } from '../model/PhysicalCoinStates.js';
 import QuantumCoinNode from './QuantumCoinNode.js';
-import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
 import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -148,21 +147,21 @@ export default class CoinsExperimentSceneView extends Node {
 
         // The user has prepared the experiment and wants to now make measurements.  Animate the motion of the prepared
         // coins to the measurement areas.
-        const coinMask = new Circle( 36, {
+        const coinMask = new Circle( InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS, {
           fill: Color.LIGHT_GRAY,
           opacity: 0.2
         } );
         let coinNode;
         if ( sceneModel.systemType === 'physical' ) {
           coinNode = new PhysicalCoinNode(
-            sceneModel.singleCoin.currentStateProperty as Property<PhysicalCoinStates>,
+            sceneModel.initialCoinStateProperty as Property<PhysicalCoinStates>,
             InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS,
             Tandem.OPT_OUT
           );
         }
         else {
           coinNode = new QuantumCoinNode(
-            sceneModel.singleCoin.currentStateProperty as Property<QuantumCoinStates>,
+            sceneModel.stateBiasProperty,
             InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS,
             Tandem.OPT_OUT
           );

@@ -2,84 +2,69 @@
 
 
 /**
- * CoinNode portrays a single coin in the view, allowing users to see its orientation, e.g. heads up or tails up.
+ * CoinNode portrays a coin with two faces.  It can show one or the other, and also supports cross-fading between the
+ * two faces in order to produce a "transposed" look.
  *
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import { Circle, Color, Node, NodeOptions, TPaint } from '../../../../scenery/js/imports.js';
+import { Circle, Node, NodeOptions, TPaint } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import optionize from '../../../../phet-core/js/optionize.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 
 // type for specifying the attributes for one face of the coin
-export type CoinFaceOptions = {
+export type CoinFaceParameters = {
   stroke?: TPaint;
   fill?: TPaint;
   content?: Node;
 };
 
-type SelfOptions = {
-  faceOptionsMap?: Map<string, CoinFaceOptions>;
-};
+type SelfOptions = EmptySelfOptions;
 export type CoinNodeOptions = SelfOptions & PickRequired<NodeOptions, 'tandem'>;
 
-const DEFAULT_FILL = new Color( '#EFE4B0' );
-const DEFAULT_STROKE = Color.BLACK;
+export default class CoinNode extends Node {
 
-export default class CoinNode<T extends string> extends Node {
+  public constructor( radius: number,
+                      crossFadeProperty: TReadOnlyProperty<number>,
+                      coinFaceParameters: CoinFaceParameters[],
+                      providedOptions?: CoinNodeOptions ) {
 
-  public constructor( coinState: TReadOnlyProperty<T>, radius: number, providedOptions?: CoinNodeOptions ) {
+    const options = optionize<CoinNodeOptions, SelfOptions, NodeOptions>()( {}, providedOptions );
 
-    const options = optionize<CoinNodeOptions, SelfOptions, NodeOptions>()( {
-      faceOptionsMap: new Map<string, CoinFaceOptions>()
-    }, providedOptions );
+    // parameter checking
+    assert && assert( coinFaceParameters.length === 2, 'there should be exactly two sets of coin face parameters' );
 
     super( options );
 
-    // Add the main outline.
-    const outline = new Circle( radius, {
-      stroke: Color.BLACK,
-      lineWidth: Math.floor( radius / 6 ),
-      fill: new Color( '#EFE4B0' )
+    // Create the nodes that represent each of the two faces.
+    const coinFaceNodes: Node[] = [];
+    coinFaceParameters.forEach( coinFaceParameterSet => {
+      const coinFace = new Circle( radius, {
+        stroke: coinFaceParameterSet.stroke,
+        lineWidth: Math.floor( radius / 6 ),
+        fill: coinFaceParameterSet.fill
+      } );
+      if ( coinFaceParameterSet.content ) {
+        const content = coinFaceParameterSet.content;
+        const scale = Math.min(
+          Math.min( 2 * radius / content.width, 1 ),
+          Math.min( 2 * radius / content.height, 1 )
+        );
+        content.setScaleMagnitude( scale );
+        content.center = Vector2.ZERO;
+        coinFace.addChild( coinFaceParameterSet.content );
+      }
+      this.addChild( coinFace );
+      coinFaceNodes.push( coinFace );
     } );
-    this.addChild( outline );
 
-    // Track any content that is currently being shown on the face of the coin.
-    let contentNode: Node | null = null;
-
-    // Update the appearance as the state changes.
-    coinState.link( state => {
-
-      // Remove previous content node if present.
-      if ( contentNode && this.hasChild( contentNode ) ) {
-        this.removeChild( contentNode );
-        contentNode = null;
-      }
-
-      // Set up the appearance of the coin face based on the new state.
-      const faceOptions = options.faceOptionsMap.get( state );
-      if ( faceOptions ) {
-        outline.fill = faceOptions.fill || DEFAULT_FILL;
-        outline.stroke = faceOptions.stroke || DEFAULT_STROKE;
-        if ( faceOptions.content ) {
-
-          contentNode = faceOptions.content;
-
-          // Scale the content to fit on the coin.  Note that this only scales down, not up.  Also, it is scaling based
-          // on rectangular bounds to fit in a circular area, so this might not work in all cases.  If possible, it's
-          // best to make sure the content node fits in the specified radius.
-          const scale = Math.min(
-            Math.min( 2 * radius / contentNode.width, 1 ),
-            Math.min( 2 * radius / contentNode.height, 1 )
-          );
-          contentNode.setScaleMagnitude( scale );
-          contentNode.centerX = 0;
-          contentNode.centerY = 0;
-          this.addChild( contentNode );
-        }
-      }
+    // Update the visibility of the coin faces.
+    crossFadeProperty.link( crossFade => {
+      coinFaceNodes[ 0 ].opacity = 1 - crossFade;
+      coinFaceNodes[ 1 ].opacity = crossFade;
     } );
   }
 }

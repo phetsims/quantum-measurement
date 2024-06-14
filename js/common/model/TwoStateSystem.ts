@@ -1,5 +1,12 @@
 // Copyright 2024, University of Colorado Boulder
 
+/**
+ * TwoStateSystem is a simple model for a system that can be in one of two states, and can be prepared (similar to
+ * flipping a coin) and measured (similar to reading how the flip turned out).
+ *
+ * @author John Blanco (PhET Interactive Simulations)
+ */
+
 import Property from '../../../../axon/js/Property.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
@@ -9,13 +16,6 @@ import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioO
 import optionize from '../../../../phet-core/js/optionize.js';
 import Range from '../../../../dot/js/Range.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
-
-/**
- * TwoStateSystem is a simple model for a system that can be in one of two states, and can be prepared (similar to
- * flipping a coin) and measured (similar to reading how the flip turned out).
- *
- * @author John Blanco (PhET Interactive Simulations)
- */
 
 type SelfOptions = {
   initialBias?: number;

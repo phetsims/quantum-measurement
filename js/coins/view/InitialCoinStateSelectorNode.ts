@@ -22,13 +22,15 @@ import RectangularRadioButtonGroup, { RectangularRadioButtonGroupOptions } from 
 import Panel from '../../../../sun/js/Panel.js';
 import { QuantumCoinStates, QuantumCoinStateValues } from '../model/QuantumCoinStates.js';
 import QuantumCoinNode from './QuantumCoinNode.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
 
 const RADIO_BUTTON_COIN_NODE_RADIUS = 16;
 const INDICATOR_COIN_NODE_RADIUS = 36;
 
 export default class InitialCoinStateSelectorNode extends VBox {
 
-  public constructor( initialCoinStateProperty: Property<PhysicalCoinStates> | Property<QuantumCoinStates>,
+  public constructor( initialCoinStateProperty: TReadOnlyProperty<PhysicalCoinStates> | TReadOnlyProperty<QuantumCoinStates>,
+                      stateBiasProperty: TReadOnlyProperty<number>,
                       preparingExperimentProperty: TReadOnlyProperty<boolean>,
                       systemType: SystemType,
                       tandem: Tandem ) {
@@ -80,7 +82,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
     else {
       const initialCoinStateItems = QuantumCoinStateValues.map( stateValue => ( {
         createNode: () => new QuantumCoinNode(
-          new Property<QuantumCoinStates>( stateValue ),
+          new NumberProperty( stateValue === 'up' ? 0 : 1 ),
           RADIO_BUTTON_COIN_NODE_RADIUS,
           Tandem.OPT_OUT
         ),
@@ -118,7 +120,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
     }
     else {
       orientationIndicatorCoinNode = new QuantumCoinNode(
-        initialCoinStateProperty as Property<QuantumCoinStates>,
+        stateBiasProperty,
         INDICATOR_COIN_NODE_RADIUS,
         tandem.createTandem( 'coinIndicatorNode' )
       );

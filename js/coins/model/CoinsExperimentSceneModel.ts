@@ -20,6 +20,8 @@ import { PhysicalCoinStates, PhysicalCoinStateValues } from './PhysicalCoinState
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import { QuantumCoinStates, QuantumCoinStateValues } from './QuantumCoinStates.js';
 import { SystemType } from '../../common/model/SystemType.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Range from '../../../../dot/js/Range.js';
 
 type SelfOptions = {
   initiallyActive?: boolean;
@@ -46,6 +48,9 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
 
   // The initial state of the coin(s) before any flipping occurs.
   public readonly initialCoinStateProperty: Property<PhysicalCoinStates> | Property<QuantumCoinStates>;
+
+  // The bias towards one outcome or another in the initially prepared state, from 0 to 1.
+  public readonly stateBiasProperty: NumberProperty;
 
   public constructor( providedOptions: CoinExperimentSceneModelOptions ) {
 
@@ -96,6 +101,11 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
         validValues: QuantumCoinStateValues
       } );
     }
+
+    this.stateBiasProperty = new NumberProperty( 0.5, {
+      range: new Range( 0, 1 ),
+      tandem: options.tandem.createTandem( 'stateBiasProperty' )
+    } );
 
     // Set the coins that will be measured into their initial states when transitioning from preparation to measurement.
     this.preparingExperimentProperty.lazyLink( preparingExperiment => {
