@@ -14,10 +14,6 @@ import CoinsExperimentSceneView, { CoinsExperimentSceneViewOptions } from './Coi
 import SceneSectionHeader from './SceneSectionHeader.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import ProbabilityEquationsNode from './ProbabilityEquationsNode.js';
-import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhysicalCoinsExperimentSceneViewOptions = SelfOptions & CoinsExperimentSceneViewOptions;
@@ -32,41 +28,6 @@ export default class PhysicalCoinsExperimentSceneView extends CoinsExperimentSce
     );
 
     super( sceneModel, options );
-
-    // Set up the header for the preparation area.
-    const prepAreaHeadingTextProperty: TReadOnlyProperty<string> = new DerivedProperty(
-      [
-        QuantumMeasurementStrings.coinStringProperty,
-        QuantumMeasurementStrings.itemToPreparePatternStringProperty,
-        sceneModel.preparingExperimentProperty
-      ],
-      ( coinString, itemToPreparePattern, preparingExperiment ) => preparingExperiment ?
-                                                                   StringUtils.fillIn( itemToPreparePattern, { item: coinString } ) :
-                                                                   coinString
-    );
-    const prepAreaHeaderLineWidthProperty = new DerivedProperty(
-      [ sceneModel.preparingExperimentProperty ],
-
-      // TODO: See https://github.com/phetsims/quantum-measurement/issues/1. Values below are empirically determined,
-      //       but there is probably a better way.
-      preparingExperiment => preparingExperiment ? 250 : 100
-    );
-    this.preparationArea.addChild( new SceneSectionHeader(
-      prepAreaHeadingTextProperty,
-      prepAreaHeaderLineWidthProperty
-    ) );
-
-    // Add the UI element that will allow the user to specify the initial state of the coin.
-    this.preparationArea.addChild( new InitialCoinStateSelectorNode(
-      sceneModel.initialCoinStateProperty,
-      sceneModel.stateBiasProperty,
-      sceneModel.preparingExperimentProperty,
-      'physical',
-      options.tandem.createTandem( 'coinStateSelectorNode' )
-    ) );
-
-    // Add the node that will show the probabilities for the possible outcomes as equations.
-    this.preparationArea.addChild( new ProbabilityEquationsNode( sceneModel.singleCoin.biasProperty, 'physical' ) );
 
     // Add the top header for the measurement area.  It changes based on the mode and the strings.
     const measurementAreaHeaderLineWidthProperty = new DerivedProperty(

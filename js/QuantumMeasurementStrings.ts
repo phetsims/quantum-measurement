@@ -28,6 +28,7 @@ type StringsType = {
   'multipleCoinMeasurementsStringProperty': LocalizedStringProperty;
   'newCoinStringProperty': LocalizedStringProperty;
   'physicalCoinStringProperty': LocalizedStringProperty;
+  'preparedStateStringProperty': LocalizedStringProperty;
   'quantumCoinQuotedStringProperty': LocalizedStringProperty;
   'ReprepareStringProperty': LocalizedStringProperty;
   'ReprepareAndRevealStringProperty': LocalizedStringProperty;
