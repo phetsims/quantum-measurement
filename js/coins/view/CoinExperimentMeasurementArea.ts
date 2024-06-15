@@ -24,6 +24,7 @@ import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
 import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
+import { Shape } from '../../../../kite/js/imports.js';
 
 const SINGLE_COIN_AREA_RECT_LINE_WIDTH = 17;
 
@@ -56,7 +57,10 @@ export default class CoinExperimentMeasurementArea extends VBox {
       lineWidth: SINGLE_COIN_AREA_RECT_LINE_WIDTH,
       stroke: new Color( '#222222' )
     } );
-    const singleCoinMeasurementArea = new Node( { children: [ singleCoinMeasurementRectangle ] } );
+    const singleCoinMeasurementArea = new Node( {
+      children: [ singleCoinMeasurementRectangle ],
+      clipArea: Shape.bounds( singleCoinMeasurementRectangle.getRectBounds() )
+    } );
 
     // Add the lower heading for the measurement area.
     const multiCoinSectionHeader = new SceneSectionHeader(
@@ -88,6 +92,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
     // When the scene switches from preparing the experiment to making measurements, coins are added that migrate from
     // the preparation area to this (the measurement) area.
     let singleCoinNode: CoinNode | null = null;
+    let coinMask: Circle | null = null;
     let animationFromPrepToMeasurementArea: Animation | null = null;
     let animationFromEdgeOfScreenToBehindIt: Animation | null = null;
     sceneModel.preparingExperimentProperty.lazyLink( preparingExperiment => {
@@ -101,15 +106,24 @@ export default class CoinExperimentMeasurementArea extends VBox {
           if ( singleCoinMeasurementArea.hasChild( singleCoinNode ) ) {
             singleCoinMeasurementArea.removeChild( singleCoinNode );
           }
-          else {
-            sceneGraphParent.removeCoinNode( singleCoinNode );
+          else if ( sceneGraphParent.hasChild( singleCoinNode ) ) {
+            sceneGraphParent.removeChild( singleCoinNode );
           }
           singleCoinNode.dispose();
           singleCoinNode = null;
         }
+        if ( coinMask ) {
+          singleCoinMeasurementArea.removeChild( coinMask );
+          coinMask.dispose();
+          coinMask = null;
+        }
         if ( animationFromPrepToMeasurementArea ) {
           animationFromPrepToMeasurementArea.stop();
           animationFromPrepToMeasurementArea = null;
+        }
+        if ( animationFromEdgeOfScreenToBehindIt ) {
+          animationFromEdgeOfScreenToBehindIt.stop();
+          animationFromEdgeOfScreenToBehindIt = null;
         }
       }
       else {
@@ -146,37 +160,41 @@ export default class CoinExperimentMeasurementArea extends VBox {
           easing: Easing.LINEAR
         } );
         animationFromPrepToMeasurementArea.start();
-        animationFromPrepToMeasurementArea.endedEmitter.addListener( () => {
+        animationFromPrepToMeasurementArea.finishEmitter.addListener( () => {
 
           const coinNode = singleCoinNode!;
           coinNode.moveToBack();
 
+          // Add a "mask" that will appear on top of the coin that will be used to hide it when it's in the test area.
+          // It is not a child of the coin node because it's being clipped by the test area.
+          coinMask = new Circle( InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS, {
+            fill: new Color( '#cccccc' ),
+            stroke: new Color( '#888888' ),
+            lineWidth: 4
+          } );
+          coinMask.center = singleCoinMeasurementArea.parentToLocalPoint( this.parentToLocalPoint( coinNode.center ) );
+          singleCoinMeasurementArea.addChild( coinMask );
+
           // Do the 2nd portion of the animation, which moves it into the actual test area.
           animationFromEdgeOfScreenToBehindIt = new Animation( {
-            setValue: value => { coinNode.center = value; },
+            setValue: value => {
+              coinNode.center = value;
+              coinMask!.center = singleCoinMeasurementArea.parentToLocalPoint( this.parentToLocalPoint( coinNode.center ) );
+            },
             getValue: () => coinNode.center,
             to: this.localToParentPoint( singleCoinMeasurementArea.center ),
             duration: 0.7,
             easing: Easing.CUBIC_OUT
           } );
-          animationFromEdgeOfScreenToBehindIt.endedEmitter.addListener( () => {
+          animationFromEdgeOfScreenToBehindIt.finishEmitter.addListener( () => {
 
             // Now that the coin is within the bounds of the measurement area, remove it from the parent node and add it
             // here.
-            sceneGraphParent.removeCoinNode( coinNode );
-            coinNode.centerX = singleCoinMeasurementArea.width / 2 - SINGLE_COIN_AREA_RECT_LINE_WIDTH / 2;
-            coinNode.centerY = singleCoinMeasurementArea.height / 2 - SINGLE_COIN_AREA_RECT_LINE_WIDTH / 2;
+            sceneGraphParent.removeChild( coinNode );
+            coinNode.centerX = singleCoinMeasurementArea.width / 2;
+            coinNode.centerY = singleCoinMeasurementArea.height / 2;
             singleCoinMeasurementArea.insertChild( 0, coinNode );
           } );
-
-          // Before starting the animation, add a "mask" on top of the coin that will be used to hide it when it's in
-          // the test area.
-          const coinMask = new Circle( InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS, {
-            fill: new Color( '#cccccc' ),
-            stroke: new Color( '#888888' ),
-            lineWidth: 4
-          } );
-          coinNode.addChild( coinMask );
 
           // Kick off the animation.
           animationFromEdgeOfScreenToBehindIt.start();

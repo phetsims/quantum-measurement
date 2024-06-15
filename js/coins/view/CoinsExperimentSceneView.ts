@@ -178,13 +178,6 @@ export default class CoinsExperimentSceneView extends Node {
     this.addChild( coinNode );
   }
 
-  /**
-   * Remove the provided coin node from the scene graph.
-   */
-  public removeCoinNode( coinNode: CoinNode ): void {
-    this.removeChild( coinNode );
-  }
-
   protected updateActivityAreaPositions(): void {
     const dividerPositionX = this.dividerXPositionProperty.value;
     this.preparationArea.centerX = dividerPositionX / 2;
