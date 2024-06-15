@@ -173,7 +173,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
             lineWidth: 4
           } );
           coinMask.center = singleCoinMeasurementArea.parentToLocalPoint( this.parentToLocalPoint( coinNode.center ) );
-          singleCoinMeasurementArea.addChild( coinMask );
+          singleCoinMeasurementArea.insertChild( 0, coinMask );
 
           // Do the 2nd portion of the animation, which moves it into the actual test area.
           animationFromEdgeOfScreenToBehindIt = new Animation( {
