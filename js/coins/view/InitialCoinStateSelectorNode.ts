@@ -23,11 +23,14 @@ import Panel from '../../../../sun/js/Panel.js';
 import { QuantumCoinStates, QuantumCoinStateValues } from '../model/QuantumCoinStates.js';
 import QuantumCoinNode from './QuantumCoinNode.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import CoinNode from './CoinNode.js';
 
 const RADIO_BUTTON_COIN_NODE_RADIUS = 16;
 const INDICATOR_COIN_NODE_RADIUS = 36;
 
 export default class InitialCoinStateSelectorNode extends VBox {
+
+  public readonly orientationIndicatorCoinNode: CoinNode;
 
   public constructor( initialCoinStateProperty: TReadOnlyProperty<PhysicalCoinStates> | TReadOnlyProperty<QuantumCoinStates>,
                       stateBiasProperty: TReadOnlyProperty<number>,
@@ -130,6 +133,8 @@ export default class InitialCoinStateSelectorNode extends VBox {
       children: [ selectorPanel, orientationIndicatorCoinNode ],
       spacing: 20
     } );
+
+    this.orientationIndicatorCoinNode = orientationIndicatorCoinNode;
   }
 
   // radius of the state indicator coin

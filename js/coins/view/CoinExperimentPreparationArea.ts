@@ -19,8 +19,11 @@ import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import ProbabilityEquationsNode from './ProbabilityEquationsNode.js';
 import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 
 export default class CoinExperimentPreparationArea extends VBox {
+
+  private readonly initialCoinStateSelectorNode: InitialCoinStateSelectorNode;
 
   public constructor( sceneModel: CoinsExperimentSceneModel, tandem: Tandem ) {
 
@@ -84,6 +87,15 @@ export default class CoinExperimentPreparationArea extends VBox {
       ],
       spacing: 15
     } );
+
+    this.initialCoinStateSelectorNode = initialCoinStateSelectorNode;
+  }
+
+  /**
+   * TODO: doc if this works, see https://github.com/phetsims/quantum-measurement/issues/11
+   */
+  public getIndicatorCoinGlobalBounds(): Bounds2 {
+    return this.initialCoinStateSelectorNode.orientationIndicatorCoinNode.getGlobalBounds();
   }
 }
 

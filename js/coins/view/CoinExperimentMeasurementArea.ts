@@ -15,6 +15,15 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import SceneSectionHeader from './SceneSectionHeader.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import PhysicalCoinNode from './PhysicalCoinNode.js';
+import Property from '../../../../axon/js/Property.js';
+import { PhysicalCoinStates } from '../model/PhysicalCoinStates.js';
+import QuantumCoinNode from './QuantumCoinNode.js';
+import CoinNode from './CoinNode.js';
+import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
+import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
+import Animation from '../../../../twixt/js/Animation.js';
+import Easing from '../../../../twixt/js/Easing.js';
 
 export default class CoinExperimentMeasurementArea extends VBox {
 
@@ -71,6 +80,78 @@ export default class CoinExperimentMeasurementArea extends VBox {
         multipleCoinMeasurementArea
       ],
       spacing: 25
+    } );
+
+    // When the scene switches from preparing the experiment to making measurements, coins are added that migrate from
+    // the preparation area to this (the measurement) area.
+    let singleCoinNode: CoinNode | null = null;
+    let preparedSingleCoinAnimation: Animation | null = null;
+    sceneModel.preparingExperimentProperty.lazyLink( preparingExperiment => {
+
+      // Create a typed reference to the parent node, since we'll need to invoke some methods on it.
+      assert && assert( this.getParent() instanceof CoinsExperimentSceneView );
+      const sceneGraphParent = this.getParent() as CoinsExperimentSceneView;
+
+      if ( preparingExperiment ) {
+        if ( singleCoinNode ) {
+          if ( singleCoinMeasurementArea.hasChild( singleCoinNode ) ) {
+            singleCoinMeasurementArea.removeChild( singleCoinNode );
+          }
+          else {
+            sceneGraphParent.removeCoinNode( singleCoinNode );
+          }
+          singleCoinNode.dispose();
+          singleCoinNode = null;
+        }
+        if ( preparedSingleCoinAnimation ) {
+          preparedSingleCoinAnimation.stop();
+          preparedSingleCoinAnimation = null;
+        }
+      }
+      else {
+
+        // The scene is transitioning from preparation to measurement mode, and we need to animate coins coming from the
+        // preparation area to the measurement area.  Start be creating the node used for single coin measurements.
+        if ( sceneModel.systemType === 'physical' ) {
+          singleCoinNode = new PhysicalCoinNode(
+            new Property<PhysicalCoinStates>( sceneModel.initialCoinStateProperty.value as PhysicalCoinStates ),
+            InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS,
+            Tandem.OPT_OUT
+          );
+        }
+        else {
+          singleCoinNode = new QuantumCoinNode(
+            sceneModel.stateBiasProperty,
+            InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS,
+            Tandem.OPT_OUT
+          );
+        }
+
+        // Add the coin to our parent node.  This is done so that we don't change our bounds, which could mess up the
+        // layout.
+        sceneGraphParent.addCoinNode( singleCoinNode );
+
+        // Create and start an animation to move this coin to the top screen in the measurement area.
+        const postShiftDestination = singleCoinMeasurementArea.center.minusXY( 100, 0 );
+        const postShiftDestinationInParentCoords = this.localToParentPoint( postShiftDestination );
+        preparedSingleCoinAnimation = new Animation( {
+          setValue: value => { singleCoinNode!.center = value; },
+          getValue: () => singleCoinNode!.center,
+          to: postShiftDestinationInParentCoords,
+          duration: 1,
+          easing: Easing.CUBIC_OUT
+        } );
+        preparedSingleCoinAnimation.start();
+        preparedSingleCoinAnimation.endedEmitter.addListener( () => {
+
+          // Now that the coin is within the bounds of the measurement area, remove it from the parent node and add it
+          // here.
+          sceneGraphParent.removeCoinNode( singleCoinNode! );
+          singleCoinNode!.centerX = singleCoinMeasurementArea.width / 2 - singleCoinMeasurementArea.lineWidth / 2;
+          singleCoinNode!.centerY = singleCoinMeasurementArea.height / 2 - singleCoinMeasurementArea.lineWidth / 2;
+          singleCoinMeasurementArea.addChild( singleCoinNode! );
+        } );
+      }
     } );
   }
 }

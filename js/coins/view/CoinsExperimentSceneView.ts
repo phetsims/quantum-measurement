@@ -8,7 +8,7 @@
  */
 
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { Circle, Color, Line, Node, NodeOptions } from '../../../../scenery/js/imports.js';
+import { Color, Line, Node, NodeOptions } from '../../../../scenery/js/imports.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
@@ -26,15 +26,10 @@ import Range from '../../../../dot/js/Range.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import Easing from '../../../../twixt/js/Easing.js';
-import PhysicalCoinNode from './PhysicalCoinNode.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import Property from '../../../../axon/js/Property.js';
-import { PhysicalCoinStates } from '../model/PhysicalCoinStates.js';
-import QuantumCoinNode from './QuantumCoinNode.js';
-import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
 import CoinExperimentPreparationArea from './CoinExperimentPreparationArea.js';
 import CoinExperimentMeasurementArea from './CoinExperimentMeasurementArea.js';
+import CoinNode from './CoinNode.js';
 
 type SelfOptions = EmptySelfOptions;
 export type CoinsExperimentSceneViewOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
@@ -61,10 +56,6 @@ export default class CoinsExperimentSceneView extends Node {
   // The animation for the movement of the divider when switching between 'preparation' and 'measurement' modes.  This
   // will be null when no animation is in progress.
   private dividerMovementAnimation: Animation | null = null;
-
-  // The coin node that will appear in the preparation area and indicate the initially prepared state.  It must be
-  // created by the subclasses, but needs to be available here so that its position is available.
-  protected orientationIndicatorCoinNode: Node | null = null;
 
   public constructor( sceneModel: CoinsExperimentSceneModel, providedOptions?: CoinsExperimentSceneViewOptions ) {
 
@@ -123,10 +114,6 @@ export default class CoinsExperimentSceneView extends Node {
       this.updateActivityAreaPositions();
     } );
 
-    // the Node and animation for the coin that moves from the prep area to the measurement area
-    let animatingSingleCoinNode: PhysicalCoinNode | null = null;
-    let preparedSingleCoinAnimation: Animation | null = null;
-
     // Monitor the state of the experiment and update the view when switching between 'preparation' and 'measurement'.
     sceneModel.preparingExperimentProperty.link( preparingExperiment => {
 
@@ -154,70 +141,6 @@ export default class CoinsExperimentSceneView extends Node {
 
       // Kick off the divider animation.
       this.dividerMovementAnimation.start();
-
-      if ( !preparingExperiment ) {
-
-        // The user has prepared the experiment and wants to now make measurements.  Animate the motion of the prepared
-        // coins to the measurement areas.
-        const coinMask = new Circle( InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS, {
-          fill: Color.LIGHT_GRAY,
-          opacity: 0.2
-        } );
-        let coinNode;
-        if ( sceneModel.systemType === 'physical' ) {
-          coinNode = new PhysicalCoinNode(
-            sceneModel.initialCoinStateProperty as Property<PhysicalCoinStates>,
-            InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS,
-            Tandem.OPT_OUT
-          );
-        }
-        else {
-          coinNode = new QuantumCoinNode(
-            sceneModel.stateBiasProperty,
-            InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS,
-            Tandem.OPT_OUT
-          );
-        }
-        animatingSingleCoinNode = new Node( {
-          children: [ coinNode, coinMask ]
-        } );
-        this.addChild( animatingSingleCoinNode );
-        animatingSingleCoinNode.moveToBack();
-
-        if ( this.orientationIndicatorCoinNode ) {
-
-          // Figure out where this coin should start - it will animate from here to the measurement area.
-          animatingSingleCoinNode.center =
-            this.globalToLocalBounds( this.orientationIndicatorCoinNode?.getGlobalBounds() ).center;
-
-          // Create and start an animation to move this coin to the top screen in the measurement area.
-          preparedSingleCoinAnimation = new Animation( {
-            setValue: value => { animatingSingleCoinNode!.center = value; },
-            getValue: () => animatingSingleCoinNode!.center,
-
-            // TODO: See https://github.com/phetsims/quantum-measurement/issues/9.  This is hardcoded so that a demo can
-            //       be shown, but it should get the needed value from the measurement area at some point.
-            to: new Vector2( 615, 130 ),
-            duration: 1,
-            easing: Easing.CUBIC_OUT
-          } );
-          preparedSingleCoinAnimation.start();
-          preparedSingleCoinAnimation.endedEmitter.addListener( () => {
-            coinMask.opacity = 1;
-            preparedSingleCoinAnimation = null;
-          } );
-        }
-      }
-      else if ( animatingSingleCoinNode ) {
-        assert && assert(
-          this.hasChild( animatingSingleCoinNode ),
-          'the parent scene view should never have reference to the animating coin unless it is a child'
-        );
-        preparedSingleCoinAnimation && preparedSingleCoinAnimation.stop();
-        this.removeChild( animatingSingleCoinNode );
-        animatingSingleCoinNode.dispose();
-        animatingSingleCoinNode = null;
-      }
     } );
 
     // Create and add the button for starting a new experiment by preparing a new coin.
@@ -238,6 +161,28 @@ export default class CoinsExperimentSceneView extends Node {
         this.newCoinButton.top = prepAreaBounds.bottom + 10;
       }
     } );
+  }
+
+  /**
+   * Add a coin node to the scene graph.  This is used to support the creation an animation of a coin from the
+   * preparation to the measurement area.  Having this method allows the measurement area to create the node and get it
+   * into the scene graph without altering its bounds.
+   */
+  public addCoinNode( coinNode: CoinNode ): void {
+
+    // TODO: See https://github.com/phetsims/quantum-measurement/issues/11.  Hardcoded values are being used because the
+    //       attempts to do something more general (the commented out code) wasn't working.  This should be fixed up.
+    // const indicatorCoinGlobalBounds = this.preparationArea.getIndicatorCoinGlobalBounds();
+    // coinNode.center = this.globalToLocalPoint( indicatorCoinGlobalBounds.center );
+    coinNode.center = this.globalToLocalPoint( new Vector2( 200, 410 ) );
+    this.addChild( coinNode );
+  }
+
+  /**
+   * Remove the provided coin node from the scene graph.
+   */
+  public removeCoinNode( coinNode: CoinNode ): void {
+    this.removeChild( coinNode );
   }
 
   protected updateActivityAreaPositions(): void {
