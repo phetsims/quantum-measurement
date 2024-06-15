@@ -9,7 +9,7 @@
  */
 
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { Color, LinearGradient, Rectangle, VBox } from '../../../../scenery/js/imports.js';
+import { Circle, Color, LinearGradient, Node, Rectangle, VBox } from '../../../../scenery/js/imports.js';
 import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import SceneSectionHeader from './SceneSectionHeader.js';
@@ -24,6 +24,8 @@ import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
 import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
+
+const SINGLE_COIN_AREA_RECT_LINE_WIDTH = 17;
 
 export default class CoinExperimentMeasurementArea extends VBox {
 
@@ -46,14 +48,15 @@ export default class CoinExperimentMeasurementArea extends VBox {
 
     // Add the area where the single coin will be hidden and revealed.
     const singleCoinTestAreaSideWidth = 150;
-    const singleCoinMeasurementArea = new Rectangle( 0, 0, singleCoinTestAreaSideWidth, 130, {
+    const singleCoinMeasurementRectangle = new Rectangle( 0, 0, singleCoinTestAreaSideWidth, 130, {
       fill: new LinearGradient( 0, 0, singleCoinTestAreaSideWidth, 0 )
         .addColorStop( 0, new Color( '#eeeeee' ) )
         .addColorStop( 1, new Color( '#cceae8' ) ),
       opacity: 0.8,
-      lineWidth: 17,
+      lineWidth: SINGLE_COIN_AREA_RECT_LINE_WIDTH,
       stroke: new Color( '#222222' )
     } );
+    const singleCoinMeasurementArea = new Node( { children: [ singleCoinMeasurementRectangle ] } );
 
     // Add the lower heading for the measurement area.
     const multiCoinSectionHeader = new SceneSectionHeader(
@@ -85,7 +88,8 @@ export default class CoinExperimentMeasurementArea extends VBox {
     // When the scene switches from preparing the experiment to making measurements, coins are added that migrate from
     // the preparation area to this (the measurement) area.
     let singleCoinNode: CoinNode | null = null;
-    let preparedSingleCoinAnimation: Animation | null = null;
+    let animationFromPrepToMeasurementArea: Animation | null = null;
+    let animationFromEdgeOfScreenToBehindIt: Animation | null = null;
     sceneModel.preparingExperimentProperty.lazyLink( preparingExperiment => {
 
       // Create a typed reference to the parent node, since we'll need to invoke some methods on it.
@@ -103,9 +107,9 @@ export default class CoinExperimentMeasurementArea extends VBox {
           singleCoinNode.dispose();
           singleCoinNode = null;
         }
-        if ( preparedSingleCoinAnimation ) {
-          preparedSingleCoinAnimation.stop();
-          preparedSingleCoinAnimation = null;
+        if ( animationFromPrepToMeasurementArea ) {
+          animationFromPrepToMeasurementArea.stop();
+          animationFromPrepToMeasurementArea = null;
         }
       }
       else {
@@ -128,28 +132,54 @@ export default class CoinExperimentMeasurementArea extends VBox {
         }
 
         // Add the coin to our parent node.  This is done so that we don't change our bounds, which could mess up the
-        // layout.
+        // layout.  It will be added back to this area when it is back within the bounds.
         sceneGraphParent.addCoinNode( singleCoinNode );
 
         // Create and start an animation to move this coin to the top screen in the measurement area.
-        const postShiftDestination = singleCoinMeasurementArea.center.minusXY( 100, 0 );
-        const postShiftDestinationInParentCoords = this.localToParentPoint( postShiftDestination );
-        preparedSingleCoinAnimation = new Animation( {
+        const leftOfTestArea = singleCoinMeasurementArea.center.minusXY( 220, 0 );
+        const leftOfTestAreaInParentCoords = this.localToParentPoint( leftOfTestArea );
+        animationFromPrepToMeasurementArea = new Animation( {
           setValue: value => { singleCoinNode!.center = value; },
           getValue: () => singleCoinNode!.center,
-          to: postShiftDestinationInParentCoords,
-          duration: 1,
-          easing: Easing.CUBIC_OUT
+          to: leftOfTestAreaInParentCoords,
+          duration: 0.5,
+          easing: Easing.LINEAR
         } );
-        preparedSingleCoinAnimation.start();
-        preparedSingleCoinAnimation.endedEmitter.addListener( () => {
+        animationFromPrepToMeasurementArea.start();
+        animationFromPrepToMeasurementArea.endedEmitter.addListener( () => {
 
-          // Now that the coin is within the bounds of the measurement area, remove it from the parent node and add it
-          // here.
-          sceneGraphParent.removeCoinNode( singleCoinNode! );
-          singleCoinNode!.centerX = singleCoinMeasurementArea.width / 2 - singleCoinMeasurementArea.lineWidth / 2;
-          singleCoinNode!.centerY = singleCoinMeasurementArea.height / 2 - singleCoinMeasurementArea.lineWidth / 2;
-          singleCoinMeasurementArea.addChild( singleCoinNode! );
+          const coinNode = singleCoinNode!;
+          coinNode.moveToBack();
+
+          // Do the 2nd portion of the animation, which moves it into the actual test area.
+          animationFromEdgeOfScreenToBehindIt = new Animation( {
+            setValue: value => { coinNode.center = value; },
+            getValue: () => coinNode.center,
+            to: this.localToParentPoint( singleCoinMeasurementArea.center ),
+            duration: 0.7,
+            easing: Easing.CUBIC_OUT
+          } );
+          animationFromEdgeOfScreenToBehindIt.endedEmitter.addListener( () => {
+
+            // Now that the coin is within the bounds of the measurement area, remove it from the parent node and add it
+            // here.
+            sceneGraphParent.removeCoinNode( coinNode );
+            coinNode.centerX = singleCoinMeasurementArea.width / 2 - SINGLE_COIN_AREA_RECT_LINE_WIDTH / 2;
+            coinNode.centerY = singleCoinMeasurementArea.height / 2 - SINGLE_COIN_AREA_RECT_LINE_WIDTH / 2;
+            singleCoinMeasurementArea.insertChild( 0, coinNode );
+          } );
+
+          // Before starting the animation, add a "mask" on top of the coin that will be used to hide it when it's in
+          // the test area.
+          const coinMask = new Circle( InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS, {
+            fill: new Color( '#cccccc' ),
+            stroke: new Color( '#888888' ),
+            lineWidth: 4
+          } );
+          coinNode.addChild( coinMask );
+
+          // Kick off the animation.
+          animationFromEdgeOfScreenToBehindIt.start();
         } );
       }
     } );
