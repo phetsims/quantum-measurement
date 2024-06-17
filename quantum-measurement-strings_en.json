@@ -50,10 +50,10 @@
   "quantumCoinQuoted": {
     "value": "\"Quantum Coin\""
   },
-  "Reprepare": {
+  "reprepare": {
     "value": "Reprepare"
   },
-  "ReprepareAndReveal": {
+  "reprepareAndReveal": {
     "value": "Reprepare and Reveal"
   },
   "reveal": {

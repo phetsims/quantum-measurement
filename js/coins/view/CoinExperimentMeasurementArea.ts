@@ -9,7 +9,7 @@
  */
 
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { Circle, Color, LinearGradient, Node, Rectangle, VBox } from '../../../../scenery/js/imports.js';
+import { Circle, Color, HBox, LinearGradient, Node, Rectangle, VBox } from '../../../../scenery/js/imports.js';
 import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import SceneSectionHeader from './SceneSectionHeader.js';
@@ -25,6 +25,7 @@ import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import { Shape } from '../../../../kite/js/imports.js';
+import CoinExperimentButtonSet from './CoinExperimentButtonSet.js';
 
 const SINGLE_COIN_AREA_RECT_LINE_WIDTH = 17;
 
@@ -61,6 +62,18 @@ export default class CoinExperimentMeasurementArea extends VBox {
       children: [ singleCoinMeasurementRectangle ],
       clipArea: Shape.bounds( singleCoinMeasurementRectangle.getRectBounds() )
     } );
+    const singleCoinExperimentButtonSet = new CoinExperimentButtonSet(
+      sceneModel.systemType,
+      {
+        tandem: tandem.createTandem( 'singleCoinExperimentButtonSet' ),
+        visibleProperty: DerivedProperty.not( sceneModel.preparingExperimentProperty )
+      }
+    );
+
+    const singleCoinAreaAndControls = new HBox( {
+      children: [ singleCoinMeasurementArea, singleCoinExperimentButtonSet ],
+      spacing: 30
+    } );
 
     // Add the lower heading for the measurement area.
     const multiCoinSectionHeader = new SceneSectionHeader(
@@ -82,7 +95,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
     super( {
       children: [
         singleCoinSectionHeader,
-        singleCoinMeasurementArea,
+        singleCoinAreaAndControls,
         multiCoinSectionHeader,
         multipleCoinMeasurementArea
       ],
@@ -149,8 +162,8 @@ export default class CoinExperimentMeasurementArea extends VBox {
         // layout.  It will be added back to this area when it is back within the bounds.
         sceneGraphParent.addCoinNode( singleCoinNode );
 
-        // Create and start an animation to move this coin to the top screen in the measurement area.
-        const leftOfTestArea = singleCoinMeasurementArea.center.minusXY( 220, 0 );
+        // Create and start an animation to move this coin to the top test area in the measurement area.
+        const leftOfTestArea = singleCoinAreaAndControls.center.minusXY( 350, 0 );
         const leftOfTestAreaInParentCoords = this.localToParentPoint( leftOfTestArea );
         animationFromPrepToMeasurementArea = new Animation( {
           setValue: value => { singleCoinNode!.center = value; },
@@ -179,17 +192,21 @@ export default class CoinExperimentMeasurementArea extends VBox {
           animationFromEdgeOfScreenToBehindIt = new Animation( {
             setValue: value => {
               coinNode.center = value;
-              coinMask!.center = singleCoinMeasurementArea.parentToLocalPoint( this.parentToLocalPoint( coinNode.center ) );
+              coinMask!.center = singleCoinAreaAndControls.parentToLocalPoint(
+                singleCoinMeasurementArea.parentToLocalPoint(
+                  this.parentToLocalPoint( coinNode.center )
+                )
+              );
             },
             getValue: () => coinNode.center,
-            to: this.localToParentPoint( singleCoinMeasurementArea.center ),
+            to: this.localToParentPoint( singleCoinAreaAndControls.localToParentPoint( singleCoinMeasurementArea.center ) ),
             duration: 0.7,
             easing: Easing.CUBIC_OUT
           } );
           animationFromEdgeOfScreenToBehindIt.finishEmitter.addListener( () => {
 
             // Now that the coin is within the bounds of the measurement area, remove it from the parent node and add it
-            // here.
+            // to the measurement area.
             sceneGraphParent.removeChild( coinNode );
             coinNode.centerX = singleCoinMeasurementArea.width / 2;
             coinNode.centerY = singleCoinMeasurementArea.height / 2;
