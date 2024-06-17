@@ -26,8 +26,11 @@ import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import CoinExperimentButtonSet from './CoinExperimentButtonSet.js';
+import Dimension2 from '../../../../dot/js/Dimension2.js';
 
 const SINGLE_COIN_AREA_RECT_LINE_WIDTH = 17;
+const MULTIPLE_COIN_TEST_BOX_SIZE = new Dimension2( 200, 200 );
+const SINGLE_COIN_TEST_BOX_SIZE = new Dimension2( 150, 130 );
 
 export default class CoinExperimentMeasurementArea extends VBox {
 
@@ -49,18 +52,23 @@ export default class CoinExperimentMeasurementArea extends VBox {
     );
 
     // Add the area where the single coin will be hidden and revealed.
-    const singleCoinTestAreaSideWidth = 150;
-    const singleCoinMeasurementRectangle = new Rectangle( 0, 0, singleCoinTestAreaSideWidth, 130, {
-      fill: new LinearGradient( 0, 0, singleCoinTestAreaSideWidth, 0 )
-        .addColorStop( 0, new Color( '#eeeeee' ) )
-        .addColorStop( 1, new Color( '#cceae8' ) ),
-      opacity: 0.8,
-      lineWidth: SINGLE_COIN_AREA_RECT_LINE_WIDTH,
-      stroke: new Color( '#222222' )
-    } );
-    const singleCoinMeasurementArea = new Node( {
-      children: [ singleCoinMeasurementRectangle ],
-      clipArea: Shape.bounds( singleCoinMeasurementRectangle.getRectBounds() )
+    const singleCoinTestBoxRectangle = new Rectangle(
+      0,
+      0,
+      SINGLE_COIN_TEST_BOX_SIZE.width,
+      SINGLE_COIN_TEST_BOX_SIZE.height,
+      {
+        fill: new LinearGradient( 0, 0, SINGLE_COIN_TEST_BOX_SIZE.width, 0 )
+          .addColorStop( 0, new Color( '#eeeeee' ) )
+          .addColorStop( 1, new Color( '#cceae8' ) ),
+        opacity: 0.8,
+        lineWidth: SINGLE_COIN_AREA_RECT_LINE_WIDTH,
+        stroke: new Color( '#222222' )
+      }
+    );
+    const singleCoinTestBox = new Node( {
+      children: [ singleCoinTestBoxRectangle ],
+      clipArea: Shape.bounds( singleCoinTestBoxRectangle.getRectBounds() )
     } );
     const singleCoinExperimentButtonSet = new CoinExperimentButtonSet(
       sceneModel.systemType,
@@ -70,8 +78,10 @@ export default class CoinExperimentMeasurementArea extends VBox {
       }
     );
 
-    const singleCoinAreaAndControls = new HBox( {
-      children: [ singleCoinMeasurementArea, singleCoinExperimentButtonSet ],
+    // Create the composite node that represents to test box and the controls where the user will experiment with a
+    // single coin.
+    const singleCoinMeasurementArea = new HBox( {
+      children: [ singleCoinTestBox, singleCoinExperimentButtonSet ],
       spacing: 30
     } );
 
@@ -83,19 +93,42 @@ export default class CoinExperimentMeasurementArea extends VBox {
     );
 
     // Add the area where the multiple coins will be hidden and revealed.
-    const multipleCoinTestAreaSideLength = 200;
-    const multipleCoinMeasurementArea = new Rectangle( 0, 0, multipleCoinTestAreaSideLength, multipleCoinTestAreaSideLength, {
-      fill: new LinearGradient( 0, 0, multipleCoinTestAreaSideLength, 0 )
-        .addColorStop( 0, new Color( '#eeeeee' ) )
-        .addColorStop( 1, new Color( '#cceae8' ) ),
-      lineWidth: 2,
-      stroke: new Color( '#666666' )
+    const multipleCoinTestBoxRectangle = new Rectangle(
+      0,
+      0,
+      MULTIPLE_COIN_TEST_BOX_SIZE.width,
+      MULTIPLE_COIN_TEST_BOX_SIZE.height,
+      {
+        fill: new LinearGradient( 0, 0, MULTIPLE_COIN_TEST_BOX_SIZE.width, 0 )
+          .addColorStop( 0, new Color( '#eeeeee' ) )
+          .addColorStop( 1, new Color( '#cceae8' ) ),
+        lineWidth: 2,
+        stroke: new Color( '#666666' )
+      }
+    );
+    const multipleCoinTestBox = new Node( {
+      children: [ multipleCoinTestBoxRectangle ],
+      clipArea: Shape.bounds( multipleCoinTestBoxRectangle.getRectBounds() )
+    } );
+    const multipleCoinExperimentButtonSet = new CoinExperimentButtonSet(
+      sceneModel.systemType,
+      {
+        tandem: tandem.createTandem( 'multipleCoinExperimentButtonSet' ),
+        visibleProperty: DerivedProperty.not( sceneModel.preparingExperimentProperty )
+      }
+    );
+
+    // Create the composite node that represents to test box and controls where the user will experiment with multiple
+    // coins at once.
+    const multipleCoinMeasurementArea = new HBox( {
+      children: [ multipleCoinTestBox, multipleCoinExperimentButtonSet ],
+      spacing: 30
     } );
 
     super( {
       children: [
         singleCoinSectionHeader,
-        singleCoinAreaAndControls,
+        singleCoinMeasurementArea,
         multiCoinSectionHeader,
         multipleCoinMeasurementArea
       ],
@@ -116,8 +149,8 @@ export default class CoinExperimentMeasurementArea extends VBox {
 
       if ( preparingExperiment ) {
         if ( singleCoinNode ) {
-          if ( singleCoinMeasurementArea.hasChild( singleCoinNode ) ) {
-            singleCoinMeasurementArea.removeChild( singleCoinNode );
+          if ( singleCoinTestBox.hasChild( singleCoinNode ) ) {
+            singleCoinTestBox.removeChild( singleCoinNode );
           }
           else if ( sceneGraphParent.hasChild( singleCoinNode ) ) {
             sceneGraphParent.removeChild( singleCoinNode );
@@ -126,7 +159,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
           singleCoinNode = null;
         }
         if ( coinMask ) {
-          singleCoinMeasurementArea.removeChild( coinMask );
+          singleCoinTestBox.removeChild( coinMask );
           coinMask.dispose();
           coinMask = null;
         }
@@ -163,7 +196,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
         sceneGraphParent.addCoinNode( singleCoinNode );
 
         // Create and start an animation to move this coin to the top test area in the measurement area.
-        const leftOfTestArea = singleCoinAreaAndControls.center.minusXY( 350, 0 );
+        const leftOfTestArea = singleCoinMeasurementArea.center.minusXY( 350, 0 );
         const leftOfTestAreaInParentCoords = this.localToParentPoint( leftOfTestArea );
         animationFromPrepToMeasurementArea = new Animation( {
           setValue: value => { singleCoinNode!.center = value; },
@@ -185,21 +218,21 @@ export default class CoinExperimentMeasurementArea extends VBox {
             stroke: new Color( '#888888' ),
             lineWidth: 4
           } );
-          coinMask.center = singleCoinMeasurementArea.parentToLocalPoint( this.parentToLocalPoint( coinNode.center ) );
-          singleCoinMeasurementArea.insertChild( 0, coinMask );
+          coinMask.center = singleCoinTestBox.parentToLocalPoint( this.parentToLocalPoint( coinNode.center ) );
+          singleCoinTestBox.insertChild( 0, coinMask );
 
           // Do the 2nd portion of the animation, which moves it into the actual test area.
           animationFromEdgeOfScreenToBehindIt = new Animation( {
             setValue: value => {
               coinNode.center = value;
-              coinMask!.center = singleCoinAreaAndControls.parentToLocalPoint(
-                singleCoinMeasurementArea.parentToLocalPoint(
+              coinMask!.center = singleCoinMeasurementArea.parentToLocalPoint(
+                singleCoinTestBox.parentToLocalPoint(
                   this.parentToLocalPoint( coinNode.center )
                 )
               );
             },
             getValue: () => coinNode.center,
-            to: this.localToParentPoint( singleCoinAreaAndControls.localToParentPoint( singleCoinMeasurementArea.center ) ),
+            to: this.localToParentPoint( singleCoinMeasurementArea.localToParentPoint( singleCoinTestBox.center ) ),
             duration: 0.7,
             easing: Easing.CUBIC_OUT
           } );
@@ -208,9 +241,9 @@ export default class CoinExperimentMeasurementArea extends VBox {
             // Now that the coin is within the bounds of the measurement area, remove it from the parent node and add it
             // to the measurement area.
             sceneGraphParent.removeChild( coinNode );
-            coinNode.centerX = singleCoinMeasurementArea.width / 2;
-            coinNode.centerY = singleCoinMeasurementArea.height / 2;
-            singleCoinMeasurementArea.insertChild( 0, coinNode );
+            coinNode.centerX = singleCoinTestBox.width / 2;
+            coinNode.centerY = singleCoinTestBox.height / 2;
+            singleCoinTestBox.insertChild( 0, coinNode );
           } );
 
           // Kick off the animation.
