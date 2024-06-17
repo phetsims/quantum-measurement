@@ -26,6 +26,9 @@
   "flipAndReveal": {
     "value": "Flip and Reveal"
   },
+  "hide": {
+    "value": "Hide"
+  },
   "initialOrientation": {
     "value": "Initial Orientation"
   },

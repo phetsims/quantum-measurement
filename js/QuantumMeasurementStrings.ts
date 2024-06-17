@@ -22,6 +22,7 @@ type StringsType = {
   'coinBiasStringProperty': LocalizedStringProperty;
   'flipStringProperty': LocalizedStringProperty;
   'flipAndRevealStringProperty': LocalizedStringProperty;
+  'hideStringProperty': LocalizedStringProperty;
   'initialOrientationStringProperty': LocalizedStringProperty;
   'initialStateStringProperty': LocalizedStringProperty;
   'itemToPreparePatternStringProperty': LocalizedStringProperty;

@@ -34,6 +34,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
   // whether this scene is active, which is mostly about whether it is shown in the view
   public readonly activeProperty: BooleanProperty;
 
+  // The type of system - physical or quantum - that is being modeled in this scene.
   public readonly systemType: SystemType;
 
   // This BooleanProperty is used to control whether the experiment is being prepared (true) or measured (false).
@@ -107,9 +108,18 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
       tandem: options.tandem.createTandem( 'stateBiasProperty' )
     } );
 
-    // Set the coins that will be measured into their initial states when transitioning from preparation to measurement.
     this.preparingExperimentProperty.lazyLink( preparingExperiment => {
-      if ( !preparingExperiment ) {
+
+      if ( preparingExperiment ) {
+
+        // Set the experiment states back to their initial values.
+        this.singleCoinExperimentStateProperty.reset();
+        this.multiCoinExperimentStateProperty.reset();
+      }
+      else {
+
+        // Set the coins that will be measured into their initial states when transitioning from preparation to
+        // measurement.
         this.singleCoin.currentStateProperty.value = this.initialCoinStateProperty.value;
       }
     } );

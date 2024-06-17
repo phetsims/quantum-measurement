@@ -28,9 +28,12 @@ import { Shape } from '../../../../kite/js/imports.js';
 import CoinExperimentButtonSet from './CoinExperimentButtonSet.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 
-const SINGLE_COIN_AREA_RECT_LINE_WIDTH = 17;
+const SINGLE_COIN_AREA_RECT_LINE_WIDTH = 36;
 const MULTIPLE_COIN_TEST_BOX_SIZE = new Dimension2( 200, 200 );
-const SINGLE_COIN_TEST_BOX_SIZE = new Dimension2( 150, 130 );
+const SINGLE_COIN_TEST_BOX_SIZE = new Dimension2( 165, 145 );
+const SINGLE_COIN_TEST_BOX_UNREVEALED_FILL = new LinearGradient( 0, 0, SINGLE_COIN_TEST_BOX_SIZE.width, 0 )
+  .addColorStop( 0, new Color( '#eeeeee' ) )
+  .addColorStop( 0.9, new Color( '#bae3e0' ) );
 
 export default class CoinExperimentMeasurementArea extends VBox {
 
@@ -58,12 +61,9 @@ export default class CoinExperimentMeasurementArea extends VBox {
       SINGLE_COIN_TEST_BOX_SIZE.width,
       SINGLE_COIN_TEST_BOX_SIZE.height,
       {
-        fill: new LinearGradient( 0, 0, SINGLE_COIN_TEST_BOX_SIZE.width, 0 )
-          .addColorStop( 0, new Color( '#eeeeee' ) )
-          .addColorStop( 1, new Color( '#cceae8' ) ),
-        opacity: 0.8,
         lineWidth: SINGLE_COIN_AREA_RECT_LINE_WIDTH,
-        stroke: new Color( '#222222' )
+        stroke: new Color( '#555555' ),
+        opacity: 0.8
       }
     );
     const singleCoinTestBox = new Node( {
@@ -72,6 +72,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
     } );
     const singleCoinExperimentButtonSet = new CoinExperimentButtonSet(
       sceneModel.systemType,
+      sceneModel.singleCoinExperimentStateProperty,
       {
         tandem: tandem.createTandem( 'singleCoinExperimentButtonSet' ),
         visibleProperty: DerivedProperty.not( sceneModel.preparingExperimentProperty )
@@ -83,6 +84,13 @@ export default class CoinExperimentMeasurementArea extends VBox {
     const singleCoinMeasurementArea = new HBox( {
       children: [ singleCoinTestBox, singleCoinExperimentButtonSet ],
       spacing: 30
+    } );
+
+    // Make the single-coin test box transparent when the state of the coin is being revealed to the user.
+    sceneModel.singleCoinExperimentStateProperty.link( singleCoinExperimentState => {
+      singleCoinTestBoxRectangle.fill = singleCoinExperimentState === 'revealedAndStill' ?
+                                        Color.TRANSPARENT :
+                                        SINGLE_COIN_TEST_BOX_UNREVEALED_FILL;
     } );
 
     // Add the lower heading for the measurement area.
@@ -112,6 +120,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
     } );
     const multipleCoinExperimentButtonSet = new CoinExperimentButtonSet(
       sceneModel.systemType,
+      sceneModel.multiCoinExperimentStateProperty,
       {
         tandem: tandem.createTandem( 'multipleCoinExperimentButtonSet' ),
         visibleProperty: DerivedProperty.not( sceneModel.preparingExperimentProperty )
@@ -135,10 +144,22 @@ export default class CoinExperimentMeasurementArea extends VBox {
       spacing: 25
     } );
 
+    // Create the node that will be used to cover (aka "mask") the coin so that its state can't be seen.
+    const coinMask = new Circle( InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS, {
+      fill: new Color( '#cccccc' ),
+      stroke: new Color( '#888888' ),
+      lineWidth: 4,
+      visibleProperty: new DerivedProperty(
+        [ sceneModel.preparingExperimentProperty, sceneModel.singleCoinExperimentStateProperty ],
+        ( preparingExperiment, singleCoinExperimentState ) =>
+          !preparingExperiment && singleCoinExperimentState !== 'revealedAndStill'
+      )
+    } );
+    singleCoinTestBox.addChild( coinMask );
+
     // When the scene switches from preparing the experiment to making measurements, coins are added that migrate from
     // the preparation area to this (the measurement) area.
     let singleCoinNode: CoinNode | null = null;
-    let coinMask: Circle | null = null;
     let animationFromPrepToMeasurementArea: Animation | null = null;
     let animationFromEdgeOfScreenToBehindIt: Animation | null = null;
     sceneModel.preparingExperimentProperty.lazyLink( preparingExperiment => {
@@ -157,11 +178,6 @@ export default class CoinExperimentMeasurementArea extends VBox {
           }
           singleCoinNode.dispose();
           singleCoinNode = null;
-        }
-        if ( coinMask ) {
-          singleCoinTestBox.removeChild( coinMask );
-          coinMask.dispose();
-          coinMask = null;
         }
         if ( animationFromPrepToMeasurementArea ) {
           animationFromPrepToMeasurementArea.stop();
@@ -195,6 +211,9 @@ export default class CoinExperimentMeasurementArea extends VBox {
         // layout.  It will be added back to this area when it is back within the bounds.
         sceneGraphParent.addCoinNode( singleCoinNode );
 
+        // Make sure the coin mask is outside the test box.
+        coinMask.x = -SINGLE_COIN_TEST_BOX_SIZE.width * 2;
+
         // Create and start an animation to move this coin to the top test area in the measurement area.
         const leftOfTestArea = singleCoinMeasurementArea.center.minusXY( 350, 0 );
         const leftOfTestAreaInParentCoords = this.localToParentPoint( leftOfTestArea );
@@ -211,21 +230,14 @@ export default class CoinExperimentMeasurementArea extends VBox {
           const coinNode = singleCoinNode!;
           coinNode.moveToBack();
 
-          // Add a "mask" that will appear on top of the coin that will be used to hide it when it's in the test area.
-          // It is not a child of the coin node because it's being clipped by the test area.
-          coinMask = new Circle( InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS, {
-            fill: new Color( '#cccccc' ),
-            stroke: new Color( '#888888' ),
-            lineWidth: 4
-          } );
+          // Move the mask to be on top of the coin.
           coinMask.center = singleCoinTestBox.parentToLocalPoint( this.parentToLocalPoint( coinNode.center ) );
-          singleCoinTestBox.insertChild( 0, coinMask );
 
           // Do the 2nd portion of the animation, which moves it into the actual test area.
           animationFromEdgeOfScreenToBehindIt = new Animation( {
             setValue: value => {
               coinNode.center = value;
-              coinMask!.center = singleCoinMeasurementArea.parentToLocalPoint(
+              coinMask.center = singleCoinMeasurementArea.parentToLocalPoint(
                 singleCoinTestBox.parentToLocalPoint(
                   this.parentToLocalPoint( coinNode.center )
                 )

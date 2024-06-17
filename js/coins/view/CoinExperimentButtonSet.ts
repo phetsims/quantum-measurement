@@ -16,6 +16,9 @@ import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
+import { CoinExperimentStates } from '../model/CoinExperimentStates.js';
+import TProperty from '../../../../axon/js/TProperty.js';
 
 type SelfOptions = EmptySelfOptions;
 export type CoinExperimentButtonSetOptions = SelfOptions & PickRequired<NodeOptions, 'tandem' | 'visibleProperty'>;
@@ -32,12 +35,32 @@ const COMMON_BUTTON_OPTIONS = {
 
 export default class CoinExperimentButtonSet extends VBox {
 
-  public constructor( systemType: SystemType, providedOptions: CoinExperimentButtonSetOptions ) {
+  public constructor( systemType: SystemType,
+                      experimentStateProperty: TProperty<CoinExperimentStates>,
+                      providedOptions: CoinExperimentButtonSetOptions ) {
 
-    const revealButton = new TextPushButton(
-      QuantumMeasurementStrings.revealStringProperty,
+    const revealHideButtonTextProperty = new DerivedStringProperty(
+      [
+        QuantumMeasurementStrings.revealStringProperty,
+        QuantumMeasurementStrings.hideStringProperty,
+        experimentStateProperty
+      ],
+      ( revealString, hideString, experimentState ) =>
+        experimentState === 'revealedAndStill' ? hideString : revealString
+    );
+
+    const revealHideButton = new TextPushButton(
+      revealHideButtonTextProperty,
       combineOptions<TextPushButtonOptions>( COMMON_BUTTON_OPTIONS, {
-        tandem: providedOptions.tandem.createTandem( 'revealButton' )
+        listener: () => {
+          if ( experimentStateProperty.value === 'hiddenAndStill' ) {
+            experimentStateProperty.value = 'revealedAndStill';
+          }
+          else if ( experimentStateProperty.value === 'revealedAndStill' ) {
+            experimentStateProperty.value = 'hiddenAndStill';
+          }
+        },
+        tandem: providedOptions.tandem.createTandem( 'revealHideButton' )
       } )
     );
 
@@ -61,7 +84,7 @@ export default class CoinExperimentButtonSet extends VBox {
 
     const options = optionize<CoinExperimentButtonSetOptions, SelfOptions, VBoxOptions>()( {
       spacing: 10,
-      children: [ revealButton, flipOrReprepareButton, flipOrReprepareAndRevealButton ]
+      children: [ revealHideButton, flipOrReprepareButton, flipOrReprepareAndRevealButton ]
     }, providedOptions );
 
     super( options );
