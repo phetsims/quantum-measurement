@@ -75,7 +75,7 @@ export default class CoinExperimentPreparationArea extends VBox {
 
     // Create the node that will show the probabilities for the possible outcomes as equations.
     const probabilityEquationsNode = new ProbabilityEquationsNode(
-      sceneModel.singleCoin.biasProperty,
+      sceneModel.stateBiasProperty,
       sceneModel.systemType
     );
 
