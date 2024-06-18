@@ -83,7 +83,11 @@ export default class CoinExperimentPreparationArea extends VBox {
     // Create the control that will allow the user to manipulate the probability of the various outcomes.
     const outcomeProbabilityControl = new OutcomeProbabilityControl(
       sceneModel.systemType,
-      sceneModel.stateBiasProperty
+      sceneModel.stateBiasProperty,
+      {
+        visibleProperty: sceneModel.preparingExperimentProperty,
+        tandem: tandem.createTandem( 'outcomeProbabilityControl' )
+      }
     );
 
     super( {

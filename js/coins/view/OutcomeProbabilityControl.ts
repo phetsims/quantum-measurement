@@ -9,7 +9,7 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import { Node, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Node, RichText, Text, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -18,6 +18,12 @@ import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstant
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import ProbabilityValueControl from './ProbabilityValueControl.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+
+type SelfOptions = EmptySelfOptions;
+type OutcomeProbabilityControlOptions = SelfOptions & PickRequired<VBox, 'tandem' | 'visibleProperty'>;
+
 
 const TITLE_FONT = new PhetFont( 16 );
 const ALPHA = QuantumMeasurementConstants.ALPHA;
@@ -32,7 +38,8 @@ const P_OF_T = 'P(<span style="color: magenta;"><b>T</b></span>)';
 export default class OutcomeProbabilityControl extends VBox {
 
   public constructor( systemType: SystemType,
-                      outcomeProbabilityProperty: NumberProperty ) {
+                      outcomeProbabilityProperty: NumberProperty,
+                      providedOptions: OutcomeProbabilityControlOptions ) {
 
     let title: Node;
     if ( systemType === 'physical' ) {
@@ -80,14 +87,16 @@ export default class OutcomeProbabilityControl extends VBox {
       probabilityOfTailsString => `${probabilityOfTailsString} ${P_OF_T}`
     );
 
-    super( {
+    const options = optionize<OutcomeProbabilityControlOptions, SelfOptions, VBoxOptions>()( {
       children: [
         title,
         new ProbabilityValueControl( upperProbabilityControlTitleProperty, outcomeProbabilityProperty ),
         new ProbabilityValueControl( lowerProbabilityControlTitleProperty, inverseOutcomeProbabilityProperty )
       ],
       spacing: 12
-    } );
+    }, providedOptions );
+
+    super( options );
   }
 }
 
