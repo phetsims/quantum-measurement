@@ -28,6 +28,7 @@ type StringsType = {
   'itemToPreparePatternStringProperty': LocalizedStringProperty;
   'multipleCoinMeasurementsStringProperty': LocalizedStringProperty;
   'newCoinStringProperty': LocalizedStringProperty;
+  'observeStringProperty': LocalizedStringProperty;
   'physicalCoinStringProperty': LocalizedStringProperty;
   'preparedStateStringProperty': LocalizedStringProperty;
   'probabilityOfHeadsStringProperty': LocalizedStringProperty;

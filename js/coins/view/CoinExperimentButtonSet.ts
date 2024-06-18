@@ -42,12 +42,24 @@ export default class CoinExperimentButtonSet extends VBox {
 
     const revealHideButtonTextProperty = new DerivedStringProperty(
       [
-        QuantumMeasurementStrings.revealStringProperty,
         QuantumMeasurementStrings.hideStringProperty,
+        QuantumMeasurementStrings.revealStringProperty,
+        QuantumMeasurementStrings.observeStringProperty,
         experimentStateProperty
       ],
-      ( revealString, hideString, experimentState ) =>
-        experimentState === 'revealedAndStill' ? hideString : revealString
+      ( hideString, revealString, observeString, experimentState ) => {
+        let labelString;
+        if ( experimentState === 'revealedAndStill' ) {
+          labelString = hideString;
+        }
+        else if ( systemType === 'physical' ) {
+          labelString = revealString;
+        }
+        else {
+          labelString = observeString;
+        }
+        return labelString;
+      }
     );
 
     // Create the button that will be used to hide and reveal the coin without flipping it.

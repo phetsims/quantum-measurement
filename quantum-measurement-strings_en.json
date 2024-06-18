@@ -44,6 +44,9 @@
   "newCoin": {
     "value": "New Coin"
   },
+  "observe": {
+    "value": "Observe"
+  },
   "physicalCoin": {
     "value": "Physical Coin"
   },
@@ -63,7 +66,7 @@
     "value": "Reprepare"
   },
   "reprepareAndReveal": {
-    "value": "Reprepare and Reveal"
+    "value": "Reprepare and Observe"
   },
   "reveal": {
     "value": "Reveal"
