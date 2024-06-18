@@ -58,7 +58,7 @@ export default class TwoStateSystem<T extends string> extends PhetioObject {
 
   /**
    * Prepare this system to be measured.  This is analogous to flipping a physical coin or setting up a quantum system
-   * into a transposed state, except that we don't actually model the transposition - we just decide the outcome.
+   * into a superimposed state, except that we don't actually model the superposition - we just decide the outcome.
    */
   public prepare(): void {
     const index = dotRandom.nextDouble() < this.biasProperty.value ? 0 : 1;

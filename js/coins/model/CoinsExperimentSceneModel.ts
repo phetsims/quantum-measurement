@@ -132,6 +132,16 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
     }
   }
 
+  /**
+   * Prepare the single coin for measurement.  This is essentially the flipping of the coin.
+   */
+  public prepareSingleCoinExperiment(): void {
+    this.singleCoin.prepare();
+
+    // TODO: See https://github.com/phetsims/quantum-measurement/issues/12.  What are we going to do state-wise here?
+    // this.singleCoinExperimentStateProperty.value = 'hiddenAndStill';
+  }
+
   public reset(): void {
     this.preparingExperimentProperty.reset();
     this.singleCoinExperimentStateProperty.reset();

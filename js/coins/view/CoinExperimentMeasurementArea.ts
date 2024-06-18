@@ -16,7 +16,6 @@ import SceneSectionHeader from './SceneSectionHeader.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import PhysicalCoinNode from './PhysicalCoinNode.js';
-import Property from '../../../../axon/js/Property.js';
 import { PhysicalCoinStates } from '../model/PhysicalCoinStates.js';
 import QuantumCoinNode from './QuantumCoinNode.js';
 import CoinNode from './CoinNode.js';
@@ -27,6 +26,7 @@ import Easing from '../../../../twixt/js/Easing.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import CoinExperimentButtonSet from './CoinExperimentButtonSet.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 
 const SINGLE_COIN_AREA_RECT_LINE_WIDTH = 36;
 const MULTIPLE_COIN_TEST_BOX_SIZE = new Dimension2( 200, 200 );
@@ -73,6 +73,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
     const singleCoinExperimentButtonSet = new CoinExperimentButtonSet(
       sceneModel.systemType,
       sceneModel.singleCoinExperimentStateProperty,
+      () => { sceneModel.prepareSingleCoinExperiment(); },
       {
         tandem: tandem.createTandem( 'singleCoinExperimentButtonSet' ),
         visibleProperty: DerivedProperty.not( sceneModel.preparingExperimentProperty )
@@ -121,6 +122,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
     const multipleCoinExperimentButtonSet = new CoinExperimentButtonSet(
       sceneModel.systemType,
       sceneModel.multiCoinExperimentStateProperty,
+      () => { console.log( 'Preparing the experiment is not yet implement for the multi-coin case.' ); },
       {
         tandem: tandem.createTandem( 'multipleCoinExperimentButtonSet' ),
         visibleProperty: DerivedProperty.not( sceneModel.preparingExperimentProperty )
@@ -191,10 +193,10 @@ export default class CoinExperimentMeasurementArea extends VBox {
       else {
 
         // The scene is transitioning from preparation to measurement mode, and we need to animate coins coming from the
-        // preparation area to the measurement area.  Start be creating the node used for single coin measurements.
+        // preparation area to the measurement area.  Start by creating the node used for single coin measurements.
         if ( sceneModel.systemType === 'physical' ) {
           singleCoinNode = new PhysicalCoinNode(
-            new Property<PhysicalCoinStates>( sceneModel.initialCoinStateProperty.value as PhysicalCoinStates ),
+            sceneModel.singleCoin.currentStateProperty as TReadOnlyProperty<PhysicalCoinStates>,
             InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS,
             Tandem.OPT_OUT
           );

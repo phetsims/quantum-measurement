@@ -37,6 +37,7 @@ export default class CoinExperimentButtonSet extends VBox {
 
   public constructor( systemType: SystemType,
                       experimentStateProperty: TProperty<CoinExperimentStates>,
+                      prepareExperiment: () => void,
                       providedOptions: CoinExperimentButtonSetOptions ) {
 
     const revealHideButtonTextProperty = new DerivedStringProperty(
@@ -49,10 +50,14 @@ export default class CoinExperimentButtonSet extends VBox {
         experimentState === 'revealedAndStill' ? hideString : revealString
     );
 
+    // Create the button that will be used to hide and reveal the coin without flipping it.
     const revealHideButton = new TextPushButton(
       revealHideButtonTextProperty,
       combineOptions<TextPushButtonOptions>( COMMON_BUTTON_OPTIONS, {
         listener: () => {
+
+          // TODO: See https://github.com/phetsims/quantum-measurement/issues/12.  Updating the experiment state
+          //       directly here feels a little off to me.  Should this be read-only and set only by the scene model?
           if ( experimentStateProperty.value === 'hiddenAndStill' ) {
             experimentStateProperty.value = 'revealedAndStill';
           }
@@ -69,6 +74,7 @@ export default class CoinExperimentButtonSet extends VBox {
       QuantumMeasurementStrings.flipStringProperty :
       QuantumMeasurementStrings.reprepareStringProperty,
       combineOptions<TextPushButtonOptions>( COMMON_BUTTON_OPTIONS, {
+        listener: prepareExperiment,
         tandem: providedOptions.tandem.createTandem( 'flipOrReprepareButton' )
       } )
     );
@@ -78,6 +84,7 @@ export default class CoinExperimentButtonSet extends VBox {
       QuantumMeasurementStrings.flipAndRevealStringProperty :
       QuantumMeasurementStrings.reprepareAndRevealStringProperty,
       combineOptions<TextPushButtonOptions>( COMMON_BUTTON_OPTIONS, {
+        listener: prepareExperiment,
         tandem: providedOptions.tandem.createTandem( 'flipOrReprepareAndRevealButton' )
       } )
     );
