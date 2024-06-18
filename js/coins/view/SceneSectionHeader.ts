@@ -32,7 +32,7 @@ export default class SceneSectionHeader extends VBox {
 
     const heading = new Text( textProperty, {
       fill: options.textColor,
-      font: new PhetFont( 22 )
+      font: new PhetFont( 24 )
     } );
     const line = new Line( 0, 0, lineWidthProperty.value, 0, {
       stroke: Color.LIGHT_GRAY,
