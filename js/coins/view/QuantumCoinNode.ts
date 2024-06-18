@@ -14,6 +14,9 @@ import CoinNode, { CoinFaceParameters } from './CoinNode.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
 
 const UP_FILL = new Color( '#00FFFF' );
 const UP_STROKE_AND_ARROW_COLOR = Color.BLACK;
@@ -23,7 +26,10 @@ const FONT = new PhetFont( { size: 40, weight: 'bold' } );
 
 export default class QuantumCoinNode extends CoinNode {
 
-  public constructor( stateProbabilityProperty: TReadOnlyProperty<number>,
+  public readonly showSuperpositionProperty: BooleanProperty;
+
+  public constructor( coinStateProperty: TReadOnlyProperty<QuantumCoinStates>,
+                      stateProbabilityProperty: TReadOnlyProperty<number>,
                       radius: number,
                       tandem: Tandem ) {
 
@@ -45,7 +51,18 @@ export default class QuantumCoinNode extends CoinNode {
       } )
     };
 
-    super( radius, stateProbabilityProperty, [ upFaceOptions, downFaceOptions ], { tandem: tandem } );
+    const showSuperpositionProperty = new BooleanProperty( true );
+    const crossFadeProperty = new DerivedProperty(
+      [ coinStateProperty, stateProbabilityProperty, showSuperpositionProperty ],
+      ( coinState, stateProbability, showSuperposition ) => {
+        return showSuperposition ? stateProbability :
+               coinState === 'up' ? 1 : 0;
+      }
+    );
+
+    super( radius, crossFadeProperty, [ upFaceOptions, downFaceOptions ], { tandem: tandem } );
+
+    this.showSuperpositionProperty = showSuperpositionProperty;
   }
 }
 

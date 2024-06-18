@@ -85,6 +85,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
     else {
       const initialCoinStateItems = QuantumCoinStateValues.map( stateValue => ( {
         createNode: () => new QuantumCoinNode(
+          new Property<QuantumCoinStates>( stateValue ),
           new NumberProperty( stateValue === 'up' ? 0 : 1 ),
           RADIO_BUTTON_COIN_NODE_RADIUS,
           Tandem.OPT_OUT
@@ -123,6 +124,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
     }
     else {
       orientationIndicatorCoinNode = new QuantumCoinNode(
+        initialCoinStateProperty as Property<QuantumCoinStates>,
         stateBiasProperty,
         INDICATOR_COIN_NODE_RADIUS,
         tandem.createTandem( 'coinIndicatorNode' )

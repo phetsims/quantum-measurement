@@ -29,6 +29,7 @@ import Dimension2 from '../../../../dot/js/Dimension2.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { TEmitterListener } from '../../../../axon/js/TEmitter.js';
 import stepTimer from '../../../../axon/js/stepTimer.js';
+import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
 
 const SINGLE_COIN_AREA_RECT_LINE_WIDTH = 36;
 const MULTIPLE_COIN_TEST_BOX_SIZE = new Dimension2( 200, 200 );
@@ -206,6 +207,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
         }
         else {
           singleCoinNode = new QuantumCoinNode(
+            sceneModel.singleCoin.currentStateProperty as TReadOnlyProperty<QuantumCoinStates>,
             sceneModel.stateBiasProperty,
             InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS,
             Tandem.OPT_OUT
@@ -261,6 +263,13 @@ export default class CoinExperimentMeasurementArea extends VBox {
             coinNode.centerX = singleCoinTestBox.width / 2;
             coinNode.centerY = singleCoinTestBox.height / 2;
             singleCoinTestBox.insertChild( 0, coinNode );
+
+            if ( sceneModel.systemType === 'quantum' ) {
+
+              // "Collapse" the state of the coin node so that it shows a single state, not a superimposed one.
+              const quantumCoinNode = singleCoinNode as QuantumCoinNode;
+              quantumCoinNode.showSuperpositionProperty.value = false;
+            }
           } );
 
           // Kick off the animation.
