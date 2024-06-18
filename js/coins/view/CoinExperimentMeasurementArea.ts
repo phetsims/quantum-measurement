@@ -27,6 +27,8 @@ import { Shape } from '../../../../kite/js/imports.js';
 import CoinExperimentButtonSet from './CoinExperimentButtonSet.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import { TEmitterListener } from '../../../../axon/js/TEmitter.js';
+import stepTimer from '../../../../axon/js/stepTimer.js';
 
 const SINGLE_COIN_AREA_RECT_LINE_WIDTH = 36;
 const MULTIPLE_COIN_TEST_BOX_SIZE = new Dimension2( 200, 200 );
@@ -34,6 +36,7 @@ const SINGLE_COIN_TEST_BOX_SIZE = new Dimension2( 165, 145 );
 const SINGLE_COIN_TEST_BOX_UNREVEALED_FILL = new LinearGradient( 0, 0, SINGLE_COIN_TEST_BOX_SIZE.width, 0 )
   .addColorStop( 0, new Color( '#eeeeee' ) )
   .addColorStop( 0.9, new Color( '#bae3e0' ) );
+const COIN_FLIP_RATE = 2; // full flips per second
 
 export default class CoinExperimentMeasurementArea extends VBox {
 
@@ -80,7 +83,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
       }
     );
 
-    // Create the composite node that represents to test box and the controls where the user will experiment with a
+    // Create the composite node that represents the test box and the controls where the user will experiment with a
     // single coin.
     const singleCoinMeasurementArea = new HBox( {
       children: [ singleCoinTestBox, singleCoinExperimentButtonSet ],
@@ -213,7 +216,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
         // layout.  It will be added back to this area when it is back within the bounds.
         sceneGraphParent.addCoinNode( singleCoinNode );
 
-        // Make sure the coin mask is outside the test box.
+        // Make sure the coin mask is outside the test box so that it isn't visible.
         coinMask.x = -SINGLE_COIN_TEST_BOX_SIZE.width * 2;
 
         // Create and start an animation to move this coin to the top test area in the measurement area.
@@ -263,6 +266,40 @@ export default class CoinExperimentMeasurementArea extends VBox {
           // Kick off the animation.
           animationFromEdgeOfScreenToBehindIt.start();
         } );
+      }
+    } );
+
+    // Add the listener that will animation the flipping motion of the coin.
+    let flippingAnimationStepListener: null | TEmitterListener<number[]> = null;
+    let flippingAnimationPhase = 0;
+    sceneModel.singleCoinExperimentStateProperty.lazyLink( singleCoinExperimentState => {
+      if ( singleCoinExperimentState === 'flipping' ) {
+
+        // state checking
+        assert && assert( !flippingAnimationStepListener, 'something is off - there should be no listener' );
+        assert && assert( singleCoinNode, 'something is off - there should be a coin node' );
+
+        // Create and hook up a step listener to perform the animation.
+        flippingAnimationStepListener = ( dt: number ) => {
+          flippingAnimationPhase = ( flippingAnimationPhase + 2 * Math.PI * COIN_FLIP_RATE * dt ) % ( 2 * Math.PI );
+          let xScaleMagnitude = Math.sin( flippingAnimationPhase );
+          if ( xScaleMagnitude === 0 ) {
+            xScaleMagnitude = 0.01;
+          }
+          coinMask.setScaleMagnitude( xScaleMagnitude, 1 );
+          singleCoinNode!.setScaleMagnitude( xScaleMagnitude, 1 );
+        };
+        stepTimer.addListener( flippingAnimationStepListener );
+      }
+      else if ( flippingAnimationStepListener ) {
+
+        // The coin is no longer in the flipping state, so remove the function that was doing the animation and set the
+        // coin to be fully round.
+        stepTimer.removeListener( flippingAnimationStepListener );
+        flippingAnimationPhase = 0;
+        coinMask.setScaleMagnitude( 1, 1 );
+        singleCoinNode!.setScaleMagnitude( 1, 1 );
+        flippingAnimationStepListener = null;
       }
     } );
   }
