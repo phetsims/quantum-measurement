@@ -73,7 +73,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
     const singleCoinExperimentButtonSet = new CoinExperimentButtonSet(
       sceneModel.systemType,
       sceneModel.singleCoinExperimentStateProperty,
-      () => { sceneModel.prepareSingleCoinExperiment(); },
+      sceneModel.prepareSingleCoinExperiment.bind( sceneModel ),
       {
         tandem: tandem.createTandem( 'singleCoinExperimentButtonSet' ),
         visibleProperty: DerivedProperty.not( sceneModel.preparingExperimentProperty )

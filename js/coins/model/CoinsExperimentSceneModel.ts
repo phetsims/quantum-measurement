@@ -22,12 +22,17 @@ import { QuantumCoinStates, QuantumCoinStateValues } from './QuantumCoinStates.j
 import { SystemType } from '../../common/model/SystemType.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
+import stepTimer from '../../../../axon/js/stepTimer.js';
+import { TimerListener } from '../../../../axon/js/Timer.js';
 
 type SelfOptions = {
   initiallyActive?: boolean;
   systemType?: SystemType;
 };
 type CoinExperimentSceneModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
+
+// constants
+const FLIPPING_TIME = 1; // time that coin is in the flipping state, in seconds
 
 export default class CoinsExperimentSceneModel extends PhetioObject {
 
@@ -52,6 +57,9 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
 
   // The bias towards one outcome or another in the initially prepared state, from 0 to 1.
   public readonly stateBiasProperty: NumberProperty;
+
+  // Timeout for the flipping state.
+  private flippingTimeout: null | TimerListener = null;
 
   public constructor( providedOptions: CoinExperimentSceneModelOptions ) {
 
@@ -135,14 +143,27 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
   /**
    * Prepare the single coin for measurement.  This is essentially the flipping of the coin.
    */
-  public prepareSingleCoinExperiment(): void {
-    this.singleCoin.prepare();
+  public prepareSingleCoinExperiment( revealWhenComplete = false ): void {
 
-    // TODO: See https://github.com/phetsims/quantum-measurement/issues/12.  What are we going to do state-wise here?
-    // this.singleCoinExperimentStateProperty.value = 'hiddenAndStill';
+    // Ignore any requests to prepare the experiment if the preparation is already in progress.
+    if ( this.singleCoinExperimentStateProperty.value === 'flipping' ) {
+      return;
+    }
+
+    // Set the state to flipping and start a timeout for the flipping to end.
+    this.singleCoinExperimentStateProperty.value = 'flipping';
+    this.flippingTimeout = stepTimer.setTimeout( () => {
+      this.singleCoin.prepare();
+      this.singleCoinExperimentStateProperty.value = revealWhenComplete ? 'revealedAndStill' : 'hiddenAndStill';
+      this.flippingTimeout = null;
+    }, FLIPPING_TIME * 1000 );
   }
 
   public reset(): void {
+    if ( this.flippingTimeout ) {
+      stepTimer.clearTimeout( this.flippingTimeout );
+      this.flippingTimeout = null;
+    }
     this.preparingExperimentProperty.reset();
     this.singleCoinExperimentStateProperty.reset();
     this.multiCoinExperimentStateProperty.reset();

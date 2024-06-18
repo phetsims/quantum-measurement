@@ -37,7 +37,7 @@ export default class CoinExperimentButtonSet extends VBox {
 
   public constructor( systemType: SystemType,
                       experimentStateProperty: TProperty<CoinExperimentStates>,
-                      prepareExperiment: () => void,
+                      prepareExperiment: ( revealWhenComplete?: boolean ) => void,
                       providedOptions: CoinExperimentButtonSetOptions ) {
 
     const revealHideButtonTextProperty = new DerivedStringProperty(
@@ -84,7 +84,7 @@ export default class CoinExperimentButtonSet extends VBox {
       QuantumMeasurementStrings.flipAndRevealStringProperty :
       QuantumMeasurementStrings.reprepareAndRevealStringProperty,
       combineOptions<TextPushButtonOptions>( COMMON_BUTTON_OPTIONS, {
-        listener: prepareExperiment,
+        listener: () => { prepareExperiment( true ); },
         tandem: providedOptions.tandem.createTandem( 'flipOrReprepareAndRevealButton' )
       } )
     );
