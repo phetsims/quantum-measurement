@@ -14,15 +14,12 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import Range from '../../../../dot/js/Range.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 
 type SelfOptions = {
   initialBias?: number;
 };
 type TwoStateSystemOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
-
-const BIAS_RANGE = new Range( 0, 1 );
 
 export default class TwoStateSystem<T extends string> extends PhetioObject {
 
@@ -33,7 +30,10 @@ export default class TwoStateSystem<T extends string> extends PhetioObject {
   // one direction, and so forth.
   public readonly biasProperty: NumberProperty;
 
-  public constructor( validValues: readonly T[], initialState: T, providedOptions: TwoStateSystemOptions ) {
+  public constructor( validValues: readonly T[],
+                      initialState: T,
+                      biasProperty: NumberProperty,
+                      providedOptions: TwoStateSystemOptions ) {
 
     assert && assert( validValues.length === 2, 'there must be exactly two valid values' );
 
@@ -50,10 +50,7 @@ export default class TwoStateSystem<T extends string> extends PhetioObject {
       phetioValueType: StringUnionIO( validValues ),
       validValues: validValues
     } );
-    this.biasProperty = new NumberProperty( options.initialBias, {
-      tandem: options.tandem.createTandem( 'biasProperty' ),
-      range: BIAS_RANGE
-    } );
+    this.biasProperty = biasProperty;
   }
 
   /**

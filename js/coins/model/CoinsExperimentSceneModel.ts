@@ -78,6 +78,10 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
     this.preparingExperimentProperty = new BooleanProperty( true, {
       tandem: options.tandem.createTandem( 'preparingExperimentProperty' )
     } );
+    this.stateBiasProperty = new NumberProperty( 0.5, {
+      range: new Range( 0, 1 ),
+      tandem: options.tandem.createTandem( 'stateBiasProperty' )
+    } );
     this.singleCoinExperimentStateProperty = new Property<CoinExperimentStates>( 'hiddenAndStill', {
       phetioValueType: StringUnionIO( CoinExperimentStateValues ),
       tandem: options.tandem.createTandem( 'singleCoinExperimentStateProperty' )
@@ -91,6 +95,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
       this.singleCoin = new TwoStateSystem<PhysicalCoinStates>(
         PhysicalCoinStateValues,
         'heads',
+        this.stateBiasProperty,
         { tandem: singleCoinTandem } );
       this.initialCoinStateProperty = new Property<PhysicalCoinStates>( 'heads', {
         tandem: options.tandem.createTandem( 'initialCoinStateProperty' ),
@@ -103,6 +108,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
       this.singleCoin = new TwoStateSystem<QuantumCoinStates>(
         QuantumCoinStateValues,
         'up',
+        this.stateBiasProperty,
         { tandem: singleCoinTandem } );
       this.initialCoinStateProperty = new Property<QuantumCoinStates>( 'up', {
         tandem: options.tandem.createTandem( 'initialCoinStateProperty' ),
@@ -110,11 +116,6 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
         validValues: QuantumCoinStateValues
       } );
     }
-
-    this.stateBiasProperty = new NumberProperty( 0.5, {
-      range: new Range( 0, 1 ),
-      tandem: options.tandem.createTandem( 'stateBiasProperty' )
-    } );
 
     this.preparingExperimentProperty.lazyLink( preparingExperiment => {
 
