@@ -20,6 +20,7 @@ import ProbabilityEquationsNode from './ProbabilityEquationsNode.js';
 import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
+import OutcomeProbabilityControl from './OutcomeProbabilityControl.js';
 
 export default class CoinExperimentPreparationArea extends VBox {
 
@@ -79,11 +80,18 @@ export default class CoinExperimentPreparationArea extends VBox {
       sceneModel.systemType
     );
 
+    // Create the control that will allow the user to manipulate the probability of the various outcomes.
+    const outcomeProbabilityControl = new OutcomeProbabilityControl(
+      sceneModel.systemType,
+      sceneModel.stateBiasProperty
+    );
+
     super( {
       children: [
         preparationAreaHeader,
         initialCoinStateSelectorNode,
-        probabilityEquationsNode
+        probabilityEquationsNode,
+        outcomeProbabilityControl
       ],
       spacing: 15
     } );

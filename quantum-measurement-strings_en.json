@@ -50,6 +50,12 @@
   "preparedState": {
     "value": "Prepared State"
   },
+  "probabilityOfHeads": {
+    "value": "Probability of Heads"
+  },
+  "probabilityOfTails": {
+    "value": "Probability of Tails"
+  },
   "quantumCoinQuoted": {
     "value": "\"Quantum Coin\""
   },
