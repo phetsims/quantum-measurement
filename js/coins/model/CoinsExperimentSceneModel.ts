@@ -33,7 +33,7 @@ type SelfOptions = {
 type CoinExperimentSceneModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
 // constants
-const FLIPPING_TIME_RANGE = new Range( 0.3, 1.3 ); // time that coins are in the flipping state, in seconds
+const FLIPPING_TIME_RANGE = new Range( 0.5, 1.3 ); // time that coins are in the flipping state, in seconds
 
 export default class CoinsExperimentSceneModel extends PhetioObject {
 
