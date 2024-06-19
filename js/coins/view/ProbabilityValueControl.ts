@@ -13,14 +13,17 @@ import { HBox, RichText, VBox } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import ArrowButton from '../../../../sun/js/buttons/ArrowButton.js';
+import ArrowButton, { ArrowButtonOptions } from '../../../../sun/js/buttons/ArrowButton.js';
 import HSlider from '../../../../sun/js/HSlider.js';
 import Range from '../../../../dot/js/Range.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
+import { combineOptions } from '../../../../phet-core/js/optionize.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 
 const TITLE_FONT = new PhetFont( 16 );
 const RANGE = new Range( 0, 1 );
+const BUTTON_CHANGE_AMOUNT = 0.1;
 
 export default class ProbabilityValueControl extends VBox {
 
@@ -40,13 +43,17 @@ export default class ProbabilityValueControl extends VBox {
     };
     const leftArrowButton = new ArrowButton(
       'left',
-      () => console.log( 'left button pressed' ),
-      arrowButtonOptions
+      () => { probabilityProperty.value = Math.max( probabilityProperty.value - BUTTON_CHANGE_AMOUNT, 0 ); },
+      combineOptions<ArrowButtonOptions>( {
+        enabledProperty: new DerivedProperty( [ probabilityProperty ], probability => probability > 0 )
+      }, arrowButtonOptions )
     );
     const rightArrowButton = new ArrowButton(
       'right',
-      () => console.log( 'right button pressed' ),
-      arrowButtonOptions
+      () => { probabilityProperty.value = Math.min( probabilityProperty.value + BUTTON_CHANGE_AMOUNT, 1 ); },
+      combineOptions<ArrowButtonOptions>( {
+        enabledProperty: new DerivedProperty( [ probabilityProperty ], probability => probability < 1 )
+      }, arrowButtonOptions )
     );
     const slider = new HSlider( probabilityProperty, RANGE, {
       trackSize: new Dimension2( 150, 1 ),
