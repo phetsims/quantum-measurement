@@ -126,7 +126,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
     const multipleCoinExperimentButtonSet = new CoinExperimentButtonSet(
       sceneModel.systemType,
       sceneModel.multiCoinExperimentStateProperty,
-      () => { console.log( 'Preparing the experiment is not yet implement for the multi-coin case.' ); },
+      () => { console.log( 'Preparing the experiment is not yet implemented for the multi-coin case.' ); },
       {
         tandem: tandem.createTandem( 'multipleCoinExperimentButtonSet' ),
         visibleProperty: DerivedProperty.not( sceneModel.preparingExperimentProperty )
@@ -168,6 +168,8 @@ export default class CoinExperimentMeasurementArea extends VBox {
     let singleCoinNode: CoinNode | null = null;
     let animationFromPrepToMeasurementArea: Animation | null = null;
     let animationFromEdgeOfScreenToBehindIt: Animation | null = null;
+    let flippingAnimationStepListener: null | TEmitterListener<number[]> = null;
+    let flippingAnimationPhase = 0;
     sceneModel.preparingExperimentProperty.lazyLink( preparingExperiment => {
 
       // Create a typed reference to the parent node, since we'll need to invoke some methods on it.
@@ -192,6 +194,11 @@ export default class CoinExperimentMeasurementArea extends VBox {
         if ( animationFromEdgeOfScreenToBehindIt ) {
           animationFromEdgeOfScreenToBehindIt.stop();
           animationFromEdgeOfScreenToBehindIt = null;
+        }
+        if ( flippingAnimationStepListener ) {
+          stepTimer.removeListener( flippingAnimationStepListener );
+          flippingAnimationStepListener = null;
+          flippingAnimationPhase = 0;
         }
       }
       else {
@@ -279,8 +286,6 @@ export default class CoinExperimentMeasurementArea extends VBox {
     } );
 
     // Add the listener that will animation the flipping motion of the coin.
-    let flippingAnimationStepListener: null | TEmitterListener<number[]> = null;
-    let flippingAnimationPhase = 0;
     sceneModel.singleCoinExperimentStateProperty.lazyLink( singleCoinExperimentState => {
       if ( singleCoinExperimentState === 'flipping' ) {
 
@@ -296,7 +301,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
             xScaleMagnitude = 0.01;
           }
           coinMask.setScaleMagnitude( xScaleMagnitude, 1 );
-          singleCoinNode!.setScaleMagnitude( xScaleMagnitude, 1 );
+          singleCoinNode && singleCoinNode.setScaleMagnitude( xScaleMagnitude, 1 );
         };
         stepTimer.addListener( flippingAnimationStepListener );
       }
@@ -304,10 +309,10 @@ export default class CoinExperimentMeasurementArea extends VBox {
 
         // The coin is no longer in the flipping state, so remove the function that was doing the animation and set the
         // coin to be fully round.
-        stepTimer.removeListener( flippingAnimationStepListener );
         flippingAnimationPhase = 0;
         coinMask.setScaleMagnitude( 1, 1 );
-        singleCoinNode!.setScaleMagnitude( 1, 1 );
+        singleCoinNode && singleCoinNode.setScaleMagnitude( 1, 1 );
+        stepTimer.removeListener( flippingAnimationStepListener );
         flippingAnimationStepListener = null;
       }
     } );
