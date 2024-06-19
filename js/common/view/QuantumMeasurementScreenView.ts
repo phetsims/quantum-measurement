@@ -41,7 +41,7 @@ export default class QuantumMeasurementScreenView extends ScreenView {
 
     // Add a screen mockup if one has been provided.
     // TODO: This is for early prototyping and should be removed eventually, see https://github.com/phetsims/quantum-measurement/issues/3.
-    if ( options.mockupImage !== null ) {
+    if ( options.mockupImage !== null && !phet.chipper.queryParameters.fuzz ) {
 
       this.mockupImage = options.mockupImage;
 
