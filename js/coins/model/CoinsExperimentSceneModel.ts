@@ -24,6 +24,7 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import stepTimer from '../../../../axon/js/stepTimer.js';
 import { TimerListener } from '../../../../axon/js/Timer.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 
 type SelfOptions = {
   initiallyActive?: boolean;
@@ -32,7 +33,7 @@ type SelfOptions = {
 type CoinExperimentSceneModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
 // constants
-const FLIPPING_TIME = 1; // time that coin is in the flipping state, in seconds
+const FLIPPING_TIME_RANGE = new Range( 0.3, 1.3 ); // time that coins are in the flipping state, in seconds
 
 export default class CoinsExperimentSceneModel extends PhetioObject {
 
@@ -157,7 +158,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
       this.singleCoin.prepare();
       this.singleCoinExperimentStateProperty.value = revealWhenComplete ? 'revealedAndStill' : 'hiddenAndStill';
       this.flippingTimeout = null;
-    }, FLIPPING_TIME * 1000 );
+    }, dotRandom.nextDoubleInRange( FLIPPING_TIME_RANGE ) * 1000 );
   }
 
   public reset(): void {

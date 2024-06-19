@@ -37,7 +37,7 @@ const SINGLE_COIN_TEST_BOX_SIZE = new Dimension2( 165, 145 );
 const SINGLE_COIN_TEST_BOX_UNREVEALED_FILL = new LinearGradient( 0, 0, SINGLE_COIN_TEST_BOX_SIZE.width, 0 )
   .addColorStop( 0, new Color( '#eeeeee' ) )
   .addColorStop( 0.9, new Color( '#bae3e0' ) );
-const COIN_FLIP_RATE = 2; // full flips per second
+const COIN_FLIP_RATE = 3; // full flips per second
 
 export default class CoinExperimentMeasurementArea extends VBox {
 
