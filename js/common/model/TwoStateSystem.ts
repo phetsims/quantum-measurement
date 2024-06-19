@@ -26,8 +26,9 @@ export default class TwoStateSystem<T extends string> extends PhetioObject {
   public readonly currentStateProperty: Property<T>;
   public readonly validValues: readonly T[];
 
-  // The bias for this two-state system.  A value of 0.5 indicates no bias, a value of 0 means it is entirely biased in
-  // one direction, and so forth.
+  // The bias for this two-state system, and specifically the probability of the system being found in the first of the
+  // two provided values.  A value of 1 means it will always be found in the first provided state, 0 means always the
+  // second, and 0.5 means no bias.
   public readonly biasProperty: NumberProperty;
 
   public constructor( validValues: readonly T[],

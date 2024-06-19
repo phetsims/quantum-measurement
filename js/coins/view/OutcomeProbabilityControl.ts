@@ -20,6 +20,7 @@ import ProbabilityValueControl from './ProbabilityValueControl.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 
 type SelfOptions = EmptySelfOptions;
 type OutcomeProbabilityControlOptions = SelfOptions & PickRequired<VBox, 'tandem' | 'visibleProperty'>;
@@ -34,6 +35,8 @@ const DOWN = QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER;
 const BRA_KET_TITLE_STRING = `( ${ALPHA}|${UP}${KET} + <span style="color: magenta;">${BETA}|${DOWN}${KET}</span> )`;
 const P_OF_H = 'P(<b>H</b>)';
 const P_OF_T = 'P(<span style="color: magenta;"><b>T</b></span>)';
+const P_OF_UP = `P(<b>${UP}</b>)`;
+const P_OF_DOWN = `P(<span style="color: magenta;"><b>${DOWN}</b></span>)`;
 
 export default class OutcomeProbabilityControl extends VBox {
 
@@ -77,14 +80,29 @@ export default class OutcomeProbabilityControl extends VBox {
       }
     } );
 
-
     const upperProbabilityControlTitleProperty = new DerivedStringProperty(
-      [ QuantumMeasurementStrings.probabilityOfHeadsStringProperty ],
-      probabilityOfHeadsString => `${probabilityOfHeadsString} ${P_OF_H}`
+      [
+        QuantumMeasurementStrings.probabilityOfPatternStringProperty,
+        QuantumMeasurementStrings.headsStringProperty,
+        QuantumMeasurementStrings.upStringProperty
+      ],
+      ( probabilityOfPatternString, headsString, upString ) => {
+        const outcomeWord = systemType === 'physical' ? headsString : upString;
+        const probabilityFunction = systemType === 'physical' ? P_OF_H : P_OF_UP;
+        return `${StringUtils.fillIn( probabilityOfPatternString, { outcome: outcomeWord } )} ${probabilityFunction}`;
+      }
     );
     const lowerProbabilityControlTitleProperty = new DerivedStringProperty(
-      [ QuantumMeasurementStrings.probabilityOfTailsStringProperty ],
-      probabilityOfTailsString => `${probabilityOfTailsString} ${P_OF_T}`
+      [
+        QuantumMeasurementStrings.probabilityOfPatternStringProperty,
+        QuantumMeasurementStrings.tailsStringProperty,
+        QuantumMeasurementStrings.downStringProperty
+      ],
+      ( probabilityOfPatternString, tailsString, downString ) => {
+        const outcomeWord = systemType === 'physical' ? tailsString : downString;
+        const probabilityFunction = systemType === 'physical' ? P_OF_T : P_OF_DOWN;
+        return `${StringUtils.fillIn( probabilityOfPatternString, { outcome: outcomeWord } )} ${probabilityFunction}`;
+      }
     );
 
     const options = optionize<OutcomeProbabilityControlOptions, SelfOptions, VBoxOptions>()( {
