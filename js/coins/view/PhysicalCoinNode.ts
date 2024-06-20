@@ -46,7 +46,7 @@ export default class PhysicalCoinNode extends CoinNode {
 
     const crossFadeProperty: TReadOnlyProperty<number> = new DerivedProperty(
       [ coinStateProperty ],
-      coinState => coinState === 'heads' ? 0 : 1
+      coinState => coinState === 'heads' ? 1 : 0
     );
 
     super( radius, crossFadeProperty, [ headsOptions, tailsOptions ], { tandem: tandem } );

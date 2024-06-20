@@ -63,8 +63,8 @@ export default class CoinNode extends Node {
 
     // Update the visibility of the coin faces.
     crossFadeProperty.link( crossFade => {
-      coinFaceNodes[ 0 ].opacity = 1 - crossFade;
-      coinFaceNodes[ 1 ].opacity = crossFade;
+      coinFaceNodes[ 0 ].opacity = crossFade;
+      coinFaceNodes[ 1 ].opacity = 1 - crossFade;
     } );
   }
 }

@@ -32,6 +32,8 @@ import stepTimer from '../../../../axon/js/stepTimer.js';
 import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
 import Range from '../../../../dot/js/Range.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import TProperty from '../../../../axon/js/TProperty.js';
 
 const SINGLE_COIN_AREA_RECT_LINE_WIDTH = 36;
 const MULTIPLE_COIN_TEST_BOX_SIZE = new Dimension2( 200, 200 );
@@ -41,12 +43,18 @@ const SINGLE_COIN_TEST_BOX_UNREVEALED_FILL = new LinearGradient( 0, 0, SINGLE_CO
   .addColorStop( 0.9, new Color( '#bae3e0' ) );
 const COIN_FLIP_RATE = 3; // full flips per second
 const COIN_ROTATION_CHANGE_RANGE = new Range( Math.PI / 8, Math.PI * 0.9 );
+const COIN_TRAVEL_ANIMATION_DURATION = CoinsExperimentSceneModel.PREPARING_TO_BE_MEASURED_TIME * 0.95;
 
 export default class CoinExperimentMeasurementArea extends VBox {
+
+  // A boolean property that tracks whether the coins are fully ensconced in their test boxes.  This is fully internal
+  // and not available to phet-io.
+  private readonly coinsInTestBoxesProperty: TProperty<boolean>;
 
   public constructor( sceneModel: CoinsExperimentSceneModel, tandem: Tandem ) {
 
     const textColor = sceneModel.systemType === 'quantum' ? Color.BLUE : Color.BLACK;
+    const coinsInTestBoxesProperty = new BooleanProperty( false );
 
     // Add the top header for the measurement area.  It changes based on the mode and the strings.
     const measurementAreaHeaderLineWidthProperty = new DerivedProperty(
@@ -80,6 +88,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
     const singleCoinExperimentButtonSet = new CoinExperimentButtonSet(
       sceneModel.systemType,
       sceneModel.singleCoinExperimentStateProperty,
+      coinsInTestBoxesProperty,
       sceneModel.prepareSingleCoinExperiment.bind( sceneModel ),
       {
         tandem: tandem.createTandem( 'singleCoinExperimentButtonSet' ),
@@ -129,6 +138,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
     const multipleCoinExperimentButtonSet = new CoinExperimentButtonSet(
       sceneModel.systemType,
       sceneModel.multiCoinExperimentStateProperty,
+      coinsInTestBoxesProperty,
       () => { console.log( 'Preparing the experiment is not yet implemented for the multi-coin case.' ); },
       {
         tandem: tandem.createTandem( 'multipleCoinExperimentButtonSet' ),
@@ -153,6 +163,8 @@ export default class CoinExperimentMeasurementArea extends VBox {
       spacing: 25
     } );
 
+    this.coinsInTestBoxesProperty = coinsInTestBoxesProperty;
+
     // Create the node that will be used to cover (aka "mask") the coin so that its state can't be seen.
     const coinMask = new Circle( InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS, {
       fill: new Color( '#cccccc' ),
@@ -166,191 +178,263 @@ export default class CoinExperimentMeasurementArea extends VBox {
     } );
     singleCoinTestBox.addChild( coinMask );
 
-    // When the scene switches from preparing the experiment to making measurements, coins are added that migrate from
-    // the preparation area to this (the measurement) area.
+    // variables to support the coin animations
     let singleCoinNode: CoinNode | null = null;
-    let animationFromPrepToMeasurementArea: Animation | null = null;
-    let animationFromEdgeOfScreenToBehindIt: Animation | null = null;
+    let animationFromPrepAreaToEdgeOfSingleCoinTestBox: Animation | null = null;
+    let animationFromEdgeOfTestBoxToInsideIt: Animation | null = null;
     let flippingAnimationStepListener: null | TEmitterListener<number[]> = null;
-    sceneModel.preparingExperimentProperty.lazyLink( preparingExperiment => {
+
+    // Create a closure function for clearing out the single coin test box.
+    const clearSingleCoinTestBox = () => {
+      assert && assert(
+      !animationFromPrepAreaToEdgeOfSingleCoinTestBox && !animationFromEdgeOfTestBoxToInsideIt,
+        'this function should not be invoked while animations are in progress'
+      );
+      if ( singleCoinNode && singleCoinTestBox.hasChild( singleCoinNode ) ) {
+        singleCoinTestBox.removeChild( singleCoinNode );
+        singleCoinNode.dispose();
+        singleCoinNode = null;
+      }
+      coinMask.right = singleCoinTestBox.left;
+      coinMask.y = singleCoinTestBox.centerY;
+      this.coinsInTestBoxesProperty.value = false;
+    };
+
+    // Create a closure function for aborting the animation of the incoming single coin.  This is intended to be called
+    // when a state change occurs that prevents the ingress animation from finishing normally.  If no animation is in
+    // progress, this does nothing, so it safe to call as a preventative measure.
+    const abortIngressAnimationForSingleCoin = () => {
+
+      // Stop any of the animations that exist.
+      animationFromPrepAreaToEdgeOfSingleCoinTestBox && animationFromPrepAreaToEdgeOfSingleCoinTestBox.stop();
+      animationFromEdgeOfTestBoxToInsideIt && animationFromEdgeOfTestBoxToInsideIt.stop();
 
       // Create a typed reference to the parent node, since we'll need to invoke some methods on it.
       assert && assert( this.getParent() instanceof CoinsExperimentSceneView );
       const sceneGraphParent = this.getParent() as CoinsExperimentSceneView;
 
+      if ( singleCoinNode ) {
+        if ( sceneGraphParent.hasChild( singleCoinNode ) ) {
+          sceneGraphParent.removeChild( singleCoinNode );
+        }
+        else if ( singleCoinTestBox.hasChild( singleCoinNode ) ) {
+          singleCoinTestBox.removeChild( singleCoinNode );
+        }
+        singleCoinNode.dispose();
+        singleCoinNode = null;
+      }
+    };
+
+    // Create a closure function for creating and starting the animation of a single coin coming from the preparation
+    // area into the single coin test box.
+    const startIngressAnimationForSingleCoin = () => {
+
+      // Create a typed reference to the parent node, since we'll need to invoke some methods on it.
+      assert && assert( this.getParent() instanceof CoinsExperimentSceneView );
+      const sceneGraphParent = this.getParent() as CoinsExperimentSceneView;
+
+      // Clear out the test box if there's anything in there.
+      clearSingleCoinTestBox();
+
+      // Create the coin that will travel from the preparation area into this measurement area.
+      if ( sceneModel.systemType === 'physical' ) {
+        singleCoinNode = new PhysicalCoinNode(
+          sceneModel.singleCoin.currentStateProperty as TReadOnlyProperty<PhysicalCoinStates>,
+          InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS,
+          Tandem.OPT_OUT
+        );
+      }
+      else {
+        singleCoinNode = new QuantumCoinNode(
+          sceneModel.singleCoin.currentStateProperty as TReadOnlyProperty<QuantumCoinStates>,
+          sceneModel.stateBiasProperty,
+          InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS,
+          Tandem.OPT_OUT
+        );
+      }
+
+      // Add the coin to our parent node.  This is done so that we don't change our bounds, which could mess up the
+      // layout.  It will be added back to this area when it is back within the bounds.
+      sceneGraphParent.addCoinNode( singleCoinNode );
+
+      // Make sure the coin mask is outside the test box so that it isn't visible.
+      coinMask.x = -SINGLE_COIN_TEST_BOX_SIZE.width * 2;
+
+      // Create and start an animation to move this coin to the side of the single coin text box.  This actually
+      // consists of two animations, one to move the coin to the edge of the test box while the test box is itself
+      // moving, then a second one to move the coin into the box.  The durations must be set up such that the test box
+      // is in place before the 2nd animation begins or the coin won't end up in the right place.
+      const leftOfTestArea = singleCoinMeasurementArea.center.minusXY( 350, 0 );
+      const leftOfTestAreaInParentCoords = this.localToParentPoint( leftOfTestArea );
+      animationFromPrepAreaToEdgeOfSingleCoinTestBox = new Animation( {
+        setValue: value => { singleCoinNode!.center = value; },
+        getValue: () => singleCoinNode!.center,
+        to: leftOfTestAreaInParentCoords,
+        duration: COIN_TRAVEL_ANIMATION_DURATION / 2,
+        easing: Easing.LINEAR
+      } );
+      animationFromPrepAreaToEdgeOfSingleCoinTestBox.finishEmitter.addListener( () => {
+
+        assert && assert( singleCoinNode, 'There should be a singleCoinNode instance at the end of this animation.' );
+
+        // Get a reference to the coin Node that allows the code to omit all the exclamation points and such.
+        const assuredSingleCoinNode = singleCoinNode!;
+        assuredSingleCoinNode.moveToBack();
+
+        // Move the mask to be on top of the coin Node.
+        coinMask.center = singleCoinTestBox.parentToLocalPoint( this.parentToLocalPoint( assuredSingleCoinNode.center ) );
+
+        // Start the 2nd portion of the animation, which moves the masked coin into the test box.
+        animationFromEdgeOfTestBoxToInsideIt = new Animation( {
+          setValue: value => {
+            assuredSingleCoinNode.center = value;
+            coinMask.center = singleCoinMeasurementArea.parentToLocalPoint(
+              singleCoinTestBox.parentToLocalPoint( this.parentToLocalPoint( assuredSingleCoinNode.center ) )
+            );
+          },
+          getValue: () => assuredSingleCoinNode.center,
+          to: this.localToParentPoint( singleCoinMeasurementArea.localToParentPoint( singleCoinTestBox.center ) ),
+          duration: COIN_TRAVEL_ANIMATION_DURATION / 2,
+          easing: Easing.CUBIC_OUT
+        } );
+        animationFromEdgeOfTestBoxToInsideIt.finishEmitter.addListener( () => {
+
+          // Now that the coin is within the bounds of the test box, remove it from the parent and add it as a child.
+          sceneGraphParent.removeChild( assuredSingleCoinNode );
+          assuredSingleCoinNode.center = singleCoinTestBox.center;
+          singleCoinTestBox.insertChild( 0, assuredSingleCoinNode );
+          coinMask.center = singleCoinTestBox.center;
+
+          if ( sceneModel.systemType === 'quantum' ) {
+
+            // "Collapse" the state of the coin node so that it shows a single state, not a superimposed one.
+            const quantumCoinNode = singleCoinNode as QuantumCoinNode;
+            quantumCoinNode.showSuperpositionProperty.value = false;
+          }
+
+          // The coin is in the test box, so update the flag that makes this known.
+          this.coinsInTestBoxesProperty.value = true;
+        } );
+
+        // Regardless of how the animation terminated its reference needs to be cleared when it is done.
+        animationFromEdgeOfTestBoxToInsideIt.endedEmitter.addListener( () => {
+          animationFromEdgeOfTestBoxToInsideIt = null;
+        } );
+
+        // Kick off the 2nd animation.
+        animationFromEdgeOfTestBoxToInsideIt.start();
+      } );
+
+      // Regardless of how the animation terminated its reference needs to be cleared when it is done.
+      animationFromPrepAreaToEdgeOfSingleCoinTestBox.endedEmitter.addListener( () => {
+        animationFromPrepAreaToEdgeOfSingleCoinTestBox = null;
+      } );
+
+      // Kick off the 1st animation.
+      animationFromPrepAreaToEdgeOfSingleCoinTestBox.start();
+    };
+
+    sceneModel.preparingExperimentProperty.lazyLink( preparingExperiment => {
       if ( preparingExperiment ) {
-        if ( singleCoinNode ) {
-          if ( singleCoinTestBox.hasChild( singleCoinNode ) ) {
-            singleCoinTestBox.removeChild( singleCoinNode );
+
+        // Abort any in-progress animations - the scene model is going back into the preparation mode.  If there are no
+        // such animations, this has no effect.
+        abortIngressAnimationForSingleCoin();
+
+        // Clear out the test box.
+        clearSingleCoinTestBox();
+      }
+      else {
+
+        // The user is ready to make measurements on the coin, so animate a transition from the prep area to this area.
+        startIngressAnimationForSingleCoin();
+      }
+    } );
+
+    // Listen to the state of the coin and animate a flipping motion for the physical coin or a travel-from-the-prep-
+    // area animation for the quantum coin.
+    sceneModel.singleCoinExperimentStateProperty.lazyLink( singleCoinExperimentState => {
+      if ( sceneModel.systemType === 'physical' ) {
+
+        if ( singleCoinExperimentState === 'preparingToBeMeasured' ) {
+
+          // state checking
+          assert && assert( !flippingAnimationStepListener, 'something is off - there should be no listener' );
+          assert && assert( singleCoinNode, 'something is off - there should be a coin node' );
+
+          // Set the initial state of things prior to starting the animation.
+          let flippingAnimationPhase = 0;
+          let rotation = dotRandom.nextDouble() * Math.PI;
+          let previousXScale = 0;
+          coinMask.setRotation( rotation );
+          singleCoinNode!.setRotation( rotation );
+
+          // Create and hook up a step listener to perform the animation.
+          flippingAnimationStepListener = ( dt: number ) => {
+
+            flippingAnimationPhase += 2 * Math.PI * COIN_FLIP_RATE * dt;
+            if ( flippingAnimationPhase >= Math.PI * 2 ) {
+
+              // A full flip as been performed.  Rotate the coins by a random amount to make things look a bit more
+              // random.  The transform is being reset here because adding new rotations was causing a pile up of some
+              // sort of floating point errors, and this just worked out better.
+              rotation += dotRandom.nextDoubleInRange( COIN_ROTATION_CHANGE_RANGE );
+              coinMask.resetTransform();
+              coinMask.center = singleCoinTestBox.center;
+              coinMask.setRotation( rotation );
+              singleCoinNode!.resetTransform();
+              singleCoinNode!.center = singleCoinTestBox.center;
+              singleCoinNode!.setRotation( rotation );
+
+              // Reset the phase.
+              flippingAnimationPhase = 0;
+            }
+
+            let xScale = Math.sin( flippingAnimationPhase );
+
+            // Handle the case where we hit zero, since the scale can't be set to that value.
+            if ( xScale === 0 ) {
+              xScale = previousXScale < 0 ? 0.01 : -0.01;
+            }
+
+            // Scale the coins on the x-axis to make it look like they are rotating.
+            coinMask.setScaleMagnitude( xScale, 1 );
+            singleCoinNode && singleCoinNode.setScaleMagnitude( xScale, 1 );
+
+            // Save some state for next time through.
+            previousXScale = xScale;
+          };
+          stepTimer.addListener( flippingAnimationStepListener );
+        }
+        else if ( flippingAnimationStepListener ) {
+
+          // The coin is no longer in the flipping state, so set it to be fully round and in the center of the test box.
+          // The transform is being reset here because floating point errors were piling up during the animation, and
+          // this just worked better.
+          coinMask.resetTransform();
+          coinMask.center = singleCoinTestBox.center;
+          if ( singleCoinNode ) {
+            singleCoinNode.resetTransform();
+            singleCoinNode.center = singleCoinTestBox.center;
           }
-          else if ( sceneGraphParent.hasChild( singleCoinNode ) ) {
-            sceneGraphParent.removeChild( singleCoinNode );
-          }
-          singleCoinNode.dispose();
-          singleCoinNode = null;
-        }
-        if ( animationFromPrepToMeasurementArea ) {
-          animationFromPrepToMeasurementArea.stop();
-          animationFromPrepToMeasurementArea = null;
-        }
-        if ( animationFromEdgeOfScreenToBehindIt ) {
-          animationFromEdgeOfScreenToBehindIt.stop();
-          animationFromEdgeOfScreenToBehindIt = null;
-        }
-        if ( flippingAnimationStepListener ) {
+
+          // Remove the step listener that was performing the flip animation.
           stepTimer.removeListener( flippingAnimationStepListener );
           flippingAnimationStepListener = null;
         }
       }
-      else {
+      else if ( sceneModel.systemType === 'quantum' ) {
 
-        // The scene is transitioning from preparation to measurement mode, and we need to animate coins coming from the
-        // preparation area to the measurement area.  Start by creating the node used for single coin measurements.
-        if ( sceneModel.systemType === 'physical' ) {
-          singleCoinNode = new PhysicalCoinNode(
-            sceneModel.singleCoin.currentStateProperty as TReadOnlyProperty<PhysicalCoinStates>,
-            InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS,
-            Tandem.OPT_OUT
-          );
+        if ( singleCoinExperimentState === 'preparingToBeMeasured' ) {
+
+          // Abort any previous animations and clear out the test box.
+          abortIngressAnimationForSingleCoin();
+          clearSingleCoinTestBox();
+
+          // Animate a coin from the prep area to the single coin test box to indicate that a new "quantum coin" is
+          // being prepared for measurement.
+          startIngressAnimationForSingleCoin();
         }
-        else {
-          singleCoinNode = new QuantumCoinNode(
-            sceneModel.singleCoin.currentStateProperty as TReadOnlyProperty<QuantumCoinStates>,
-            sceneModel.stateBiasProperty,
-            InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS,
-            Tandem.OPT_OUT
-          );
-        }
-
-        // Add the coin to our parent node.  This is done so that we don't change our bounds, which could mess up the
-        // layout.  It will be added back to this area when it is back within the bounds.
-        sceneGraphParent.addCoinNode( singleCoinNode );
-
-        // Make sure the coin mask is outside the test box so that it isn't visible.
-        coinMask.x = -SINGLE_COIN_TEST_BOX_SIZE.width * 2;
-
-        // Create and start an animation to move this coin to the top test area in the measurement area.
-        const leftOfTestArea = singleCoinMeasurementArea.center.minusXY( 350, 0 );
-        const leftOfTestAreaInParentCoords = this.localToParentPoint( leftOfTestArea );
-        animationFromPrepToMeasurementArea = new Animation( {
-          setValue: value => { singleCoinNode!.center = value; },
-          getValue: () => singleCoinNode!.center,
-          to: leftOfTestAreaInParentCoords,
-          duration: 0.5,
-          easing: Easing.LINEAR
-        } );
-        animationFromPrepToMeasurementArea.start();
-        animationFromPrepToMeasurementArea.finishEmitter.addListener( () => {
-
-          const coinNode = singleCoinNode!;
-          coinNode.moveToBack();
-
-          // Move the mask to be on top of the coin.
-          coinMask.center = singleCoinTestBox.parentToLocalPoint( this.parentToLocalPoint( coinNode.center ) );
-
-          // Do the 2nd portion of the animation, which moves it into the actual test area.
-          animationFromEdgeOfScreenToBehindIt = new Animation( {
-            setValue: value => {
-              coinNode.center = value;
-              coinMask.center = singleCoinMeasurementArea.parentToLocalPoint(
-                singleCoinTestBox.parentToLocalPoint( this.parentToLocalPoint( coinNode.center ) )
-              );
-            },
-            getValue: () => coinNode.center,
-            to: this.localToParentPoint( singleCoinMeasurementArea.localToParentPoint( singleCoinTestBox.center ) ),
-            duration: 0.7,
-            easing: Easing.CUBIC_OUT
-          } );
-          animationFromEdgeOfScreenToBehindIt.finishEmitter.addListener( () => {
-
-            // Now that the coin is within the bounds of the measurement area, remove it from the parent node and add it
-            // to the test box.
-            sceneGraphParent.removeChild( coinNode );
-            coinNode.center = singleCoinTestBox.center;
-            singleCoinTestBox.insertChild( 0, coinNode );
-            coinMask.center = singleCoinTestBox.center;
-
-            if ( sceneModel.systemType === 'quantum' ) {
-
-              // "Collapse" the state of the coin node so that it shows a single state, not a superimposed one.
-              const quantumCoinNode = singleCoinNode as QuantumCoinNode;
-              quantumCoinNode.showSuperpositionProperty.value = false;
-            }
-          } );
-
-          // Kick off the animation.
-          animationFromEdgeOfScreenToBehindIt.start();
-        } );
-      }
-    } );
-
-    // Add the listener that will animation the flipping motion of the coin.
-    sceneModel.singleCoinExperimentStateProperty.lazyLink( singleCoinExperimentState => {
-      if ( singleCoinExperimentState === 'flipping' ) {
-
-        // state checking
-        assert && assert( !flippingAnimationStepListener, 'something is off - there should be no listener' );
-        assert && assert( singleCoinNode, 'something is off - there should be a coin node' );
-
-        // Set the initial state of things prior to starting the animation.
-        let flippingAnimationPhase = 0;
-        let rotation = dotRandom.nextDouble() * Math.PI;
-        let previousXScale = 0;
-        coinMask.setRotation( rotation );
-        singleCoinNode!.setRotation( rotation );
-
-        // Create and hook up a step listener to perform the animation.
-        flippingAnimationStepListener = ( dt: number ) => {
-
-          flippingAnimationPhase += 2 * Math.PI * COIN_FLIP_RATE * dt;
-          if ( flippingAnimationPhase >= Math.PI * 2 ) {
-
-            // A full flip as been performed.  Rotate the coins by a random amount to make things look a bit more
-            // random.  The transform is being reset here because adding new rotations was causing a pile up of some
-            // sort of floating point errors, and this just worked out better.
-            rotation += dotRandom.nextDoubleInRange( COIN_ROTATION_CHANGE_RANGE );
-            coinMask.resetTransform();
-            coinMask.center = singleCoinTestBox.center;
-            coinMask.setRotation( rotation );
-            singleCoinNode!.resetTransform();
-            singleCoinNode!.center = singleCoinTestBox.center;
-            singleCoinNode!.setRotation( rotation );
-
-            // Reset the phase.
-            flippingAnimationPhase = 0;
-          }
-
-          let xScale = Math.sin( flippingAnimationPhase );
-
-          // Handle the case where we hit zero, since the scale can't be set to that value.
-          if ( xScale === 0 ) {
-            xScale = previousXScale < 0 ? 0.01 : -0.01;
-          }
-
-          // Scale the coins on the x-axis to make it look like they are rotating.
-          coinMask.setScaleMagnitude( xScale, 1 );
-          singleCoinNode && singleCoinNode.setScaleMagnitude( xScale, 1 );
-
-          // Save some state for next time through.
-          previousXScale = xScale;
-        };
-        stepTimer.addListener( flippingAnimationStepListener );
-      }
-      else if ( flippingAnimationStepListener ) {
-
-        // The coin is no longer in the flipping state, so reset it to be fully round and in the center of the test box.
-        // The transform is being reset here because floating point errors were piling up during the animation, and this
-        // just worked better.
-        coinMask.resetTransform();
-        coinMask.center = singleCoinTestBox.center;
-        if ( singleCoinNode ) {
-          singleCoinNode.resetTransform();
-          singleCoinNode.center = singleCoinTestBox.center;
-        }
-
-        // Remove the step listener that was performing the flip animation.
-        stepTimer.removeListener( flippingAnimationStepListener );
-        flippingAnimationStepListener = null;
       }
     } );
   }

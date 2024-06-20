@@ -19,6 +19,7 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import { CoinExperimentStates } from '../model/CoinExperimentStates.js';
 import TProperty from '../../../../axon/js/TProperty.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 
 type SelfOptions = EmptySelfOptions;
 export type CoinExperimentButtonSetOptions = SelfOptions & PickRequired<NodeOptions, 'tandem' | 'visibleProperty'>;
@@ -26,26 +27,38 @@ export type CoinExperimentButtonSetOptions = SelfOptions & PickRequired<NodeOpti
 const BUTTON_COLOR = new Color( '#0ffdfd' );
 const BUTTON_FONT = new PhetFont( 14 );
 const BUTTON_WIDTH = 160; // empirically determined to match spec
-const COMMON_BUTTON_OPTIONS = {
-  baseColor: BUTTON_COLOR,
-  font: BUTTON_FONT,
-  minWidth: BUTTON_WIDTH,
-  maxWidth: BUTTON_WIDTH
-};
 
 export default class CoinExperimentButtonSet extends VBox {
 
   public constructor( systemType: SystemType,
-                      experimentStateProperty: TProperty<CoinExperimentStates>,
+                      coinStateProperty: TProperty<CoinExperimentStates>,
+                      testBoxReadyProperty: TProperty<boolean>,
                       prepareExperiment: ( revealWhenComplete?: boolean ) => void,
                       providedOptions: CoinExperimentButtonSetOptions ) {
 
+    // Create an enabledProperty for the buttons, since interaction with the test boxes is only possible if they have
+    // coins in them and the coins are not in the process of being prepared (e.g. flipped).
+    const buttonsEnabledProperty = new DerivedProperty(
+      [ testBoxReadyProperty, coinStateProperty ],
+      ( testBoxReady, coinState ) => testBoxReady && coinState !== 'preparingToBeMeasured'
+    );
+
+    // common options for all buttons in the set
+    const commonButtonOptions: TextPushButtonOptions = {
+      baseColor: BUTTON_COLOR,
+      font: BUTTON_FONT,
+      minWidth: BUTTON_WIDTH,
+      maxWidth: BUTTON_WIDTH,
+      enabledProperty: buttonsEnabledProperty
+    };
+
+    // Create the text for the button whose label changes based on the state.
     const revealHideButtonTextProperty = new DerivedStringProperty(
       [
         QuantumMeasurementStrings.hideStringProperty,
         QuantumMeasurementStrings.revealStringProperty,
         QuantumMeasurementStrings.observeStringProperty,
-        experimentStateProperty
+        coinStateProperty
       ],
       ( hideString, revealString, observeString, experimentState ) => {
         let labelString;
@@ -62,19 +75,19 @@ export default class CoinExperimentButtonSet extends VBox {
       }
     );
 
-    // Create the button that will be used to hide and reveal the coin without flipping it.
+    // Create the button that will be used to hide and reveal the coin without re-preparing it.
     const revealHideButton = new TextPushButton(
       revealHideButtonTextProperty,
-      combineOptions<TextPushButtonOptions>( COMMON_BUTTON_OPTIONS, {
+      combineOptions<TextPushButtonOptions>( commonButtonOptions, {
         listener: () => {
 
           // TODO: See https://github.com/phetsims/quantum-measurement/issues/12.  Updating the experiment state
           //       directly here feels a little off to me.  Should this be read-only and set only by the scene model?
-          if ( experimentStateProperty.value === 'hiddenAndStill' ) {
-            experimentStateProperty.value = 'revealedAndStill';
+          if ( coinStateProperty.value === 'hiddenAndStill' ) {
+            coinStateProperty.value = 'revealedAndStill';
           }
-          else if ( experimentStateProperty.value === 'revealedAndStill' ) {
-            experimentStateProperty.value = 'hiddenAndStill';
+          else if ( coinStateProperty.value === 'revealedAndStill' ) {
+            coinStateProperty.value = 'hiddenAndStill';
           }
         },
         tandem: providedOptions.tandem.createTandem( 'revealHideButton' )
@@ -85,7 +98,7 @@ export default class CoinExperimentButtonSet extends VBox {
       systemType === 'physical' ?
       QuantumMeasurementStrings.flipStringProperty :
       QuantumMeasurementStrings.reprepareStringProperty,
-      combineOptions<TextPushButtonOptions>( COMMON_BUTTON_OPTIONS, {
+      combineOptions<TextPushButtonOptions>( commonButtonOptions, {
         listener: prepareExperiment,
         tandem: providedOptions.tandem.createTandem( 'flipOrReprepareButton' )
       } )
@@ -95,7 +108,7 @@ export default class CoinExperimentButtonSet extends VBox {
       systemType === 'physical' ?
       QuantumMeasurementStrings.flipAndRevealStringProperty :
       QuantumMeasurementStrings.reprepareAndRevealStringProperty,
-      combineOptions<TextPushButtonOptions>( COMMON_BUTTON_OPTIONS, {
+      combineOptions<TextPushButtonOptions>( commonButtonOptions, {
         listener: () => { prepareExperiment( true ); },
         tandem: providedOptions.tandem.createTandem( 'flipOrReprepareAndRevealButton' )
       } )

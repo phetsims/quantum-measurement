@@ -7,5 +7,5 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-export const CoinExperimentStateValues = [ 'hiddenAndStill', 'flipping', 'revealedAndStill' ] as const;
+export const CoinExperimentStateValues = [ 'hiddenAndStill', 'preparingToBeMeasured', 'revealedAndStill' ] as const;
 export type CoinExperimentStates = ( typeof CoinExperimentStateValues )[number];

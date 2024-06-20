@@ -86,7 +86,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
       const initialCoinStateItems = QuantumCoinStateValues.map( stateValue => ( {
         createNode: () => new QuantumCoinNode(
           new Property<QuantumCoinStates>( stateValue ),
-          new NumberProperty( stateValue === 'up' ? 0 : 1 ),
+          new NumberProperty( stateValue === 'up' ? 1 : 0 ),
           RADIO_BUTTON_COIN_NODE_RADIUS,
           Tandem.OPT_OUT
         ),

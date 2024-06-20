@@ -26,7 +26,6 @@ import Range from '../../../../dot/js/Range.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import Easing from '../../../../twixt/js/Easing.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
 import CoinExperimentPreparationArea from './CoinExperimentPreparationArea.js';
 import CoinExperimentMeasurementArea from './CoinExperimentMeasurementArea.js';
 import CoinNode from './CoinNode.js';
@@ -170,11 +169,14 @@ export default class CoinsExperimentSceneView extends Node {
    */
   public addCoinNode( coinNode: CoinNode ): void {
 
-    // TODO: See https://github.com/phetsims/quantum-measurement/issues/11.  Hardcoded values are being used because the
-    //       attempts to do something more general (the commented out code) wasn't working.  This should be fixed up.
+    // TODO: See https://github.com/phetsims/quantum-measurement/issues/11.  Values based on the local coordering frame
+    //       are being used because the attempts to do something more general (the commented out code) weren't working.
+    //       This should be fixed up.
     // const indicatorCoinGlobalBounds = this.preparationArea.getIndicatorCoinGlobalBounds();
     // coinNode.center = this.globalToLocalPoint( indicatorCoinGlobalBounds.center );
-    coinNode.center = this.globalToLocalPoint( new Vector2( 200, 410 ) );
+    coinNode.centerX = this.dividerXPositionProperty.value - 100;
+    coinNode.centerY = DIVIDER_HEIGHT / 3;
+
     this.addChild( coinNode );
   }
 

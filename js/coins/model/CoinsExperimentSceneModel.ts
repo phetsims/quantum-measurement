@@ -24,7 +24,6 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import stepTimer from '../../../../axon/js/stepTimer.js';
 import { TimerListener } from '../../../../axon/js/Timer.js';
-import dotRandom from '../../../../dot/js/dotRandom.js';
 
 type SelfOptions = {
   initiallyActive?: boolean;
@@ -33,7 +32,7 @@ type SelfOptions = {
 type CoinExperimentSceneModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
 // constants
-const FLIPPING_TIME_RANGE = new Range( 0.5, 1.3 ); // time that coins are in the flipping state, in seconds
+const PREPARING_TO_BE_MEASURED_TIME = 1; // time that coins are in the preparingToBeMeasured state
 
 export default class CoinsExperimentSceneModel extends PhetioObject {
 
@@ -53,14 +52,14 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
   // The coins that are flipped/prepared and then measured during the experiment.
   public readonly singleCoin: TwoStateSystem<PhysicalCoinStates> | TwoStateSystem<QuantumCoinStates>;
 
-  // The initial state of the coin(s) before any flipping occurs.
+  // The initial state of the coin(s) before any flipping or other experiment preparation occurs.
   public readonly initialCoinStateProperty: Property<PhysicalCoinStates> | Property<QuantumCoinStates>;
 
   // The bias towards one outcome or another in the initially prepared state, from 0 to 1.
   public readonly stateBiasProperty: NumberProperty;
 
-  // Timeout for the flipping state.
-  private flippingTimeout: null | TimerListener = null;
+  // Timeout for the preparingToBeMeasured state.
+  private preparingToBeMeasuredTimeout: null | TimerListener = null;
 
   public constructor( providedOptions: CoinExperimentSceneModelOptions ) {
 
@@ -137,34 +136,34 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
     // If this is a quantum system, changing the initial state of the coin sets the bias to match that coin.
     if ( this.systemType === 'quantum' ) {
       this.initialCoinStateProperty.link( initialCoinState => {
-        this.stateBiasProperty.value = initialCoinState === 'up' ? 0 : 1;
+        this.stateBiasProperty.value = initialCoinState === 'up' ? 1 : 0;
       } );
     }
   }
 
   /**
-   * Prepare the single coin for measurement.  This is essentially the flipping of the coin.
+   * Prepare the single coin for measurement.  For the physical coin, this is essentially starting to flip it.
    */
   public prepareSingleCoinExperiment( revealWhenComplete = false ): void {
 
     // Ignore any requests to prepare the experiment if the preparation is already in progress.
-    if ( this.singleCoinExperimentStateProperty.value === 'flipping' ) {
+    if ( this.singleCoinExperimentStateProperty.value === 'preparingToBeMeasured' ) {
       return;
     }
 
-    // Set the state to flipping and start a timeout for the flipping to end.
-    this.singleCoinExperimentStateProperty.value = 'flipping';
-    this.flippingTimeout = stepTimer.setTimeout( () => {
+    // Set the state to preparingToBeMeasured and start a timeout for the state to end.
+    this.singleCoinExperimentStateProperty.value = 'preparingToBeMeasured';
+    this.preparingToBeMeasuredTimeout = stepTimer.setTimeout( () => {
       this.singleCoin.prepare();
       this.singleCoinExperimentStateProperty.value = revealWhenComplete ? 'revealedAndStill' : 'hiddenAndStill';
-      this.flippingTimeout = null;
-    }, dotRandom.nextDoubleInRange( FLIPPING_TIME_RANGE ) * 1000 );
+      this.preparingToBeMeasuredTimeout = null;
+    }, PREPARING_TO_BE_MEASURED_TIME * 1000 );
   }
 
   public reset(): void {
-    if ( this.flippingTimeout ) {
-      stepTimer.clearTimeout( this.flippingTimeout );
-      this.flippingTimeout = null;
+    if ( this.preparingToBeMeasuredTimeout ) {
+      stepTimer.clearTimeout( this.preparingToBeMeasuredTimeout );
+      this.preparingToBeMeasuredTimeout = null;
     }
     this.preparingExperimentProperty.reset();
     this.singleCoinExperimentStateProperty.reset();
@@ -172,6 +171,9 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
     this.initialCoinStateProperty.reset();
     this.singleCoin.reset();
   }
+
+  // The amount of time spent in the preparingToBeMeasured state.
+  public static readonly PREPARING_TO_BE_MEASURED_TIME = PREPARING_TO_BE_MEASURED_TIME;
 }
 
 quantumMeasurement.register( 'CoinsExperimentSceneModel', CoinsExperimentSceneModel );
