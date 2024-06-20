@@ -227,7 +227,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
 
     // Create a closure function for creating and starting the animation of a single coin coming from the preparation
     // area into the single coin test box.
-    const startIngressAnimationForSingleCoin = () => {
+    const startIngressAnimationForSingleCoin = ( forReprepare: boolean ) => {
 
       // Create a typed reference to the parent node, since we'll need to invoke some methods on it.
       assert && assert( this.getParent() instanceof CoinsExperimentSceneView );
@@ -255,16 +255,17 @@ export default class CoinExperimentMeasurementArea extends VBox {
 
       // Add the coin to our parent node.  This is done so that we don't change our bounds, which could mess up the
       // layout.  It will be added back to this area when it is back within the bounds.
-      sceneGraphParent.addCoinNode( singleCoinNode );
+      sceneGraphParent.addCoinNode( singleCoinNode, forReprepare );
 
       // Make sure the coin mask is outside the test box so that it isn't visible.
       coinMask.x = -SINGLE_COIN_TEST_BOX_SIZE.width * 2;
 
-      // Create and start an animation to move this coin to the side of the single coin text box.  This actually
-      // consists of two animations, one to move the coin to the edge of the test box while the test box is itself
-      // moving, then a second one to move the coin into the box.  The durations must be set up such that the test box
-      // is in place before the 2nd animation begins or the coin won't end up in the right place.
-      const leftOfTestArea = singleCoinMeasurementArea.center.minusXY( 350, 0 );
+      // Create and start an animation to move the single coin to the side of the single coin text box.  The entire
+      // process consists of two animations, one to move the coin to the left edge of the test box while the test box is
+      // potentially also moving, then a second one to move the coin into the box.  The durations must be set up such
+      // that the test box is in place before the 2nd animation begins or the coin won't end up in the right place.
+      const testAreaXOffset = forReprepare ? 200 : 350;
+      const leftOfTestArea = singleCoinMeasurementArea.center.minusXY( testAreaXOffset, 0 );
       const leftOfTestAreaInParentCoords = this.localToParentPoint( leftOfTestArea );
       animationFromPrepAreaToEdgeOfSingleCoinTestBox = new Animation( {
         setValue: value => { singleCoinNode!.center = value; },
@@ -347,7 +348,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
       else {
 
         // The user is ready to make measurements on the coin, so animate a transition from the prep area to this area.
-        startIngressAnimationForSingleCoin();
+        startIngressAnimationForSingleCoin( false );
       }
     } );
 
@@ -433,7 +434,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
 
           // Animate a coin from the prep area to the single coin test box to indicate that a new "quantum coin" is
           // being prepared for measurement.
-          startIngressAnimationForSingleCoin();
+          startIngressAnimationForSingleCoin( true );
         }
       }
     } );

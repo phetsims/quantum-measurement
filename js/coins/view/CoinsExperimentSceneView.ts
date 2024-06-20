@@ -167,15 +167,24 @@ export default class CoinsExperimentSceneView extends Node {
    * preparation to the measurement area.  Having this method allows the measurement area to create the node and get it
    * into the scene graph without altering its bounds.
    */
-  public addCoinNode( coinNode: CoinNode ): void {
+  public addCoinNode( coinNode: CoinNode, forReprepare = false ): void {
 
-    // TODO: See https://github.com/phetsims/quantum-measurement/issues/11.  Values based on the local coordering frame
-    //       are being used because the attempts to do something more general (the commented out code) weren't working.
-    //       This should be fixed up.
+    // TODO: See https://github.com/phetsims/quantum-measurement/issues/11.  Empirically determined values in the local
+    //       coordinate frame are being used because my (jbphet) attempts to do something more general, such as the
+    //       commented out code below, weren't working. This should be fixed up.
     // const indicatorCoinGlobalBounds = this.preparationArea.getIndicatorCoinGlobalBounds();
     // coinNode.center = this.globalToLocalPoint( indicatorCoinGlobalBounds.center );
-    coinNode.centerX = this.dividerXPositionProperty.value - 100;
-    coinNode.centerY = DIVIDER_HEIGHT / 3;
+
+    // Use a different initial position for the coin if this is a reprepare (which applies to the quantum coin only)
+    // versus an initial preparation of the coin.
+    if ( forReprepare ) {
+      coinNode.centerX = DIVIDER_X_POSITION_DURING_MEASUREMENT - 100;
+      coinNode.centerY = 80;
+    }
+    else {
+      coinNode.centerX = DIVIDER_X_POSITION_DURING_PREPARATION - 200;
+      coinNode.centerY = DIVIDER_HEIGHT * 0.4;
+    }
 
     this.addChild( coinNode );
   }
