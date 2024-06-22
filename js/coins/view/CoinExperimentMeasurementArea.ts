@@ -34,6 +34,8 @@ import Range from '../../../../dot/js/Range.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import TProperty from '../../../../axon/js/TProperty.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
+import TwoStateSystem from '../../common/model/TwoStateSystem.js';
 
 const SINGLE_COIN_AREA_RECT_LINE_WIDTH = 36;
 const MULTIPLE_COIN_TEST_BOX_SIZE = new Dimension2( 200, 200 );
@@ -43,7 +45,7 @@ const SINGLE_COIN_TEST_BOX_UNREVEALED_FILL = new LinearGradient( 0, 0, SINGLE_CO
   .addColorStop( 0.9, new Color( '#bae3e0' ) );
 const COIN_FLIP_RATE = 3; // full flips per second
 const COIN_ROTATION_CHANGE_RANGE = new Range( Math.PI / 8, Math.PI * 0.9 );
-const COIN_TRAVEL_ANIMATION_DURATION = CoinsExperimentSceneModel.PREPARING_TO_BE_MEASURED_TIME * 0.95;
+const COIN_TRAVEL_ANIMATION_DURATION = QuantumMeasurementConstants.PREPARING_TO_BE_MEASURED_TIME * 0.95;
 
 export default class CoinExperimentMeasurementArea extends VBox {
 
@@ -86,10 +88,9 @@ export default class CoinExperimentMeasurementArea extends VBox {
       clipArea: Shape.bounds( singleCoinTestBoxRectangle.getRectBounds() )
     } );
     const singleCoinExperimentButtonSet = new CoinExperimentButtonSet(
+      sceneModel.singleCoin as TwoStateSystem<string>,
       sceneModel.systemType,
-      sceneModel.singleCoinExperimentStateProperty,
       coinsInTestBoxesProperty,
-      sceneModel.prepareSingleCoinExperiment.bind( sceneModel ),
       {
         tandem: tandem.createTandem( 'singleCoinExperimentButtonSet' ),
         visibleProperty: DerivedProperty.not( sceneModel.preparingExperimentProperty )
@@ -104,8 +105,8 @@ export default class CoinExperimentMeasurementArea extends VBox {
     } );
 
     // Make the single-coin test box transparent when the state of the coin is being revealed to the user.
-    sceneModel.singleCoinExperimentStateProperty.link( singleCoinExperimentState => {
-      singleCoinTestBoxRectangle.fill = singleCoinExperimentState === 'revealedAndStill' ?
+    sceneModel.singleCoin.measurementStateProperty.link( singleCoinMeasurementState => {
+      singleCoinTestBoxRectangle.fill = singleCoinMeasurementState === 'measuredAndRevealed' ?
                                         Color.TRANSPARENT :
                                         SINGLE_COIN_TEST_BOX_UNREVEALED_FILL;
     } );
@@ -136,10 +137,9 @@ export default class CoinExperimentMeasurementArea extends VBox {
       clipArea: Shape.bounds( multipleCoinTestBoxRectangle.getRectBounds() )
     } );
     const multipleCoinExperimentButtonSet = new CoinExperimentButtonSet(
+      sceneModel.singleCoin as TwoStateSystem<string>,
       sceneModel.systemType,
-      sceneModel.multiCoinExperimentStateProperty,
       coinsInTestBoxesProperty,
-      () => { console.log( 'Preparing the experiment is not yet implemented for the multi-coin case.' ); },
       {
         tandem: tandem.createTandem( 'multipleCoinExperimentButtonSet' ),
         visibleProperty: DerivedProperty.not( sceneModel.preparingExperimentProperty )
@@ -171,9 +171,9 @@ export default class CoinExperimentMeasurementArea extends VBox {
       stroke: new Color( '#888888' ),
       lineWidth: 4,
       visibleProperty: new DerivedProperty(
-        [ sceneModel.preparingExperimentProperty, sceneModel.singleCoinExperimentStateProperty ],
+        [ sceneModel.preparingExperimentProperty, sceneModel.singleCoin.measurementStateProperty ],
         ( preparingExperiment, singleCoinExperimentState ) =>
-          !preparingExperiment && singleCoinExperimentState !== 'revealedAndStill'
+          !preparingExperiment && singleCoinExperimentState !== 'measuredAndRevealed'
       )
     } );
     singleCoinTestBox.addChild( coinMask );
@@ -239,14 +239,14 @@ export default class CoinExperimentMeasurementArea extends VBox {
       // Create the coin that will travel from the preparation area into this measurement area.
       if ( sceneModel.systemType === 'physical' ) {
         singleCoinNode = new PhysicalCoinNode(
-          sceneModel.singleCoin.currentStateProperty as TReadOnlyProperty<PhysicalCoinStates>,
+          sceneModel.singleCoin.measuredValueProperty as TReadOnlyProperty<PhysicalCoinStates>,
           InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS,
           Tandem.OPT_OUT
         );
       }
       else {
         singleCoinNode = new QuantumCoinNode(
-          sceneModel.singleCoin.currentStateProperty as TReadOnlyProperty<QuantumCoinStates>,
+          sceneModel.singleCoin.measuredValueProperty as TReadOnlyProperty<QuantumCoinStates>,
           sceneModel.stateBiasProperty,
           InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS,
           Tandem.OPT_OUT
@@ -311,6 +311,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
             // "Collapse" the state of the coin node so that it shows a single state, not a superimposed one.
             const quantumCoinNode = singleCoinNode as QuantumCoinNode;
             quantumCoinNode.showSuperpositionProperty.value = false;
+            sceneModel.singleCoin.prepareInstantly();
           }
 
           // The coin is in the test box, so update the flag that makes this known.
@@ -354,10 +355,10 @@ export default class CoinExperimentMeasurementArea extends VBox {
 
     // Listen to the state of the coin and animate a flipping motion for the physical coin or a travel-from-the-prep-
     // area animation for the quantum coin.
-    sceneModel.singleCoinExperimentStateProperty.lazyLink( singleCoinExperimentState => {
+    sceneModel.singleCoin.measurementStateProperty.lazyLink( singleCoinMeasurementState => {
       if ( sceneModel.systemType === 'physical' ) {
 
-        if ( singleCoinExperimentState === 'preparingToBeMeasured' ) {
+        if ( singleCoinMeasurementState === 'preparingToBeMeasured' ) {
 
           // state checking
           assert && assert( !flippingAnimationStepListener, 'something is off - there should be no listener' );
@@ -426,7 +427,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
       }
       else if ( sceneModel.systemType === 'quantum' ) {
 
-        if ( singleCoinExperimentState === 'preparingToBeMeasured' ) {
+        if ( singleCoinMeasurementState === 'preparingToBeMeasured' ) {
 
           // Abort any previous animations and clear out the test box.
           abortIngressAnimationForSingleCoin();

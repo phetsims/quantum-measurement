@@ -17,7 +17,9 @@ const QuantumMeasurementConstants = {
   BETA: '\u03b2',
   SPIN_UP_ARROW_CHARACTER: '\u2b61',
   SPIN_DOWN_ARROW_CHARACTER: '\u2b63',
-  KET: '\u27e9'
+  KET: '\u27e9',
+
+  PREPARING_TO_BE_MEASURED_TIME: 1 // in seconds
 };
 
 quantumMeasurement.register( 'QuantumMeasurementConstants', QuantumMeasurementConstants );

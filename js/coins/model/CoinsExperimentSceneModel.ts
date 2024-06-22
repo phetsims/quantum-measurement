@@ -1,9 +1,8 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * TODO: See https://github.com/phetsims/quantum-measurement/issues/1.  At the time of this writing I (jbphet) am not
- *        sure if this will be the base class for the two scenes on the "Coins" screen or a configurable class.  Update
- *        this header when that decision is made.
+ * Main model class for the "Physical Coin" and "Quantum Coin" scenes on the "Coins" screen.  This manages the
+ * preparation and measurement phases for the experiments.
  *
  * @author John Blanco, PhET Interactive Simulations
  */
@@ -14,7 +13,6 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import Property from '../../../../axon/js/Property.js';
-import { CoinExperimentStates, CoinExperimentStateValues } from './CoinExperimentStates.js';
 import TwoStateSystem from '../../common/model/TwoStateSystem.js';
 import { PhysicalCoinStates, PhysicalCoinStateValues } from './PhysicalCoinStates.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
@@ -22,17 +20,13 @@ import { QuantumCoinStates, QuantumCoinStateValues } from './QuantumCoinStates.j
 import { SystemType } from '../../common/model/SystemType.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
-import stepTimer from '../../../../axon/js/stepTimer.js';
-import { TimerListener } from '../../../../axon/js/Timer.js';
 
 type SelfOptions = {
   initiallyActive?: boolean;
+  initialBias?: number;
   systemType?: SystemType;
 };
 type CoinExperimentSceneModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
-
-// constants
-const PREPARING_TO_BE_MEASURED_TIME = 1; // time that coins are in the preparingToBeMeasured state
 
 export default class CoinsExperimentSceneModel extends PhetioObject {
 
@@ -45,12 +39,10 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
   // This BooleanProperty is used to control whether the experiment is being prepared (true) or measured (false).
   public readonly preparingExperimentProperty: BooleanProperty;
 
-  // current state of the single- and multi-coin experiments
-  public readonly singleCoinExperimentStateProperty: Property<CoinExperimentStates>;
-  public readonly multiCoinExperimentStateProperty: Property<CoinExperimentStates>;
-
   // The coins that are flipped/prepared and then measured during the experiment.
   public readonly singleCoin: TwoStateSystem<PhysicalCoinStates> | TwoStateSystem<QuantumCoinStates>;
+
+  public readonly coinSet: TwoStateSystem<PhysicalCoinStates> | TwoStateSystem<QuantumCoinStates>;
 
   // The initial state of the coin(s) before any flipping or other experiment preparation occurs.
   public readonly initialCoinStateProperty: Property<PhysicalCoinStates> | Property<QuantumCoinStates>;
@@ -58,14 +50,12 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
   // The bias towards one outcome or another in the initially prepared state, from 0 to 1.
   public readonly stateBiasProperty: NumberProperty;
 
-  // Timeout for the preparingToBeMeasured state.
-  private preparingToBeMeasuredTimeout: null | TimerListener = null;
-
   public constructor( providedOptions: CoinExperimentSceneModelOptions ) {
 
     const options = optionize<CoinExperimentSceneModelOptions, SelfOptions, PhetioObjectOptions>()( {
       systemType: 'physical',
-      initiallyActive: false
+      initiallyActive: false,
+      initialBias: 0.5
     }, providedOptions );
 
     super( options );
@@ -78,58 +68,64 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
     this.preparingExperimentProperty = new BooleanProperty( true, {
       tandem: options.tandem.createTandem( 'preparingExperimentProperty' )
     } );
-    this.stateBiasProperty = new NumberProperty( 0.5, {
+    this.stateBiasProperty = new NumberProperty( options.initialBias, {
       range: new Range( 0, 1 ),
       tandem: options.tandem.createTandem( 'stateBiasProperty' )
     } );
-    this.singleCoinExperimentStateProperty = new Property<CoinExperimentStates>( 'hiddenAndStill', {
-      phetioValueType: StringUnionIO( CoinExperimentStateValues ),
-      tandem: options.tandem.createTandem( 'singleCoinExperimentStateProperty' )
-    } );
-    this.multiCoinExperimentStateProperty = new Property<CoinExperimentStates>( 'hiddenAndStill', {
-      phetioValueType: StringUnionIO( CoinExperimentStateValues ),
-      tandem: options.tandem.createTandem( 'multiCoinExperimentStateProperty' )
-    } );
     const singleCoinTandem = options.tandem.createTandem( 'singleCoin' );
     if ( options.systemType === 'physical' ) {
-      this.singleCoin = new TwoStateSystem<PhysicalCoinStates>(
-        PhysicalCoinStateValues,
-        'heads',
-        this.stateBiasProperty,
-        { tandem: singleCoinTandem } );
       this.initialCoinStateProperty = new Property<PhysicalCoinStates>( 'heads', {
         tandem: options.tandem.createTandem( 'initialCoinStateProperty' ),
         phetioValueType: StringUnionIO( PhysicalCoinStateValues ),
         validValues: PhysicalCoinStateValues
       } );
+      this.singleCoin = new TwoStateSystem<PhysicalCoinStates>(
+        PhysicalCoinStateValues,
+        'heads',
+        this.stateBiasProperty,
+        { tandem: singleCoinTandem }
+      );
+      this.coinSet = new TwoStateSystem<PhysicalCoinStates>(
+        PhysicalCoinStateValues,
+        'heads',
+        this.stateBiasProperty,
+        { tandem: singleCoinTandem }
+      );
     }
     else {
       assert && assert( options.systemType === 'quantum', 'unhandled system type' );
-      this.singleCoin = new TwoStateSystem<QuantumCoinStates>(
-        QuantumCoinStateValues,
-        'up',
-        this.stateBiasProperty,
-        { tandem: singleCoinTandem } );
       this.initialCoinStateProperty = new Property<QuantumCoinStates>( 'up', {
         tandem: options.tandem.createTandem( 'initialCoinStateProperty' ),
         phetioValueType: StringUnionIO( QuantumCoinStateValues ),
         validValues: QuantumCoinStateValues
       } );
+      this.singleCoin = new TwoStateSystem<QuantumCoinStates>(
+        QuantumCoinStateValues,
+        'up',
+        this.stateBiasProperty,
+        { tandem: singleCoinTandem }
+      );
+      this.coinSet = new TwoStateSystem<QuantumCoinStates>(
+        QuantumCoinStateValues,
+        'up',
+        this.stateBiasProperty,
+        { tandem: singleCoinTandem }
+      );
     }
 
     this.preparingExperimentProperty.lazyLink( preparingExperiment => {
 
       if ( preparingExperiment ) {
 
-        // Set the experiment states back to their initial values.
-        this.singleCoinExperimentStateProperty.reset();
-        this.multiCoinExperimentStateProperty.reset();
+        // Set the coin measurement states back to their initial values.
+        this.singleCoin.reset();
+        this.coinSet.reset();
       }
       else {
 
-        // Set the coins that will be measured into their initial states when transitioning from preparation to
-        // measurement.
-        this.singleCoin.currentStateProperty.value = this.initialCoinStateProperty.value;
+        // The scene is moving from preparation mode to measurement mode.  Force the single coin to be in the initial
+        // state so that it will match when it animates into the test box.
+        this.singleCoin.setMeasurementValueImmediate( this.initialCoinStateProperty.value as never );
       }
     } );
 
@@ -145,35 +141,15 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
    * Prepare the single coin for measurement.  For the physical coin, this is essentially starting to flip it.
    */
   public prepareSingleCoinExperiment( revealWhenComplete = false ): void {
-
-    // Ignore any requests to prepare the experiment if the preparation is already in progress.
-    if ( this.singleCoinExperimentStateProperty.value === 'preparingToBeMeasured' ) {
-      return;
-    }
-
-    // Set the state to preparingToBeMeasured and start a timeout for the state to end.
-    this.singleCoinExperimentStateProperty.value = 'preparingToBeMeasured';
-    this.preparingToBeMeasuredTimeout = stepTimer.setTimeout( () => {
-      this.singleCoin.prepare();
-      this.singleCoinExperimentStateProperty.value = revealWhenComplete ? 'revealedAndStill' : 'hiddenAndStill';
-      this.preparingToBeMeasuredTimeout = null;
-    }, PREPARING_TO_BE_MEASURED_TIME * 1000 );
+    this.singleCoin.prepare( revealWhenComplete );
   }
 
   public reset(): void {
-    if ( this.preparingToBeMeasuredTimeout ) {
-      stepTimer.clearTimeout( this.preparingToBeMeasuredTimeout );
-      this.preparingToBeMeasuredTimeout = null;
-    }
     this.preparingExperimentProperty.reset();
-    this.singleCoinExperimentStateProperty.reset();
-    this.multiCoinExperimentStateProperty.reset();
     this.initialCoinStateProperty.reset();
+    this.stateBiasProperty.reset();
     this.singleCoin.reset();
   }
-
-  // The amount of time spent in the preparingToBeMeasured state.
-  public static readonly PREPARING_TO_BE_MEASURED_TIME = PREPARING_TO_BE_MEASURED_TIME;
 }
 
 quantumMeasurement.register( 'CoinsExperimentSceneModel', CoinsExperimentSceneModel );

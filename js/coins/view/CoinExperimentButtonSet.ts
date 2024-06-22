@@ -17,9 +17,9 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
-import { CoinExperimentStates } from '../model/CoinExperimentStates.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import TwoStateSystem from '../../common/model/TwoStateSystem.js';
 
 type SelfOptions = EmptySelfOptions;
 export type CoinExperimentButtonSetOptions = SelfOptions & PickRequired<NodeOptions, 'tandem' | 'visibleProperty'>;
@@ -30,16 +30,15 @@ const BUTTON_WIDTH = 160; // empirically determined to match spec
 
 export default class CoinExperimentButtonSet extends VBox {
 
-  public constructor( systemType: SystemType,
-                      coinStateProperty: TProperty<CoinExperimentStates>,
+  public constructor( system: TwoStateSystem<string>,
+                      systemType: SystemType,
                       testBoxReadyProperty: TProperty<boolean>,
-                      prepareExperiment: ( revealWhenComplete?: boolean ) => void,
                       providedOptions: CoinExperimentButtonSetOptions ) {
 
     // Create an enabledProperty for the buttons, since interaction with the test boxes is only possible if they have
     // coins in them and the coins are not in the process of being prepared (e.g. flipped).
     const buttonsEnabledProperty = new DerivedProperty(
-      [ testBoxReadyProperty, coinStateProperty ],
+      [ testBoxReadyProperty, system.measurementStateProperty ],
       ( testBoxReady, coinState ) => testBoxReady && coinState !== 'preparingToBeMeasured'
     );
 
@@ -58,11 +57,11 @@ export default class CoinExperimentButtonSet extends VBox {
         QuantumMeasurementStrings.hideStringProperty,
         QuantumMeasurementStrings.revealStringProperty,
         QuantumMeasurementStrings.observeStringProperty,
-        coinStateProperty
+        system.measurementStateProperty
       ],
       ( hideString, revealString, observeString, experimentState ) => {
         let labelString;
-        if ( experimentState === 'revealedAndStill' ) {
+        if ( experimentState === 'measuredAndRevealed' ) {
           labelString = hideString;
         }
         else if ( systemType === 'physical' ) {
@@ -80,14 +79,11 @@ export default class CoinExperimentButtonSet extends VBox {
       revealHideButtonTextProperty,
       combineOptions<TextPushButtonOptions>( commonButtonOptions, {
         listener: () => {
-
-          // TODO: See https://github.com/phetsims/quantum-measurement/issues/12.  Updating the experiment state
-          //       directly here feels a little off to me.  Should this be read-only and set only by the scene model?
-          if ( coinStateProperty.value === 'hiddenAndStill' ) {
-            coinStateProperty.value = 'revealedAndStill';
+          if ( system.measurementStateProperty.value === 'readyToBeMeasured' ) {
+            system.measure();
           }
-          else if ( coinStateProperty.value === 'revealedAndStill' ) {
-            coinStateProperty.value = 'hiddenAndStill';
+          else if ( system.measurementStateProperty.value === 'measuredAndRevealed' ) {
+            system.hide();
           }
         },
         tandem: providedOptions.tandem.createTandem( 'revealHideButton' )
@@ -99,7 +95,7 @@ export default class CoinExperimentButtonSet extends VBox {
       QuantumMeasurementStrings.flipStringProperty :
       QuantumMeasurementStrings.reprepareStringProperty,
       combineOptions<TextPushButtonOptions>( commonButtonOptions, {
-        listener: prepareExperiment,
+        listener: () => system.prepare(),
         tandem: providedOptions.tandem.createTandem( 'flipOrReprepareButton' )
       } )
     );
@@ -109,7 +105,7 @@ export default class CoinExperimentButtonSet extends VBox {
       QuantumMeasurementStrings.flipAndRevealStringProperty :
       QuantumMeasurementStrings.reprepareAndRevealStringProperty,
       combineOptions<TextPushButtonOptions>( commonButtonOptions, {
-        listener: () => { prepareExperiment( true ); },
+        listener: () => system.prepare( true ),
         tandem: providedOptions.tandem.createTandem( 'flipOrReprepareAndRevealButton' )
       } )
     );
