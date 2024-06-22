@@ -20,6 +20,7 @@ import { QuantumCoinStates, QuantumCoinStateValues } from './QuantumCoinStates.j
 import { SystemType } from '../../common/model/SystemType.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
+import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
 
 type SelfOptions = {
   initiallyActive?: boolean;
@@ -42,7 +43,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
   // The coins that are flipped/prepared and then measured during the experiment.
   public readonly singleCoin: TwoStateSystem<PhysicalCoinStates> | TwoStateSystem<QuantumCoinStates>;
 
-  public readonly coinSet: TwoStateSystem<PhysicalCoinStates> | TwoStateSystem<QuantumCoinStates>;
+  public readonly coinSet: TwoStateSystemSet<PhysicalCoinStates | QuantumCoinStates>;
 
   // The initial state of the coin(s) before any flipping or other experiment preparation occurs.
   public readonly initialCoinStateProperty: Property<PhysicalCoinStates> | Property<QuantumCoinStates>;
@@ -85,7 +86,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
         this.stateBiasProperty,
         { tandem: singleCoinTandem }
       );
-      this.coinSet = new TwoStateSystem<PhysicalCoinStates>(
+      this.coinSet = new TwoStateSystemSet<PhysicalCoinStates>(
         PhysicalCoinStateValues,
         'heads',
         this.stateBiasProperty,
@@ -105,7 +106,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
         this.stateBiasProperty,
         { tandem: singleCoinTandem }
       );
-      this.coinSet = new TwoStateSystem<QuantumCoinStates>(
+      this.coinSet = new TwoStateSystemSet<QuantumCoinStates>(
         QuantumCoinStateValues,
         'up',
         this.stateBiasProperty,

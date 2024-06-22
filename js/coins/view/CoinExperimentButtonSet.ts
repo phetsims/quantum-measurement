@@ -20,6 +20,7 @@ import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js'
 import TProperty from '../../../../axon/js/TProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TwoStateSystem from '../../common/model/TwoStateSystem.js';
+import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
 
 type SelfOptions = EmptySelfOptions;
 export type CoinExperimentButtonSetOptions = SelfOptions & PickRequired<NodeOptions, 'tandem' | 'visibleProperty'>;
@@ -30,7 +31,7 @@ const BUTTON_WIDTH = 160; // empirically determined to match spec
 
 export default class CoinExperimentButtonSet extends VBox {
 
-  public constructor( system: TwoStateSystem<string>,
+  public constructor( system: TwoStateSystem<string> | TwoStateSystemSet<string>,
                       systemType: SystemType,
                       testBoxReadyProperty: TProperty<boolean>,
                       providedOptions: CoinExperimentButtonSetOptions ) {

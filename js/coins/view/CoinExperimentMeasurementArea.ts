@@ -137,7 +137,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
       clipArea: Shape.bounds( multipleCoinTestBoxRectangle.getRectBounds() )
     } );
     const multipleCoinExperimentButtonSet = new CoinExperimentButtonSet(
-      sceneModel.singleCoin as TwoStateSystem<string>,
+      sceneModel.coinSet,
       sceneModel.systemType,
       coinsInTestBoxesProperty,
       {
@@ -439,6 +439,21 @@ export default class CoinExperimentMeasurementArea extends VBox {
         }
       }
     } );
+
+    sceneModel.coinSet.measurementStateProperty.link( measurementState => {
+      console.log( '---------------------------------' );
+      console.log( `measurementState = ${measurementState}` );
+      if ( measurementState === 'measuredAndRevealed' ) {
+        const measurementResults = sceneModel.coinSet.measure();
+        console.log( `measurementResults.length = ${measurementResults.length}` );
+        for ( let i = 0; i < measurementResults.length; i++ ) {
+          console.log( `measurementResults.measuredValues[ i ] = ${measurementResults.measuredValues[ i ]}` );
+        }
+      }
+
+    } );
+
+
   }
 }
 
