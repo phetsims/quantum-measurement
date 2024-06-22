@@ -18,7 +18,6 @@ import { ExperimentMeasurementState, ExperimentMeasurementStateValues } from '..
 import stepTimer from '../../../../axon/js/stepTimer.js';
 import QuantumMeasurementConstants from '../QuantumMeasurementConstants.js';
 import { TimerListener } from '../../../../axon/js/Timer.js';
-import TProperty from '../../../../axon/js/TProperty.js';
 import Range from '../../../../dot/js/Range.js';
 
 type SelfOptions = {
@@ -44,7 +43,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
   public readonly measuredValues: Array<T | null>;
 
   // The number of systems that will be measured each time a measurement is made.
-  public readonly numberOfActiveSystemsProperty: TProperty<number>;
+  public readonly numberOfActiveSystemsProperty: NumberProperty;
 
   // Timeout for the preparingToBeMeasured state.
   private preparingToBeMeasuredTimeoutListener: null | TimerListener = null;
@@ -63,7 +62,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
 
     const options = optionize<TwoStateSystemOptions, SelfOptions, PhetioObjectOptions>()( {
       initialBias: 0.5,
-      maxNumberOfSystems: 100
+      maxNumberOfSystems: 10000
     }, providedOptions );
 
     super( options );
@@ -155,6 +154,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
 
   public reset(): void {
     this.measurementStateProperty.reset();
+    this.numberOfActiveSystemsProperty.reset();
   }
 }
 

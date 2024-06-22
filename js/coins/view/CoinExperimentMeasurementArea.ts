@@ -9,7 +9,7 @@
  */
 
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { Circle, Color, HBox, LinearGradient, Node, Rectangle, VBox } from '../../../../scenery/js/imports.js';
+import { Circle, Color, HBox, LinearGradient, Node, Rectangle, Text, VBox } from '../../../../scenery/js/imports.js';
 import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import SceneSectionHeader from './SceneSectionHeader.js';
@@ -36,6 +36,8 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import TwoStateSystem from '../../common/model/TwoStateSystem.js';
+import VerticalAquaRadioButtonGroup from '../../../../sun/js/VerticalAquaRadioButtonGroup.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 
 const SINGLE_COIN_AREA_RECT_LINE_WIDTH = 36;
 const MULTIPLE_COIN_TEST_BOX_SIZE = new Dimension2( 200, 200 );
@@ -46,6 +48,7 @@ const SINGLE_COIN_TEST_BOX_UNREVEALED_FILL = new LinearGradient( 0, 0, SINGLE_CO
 const COIN_FLIP_RATE = 3; // full flips per second
 const COIN_ROTATION_CHANGE_RANGE = new Range( Math.PI / 8, Math.PI * 0.9 );
 const COIN_TRAVEL_ANIMATION_DURATION = QuantumMeasurementConstants.PREPARING_TO_BE_MEASURED_TIME * 0.95;
+const RADIO_BUTTON_FONT = new PhetFont( 12 );
 
 export default class CoinExperimentMeasurementArea extends VBox {
 
@@ -146,10 +149,43 @@ export default class CoinExperimentMeasurementArea extends VBox {
       }
     );
 
+    // Create a control that consists of a label and a group of radio buttons for selecting the number of coins to model
+    // in the multi-coin mode.
+    const numberOfCoinsSelectorTitle = new Text( QuantumMeasurementStrings.identicalCoinsStringProperty, {
+      font: new PhetFont( 14 )
+    } );
+
+    const createRadioButtonGroupItem = ( value: number ) => {
+      const valueText = value.toString();
+      return {
+        createNode: () => new Text( valueText, { font: RADIO_BUTTON_FONT } ),
+        value: value,
+        tandemName: valueText
+      };
+    };
+    const numberOfCoinsRadioButtonGroup = new VerticalAquaRadioButtonGroup(
+      sceneModel.coinSet.numberOfActiveSystemsProperty,
+      [
+        createRadioButtonGroupItem( 10 ),
+        createRadioButtonGroupItem( 100 ),
+        createRadioButtonGroupItem( 10000 )
+      ],
+      {
+        spacing: 10,
+        tandem: tandem.createTandem( 'numberOfCoinsRadioButtonGroup' )
+      }
+    );
+
+    const numberOfCoinsSelector = new VBox( {
+      children: [ numberOfCoinsSelectorTitle, numberOfCoinsRadioButtonGroup ],
+      spacing: 12,
+      visibleProperty: sceneModel.preparingExperimentProperty
+    } );
+
     // Create the composite node that represents to test box and controls where the user will experiment with multiple
     // coins at once.
     const multipleCoinMeasurementArea = new HBox( {
-      children: [ multipleCoinTestBox, multipleCoinExperimentButtonSet ],
+      children: [ multipleCoinTestBox, numberOfCoinsSelector, multipleCoinExperimentButtonSet ],
       spacing: 30
     } );
 

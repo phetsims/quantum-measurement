@@ -150,6 +150,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
     this.initialCoinStateProperty.reset();
     this.stateBiasProperty.reset();
     this.singleCoin.reset();
+    this.coinSet.reset();
   }
 }
 

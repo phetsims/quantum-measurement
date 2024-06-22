@@ -25,6 +25,7 @@ type StringsType = {
   'flipAndRevealStringProperty': LocalizedStringProperty;
   'headsStringProperty': LocalizedStringProperty;
   'hideStringProperty': LocalizedStringProperty;
+  'identicalCoinsStringProperty': LocalizedStringProperty;
   'initialOrientationStringProperty': LocalizedStringProperty;
   'initialStateStringProperty': LocalizedStringProperty;
   'itemToPreparePatternStringProperty': LocalizedStringProperty;
