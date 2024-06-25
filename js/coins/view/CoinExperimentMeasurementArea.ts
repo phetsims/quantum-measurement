@@ -126,6 +126,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
 
     // Add the area where the multiple coins will be hidden and revealed.
     const multipleCoinTestBox = new MultiCoinTestBox(
+      sceneModel.coinSet,
       sceneModel.coinSet.measurementStateProperty,
       sceneModel.coinSet.numberOfActiveSystemsProperty,
       { tandem: tandem.createTandem( 'multipleCoinTestBox' ) }
@@ -469,13 +470,13 @@ export default class CoinExperimentMeasurementArea extends VBox {
             coinNode.center = multipleCoinTestBox.center.plus( offset );
             multipleCoinTestBox.addCoinNodeToBox( coinNode );
 
-            // if ( sceneModel.systemType === 'quantum' ) {
-            //
-            //   // "Collapse" the state of the coin node so that it shows a single state, not a superimposed one.
-            //   const quantumCoinNode = singleCoinNode as QuantumCoinNode;
-            //   quantumCoinNode.showSuperpositionProperty.value = false;
-            //   sceneModel.singleCoin.prepareInstantly();
-            // }
+            if ( sceneModel.systemType === 'quantum' ) {
+
+              // "Collapse" the state of the coin nodes so that they show a single state, not a superimposed one.
+              // TODO: https://github.com/phetsims/quantum-measurement/issues/16 - This isn't quite complete.  It will
+              //       need to collapse the coins as well.
+              sceneModel.coinSet.prepareInstantly();
+            }
 
             // If all animations have completed, set the flag that indicates the coins are fully in the box.
             const runningAnimations = animationsFromEdgeOfMultiCoinBoxToInside.filter(
@@ -619,15 +620,6 @@ export default class CoinExperimentMeasurementArea extends VBox {
     } );
 
     sceneModel.coinSet.measurementStateProperty.link( measurementState => {
-      console.log( '---------------------------------' );
-      console.log( `measurementState = ${measurementState}` );
-      if ( measurementState === 'measuredAndRevealed' ) {
-        const measurementResults = sceneModel.coinSet.measure();
-        console.log( `measurementResults.length = ${measurementResults.length}` );
-        for ( let i = 0; i < measurementResults.length; i++ ) {
-          console.log( `measurementResults.measuredValues[ i ] = ${measurementResults.measuredValues[ i ]}` );
-        }
-      }
 
       if ( measurementState === 'preparingToBeMeasured' && sceneModel.systemType === 'quantum' ) {
 

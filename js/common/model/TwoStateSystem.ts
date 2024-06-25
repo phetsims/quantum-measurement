@@ -129,6 +129,9 @@ export default class TwoStateSystem<T extends string> extends PhetioObject {
     this.measurementStateProperty.value = 'readyToBeMeasured';
   }
 
+  /**
+   * Set the measurement value immediately, i.e. without transitioning through the 'preparingToBeMeasured' state.
+   */
   public setMeasurementValueImmediate( value: T ): void {
     if ( this.preparingToBeMeasuredTimeoutListener ) {
       stepTimer.clearTimeout( this.preparingToBeMeasuredTimeoutListener );

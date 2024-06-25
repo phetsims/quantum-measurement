@@ -124,9 +124,11 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
       }
       else {
 
-        // The scene is moving from preparation mode to measurement mode.  Force the single coin to be in the initial
-        // state so that it will match when it animates into the test box.
+        // The scene is moving from preparation mode to measurement mode.  Force the coins to be in the initial state
+        // chosen by the user so that it will match when it animates into the test box and be correct if revealed right
+        // away.
         this.singleCoin.setMeasurementValueImmediate( this.initialCoinStateProperty.value as never );
+        this.coinSet.setMeasurementValuesImmediate( this.initialCoinStateProperty.value );
       }
     } );
 

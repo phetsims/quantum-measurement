@@ -19,6 +19,7 @@ import { ExperimentMeasurementState } from '../model/ExperimentMeasurementState.
 import SmallCoinNode from './SmallCoinNode.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
 
 type SelfOptions = EmptySelfOptions;
 export type MultiCoinTestBoxOptions = SelfOptions & PickRequired<HBoxOptions, 'tandem'>;
@@ -47,8 +48,10 @@ export default class MultiCoinTestBox extends HBox {
 
   private readonly testBoxWithClipArea: Node;
   private readonly coinCapacityProperty: TReadOnlyProperty<number>;
+  private readonly residentCoinNodes: SmallCoinNode[] = [];
 
-  public constructor( measurementStateProperty: Property<ExperimentMeasurementState>,
+  public constructor( coinSet: TwoStateSystemSet<string>,
+                      measurementStateProperty: Property<ExperimentMeasurementState>,
                       coinCapacityProperty: TReadOnlyProperty<number>,
                       providedOptions?: MultiCoinTestBoxOptions ) {
 
@@ -66,13 +69,6 @@ export default class MultiCoinTestBox extends HBox {
         stroke: new Color( '#666666' )
       }
     );
-
-    // Update the fill for the rectangle based on the measurement state.
-    measurementStateProperty.link( measurementState => {
-      multipleCoinTestBoxRectangle.fill = measurementState === 'measuredAndRevealed' ?
-                                          TEST_BOX_CONTENTS_REVEALED_FILL :
-                                          TEST_BOX_CONTENTS_HIDDEN_FILL;
-    } );
 
     // Create a node that includes the test box and a clip area.  This is used to put masks over the tops of the coins
     // that appear as the coins slide into the box.
@@ -96,16 +92,52 @@ export default class MultiCoinTestBox extends HBox {
 
     this.testBoxWithClipArea = testBoxWithClipArea;
     this.coinCapacityProperty = coinCapacityProperty;
+
+    // Update the fill for the rectangle based on the measurement state.
+    measurementStateProperty.link( measurementState => {
+
+      // Make the box look hazy when the measurement is not revealed.
+      multipleCoinTestBoxRectangle.fill = measurementState === 'measuredAndRevealed' ?
+                                          TEST_BOX_CONTENTS_REVEALED_FILL :
+                                          TEST_BOX_CONTENTS_HIDDEN_FILL;
+
+      // Update the appearance of the coin nodes.
+      this.residentCoinNodes.forEach( ( coinNode, index ) => {
+        if ( measurementState === 'measuredAndRevealed' ) {
+          const state = coinSet.measuredValues[ index ];
+          if ( state === null ) {
+            coinNode.displayModeProperty.value = 'masked';
+          }
+          else if ( state === 'up' ) {
+            coinNode.displayModeProperty.value = 'up';
+          }
+          else if ( state === 'down' ) {
+            coinNode.displayModeProperty.value = 'down';
+          }
+          else if ( state === 'heads' ) {
+            coinNode.displayModeProperty.value = 'heads';
+          }
+          else if ( state === 'tails' ) {
+            coinNode.displayModeProperty.value = 'tails';
+          }
+        }
+        else {
+          coinNode.displayModeProperty.value = 'masked';
+        }
+      } );
+
+    } );
   }
 
   // Clear out the contents of this test box.
   public clearContents(): void {
-    const coinNodeChildren = this.testBoxWithClipArea.children.filter( node => node instanceof SmallCoinNode );
-    coinNodeChildren.forEach( coinNodeChild => this.testBoxWithClipArea.removeChild( coinNodeChild ) );
+    this.residentCoinNodes.forEach( coinNode => this.testBoxWithClipArea.removeChild( coinNode ) );
+    this.residentCoinNodes.length = 0;
   }
 
   public addCoinNodeToBox( coinNode: SmallCoinNode ): void {
     this.testBoxWithClipArea.addChild( coinNode );
+    this.residentCoinNodes.push( coinNode );
   }
 
   /**
@@ -129,7 +161,7 @@ export default class MultiCoinTestBox extends HBox {
       offset.setXY( xOffset, yOffset );
     }
 
-    // TODO: See https://github.com/phetsims/quantum-measurement/issues/15.  This is a temporary workaround where we are
+      // TODO: See https://github.com/phetsims/quantum-measurement/issues/15.  This is a temporary workaround where we are
     //       handling the 10000 setting as though it's 144, and will need to be replaced.
     else if ( this.coinCapacityProperty.value === 144 ) {
 

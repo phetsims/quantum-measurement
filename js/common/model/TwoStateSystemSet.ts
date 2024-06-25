@@ -134,8 +134,12 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
     );
 
     _.times( this.numberOfActiveSystemsProperty.value, i => {
-      const valueSetIndex = dotRandom.nextDouble() < this.biasProperty.value ? 0 : 1;
-      this.measuredValues[ i ] = this.validValues[ valueSetIndex ];
+
+      // Only make a new measurement if one doesn't exist for this element.  Otherwise, just keep the existing value.
+      if ( this.measuredValues[ i ] === null ) {
+        const valueSetIndex = dotRandom.nextDouble() < this.biasProperty.value ? 0 : 1;
+        this.measuredValues[ i ] = this.validValues[ valueSetIndex ];
+      }
     } );
 
     this.measurementStateProperty.value = 'measuredAndRevealed';
@@ -144,6 +148,20 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
       measuredValues: this.measuredValues
     };
   }
+
+  // Set the measurement value immediately for all elements in this set without transitioning through the
+  // 'preparingToBeMeasured' state.
+  public setMeasurementValuesImmediate( value: T ): void {
+    if ( this.preparingToBeMeasuredTimeoutListener ) {
+      stepTimer.clearTimeout( this.preparingToBeMeasuredTimeoutListener );
+      this.preparingToBeMeasuredTimeoutListener = null;
+    }
+    _.times( this.numberOfActiveSystemsProperty.value, i => {
+      this.measuredValues[ i ] = value;
+    } );
+    this.measurementStateProperty.value = 'readyToBeMeasured';
+  }
+
 
   /**
    * Go back to the 'readyToBeMeasured' state without re-preparing the measurement.
