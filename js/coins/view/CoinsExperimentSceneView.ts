@@ -29,6 +29,10 @@ import Easing from '../../../../twixt/js/Easing.js';
 import CoinExperimentPreparationArea from './CoinExperimentPreparationArea.js';
 import CoinExperimentMeasurementArea from './CoinExperimentMeasurementArea.js';
 import CoinNode from './CoinNode.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import SmallCoinNode from './SmallCoinNode.js';
+import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 
 type SelfOptions = EmptySelfOptions;
 export type CoinsExperimentSceneViewOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
@@ -37,6 +41,8 @@ const SCENE_WIDTH = QuantumMeasurementConstants.LAYOUT_BOUNDS.width;
 const DIVIDER_X_POSITION_DURING_PREPARATION = Math.floor( ScreenView.DEFAULT_LAYOUT_BOUNDS.width * 0.38 );
 const DIVIDER_X_POSITION_DURING_MEASUREMENT = Math.ceil( ScreenView.DEFAULT_LAYOUT_BOUNDS.width * 0.2 );
 const DIVIDER_HEIGHT = 500; // empirically determined
+const COIN_POSITION_IN_PREPARE_MODE = new Vector2( DIVIDER_X_POSITION_DURING_MEASUREMENT - 200, DIVIDER_HEIGHT * 0.4 );
+const COIN_POSITION_IN_MEASUREMENT_MODE = new Vector2( DIVIDER_X_POSITION_DURING_MEASUREMENT - 100, 80 );
 
 export default class CoinsExperimentSceneView extends Node {
 
@@ -163,11 +169,12 @@ export default class CoinsExperimentSceneView extends Node {
   }
 
   /**
-   * Add a coin node to the scene graph.  This is used to support the creation an animation of a coin from the
-   * preparation to the measurement area.  Having this method allows the measurement area to create the node and get it
-   * into the scene graph without altering its bounds.
+   * Add a coin node to the scene graph.  This is used to support the animation of the coins used in the "Single Coin
+   * Measurements" experiment from the preparation area to the measurement area.  Having this method allows the
+   * measurement area to create the node and get it into the scene graph at the appropriate place without altering the
+   * measurement area's bounds.
    */
-  public addCoinNode( coinNode: CoinNode, forReprepare = false ): void {
+  public addSingleCoinNode( coinNode: CoinNode, forReprepare = false ): void {
 
     // TODO: See https://github.com/phetsims/quantum-measurement/issues/11.  Empirically determined values in the local
     //       coordinate frame are being used because my (jbphet) attempts to do something more general, such as the
@@ -177,16 +184,45 @@ export default class CoinsExperimentSceneView extends Node {
 
     // Use a different initial position for the coin if this is a reprepare (which applies to the quantum coin only)
     // versus an initial preparation of the coin.
-    if ( forReprepare ) {
-      coinNode.centerX = DIVIDER_X_POSITION_DURING_MEASUREMENT - 100;
-      coinNode.centerY = 80;
-    }
-    else {
-      coinNode.centerX = DIVIDER_X_POSITION_DURING_PREPARATION - 200;
-      coinNode.centerY = DIVIDER_HEIGHT * 0.4;
-    }
+    coinNode.center = forReprepare ? COIN_POSITION_IN_MEASUREMENT_MODE : COIN_POSITION_IN_PREPARE_MODE;
 
     this.addChild( coinNode );
+  }
+
+  /**
+   * Add a set of the smaller type of coin nodes to the scene graph.  This is used to support the animation of the coins
+   * used in the "Multiple Coin Measurements" experiment from the preparation area to the measurement area.  Having this
+   * method allows the measurement area to create the nodes and get them into the scene graph at the appropriate places
+   * without altering the measurement area's bounds.
+   */
+  public addCoinNodeSet( coinNodeSet: SmallCoinNode[], forReprepare = false ): void {
+
+    if ( coinNodeSet.length === 0 ) {
+      return;
+    }
+
+    // TODO: See https://github.com/phetsims/quantum-measurement/issues/11.  Empirically determined values in the local
+    //       coordinate frame are being used because my (jbphet) attempts to do something more general weren't working.
+    //       This should be made to use information from where the indicator nodes are in the preparation area.
+
+    // Use a different initial position for the coin if this is a reprepare (which applies to the quantum coins only)
+    // versus an initial preparation of the coin.
+    const regionCenter = forReprepare ? COIN_POSITION_IN_MEASUREMENT_MODE : COIN_POSITION_IN_PREPARE_MODE;
+
+    // variables used for randomizing the position of the coin node
+    const offsetVector = new Vector2( 0, 0 );
+    const maxDistanceFromCenter = InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS - coinNodeSet[ 0 ].radius;
+
+    coinNodeSet.forEach( coinNode => {
+
+      // Calculate a random offset from the center that will keep the coin within the bounds of the coin state
+      // indicator node.
+      const distanceFromCenter = dotRandom.nextDouble() * maxDistanceFromCenter;
+      offsetVector.setXY( distanceFromCenter, 0 );
+      offsetVector.rotate( dotRandom.nextDouble() * 2 * Math.PI );
+      coinNode.center = regionCenter.plus( offsetVector );
+      this.addChild( coinNode );
+    } );
   }
 
   protected updateActivityAreaPositions(): void {
