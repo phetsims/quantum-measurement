@@ -40,6 +40,7 @@ import VerticalAquaRadioButtonGroup from '../../../../sun/js/VerticalAquaRadioBu
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import MultiCoinTestBox from './MultiCoinTestBox.js';
 import SmallCoinNode from './SmallCoinNode.js';
+import CoinMeasurementHistogram from './CoinMeasurementHistogram.js';
 
 const SINGLE_COIN_AREA_RECT_LINE_WIDTH = 36;
 const SINGLE_COIN_TEST_BOX_SIZE = new Dimension2( 165, 145 );
@@ -131,6 +132,10 @@ export default class CoinExperimentMeasurementArea extends VBox {
       sceneModel.coinSet.numberOfActiveSystemsProperty,
       { tandem: tandem.createTandem( 'multipleCoinTestBox' ) }
     );
+    const multiCoinExperimentHistogram = new CoinMeasurementHistogram( sceneModel.coinSet, sceneModel.systemType, {
+      visibleProperty: DerivedProperty.not( sceneModel.preparingExperimentProperty ),
+      tandem: tandem.createTandem( 'multiCoinExperimentHistogram' )
+    } );
     const multipleCoinExperimentButtonSet = new CoinExperimentButtonSet(
       sceneModel.coinSet,
       sceneModel.systemType,
@@ -179,7 +184,12 @@ export default class CoinExperimentMeasurementArea extends VBox {
     // Create the composite node that represents to test box and controls where the user will experiment with multiple
     // coins at once.
     const multipleCoinMeasurementArea = new HBox( {
-      children: [ multipleCoinTestBox, numberOfCoinsSelector, multipleCoinExperimentButtonSet ],
+      children: [
+        multipleCoinTestBox,
+        numberOfCoinsSelector,
+        multiCoinExperimentHistogram,
+        multipleCoinExperimentButtonSet
+      ],
       spacing: 30
     } );
 
