@@ -103,7 +103,14 @@ export default class MultiCoinTestBox extends HBox {
 
       // Update the appearance of the coin nodes.
       this.residentCoinNodes.forEach( ( coinNode, index ) => {
+
         if ( measurementState === 'measuredAndRevealed' ) {
+
+          if ( coinNode.isFlipping ) {
+            coinNode.stopFlipping();
+          }
+
+          // Reveal the coin's state.
           const state = coinSet.measuredValues[ index ];
           if ( state === null ) {
             coinNode.displayModeProperty.value = 'masked';
@@ -121,11 +128,20 @@ export default class MultiCoinTestBox extends HBox {
             coinNode.displayModeProperty.value = 'tails';
           }
         }
-        else {
+        else if ( measurementState === 'preparingToBeMeasured' ) {
+
+          assert && assert( !coinNode.isFlipping, 'coin node should not already be flipping' );
+
+          coinNode.displayModeProperty.value = 'masked';
+          coinNode.startFlipping();
+        }
+        else if ( measurementState === 'readyToBeMeasured' ) {
+          if ( coinNode.isFlipping ) {
+            coinNode.stopFlipping();
+          }
           coinNode.displayModeProperty.value = 'masked';
         }
       } );
-
     } );
   }
 

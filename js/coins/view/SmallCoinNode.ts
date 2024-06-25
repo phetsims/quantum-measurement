@@ -17,6 +17,9 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import Property from '../../../../axon/js/Property.js';
+import Animation from '../../../../twixt/js/Animation.js';
+import Easing from '../../../../twixt/js/Easing.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 
 type SelfOptions = EmptySelfOptions;
 export type SmallCoinNodeOptions = SelfOptions & PickRequired<NodeOptions, 'tandem'>;
@@ -36,6 +39,8 @@ export default class SmallCoinNode extends Node {
 
   public readonly displayModeProperty: TProperty<SmallCoinDisplayMode>;
   public readonly radius: number;
+  private coinCircle: Circle;
+  private flippingAnimation: Animation | null = null;
 
   public constructor( radius: number,
                       providedOptions?: SmallCoinNodeOptions ) {
@@ -43,7 +48,7 @@ export default class SmallCoinNode extends Node {
     const coinCircle = new Circle( radius, {
       fill: MASKED_FILL,
       stroke: COIN_STROKE,
-      lineWidth: Math.max( Math.floor( radius / 5 ), 1 )
+      lineWidth: Math.max( Math.floor( radius / 4 ), 1 )
     } );
 
     // Create the up and down arrows as Text nodes.
@@ -70,6 +75,7 @@ export default class SmallCoinNode extends Node {
     super( options );
 
     this.radius = radius;
+    this.coinCircle = coinCircle;
     this.displayModeProperty = new Property<SmallCoinDisplayMode>( 'masked' );
 
     const updateCoinAppearance = ( displayMode: SmallCoinDisplayMode ) => {
@@ -106,6 +112,45 @@ export default class SmallCoinNode extends Node {
     };
 
     this.displayModeProperty.link( updateCoinAppearance );
+  }
+
+  public get isFlipping(): boolean { return this.flippingAnimation !== null; }
+
+  public startFlipping(): void {
+    let flipPhase = 0;
+    let previousXScale = 0;
+    const destinationPhaseMultiplier = dotRandom.nextDoubleBetween( 5, 10 );
+    const rotationalAxis = dotRandom.nextIntBetween( 0, 1 ) * Math.PI / 2;
+    this.coinCircle.setRotation( rotationalAxis );
+
+    this.flippingAnimation = new Animation( {
+      setValue: value => {
+        flipPhase = value;
+        let xScale = Math.sin( flipPhase );
+
+        // Handle the case where we hit zero, since the scale can't be set to that value.
+        if ( xScale === 0 ) {
+          xScale = previousXScale < 0 ? 0.01 : -0.01;
+        }
+        this.coinCircle.setScaleMagnitude( xScale, 1 );
+        previousXScale = xScale;
+      },
+      getValue: () => flipPhase,
+      to: Math.PI * destinationPhaseMultiplier,
+      duration: QuantumMeasurementConstants.PREPARING_TO_BE_MEASURED_TIME,
+      easing: Easing.LINEAR
+    } );
+    this.flippingAnimation.endedEmitter.addListener( () => {
+      this.coinCircle.setScaleMagnitude( 1, 1 );
+      this.flippingAnimation = null;
+    } );
+    this.flippingAnimation.start();
+  }
+
+  public stopFlipping(): void {
+    if ( this.flippingAnimation ) {
+      this.flippingAnimation.stop();
+    }
   }
 }
 
