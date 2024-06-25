@@ -29,6 +29,8 @@ const COIN_STROKE = new Color( '#888888' );
 const MASKED_FILL = new Color( '#cccccc' );
 const HEADS_FILL = Color.BLACK;
 const TAILS_FILL = Color.MAGENTA;
+const UP_COLOR = Color.BLACK;
+const DOWN_COLOR = Color.MAGENTA;
 
 export default class SmallCoinNode extends Node {
 
@@ -41,16 +43,16 @@ export default class SmallCoinNode extends Node {
     const coinCircle = new Circle( radius, {
       fill: MASKED_FILL,
       stroke: COIN_STROKE,
-      lineWidth: Math.floor( radius / 5 )
+      lineWidth: Math.max( Math.floor( radius / 5 ), 1 )
     } );
 
     // Create the up and down arrows as Text nodes.
     const upArrow = new Text( QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER, {
-      fill: Color.BLACK,
+      fill: UP_COLOR,
       font: DEFAULT_ARROW_FONT
     } );
     const downArrow = new Text( QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER, {
-      fill: Color.MAGENTA,
+      fill: DOWN_COLOR,
       font: DEFAULT_ARROW_FONT
     } );
 
@@ -93,13 +95,13 @@ export default class SmallCoinNode extends Node {
         upArrow.visible = true;
         downArrow.visible = false;
         coinCircle.fill = Color.TRANSPARENT;
-        coinCircle.stroke = Color.TRANSPARENT;
+        coinCircle.stroke = UP_COLOR;
       }
       else if ( displayMode === 'down' ) {
         upArrow.visible = false;
         downArrow.visible = true;
         coinCircle.fill = Color.TRANSPARENT;
-        coinCircle.stroke = Color.TRANSPARENT;
+        coinCircle.stroke = DOWN_COLOR;
       }
     };
 
