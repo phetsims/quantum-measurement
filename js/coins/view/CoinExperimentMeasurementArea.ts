@@ -30,7 +30,6 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { TEmitterListener } from '../../../../axon/js/TEmitter.js';
 import stepTimer from '../../../../axon/js/stepTimer.js';
 import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
-import Range from '../../../../dot/js/Range.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import TProperty from '../../../../axon/js/TProperty.js';
@@ -48,7 +47,6 @@ const SINGLE_COIN_TEST_BOX_UNREVEALED_FILL = new LinearGradient( 0, 0, SINGLE_CO
   .addColorStop( 0, new Color( '#eeeeee' ) )
   .addColorStop( 0.9, new Color( '#bae3e0' ) );
 const COIN_FLIP_RATE = 3; // full flips per second
-const COIN_ROTATION_CHANGE_RANGE = new Range( Math.PI / 8, Math.PI * 0.9 );
 const COIN_TRAVEL_ANIMATION_DURATION = QuantumMeasurementConstants.PREPARING_TO_BE_MEASURED_TIME * 0.95;
 const RADIO_BUTTON_FONT = new PhetFont( 12 );
 
@@ -555,32 +553,14 @@ export default class CoinExperimentMeasurementArea extends VBox {
 
           // Set the initial state of things prior to starting the animation.
           let flippingAnimationPhase = 0;
-          let rotation = dotRandom.nextDouble() * Math.PI;
+          const rotation = dotRandom.nextDouble() * Math.PI;
           let previousXScale = 0;
           coinMask.setRotation( rotation );
           singleCoinNode!.setRotation( rotation );
 
           // Create and hook up a step listener to perform the animation.
           flippingAnimationStepListener = ( dt: number ) => {
-
             flippingAnimationPhase += 2 * Math.PI * COIN_FLIP_RATE * dt;
-            if ( flippingAnimationPhase >= Math.PI * 2 ) {
-
-              // A full flip as been performed.  Rotate the coins by a random amount to make things look a bit more
-              // random.  The transform is being reset here because adding new rotations was causing a pile up of some
-              // sort of floating point errors, and this just worked out better.
-              rotation += dotRandom.nextDoubleInRange( COIN_ROTATION_CHANGE_RANGE );
-              coinMask.resetTransform();
-              coinMask.center = singleCoinTestBox.center;
-              coinMask.setRotation( rotation );
-              singleCoinNode!.resetTransform();
-              singleCoinNode!.center = singleCoinTestBox.center;
-              singleCoinNode!.setRotation( rotation );
-
-              // Reset the phase.
-              flippingAnimationPhase = 0;
-            }
-
             let xScale = Math.sin( flippingAnimationPhase );
 
             // Handle the case where we hit zero, since the scale can't be set to that value.
@@ -588,7 +568,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
               xScale = previousXScale < 0 ? 0.01 : -0.01;
             }
 
-            // Scale the coins on the x-axis to make it look like they are rotating.
+            // Scale the coin on the x-axis to make it look like they are rotating.
             coinMask.setScaleMagnitude( xScale, 1 );
             singleCoinNode && singleCoinNode.setScaleMagnitude( xScale, 1 );
 
