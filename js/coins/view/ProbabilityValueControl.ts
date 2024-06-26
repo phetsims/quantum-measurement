@@ -9,7 +9,7 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import { HBox, RichText, VBox } from '../../../../scenery/js/imports.js';
+import { HBox, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
@@ -22,6 +22,7 @@ import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 
 const TITLE_FONT = new PhetFont( 16 );
+const TICK_MARK_FONT = new PhetFont( 14 );
 const RANGE = new Range( 0, 1 );
 const BUTTON_CHANGE_AMOUNT = 0.1;
 
@@ -57,8 +58,12 @@ export default class ProbabilityValueControl extends VBox {
     );
     const slider = new HSlider( probabilityProperty, RANGE, {
       trackSize: new Dimension2( 150, 1 ),
-      thumbSize: new Dimension2( 12, 26 )
+      thumbSize: new Dimension2( 12, 26 ),
+      majorTickLength: 10,
+      tickLabelSpacing: 4
     } );
+    slider.addMajorTick( RANGE.min, new Text( RANGE.min.toString(), { font: TICK_MARK_FONT } ) );
+    slider.addMajorTick( RANGE.max, new Text( RANGE.max.toString(), { font: TICK_MARK_FONT } ) );
     const sliderAndArrows = new HBox( {
       children: [ leftArrowButton, slider, rightArrowButton ],
       spacing: 5
