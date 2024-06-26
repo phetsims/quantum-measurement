@@ -134,7 +134,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
 
     // If this is a quantum system, changing the initial state of the coin sets the bias to match that coin.
     if ( this.systemType === 'quantum' ) {
-      this.initialCoinStateProperty.link( initialCoinState => {
+      this.initialCoinStateProperty.lazyLink( initialCoinState => {
         this.stateBiasProperty.value = initialCoinState === 'up' ? 1 : 0;
       } );
     }
