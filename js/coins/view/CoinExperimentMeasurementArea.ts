@@ -216,6 +216,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
       )
     } );
     singleCoinTestBox.addChild( coinMask );
+    coinMask.moveToBack();
 
     // variables to support the coin animations
     let singleCoinNode: CoinNode | null = null;

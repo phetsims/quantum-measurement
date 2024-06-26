@@ -187,6 +187,7 @@ export default class CoinsExperimentSceneView extends Node {
     coinNode.center = forReprepare ? COIN_POSITION_IN_MEASUREMENT_MODE : COIN_POSITION_IN_PREPARE_MODE;
 
     this.addChild( coinNode );
+    coinNode.moveToBack();
   }
 
   /**
@@ -222,6 +223,7 @@ export default class CoinsExperimentSceneView extends Node {
       offsetVector.rotate( dotRandom.nextDouble() * 2 * Math.PI );
       coinNode.center = regionCenter.plus( offsetVector );
       this.addChild( coinNode );
+      coinNode.moveToBack();
     } );
   }
 

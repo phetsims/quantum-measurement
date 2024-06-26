@@ -62,9 +62,8 @@ export default class MultiCoinTestBox extends HBox {
       BOX_SIZE.width,
       BOX_SIZE.height,
       {
-        fill: new LinearGradient( 0, 0, BOX_SIZE.width, 0 )
-          .addColorStop( 0, new Color( '#eeeeee' ) )
-          .addColorStop( 1, new Color( '#cceae8' ) ),
+        fill: TEST_BOX_CONTENTS_HIDDEN_FILL,
+        opacity: 0.5,
         lineWidth: 2,
         stroke: new Color( '#666666' )
       }
@@ -153,6 +152,7 @@ export default class MultiCoinTestBox extends HBox {
 
   public addCoinNodeToBox( coinNode: SmallCoinNode ): void {
     this.testBoxWithClipArea.addChild( coinNode );
+    coinNode.moveToBack();
     this.residentCoinNodes.push( coinNode );
   }
 
