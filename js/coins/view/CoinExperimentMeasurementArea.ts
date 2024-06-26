@@ -303,7 +303,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
       // process consists of two animations, one to move the coin to the left edge of the test box while the test box is
       // potentially also moving, then a second one to move the coin into the box.  The durations must be set up such
       // that the test box is in place before the 2nd animation begins or the coin won't end up in the right place.
-      const testAreaXOffset = forReprepare ? 200 : 350; // empirically determined
+      const testAreaXOffset = forReprepare ? 200 : 420; // empirically determined
       const leftOfTestArea = singleCoinMeasurementArea.center.minusXY( testAreaXOffset, 0 );
       const leftOfTestAreaInParentCoords = this.localToParentPoint( leftOfTestArea );
       singleCoinAnimationFromPrepAreaToEdgeOfTestBox = new Animation( {
@@ -434,7 +434,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
       // the test box is potentially also moving, then a second one to move the coin into the box.  The durations must
       // be set up such that the test box is in place before the 2nd animation begins or the coins won't end up in the
       // right places.
-      const testAreaXOffset = forReprepare ? 100 : 250;
+      const testAreaXOffset = forReprepare ? 100 : 300;
       const multipleCoinTestBoxBounds = this.globalToLocalBounds( multipleCoinTestBox.getGlobalBounds() );
       const leftOfTestBox = multipleCoinTestBoxBounds.center.minusXY( testAreaXOffset, 0 );
       const leftOfTestAreaInParentCoords = this.localToParentPoint( leftOfTestBox );
