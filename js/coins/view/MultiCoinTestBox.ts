@@ -172,8 +172,8 @@ export default class MultiCoinTestBox extends HBox {
     else if ( this.coinCapacityProperty.value === 100 ) {
 
       // 10 rows of 10
-      const xOffset = BOX_SIZE.width / 11 * ( Math.floor( index / 10 ) + 1 ) - BOX_SIZE.width / 2;
-      const yOffset = BOX_SIZE.height / 11 * ( index % 10 + 1 ) - BOX_SIZE.height / 2;
+      const xOffset = BOX_SIZE.width / 11 * ( ( index % 10 ) + 1 ) - BOX_SIZE.width / 2;
+      const yOffset = BOX_SIZE.height / 11 * ( Math.floor( index / 10 ) + 1 ) - BOX_SIZE.height / 2;
       offset.setXY( xOffset, yOffset );
     }
 

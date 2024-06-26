@@ -475,7 +475,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
             // scene graph parent and add it to the test box.
             sceneGraphParent.removeChild( coinNode );
             const offset = multipleCoinTestBox.getOffsetFromCenter( coinSetNodes.indexOf( coinNode ) );
-            coinNode.center = multipleCoinTestBox.center.plus( offset );
+            coinNode.center = multipleCoinTestBox.getLocalBounds().center.plus( offset );
             multipleCoinTestBox.addCoinNodeToBox( coinNode );
 
             if ( sceneModel.systemType === 'quantum' ) {
