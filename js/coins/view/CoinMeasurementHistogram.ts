@@ -20,7 +20,7 @@ import Dimension2 from '../../../../dot/js/Dimension2.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import NumberDisplay from '../../../../scenery-phet/js/NumberDisplay.js';
+import NumberDisplay, { NumberDisplayOptions } from '../../../../scenery-phet/js/NumberDisplay.js';
 import Range from '../../../../dot/js/Range.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -33,6 +33,15 @@ const LABEL_FONT = new PhetFont( { size: 20, weight: 'bold' } );
 const NUMBER_DISPLAY_RANGE = new Range( 0, 10000 );
 const NUMBER_DISPLAY_MAX_WIDTH = HISTOGRAM_SIZE.width / 2 * 0.85;
 const HISTOGRAM_BAR_WIDTH = HISTOGRAM_SIZE.width / 6;
+const NUMBER_DISPLAY_OPTIONS: NumberDisplayOptions = {
+  align: 'center',
+  xMargin: 0,
+  backgroundStroke: null,
+  textOptions: {
+    maxWidth: NUMBER_DISPLAY_MAX_WIDTH,
+    font: LABEL_FONT
+  }
+};
 
 export default class CoinMeasurementHistogram extends Node {
 
@@ -100,15 +109,7 @@ export default class CoinMeasurementHistogram extends Node {
         return total;
       }
     );
-    const leftNumberDisplay = new NumberDisplay( leftNumberProperty, NUMBER_DISPLAY_RANGE, {
-      align: 'center',
-      xMargin: 0,
-      backgroundStroke: null,
-      textOptions: {
-        maxWidth: NUMBER_DISPLAY_MAX_WIDTH,
-        font: LABEL_FONT
-      }
-    } );
+    const leftNumberDisplay = new NumberDisplay( leftNumberProperty, NUMBER_DISPLAY_RANGE, NUMBER_DISPLAY_OPTIONS );
     const rightNumberProperty = new DerivedProperty(
       [ coinSet.numberOfActiveSystemsProperty, coinSet.measurementStateProperty ],
       ( numberOfActiveSystems, measurementState ) => {
@@ -126,15 +127,7 @@ export default class CoinMeasurementHistogram extends Node {
         return total;
       }
     );
-    const rightNumberDisplay = new NumberDisplay( rightNumberProperty, NUMBER_DISPLAY_RANGE, {
-      align: 'center',
-      xMargin: 0,
-      backgroundStroke: null,
-      textOptions: {
-        maxWidth: NUMBER_DISPLAY_MAX_WIDTH,
-        font: LABEL_FONT
-      }
-    } );
+    const rightNumberDisplay = new NumberDisplay( rightNumberProperty, NUMBER_DISPLAY_RANGE, NUMBER_DISPLAY_OPTIONS );
 
     const numberDisplays = new HBox( {
       children: [ leftNumberDisplay, rightNumberDisplay ],
