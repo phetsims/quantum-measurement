@@ -119,8 +119,8 @@ export default class SmallCoinNode extends Node {
   public startFlipping(): void {
     let flipPhase = 0;
     let previousXScale = 0;
-    const destinationPhaseMultiplier = dotRandom.nextDoubleBetween( 5, 10 );
-    const rotationalAxis = dotRandom.nextIntBetween( 0, 1 ) * Math.PI / 2;
+    const destinationPhaseMultiplier = dotRandom.nextDoubleBetween( 4, 12 );
+    const rotationalAxis = dotRandom.nextIntBetween( 0, 2 ) * 2 * Math.PI / 3;
     this.coinCircle.setRotation( rotationalAxis );
 
     this.flippingAnimation = new Animation( {
