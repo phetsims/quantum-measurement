@@ -21,22 +21,24 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import Utils from '../../../../dot/js/Utils.js';
 
 type SelfOptions = EmptySelfOptions;
 type OutcomeProbabilityControlOptions = SelfOptions & PickRequired<VBox, 'tandem' | 'visibleProperty'>;
 
-
-const TITLE_FONT = new PhetFont( 16 );
+// constants
+const TITLE_AND_LABEL_FONT = new PhetFont( 16 );
 const ALPHA = QuantumMeasurementConstants.ALPHA;
 const BETA = QuantumMeasurementConstants.BETA;
 const UP = QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
 const KET = QuantumMeasurementConstants.KET;
 const DOWN = QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER;
-const BRA_KET_TITLE_STRING = `( ${ALPHA}|${UP}${KET} + <span style="color: magenta;">${BETA}|${DOWN}${KET}</span> )`;
+const BRA_KET_TITLE_STRING = `( ${ALPHA}|${UP}${KET} + <span style="color: magenta;">${BETA}</span>|<span style="color: magenta;">${DOWN}</span>${KET} )`;
 const P_OF_H = 'P(<b>H</b>)';
 const P_OF_T = 'P(<span style="color: magenta;"><b>T</b></span>)';
-const P_OF_UP = `P(<b>${UP}</b>)`;
-const P_OF_DOWN = `P(<span style="color: magenta;"><b>${DOWN}</b></span>)`;
+const MAGNITUDE_OF_ALPHA_SQUARED = `|${ALPHA}|<sup>2`;
+const MAGNITUDE_OF_BETA_SQUARED = `<span style="color: magenta;">|${BETA}|<sup>2</span>`;
 
 export default class OutcomeProbabilityControl extends VBox {
 
@@ -47,7 +49,7 @@ export default class OutcomeProbabilityControl extends VBox {
     let title: Node;
     if ( systemType === 'physical' ) {
       title = new Text( QuantumMeasurementStrings.coinBiasStringProperty, {
-        font: TITLE_FONT,
+        font: TITLE_AND_LABEL_FONT,
         fontWeight: 'bold'
       } );
     }
@@ -57,7 +59,7 @@ export default class OutcomeProbabilityControl extends VBox {
         stateToPrepareString => `<b>${stateToPrepareString}</b> ${BRA_KET_TITLE_STRING}`
       );
       title = new RichText( titleStringProperty, {
-        font: TITLE_FONT
+        font: TITLE_AND_LABEL_FONT
       } );
     }
 
@@ -86,31 +88,72 @@ export default class OutcomeProbabilityControl extends VBox {
         QuantumMeasurementStrings.headsStringProperty,
         QuantumMeasurementStrings.upStringProperty
       ],
-      ( probabilityOfPatternString, headsString, upString ) => {
-        const outcomeWord = systemType === 'physical' ? headsString : upString;
-        const probabilityFunction = systemType === 'physical' ? P_OF_H : P_OF_UP;
-        return `${StringUtils.fillIn( probabilityOfPatternString, { outcome: outcomeWord } )} ${probabilityFunction}`;
+      ( probabilityOfPatternString, headsString ) => {
+
+        // This is only dynamic in the physical case as of this writing, but may change, and it is easier to handle the
+        // physical and quantum cases together.
+        let result: string;
+        if ( systemType === 'physical' ) {
+          result = `${StringUtils.fillIn( probabilityOfPatternString, { outcome: headsString } )} ${P_OF_H}`;
+        }
+        else {
+          result = MAGNITUDE_OF_ALPHA_SQUARED;
+        }
+        return result;
       }
     );
     const lowerProbabilityControlTitleProperty = new DerivedStringProperty(
       [
         QuantumMeasurementStrings.probabilityOfPatternStringProperty,
-        QuantumMeasurementStrings.tailsStringProperty,
-        QuantumMeasurementStrings.downStringProperty
+        QuantumMeasurementStrings.tailsStringProperty
       ],
-      ( probabilityOfPatternString, tailsString, downString ) => {
-        const outcomeWord = systemType === 'physical' ? tailsString : downString;
-        const probabilityFunction = systemType === 'physical' ? P_OF_T : P_OF_DOWN;
-        return `${StringUtils.fillIn( probabilityOfPatternString, { outcome: outcomeWord } )} ${probabilityFunction}`;
+      ( probabilityOfPatternString, tailsString ) => {
+
+        // This is only dynamic in the physical case as of this writing, but may change, and it is easier to handle the
+        // physical and quantum cases together.
+        let result: string;
+        if ( systemType === 'physical' ) {
+          result = `${StringUtils.fillIn( probabilityOfPatternString, { outcome: tailsString } )} ${P_OF_T}`;
+        }
+        else {
+          result = MAGNITUDE_OF_BETA_SQUARED;
+        }
+        return result;
       }
     );
 
-    const options = optionize<OutcomeProbabilityControlOptions, SelfOptions, VBoxOptions>()( {
-      children: [
+    let children: Node[];
+    if ( systemType === 'physical' ) {
+      children = [
         title,
         new ProbabilityValueControl( upperProbabilityControlTitleProperty, outcomeProbabilityProperty ),
         new ProbabilityValueControl( lowerProbabilityControlTitleProperty, inverseOutcomeProbabilityProperty )
-      ],
+      ];
+    }
+    else {
+
+      // There is an additional child node in the quantum case that shows the quantum state and updates dynamically.
+      const quantumStateReadoutStringProperty = new DerivedProperty(
+        [ outcomeProbabilityProperty ],
+        outcomeProbability => {
+          const alphaValue = Utils.toFixed( Math.sqrt( outcomeProbability ), 3 );
+          const betaValue = Utils.toFixed( Math.sqrt( 1 - outcomeProbability ), 3 );
+          return `${alphaValue}|${UP}${KET} + <span style="color: magenta;">${betaValue}</span>|<span style="color: magenta;">${DOWN}</span>${KET}`;
+        }
+      );
+
+      const quantumReadout = new RichText( quantumStateReadoutStringProperty, { font: TITLE_AND_LABEL_FONT } );
+
+      children = [
+        title,
+        quantumReadout,
+        new ProbabilityValueControl( upperProbabilityControlTitleProperty, outcomeProbabilityProperty ),
+        new ProbabilityValueControl( lowerProbabilityControlTitleProperty, inverseOutcomeProbabilityProperty )
+      ];
+    }
+
+    const options = optionize<OutcomeProbabilityControlOptions, SelfOptions, VBoxOptions>()( {
+      children: children,
       spacing: 12
     }, providedOptions );
 
