@@ -151,7 +151,7 @@ export default class CoinsExperimentSceneView extends Node {
     // Create and add the button for starting a new experiment by preparing a new coin.
     this.newCoinButton = new TextPushButton( QuantumMeasurementStrings.newCoinStringProperty, {
       visibleProperty: DerivedProperty.not( sceneModel.preparingExperimentProperty ),
-      baseColor: Color.CYAN,
+      baseColor: Color.GREEN,
       font: new PhetFont( 14 ),
       listener: () => {
         sceneModel.preparingExperimentProperty.value = true;
