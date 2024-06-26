@@ -205,10 +205,11 @@ export default class CoinExperimentMeasurementArea extends VBox {
     this.coinSetInTestBoxProperty = coinSetInTestBoxProperty;
 
     // Create the node that will be used to cover (aka "mask") the coin so that its state can't be seen.
-    const coinMask = new Circle( InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS, {
+    const maskRadius = InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS * 1.02;
+    const coinMask = new Circle( maskRadius, {
       fill: new Color( '#cccccc' ),
       stroke: new Color( '#888888' ),
-      lineWidth: 4,
+      lineWidth: 7,
       visibleProperty: new DerivedProperty(
         [ sceneModel.preparingExperimentProperty, sceneModel.singleCoin.measurementStateProperty ],
         ( preparingExperiment, singleCoinExperimentState ) =>
