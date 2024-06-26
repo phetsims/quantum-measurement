@@ -1,11 +1,11 @@
 {
-  "comment": "# quantum-measurement 1.0.0-dev.1 Thu Jun 20 2024 15:57:17 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# quantum-measurement 1.0.0-dev.2 Tue Jun 25 2024 19:32:35 GMT-0600 (Mountain Daylight Time)",
   "assert": {
     "sha": "4eaabfefb0b88b213e98b9c7f32d6c570c3fc122",
     "branch": "main"
   },
   "axon": {
-    "sha": "950e37137c9117cbe6b0fb154ce00403b1780151",
+    "sha": "950a9a5da2d992d0834df8a984bcb8b5185b8448",
     "branch": "main"
   },
   "brand": {
@@ -17,7 +17,7 @@
     "branch": "main"
   },
   "dot": {
-    "sha": "1529ddbebf001e0cbd4c41871eedda1a63ddc191",
+    "sha": "cdb6a3a16167a8d4bd8273ea40756c6b2fad7e46",
     "branch": "main"
   },
   "joist": {
@@ -41,11 +41,11 @@
     "branch": "main"
   },
   "phet-io-sim-specific": {
-    "sha": "b62cb0798852bc51ffc445521ae9dab10a0b4c40",
+    "sha": "74d368e103dba098023262340b551de06fa9a7e7",
     "branch": "main"
   },
   "phet-io-wrappers": {
-    "sha": "5df323761a319d12a003e77d397a9ef7d6e0c097",
+    "sha": "d6acbd1986b7195bf48f1752c14e46fb7f62e8cd",
     "branch": "main"
   },
   "phetcommon": {
@@ -57,7 +57,7 @@
     "branch": "main"
   },
   "quantum-measurement": {
-    "sha": "02f377763fd6daea7f73de25fc9c2b4d5b273971",
+    "sha": "08d2bf1785f1217ff3b66449bb909d4eac056243",
     "branch": "main"
   },
   "query-string-machine": {
@@ -69,7 +69,7 @@
     "branch": "main"
   },
   "scenery-phet": {
-    "sha": "313e4aa4b886068e04bbc37eca85873134b844ab",
+    "sha": "cbbe96ebcd9789b6f34d8d4e7ed80391385e6f21",
     "branch": "main"
   },
   "sherpa": {
@@ -81,7 +81,7 @@
     "branch": "main"
   },
   "sun": {
-    "sha": "3997198f24581172345b2a08ae75f1bb44495944",
+    "sha": "eec0449cc1afd5b7885682250a167ae4d472e700",
     "branch": "main"
   },
   "tambo": {
