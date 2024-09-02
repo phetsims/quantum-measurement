@@ -4,6 +4,8 @@
  * TwoStateSystem is a simple model for a system that can be in one of two states, and can be prepared (similar to
  * flipping a coin) and measured (similar to reading how the flip turned out).
  *
+ * REVIEW TODO: This file is very similar to TwoStateSystemSet.ts. Couldn't this work as a 1 element set? https://github.com/phetsims/quantum-measurement/issues/20
+ *
  * @author John Blanco (PhET Interactive Simulations)
  */
 
@@ -41,7 +43,7 @@ export default class TwoStateSystem<T extends string> extends PhetioObject {
   private preparingToBeMeasuredTimeoutListener: null | TimerListener = null;
 
   // The bias for this two-state system, and specifically the probability of the system being found in the first of the
-  // two provided values.  A value of 1 means it will always be found in the first provided state, 0 means always the
+  // two provided values. A value of 1 means it will always be found in the first provided state, 0 means always the
   // second, and 0.5 means no bias.
   public readonly biasProperty: NumberProperty;
 
@@ -74,8 +76,8 @@ export default class TwoStateSystem<T extends string> extends PhetioObject {
   }
 
   /**
-   * Prepare this system to be measured.  This is analogous to initiating the flipping of a physical coin or setting up
-   * a quantum system into a superimposed state.  After a timeout, this system will transition to a state where it is
+   * Prepare this system to be measured. This is analogous to initiating the flipping of a physical coin or setting up
+   * a quantum system into a superposed state. After a timeout, this system will transition to a state where it is
    * ready to be measured.
    */
   public prepare( measureWhenPrepared = false ): void {
@@ -94,7 +96,7 @@ export default class TwoStateSystem<T extends string> extends PhetioObject {
   }
 
   /**
-   * Prepare the system for measurement without transitioning through the 'preparingToBeMeasured' state.  This is more
+   * Prepare the system for measurement without transitioning through the 'preparingToBeMeasured' state. This is more
    * the exception than the rule, but is needed in a case or two.
    */
   public prepareInstantly(): void {

@@ -47,7 +47,7 @@ const COIN_POSITION_IN_MEASUREMENT_MODE = new Vector2( DIVIDER_X_POSITION_DURING
 export default class CoinsExperimentSceneView extends Node {
 
   // The coin experiment scene view has two areas, one for preparing the experiment and one for running it and measuring
-  // the results. These are the root nodes for each of these areas.  They are mostly populated by subclasses.
+  // the results. These are the root nodes for each of these areas. They are mostly populated by subclasses.
   protected readonly preparationArea: CoinExperimentPreparationArea;
   protected readonly measurementArea: CoinExperimentMeasurementArea;
 
@@ -55,10 +55,10 @@ export default class CoinsExperimentSceneView extends Node {
   protected readonly newCoinButton: ButtonNode;
 
   // The X (horizontal) position in screen coordinates where the demarcation between the preparation area and the
-  // measurement area should be.  This moves back and forth when moving between preparation and measurement modes.
+  // measurement area should be. This moves back and forth when moving between preparation and measurement modes.
   protected readonly dividerXPositionProperty: TProperty<number>;
 
-  // The animation for the movement of the divider when switching between 'preparation' and 'measurement' modes.  This
+  // The animation for the movement of the divider when switching between 'preparation' and 'measurement' modes. This
   // will be null when no animation is in progress.
   private dividerMovementAnimation: Animation | null = null;
 
@@ -135,7 +135,7 @@ export default class CoinsExperimentSceneView extends Node {
         easing: Easing.CUBIC_OUT
       } );
 
-      // Add a handler for when the animation is ended.  This is here for situations such as a reset occurring during
+      // Add a handler for when the animation is ended. This is here for situations such as a reset occurring during
       // the animation.
       this.dividerMovementAnimation.endedEmitter.addListener( () => {
         this.dividerXPositionProperty.value = preparingExperiment ?
@@ -169,14 +169,14 @@ export default class CoinsExperimentSceneView extends Node {
   }
 
   /**
-   * Add a coin node to the scene graph.  This is used to support the animation of the coins used in the "Single Coin
-   * Measurements" experiment from the preparation area to the measurement area.  Having this method allows the
+   * Add a coin node to the scene graph. This is used to support the animation of the coins used in the "Single Coin
+   * Measurements" experiment from the preparation area to the measurement area. Having this method allows the
    * measurement area to create the node and get it into the scene graph at the appropriate place without altering the
    * measurement area's bounds.
    */
   public addSingleCoinNode( coinNode: CoinNode, forReprepare = false ): void {
 
-    // TODO: See https://github.com/phetsims/quantum-measurement/issues/11.  Empirically determined values in the local
+    // TODO: See https://github.com/phetsims/quantum-measurement/issues/11. Empirically determined values in the local
     //       coordinate frame are being used because my (jbphet) attempts to do something more general, such as the
     //       commented out code below, weren't working. This should be fixed up.
     // const indicatorCoinGlobalBounds = this.preparationArea.getIndicatorCoinGlobalBounds();
@@ -191,8 +191,8 @@ export default class CoinsExperimentSceneView extends Node {
   }
 
   /**
-   * Add a set of the smaller type of coin nodes to the scene graph.  This is used to support the animation of the coins
-   * used in the "Multiple Coin Measurements" experiment from the preparation area to the measurement area.  Having this
+   * Add a set of the smaller type of coin nodes to the scene graph. This is used to support the animation of the coins
+   * used in the "Multiple Coin Measurements" experiment from the preparation area to the measurement area. Having this
    * method allows the measurement area to create the nodes and get them into the scene graph at the appropriate places
    * without altering the measurement area's bounds.
    */
@@ -202,7 +202,7 @@ export default class CoinsExperimentSceneView extends Node {
       return;
     }
 
-    // TODO: See https://github.com/phetsims/quantum-measurement/issues/11.  Empirically determined values in the local
+    // TODO: See https://github.com/phetsims/quantum-measurement/issues/11. Empirically determined values in the local
     //       coordinate frame are being used because my (jbphet) attempts to do something more general weren't working.
     //       This should be made to use information from where the indicator nodes are in the preparation area.
 

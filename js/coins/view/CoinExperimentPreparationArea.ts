@@ -3,7 +3,7 @@
 /**
  * CoinExperimentPreparationArea is a composite UI component that allows users to configure a two-state physical or
  * quantum system - basically a physical or quantum coin - for a set of experiments where the user can flip and reveal
- * the coins.  This is implemented as a VBox that acts as a column in the UI.
+ * the coins. This is implemented as a VBox that acts as a column in the UI.
  *
  * @author John Blanco, PhET Interactive Simulations
  */
@@ -30,7 +30,7 @@ export default class CoinExperimentPreparationArea extends VBox {
 
     const textColor = sceneModel.systemType === 'quantum' ? Color.BLUE : Color.BLACK;
 
-    // Create the header.  It is somewhat different depending on whether this is for a physical or quantum system.
+    // Create the header. It is somewhat different depending on whether this is for a physical or quantum system.
     const prepAreaHeadingTextProperty: TReadOnlyProperty<string> = new DerivedProperty(
       [
         QuantumMeasurementStrings.coinStringProperty,
@@ -56,7 +56,7 @@ export default class CoinExperimentPreparationArea extends VBox {
     const prepAreaHeaderLineWidthProperty = new DerivedProperty(
       [ sceneModel.preparingExperimentProperty ],
 
-      // TODO: Values below are empirically determined, but there is probably a better way.  See https://github.com/phetsims/quantum-measurement/issues/1.
+      // TODO: Values below are empirically determined, but there is probably a better way. See https://github.com/phetsims/quantum-measurement/issues/1.
       preparingExperiment => preparingExperiment ? 250 : 100
     );
     const preparationAreaHeader = new SceneSectionHeader(

@@ -1,7 +1,7 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * TODO Describe this class and its responsibilities.  See https://github.com/phetsims/quantum-measurement/issues/1
+ * TODO Describe this class and its responsibilities. See https://github.com/phetsims/quantum-measurement/issues/1
  *
  * @author John Blanco, PhET Interactive Simulations
  */

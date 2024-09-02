@@ -31,6 +31,7 @@ export type StateSetMeasurementResult<T> = {
   measuredValues: Array<T | null>;
 };
 
+// REVIEW: Should T only extend string or some system type? See https://github.com/phetsims/quantum-measurement/issues/20
 export default class TwoStateSystemSet<T extends string> extends PhetioObject {
 
   // the state of the measurement for this system
@@ -39,17 +40,19 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
   // valid values for a measurement
   public readonly validValues: readonly T[];
 
+  // REVIEW: Any reason why here it's Array<> and above is T[]? https://github.com/phetsims/quantum-measurement/issues/20
   // the values of most recent measurement, null indicates indeterminate
   public readonly measuredValues: Array<T | null>;
 
   // The number of systems that will be measured each time a measurement is made.
   public readonly numberOfActiveSystemsProperty: NumberProperty;
 
+  // TODO AV: Check how this is used https://github.com/phetsims/quantum-measurement/issues/20
   // Timeout for the preparingToBeMeasured state.
   private preparingToBeMeasuredTimeoutListener: null | TimerListener = null;
 
   // The bias for each two-state system, and specifically the probability of the system being found in the first of the
-  // two provided values.  A value of 1 means it will always be found in the first provided state, 0 means always the
+  // two provided values. A value of 1 means it will always be found in the first provided state, 0 means always the
   // second, and 0.5 means no bias.
   public readonly biasProperty: NumberProperty;
 
@@ -87,8 +90,8 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
   }
 
   /**
-   * Prepare this system to be measured.  This is analogous to initiating the flipping of a physical coin or setting up
-   * a quantum system into a superimposed state.  After a timeout, this system will transition to a state where it is
+   * Prepare this system to be measured. This is analogous to initiating the flipping of a physical coin or setting up
+   * a quantum system into a superposed state. After a timeout, this system will transition to a state where it is
    * ready to be measured.
    */
   public prepare( measureWhenPrepared = false ): void {
@@ -101,6 +104,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
       this.measuredValues[ i ] = null;
     } );
 
+    // REVIEW: Document how the stepTimer operates here https://github.com/phetsims/quantum-measurement/issues/20
     this.preparingToBeMeasuredTimeoutListener = stepTimer.setTimeout( () => {
       this.preparingToBeMeasuredTimeoutListener = null;
       this.measurementStateProperty.value = 'readyToBeMeasured';
@@ -111,7 +115,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
   }
 
   /**
-   * Prepare the system for measurement without transitioning through the 'preparingToBeMeasured' state.  This is more
+   * Prepare the system for measurement without transitioning through the 'preparingToBeMeasured' state. This is more
    * the exception than the rule, but is needed in a case or two.
    */
   public prepareInstantly(): void {
@@ -133,9 +137,12 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
       'The system should not be measured if it is not ready for measurement.'
     );
 
+    // REVIEW TODO: What happens if the state is currently 'measuredAndRevealed' see https://github.com/phetsims/quantum-measurement/issues/20
+    // Shouldnt we assert that the state is 'readyToBeMeasured'?
+
     _.times( this.numberOfActiveSystemsProperty.value, i => {
 
-      // Only make a new measurement if one doesn't exist for this element.  Otherwise, just keep the existing value.
+      // Only make a new measurement if one doesn't exist for this element. Otherwise, just keep the existing value.
       if ( this.measuredValues[ i ] === null ) {
         const valueSetIndex = dotRandom.nextDouble() < this.biasProperty.value ? 0 : 1;
         this.measuredValues[ i ] = this.validValues[ valueSetIndex ];

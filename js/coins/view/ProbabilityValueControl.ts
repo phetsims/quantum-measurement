@@ -3,7 +3,7 @@
 
 /**
  * ProbabilityValueControl is a UI component that allows the user to control the value of a NumberProperty whose value
- * ranges from 0 to 1.  The control includes horizontal slider, arrow controls on each side of the slider for
+ * ranges from 0 to 1. The control includes horizontal slider, arrow controls on each side of the slider for
  * fine-grained control, and a title that goes above it all.
  *
  * @author John Blanco, PhET Interactive Simulations

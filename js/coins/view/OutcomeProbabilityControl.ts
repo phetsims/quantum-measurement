@@ -3,7 +3,7 @@
 
 /**
  * OutcomeProbabilityControl is a UI component that allows the user to manipulate the probability of the outcome for
- * the measurement of a two-state system.  For a physical coin, this is essentially setting the bias of the coin.  For
+ * the measurement of a two-state system. For a physical coin, this is essentially setting the bias of the coin. For
  * a quantum system, it is more like preparing the state of an experiment.
  *
  * @author John Blanco, PhET Interactive Simulations

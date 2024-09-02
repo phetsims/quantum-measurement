@@ -2,7 +2,7 @@
 
 /**
  * SceneSectionHeader is a composite Scenery Node that consists of a textual header and a line below it, where the line
- * is generally wider than text.  It looks something like this:
+ * is generally wider than text. It looks something like this:
  *
  *          Coin to Prepare
  *      -------------------------

@@ -2,7 +2,7 @@
 
 /**
  * CoinExperimentMeasurementArea is a composite UI component that presents two areas - one for a single coin and one for
- * multiple coins - where uses can flip and reveal coins.  Depending on how this is parameterized, the coins may either
+ * multiple coins - where uses can flip and reveal coins. Depending on how this is parameterized, the coins may either
  * be physical or "quantum coins".
  *
  * @author John Blanco, PhET Interactive Simulations
@@ -63,11 +63,11 @@ export default class CoinExperimentMeasurementArea extends VBox {
     const singleCoinInTestBoxProperty = new BooleanProperty( false );
     const coinSetInTestBoxProperty = new BooleanProperty( false );
 
-    // Add the top header for the measurement area.  It changes based on the mode and the strings.
+    // Add the top header for the measurement area. It changes based on the mode and the strings.
     const measurementAreaHeaderLineWidthProperty = new DerivedProperty(
       [ sceneModel.preparingExperimentProperty ],
 
-      // TODO: Values below are empirically determined, but there is probably a better way.  See https://github.com/phetsims/quantum-measurement/issues/1.
+      // TODO: Values below are empirically determined, but there is probably a better way. See https://github.com/phetsims/quantum-measurement/issues/1.
       preparingExperiment => preparingExperiment ? 300 : 400
     );
     const singleCoinSectionHeader = new SceneSectionHeader(
@@ -155,7 +155,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
       return {
         createNode: () => new Text( valueText, { font: RADIO_BUTTON_FONT } ),
 
-        // TODO: See https://github.com/phetsims/quantum-measurement/issues/15.  Handel 10000 coins eventually.
+        // TODO: See https://github.com/phetsims/quantum-measurement/issues/15. Handle 10000 coins eventually.
         value: value === 10000 ? 144 : value,
         tandemName: valueText
       };
@@ -241,8 +241,8 @@ export default class CoinExperimentMeasurementArea extends VBox {
       this.singleCoinInTestBoxProperty.value = false;
     };
 
-    // Create a closure function for aborting the animation of the incoming single coin.  This is intended to be called
-    // when a state change occurs that prevents the ingress animation from finishing normally.  If no animation is in
+    // Create a closure function for aborting the animation of the incoming single coin. This is intended to be called
+    // when a state change occurs that prevents the ingress animation from finishing normally. If no animation is in
     // progress, this does nothing, so it safe to call as a preventative measure.
     const abortIngressAnimationForSingleCoin = () => {
 
@@ -294,16 +294,16 @@ export default class CoinExperimentMeasurementArea extends VBox {
         );
       }
 
-      // Add the coin to our parent node.  This is done so that we don't change our bounds, which could mess up the
-      // layout.  It will be added back to this area when it is back within the bounds.
+      // Add the coin to our parent node. This is done so that we don't change our bounds, which could mess up the
+      // layout. It will be added back to this area when it is back within the bounds.
       sceneGraphParent.addSingleCoinNode( singleCoinNode, forReprepare );
 
       // Make sure the coin mask is outside the test box so that it isn't visible.
       coinMask.x = -SINGLE_COIN_TEST_BOX_SIZE.width * 2;
 
-      // Create and start an animation to move the single coin to the side of the single coin test box.  The entire
+      // Create and start an animation to move the single coin to the side of the single coin test box. The entire
       // process consists of two animations, one to move the coin to the left edge of the test box while the test box is
-      // potentially also moving, then a second one to move the coin into the box.  The durations must be set up such
+      // potentially also moving, then a second one to move the coin into the box. The durations must be set up such
       // that the test box is in place before the 2nd animation begins or the coin won't end up in the right place.
       const testAreaXOffset = forReprepare ? 200 : 420; // empirically determined
       const leftOfTestArea = singleCoinMeasurementArea.center.minusXY( testAreaXOffset, 0 );
@@ -349,7 +349,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
 
           if ( sceneModel.systemType === 'quantum' ) {
 
-            // "Collapse" the state of the coin node so that it shows a single state, not a superimposed one.
+            // "Collapse" the state of the coin node so that it shows a single state, not a superposed one.
             const quantumCoinNode = singleCoinNode as QuantumCoinNode;
             quantumCoinNode.showSuperpositionProperty.value = false;
             sceneModel.singleCoin.prepareInstantly();
@@ -380,8 +380,8 @@ export default class CoinExperimentMeasurementArea extends VBox {
     const animationsToEdgeOfMultiCoinTestBox: Animation[] = [];
     const animationsFromEdgeOfMultiCoinBoxToInside: Animation[] = [];
 
-    // Create a closure function for aborting the animation of the incoming single coin.  This is intended to be called
-    // when a state change occurs that prevents the ingress animation from finishing normally.  If no animation is in
+    // Create a closure function for aborting the animation of the incoming single coin. This is intended to be called
+    // when a state change occurs that prevents the ingress animation from finishing normally. If no animation is in
     // progress, this does nothing, so it safe to call as a preventative measure.
     const abortIngressAnimationForCoinSet = () => {
 
@@ -423,17 +423,18 @@ export default class CoinExperimentMeasurementArea extends VBox {
       );
       const coinSetNodes: SmallCoinNode[] = [];
       _.times( sceneModel.coinSet.numberOfActiveSystemsProperty.value, i => {
+        // TODO: Is this tandem structure a final decision or placeholder? https://github.com/phetsims/quantum-measurement/issues/20
         const smallCoinTandem = tandem.createTandem( `multiCoin${i}` );
         coinSetNodes.push( new SmallCoinNode( coinRadius, { tandem: smallCoinTandem } ) );
       } );
 
-      // Add the coin to our parent node.  This is done so that we don't change our bounds, which could mess up the
-      // layout.  It will be added back to this area when it is back within the bounds.
+      // Add the coin to our parent node. This is done so that we don't change our bounds, which could mess up the
+      // layout. It will be added back to this area when it is back within the bounds.
       sceneGraphParent.addCoinNodeSet( coinSetNodes, forReprepare );
 
       // Create and start a set of animations to move these new created coin nodes to the side of the multiple coin test
-      // box.  The entire process consists of two animations, one to move a coin to the left edge of the test box while
-      // the test box is potentially also moving, then a second one to move the coin into the box.  The durations must
+      // box. The entire process consists of two animations, one to move a coin to the left edge of the test box while
+      // the test box is potentially also moving, then a second one to move the coin into the box. The durations must
       // be set up such that the test box is in place before the 2nd animation begins or the coins won't end up in the
       // right places.
       const testAreaXOffset = forReprepare ? 100 : 300;
@@ -473,7 +474,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
           animationsFromEdgeOfMultiCoinBoxToInside.push( animationFromTestBoxEdgeToInside );
           animationFromTestBoxEdgeToInside.finishEmitter.addListener( () => {
 
-            // The coin node should now be within the bounds of the multi-coin test box.  Remove the coin node from the
+            // The coin node should now be within the bounds of the multi-coin test box. Remove the coin node from the
             // scene graph parent and add it to the test box.
             sceneGraphParent.removeChild( coinNode );
             const offset = multipleCoinTestBox.getOffsetFromCenter( coinSetNodes.indexOf( coinNode ) );
@@ -482,8 +483,8 @@ export default class CoinExperimentMeasurementArea extends VBox {
 
             if ( sceneModel.systemType === 'quantum' ) {
 
-              // "Collapse" the state of the coin nodes so that they show a single state, not a superimposed one.
-              // TODO: https://github.com/phetsims/quantum-measurement/issues/16 - This isn't quite complete.  It will
+              // "Collapse" the state of the coin nodes so that they show a single state, not a superposed one.
+              // TODO: https://github.com/phetsims/quantum-measurement/issues/16 - This isn't quite complete. It will
               //       need to collapse the coins as well.
               sceneModel.coinSet.prepareInstantly();
             }
@@ -524,7 +525,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
     sceneModel.preparingExperimentProperty.lazyLink( preparingExperiment => {
       if ( preparingExperiment ) {
 
-        // Abort any in-progress animations - the scene model is going back into the preparation mode.  If there are no
+        // Abort any in-progress animations - the scene model is going back into the preparation mode. If there are no
         // such animations, this has no effect.
         abortIngressAnimationForSingleCoin();
         abortIngressAnimationForCoinSet();

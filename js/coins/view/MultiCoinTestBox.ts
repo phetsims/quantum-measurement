@@ -2,7 +2,7 @@
 
 /**
  * MultiCoinTestBox is a Scenery Node that represents a box (i.e. a rectangle) where coins are placed for tests where
- * they are prepared for measurement and then measured.  It is responsible for creating the coins that will be shown
+ * they are prepared for measurement and then measured. It is responsible for creating the coins that will be shown
  * within it.
  *
  * @author John Blanco, PhET Interactive Simulations
@@ -38,7 +38,7 @@ const MAP_OF_COIN_QUANTITY_TO_RADIUS = new Map( [
   [ 10, 12 ],
   [ 100, 6 ],
 
-  // TODO: See https://github.com/phetsims/quantum-measurement/issues/15.  This will need to be modded when real suppor
+  // TODO: See https://github.com/phetsims/quantum-measurement/issues/15. This will need to be modded when real suppor
   //       for 10000 coins is added.
   [ 144, 4 ]
   // [ 10000, 0.5 ]
@@ -69,7 +69,7 @@ export default class MultiCoinTestBox extends HBox {
       }
     );
 
-    // Create a node that includes the test box and a clip area.  This is used to put masks over the tops of the coins
+    // Create a node that includes the test box and a clip area. This is used to put masks over the tops of the coins
     // that appear as the coins slide into the box.
     const testBoxWithClipArea = new Node( {
       children: [ multipleCoinTestBoxRectangle ],
@@ -77,7 +77,7 @@ export default class MultiCoinTestBox extends HBox {
     } );
 
     // Create an area that will set to the left of the test box where coins that are animating into the box can be
-    // placed before moving into it.  This is done so that the bounds of this node don't change when the coins and the
+    // placed before moving into it. This is done so that the bounds of this node don't change when the coins and the
     // masks for those coins are added as children.
     const coinLandingZone = new Rectangle( 0, 0, LANDING_ZONE_WIDTH, BOX_SIZE.height, {
       fill: LANDING_ZONE_FILL
@@ -177,7 +177,7 @@ export default class MultiCoinTestBox extends HBox {
       offset.setXY( xOffset, yOffset );
     }
 
-      // TODO: See https://github.com/phetsims/quantum-measurement/issues/15.  This is a temporary workaround where we are
+      // TODO: See https://github.com/phetsims/quantum-measurement/issues/15. This is a temporary workaround where we are
     //       handling the 10000 setting as though it's 144, and will need to be replaced.
     else if ( this.coinCapacityProperty.value === 144 ) {
 

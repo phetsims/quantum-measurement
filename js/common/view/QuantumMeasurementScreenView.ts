@@ -67,7 +67,7 @@ export default class QuantumMeasurementScreenView extends ScreenView {
   }
 
   /**
-   * Resets the view.  Override as needed in subclasses.
+   * Resets the view. Override as needed in subclasses.
    */
   public reset(): void {
     // Does nothing in base class.

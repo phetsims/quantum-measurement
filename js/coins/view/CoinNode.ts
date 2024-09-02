@@ -2,7 +2,7 @@
 
 
 /**
- * CoinNode portrays a coin with two faces.  It can show one or the other, and also supports cross-fading between the
+ * CoinNode portrays a coin with two faces. It can show one or the other, and also supports cross-fading between the
  * two faces in order to produce a "transposed" look.
  *
  * @author John Blanco, PhET Interactive Simulations

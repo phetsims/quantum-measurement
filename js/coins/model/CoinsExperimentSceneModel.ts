@@ -1,7 +1,7 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * Main model class for the "Physical Coin" and "Quantum Coin" scenes on the "Coins" screen.  This manages the
+ * Main model class for the "Physical Coin" and "Quantum Coin" scenes on the "Coins" screen. This manages the
  * preparation and measurement phases for the experiments.
  *
  * @author John Blanco, PhET Interactive Simulations
@@ -124,7 +124,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
       }
       else {
 
-        // The scene is moving from preparation mode to measurement mode.  Force the coins to be in the initial state
+        // The scene is moving from preparation mode to measurement mode. Force the coins to be in the initial state
         // chosen by the user so that it will match when it animates into the test box and be correct if revealed right
         // away.
         this.singleCoin.setMeasurementValueImmediate( this.initialCoinStateProperty.value as never );
@@ -141,7 +141,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
   }
 
   /**
-   * Prepare the single coin for measurement.  For the physical coin, this is essentially starting to flip it.
+   * Prepare the single coin for measurement. For the physical coin, this is essentially starting to flip it.
    */
   public prepareSingleCoinExperiment( revealWhenComplete = false ): void {
     this.singleCoin.prepare( revealWhenComplete );
