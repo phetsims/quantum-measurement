@@ -52,7 +52,7 @@ const RADIO_BUTTON_FONT = new PhetFont( 12 );
 
 export default class CoinExperimentMeasurementArea extends VBox {
 
-  // Boolean Properties that track whether the coins that go into the test boxes are fully ensconced there. This is an
+  // Boolean Properties that track whether the coins that go into the test boxes are fully enclosed there. This is an
   // internal-only thing and is not available to phet-io.
   private readonly singleCoinInTestBoxProperty: TProperty<boolean>;
   private readonly coinSetInTestBoxProperty: TProperty<boolean>;
@@ -88,6 +88,13 @@ export default class CoinExperimentMeasurementArea extends VBox {
         opacity: 0.8
       }
     );
+    // Make the single-coin test box transparent when the state of the coin is being revealed to the user.
+    sceneModel.singleCoin.measurementStateProperty.link( singleCoinMeasurementState => {
+      singleCoinTestBoxRectangle.fill = singleCoinMeasurementState === 'measuredAndRevealed' ?
+                                        Color.TRANSPARENT :
+                                        SINGLE_COIN_TEST_BOX_UNREVEALED_FILL;
+    } );
+
     const singleCoinTestBox = new Node( {
       children: [ singleCoinTestBoxRectangle ],
       clipArea: Shape.bounds( singleCoinTestBoxRectangle.getRectBounds() )
@@ -107,13 +114,6 @@ export default class CoinExperimentMeasurementArea extends VBox {
     const singleCoinMeasurementArea = new HBox( {
       children: [ singleCoinTestBox, singleCoinExperimentButtonSet ],
       spacing: 30
-    } );
-
-    // Make the single-coin test box transparent when the state of the coin is being revealed to the user.
-    sceneModel.singleCoin.measurementStateProperty.link( singleCoinMeasurementState => {
-      singleCoinTestBoxRectangle.fill = singleCoinMeasurementState === 'measuredAndRevealed' ?
-                                        Color.TRANSPARENT :
-                                        SINGLE_COIN_TEST_BOX_UNREVEALED_FILL;
     } );
 
     // Add the lower heading for the measurement area.
@@ -299,6 +299,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
       sceneGraphParent.addSingleCoinNode( singleCoinNode, forReprepare );
 
       // Make sure the coin mask is outside the test box so that it isn't visible.
+      // REVIEW TODO: Why not just hide it? https://github.com/phetsims/quantum-measurement/issues/20
       coinMask.x = -SINGLE_COIN_TEST_BOX_SIZE.width * 2;
 
       // Create and start an animation to move the single coin to the side of the single coin test box. The entire
@@ -402,7 +403,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
       } );
 
       // Set the flag to indicate that the coins are not in the box.
-      coinSetInTestBoxProperty.value = false;
+      this.coinSetInTestBoxProperty.value = false;
     };
 
     const startIngressAnimationForCoinSet = ( forReprepare: boolean ) => {
@@ -415,7 +416,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
       multipleCoinTestBox.clearContents();
 
       // Set the flag to indicate that the coins aren't in the box.
-      coinSetInTestBoxProperty.value = false;
+      this.coinSetInTestBoxProperty.value = false;
 
       // Create the coins that will travel from the preparation area into this measurement area.
       const coinRadius = MultiCoinTestBox.getRadiusFromCoinQuantity(
@@ -494,7 +495,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
               animation => animation.animatingProperty.value
             );
             if ( runningAnimations.length === 0 ) {
-              coinSetInTestBoxProperty.value = true;
+              this.coinSetInTestBoxProperty.value = true;
             }
           } );
 
@@ -543,8 +544,9 @@ export default class CoinExperimentMeasurementArea extends VBox {
       }
     } );
 
-    // Listen to the state of the coin and animate a flipping motion for the physical coin or a travel-from-the-prep-
-    // area animation for the quantum coin.
+    // Listen to the state of the coin and animate a flipping motion for the physical coin or a
+    // travel-from-the-prep-area animation for the quantum coin.
+    // REVIEW: Want to change this snake case description for the actual name? https://github.com/phetsims/quantum-measurement/issues/20
     sceneModel.singleCoin.measurementStateProperty.lazyLink( singleCoinMeasurementState => {
       if ( sceneModel.systemType === 'physical' ) {
 
@@ -572,10 +574,11 @@ export default class CoinExperimentMeasurementArea extends VBox {
             }
 
             // Scale the coin on the x-axis to make it look like they are rotating.
+            // REVIEW: Why not check for coinMask? https://github.com/phetsims/quantum-measurement/issues/20
             coinMask.setScaleMagnitude( xScale, 1 );
             singleCoinNode && singleCoinNode.setScaleMagnitude( xScale, 1 );
 
-            // Save some state for next time through.
+            // Save state for handling the zero case.
             previousXScale = xScale;
           };
           stepTimer.addListener( flippingAnimationStepListener );
