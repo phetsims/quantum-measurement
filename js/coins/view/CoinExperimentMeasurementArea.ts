@@ -5,6 +5,8 @@
  * multiple coins - where uses can flip and reveal coins. Depending on how this is parameterized, the coins may either
  * be physical or "quantum coins".
  *
+ * REVIEW TODO: Move some of the animation logic into its own subclass https://github.com/phetsims/quantum-measurement/issues/20
+ *
  * @author John Blanco, PhET Interactive Simulations
  */
 
