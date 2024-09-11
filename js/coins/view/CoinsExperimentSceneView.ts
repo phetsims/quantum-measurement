@@ -73,6 +73,7 @@ export default class CoinsExperimentSceneView extends Node {
 
     super( options );
 
+    // REVIEW TODO: Shouldn't this be phetioReadonly: true? See https://github.com/phetsims/quantum-measurement/issues/20
     this.dividerXPositionProperty = new NumberProperty( DIVIDER_X_POSITION_DURING_PREPARATION, {
       tandem: options.tandem.createTandem( 'dividerXPositionProperty' ),
       range: new Range( DIVIDER_X_POSITION_DURING_MEASUREMENT, DIVIDER_X_POSITION_DURING_PREPARATION )
@@ -84,11 +85,11 @@ export default class CoinsExperimentSceneView extends Node {
       options.tandem.createTandem( 'preparationArea' )
     );
     this.addChild( this.preparationArea );
+
     this.measurementArea = new CoinExperimentMeasurementArea(
       sceneModel,
       options.tandem.createTandem( 'measurementArea' )
     );
-
     this.addChild( this.measurementArea );
 
     // Add the vertical line that will sit between the preparation and measurement areas.
@@ -234,6 +235,9 @@ export default class CoinsExperimentSceneView extends Node {
   }
 
   public reset(): void {
+
+    // REVIEW: Shouldn't this also reset the divider to the original position? https://github.com/phetsims/quantum-measurement/issues/20
+
     if ( this.dividerMovementAnimation ) {
       this.dividerMovementAnimation.stop();
     }
