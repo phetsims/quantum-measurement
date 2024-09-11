@@ -19,7 +19,21 @@ const QuantumMeasurementConstants = {
   SPIN_DOWN_ARROW_CHARACTER: '\u2b63',
   KET: '\u27e9',
 
-  PREPARING_TO_BE_MEASURED_TIME: 1 // in seconds
+  PREPARING_TO_BE_MEASURED_TIME: 1, // in seconds
+  HOLLYWOODED_MAX_COINS: 900, //
+  HOLLYWOODED_MAX_COINS_RADII: 2
+  /**
+   * 20 400
+   * 25 625
+   * 30 900
+   * 35 1225
+   * 40 1600
+   * 50 2500
+   * 60 3600
+   * 70 4900
+   * 90 8100
+   * 100  10000
+   */
 };
 
 quantumMeasurement.register( 'QuantumMeasurementConstants', QuantumMeasurementConstants );

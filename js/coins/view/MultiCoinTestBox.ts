@@ -20,6 +20,7 @@ import SmallCoinNode from './SmallCoinNode.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 
 type SelfOptions = EmptySelfOptions;
 export type MultiCoinTestBoxOptions = SelfOptions & PickRequired<HBoxOptions, 'tandem'>;
@@ -40,7 +41,7 @@ const MAP_OF_COIN_QUANTITY_TO_RADIUS = new Map( [
 
   // TODO: See https://github.com/phetsims/quantum-measurement/issues/15. This will need to be modded when real suppor
   //       for 10000 coins is added.
-  [ 144, 4 ]
+  [ QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS, QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS_RADII ]
   // [ 10000, 0.5 ]
 ] );
 
@@ -178,12 +179,14 @@ export default class MultiCoinTestBox extends HBox {
     }
 
       // TODO: See https://github.com/phetsims/quantum-measurement/issues/15. This is a temporary workaround where we are
-    //       handling the 10000 setting as though it's 144, and will need to be replaced.
-    else if ( this.coinCapacityProperty.value === 144 ) {
+    //       handling the 10000 setting as though it's QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS, and will need to be replaced.
+    else if ( this.coinCapacityProperty.value === QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS ) {
 
-      // 12 rows of 12
-      const xOffset = BOX_SIZE.width / 13 * ( Math.floor( index / 12 ) + 1 ) - BOX_SIZE.width / 2;
-      const yOffset = BOX_SIZE.height / 13 * ( index % 12 + 1 ) - BOX_SIZE.height / 2;
+      const sideLength = Math.sqrt( this.coinCapacityProperty.value );
+      // N rows of N
+      const BoxDimension = new Vector2( BOX_SIZE.width, BOX_SIZE.height ).timesScalar( 0.9 );
+      const xOffset = BoxDimension.x / ( sideLength + 1 ) * ( Math.floor( index / sideLength ) + 1 ) - BoxDimension.x / 2;
+      const yOffset = BoxDimension.y / ( sideLength + 1 ) * ( index % sideLength + 1 ) - BoxDimension.y / 2;
       offset.setXY( xOffset, yOffset );
     }
     return offset;

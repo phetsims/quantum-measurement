@@ -26,7 +26,7 @@ import Range from '../../../../dot/js/Range.js';
 type SelfOptions = EmptySelfOptions;
 export type CoinMeasurementHistogramOptions = SelfOptions & PickRequired<NodeOptions, 'tandem' | 'visibleProperty'>;
 
-const HISTOGRAM_SIZE = new Dimension2( 100, 180 ); // size excluding labels at bottom, in screen coordinates
+const HISTOGRAM_SIZE = new Dimension2( 200, 180 ); // size excluding labels at bottom, in screen coordinates
 const AXIS_STROKE = Color.BLACK;
 const AXIS_LINE_WIDTH = 2;
 const LABEL_FONT = new PhetFont( { size: 20, weight: 'bold' } );
@@ -100,7 +100,8 @@ export default class CoinMeasurementHistogram extends Node {
         let total = 0;
 
         if ( measurementState === 'measuredAndRevealed' ) {
-          _.times( numberOfActiveSystems, i => {
+          const times = numberOfActiveSystems === QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS ? 1e4 : numberOfActiveSystems;
+          _.times( times, i => {
             if ( coinSet.measuredValues[ i ] === testValue ) {
               total++;
             }
@@ -118,7 +119,8 @@ export default class CoinMeasurementHistogram extends Node {
         let total = 0;
 
         if ( measurementState === 'measuredAndRevealed' ) {
-          _.times( numberOfActiveSystems, i => {
+          const times = numberOfActiveSystems === QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS ? 1e4 : numberOfActiveSystems;
+          _.times( times, i => {
             if ( coinSet.measuredValues[ i ] === testValue ) {
               total++;
             }
@@ -132,7 +134,7 @@ export default class CoinMeasurementHistogram extends Node {
     const numberDisplays = new HBox( {
       children: [ leftNumberDisplay, rightNumberDisplay ],
       align: 'center',
-      spacing: AXIS_LINE_WIDTH * 2,
+      spacing: HISTOGRAM_SIZE.width / 3,
       centerX: yAxis.centerX,
       top: yAxis.top,
       visibleProperty: displayValuesProperty
@@ -147,7 +149,8 @@ export default class CoinMeasurementHistogram extends Node {
       bottom: xAxis.centerY
     } );
     leftNumberProperty.link( leftNumber => {
-      const proportion = leftNumber / coinSet.numberOfActiveSystemsProperty.value;
+      const numberOfSystems = coinSet.numberOfActiveSystemsProperty.value === QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS ? 1e4 : coinSet.numberOfActiveSystemsProperty.value;
+      const proportion = leftNumber / numberOfSystems;
       leftHistogramBar.setRectHeightFromBottom( proportion * maxBarHeight );
     } );
     const rightHistogramBar = new Rectangle( 0, 0, HISTOGRAM_BAR_WIDTH, maxBarHeight, {
@@ -156,7 +159,8 @@ export default class CoinMeasurementHistogram extends Node {
       bottom: xAxis.centerY
     } );
     rightNumberProperty.link( rightNumber => {
-      const proportion = rightNumber / coinSet.numberOfActiveSystemsProperty.value;
+      const numberOfSystems = coinSet.numberOfActiveSystemsProperty.value === QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS ? 1e4 : coinSet.numberOfActiveSystemsProperty.value;
+      const proportion = rightNumber / numberOfSystems;
       rightHistogramBar.setRectHeightFromBottom( proportion * maxBarHeight );
     } );
 

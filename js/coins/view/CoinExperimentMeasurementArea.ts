@@ -42,6 +42,8 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import MultiCoinTestBox from './MultiCoinTestBox.js';
 import SmallCoinNode from './SmallCoinNode.js';
 import CoinMeasurementHistogram from './CoinMeasurementHistogram.js';
+import CoinSetPixelRepresentation from './CoinSetPixelRepresentation.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 
 const SINGLE_COIN_AREA_RECT_LINE_WIDTH = 36;
 const SINGLE_COIN_TEST_BOX_SIZE = new Dimension2( 165, 145 );
@@ -58,6 +60,8 @@ export default class CoinExperimentMeasurementArea extends VBox {
   // internal-only thing and is not available to phet-io.
   private readonly singleCoinInTestBoxProperty: TProperty<boolean>;
   private readonly coinSetInTestBoxProperty: TProperty<boolean>;
+
+  private pixelRepresentation: CoinSetPixelRepresentation;
 
   public constructor( sceneModel: CoinsExperimentSceneModel, tandem: Tandem ) {
 
@@ -158,7 +162,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
         createNode: () => new Text( valueText, { font: RADIO_BUTTON_FONT } ),
 
         // TODO: See https://github.com/phetsims/quantum-measurement/issues/15. Handle 10000 coins eventually.
-        value: value === 10000 ? 144 : value,
+        value: value === 10000 ? QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS : value,
         tandemName: valueText
       };
     };
@@ -181,11 +185,29 @@ export default class CoinExperimentMeasurementArea extends VBox {
       visibleProperty: sceneModel.preparingExperimentProperty
     } );
 
+    // Create the pixel ratio image
+    const initialStateBias = sceneModel.systemType === 'physical' ?
+                             sceneModel.initialCoinStateProperty.value === 'heads' ? 1 : 0 :
+                             sceneModel.initialCoinStateProperty.value === 'up' ? 1 : 0;
+
+    const pixelRepresentation = new CoinSetPixelRepresentation( initialStateBias );
+
+    const multipleCoinTestBoxContainer = new Node( {
+      children: [
+        multipleCoinTestBox,
+        pixelRepresentation
+      ]
+    } );
+
+    const offset = multipleCoinTestBox.width - pixelRepresentation.width;
+    pixelRepresentation.x = offset / 2;
+    pixelRepresentation.y = offset / 2;
+
     // Create the composite node that represents to test box and controls where the user will experiment with multiple
     // coins at once.
     const multipleCoinMeasurementArea = new HBox( {
       children: [
-        multipleCoinTestBox,
+        multipleCoinTestBoxContainer,
         numberOfCoinsSelector,
         multiCoinExperimentHistogram,
         multipleCoinExperimentButtonSet
@@ -205,6 +227,18 @@ export default class CoinExperimentMeasurementArea extends VBox {
 
     this.singleCoinInTestBoxProperty = singleCoinInTestBoxProperty;
     this.coinSetInTestBoxProperty = coinSetInTestBoxProperty;
+    this.pixelRepresentation = pixelRepresentation;
+
+    Multilink.multilink(
+      [
+        sceneModel.coinSet.numberOfActiveSystemsProperty,
+        sceneModel.coinSet.measurementStateProperty
+      ],
+      ( number, state ) => {
+        pixelRepresentation.visible = number === QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS && state === 'measuredAndRevealed';
+
+      }
+    );
 
     // Create the node that will be used to cover (aka "mask") the coin so that its state can't be seen.
     const maskRadius = InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS * 1.02;
@@ -410,6 +444,9 @@ export default class CoinExperimentMeasurementArea extends VBox {
 
     const startIngressAnimationForCoinSet = ( forReprepare: boolean ) => {
 
+      this.pixelRepresentation.refresh( sceneModel.stateBiasProperty.value );
+
+
       // Create a typed reference to the parent node, since we'll need to invoke some methods on it.
       assert && assert( this.getParent() instanceof CoinsExperimentSceneView );
       const sceneGraphParent = this.getParent() as CoinsExperimentSceneView;
@@ -536,6 +573,9 @@ export default class CoinExperimentMeasurementArea extends VBox {
         // Clear out the test boxes.
         clearSingleCoinTestBox();
         multipleCoinTestBox.clearContents();
+
+        this.pixelRepresentation.refresh( sceneModel.stateBiasProperty.value );
+
       }
       else {
 
