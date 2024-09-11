@@ -32,11 +32,14 @@ const TITLE_AND_LABEL_FONT = new PhetFont( 16 );
 const ALPHA = QuantumMeasurementConstants.ALPHA;
 const BETA = QuantumMeasurementConstants.BETA;
 const UP = QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
-const KET = QuantumMeasurementConstants.KET;
 const DOWN = QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER;
+const KET = QuantumMeasurementConstants.KET;
 const BRA_KET_TITLE_STRING = `( ${ALPHA}|${UP}${KET} + <span style="color: magenta;">${BETA}</span>|<span style="color: magenta;">${DOWN}</span>${KET} )`;
+
+// REVIEW TODO: H and T should be variables, see https://github.com/phetsims/quantum-measurement/issues/20
 const P_OF_H = 'P(<b>H</b>)';
 const P_OF_T = 'P(<span style="color: magenta;"><b>T</b></span>)';
+
 const MAGNITUDE_OF_ALPHA_SQUARED = `|${ALPHA}|<sup>2`;
 const MAGNITUDE_OF_BETA_SQUARED = `<span style="color: magenta;">|${BETA}|<sup>2</span>`;
 
@@ -136,6 +139,8 @@ export default class OutcomeProbabilityControl extends VBox {
       const quantumStateReadoutStringProperty = new DerivedProperty(
         [ outcomeProbabilityProperty ],
         outcomeProbability => {
+
+          // TODO: Make sure the values are correct here, see https://github.com/phetsims/quantum-measurement/issues/23
           const alphaValue = Utils.toFixed( Math.sqrt( outcomeProbability ), 3 );
           const betaValue = Utils.toFixed( Math.sqrt( 1 - outcomeProbability ), 3 );
           return `${alphaValue}|${UP}${KET} + <span style="color: magenta;">${betaValue}</span>|<span style="color: magenta;">${DOWN}</span>${KET}`;
