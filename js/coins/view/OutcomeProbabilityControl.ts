@@ -22,25 +22,24 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
+import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 
 type SelfOptions = EmptySelfOptions;
 type OutcomeProbabilityControlOptions = SelfOptions & PickRequired<VBox, 'tandem' | 'visibleProperty'>;
 
 // constants
+const MAGENTA_SPAN = ( text: string ) => `<span style="color: magenta;">${text}</span>`;
 const TITLE_AND_LABEL_FONT = new PhetFont( 16 );
 const ALPHA = QuantumMeasurementConstants.ALPHA;
 const BETA = QuantumMeasurementConstants.BETA;
 const UP = QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
 const DOWN = QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER;
 const KET = QuantumMeasurementConstants.KET;
-const BRA_KET_TITLE_STRING = `( ${ALPHA}|${UP}${KET} + <span style="color: magenta;">${BETA}</span>|<span style="color: magenta;">${DOWN}</span>${KET} )`;
-
-// REVIEW TODO: H and T should be variables, see https://github.com/phetsims/quantum-measurement/issues/20
-const P_OF_H = 'P(<b>H</b>)';
-const P_OF_T = 'P(<span style="color: magenta;"><b>T</b></span>)';
+const BRA_KET_TITLE_STRING = `( ${ALPHA}|${UP}${KET} + ${MAGENTA_SPAN( BETA )}|${MAGENTA_SPAN( DOWN )}${KET} )`;
 
 const MAGNITUDE_OF_ALPHA_SQUARED = `|${ALPHA}|<sup>2`;
-const MAGNITUDE_OF_BETA_SQUARED = `<span style="color: magenta;">|${BETA}|<sup>2</span>`;
+const MAGNITUDE_OF_BETA_SQUARED = MAGENTA_SPAN( `|${BETA}|<sup>2` );
+
 
 export default class OutcomeProbabilityControl extends VBox {
 
@@ -84,40 +83,43 @@ export default class OutcomeProbabilityControl extends VBox {
       }
     } );
 
-    const upperProbabilityControlTitleProperty = new DerivedStringProperty(
-      [
-        QuantumMeasurementStrings.probabilityStringProperty
-      ],
-      probabilityString => {
-
-        // This is only dynamic in the classical case as of this writing, but may change, and it is easier to handle the
-        // classical and quantum cases together.
-        let result: string;
-        if ( systemType === 'classical' ) {
-          result = `${probabilityString} ${P_OF_H}`;
-        }
-        else {
-          result = `${probabilityString} ${P_OF_H} = ${MAGNITUDE_OF_ALPHA_SQUARED}`;
-        }
-        return result;
+    const classicalUpTitleProperty = new DerivedProperty( [
+        QuantumMeasurementStrings.probabilityStringProperty,
+        QuantumMeasurementStrings.probabilityOfValuePatternStringProperty,
+        QuantumMeasurementStrings.classicalUpSymbolStringProperty
+      ], ( probabilityString, probabilityOfValuePatternString, classicalUpSymbolString ) => {
+        const POfV = StringUtils.fillIn( probabilityOfValuePatternString, { value: `<b>${classicalUpSymbolString}</b>` } );
+        return `${probabilityString} ${POfV}`;
       }
     );
-    const lowerProbabilityControlTitleProperty = new DerivedStringProperty(
-      [
-        QuantumMeasurementStrings.probabilityStringProperty
-      ],
-      ( probabilityOfPatternString, tailsString ) => {
 
-        // This is only dynamic in the classical case as of this writing, but may change, and it is easier to handle the
-        // classical and quantum cases together.
-        let result: string;
-        if ( systemType === 'classical' ) {
-          result = `${probabilityOfPatternString} ${P_OF_T}`;
-        }
-        else {
-          result = `${probabilityOfPatternString} ${P_OF_T} = ${MAGNITUDE_OF_BETA_SQUARED}`;
-        }
-        return result;
+    const classicalDownTitleProperty = new DerivedProperty( [
+        QuantumMeasurementStrings.probabilityStringProperty,
+        QuantumMeasurementStrings.probabilityOfValuePatternStringProperty,
+        QuantumMeasurementStrings.classicalDownSymbolStringProperty
+      ], ( probabilityString, probabilityOfValuePatternString, classicalDownSymbolString ) => {
+        const POfV = StringUtils.fillIn( probabilityOfValuePatternString, { value: MAGENTA_SPAN( `<b>${classicalDownSymbolString}</b>` ) } );
+        return `${probabilityString} ${POfV}`;
+      }
+    );
+
+    const quantumUpTitleProperty = new DerivedProperty( [
+        QuantumMeasurementStrings.probabilityStringProperty,
+        QuantumMeasurementStrings.probabilityOfValuePatternStringProperty,
+        QuantumMeasurementStrings.quantumUpSymbolStringProperty
+      ], ( probabilityString, probabilityOfValuePatternString, quantumUpSymbolString ) => {
+        const POfV = StringUtils.fillIn( probabilityOfValuePatternString, { value: `<b>${quantumUpSymbolString}</b>` } );
+        return `${probabilityString} ${POfV} = ${MAGNITUDE_OF_ALPHA_SQUARED}`;
+      }
+    );
+
+    const quantumDownTitleProperty = new DerivedProperty( [
+        QuantumMeasurementStrings.probabilityStringProperty,
+        QuantumMeasurementStrings.probabilityOfValuePatternStringProperty,
+        QuantumMeasurementStrings.quantumDownSymbolStringProperty
+      ], ( probabilityString, probabilityOfValuePatternString, quantumDownSymbolString ) => {
+        const POfV = StringUtils.fillIn( probabilityOfValuePatternString, { value: MAGENTA_SPAN( `<b>${quantumDownSymbolString}</b>` ) } );
+        return `${probabilityString} ${POfV} = ${MAGNITUDE_OF_BETA_SQUARED}`;
       }
     );
 
@@ -125,8 +127,8 @@ export default class OutcomeProbabilityControl extends VBox {
     if ( systemType === 'classical' ) {
       children = [
         title,
-        new ProbabilityValueControl( upperProbabilityControlTitleProperty, outcomeProbabilityProperty ),
-        new ProbabilityValueControl( lowerProbabilityControlTitleProperty, inverseOutcomeProbabilityProperty )
+        new ProbabilityValueControl( classicalUpTitleProperty, outcomeProbabilityProperty ),
+        new ProbabilityValueControl( classicalDownTitleProperty, inverseOutcomeProbabilityProperty )
       ];
     }
     else {
@@ -139,7 +141,7 @@ export default class OutcomeProbabilityControl extends VBox {
           // TODO: Make sure the values are correct here, see https://github.com/phetsims/quantum-measurement/issues/23
           const alphaValue = Utils.toFixed( Math.sqrt( outcomeProbability ), 3 );
           const betaValue = Utils.toFixed( Math.sqrt( 1 - outcomeProbability ), 3 );
-          return `${alphaValue}|${UP}${KET} + <span style="color: magenta;">${betaValue}</span>|<span style="color: magenta;">${DOWN}</span>${KET}`;
+          return `${alphaValue}|${UP}${KET} + ${MAGENTA_SPAN( betaValue )}|${MAGENTA_SPAN( DOWN )}${KET}`;
         }
       );
 
@@ -148,8 +150,8 @@ export default class OutcomeProbabilityControl extends VBox {
       children = [
         title,
         quantumReadout,
-        new ProbabilityValueControl( upperProbabilityControlTitleProperty, outcomeProbabilityProperty ),
-        new ProbabilityValueControl( lowerProbabilityControlTitleProperty, inverseOutcomeProbabilityProperty )
+        new ProbabilityValueControl( quantumUpTitleProperty, outcomeProbabilityProperty ),
+        new ProbabilityValueControl( quantumDownTitleProperty, inverseOutcomeProbabilityProperty )
       ];
     }
 

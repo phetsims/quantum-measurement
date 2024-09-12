@@ -65,6 +65,21 @@
   "probability": {
     "value": "Probability"
   },
+  "probabilityOfValuePattern": {
+    "value": "P({{value}})"
+  },
+  "classicalUpSymbol": {
+    "value": "H"
+  },
+  "classicalDownSymbol": {
+      "value": "T"
+  },
+  "quantumUpSymbol": {
+    "value": "\u2b61"
+  },
+  "quantumDownSymbol": {
+      "value": "\u2b63"
+  },
   "quantumCoinQuoted": {
     "value": "Quantum \"Coin\""
   },
