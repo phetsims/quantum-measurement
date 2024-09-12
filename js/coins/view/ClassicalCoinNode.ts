@@ -15,6 +15,7 @@ import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 
 const HEADS_FILL = new Color( '#EFE4B0' );
 const HEADS_STROKE_AND_LETTER_COLOR = Color.BLACK;
@@ -29,7 +30,7 @@ export default class ClassicalCoinNode extends CoinNode {
     const headsOptions: CoinFaceParameters = {
       fill: HEADS_FILL,
       stroke: HEADS_STROKE_AND_LETTER_COLOR,
-      content: new Text( 'H', {
+      content: new Text( QuantumMeasurementStrings.classicalUpSymbolStringProperty, {
         font: LETTER_LABEL_FONT,
         fill: HEADS_STROKE_AND_LETTER_COLOR
       } )
@@ -38,7 +39,7 @@ export default class ClassicalCoinNode extends CoinNode {
     const tailsOptions: CoinFaceParameters = {
       fill: TAILS_FILL,
       stroke: TAILS_STROKE_AND_LETTER_COLOR,
-      content: new Text( 'T', {
+      content: new Text( QuantumMeasurementStrings.classicalDownSymbolStringProperty, {
         font: LETTER_LABEL_FONT,
         fill: TAILS_STROKE_AND_LETTER_COLOR
       } )
