@@ -23,7 +23,7 @@ import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
 const SCENE_POSITION = new Vector2( 0, 90 ); // empirically determined to look decent
 const SYSTEM_TYPE_TO_STRING_MAP = new Map<SystemType, LocalizedStringProperty>(
   [
-    [ 'classical', QuantumMeasurementStrings.physicalCoinStringProperty ],
+    [ 'classical', QuantumMeasurementStrings.classicalCoinStringProperty ],
     [ 'quantum', QuantumMeasurementStrings.quantumCoinQuotedStringProperty ]
   ]
 );
@@ -33,7 +33,7 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
   private readonly model: CoinsModel;
 
   // the two scene views for the experiments
-  private readonly physicalCoinsExperimentSceneView: CoinsExperimentSceneView;
+  private readonly classicalCoinsExperimentSceneView: CoinsExperimentSceneView;
   private readonly quantumCoinsExperimentSceneView: CoinsExperimentSceneView;
 
   public constructor( model: CoinsModel, tandem: Tandem ) {
@@ -87,11 +87,11 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
     this.addChild( experimentTypeRadioButtonGroup );
 
     // Add the views for the two scenes that can be shown on this screen.
-    this.physicalCoinsExperimentSceneView = new CoinsExperimentSceneView( model.physicalCoinExperimentSceneModel, {
+    this.classicalCoinsExperimentSceneView = new CoinsExperimentSceneView( model.classicalCoinExperimentSceneModel, {
       translation: SCENE_POSITION,
-      tandem: tandem.createTandem( 'physicalCoinsExperimentSceneView' )
+      tandem: tandem.createTandem( 'classicalCoinsExperimentSceneView' )
     } );
-    this.addChild( this.physicalCoinsExperimentSceneView );
+    this.addChild( this.classicalCoinsExperimentSceneView );
     this.quantumCoinsExperimentSceneView = new CoinsExperimentSceneView( model.quantumCoinExperimentSceneModel, {
       translation: SCENE_POSITION,
       tandem: tandem.createTandem( 'quantumCoinsExperimentSceneView' )
@@ -106,7 +106,7 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
 
   public override reset(): void {
     this.model.reset();
-    this.physicalCoinsExperimentSceneView.reset();
+    this.classicalCoinsExperimentSceneView.reset();
     this.quantumCoinsExperimentSceneView.reset();
     super.reset();
   }

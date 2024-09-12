@@ -1,7 +1,7 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * Main model class for the "Physical Coin" and "Quantum Coin" scenes on the "Coins" screen. This manages the
+ * Main model class for the "Classical Coin" and "Quantum Coin" scenes on the "Coins" screen. This manages the
  * preparation and measurement phases for the experiments.
  *
  * @author John Blanco, PhET Interactive Simulations

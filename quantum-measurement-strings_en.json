@@ -56,8 +56,8 @@
   "observe": {
     "value": "Observe"
   },
-  "physicalCoin": {
-    "value": "Physical Coin"
+  "classicalCoin": {
+    "value": "Classical Coin"
   },
   "preparedState": {
     "value": "Prepared State"
