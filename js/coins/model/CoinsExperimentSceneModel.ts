@@ -54,7 +54,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
   public constructor( providedOptions: CoinExperimentSceneModelOptions ) {
 
     const options = optionize<CoinExperimentSceneModelOptions, SelfOptions, PhetioObjectOptions>()( {
-      systemType: 'physical',
+      systemType: 'classical',
       initiallyActive: false,
       initialBias: 0.5
     }, providedOptions );
@@ -74,7 +74,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
       tandem: options.tandem.createTandem( 'stateBiasProperty' )
     } );
     const singleCoinTandem = options.tandem.createTandem( 'singleCoin' );
-    if ( options.systemType === 'physical' ) {
+    if ( options.systemType === 'classical' ) {
       this.initialCoinStateProperty = new Property<ClassicalCoinStates>( 'heads', {
         tandem: options.tandem.createTandem( 'initialCoinStateProperty' ),
         phetioValueType: StringUnionIO( ClassicalCoinStateValues ),

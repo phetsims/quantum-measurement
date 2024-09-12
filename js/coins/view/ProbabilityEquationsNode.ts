@@ -24,8 +24,8 @@ export default class ProbabilityEquationsNode extends RichText {
 
   public constructor( biasProperty: TReadOnlyProperty<number>, systemType: SystemType ) {
 
-    const upperFunctionParameter = systemType === 'physical' ? 'H' : UP_ARROW_CHARACTER;
-    const lowerFunctionParameter = systemType === 'physical' ? 'T' : DOWN_ARROW_CHARACTER;
+    const upperFunctionParameter = systemType === 'classical' ? 'H' : UP_ARROW_CHARACTER;
+    const lowerFunctionParameter = systemType === 'classical' ? 'T' : DOWN_ARROW_CHARACTER;
 
     const equationsStringProperty = new DerivedProperty( [ biasProperty ], bias => {
       const upperEquation = `P(<b>${upperFunctionParameter}</b>) = ${Utils.toFixed( bias, 2 )}`;

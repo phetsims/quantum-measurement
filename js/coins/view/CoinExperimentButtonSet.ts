@@ -65,7 +65,7 @@ export default class CoinExperimentButtonSet extends VBox {
         if ( experimentState === 'measuredAndRevealed' ) {
           labelString = hideString;
         }
-        else if ( systemType === 'physical' ) {
+        else if ( systemType === 'classical' ) {
           labelString = revealString;
         }
         else {
@@ -92,7 +92,7 @@ export default class CoinExperimentButtonSet extends VBox {
     );
 
     const flipOrReprepareButton = new TextPushButton(
-      systemType === 'physical' ?
+      systemType === 'classical' ?
       QuantumMeasurementStrings.flipStringProperty :
       QuantumMeasurementStrings.reprepareStringProperty,
       combineOptions<TextPushButtonOptions>( commonButtonOptions, {
@@ -102,7 +102,7 @@ export default class CoinExperimentButtonSet extends VBox {
     );
 
     const flipOrReprepareAndRevealButton = new TextPushButton(
-      systemType === 'physical' ?
+      systemType === 'classical' ?
       QuantumMeasurementStrings.flipAndRevealStringProperty :
       QuantumMeasurementStrings.reprepareAndRevealStringProperty,
       combineOptions<TextPushButtonOptions>( commonButtonOptions, {

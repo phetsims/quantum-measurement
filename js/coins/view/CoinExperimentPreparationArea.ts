@@ -43,11 +43,11 @@ export default class CoinExperimentPreparationArea extends VBox {
         let returnText;
         if ( preparingExperiment ) {
           returnText = StringUtils.fillIn( itemToPreparePattern, {
-            item: sceneModel.systemType === 'physical' ? coinString : quantumCoinString
+            item: sceneModel.systemType === 'classical' ? coinString : quantumCoinString
           } );
         }
         else {
-          returnText = sceneModel.systemType === 'physical' ? coinString : preparedStateString;
+          returnText = sceneModel.systemType === 'classical' ? coinString : preparedStateString;
         }
         return returnText;
       }

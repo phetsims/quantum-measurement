@@ -39,14 +39,14 @@ export default class CoinsModel implements TModel {
       tandem: providedOptions.tandem.createTandem( 'quantumCoinExperimentSceneModel' )
     } );
 
-    this.experimentTypeProperty = new Property<SystemType>( 'physical', {
+    this.experimentTypeProperty = new Property<SystemType>( 'classical', {
       tandem: providedOptions.tandem.createTandem( 'experimentTypeProperty' ),
       phetioValueType: StringUnionIO( SystemTypeValues )
     } );
 
     // Update the active scene model based on the experiment type.
     this.experimentTypeProperty.link( experimentType => {
-      this.physicalCoinExperimentSceneModel.activeProperty.value = experimentType === 'physical';
+      this.physicalCoinExperimentSceneModel.activeProperty.value = experimentType === 'classical';
       this.quantumCoinExperimentSceneModel.activeProperty.value = experimentType === 'quantum';
     } );
   }

@@ -72,13 +72,13 @@ export default class CoinMeasurementHistogram extends Node {
 
     // Create the labels for the X axis.
     const xAxisLeftLabel = new Text(
-      systemType === 'physical' ? 'H' : QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER,
+      systemType === 'classical' ? 'H' : QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER,
       {
         font: LABEL_FONT
       }
     );
     const xAxisRightLabel = new Text(
-      systemType === 'physical' ? 'T' : QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER,
+      systemType === 'classical' ? 'T' : QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER,
       {
         font: LABEL_FONT,
         fill: Color.MAGENTA
@@ -96,7 +96,7 @@ export default class CoinMeasurementHistogram extends Node {
       [ coinSet.numberOfActiveSystemsProperty, coinSet.measurementStateProperty ],
       ( numberOfActiveSystems, measurementState ) => {
 
-        const testValue = systemType === 'physical' ? 'heads' : 'up';
+        const testValue = systemType === 'classical' ? 'heads' : 'up';
         let total = 0;
 
         if ( measurementState === 'measuredAndRevealed' ) {
@@ -115,7 +115,7 @@ export default class CoinMeasurementHistogram extends Node {
       [ coinSet.numberOfActiveSystemsProperty, coinSet.measurementStateProperty ],
       ( numberOfActiveSystems, measurementState ) => {
 
-        const testValue = systemType === 'physical' ? 'tails' : 'down';
+        const testValue = systemType === 'classical' ? 'tails' : 'down';
         let total = 0;
 
         if ( measurementState === 'measuredAndRevealed' ) {

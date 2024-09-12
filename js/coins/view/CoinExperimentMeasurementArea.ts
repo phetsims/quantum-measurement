@@ -186,7 +186,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
     } );
 
     // Create the pixel ratio image
-    const initialStateBias = sceneModel.systemType === 'physical' ?
+    const initialStateBias = sceneModel.systemType === 'classical' ?
                              sceneModel.initialCoinStateProperty.value === 'heads' ? 1 : 0 :
                              sceneModel.initialCoinStateProperty.value === 'up' ? 1 : 0;
 
@@ -314,7 +314,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
       clearSingleCoinTestBox();
 
       // Create the coin that will travel from the preparation area into this measurement area.
-      if ( sceneModel.systemType === 'physical' ) {
+      if ( sceneModel.systemType === 'classical' ) {
         singleCoinNode = new ClassicalCoinNode(
           sceneModel.singleCoin.measuredValueProperty as TReadOnlyProperty<ClassicalCoinStates>,
           InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS,
@@ -590,7 +590,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
     // travel-from-the-prep-area animation for the quantum coin.
     // REVIEW: Want to change this snake case description for the actual name? https://github.com/phetsims/quantum-measurement/issues/20
     sceneModel.singleCoin.measurementStateProperty.lazyLink( singleCoinMeasurementState => {
-      if ( sceneModel.systemType === 'physical' ) {
+      if ( sceneModel.systemType === 'classical' ) {
 
         if ( singleCoinMeasurementState === 'preparingToBeMeasured' ) {
 

@@ -50,7 +50,7 @@ export default class OutcomeProbabilityControl extends VBox {
                       providedOptions: OutcomeProbabilityControlOptions ) {
 
     let title: Node;
-    if ( systemType === 'physical' ) {
+    if ( systemType === 'classical' ) {
       title = new Text( QuantumMeasurementStrings.coinBiasStringProperty, {
         font: TITLE_AND_LABEL_FONT,
         fontWeight: 'bold'
@@ -96,7 +96,7 @@ export default class OutcomeProbabilityControl extends VBox {
         // This is only dynamic in the physical case as of this writing, but may change, and it is easier to handle the
         // physical and quantum cases together.
         let result: string;
-        if ( systemType === 'physical' ) {
+        if ( systemType === 'classical' ) {
           result = `${StringUtils.fillIn( probabilityOfPatternString, { outcome: headsString } )} ${P_OF_H}`;
         }
         else {
@@ -115,7 +115,7 @@ export default class OutcomeProbabilityControl extends VBox {
         // This is only dynamic in the physical case as of this writing, but may change, and it is easier to handle the
         // physical and quantum cases together.
         let result: string;
-        if ( systemType === 'physical' ) {
+        if ( systemType === 'classical' ) {
           result = `${StringUtils.fillIn( probabilityOfPatternString, { outcome: tailsString } )} ${P_OF_T}`;
         }
         else {
@@ -126,7 +126,7 @@ export default class OutcomeProbabilityControl extends VBox {
     );
 
     let children: Node[];
-    if ( systemType === 'physical' ) {
+    if ( systemType === 'classical' ) {
       children = [
         title,
         new ProbabilityValueControl( upperProbabilityControlTitleProperty, outcomeProbabilityProperty ),

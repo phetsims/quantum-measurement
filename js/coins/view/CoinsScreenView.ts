@@ -23,7 +23,7 @@ import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
 const SCENE_POSITION = new Vector2( 0, 90 ); // empirically determined to look decent
 const SYSTEM_TYPE_TO_STRING_MAP = new Map<SystemType, LocalizedStringProperty>(
   [
-    [ 'physical', QuantumMeasurementStrings.physicalCoinStringProperty ],
+    [ 'classical', QuantumMeasurementStrings.physicalCoinStringProperty ],
     [ 'quantum', QuantumMeasurementStrings.quantumCoinQuotedStringProperty ]
   ]
 );
