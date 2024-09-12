@@ -48,7 +48,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
 
     const titleStringProperty = systemType === 'physical' ?
                                 QuantumMeasurementStrings.initialOrientationStringProperty :
-                                QuantumMeasurementStrings.initialStateStringProperty;
+                                QuantumMeasurementStrings.basisStateStringProperty;
 
     const selectionPanelTitle = new Text( titleStringProperty, {
       font: new PhetFont( { size: 18, weight: 'bold' } )
