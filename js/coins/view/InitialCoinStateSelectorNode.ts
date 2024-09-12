@@ -15,7 +15,7 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { PhysicalCoinStates, PhysicalCoinStateValues } from '../model/PhysicalCoinStates.js';
-import PhysicalCoinNode from './PhysicalCoinNode.js';
+import ClassicalCoinNode from './ClassicalCoinNode.js';
 import Property from '../../../../axon/js/Property.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import RectangularRadioButtonGroup, { RectangularRadioButtonGroupOptions } from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
@@ -68,7 +68,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
     let initialOrientationRadioButtonGroup;
     if ( systemType === 'physical' ) {
       const initialCoinStateItems = PhysicalCoinStateValues.map( stateValue => ( {
-        createNode: () => new PhysicalCoinNode(
+        createNode: () => new ClassicalCoinNode(
           new Property<PhysicalCoinStates>( stateValue ),
           RADIO_BUTTON_COIN_NODE_RADIUS,
           Tandem.OPT_OUT
@@ -116,7 +116,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
     // Add the Node that will indicate the initial orientation of the coin.
     let orientationIndicatorCoinNode;
     if ( systemType === 'physical' ) {
-      orientationIndicatorCoinNode = new PhysicalCoinNode(
+      orientationIndicatorCoinNode = new ClassicalCoinNode(
         initialCoinStateProperty as Property<PhysicalCoinStates>,
         INDICATOR_COIN_NODE_RADIUS,
         tandem.createTandem( 'coinIndicatorNode' )

@@ -22,7 +22,7 @@ const TAILS_FILL = new Color( '#EFE4B0' );
 const TAILS_STROKE_AND_LETTER_COLOR = Color.MAGENTA;
 const LETTER_LABEL_FONT = new PhetFont( { size: 40, weight: 'bold' } );
 
-export default class PhysicalCoinNode extends CoinNode {
+export default class ClassicalCoinNode extends CoinNode {
 
   public constructor( coinStateProperty: TReadOnlyProperty<PhysicalCoinStates>, radius: number, tandem: Tandem ) {
 
@@ -53,4 +53,4 @@ export default class PhysicalCoinNode extends CoinNode {
   }
 }
 
-quantumMeasurement.register( 'PhysicalCoinNode', PhysicalCoinNode );
+quantumMeasurement.register( 'ClassicalCoinNode', ClassicalCoinNode );

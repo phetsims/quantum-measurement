@@ -17,7 +17,7 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import SceneSectionHeader from './SceneSectionHeader.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import PhysicalCoinNode from './PhysicalCoinNode.js';
+import ClassicalCoinNode from './ClassicalCoinNode.js';
 import { PhysicalCoinStates } from '../model/PhysicalCoinStates.js';
 import QuantumCoinNode from './QuantumCoinNode.js';
 import CoinNode from './CoinNode.js';
@@ -315,7 +315,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
 
       // Create the coin that will travel from the preparation area into this measurement area.
       if ( sceneModel.systemType === 'physical' ) {
-        singleCoinNode = new PhysicalCoinNode(
+        singleCoinNode = new ClassicalCoinNode(
           sceneModel.singleCoin.measuredValueProperty as TReadOnlyProperty<PhysicalCoinStates>,
           InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS,
           Tandem.OPT_OUT
