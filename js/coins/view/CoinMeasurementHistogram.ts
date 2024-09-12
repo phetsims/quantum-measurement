@@ -3,7 +3,7 @@
 
 /**
  * CoinMeasurementHistogram displays a histogram with two bars, one for the quantity of each of the two possible
- * outcomes for an experiment where multiple physical or quantum coins are flipped.
+ * outcomes for an experiment where multiple classical or quantum coins are flipped.
  *
  * @author John Blanco, PhET Interactive Simulations
  */

@@ -1,7 +1,7 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * PhysicalCoinStates is a union type the represents the possible states for a physical coin.
+ * ClassicalCoinStates is a union type the represents the possible states for a classical (e.g. non-quantum) coin.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */

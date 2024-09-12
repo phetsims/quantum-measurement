@@ -91,7 +91,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
   }
 
   /**
-   * Prepare this system to be measured. This is analogous to initiating the flipping of a physical coin or setting up
+   * Prepare this system to be measured. This is analogous to initiating the flipping of a classical coin or setting up
    * a quantum system into a superposed state. After a timeout, this system will transition to a state where it is
    * ready to be measured.
    */

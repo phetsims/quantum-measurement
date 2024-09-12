@@ -1,7 +1,7 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * CoinsExperimentSceneView presents the views for the physical or the quantum scene on the "Coins" screen depending
+ * CoinsExperimentSceneView presents the views for the classical or the quantum scene on the "Coins" screen depending
  * upon how it is configured.
  *
  * @author John Blanco, PhET Interactive Simulations

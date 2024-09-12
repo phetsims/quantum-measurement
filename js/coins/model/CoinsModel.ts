@@ -21,17 +21,17 @@ type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOpt
 
 export default class CoinsModel implements TModel {
 
-  // The type of experiment being prepared and measured, either physical or quantum.
+  // The type of experiment being prepared and measured, either classical or quantum.
   public readonly experimentTypeProperty: Property<SystemType>;
 
-  // This screen has two scenes, the "Physical Coin" scene and the "Quantum Coin" scene. These are the models for each.
-  public readonly physicalCoinExperimentSceneModel: CoinsExperimentSceneModel;
+  // This screen has two scenes, the "Classical Coin" scene and the "Quantum Coin" scene. These are the models for each.
+  public readonly classicalCoinExperimentSceneModel: CoinsExperimentSceneModel;
   public readonly quantumCoinExperimentSceneModel: CoinsExperimentSceneModel;
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
-    this.physicalCoinExperimentSceneModel = new CoinsExperimentSceneModel( {
-      tandem: providedOptions.tandem.createTandem( 'physicalCoinExperimentSceneModel' )
+    this.classicalCoinExperimentSceneModel = new CoinsExperimentSceneModel( {
+      tandem: providedOptions.tandem.createTandem( 'classicalCoinExperimentSceneModel' )
     } );
     this.quantumCoinExperimentSceneModel = new CoinsExperimentSceneModel( {
       systemType: 'quantum',
@@ -46,7 +46,7 @@ export default class CoinsModel implements TModel {
 
     // Update the active scene model based on the experiment type.
     this.experimentTypeProperty.link( experimentType => {
-      this.physicalCoinExperimentSceneModel.activeProperty.value = experimentType === 'classical';
+      this.classicalCoinExperimentSceneModel.activeProperty.value = experimentType === 'classical';
       this.quantumCoinExperimentSceneModel.activeProperty.value = experimentType === 'quantum';
     } );
   }
@@ -55,7 +55,7 @@ export default class CoinsModel implements TModel {
    * Resets the model.
    */
   public reset(): void {
-    this.physicalCoinExperimentSceneModel.reset();
+    this.classicalCoinExperimentSceneModel.reset();
     this.quantumCoinExperimentSceneModel.reset();
     this.experimentTypeProperty.reset();
   }

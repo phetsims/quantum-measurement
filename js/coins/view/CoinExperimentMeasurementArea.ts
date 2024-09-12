@@ -2,8 +2,8 @@
 
 /**
  * CoinExperimentMeasurementArea is a composite UI component that presents two areas - one for a single coin and one for
- * multiple coins - where uses can flip and reveal coins. Depending on how this is parameterized, the coins may either
- * be physical or "quantum coins".
+ * multiple coins - where users can flip and reveal coins. Depending on how this is parameterized, the coins may either
+ * be classical or quantum coins.
  *
  * REVIEW TODO: Move some of the animation logic into its own subclass https://github.com/phetsims/quantum-measurement/issues/20
  *
@@ -586,8 +586,8 @@ export default class CoinExperimentMeasurementArea extends VBox {
       }
     } );
 
-    // Listen to the state of the coin and animate a flipping motion for the physical coin or a
-    // travel-from-the-prep-area animation for the quantum coin.
+    // Listen to the state of the coin and animate a flipping motion for the classical coin or a travel-from-the-prep-
+    // area animation for the quantum coin.
     // REVIEW: Want to change this snake case description for the actual name? https://github.com/phetsims/quantum-measurement/issues/20
     sceneModel.singleCoin.measurementStateProperty.lazyLink( singleCoinMeasurementState => {
       if ( sceneModel.systemType === 'classical' ) {

@@ -2,8 +2,8 @@
 
 
 /**
- * ProbabilityEquationsNode shows the probability settings (aka the bias) for the physical or quantum coins depending on
- * how it is configured.
+ * ProbabilityEquationsNode shows the probability settings (aka the bias) for the classical or quantum coins depending
+ * on how it is configured.
  *
  * @author John Blanco, PhET Interactive Simulations
  */

@@ -32,7 +32,7 @@ type StringsType = {
   'multipleCoinMeasurementsStringProperty': LocalizedStringProperty;
   'newCoinStringProperty': LocalizedStringProperty;
   'observeStringProperty': LocalizedStringProperty;
-  'physicalCoinStringProperty': LocalizedStringProperty;
+  'classicalCoinStringProperty': LocalizedStringProperty;
   'preparedStateStringProperty': LocalizedStringProperty;
   'probabilityStringProperty': LocalizedStringProperty;
   'quantumCoinQuotedStringProperty': LocalizedStringProperty;
