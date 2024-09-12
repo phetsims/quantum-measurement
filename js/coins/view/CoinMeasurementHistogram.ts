@@ -13,7 +13,7 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
-import { PhysicalCoinStates } from '../model/PhysicalCoinStates.js';
+import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
 import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
@@ -45,7 +45,7 @@ const NUMBER_DISPLAY_OPTIONS: NumberDisplayOptions = {
 
 export default class CoinMeasurementHistogram extends Node {
 
-  public constructor( coinSet: TwoStateSystemSet<PhysicalCoinStates | QuantumCoinStates>,
+  public constructor( coinSet: TwoStateSystemSet<ClassicalCoinStates | QuantumCoinStates>,
                       systemType: SystemType,
                       providedOptions?: CoinMeasurementHistogramOptions ) {
 

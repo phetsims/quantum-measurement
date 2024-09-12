@@ -6,5 +6,5 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-export const PhysicalCoinStateValues = [ 'heads', 'tails' ] as const;
-export type PhysicalCoinStates = ( typeof PhysicalCoinStateValues )[number];
+export const ClassicalCoinStateValues = [ 'heads', 'tails' ] as const;
+export type ClassicalCoinStates = ( typeof ClassicalCoinStateValues )[number];

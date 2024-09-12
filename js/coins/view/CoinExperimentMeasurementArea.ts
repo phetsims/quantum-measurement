@@ -18,7 +18,7 @@ import SceneSectionHeader from './SceneSectionHeader.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ClassicalCoinNode from './ClassicalCoinNode.js';
-import { PhysicalCoinStates } from '../model/PhysicalCoinStates.js';
+import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
 import QuantumCoinNode from './QuantumCoinNode.js';
 import CoinNode from './CoinNode.js';
 import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
@@ -316,7 +316,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
       // Create the coin that will travel from the preparation area into this measurement area.
       if ( sceneModel.systemType === 'physical' ) {
         singleCoinNode = new ClassicalCoinNode(
-          sceneModel.singleCoin.measuredValueProperty as TReadOnlyProperty<PhysicalCoinStates>,
+          sceneModel.singleCoin.measuredValueProperty as TReadOnlyProperty<ClassicalCoinStates>,
           InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS,
           Tandem.OPT_OUT
         );

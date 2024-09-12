@@ -14,7 +14,7 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
-import { PhysicalCoinStates, PhysicalCoinStateValues } from '../model/PhysicalCoinStates.js';
+import { ClassicalCoinStates, ClassicalCoinStateValues } from '../model/ClassicalCoinStates.js';
 import ClassicalCoinNode from './ClassicalCoinNode.js';
 import Property from '../../../../axon/js/Property.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -32,7 +32,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
 
   public readonly orientationIndicatorCoinNode: CoinNode;
 
-  public constructor( initialCoinStateProperty: TReadOnlyProperty<PhysicalCoinStates> | TReadOnlyProperty<QuantumCoinStates>,
+  public constructor( initialCoinStateProperty: TReadOnlyProperty<ClassicalCoinStates> | TReadOnlyProperty<QuantumCoinStates>,
                       stateBiasProperty: TReadOnlyProperty<number>,
                       preparingExperimentProperty: TReadOnlyProperty<boolean>,
                       systemType: SystemType,
@@ -40,7 +40,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
 
     assert && assert(
       systemType === 'physical' &&
-      PhysicalCoinStateValues.includes( initialCoinStateProperty.value as PhysicalCoinStates ) ||
+      ClassicalCoinStateValues.includes( initialCoinStateProperty.value as ClassicalCoinStates ) ||
       systemType === 'quantum' &&
       QuantumCoinStateValues.includes( initialCoinStateProperty.value as QuantumCoinStates ),
       'the specified systemType does not match with initialCoinStateProperty'
@@ -67,17 +67,17 @@ export default class InitialCoinStateSelectorNode extends VBox {
 
     let initialOrientationRadioButtonGroup;
     if ( systemType === 'physical' ) {
-      const initialCoinStateItems = PhysicalCoinStateValues.map( stateValue => ( {
+      const initialCoinStateItems = ClassicalCoinStateValues.map( stateValue => ( {
         createNode: () => new ClassicalCoinNode(
-          new Property<PhysicalCoinStates>( stateValue ),
+          new Property<ClassicalCoinStates>( stateValue ),
           RADIO_BUTTON_COIN_NODE_RADIUS,
           Tandem.OPT_OUT
         ),
         value: stateValue,
         tandemName: `${stateValue.toLowerCase()}RadioButton`
       } ) );
-      initialOrientationRadioButtonGroup = new RectangularRadioButtonGroup<PhysicalCoinStates>(
-        initialCoinStateProperty as Property<PhysicalCoinStates>,
+      initialOrientationRadioButtonGroup = new RectangularRadioButtonGroup<ClassicalCoinStates>(
+        initialCoinStateProperty as Property<ClassicalCoinStates>,
         initialCoinStateItems,
         radioButtonGroupOptions
       );
@@ -117,7 +117,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
     let orientationIndicatorCoinNode;
     if ( systemType === 'physical' ) {
       orientationIndicatorCoinNode = new ClassicalCoinNode(
-        initialCoinStateProperty as Property<PhysicalCoinStates>,
+        initialCoinStateProperty as Property<ClassicalCoinStates>,
         INDICATOR_COIN_NODE_RADIUS,
         tandem.createTandem( 'coinIndicatorNode' )
       );

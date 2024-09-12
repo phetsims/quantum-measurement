@@ -11,7 +11,7 @@ import { Color, Text } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import CoinNode, { CoinFaceParameters } from './CoinNode.js';
-import { PhysicalCoinStates } from '../model/PhysicalCoinStates.js';
+import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
@@ -24,7 +24,7 @@ const LETTER_LABEL_FONT = new PhetFont( { size: 40, weight: 'bold' } );
 
 export default class ClassicalCoinNode extends CoinNode {
 
-  public constructor( coinStateProperty: TReadOnlyProperty<PhysicalCoinStates>, radius: number, tandem: Tandem ) {
+  public constructor( coinStateProperty: TReadOnlyProperty<ClassicalCoinStates>, radius: number, tandem: Tandem ) {
 
     const headsOptions: CoinFaceParameters = {
       fill: HEADS_FILL,

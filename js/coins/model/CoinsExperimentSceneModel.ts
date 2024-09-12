@@ -14,7 +14,7 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import Property from '../../../../axon/js/Property.js';
 import TwoStateSystem from '../../common/model/TwoStateSystem.js';
-import { PhysicalCoinStates, PhysicalCoinStateValues } from './PhysicalCoinStates.js';
+import { ClassicalCoinStates, ClassicalCoinStateValues } from './ClassicalCoinStates.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import { QuantumCoinStates, QuantumCoinStateValues } from './QuantumCoinStates.js';
 import { SystemType } from '../../common/model/SystemType.js';
@@ -41,12 +41,12 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
   public readonly preparingExperimentProperty: BooleanProperty;
 
   // The coins that are flipped/prepared and then measured during the experiment.
-  public readonly singleCoin: TwoStateSystem<PhysicalCoinStates> | TwoStateSystem<QuantumCoinStates>;
+  public readonly singleCoin: TwoStateSystem<ClassicalCoinStates> | TwoStateSystem<QuantumCoinStates>;
 
-  public readonly coinSet: TwoStateSystemSet<PhysicalCoinStates | QuantumCoinStates>;
+  public readonly coinSet: TwoStateSystemSet<ClassicalCoinStates | QuantumCoinStates>;
 
   // The initial state of the coin(s) before any flipping or other experiment preparation occurs.
-  public readonly initialCoinStateProperty: Property<PhysicalCoinStates> | Property<QuantumCoinStates>;
+  public readonly initialCoinStateProperty: Property<ClassicalCoinStates> | Property<QuantumCoinStates>;
 
   // The bias towards one outcome or another in the initially prepared state, from 0 to 1.
   public readonly stateBiasProperty: NumberProperty;
@@ -75,19 +75,19 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
     } );
     const singleCoinTandem = options.tandem.createTandem( 'singleCoin' );
     if ( options.systemType === 'physical' ) {
-      this.initialCoinStateProperty = new Property<PhysicalCoinStates>( 'heads', {
+      this.initialCoinStateProperty = new Property<ClassicalCoinStates>( 'heads', {
         tandem: options.tandem.createTandem( 'initialCoinStateProperty' ),
-        phetioValueType: StringUnionIO( PhysicalCoinStateValues ),
-        validValues: PhysicalCoinStateValues
+        phetioValueType: StringUnionIO( ClassicalCoinStateValues ),
+        validValues: ClassicalCoinStateValues
       } );
-      this.singleCoin = new TwoStateSystem<PhysicalCoinStates>(
-        PhysicalCoinStateValues,
+      this.singleCoin = new TwoStateSystem<ClassicalCoinStates>(
+        ClassicalCoinStateValues,
         'heads',
         this.stateBiasProperty,
         { tandem: singleCoinTandem }
       );
-      this.coinSet = new TwoStateSystemSet<PhysicalCoinStates>(
-        PhysicalCoinStateValues,
+      this.coinSet = new TwoStateSystemSet<ClassicalCoinStates>(
+        ClassicalCoinStateValues,
         'heads',
         this.stateBiasProperty,
         { tandem: singleCoinTandem }
