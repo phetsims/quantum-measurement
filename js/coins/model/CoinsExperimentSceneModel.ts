@@ -34,7 +34,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
   // whether this scene is active, which is mostly about whether it is shown in the view
   public readonly activeProperty: BooleanProperty;
 
-  // The type of system - physical or quantum - that is being modeled in this scene.
+  // The type of system - classical or quantum - that is being modeled in this scene.
   public readonly systemType: SystemType;
 
   // This BooleanProperty is used to control whether the experiment is being prepared (true) or measured (false).
@@ -141,7 +141,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
   }
 
   /**
-   * Prepare the single coin for measurement. For the physical coin, this is essentially starting to flip it.
+   * Prepare the single coin for measurement. For the classical coin, this is essentially starting to flip it.
    */
   public prepareSingleCoinExperiment( revealWhenComplete = false ): void {
     this.singleCoin.prepare( revealWhenComplete );

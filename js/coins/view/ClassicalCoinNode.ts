@@ -1,8 +1,8 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * PhysicalCoinNode portrays a single physical coin in the view, allowing users to see its orientation, e.g. heads up or
- * tails up.
+ * ClassicalCoinNode portrays a single classical coin in the view, allowing users to see its orientation, e.g. heads up
+ * or tails up.
  *
  * @author John Blanco, PhET Interactive Simulations
  */

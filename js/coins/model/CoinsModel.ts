@@ -21,7 +21,7 @@ type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOpt
 
 export default class CoinsModel implements TModel {
 
-  // The type of experiment being prepared and measured, either physical or quantum.
+  // The type of experiment being prepared and measured, either classical or quantum.
   public readonly experimentTypeProperty: Property<SystemType>;
 
   // This screen has two scenes, the "Physical Coin" scene and the "Quantum Coin" scene. These are the models for each.

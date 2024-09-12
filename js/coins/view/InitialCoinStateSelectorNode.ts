@@ -2,7 +2,7 @@
 
 
 /**
- * InitialCoinStateSelectorNode is a UI component that enables the user to select the initial state of a physical or
+ * InitialCoinStateSelectorNode is a UI component that enables the user to select the initial state of a classical or
  * quantum coin.
  *
  * @author John Blanco, PhET Interactive Simulations

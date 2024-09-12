@@ -3,7 +3,7 @@
 
 /**
  * OutcomeProbabilityControl is a UI component that allows the user to manipulate the probability of the outcome for
- * the measurement of a two-state system. For a physical coin, this is essentially setting the bias of the coin. For
+ * the measurement of a two-state system. For a classical coin, this is essentially setting the bias of the coin. For
  * a quantum system, it is more like preparing the state of an experiment.
  *
  * @author John Blanco, PhET Interactive Simulations
@@ -93,8 +93,8 @@ export default class OutcomeProbabilityControl extends VBox {
       ],
       ( probabilityOfPatternString, headsString ) => {
 
-        // This is only dynamic in the physical case as of this writing, but may change, and it is easier to handle the
-        // physical and quantum cases together.
+        // This is only dynamic in the classical case as of this writing, but may change, and it is easier to handle the
+        // classical and quantum cases together.
         let result: string;
         if ( systemType === 'classical' ) {
           result = `${StringUtils.fillIn( probabilityOfPatternString, { outcome: headsString } )} ${P_OF_H}`;
@@ -112,8 +112,8 @@ export default class OutcomeProbabilityControl extends VBox {
       ],
       ( probabilityOfPatternString, tailsString ) => {
 
-        // This is only dynamic in the physical case as of this writing, but may change, and it is easier to handle the
-        // physical and quantum cases together.
+        // This is only dynamic in the classical case as of this writing, but may change, and it is easier to handle the
+        // classical and quantum cases together.
         let result: string;
         if ( systemType === 'classical' ) {
           result = `${StringUtils.fillIn( probabilityOfPatternString, { outcome: tailsString } )} ${P_OF_T}`;

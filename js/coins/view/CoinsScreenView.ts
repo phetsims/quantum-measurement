@@ -45,7 +45,7 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
 
     this.model = model;
 
-    // Add the radio buttons at the top of the screen that will allow users to pick between physical and quantum coins.
+    // Add the radio buttons at the top of the screen that will allow users to pick between classical and quantum coins.
     const experimentTypeItems = SystemTypeValues.map( systemType => ( {
       createNode: () => {
         assert && assert( SYSTEM_TYPE_TO_STRING_MAP.has( systemType ), 'no string Property for system type' );
