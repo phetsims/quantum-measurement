@@ -20,7 +20,6 @@ import ProbabilityValueControl from './ProbabilityValueControl.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 
@@ -87,28 +86,25 @@ export default class OutcomeProbabilityControl extends VBox {
 
     const upperProbabilityControlTitleProperty = new DerivedStringProperty(
       [
-        QuantumMeasurementStrings.probabilityOfPatternStringProperty,
-        QuantumMeasurementStrings.headsStringProperty,
-        QuantumMeasurementStrings.upStringProperty
+        QuantumMeasurementStrings.probabilityStringProperty
       ],
-      ( probabilityOfPatternString, headsString ) => {
+      probabilityString => {
 
         // This is only dynamic in the physical case as of this writing, but may change, and it is easier to handle the
         // physical and quantum cases together.
         let result: string;
         if ( systemType === 'classical' ) {
-          result = `${StringUtils.fillIn( probabilityOfPatternString, { outcome: headsString } )} ${P_OF_H}`;
+          result = `${probabilityString} ${P_OF_H}`;
         }
         else {
-          result = MAGNITUDE_OF_ALPHA_SQUARED;
+          result = `${probabilityString} ${P_OF_H} = ${MAGNITUDE_OF_ALPHA_SQUARED}`;
         }
         return result;
       }
     );
     const lowerProbabilityControlTitleProperty = new DerivedStringProperty(
       [
-        QuantumMeasurementStrings.probabilityOfPatternStringProperty,
-        QuantumMeasurementStrings.tailsStringProperty
+        QuantumMeasurementStrings.probabilityStringProperty
       ],
       ( probabilityOfPatternString, tailsString ) => {
 
@@ -116,10 +112,10 @@ export default class OutcomeProbabilityControl extends VBox {
         // physical and quantum cases together.
         let result: string;
         if ( systemType === 'classical' ) {
-          result = `${StringUtils.fillIn( probabilityOfPatternString, { outcome: tailsString } )} ${P_OF_T}`;
+          result = `${probabilityOfPatternString} ${P_OF_T}`;
         }
         else {
-          result = MAGNITUDE_OF_BETA_SQUARED;
+          result = `${probabilityOfPatternString} ${P_OF_T} = ${MAGNITUDE_OF_BETA_SQUARED}`;
         }
         return result;
       }

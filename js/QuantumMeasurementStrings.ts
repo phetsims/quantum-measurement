@@ -34,7 +34,7 @@ type StringsType = {
   'observeStringProperty': LocalizedStringProperty;
   'physicalCoinStringProperty': LocalizedStringProperty;
   'preparedStateStringProperty': LocalizedStringProperty;
-  'probabilityOfPatternStringProperty': LocalizedStringProperty;
+  'probabilityStringProperty': LocalizedStringProperty;
   'quantumCoinQuotedStringProperty': LocalizedStringProperty;
   'reprepareStringProperty': LocalizedStringProperty;
   'reprepareAndRevealStringProperty': LocalizedStringProperty;
