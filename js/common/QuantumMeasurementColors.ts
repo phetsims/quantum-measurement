@@ -27,7 +27,7 @@ const QuantumMeasurementColors = {
     default: 'cyan'
   } ),
   selectorButtonDeselectedColorProperty: new ProfileColorProperty( quantumMeasurement, 'selectorButtonDeselected', {
-    default: '#222222'
+    default: '#aaa'
   } )
 };
 

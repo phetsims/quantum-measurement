@@ -75,7 +75,8 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
           xMargin: 10,
           baseColor: QuantumMeasurementColors.selectorButtonSelectedColorProperty,
           buttonAppearanceStrategyOptions: {
-            deselectedButtonOpacity: deselectedRadioButtonOpacity
+            deselectedButtonOpacity: deselectedRadioButtonOpacity,
+            deselectedFill: QuantumMeasurementColors.selectorButtonDeselectedColorProperty
           },
           contentAppearanceStrategyOptions: {
             deselectedContentOpacity: deselectedRadioButtonOpacity
