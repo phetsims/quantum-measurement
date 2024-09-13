@@ -8,7 +8,7 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import { Color, HBox, Line, Node, NodeOptions, Rectangle, Text } from '../../../../scenery/js/imports.js';
+import { AlignBox, AlignGroup, Color, HBox, Line, Node, NodeOptions, Rectangle, Text } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
@@ -22,6 +22,7 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import NumberDisplay, { NumberDisplayOptions } from '../../../../scenery-phet/js/NumberDisplay.js';
 import Range from '../../../../dot/js/Range.js';
+import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 
 type SelfOptions = EmptySelfOptions;
 export type CoinMeasurementHistogramOptions = SelfOptions & PickRequired<NodeOptions, 'tandem' | 'visibleProperty'>;
@@ -72,24 +73,18 @@ export default class CoinMeasurementHistogram extends Node {
 
     // Create the labels for the X axis.
     const xAxisLeftLabel = new Text(
-      systemType === 'classical' ? 'H' : QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER,
+      systemType === 'classical' ? QuantumMeasurementStrings.classicalUpSymbolStringProperty : QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER,
       {
         font: LABEL_FONT
       }
     );
     const xAxisRightLabel = new Text(
-      systemType === 'classical' ? 'T' : QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER,
+      systemType === 'classical' ? QuantumMeasurementStrings.classicalDownSymbolStringProperty : QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER,
       {
         font: LABEL_FONT,
         fill: Color.MAGENTA
       }
     );
-    const xAxisLabels = new HBox( {
-      children: [ xAxisLeftLabel, xAxisRightLabel ],
-      spacing: HISTOGRAM_SIZE.width / 3,
-      centerX: 0,
-      top: xAxis.centerY + 6
-    } );
 
     // Create the numeric displays for the right and left sides.
     const leftNumberProperty = new DerivedProperty(
@@ -110,7 +105,7 @@ export default class CoinMeasurementHistogram extends Node {
         return total;
       }
     );
-    const leftNumberDisplay = new NumberDisplay( leftNumberProperty, NUMBER_DISPLAY_RANGE, NUMBER_DISPLAY_OPTIONS );
+
     const rightNumberProperty = new DerivedProperty(
       [ coinSet.numberOfActiveSystemsProperty, coinSet.measurementStateProperty ],
       ( numberOfActiveSystems, measurementState ) => {
@@ -129,43 +124,71 @@ export default class CoinMeasurementHistogram extends Node {
         return total;
       }
     );
+    const leftNumberDisplay = new NumberDisplay( leftNumberProperty, NUMBER_DISPLAY_RANGE, NUMBER_DISPLAY_OPTIONS );
     const rightNumberDisplay = new NumberDisplay( rightNumberProperty, NUMBER_DISPLAY_RANGE, NUMBER_DISPLAY_OPTIONS );
-
-    const numberDisplays = new HBox( {
-      children: [ leftNumberDisplay, rightNumberDisplay ],
-      align: 'center',
-      spacing: HISTOGRAM_SIZE.width / 3,
-      centerX: yAxis.centerX,
-      top: yAxis.top,
-      visibleProperty: displayValuesProperty
-    } );
 
     // Create the histogram bars for the right and left sides.
     const maxBarHeight = yAxis.height - leftNumberDisplay.height;
-    const barCenterXDistanceFromCenter = HISTOGRAM_SIZE.width / 4;
-    const leftHistogramBar = new Rectangle( 0, 0, HISTOGRAM_BAR_WIDTH, maxBarHeight, {
-      fill: Color.BLACK,
-      centerX: -barCenterXDistanceFromCenter,
-      bottom: xAxis.centerY
+    const leftHistogramBar = new Rectangle( 0, 0, HISTOGRAM_BAR_WIDTH, maxBarHeight, { fill: Color.BLACK } );
+    const rightHistogramBar = new Rectangle( 0, 0, HISTOGRAM_BAR_WIDTH, maxBarHeight, { fill: Color.MAGENTA } );
+
+    const leftAlignGroup = new AlignGroup( { matchVertical: false } );
+    const rightAlignGroup = new AlignGroup( { matchVertical: false } );
+
+    const SPACING = HISTOGRAM_SIZE.width / 4;
+
+    const numberDisplays = new HBox( {
+      children: [
+        new AlignBox( leftNumberDisplay, { group: leftAlignGroup } ),
+        new AlignBox( rightNumberDisplay, { group: rightAlignGroup } )
+      ],
+      centerX: 0,
+      spacing: SPACING,
+      top: yAxis.top,
+      visibleProperty: displayValuesProperty
     } );
+    const xAxisLabels = new HBox( {
+      children: [
+        new AlignBox( xAxisLeftLabel, { group: leftAlignGroup } ),
+        new AlignBox( xAxisRightLabel, { group: rightAlignGroup } )
+      ],
+      centerX: 0,
+      spacing: SPACING,
+      top: xAxis.centerY + 6
+    } );
+    const numberBars = new HBox( {
+      children: [
+        new AlignBox( leftHistogramBar, { group: leftAlignGroup } ),
+        new AlignBox( rightHistogramBar, { group: rightAlignGroup } )
+      ],
+      align: 'bottom',
+      centerX: 0,
+      spacing: SPACING,
+      bottom: xAxis.centerY,
+      stretch: false
+    } );
+
     leftNumberProperty.link( leftNumber => {
       const numberOfSystems = coinSet.numberOfActiveSystemsProperty.value === QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS ? 1e4 : coinSet.numberOfActiveSystemsProperty.value;
       const proportion = leftNumber / numberOfSystems;
-      leftHistogramBar.setRectHeightFromBottom( proportion * maxBarHeight );
-    } );
-    const rightHistogramBar = new Rectangle( 0, 0, HISTOGRAM_BAR_WIDTH, maxBarHeight, {
-      fill: Color.MAGENTA,
-      centerX: barCenterXDistanceFromCenter,
-      bottom: xAxis.centerY
+      leftHistogramBar.setRect( 0, 0, HISTOGRAM_BAR_WIDTH, proportion * maxBarHeight );
+      numberBars.bottom = xAxis.centerY;
     } );
     rightNumberProperty.link( rightNumber => {
       const numberOfSystems = coinSet.numberOfActiveSystemsProperty.value === QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS ? 1e4 : coinSet.numberOfActiveSystemsProperty.value;
       const proportion = rightNumber / numberOfSystems;
-      rightHistogramBar.setRectHeightFromBottom( proportion * maxBarHeight );
+      rightHistogramBar.setRect( 0, 0, HISTOGRAM_BAR_WIDTH, proportion * maxBarHeight );
+      numberBars.bottom = xAxis.centerY; // TODO: This is being called twice! https://github.com/phetsims/quantum-measurement/issues/22
     } );
 
     const options = optionize<CoinMeasurementHistogramOptions, SelfOptions, NodeOptions>()( {
-      children: [ leftHistogramBar, rightHistogramBar, yAxis, xAxis, xAxisLabels, numberDisplays ]
+      children: [
+        numberBars,
+        yAxis,
+        xAxis,
+        xAxisLabels,
+        numberDisplays
+      ]
     }, providedOptions );
 
     super( options );
