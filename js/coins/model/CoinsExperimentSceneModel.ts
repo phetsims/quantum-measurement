@@ -20,7 +20,7 @@ import TwoStateSystem from '../../common/model/TwoStateSystem.js';
 import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { ClassicalCoinStates, ClassicalCoinStateValues } from './ClassicalCoinStates.js';
-import { QuantumCoinStates, QuantumCoinStateValues } from './QuantumCoinStates.js';
+import { QuantumCoinStates, QuantumCoinStateValues, QuantumUncollapsedCoinStates, QuantumUncollapsedCoinStateValues } from './QuantumCoinStates.js';
 
 type SelfOptions = {
   initiallyActive?: boolean;
@@ -46,7 +46,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
   public readonly coinSet: TwoStateSystemSet<ClassicalCoinStates | QuantumCoinStates>;
 
   // The initial state of the coin(s) before any flipping or other experiment preparation occurs.
-  public readonly initialCoinStateProperty: Property<ClassicalCoinStates> | Property<QuantumCoinStates>;
+  public readonly initialCoinStateProperty: Property<ClassicalCoinStates> | Property<QuantumUncollapsedCoinStates>;
 
   // The bias towards one outcome or another in the initially prepared state, from 0 to 1.
   public readonly stateBiasProperty: NumberProperty;
@@ -95,10 +95,10 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
     }
     else {
       assert && assert( options.systemType === 'quantum', 'unhandled system type' );
-      this.initialCoinStateProperty = new Property<QuantumCoinStates>( 'up', {
+      this.initialCoinStateProperty = new Property<QuantumUncollapsedCoinStates>( 'up', {
         tandem: options.tandem.createTandem( 'initialCoinStateProperty' ),
-        phetioValueType: StringUnionIO( QuantumCoinStateValues ),
-        validValues: QuantumCoinStateValues
+        phetioValueType: StringUnionIO( QuantumUncollapsedCoinStateValues ),
+        validValues: QuantumUncollapsedCoinStateValues
       } );
       this.singleCoin = new TwoStateSystem<QuantumCoinStates>(
         QuantumCoinStateValues,
@@ -128,14 +128,26 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
         // chosen by the user so that it will match when it animates into the test box and be correct if revealed right
         // away.
         this.singleCoin.setMeasurementValueImmediate( this.initialCoinStateProperty.value as never );
-        this.coinSet.setMeasurementValuesImmediate( this.initialCoinStateProperty.value );
+        this.coinSet.setMeasurementValuesImmediate( this.initialCoinStateProperty.value as QuantumCoinStates | ClassicalCoinStates );
       }
     } );
 
     // If this is a quantum system, changing the initial state of the coin sets the bias to match that coin.
     if ( this.systemType === 'quantum' ) {
       this.initialCoinStateProperty.lazyLink( initialCoinState => {
-        this.stateBiasProperty.value = initialCoinState === 'up' ? 1 : 0;
+        if ( initialCoinState !== 'superposed' ) {
+          this.stateBiasProperty.value = initialCoinState === 'up' ? 1 : 0;
+        }
+      } );
+
+      this.stateBiasProperty.lazyLink( bias => {
+        if ( bias !== 0 && bias !== 1 ) {
+          this.initialCoinStateProperty.value = 'superposed';
+        }
+        else {
+          // TODO: Wouldn't this cause a reentry? https://github.com/phetsims/quantum-measurement/issues/28
+          this.initialCoinStateProperty.value = bias === 1 ? 'up' : 'down';
+        }
       } );
     }
   }
