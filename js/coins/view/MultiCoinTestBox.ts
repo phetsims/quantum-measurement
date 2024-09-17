@@ -8,19 +8,19 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import { Color, HBox, HBoxOptions, LinearGradient, Node, Rectangle } from '../../../../scenery/js/imports.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
+import Property from '../../../../axon/js/Property.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Dimension2 from '../../../../dot/js/Dimension2.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import { Shape } from '../../../../kite/js/imports.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import { Shape } from '../../../../kite/js/imports.js';
-import Dimension2 from '../../../../dot/js/Dimension2.js';
-import Property from '../../../../axon/js/Property.js';
-import { ExperimentMeasurementState } from '../model/ExperimentMeasurementState.js';
-import SmallCoinNode from './SmallCoinNode.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
+import { Color, HBox, HBoxOptions, LinearGradient, Node, Rectangle } from '../../../../scenery/js/imports.js';
 import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
+import quantumMeasurement from '../../quantumMeasurement.js';
+import { ExperimentMeasurementState } from '../model/ExperimentMeasurementState.js';
+import SmallCoinNode from './SmallCoinNode.js';
 
 type SelfOptions = EmptySelfOptions;
 export type MultiCoinTestBoxOptions = SelfOptions & PickRequired<HBoxOptions, 'tandem'>;

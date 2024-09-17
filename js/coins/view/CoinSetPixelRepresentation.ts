@@ -8,10 +8,10 @@
  *
  */
 
-import quantumMeasurement from '../../quantumMeasurement.js';
-import { Image, Node } from '../../../../scenery/js/imports.js';
-import Utils from '../../../../dot/js/Utils.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
+import Utils from '../../../../dot/js/Utils.js';
+import { Image, Node } from '../../../../scenery/js/imports.js';
+import quantumMeasurement from '../../quantumMeasurement.js';
 
 export default class CoinSetPixelRepresentation extends Node {
 

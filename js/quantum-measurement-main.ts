@@ -9,12 +9,12 @@
 import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
 import Tandem from '../../tandem/js/Tandem.js';
+import BlochSphereScreen from './bloch-sphere/BlochSphereScreen.js';
 import CoinsScreen from './coins/CoinsScreen.js';
+import PhotonsScreen from './photons/PhotonsScreen.js';
 import QuantumMeasurementStrings from './QuantumMeasurementStrings.js';
 import './common/QuantumMeasurementQueryParameters.js';
-import PhotonsScreen from './photons/PhotonsScreen.js';
 import SpinScreen from './spin/SpinScreen.js';
-import BlochSphereScreen from './bloch-sphere/BlochSphereScreen.js';
 
 // Launch the sim. Beware that scenery Image nodes created outside simLauncher.launch() will have zero bounds
 // until the images are fully loaded. See https://github.com/phetsims/coulombs-law/issues/70#issuecomment-429037461

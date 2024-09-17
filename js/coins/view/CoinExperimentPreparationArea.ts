@@ -8,19 +8,19 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import quantumMeasurement from '../../quantumMeasurement.js';
-import { Color, VBox } from '../../../../scenery/js/imports.js';
-import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import SceneSectionHeader from './SceneSectionHeader.js';
-import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
-import ProbabilityEquationsNode from './ProbabilityEquationsNode.js';
-import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
+import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
+import { Color, VBox } from '../../../../scenery/js/imports.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
+import quantumMeasurement from '../../quantumMeasurement.js';
+import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
+import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
+import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
 import OutcomeProbabilityControl from './OutcomeProbabilityControl.js';
+import ProbabilityEquationsNode from './ProbabilityEquationsNode.js';
+import SceneSectionHeader from './SceneSectionHeader.js';
 
 export default class CoinExperimentPreparationArea extends VBox {
 

@@ -6,14 +6,14 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import TModel from '../../../../joist/js/TModel.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
-import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Property from '../../../../axon/js/Property.js';
-import { SystemType, SystemTypeValues } from '../../common/model/SystemType.js';
+import TModel from '../../../../joist/js/TModel.js';
+import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
+import { SystemType, SystemTypeValues } from '../../common/model/SystemType.js';
+import quantumMeasurement from '../../quantumMeasurement.js';
 import CoinsExperimentSceneModel from './CoinsExperimentSceneModel.js';
 
 type SelfOptions = EmptySelfOptions;

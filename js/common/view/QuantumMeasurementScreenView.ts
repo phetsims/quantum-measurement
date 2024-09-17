@@ -6,14 +6,14 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import ScreenView, { ScreenViewOptions } from '../../../../joist/js/ScreenView.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
+import { Image } from '../../../../scenery/js/imports.js';
+import MockupOpacitySlider from '../../common/MockupOpacitySlider.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import MockupOpacitySlider from '../../common/MockupOpacitySlider.js';
-import { Image } from '../../../../scenery/js/imports.js';
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
 
 type SelfOptions = {
 

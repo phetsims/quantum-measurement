@@ -7,20 +7,20 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import Property from '../../../../axon/js/Property.js';
-import TwoStateSystem from '../../common/model/TwoStateSystem.js';
-import { ClassicalCoinStates, ClassicalCoinStateValues } from './ClassicalCoinStates.js';
-import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
-import { QuantumCoinStates, QuantumCoinStateValues } from './QuantumCoinStates.js';
-import { SystemType } from '../../common/model/SystemType.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import Range from '../../../../dot/js/Range.js';
+import optionize from '../../../../phet-core/js/optionize.js';
+import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
+import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
+import { SystemType } from '../../common/model/SystemType.js';
+import TwoStateSystem from '../../common/model/TwoStateSystem.js';
 import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
+import quantumMeasurement from '../../quantumMeasurement.js';
+import { ClassicalCoinStates, ClassicalCoinStateValues } from './ClassicalCoinStates.js';
+import { QuantumCoinStates, QuantumCoinStateValues } from './QuantumCoinStates.js';
 
 type SelfOptions = {
   initiallyActive?: boolean;

@@ -8,18 +8,18 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import { Circle, Color, Node, NodeOptions, Text } from '../../../../scenery/js/imports.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
+import Property from '../../../../axon/js/Property.js';
+import TProperty from '../../../../axon/js/TProperty.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import TProperty from '../../../../axon/js/TProperty.js';
-import Property from '../../../../axon/js/Property.js';
+import { Circle, Color, Node, NodeOptions, Text } from '../../../../scenery/js/imports.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
-import dotRandom from '../../../../dot/js/dotRandom.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
+import quantumMeasurement from '../../quantumMeasurement.js';
 
 type SelfOptions = EmptySelfOptions;
 export type SmallCoinNodeOptions = SelfOptions & PickRequired<NodeOptions, 'tandem'>;

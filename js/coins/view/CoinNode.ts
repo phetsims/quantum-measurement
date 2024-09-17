@@ -8,12 +8,12 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import { Circle, Node, NodeOptions, TPaint } from '../../../../scenery/js/imports.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
+import { Circle, Node, NodeOptions, TPaint } from '../../../../scenery/js/imports.js';
+import quantumMeasurement from '../../quantumMeasurement.js';
 
 // type for specifying the attributes for one face of the coin
 export type CoinFaceParameters = {

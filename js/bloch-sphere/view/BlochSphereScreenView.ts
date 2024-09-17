@@ -6,13 +6,13 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import quantumMeasurement from '../../quantumMeasurement.js';
 import BlochSphereModel from 'model/BlochSphereModel.js';
+import ScreenView from '../../../../joist/js/ScreenView.js';
+import { Image } from '../../../../scenery/js/imports.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import blochSphereScreenMockup_png from '../../../images/blochSphereScreenMockup_png.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
-import { Image } from '../../../../scenery/js/imports.js';
-import ScreenView from '../../../../joist/js/ScreenView.js';
+import quantumMeasurement from '../../quantumMeasurement.js';
 
 export default class BlochSphereScreenView extends QuantumMeasurementScreenView {
 

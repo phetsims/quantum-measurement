@@ -6,8 +6,8 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import quantumMeasurement from '../quantumMeasurement.js';
 import ScreenView from '../../../joist/js/ScreenView.js';
+import quantumMeasurement from '../quantumMeasurement.js';
 
 const QuantumMeasurementConstants = {
   LAYOUT_BOUNDS: ScreenView.DEFAULT_LAYOUT_BOUNDS,

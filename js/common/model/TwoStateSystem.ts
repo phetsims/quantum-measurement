@@ -9,19 +9,19 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import Property from '../../../../axon/js/Property.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
-import dotRandom from '../../../../dot/js/dotRandom.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
+import stepTimer from '../../../../axon/js/stepTimer.js';
+import { TimerListener } from '../../../../axon/js/Timer.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
-import optionize from '../../../../phet-core/js/optionize.js';
+import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import { ExperimentMeasurementState, ExperimentMeasurementStateValues } from '../../coins/model/ExperimentMeasurementState.js';
-import stepTimer from '../../../../axon/js/stepTimer.js';
+import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementConstants from '../QuantumMeasurementConstants.js';
-import { TimerListener } from '../../../../axon/js/Timer.js';
-import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 
 type SelfOptions = {
   initialBias?: number;

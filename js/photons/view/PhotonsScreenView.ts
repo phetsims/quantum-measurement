@@ -6,13 +6,13 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
+import ScreenView from '../../../../joist/js/ScreenView.js';
+import { Image } from '../../../../scenery/js/imports.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
+import photonsScreenMockup_png from '../../../images/photonsScreenMockup_png.js';
+import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import PhotonsModel from '../model/PhotonsModel.js';
-import photonsScreenMockup_png from '../../../images/photonsScreenMockup_png.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
-import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
-import { Image } from '../../../../scenery/js/imports.js';
-import ScreenView from '../../../../joist/js/ScreenView.js';
 
 export default class PhotonsScreenView extends QuantumMeasurementScreenView {
 

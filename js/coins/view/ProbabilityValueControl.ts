@@ -9,17 +9,17 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import { HBox, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Dimension2 from '../../../../dot/js/Dimension2.js';
+import Range from '../../../../dot/js/Range.js';
+import { combineOptions } from '../../../../phet-core/js/optionize.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import { HBox, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import ArrowButton, { ArrowButtonOptions } from '../../../../sun/js/buttons/ArrowButton.js';
 import HSlider from '../../../../sun/js/HSlider.js';
-import Range from '../../../../dot/js/Range.js';
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import Dimension2 from '../../../../dot/js/Dimension2.js';
-import { combineOptions } from '../../../../phet-core/js/optionize.js';
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import quantumMeasurement from '../../quantumMeasurement.js';
 
 const TITLE_FONT = new PhetFont( 16 );
 const TICK_MARK_FONT = new PhetFont( 14 );

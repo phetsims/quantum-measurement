@@ -9,20 +9,20 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import { Node, RichText, Text, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
-import { SystemType } from '../../common/model/SystemType.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
-import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
-import ProbabilityValueControl from './ProbabilityValueControl.js';
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import { Node, RichText, Text, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
+import { SystemType } from '../../common/model/SystemType.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
+import quantumMeasurement from '../../quantumMeasurement.js';
+import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
+import ProbabilityValueControl from './ProbabilityValueControl.js';
 
 type SelfOptions = EmptySelfOptions;
 type OutcomeProbabilityControlOptions = SelfOptions & PickRequired<VBox, 'tandem' | 'visibleProperty'>;

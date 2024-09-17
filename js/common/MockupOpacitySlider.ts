@@ -1,13 +1,13 @@
 // Copyright 2024, University of Colorado Boulder
 
-import HSlider from '../../../sun/js/HSlider.js';
-import Range from '../../../dot/js/Range.js';
+import NumberProperty from '../../../axon/js/NumberProperty.js';
 import Dimension2 from '../../../dot/js/Dimension2.js';
+import Range from '../../../dot/js/Range.js';
+import ScreenView from '../../../joist/js/ScreenView.js';
+import { Image } from '../../../scenery/js/imports.js';
+import HSlider from '../../../sun/js/HSlider.js';
 import quantumMeasurement from '../quantumMeasurement.js';
 import QuantumMeasurementConstants from './QuantumMeasurementConstants.js';
-import { Image } from '../../../scenery/js/imports.js';
-import ScreenView from '../../../joist/js/ScreenView.js';
-import NumberProperty from '../../../axon/js/NumberProperty.js';
 
 /**
  * Define a slider that can be added to a screen view and will control the opacity of a Property that is used to display

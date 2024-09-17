@@ -10,11 +10,11 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import quantumMeasurement from '../../quantumMeasurement.js';
-import { Color, Line, Text, TPaint, VBox } from '../../../../scenery/js/imports.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import optionize from '../../../../phet-core/js/optionize.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import { Color, Line, Text, TPaint, VBox } from '../../../../scenery/js/imports.js';
+import quantumMeasurement from '../../quantumMeasurement.js';
 
 type SceneSectionHeaderOptions = {
   textColor?: TPaint;

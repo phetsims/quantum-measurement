@@ -8,22 +8,22 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import { Color, Text, VBox } from '../../../../scenery/js/imports.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import { SystemType } from '../../common/model/SystemType.js';
-import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
-import { ClassicalCoinStates, ClassicalCoinStateValues } from '../model/ClassicalCoinStates.js';
-import ClassicalCoinNode from './ClassicalCoinNode.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import { Color, Text, VBox } from '../../../../scenery/js/imports.js';
 import RectangularRadioButtonGroup, { RectangularRadioButtonGroupOptions } from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import Panel from '../../../../sun/js/Panel.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
+import { SystemType } from '../../common/model/SystemType.js';
+import quantumMeasurement from '../../quantumMeasurement.js';
+import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
+import { ClassicalCoinStates, ClassicalCoinStateValues } from '../model/ClassicalCoinStates.js';
 import { QuantumCoinStates, QuantumCoinStateValues } from '../model/QuantumCoinStates.js';
-import QuantumCoinNode from './QuantumCoinNode.js';
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import ClassicalCoinNode from './ClassicalCoinNode.js';
 import CoinNode from './CoinNode.js';
+import QuantumCoinNode from './QuantumCoinNode.js';
 
 const RADIO_BUTTON_COIN_NODE_RADIUS = 16;
 const INDICATOR_COIN_NODE_RADIUS = 36;

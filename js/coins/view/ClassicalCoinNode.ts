@@ -7,15 +7,15 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import { Color, Text } from '../../../../scenery/js/imports.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import CoinNode, { CoinFaceParameters } from './CoinNode.js';
-import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import { Color, Text } from '../../../../scenery/js/imports.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
+import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
+import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
+import CoinNode, { CoinFaceParameters } from './CoinNode.js';
 
 const HEADS_FILL = new Color( '#EFE4B0' );
 const HEADS_STROKE_AND_LETTER_COLOR = Color.BLACK;

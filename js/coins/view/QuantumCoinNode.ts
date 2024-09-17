@@ -7,16 +7,16 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import { Color, Text } from '../../../../scenery/js/imports.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import CoinNode, { CoinFaceParameters } from './CoinNode.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import { Color, Text } from '../../../../scenery/js/imports.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
+import quantumMeasurement from '../../quantumMeasurement.js';
 import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
+import CoinNode, { CoinFaceParameters } from './CoinNode.js';
 
 const UP_FILL = new Color( '#00FFFF' );
 const UP_STROKE_AND_ARROW_COLOR = Color.BLACK;

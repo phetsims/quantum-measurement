@@ -8,13 +8,13 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import { RichText } from '../../../../scenery/js/imports.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import { SystemType } from '../../common/model/SystemType.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import { RichText } from '../../../../scenery/js/imports.js';
+import { SystemType } from '../../common/model/SystemType.js';
+import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 
 export default class ProbabilityEquationsNode extends RichText {

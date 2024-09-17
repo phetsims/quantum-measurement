@@ -7,32 +7,32 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import quantumMeasurement from '../../quantumMeasurement.js';
-import { Color, Line, Node, NodeOptions } from '../../../../scenery/js/imports.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
-import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
-import ScreenView from '../../../../joist/js/ScreenView.js';
-import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushButton.js';
-import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
-import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
-import ButtonNode from '../../../../sun/js/buttons/ButtonNode.js';
-import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import Range from '../../../../dot/js/Range.js';
-import Animation from '../../../../twixt/js/Animation.js';
 import TProperty from '../../../../axon/js/TProperty.js';
-import Easing from '../../../../twixt/js/Easing.js';
-import CoinExperimentPreparationArea from './CoinExperimentPreparationArea.js';
-import CoinExperimentMeasurementArea from './CoinExperimentMeasurementArea.js';
-import CoinNode from './CoinNode.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import SmallCoinNode from './SmallCoinNode.js';
-import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
+import Range from '../../../../dot/js/Range.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import ScreenView from '../../../../joist/js/ScreenView.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
+import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import { Color, Line, Node, NodeOptions } from '../../../../scenery/js/imports.js';
+import ButtonNode from '../../../../sun/js/buttons/ButtonNode.js';
+import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushButton.js';
+import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
+import Animation from '../../../../twixt/js/Animation.js';
+import Easing from '../../../../twixt/js/Easing.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
+import quantumMeasurement from '../../quantumMeasurement.js';
+import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
+import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
+import CoinExperimentMeasurementArea from './CoinExperimentMeasurementArea.js';
+import CoinExperimentPreparationArea from './CoinExperimentPreparationArea.js';
+import CoinNode from './CoinNode.js';
+import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
+import SmallCoinNode from './SmallCoinNode.js';
 
 type SelfOptions = EmptySelfOptions;
 export type CoinsExperimentSceneViewOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;

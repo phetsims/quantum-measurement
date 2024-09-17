@@ -8,21 +8,21 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import { AlignBox, AlignGroup, Color, HBox, Line, Node, NodeOptions, Rectangle, Text } from '../../../../scenery/js/imports.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import Dimension2 from '../../../../dot/js/Dimension2.js';
+import Range from '../../../../dot/js/Range.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import NumberDisplay, { NumberDisplayOptions } from '../../../../scenery-phet/js/NumberDisplay.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import { AlignBox, AlignGroup, Color, HBox, Line, Node, NodeOptions, Rectangle, Text } from '../../../../scenery/js/imports.js';
+import { SystemType } from '../../common/model/SystemType.js';
 import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
+import quantumMeasurement from '../../quantumMeasurement.js';
+import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
 import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
-import { SystemType } from '../../common/model/SystemType.js';
-import Dimension2 from '../../../../dot/js/Dimension2.js';
-import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import NumberDisplay, { NumberDisplayOptions } from '../../../../scenery-phet/js/NumberDisplay.js';
-import Range from '../../../../dot/js/Range.js';
-import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 
 type SelfOptions = EmptySelfOptions;
 export type CoinMeasurementHistogramOptions = SelfOptions & PickRequired<NodeOptions, 'tandem' | 'visibleProperty'>;

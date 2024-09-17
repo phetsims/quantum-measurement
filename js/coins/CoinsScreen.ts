@@ -10,9 +10,9 @@ import Screen, { ScreenOptions } from '../../../joist/js/Screen.js';
 import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
 import QuantumMeasurementColors from '../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../quantumMeasurement.js';
+import QuantumMeasurementStrings from '../QuantumMeasurementStrings.js';
 import CoinsModel from './model/CoinsModel.js';
 import CoinsScreenView from './view/CoinsScreenView.js';
-import QuantumMeasurementStrings from '../QuantumMeasurementStrings.js';
 
 type SelfOptions = EmptySelfOptions;
 type QuantumMeasurementScreenOptions = SelfOptions & ScreenOptions;

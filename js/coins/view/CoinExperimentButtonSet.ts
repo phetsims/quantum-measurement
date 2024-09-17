@@ -8,19 +8,19 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import { Color, NodeOptions, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
-import { SystemType } from '../../common/model/SystemType.js';
-import TextPushButton, { TextPushButtonOptions } from '../../../../sun/js/buttons/TextPushButton.js';
-import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import TProperty from '../../../../axon/js/TProperty.js';
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import { Color, NodeOptions, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
+import TextPushButton, { TextPushButtonOptions } from '../../../../sun/js/buttons/TextPushButton.js';
+import { SystemType } from '../../common/model/SystemType.js';
 import TwoStateSystem from '../../common/model/TwoStateSystem.js';
 import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
+import quantumMeasurement from '../../quantumMeasurement.js';
+import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 
 type SelfOptions = EmptySelfOptions;
 export type CoinExperimentButtonSetOptions = SelfOptions & PickRequired<NodeOptions, 'tandem' | 'visibleProperty'>;

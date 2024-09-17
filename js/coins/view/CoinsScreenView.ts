@@ -6,18 +6,18 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import quantumMeasurement from '../../quantumMeasurement.js';
 import CoinsModel from 'model/CoinsModel.js';
-import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
-import { Color, Text } from '../../../../scenery/js/imports.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
-import { SystemType, SystemTypeValues } from '../../common/model/SystemType.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import LocalizedStringProperty from '../../../../chipper/js/LocalizedStringProperty.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import { Color, Text } from '../../../../scenery/js/imports.js';
+import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
+import { SystemType, SystemTypeValues } from '../../common/model/SystemType.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
+import quantumMeasurement from '../../quantumMeasurement.js';
+import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
 
 const SCENE_POSITION = new Vector2( 0, 90 ); // empirically determined to look decent
