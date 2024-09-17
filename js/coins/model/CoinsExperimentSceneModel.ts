@@ -127,7 +127,8 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
         // The scene is moving from preparation mode to measurement mode. Force the coins to be in the initial state
         // chosen by the user so that it will match when it animates into the test box and be correct if revealed right
         // away.
-        this.singleCoin.setMeasurementValueImmediate( null as never );
+        const singleCoinInitialState = this.systemType === 'classical' ? this.initialCoinStateProperty.value as never : null as never;
+        this.singleCoin.setMeasurementValueImmediate( singleCoinInitialState );
         this.coinSet.setMeasurementValuesImmediate( this.initialCoinStateProperty.value as QuantumCoinStates | ClassicalCoinStates );
       }
     } );
