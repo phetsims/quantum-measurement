@@ -192,6 +192,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
       ]
     } );
 
+    // Empirically determined; TODO: Get from the coin drawing place, see https://github.com/phetsims/quantum-measurement/issues/15
     measuredCoinsPixelRepresentation.scale( 1.85 );
     const offset = multipleCoinTestBox.width - measuredCoinsPixelRepresentation.width;
     measuredCoinsPixelRepresentation.x = offset / 2;
