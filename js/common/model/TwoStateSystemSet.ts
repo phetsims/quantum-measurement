@@ -142,7 +142,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
     // Shouldnt we assert that the state is 'readyToBeMeasured'?
 
     const times = this.numberOfActiveSystemsProperty.value === QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS ?
-                  1e4 : this.numberOfActiveSystemsProperty.value;
+                  10000 : this.numberOfActiveSystemsProperty.value;
 
     _.times( times, i => {
 
