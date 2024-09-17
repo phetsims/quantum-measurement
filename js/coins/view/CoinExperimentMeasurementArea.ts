@@ -192,6 +192,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
       ]
     } );
 
+    measuredCoinsPixelRepresentation.scale( 1.85 );
     const offset = multipleCoinTestBox.width - measuredCoinsPixelRepresentation.width;
     measuredCoinsPixelRepresentation.x = offset / 2;
     measuredCoinsPixelRepresentation.y = offset / 2;
