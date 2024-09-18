@@ -18,6 +18,7 @@ const QuantumMeasurementConstants = {
   SPIN_UP_ARROW_CHARACTER: '\u2b61',
   SPIN_DOWN_ARROW_CHARACTER: '\u2b63',
   KET: '\u27e9',
+  COIN_SET_AREA_PROPORTION: 0.9, // Side of the explicit coin area with respect to the measurement area
 
   PREPARING_TO_BE_MEASURED_TIME: 1, // in seconds
   HOLLYWOODED_MAX_COINS: 900, //

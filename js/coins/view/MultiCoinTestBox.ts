@@ -183,8 +183,7 @@ export default class MultiCoinTestBox extends HBox {
     else if ( this.coinCapacityProperty.value === QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS ) {
 
       const sideLength = Math.sqrt( this.coinCapacityProperty.value );
-      // N rows of N
-      const BoxDimension = new Vector2( BOX_SIZE.width, BOX_SIZE.height ).timesScalar( 0.9 );
+      const BoxDimension = new Vector2( BOX_SIZE.width, BOX_SIZE.height ).timesScalar( QuantumMeasurementConstants.COIN_SET_AREA_PROPORTION );
       const xOffset = BoxDimension.x / ( sideLength + 1 ) * ( Math.floor( index / sideLength ) + 1 ) - BoxDimension.x / 2;
       const yOffset = BoxDimension.y / ( sideLength + 1 ) * ( index % sideLength + 1 ) - BoxDimension.y / 2;
       offset.setXY( xOffset, yOffset );
