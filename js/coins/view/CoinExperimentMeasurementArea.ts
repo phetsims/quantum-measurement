@@ -326,7 +326,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
       else {
         singleCoinNode = new QuantumCoinNode(
           sceneModel.singleCoin.measuredValueProperty as TReadOnlyProperty<QuantumCoinStates>,
-          sceneModel.stateBiasProperty,
+          sceneModel.upProbabilityProperty,
           InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS,
           Tandem.OPT_OUT
         );

@@ -34,7 +34,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
   public readonly orientationIndicatorCoinNode: CoinNode;
 
   public constructor( initialCoinStateProperty: TReadOnlyProperty<ClassicalCoinStates> | TReadOnlyProperty<QuantumUncollapsedCoinStates>,
-                      stateBiasProperty: TReadOnlyProperty<number>,
+                      upProbabilityProperty: TReadOnlyProperty<number>,
                       preparingExperimentProperty: TReadOnlyProperty<boolean>,
                       systemType: SystemType,
                       tandem: Tandem ) {
@@ -123,7 +123,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
     else {
       orientationIndicatorCoinNode = new QuantumCoinNode(
         initialCoinStateProperty as Property<QuantumCoinStates>,
-        stateBiasProperty,
+        upProbabilityProperty,
         INDICATOR_COIN_NODE_RADIUS,
         tandem.createTandem( 'coinIndicatorNode' )
       );

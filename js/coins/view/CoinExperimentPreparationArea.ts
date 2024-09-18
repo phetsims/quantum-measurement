@@ -68,7 +68,7 @@ export default class CoinExperimentPreparationArea extends VBox {
     // Create the UI element that will allow the user to specify the initial state of the coin.
     const initialCoinStateSelectorNode = new InitialCoinStateSelectorNode(
       sceneModel.initialCoinStateProperty,
-      sceneModel.stateBiasProperty,
+      sceneModel.upProbabilityProperty,
       sceneModel.preparingExperimentProperty,
       sceneModel.systemType,
       tandem.createTandem( 'coinStateSelectorNode' )
@@ -76,14 +76,14 @@ export default class CoinExperimentPreparationArea extends VBox {
 
     // Create the node that will show the probabilities for the possible outcomes as equations.
     const probabilityEquationsNode = new ProbabilityEquationsNode(
-      sceneModel.stateBiasProperty,
+      sceneModel.upProbabilityProperty,
       sceneModel.systemType
     );
 
     // Create the control that will allow the user to manipulate the probability of the various outcomes.
     const outcomeProbabilityControl = new OutcomeProbabilityControl(
       sceneModel.systemType,
-      sceneModel.stateBiasProperty,
+      sceneModel.upProbabilityProperty,
       {
         visibleProperty: sceneModel.preparingExperimentProperty,
         tandem: tandem.createTandem( 'outcomeProbabilityControl' )
