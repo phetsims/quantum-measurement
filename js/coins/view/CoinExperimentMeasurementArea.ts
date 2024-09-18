@@ -232,7 +232,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
         sceneModel.coinSet.measurementStateProperty
       ],
       ( numberOfActiveSystems, state ) => {
-        if ( numberOfActiveSystems === 10_000 && state === 'measuredAndRevealed' ) {
+        if ( numberOfActiveSystems === 10000 && state === 'measuredAndRevealed' ) {
           this.measuredCoinsPixelRepresentation.redraw( sceneModel.coinSet.measuredValues );
           this.measuredCoinsPixelRepresentation.visible = true;
         }
@@ -461,7 +461,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
         sceneModel.coinSet.numberOfActiveSystemsProperty.value
       );
       const coinSetNodes: SmallCoinNode[] = [];
-      const coinsToDraw = sceneModel.coinSet.numberOfActiveSystemsProperty.value === 10_000 ?
+      const coinsToDraw = sceneModel.coinSet.numberOfActiveSystemsProperty.value === 10000 ?
                           QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS : sceneModel.coinSet.numberOfActiveSystemsProperty.value;
       _.times( coinsToDraw, i => {
         // TODO: Is this tandem structure a final decision or placeholder? https://github.com/phetsims/quantum-measurement/issues/20

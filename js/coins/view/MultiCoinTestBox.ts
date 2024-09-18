@@ -38,7 +38,7 @@ const LANDING_ZONE_FILL = 'rgba( 255, 192, 203, 0.5 )'; // useful for debug, opa
 const MAP_OF_COIN_QUANTITY_TO_RADIUS = new Map( [
   [ 10, 12 ],
   [ 100, 6 ],
-  [ 10_000, QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS_RADII ]
+  [ 10000, QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS_RADII ]
   // [ 10000, 0.5 ]
 ] );
 
@@ -176,7 +176,7 @@ export default class MultiCoinTestBox extends HBox {
       const yOffset = BOX_SIZE.height / 11 * ( Math.floor( index / 10 ) + 1 ) - BOX_SIZE.height / 2;
       offset.setXY( xOffset, yOffset );
     }
-    else if ( this.coinCapacityProperty.value === 10_000 ) {
+    else if ( this.coinCapacityProperty.value === 10000 ) {
 
       // REVIEW TODO: Encompass these three implementations in a method, see https://github.com/phetsims/quantum-measurement/issues/20
 
