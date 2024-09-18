@@ -69,10 +69,10 @@
     "value": "P({{value}})"
   },
   "classicalUpSymbol": {
-    "value": "\u2665"
+    "value": "\uD83C\uDF1E\uFE0E\uFE0E"
   },
   "classicalDownSymbol": {
-      "value": "\u2605"
+      "value": "\u263D"
   },
   "quantumUpSymbol": {
     "value": "\u2b61"
