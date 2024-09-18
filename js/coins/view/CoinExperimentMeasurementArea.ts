@@ -160,7 +160,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
       const valueText = value.toString();
       return {
         createNode: () => new Text( valueText, { font: RADIO_BUTTON_FONT } ),
-        value: value === 10000 ? QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS : value,
+        value: value,
         tandemName: valueText
       };
     };
@@ -231,8 +231,8 @@ export default class CoinExperimentMeasurementArea extends VBox {
         sceneModel.coinSet.numberOfActiveSystemsProperty,
         sceneModel.coinSet.measurementStateProperty
       ],
-      ( number, state ) => {
-        if ( number === QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS && state === 'measuredAndRevealed' ) {
+      ( numberOfActiveSystems, state ) => {
+        if ( numberOfActiveSystems === 10_000 && state === 'measuredAndRevealed' ) {
           this.measuredCoinsPixelRepresentation.redraw( sceneModel.coinSet.measuredValues );
           this.measuredCoinsPixelRepresentation.visible = true;
         }
@@ -461,7 +461,9 @@ export default class CoinExperimentMeasurementArea extends VBox {
         sceneModel.coinSet.numberOfActiveSystemsProperty.value
       );
       const coinSetNodes: SmallCoinNode[] = [];
-      _.times( sceneModel.coinSet.numberOfActiveSystemsProperty.value, i => {
+      const coinsToDraw = sceneModel.coinSet.numberOfActiveSystemsProperty.value === 10_000 ?
+                          QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS : sceneModel.coinSet.numberOfActiveSystemsProperty.value;
+      _.times( coinsToDraw, i => {
         // TODO: Is this tandem structure a final decision or placeholder? https://github.com/phetsims/quantum-measurement/issues/20
         const smallCoinTandem = tandem.createTandem( `multiCoin${i}` );
         coinSetNodes.push( new SmallCoinNode( coinRadius, { tandem: smallCoinTandem } ) );

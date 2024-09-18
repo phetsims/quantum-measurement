@@ -95,8 +95,7 @@ export default class CoinMeasurementHistogram extends Node {
         let total = 0;
 
         if ( measurementState === 'measuredAndRevealed' ) {
-          const times = numberOfActiveSystems === QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS ? 1e4 : numberOfActiveSystems;
-          _.times( times, i => {
+          _.times( numberOfActiveSystems, i => {
             if ( coinSet.measuredValues[ i ] === testValue ) {
               total++;
             }
@@ -114,8 +113,7 @@ export default class CoinMeasurementHistogram extends Node {
         let total = 0;
 
         if ( measurementState === 'measuredAndRevealed' ) {
-          const times = numberOfActiveSystems === QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS ? 1e4 : numberOfActiveSystems;
-          _.times( times, i => {
+          _.times( numberOfActiveSystems, i => {
             if ( coinSet.measuredValues[ i ] === testValue ) {
               total++;
             }
@@ -169,14 +167,12 @@ export default class CoinMeasurementHistogram extends Node {
     } );
 
     leftNumberProperty.link( leftNumber => {
-      const numberOfSystems = coinSet.numberOfActiveSystemsProperty.value === QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS ? 1e4 : coinSet.numberOfActiveSystemsProperty.value;
-      const proportion = leftNumber / numberOfSystems;
+      const proportion = leftNumber / coinSet.numberOfActiveSystemsProperty.value;
       leftHistogramBar.setRect( 0, 0, HISTOGRAM_BAR_WIDTH, proportion * maxBarHeight );
       numberBars.bottom = xAxis.centerY;
     } );
     rightNumberProperty.link( rightNumber => {
-      const numberOfSystems = coinSet.numberOfActiveSystemsProperty.value === QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS ? 1e4 : coinSet.numberOfActiveSystemsProperty.value;
-      const proportion = rightNumber / numberOfSystems;
+      const proportion = rightNumber / coinSet.numberOfActiveSystemsProperty.value;
       rightHistogramBar.setRect( 0, 0, HISTOGRAM_BAR_WIDTH, proportion * maxBarHeight );
       numberBars.bottom = xAxis.centerY; // TODO: This is being called twice! https://github.com/phetsims/quantum-measurement/issues/22
     } );

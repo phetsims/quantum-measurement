@@ -21,7 +21,7 @@ const QuantumMeasurementConstants = {
   COIN_SET_AREA_PROPORTION: 0.9, // Side of the explicit coin area with respect to the measurement area
 
   PREPARING_TO_BE_MEASURED_TIME: 1, // in seconds
-  HOLLYWOODED_MAX_COINS: 900, //
+  HOLLYWOODED_MAX_COINS: 900, // This number should be used when *showing* fewer coins than the 10000. But the model will have 10000
   HOLLYWOODED_MAX_COINS_RADII: 2
   /**
    * 20 400

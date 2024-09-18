@@ -38,16 +38,15 @@ const LANDING_ZONE_FILL = 'rgba( 255, 192, 203, 0.5 )'; // useful for debug, opa
 const MAP_OF_COIN_QUANTITY_TO_RADIUS = new Map( [
   [ 10, 12 ],
   [ 100, 6 ],
-
-  // TODO: See https://github.com/phetsims/quantum-measurement/issues/15. This will need to be modded when real suppor
-  //       for 10000 coins is added.
-  [ QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS, QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS_RADII ]
+  [ 10_000, QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS_RADII ]
   // [ 10000, 0.5 ]
 ] );
 
 export default class MultiCoinTestBox extends HBox {
 
   private readonly testBoxWithClipArea: Node;
+
+  // REVIEW TODO: Should this be also called numberOfActiveSystemsProperty for consistency with the model naming? https://github.com/phetsims/quantum-measurement/issues/20
   private readonly coinCapacityProperty: TReadOnlyProperty<number>;
   private readonly residentCoinNodes: SmallCoinNode[] = [];
 
@@ -166,7 +165,7 @@ export default class MultiCoinTestBox extends HBox {
     if ( this.coinCapacityProperty.value === 10 ) {
 
       // Two rows of five.
-      const xOffset = BOX_SIZE.width / 6 * ( index % 5 + 1 ) - BOX_SIZE.width / 2;
+      const xOffset = BOX_SIZE.width / 6 * ( ( index % 5 ) + 1 ) - BOX_SIZE.width / 2;
       const yOffset = BOX_SIZE.height / 3 * ( Math.floor( index / 5 ) + 1 ) - BOX_SIZE.height / 2;
       offset.setXY( xOffset, yOffset );
     }
@@ -177,15 +176,15 @@ export default class MultiCoinTestBox extends HBox {
       const yOffset = BOX_SIZE.height / 11 * ( Math.floor( index / 10 ) + 1 ) - BOX_SIZE.height / 2;
       offset.setXY( xOffset, yOffset );
     }
+    else if ( this.coinCapacityProperty.value === 10_000 ) {
 
-      // TODO: See https://github.com/phetsims/quantum-measurement/issues/15. This is a temporary workaround where we are
-    //       handling the 10000 setting as though it's QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS, and will need to be replaced.
-    else if ( this.coinCapacityProperty.value === QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS ) {
+      // REVIEW TODO: Encompass these three implementations in a method, see https://github.com/phetsims/quantum-measurement/issues/20
 
-      const sideLength = Math.sqrt( this.coinCapacityProperty.value );
+      // N rows of N = sqrt( Hollywooded number of coins )
+      const sideLength = Math.sqrt( QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS );
       const BoxDimension = new Vector2( BOX_SIZE.width, BOX_SIZE.height ).timesScalar( QuantumMeasurementConstants.COIN_SET_AREA_PROPORTION );
-      const xOffset = BoxDimension.x / ( sideLength + 1 ) * ( Math.floor( index / sideLength ) + 1 ) - BoxDimension.x / 2;
       const yOffset = BoxDimension.y / ( sideLength + 1 ) * ( index % sideLength + 1 ) - BoxDimension.y / 2;
+      const xOffset = BoxDimension.x / ( sideLength + 1 ) * ( Math.floor( index / sideLength ) + 1 ) - BoxDimension.x / 2;
       offset.setXY( xOffset, yOffset );
     }
     return offset;

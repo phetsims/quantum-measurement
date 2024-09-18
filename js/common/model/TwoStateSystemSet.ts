@@ -45,10 +45,8 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
   public readonly measuredValues: Array<T | null>;
 
   // The number of systems that will be measured each time a measurement is made.
-  // TODO: Have the real 10_000 used here, hollywood elsewhere for coinNodes, see https://github.com/phetsims/quantum-measurement/issues/15
   public readonly numberOfActiveSystemsProperty: NumberProperty;
 
-  // TODO AV: Check how this is used https://github.com/phetsims/quantum-measurement/issues/20
   // Timeout for the preparingToBeMeasured state.
   private preparingToBeMeasuredTimeoutListener: null | TimerListener = null;
 
@@ -131,6 +129,8 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
   /**
    * Measure the system, which will either cause a value to be chosen if one hasn't been since the last preparation, or
    * will just return the value of the most recent measurement.
+   *
+   * REVIEW TODO: The return value of this method is never used anywhere! See https://github.com/phetsims/quantum-measurement/issues/20
    */
   public measure(): StateSetMeasurementResult<T> {
     assert && assert(
@@ -141,10 +141,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
     // REVIEW TODO: What happens if the state is currently 'measuredAndRevealed' see https://github.com/phetsims/quantum-measurement/issues/20
     // Shouldnt we assert that the state is 'readyToBeMeasured'?
 
-    const times = this.numberOfActiveSystemsProperty.value === QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS ?
-                  10000 : this.numberOfActiveSystemsProperty.value;
-
-    _.times( times, i => {
+    _.times( this.numberOfActiveSystemsProperty.value, i => {
 
       // Only make a new measurement if one doesn't exist for this element. Otherwise, just keep the existing value.
       if ( this.measuredValues[ i ] === null ) {
