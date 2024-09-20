@@ -10,7 +10,7 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import Bounds2 from '../../../../dot/js/Bounds2.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import { Color, VBox } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -104,10 +104,12 @@ export default class CoinExperimentPreparationArea extends VBox {
   }
 
   /**
-   * TODO: doc if this works, see https://github.com/phetsims/quantum-measurement/issues/11
+   * Get the position of the coin that indicates the initial orientation or prepared state in the global coordinate
+   * frame.  This is generally used when trying to animate the movement of coin between parent nodes.
    */
-  public getIndicatorCoinGlobalBounds(): Bounds2 {
-    return this.initialCoinStateSelectorNode.orientationIndicatorCoinNode.getGlobalBounds();
+  public getIndicatorCoinGlobalCenter(): Vector2 {
+    const orientationIndicatorGlobalBounds = this.initialCoinStateSelectorNode.orientationIndicatorCoinNode.getGlobalBounds();
+    return orientationIndicatorGlobalBounds.center;
   }
 }
 

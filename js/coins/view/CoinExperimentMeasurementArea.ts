@@ -334,7 +334,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
 
       // Add the coin to our parent node. This is done so that we don't change our bounds, which could mess up the
       // layout. It will be added back to this area when it is back within the bounds.
-      sceneGraphParent.addSingleCoinNode( singleCoinNode, forReprepare );
+      sceneGraphParent.addSingleCoinNode( singleCoinNode );
 
       // Make sure the coin mask is outside the test box so that it isn't visible.
       // REVIEW TODO: Why not just hide it? https://github.com/phetsims/quantum-measurement/issues/20
@@ -471,7 +471,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
 
       // Add the coin to our parent node. This is done so that we don't change our bounds, which could mess up the
       // layout. It will be added back to this area when it is back within the bounds.
-      sceneGraphParent.addCoinNodeSet( coinSetNodes, forReprepare );
+      sceneGraphParent.addCoinNodeSet( coinSetNodes );
 
       // Create and start a set of animations to move these new created coin nodes to the side of the multiple coin test
       // box. The entire process consists of two animations, one to move a coin to the left edge of the test box while

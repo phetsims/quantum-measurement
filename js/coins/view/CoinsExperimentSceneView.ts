@@ -41,8 +41,6 @@ const SCENE_WIDTH = QuantumMeasurementConstants.LAYOUT_BOUNDS.width;
 const DIVIDER_X_POSITION_DURING_PREPARATION = Math.floor( ScreenView.DEFAULT_LAYOUT_BOUNDS.width * 0.38 );
 const DIVIDER_X_POSITION_DURING_MEASUREMENT = Math.ceil( ScreenView.DEFAULT_LAYOUT_BOUNDS.width * 0.2 );
 const DIVIDER_HEIGHT = 500; // empirically determined
-const COIN_POSITION_IN_PREPARE_MODE = new Vector2( DIVIDER_X_POSITION_DURING_PREPARATION - 200, DIVIDER_HEIGHT * 0.4 );
-const COIN_POSITION_IN_MEASUREMENT_MODE = new Vector2( DIVIDER_X_POSITION_DURING_MEASUREMENT - 100, 80 );
 
 export default class CoinsExperimentSceneView extends Node {
 
@@ -61,6 +59,10 @@ export default class CoinsExperimentSceneView extends Node {
   // The animation for the movement of the divider when switching between 'preparation' and 'measurement' modes. This
   // will be null when no animation is in progress.
   private dividerMovementAnimation: Animation | null = null;
+
+  // Track the location where animations of coins from the preparation area to the measurement area should start.  This
+  // is updated as the size and layout of the preparation area changes.
+  private travelingCoinsOrigin: Vector2;
 
   public constructor( sceneModel: CoinsExperimentSceneModel, providedOptions?: CoinsExperimentSceneViewOptions ) {
 
@@ -120,6 +122,10 @@ export default class CoinsExperimentSceneView extends Node {
       this.updateActivityAreaPositions();
     } );
 
+    // Set the initial position that will be used when adding the coins that move (animate) between the preparation and
+    // measurement areas.
+    this.travelingCoinsOrigin = this.globalToLocalPoint( this.preparationArea.getIndicatorCoinGlobalCenter() );
+
     // Monitor the state of the experiment and update the view when switching between 'preparation' and 'measurement'.
     sceneModel.preparingExperimentProperty.link( preparingExperiment => {
 
@@ -143,6 +149,9 @@ export default class CoinsExperimentSceneView extends Node {
                                               DIVIDER_X_POSITION_DURING_PREPARATION :
                                               DIVIDER_X_POSITION_DURING_MEASUREMENT;
         this.dividerMovementAnimation = null;
+
+        // Update the location where the coins should come from during animations.
+        this.travelingCoinsOrigin = this.globalToLocalPoint( this.preparationArea.getIndicatorCoinGlobalCenter() );
       } );
 
       // Kick off the divider animation.
@@ -170,23 +179,13 @@ export default class CoinsExperimentSceneView extends Node {
   }
 
   /**
-   * Add a coin node to the scene graph. This is used to support the animation of the coins used in the "Single Coin
-   * Measurements" experiment from the preparation area to the measurement area. Having this method allows the
-   * measurement area to create the node and get it into the scene graph at the appropriate place without altering the
-   * measurement area's bounds.
+   * Add the provided coin node to the scene graph. This is used to support the animation of the coins used in the
+   * "Single Coin Measurements" experiment from the preparation area to the measurement area. Having this method allows
+   * the measurement area to create the coin Node, retain a reference to it, and get it into the scene graph at the
+   * appropriate place without altering its own bounds.
    */
-  public addSingleCoinNode( coinNode: CoinNode, forReprepare = false ): void {
-
-    // TODO: See https://github.com/phetsims/quantum-measurement/issues/11. Empirically determined values in the local
-    //       coordinate frame are being used because my (jbphet) attempts to do something more general, such as the
-    //       commented out code below, weren't working. This should be fixed up.
-    // const indicatorCoinGlobalBounds = this.preparationArea.getIndicatorCoinGlobalBounds();
-    // coinNode.center = this.globalToLocalPoint( indicatorCoinGlobalBounds.center );
-
-    // Use a different initial position for the coin if this is a reprepare (which applies to the quantum coin only)
-    // versus an initial preparation of the coin.
-    coinNode.center = forReprepare ? COIN_POSITION_IN_MEASUREMENT_MODE : COIN_POSITION_IN_PREPARE_MODE;
-
+  public addSingleCoinNode( coinNode: CoinNode ): void {
+    coinNode.center = this.travelingCoinsOrigin;
     this.addChild( coinNode );
     coinNode.moveToBack();
   }
@@ -197,19 +196,11 @@ export default class CoinsExperimentSceneView extends Node {
    * method allows the measurement area to create the nodes and get them into the scene graph at the appropriate places
    * without altering the measurement area's bounds.
    */
-  public addCoinNodeSet( coinNodeSet: SmallCoinNode[], forReprepare = false ): void {
+  public addCoinNodeSet( coinNodeSet: SmallCoinNode[] ): void {
 
     if ( coinNodeSet.length === 0 ) {
       return;
     }
-
-    // TODO: See https://github.com/phetsims/quantum-measurement/issues/11. Empirically determined values in the local
-    //       coordinate frame are being used because my (jbphet) attempts to do something more general weren't working.
-    //       This should be made to use information from where the indicator nodes are in the preparation area.
-
-    // Use a different initial position for the coin if this is a reprepare (which applies to the quantum coins only)
-    // versus an initial preparation of the coin.
-    const regionCenter = forReprepare ? COIN_POSITION_IN_MEASUREMENT_MODE : COIN_POSITION_IN_PREPARE_MODE;
 
     // variables used for randomizing the position of the coin node
     const offsetVector = new Vector2( 0, 0 );
@@ -222,7 +213,7 @@ export default class CoinsExperimentSceneView extends Node {
       const distanceFromCenter = dotRandom.nextDouble() * maxDistanceFromCenter;
       offsetVector.setXY( distanceFromCenter, 0 );
       offsetVector.rotate( dotRandom.nextDouble() * 2 * Math.PI );
-      coinNode.center = regionCenter.plus( offsetVector );
+      coinNode.center = this.travelingCoinsOrigin.plus( offsetVector );
       this.addChild( coinNode );
       coinNode.moveToBack();
     } );
