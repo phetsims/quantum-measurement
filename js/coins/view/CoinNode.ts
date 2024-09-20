@@ -15,11 +15,19 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { Circle, Node, NodeOptions, TPaint } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
+// constants
+const DEFAULT_MARGIN_FACTOR = 0.1;
+
 // type for specifying the attributes for one face of the coin
 export type CoinFaceParameters = {
   stroke?: TPaint;
   fill?: TPaint;
   content?: Node;
+
+  // These values control how the content is scaled on the coin face.  They are multipliers that are applied to the
+  // coin radius to calculate the margin.  If not provided they are calculated automatically.
+  minXMarginFactor?: number;
+  minYMarginFactor?: number;
 };
 
 type SelfOptions = EmptySelfOptions;
@@ -48,14 +56,23 @@ export default class CoinNode extends Node {
         fill: coinFaceParameterSet.fill
       } );
       if ( coinFaceParameterSet.content ) {
+
+        // Scale the content to fit on the coin face based on the provided margin information.
         const content = coinFaceParameterSet.content;
+        content.setScaleMagnitude( 1 );
+        const minXMarginFactor = coinFaceParameterSet.minXMarginFactor === undefined ?
+                                 DEFAULT_MARGIN_FACTOR :
+                                 coinFaceParameterSet.minXMarginFactor;
+        const minYMarginFactor = coinFaceParameterSet.minYMarginFactor === undefined ?
+                                 DEFAULT_MARGIN_FACTOR :
+                                 coinFaceParameterSet.minYMarginFactor;
         const scale = Math.min(
-          Math.min( 2 * radius / content.width, 1 ),
-          Math.min( 2 * radius / content.height, 1 )
+          2 * radius * ( 1 - minXMarginFactor ) / content.width,
+          2 * radius * ( 1 - minYMarginFactor ) / content.height
         );
         content.setScaleMagnitude( scale );
         content.center = Vector2.ZERO;
-        coinFace.addChild( coinFaceParameterSet.content );
+        coinFace.addChild( content );
       }
       this.addChild( coinFace );
       coinFaceNodes.push( coinFace );

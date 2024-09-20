@@ -32,7 +32,8 @@ export default class ClassicalCoinNode extends CoinNode {
       stroke: HEADS_STROKE_AND_LETTER_COLOR,
       content: new Text( QuantumMeasurementStrings.classicalUpSymbolStringProperty, {
         font: LETTER_LABEL_FONT,
-        fill: HEADS_STROKE_AND_LETTER_COLOR
+        fill: HEADS_STROKE_AND_LETTER_COLOR,
+        boundsMethod: 'accurate'
       } )
     };
 
@@ -41,8 +42,10 @@ export default class ClassicalCoinNode extends CoinNode {
       stroke: TAILS_STROKE_AND_LETTER_COLOR,
       content: new Text( QuantumMeasurementStrings.classicalDownSymbolStringProperty, {
         font: LETTER_LABEL_FONT,
-        fill: TAILS_STROKE_AND_LETTER_COLOR
-      } )
+        fill: TAILS_STROKE_AND_LETTER_COLOR,
+        boundsMethod: 'accurate'
+      } ),
+      minYMarginFactor: 0.3
     };
 
     const crossFadeProperty: TReadOnlyProperty<number> = new DerivedProperty(
