@@ -65,7 +65,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
     const options = optionize<TwoStateSystemOptions, SelfOptions, PhetioObjectOptions>()( {
       initialBias: 0.5,
       maxNumberOfSystems: 10000,
-      phetioState: false // TODO: Turn on state for this, see https://github.com/phetsims/quantum-measurement/issues/29.
+      phetioState: false // TODO: Turn on state for this, see https://github.com/phetsims/quantum-measurement/issues/32.
     }, providedOptions );
 
     super( options );
