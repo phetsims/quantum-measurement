@@ -5,7 +5,7 @@
  * multiple coins - where users can flip and reveal coins. Depending on how this is parameterized, the coins may either
  * be classical or quantum coins.
  *
- * REVIEW TODO: Move some of the animation logic into its own subclass https://github.com/phetsims/quantum-measurement/issues/20
+ * REVIEW TODO: Move some of the animation logic into its own subclass https://github.com/phetsims/quantum-measurement/issues/34
  *
  * @author John Blanco, PhET Interactive Simulations
  */
@@ -73,7 +73,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
     const measurementAreaHeaderLineWidthProperty = new DerivedProperty(
       [ sceneModel.preparingExperimentProperty ],
 
-      // TODO: Values below are empirically determined, but there is probably a better way. See https://github.com/phetsims/quantum-measurement/issues/1.
+      // TODO: Values below are empirically determined, but there is probably a better way. See https://github.com/phetsims/quantum-measurement/issues/35.
       preparingExperiment => preparingExperiment ? 300 : 400
     );
     const singleCoinSectionHeader = new SceneSectionHeader(
@@ -336,8 +336,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
       // layout. It will be added back to this area when it is back within the bounds.
       sceneGraphParent.addSingleCoinNode( singleCoinNode );
 
-      // Make sure the coin mask is outside the test box so that it isn't visible.
-      // REVIEW TODO: Why not just hide it? https://github.com/phetsims/quantum-measurement/issues/20
+      // Make sure the coin mask is outside the test box so that it isn't visible until it slides into the test box.
       coinMask.x = -SINGLE_COIN_TEST_BOX_SIZE.width * 2;
 
       // Create and start an animation to move the single coin to the side of the single coin test box. The entire
@@ -464,7 +463,6 @@ export default class CoinExperimentMeasurementArea extends VBox {
       const coinsToDraw = sceneModel.coinSet.numberOfActiveSystemsProperty.value === 10000 ?
                           QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS : sceneModel.coinSet.numberOfActiveSystemsProperty.value;
       _.times( coinsToDraw, i => {
-        // TODO: Is this tandem structure a final decision or placeholder? https://github.com/phetsims/quantum-measurement/issues/20
         const smallCoinTandem = tandem.createTandem( `multiCoin${i}` );
         coinSetNodes.push( new SmallCoinNode( coinRadius, { tandem: smallCoinTandem } ) );
       } );
@@ -523,10 +521,6 @@ export default class CoinExperimentMeasurementArea extends VBox {
             multipleCoinTestBox.addCoinNodeToBox( coinNode );
 
             if ( sceneModel.systemType === 'quantum' ) {
-
-              // "Collapse" the state of the coin nodes so that they show a single state, not a superposed one.
-              // TODO: https://github.com/phetsims/quantum-measurement/issues/16 - This isn't quite complete. It will
-              //       need to collapse the coins as well.
               sceneModel.coinSet.prepareInstantly();
             }
 

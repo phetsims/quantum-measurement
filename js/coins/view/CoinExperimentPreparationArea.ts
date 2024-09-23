@@ -56,7 +56,7 @@ export default class CoinExperimentPreparationArea extends VBox {
     const prepAreaHeaderLineWidthProperty = new DerivedProperty(
       [ sceneModel.preparingExperimentProperty ],
 
-      // TODO: Values below are empirically determined, but there is probably a better way. See https://github.com/phetsims/quantum-measurement/issues/1.
+      // TODO: Values below are empirically determined, but there is probably a better way. See https://github.com/phetsims/quantum-measurement/issues/35.
       preparingExperiment => preparingExperiment ? 250 : 100
     );
     const preparationAreaHeader = new SceneSectionHeader(

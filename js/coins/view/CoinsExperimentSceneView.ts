@@ -75,9 +75,7 @@ export default class CoinsExperimentSceneView extends Node {
 
     super( options );
 
-    // REVIEW TODO: Shouldn't this be phetioReadonly: true? See https://github.com/phetsims/quantum-measurement/issues/20
     this.dividerXPositionProperty = new NumberProperty( DIVIDER_X_POSITION_DURING_PREPARATION, {
-      tandem: options.tandem.createTandem( 'dividerXPositionProperty' ),
       range: new Range( DIVIDER_X_POSITION_DURING_MEASUREMENT, DIVIDER_X_POSITION_DURING_PREPARATION )
     } );
 

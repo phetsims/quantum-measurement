@@ -4,7 +4,7 @@
  * TwoStateSystem is a simple model for a system that can be in one of two states, and can be prepared (similar to
  * flipping a coin) and measured (similar to reading how the flip turned out).
  *
- * REVIEW TODO: This file is very similar to TwoStateSystemSet.ts. Couldn't this work as a 1 element set? https://github.com/phetsims/quantum-measurement/issues/20
+ * REVIEW TODO: This file is very similar to TwoStateSystemSet.ts. Couldn't this work as a 1 element set? https://github.com/phetsims/quantum-measurement/issues/36
  *
  * @author John Blanco (PhET Interactive Simulations)
  */

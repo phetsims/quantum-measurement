@@ -135,12 +135,9 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
    */
   public measure(): StateSetMeasurementResult<T> {
     assert && assert(
-      this.measurementStateProperty.value !== 'preparingToBeMeasured',
-      'The system should not be measured if it is not ready for measurement.'
+      this.measurementStateProperty.value === 'readyToBeMeasured' || this.measurementStateProperty.value === 'measuredAndRevealed',
+      'The system should be ready for measurement or have already been measured.'
     );
-
-    // REVIEW TODO: What happens if the state is currently 'measuredAndRevealed' see https://github.com/phetsims/quantum-measurement/issues/20
-    // Shouldnt we assert that the state is 'readyToBeMeasured'?
 
     _.times( this.numberOfActiveSystemsProperty.value, i => {
 

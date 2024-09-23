@@ -148,7 +148,6 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
           this.initialCoinStateProperty.value = 'superposed';
         }
         else {
-          // TODO: Wouldn't this cause a reentry? https://github.com/phetsims/quantum-measurement/issues/28
           this.initialCoinStateProperty.value = bias === 1 ? 'up' : 'down';
         }
       } );

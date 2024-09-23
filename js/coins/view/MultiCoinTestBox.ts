@@ -45,14 +45,12 @@ const MAP_OF_COIN_QUANTITY_TO_RADIUS = new Map( [
 export default class MultiCoinTestBox extends HBox {
 
   private readonly testBoxWithClipArea: Node;
-
-  // REVIEW TODO: Should this be also called numberOfActiveSystemsProperty for consistency with the model naming? https://github.com/phetsims/quantum-measurement/issues/20
-  private readonly coinCapacityProperty: TReadOnlyProperty<number>;
+  private readonly numberOfActiveSystemsProperty: TReadOnlyProperty<number>;
   private readonly residentCoinNodes: SmallCoinNode[] = [];
 
   public constructor( coinSet: TwoStateSystemSet<string>,
                       measurementStateProperty: Property<ExperimentMeasurementState>,
-                      coinCapacityProperty: TReadOnlyProperty<number>,
+                      numberOfActiveSystemsProperty: TReadOnlyProperty<number>,
                       providedOptions?: MultiCoinTestBoxOptions ) {
 
     // Create the main rectangle that will represent the area where the coins will be hidden and shown.
@@ -90,7 +88,7 @@ export default class MultiCoinTestBox extends HBox {
     super( options );
 
     this.testBoxWithClipArea = testBoxWithClipArea;
-    this.coinCapacityProperty = coinCapacityProperty;
+    this.numberOfActiveSystemsProperty = numberOfActiveSystemsProperty;
 
     // Update the fill for the rectangle based on the measurement state.
     measurementStateProperty.link( measurementState => {
@@ -160,25 +158,25 @@ export default class MultiCoinTestBox extends HBox {
    * Get an offset value from the center of the test box rectangle where a coin at the given index should go.
    */
   public getOffsetFromCenter( index: number ): Vector2 {
-    assert && assert( index < this.coinCapacityProperty.value, 'index is out of range for current capacity' );
+    assert && assert( index < this.numberOfActiveSystemsProperty.value, 'index is out of range for current capacity' );
     const offset = new Vector2( 0, 0 );
-    if ( this.coinCapacityProperty.value === 10 ) {
+    if ( this.numberOfActiveSystemsProperty.value === 10 ) {
 
       // Two rows of five.
       const xOffset = BOX_SIZE.width / 6 * ( ( index % 5 ) + 1 ) - BOX_SIZE.width / 2;
       const yOffset = BOX_SIZE.height / 3 * ( Math.floor( index / 5 ) + 1 ) - BOX_SIZE.height / 2;
       offset.setXY( xOffset, yOffset );
     }
-    else if ( this.coinCapacityProperty.value === 100 ) {
+    else if ( this.numberOfActiveSystemsProperty.value === 100 ) {
 
       // 10 rows of 10
       const xOffset = BOX_SIZE.width / 11 * ( ( index % 10 ) + 1 ) - BOX_SIZE.width / 2;
       const yOffset = BOX_SIZE.height / 11 * ( Math.floor( index / 10 ) + 1 ) - BOX_SIZE.height / 2;
       offset.setXY( xOffset, yOffset );
     }
-    else if ( this.coinCapacityProperty.value === 10000 ) {
+    else if ( this.numberOfActiveSystemsProperty.value === 10000 ) {
 
-      // REVIEW TODO: Encompass these three implementations in a method, see https://github.com/phetsims/quantum-measurement/issues/20
+      // REVIEW TODO: Encompass these three implementations in a method, see https://github.com/phetsims/quantum-measurement/issues/37
 
       // N rows of N = sqrt( Hollywooded number of coins )
       const sideLength = Math.sqrt( QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS );
