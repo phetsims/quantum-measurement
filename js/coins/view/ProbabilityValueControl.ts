@@ -20,6 +20,7 @@ import { HBox, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import ArrowButton, { ArrowButtonOptions } from '../../../../sun/js/buttons/ArrowButton.js';
 import HSlider from '../../../../sun/js/HSlider.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 
 const TITLE_FONT = new PhetFont( 16 );
 const TICK_MARK_FONT = new PhetFont( 14 );
@@ -29,7 +30,8 @@ const BUTTON_CHANGE_AMOUNT = 0.1;
 export default class ProbabilityValueControl extends VBox {
 
   public constructor( titleStringProperty: TReadOnlyProperty<string>,
-                      probabilityProperty: NumberProperty ) {
+                      probabilityProperty: NumberProperty,
+                      tandem: Tandem ) {
 
     const title = new RichText( titleStringProperty, {
       font: TITLE_FONT
@@ -46,21 +48,24 @@ export default class ProbabilityValueControl extends VBox {
       'left',
       () => { probabilityProperty.value = Math.max( probabilityProperty.value - BUTTON_CHANGE_AMOUNT, 0 ); },
       combineOptions<ArrowButtonOptions>( {
-        enabledProperty: new DerivedProperty( [ probabilityProperty ], probability => probability > 0 )
+        enabledProperty: new DerivedProperty( [ probabilityProperty ], probability => probability > 0 ),
+        tandem: tandem.createTandem( 'leftArrowButton' )
       }, arrowButtonOptions )
     );
     const rightArrowButton = new ArrowButton(
       'right',
       () => { probabilityProperty.value = Math.min( probabilityProperty.value + BUTTON_CHANGE_AMOUNT, 1 ); },
       combineOptions<ArrowButtonOptions>( {
-        enabledProperty: new DerivedProperty( [ probabilityProperty ], probability => probability < 1 )
+        enabledProperty: new DerivedProperty( [ probabilityProperty ], probability => probability < 1 ),
+        tandem: tandem.createTandem( 'rightArrowButton' )
       }, arrowButtonOptions )
     );
     const slider = new HSlider( probabilityProperty, RANGE, {
       trackSize: new Dimension2( 150, 1 ),
       thumbSize: new Dimension2( 12, 26 ),
       majorTickLength: 10,
-      tickLabelSpacing: 4
+      tickLabelSpacing: 4,
+      tandem: tandem.createTandem( 'slider' )
     } );
     slider.addMajorTick( RANGE.min, new Text( RANGE.min.toString(), { font: TICK_MARK_FONT } ) );
     slider.addMajorTick( RANGE.max, new Text( RANGE.max.toString(), { font: TICK_MARK_FONT } ) );
@@ -74,7 +79,8 @@ export default class ProbabilityValueControl extends VBox {
         title,
         sliderAndArrows
       ],
-      spacing: 5
+      spacing: 5,
+      tandem: tandem
     } );
   }
 }

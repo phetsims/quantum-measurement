@@ -8,6 +8,7 @@ import { Image } from '../../../scenery/js/imports.js';
 import HSlider from '../../../sun/js/HSlider.js';
 import quantumMeasurement from '../quantumMeasurement.js';
 import QuantumMeasurementConstants from './QuantumMeasurementConstants.js';
+import Tandem from '../../../tandem/js/Tandem.js';
 
 /**
  * Define a slider that can be added to a screen view and will control the opacity of a Property that is used to display
@@ -26,7 +27,8 @@ export default class MockupOpacitySlider extends HSlider {
       left: QuantumMeasurementConstants.SCREEN_VIEW_X_MARGIN,
       bottom: ScreenView.DEFAULT_LAYOUT_BOUNDS.height - QuantumMeasurementConstants.SCREEN_VIEW_Y_MARGIN,
       thumbSize: new Dimension2( 10, 20 ),
-      trackSize: new Dimension2( 50, 3 )
+      trackSize: new Dimension2( 50, 3 ),
+      tandem: Tandem.OPT_OUT
     } );
 
     // Update the mockup opacity.

@@ -56,7 +56,8 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
     const options = optionize<CoinExperimentSceneModelOptions, SelfOptions, PhetioObjectOptions>()( {
       systemType: 'classical',
       initiallyActive: false,
-      initialBias: 0.5
+      initialBias: 0.5,
+      phetioState: false // TODO: Is this right?  What should it be?  See https://github.com/phetsims/quantum-measurement/issues/29.
     }, providedOptions );
 
     super( options );
@@ -74,6 +75,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
       tandem: options.tandem.createTandem( 'upProbabilityProperty' )
     } );
     const singleCoinTandem = options.tandem.createTandem( 'singleCoin' );
+    const coinSetTandem = options.tandem.createTandem( 'coinSet' );
     if ( options.systemType === 'classical' ) {
       this.initialCoinStateProperty = new Property<ClassicalCoinStates>( 'heads', {
         tandem: options.tandem.createTandem( 'initialCoinStateProperty' ),
@@ -90,7 +92,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
         ClassicalCoinStateValues,
         'heads',
         this.upProbabilityProperty,
-        { tandem: singleCoinTandem }
+        { tandem: coinSetTandem }
       );
     }
     else {
@@ -110,7 +112,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
         QuantumCoinStateValues,
         'up',
         this.upProbabilityProperty,
-        { tandem: singleCoinTandem }
+        { tandem: coinSetTandem }
       );
     }
 

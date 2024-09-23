@@ -26,7 +26,7 @@ simLauncher.launch( () => {
     new CoinsScreen( { tandem: Tandem.ROOT.createTandem( 'coinsScreen' ) } ),
     new PhotonsScreen( { tandem: Tandem.ROOT.createTandem( 'photonsScreen' ) } ),
     new SpinScreen( { tandem: Tandem.ROOT.createTandem( 'spinScreen' ) } ),
-    new BlochSphereScreen( { tandem: Tandem.ROOT.createTandem( 'spinScreen' ) } )
+    new BlochSphereScreen( { tandem: Tandem.ROOT.createTandem( 'blochSphereScreen' ) } )
   ];
 
   const options: SimOptions = {

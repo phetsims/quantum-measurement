@@ -111,7 +111,8 @@ export default class CoinsExperimentSceneView extends Node {
       } ),
       listener: () => { sceneModel.preparingExperimentProperty.value = false; },
       visibleProperty: sceneModel.preparingExperimentProperty,
-      centerY: 245 // empirically determined
+      centerY: 245, // empirically determined
+      tandem: options.tandem.createTandem( 'startMeasurementButton' )
     } );
     this.addChild( startMeasurementButton );
 
@@ -165,7 +166,8 @@ export default class CoinsExperimentSceneView extends Node {
       font: new PhetFont( 14 ),
       listener: () => {
         sceneModel.preparingExperimentProperty.value = true;
-      }
+      },
+      tandem: options.tandem.createTandem( 'newCoinButton' )
     } );
     this.addChild( this.newCoinButton );
 

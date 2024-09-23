@@ -161,7 +161,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
       return {
         createNode: () => new Text( valueText, { font: RADIO_BUTTON_FONT } ),
         value: value,
-        tandemName: valueText
+        tandemName: `${valueText}CoinsRadioButton`
       };
     };
     const numberOfCoinsRadioButtonGroup = new VerticalAquaRadioButtonGroup(

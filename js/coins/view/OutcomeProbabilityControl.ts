@@ -127,8 +127,16 @@ export default class OutcomeProbabilityControl extends VBox {
     if ( systemType === 'classical' ) {
       children = [
         title,
-        new ProbabilityValueControl( classicalUpTitleProperty, outcomeProbabilityProperty ),
-        new ProbabilityValueControl( classicalDownTitleProperty, inverseOutcomeProbabilityProperty )
+        new ProbabilityValueControl(
+          classicalUpTitleProperty,
+          outcomeProbabilityProperty,
+          providedOptions.tandem.createTandem( 'classicalUpProbabilityControl' )
+        ),
+        new ProbabilityValueControl(
+          classicalDownTitleProperty,
+          inverseOutcomeProbabilityProperty,
+          providedOptions.tandem.createTandem( 'classicalDownProbabilityControl' )
+        )
       ];
     }
     else {
@@ -150,8 +158,16 @@ export default class OutcomeProbabilityControl extends VBox {
       children = [
         title,
         quantumReadout,
-        new ProbabilityValueControl( quantumUpTitleProperty, outcomeProbabilityProperty ),
-        new ProbabilityValueControl( quantumDownTitleProperty, inverseOutcomeProbabilityProperty )
+        new ProbabilityValueControl(
+          quantumUpTitleProperty,
+          outcomeProbabilityProperty,
+          providedOptions.tandem.createTandem( 'quantumUpProbabilityControl' )
+        ),
+        new ProbabilityValueControl(
+          quantumDownTitleProperty,
+          inverseOutcomeProbabilityProperty,
+          providedOptions.tandem.createTandem( 'quantumDownProbabilityControl' )
+        )
       ];
     }
 
