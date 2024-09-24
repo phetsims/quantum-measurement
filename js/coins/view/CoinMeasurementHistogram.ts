@@ -20,7 +20,6 @@ import { SystemType } from '../../common/model/SystemType.js';
 import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
 import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
 
@@ -73,13 +72,17 @@ export default class CoinMeasurementHistogram extends Node {
 
     // Create the labels for the X axis.
     const xAxisLeftLabel = new Text(
-      systemType === 'classical' ? QuantumMeasurementStrings.classicalUpSymbolStringProperty : QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER,
+      systemType === 'classical' ?
+      QuantumMeasurementConstants.CLASSICAL_UP_SYMBOL :
+      QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER,
       {
         font: LABEL_FONT
       }
     );
     const xAxisRightLabel = new Text(
-      systemType === 'classical' ? QuantumMeasurementStrings.classicalDownSymbolStringProperty : QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER,
+      systemType === 'classical' ?
+      QuantumMeasurementConstants.CLASSICAL_DOWN_SYMBOL :
+      QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER,
       {
         font: LABEL_FONT,
         fill: Color.MAGENTA

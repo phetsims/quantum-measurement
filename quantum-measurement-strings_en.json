@@ -68,18 +68,6 @@
   "probabilityOfValuePattern": {
     "value": "P({{value}})"
   },
-  "classicalUpSymbol": {
-    "value": "\uD83C\uDF1E\uFE0E\uFE0E"
-  },
-  "classicalDownSymbol": {
-      "value": "\u263D"
-  },
-  "quantumUpSymbol": {
-    "value": "\u2b61"
-  },
-  "quantumDownSymbol": {
-      "value": "\u2b63"
-  },
   "quantumCoinQuoted": {
     "value": "Quantum \"Coin\""
   },

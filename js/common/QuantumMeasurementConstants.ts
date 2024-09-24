@@ -17,6 +17,8 @@ const QuantumMeasurementConstants = {
   BETA: '\u03b2',
   SPIN_UP_ARROW_CHARACTER: '\u2b61',
   SPIN_DOWN_ARROW_CHARACTER: '\u2b63',
+  CLASSICAL_UP_SYMBOL: '\uD83C\uDF1E\uFE0E\uFE0E', // 🌞 Sun symbol
+  CLASSICAL_DOWN_SYMBOL: '\u263D', // 🌙 Moon Symbol
   KET: '\u27e9',
   COIN_SET_AREA_PROPORTION: 0.9, // Side of the explicit coin area with respect to the measurement area
 

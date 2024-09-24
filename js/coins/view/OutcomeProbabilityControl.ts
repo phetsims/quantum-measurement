@@ -85,40 +85,36 @@ export default class OutcomeProbabilityControl extends VBox {
 
     const classicalUpTitleProperty = new DerivedProperty( [
         QuantumMeasurementStrings.probabilityStringProperty,
-        QuantumMeasurementStrings.probabilityOfValuePatternStringProperty,
-        QuantumMeasurementStrings.classicalUpSymbolStringProperty
-      ], ( probabilityString, probabilityOfValuePatternString, classicalUpSymbolString ) => {
-        const POfV = StringUtils.fillIn( probabilityOfValuePatternString, { value: `<b>${classicalUpSymbolString}</b>` } );
+        QuantumMeasurementStrings.probabilityOfValuePatternStringProperty
+      ], ( probabilityString, probabilityOfValuePatternString ) => {
+        const POfV = StringUtils.fillIn( probabilityOfValuePatternString, { value: `<b>${QuantumMeasurementConstants.CLASSICAL_UP_SYMBOL}</b>` } );
         return `${probabilityString} ${POfV}`;
       }
     );
 
     const classicalDownTitleProperty = new DerivedProperty( [
         QuantumMeasurementStrings.probabilityStringProperty,
-        QuantumMeasurementStrings.probabilityOfValuePatternStringProperty,
-        QuantumMeasurementStrings.classicalDownSymbolStringProperty
-      ], ( probabilityString, probabilityOfValuePatternString, classicalDownSymbolString ) => {
-        const POfV = StringUtils.fillIn( probabilityOfValuePatternString, { value: MAGENTA_SPAN( `<b>${classicalDownSymbolString}</b>` ) } );
+        QuantumMeasurementStrings.probabilityOfValuePatternStringProperty
+      ], ( probabilityString, probabilityOfValuePatternString ) => {
+        const POfV = StringUtils.fillIn( probabilityOfValuePatternString, { value: MAGENTA_SPAN( `<b>${QuantumMeasurementConstants.CLASSICAL_DOWN_SYMBOL}</b>` ) } );
         return `${probabilityString} ${POfV}`;
       }
     );
 
     const quantumUpTitleProperty = new DerivedProperty( [
         QuantumMeasurementStrings.probabilityStringProperty,
-        QuantumMeasurementStrings.probabilityOfValuePatternStringProperty,
-        QuantumMeasurementStrings.quantumUpSymbolStringProperty
-      ], ( probabilityString, probabilityOfValuePatternString, quantumUpSymbolString ) => {
-        const POfV = StringUtils.fillIn( probabilityOfValuePatternString, { value: `<b>${quantumUpSymbolString}</b>` } );
+        QuantumMeasurementStrings.probabilityOfValuePatternStringProperty
+      ], ( probabilityString, probabilityOfValuePatternString ) => {
+        const POfV = StringUtils.fillIn( probabilityOfValuePatternString, { value: `<b>${QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER}</b>` } );
         return `${probabilityString} ${POfV} = ${MAGNITUDE_OF_ALPHA_SQUARED}`;
       }
     );
 
     const quantumDownTitleProperty = new DerivedProperty( [
         QuantumMeasurementStrings.probabilityStringProperty,
-        QuantumMeasurementStrings.probabilityOfValuePatternStringProperty,
-        QuantumMeasurementStrings.quantumDownSymbolStringProperty
-      ], ( probabilityString, probabilityOfValuePatternString, quantumDownSymbolString ) => {
-        const POfV = StringUtils.fillIn( probabilityOfValuePatternString, { value: MAGENTA_SPAN( `<b>${quantumDownSymbolString}</b>` ) } );
+        QuantumMeasurementStrings.probabilityOfValuePatternStringProperty
+      ], ( probabilityString, probabilityOfValuePatternString ) => {
+        const POfV = StringUtils.fillIn( probabilityOfValuePatternString, { value: MAGENTA_SPAN( `<b>${QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER}</b>` ) } );
         return `${probabilityString} ${POfV} = ${MAGNITUDE_OF_BETA_SQUARED}`;
       }
     );

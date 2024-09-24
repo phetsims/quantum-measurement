@@ -12,8 +12,8 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Color, Text } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
 import CoinNode, { CoinFaceParameters } from './CoinNode.js';
 
@@ -30,7 +30,7 @@ export default class ClassicalCoinNode extends CoinNode {
     const headsOptions: CoinFaceParameters = {
       fill: HEADS_FILL,
       stroke: HEADS_STROKE_AND_LETTER_COLOR,
-      content: new Text( QuantumMeasurementStrings.classicalUpSymbolStringProperty, {
+      content: new Text( QuantumMeasurementConstants.CLASSICAL_UP_SYMBOL, {
         font: LETTER_LABEL_FONT,
         fill: HEADS_STROKE_AND_LETTER_COLOR,
         boundsMethod: 'accurate'
@@ -40,7 +40,7 @@ export default class ClassicalCoinNode extends CoinNode {
     const tailsOptions: CoinFaceParameters = {
       fill: TAILS_FILL,
       stroke: TAILS_STROKE_AND_LETTER_COLOR,
-      content: new Text( QuantumMeasurementStrings.classicalDownSymbolStringProperty, {
+      content: new Text( QuantumMeasurementConstants.CLASSICAL_DOWN_SYMBOL, {
         font: LETTER_LABEL_FONT,
         fill: TAILS_STROKE_AND_LETTER_COLOR,
         boundsMethod: 'accurate'

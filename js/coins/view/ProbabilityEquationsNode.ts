@@ -14,21 +14,16 @@ import Utils from '../../../../dot/js/Utils.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { RichText } from '../../../../scenery/js/imports.js';
 import { SystemType } from '../../common/model/SystemType.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 
 export default class ProbabilityEquationsNode extends RichText {
 
   public constructor( biasProperty: TReadOnlyProperty<number>, systemType: SystemType ) {
-    const equationsStringProperty = new DerivedProperty( [
-      biasProperty,
-      QuantumMeasurementStrings.classicalUpSymbolStringProperty,
-      QuantumMeasurementStrings.classicalDownSymbolStringProperty,
-      QuantumMeasurementStrings.quantumUpSymbolStringProperty,
-      QuantumMeasurementStrings.quantumDownSymbolStringProperty
-    ], ( bias, classicalUp, classicalDown, quantumUp, quantumDown ) => {
-      const upperFunctionParameter = systemType === 'classical' ? classicalUp : quantumUp;
-      const lowerFunctionParameter = systemType === 'classical' ? classicalDown : quantumDown;
+    const equationsStringProperty = new DerivedProperty( [ biasProperty ], bias => {
+
+      const upperFunctionParameter = systemType === 'classical' ? QuantumMeasurementConstants.CLASSICAL_UP_SYMBOL : QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
+      const lowerFunctionParameter = systemType === 'classical' ? QuantumMeasurementConstants.CLASSICAL_DOWN_SYMBOL : QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER;
       const upperEquation = `P(<b>${upperFunctionParameter}</b>) = ${Utils.toFixed( bias, 2 )}`;
       const lowerEquation = `P(<span style="color: magenta;"><b>${lowerFunctionParameter}</b></span>) = <span style="color: magenta;">${Utils.toFixed( 1 - bias, 2 )}</span>`;
       return `${upperEquation}<br>${lowerEquation}`;
