@@ -55,6 +55,9 @@ const COIN_FLIP_RATE = 3; // full flips per second
 const COIN_TRAVEL_ANIMATION_DURATION = QuantumMeasurementConstants.PREPARING_TO_BE_MEASURED_TIME * 0.95;
 const RADIO_BUTTON_FONT = new PhetFont( 12 );
 
+// allowed values for the number of coins to use in the multi-coin experiment
+export const MULTI_COIN_EXPERIMENT_QUANTITIES = [ 10, 100, 10000 ];
+
 export default class CoinExperimentMeasurementArea extends VBox {
 
   // Boolean Properties that track whether the coins that go into the test boxes are fully enclosed there. This is an
@@ -95,6 +98,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
         opacity: 0.8
       }
     );
+
     // Make the single-coin test box transparent when the state of the coin is being revealed to the user.
     sceneModel.singleCoin.measurementStateProperty.link( singleCoinMeasurementState => {
       singleCoinTestBoxRectangle.fill = singleCoinMeasurementState === 'measuredAndRevealed' ?
@@ -157,6 +161,19 @@ export default class CoinExperimentMeasurementArea extends VBox {
       font: new PhetFont( 14 )
     } );
 
+    // Create the nodes that will be used to animate coin motion for the multiple coin experiments.  These are sized
+    // differently based on the quantity being animated.
+    const movingCoinNodes = new Map<number, SmallCoinNode[]>();
+    MULTI_COIN_EXPERIMENT_QUANTITIES.forEach( quantity => {
+      const quantityToCreate = Math.min( quantity, QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS );
+      const radius = MultiCoinTestBox.getRadiusFromCoinQuantity( quantity );
+      const coinNodes: SmallCoinNode[] = [];
+      _.times( quantityToCreate, () => {
+        coinNodes.push( new SmallCoinNode( radius ) );
+      } );
+      movingCoinNodes.set( quantity, coinNodes );
+    } );
+
     const createRadioButtonGroupItem = ( value: number ) => {
       const valueText = value.toString();
       return {
@@ -167,11 +184,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
     };
     const numberOfCoinsRadioButtonGroup = new VerticalAquaRadioButtonGroup(
       sceneModel.coinSet.numberOfActiveSystemsProperty,
-      [
-        createRadioButtonGroupItem( 10 ),
-        createRadioButtonGroupItem( 100 ),
-        createRadioButtonGroupItem( 10000 )
-      ],
+      MULTI_COIN_EXPERIMENT_QUANTITIES.map( quantity => createRadioButtonGroupItem( quantity ) ),
       {
         spacing: 10,
         tandem: tandem.createTandem( 'numberOfCoinsRadioButtonGroup' )
@@ -465,20 +478,25 @@ export default class CoinExperimentMeasurementArea extends VBox {
       this.coinSetInTestBoxProperty.value = false;
 
       // Create the coins that will travel from the preparation area into this measurement area.
-      const coinRadius = MultiCoinTestBox.getRadiusFromCoinQuantity(
-        sceneModel.coinSet.numberOfActiveSystemsProperty.value
+      // const coinRadius = MultiCoinTestBox.getRadiusFromCoinQuantity(
+      //   sceneModel.coinSet.numberOfActiveSystemsProperty.value
+      // );
+      // const coinSetNodes: SmallCoinNode[] = [];
+      // const coinsToDraw = sceneModel.coinSet.numberOfActiveSystemsProperty.value === 10000 ?
+      //                     QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS : sceneModel.coinSet.numberOfActiveSystemsProperty.value;
+      // _.times( coinsToDraw, i => {
+      //   const smallCoinTandem = tandem.createTandem( `multiCoin${i}` );
+      //   coinSetNodes.push( new SmallCoinNode( coinRadius, { tandem: smallCoinTandem } ) );
+      // } );
+      assert && assert(
+        movingCoinNodes.has( sceneModel.coinSet.numberOfActiveSystemsProperty.value ),
+        'No coin nodes exist for the needed quantity.'
       );
-      const coinSetNodes: SmallCoinNode[] = [];
-      const coinsToDraw = sceneModel.coinSet.numberOfActiveSystemsProperty.value === 10000 ?
-                          QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS : sceneModel.coinSet.numberOfActiveSystemsProperty.value;
-      _.times( coinsToDraw, i => {
-        const smallCoinTandem = tandem.createTandem( `multiCoin${i}` );
-        coinSetNodes.push( new SmallCoinNode( coinRadius, { tandem: smallCoinTandem } ) );
-      } );
+      const coinsToAnimate = movingCoinNodes.get( sceneModel.coinSet.numberOfActiveSystemsProperty.value );
 
-      // Add the coin to our parent node. This is done so that we don't change our bounds, which could mess up the
+      // Add the coins to our parent node. This is done so that we don't change our bounds, which could mess up the
       // layout. It will be added back to this area when it is back within the bounds.
-      sceneGraphParent.addCoinNodeSet( coinSetNodes );
+      sceneGraphParent.addCoinNodeSet( coinsToAnimate! );
 
       // Create and start a set of animations to move these new created coin nodes to the side of the multiple coin test
       // box. The entire process consists of two animations, one to move a coin to the left edge of the test box while
@@ -489,7 +507,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
       const multipleCoinTestBoxBounds = this.globalToLocalBounds( multipleCoinTestBox.getGlobalBounds() );
       const leftOfTestBox = multipleCoinTestBoxBounds.center.minusXY( testAreaXOffset, 0 );
       const leftOfTestAreaInParentCoords = this.localToParentPoint( leftOfTestBox );
-      coinSetNodes.forEach( ( coinNode, index ) => {
+      coinsToAnimate!.forEach( ( coinNode, index ) => {
 
         // Get the final destination for this coin node in terms of its offset from the center of the test box.
         const finalDestinationOffset = multipleCoinTestBox.getOffsetFromCenter( index );
@@ -525,7 +543,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
             // The coin node should now be within the bounds of the multi-coin test box. Remove the coin node from the
             // scene graph parent and add it to the test box.
             sceneGraphParent.removeChild( coinNode );
-            const offset = multipleCoinTestBox.getOffsetFromCenter( coinSetNodes.indexOf( coinNode ) );
+            const offset = multipleCoinTestBox.getOffsetFromCenter( coinsToAnimate!.indexOf( coinNode ) );
             coinNode.center = multipleCoinTestBox.getLocalBounds().center.plus( offset );
             multipleCoinTestBox.addCoinNodeToBox( coinNode );
 
