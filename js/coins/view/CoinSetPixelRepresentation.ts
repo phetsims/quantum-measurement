@@ -8,45 +8,50 @@
  *
  */
 
-import { Image, Node } from '../../../../scenery/js/imports.js';
+import { CanvasNode, CanvasNodeOptions } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
-export default class CoinSetPixelRepresentation extends Node {
-
-  public pixelImage: Image;
-  private readonly canvas: HTMLCanvasElement;
-  private readonly context: CanvasRenderingContext2D;
+export default class CoinSetPixelRepresentation extends CanvasNode {
   private readonly sideLength = 100;
+  private pixels: number[] = [];
+  private pixelScale = 1;
 
-  public constructor( private readonly systemType: 'classical' | 'quantum' ) {
-    super();
-
-    // TODO: Look into extending CanvasNode, see https://github.com/phetsims/quantum-measurement/issues/15
-    this.canvas = document.createElement( 'canvas' );
-    this.canvas.width = this.sideLength;
-    this.canvas.height = this.sideLength;
-    this.context = this.canvas.getContext( '2d' )!;
-
-    this.pixelImage = new Image( this.canvas );
-    this.addChild( this.pixelImage );
+  public constructor( private readonly systemType: 'classical' | 'quantum', providedOptions?: CanvasNodeOptions ) {
+    super( providedOptions );
   }
 
   public redraw( measuredValues: Array<string | null> ): void {
 
     const comparisonValue = this.systemType === 'classical' ? 'heads' : 'up';
     // Create an array of pixel colors (1 for fuchsia, 0 for black)
-    const pixels: number[] = measuredValues.map( value => value === comparisonValue ? 1 : 0 );
+    this.pixels = measuredValues.map( value => value === comparisonValue ? 1 : 0 );
 
+    this.invalidatePaint();
+  }
+
+  /**
+   * Sets the scale of the grid.
+   */
+  public setPixelScale( scale: number ): void {
+    this.pixelScale = scale;
+  }
+
+  /**
+   * Paints the grid lines on the canvas node.
+   */
+  public paintCanvas( context: CanvasRenderingContext2D ): void {
+
+    context.save();
     // Draw pixels on canvas
     for ( let i = 0; i < this.sideLength; i++ ) {
       for ( let j = 0; j < this.sideLength; j++ ) {
         const index = i * this.sideLength + j;
-        this.context.fillStyle = pixels[ index ] === 1 ? 'black' : 'fuchsia';
-        this.context.fillRect( j, i, 1, 1 );
+        context.fillStyle = this.pixels[ index ] === 1 ? 'black' : 'fuchsia';
+        context.fillRect( j * this.pixelScale, i * this.pixelScale, this.pixelScale, this.pixelScale );
       }
     }
 
-    this.pixelImage.image = this.canvas;
+    context.restore();
   }
 }
 

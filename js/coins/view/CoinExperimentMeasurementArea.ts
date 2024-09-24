@@ -17,6 +17,7 @@ import stepTimer from '../../../../axon/js/stepTimer.js';
 import { TEmitterListener } from '../../../../axon/js/TEmitter.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import { Shape } from '../../../../kite/js/imports.js';
@@ -189,16 +190,9 @@ export default class CoinExperimentMeasurementArea extends VBox {
       children: [
         multipleCoinTestBox,
         measuredCoinsPixelRepresentation
-      ]
+      ],
+      localBounds: multipleCoinTestBox.getGlobalBounds()
     } );
-
-    // Scaling in proportion to the test box, but a little smaller
-    measuredCoinsPixelRepresentation.scale(
-      QuantumMeasurementConstants.COIN_SET_AREA_PROPORTION * multipleCoinTestBox.width / measuredCoinsPixelRepresentation.width
-    );
-    const offset = multipleCoinTestBox.width - measuredCoinsPixelRepresentation.width;
-    measuredCoinsPixelRepresentation.x = offset / 2;
-    measuredCoinsPixelRepresentation.y = offset / 2;
 
     // Create the composite node that represents to test box and controls where the user will experiment with multiple
     // coins at once.
@@ -225,6 +219,21 @@ export default class CoinExperimentMeasurementArea extends VBox {
     this.singleCoinInTestBoxProperty = singleCoinInTestBoxProperty;
     this.coinSetInTestBoxProperty = coinSetInTestBoxProperty;
     this.measuredCoinsPixelRepresentation = measuredCoinsPixelRepresentation;
+    this.measuredCoinsPixelRepresentation.setPixelScale(
+      multipleCoinTestBox.width / 100 * QuantumMeasurementConstants.COIN_SET_AREA_PROPORTION
+    );
+    this.measuredCoinsPixelRepresentation.setCanvasBounds(
+      new Bounds2(
+        0,
+        0,
+        multipleCoinTestBox.width,
+        multipleCoinTestBox.height
+      )
+    );
+
+    const offset = multipleCoinTestBox.width * ( 1 - QuantumMeasurementConstants.COIN_SET_AREA_PROPORTION ) / 2;
+    this.measuredCoinsPixelRepresentation.setX( offset );
+    this.measuredCoinsPixelRepresentation.setY( offset );
 
     Multilink.multilink(
       [
