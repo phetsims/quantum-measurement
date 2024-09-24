@@ -57,7 +57,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
       systemType: 'classical',
       initiallyActive: false,
       initialBias: 0.5,
-      phetioState: false // TODO: Is this right?  What should it be?  See https://github.com/phetsims/quantum-measurement/issues/32.
+      phetioState: false
     }, providedOptions );
 
     super( options );
