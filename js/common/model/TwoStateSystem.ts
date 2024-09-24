@@ -39,6 +39,9 @@ export default class TwoStateSystem<T extends string> extends PhetioObject {
   // the value of most recent measurement, null indicates indeterminate
   public readonly measuredValueProperty: Property<T | null>;
 
+  // Currently one because this is a single system.
+  public readonly numberOfActiveSystemsProperty: NumberProperty;
+
   // Timeout for the preparingToBeMeasured state.
   private preparingToBeMeasuredTimeoutListener: null | TimerListener = null;
 
@@ -62,6 +65,8 @@ export default class TwoStateSystem<T extends string> extends PhetioObject {
     super( options );
 
     this.validValues = stateValues;
+
+    this.numberOfActiveSystemsProperty = new NumberProperty( 1 );
 
     this.measurementStateProperty = new Property<ExperimentMeasurementState>( 'readyToBeMeasured', {
       tandem: options.tandem.createTandem( 'measurementStateProperty' ),

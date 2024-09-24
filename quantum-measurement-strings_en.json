@@ -68,6 +68,9 @@
   "probabilityOfValuePattern": {
     "value": "P({{value}})"
   },
+  "numberOfCoinsPattern": {
+    "value": "N = {{number}}"
+  },
   "quantumCoinQuoted": {
     "value": "Quantum \"Coin\""
   },

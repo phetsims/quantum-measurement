@@ -13,8 +13,9 @@ import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js'
 import TProperty from '../../../../axon/js/TProperty.js';
 import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, NodeOptions, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
+import { Text, Node, Color, NodeOptions, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
 import TextPushButton, { TextPushButtonOptions } from '../../../../sun/js/buttons/TextPushButton.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import TwoStateSystem from '../../common/model/TwoStateSystem.js';
@@ -111,9 +112,25 @@ export default class CoinExperimentButtonSet extends VBox {
       } )
     );
 
+    const numberOfCoinsStringProperty = new DerivedStringProperty(
+      [ system.numberOfActiveSystemsProperty ],
+      numberOfCoins => StringUtils.fillIn(
+        QuantumMeasurementStrings.numberOfCoinsPatternStringProperty,
+        { number: numberOfCoins }
+      )
+    );
+
+    const numberOfSystemsText = system.numberOfActiveSystemsProperty.value !== 1 ?
+                                new Text( numberOfCoinsStringProperty, { font: new PhetFont( 16 ) } ) : new Node();
+
     const options = optionize<CoinExperimentButtonSetOptions, SelfOptions, VBoxOptions>()( {
       spacing: 10,
-      children: [ revealHideButton, flipOrReprepareButton, flipOrReprepareAndRevealButton ]
+      children: [
+        numberOfSystemsText,
+        revealHideButton,
+        flipOrReprepareButton,
+        flipOrReprepareAndRevealButton
+      ]
     }, providedOptions );
 
     super( options );
