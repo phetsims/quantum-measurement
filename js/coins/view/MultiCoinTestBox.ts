@@ -153,30 +153,27 @@ export default class MultiCoinTestBox extends HBox {
   public getOffsetFromCenter( index: number ): Vector2 {
     assert && assert( index < this.numberOfActiveSystemsProperty.value, 'index is out of range for current capacity' );
     const offset = new Vector2( 0, 0 );
-    if ( this.numberOfActiveSystemsProperty.value === 10 ) {
 
-      // Two rows of five.
-      const xOffset = BOX_SIZE.width / 6 * ( ( index % 5 ) + 1 ) - BOX_SIZE.width / 2;
-      const yOffset = BOX_SIZE.height / 3 * ( Math.floor( index / 5 ) + 1 ) - BOX_SIZE.height / 2;
+    const setOffsets = ( box: Dimension2, columns: number, rows: number ) => {
+      const xOffset = box.width / ( columns + 1 ) * ( ( index % columns ) + 1 ) - box.width / 2;
+      const yOffset = box.height / ( rows + 1 ) * ( Math.floor( index / columns ) + 1 ) - box.height / 2;
       offset.setXY( xOffset, yOffset );
+    };
+
+    if ( this.numberOfActiveSystemsProperty.value === 10 ) {
+      setOffsets( BOX_SIZE, 5, 2 );
     }
     else if ( this.numberOfActiveSystemsProperty.value === 100 ) {
-
-      // 10 rows of 10
-      const xOffset = BOX_SIZE.width / 11 * ( ( index % 10 ) + 1 ) - BOX_SIZE.width / 2;
-      const yOffset = BOX_SIZE.height / 11 * ( Math.floor( index / 10 ) + 1 ) - BOX_SIZE.height / 2;
-      offset.setXY( xOffset, yOffset );
+      setOffsets( BOX_SIZE, 10, 10 );
     }
     else if ( this.numberOfActiveSystemsProperty.value === MAX_COINS ) {
-
-      // REVIEW TODO: Encompass these three implementations in a method, see https://github.com/phetsims/quantum-measurement/issues/37
-
       // N rows of N = sqrt( Hollywooded number of coins )
       const sideLength = Math.sqrt( QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS );
-      const BoxDimension = new Vector2( BOX_SIZE.width, BOX_SIZE.height ).timesScalar( QuantumMeasurementConstants.COIN_SET_AREA_PROPORTION );
-      const yOffset = BoxDimension.y / ( sideLength + 1 ) * ( index % sideLength + 1 ) - BoxDimension.y / 2;
-      const xOffset = BoxDimension.x / ( sideLength + 1 ) * ( Math.floor( index / sideLength ) + 1 ) - BoxDimension.x / 2;
-      offset.setXY( xOffset, yOffset );
+      const BoxDimension = new Dimension2(
+        BOX_SIZE.width * QuantumMeasurementConstants.COIN_SET_AREA_PROPORTION + 3 * QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS_RADII,
+        BOX_SIZE.height * QuantumMeasurementConstants.COIN_SET_AREA_PROPORTION + 3 * QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS_RADII
+      );
+      setOffsets( BoxDimension, sideLength, sideLength );
     }
     return offset;
   }
