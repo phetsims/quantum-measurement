@@ -89,17 +89,6 @@ public readonly startIngressAnimationForCoinSet: ( forReprepare: boolean ) => vo
       // Set the flag to indicate that the coins aren't in the box.
       coinSetInTestBoxProperty.value = false;
 
-      // Create the coins that will travel from the preparation area into this measurement area.
-      // const coinRadius = MultiCoinTestBox.getRadiusFromCoinQuantity(
-      //   sceneModel.coinSet.numberOfActiveSystemsProperty.value
-      // );
-      // const coinSetNodes: SmallCoinNode[] = [];
-      // const coinsToDraw = sceneModel.coinSet.numberOfActiveSystemsProperty.value === 10000 ?
-      //                     QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS : sceneModel.coinSet.numberOfActiveSystemsProperty.value;
-      // _.times( coinsToDraw, i => {
-      //   const smallCoinTandem = tandem.createTandem( `multiCoin${i}` );
-      //   coinSetNodes.push( new SmallCoinNode( coinRadius, { tandem: smallCoinTandem } ) );
-      // } );
       assert && assert(
         movingCoinNodes.has( sceneModel.coinSet.numberOfActiveSystemsProperty.value ),
         'No coin nodes exist for the needed quantity.'
