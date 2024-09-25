@@ -21,6 +21,7 @@ import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstant
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { ExperimentMeasurementState } from '../model/ExperimentMeasurementState.js';
 import SmallCoinNode from './SmallCoinNode.js';
+import { MAX_COINS, MULTI_COIN_EXPERIMENT_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
 
 type SelfOptions = EmptySelfOptions;
 export type MultiCoinTestBoxOptions = SelfOptions & PickRequired<HBoxOptions, 'tandem'>;
@@ -33,14 +34,6 @@ const TEST_BOX_CONTENTS_HIDDEN_FILL = new LinearGradient( 0, 0, BOX_SIZE.width, 
 const TEST_BOX_CONTENTS_REVEALED_FILL = Color.WHITE.withAlpha( 0 );
 const LANDING_ZONE_WIDTH = 1;
 const LANDING_ZONE_FILL = 'rgba( 255, 192, 203, 0.5 )'; // useful for debug, opacity should be 0 in production version
-
-// map of the radii to be used based on the quantity of coins that will appear in this test box
-const MAP_OF_COIN_QUANTITY_TO_RADIUS = new Map( [
-  [ 10, 12 ],
-  [ 100, 6 ],
-  [ 10000, QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS_RADII ]
-  // [ 10000, 0.5 ]
-] );
 
 export default class MultiCoinTestBox extends HBox {
 
@@ -174,7 +167,7 @@ export default class MultiCoinTestBox extends HBox {
       const yOffset = BOX_SIZE.height / 11 * ( Math.floor( index / 10 ) + 1 ) - BOX_SIZE.height / 2;
       offset.setXY( xOffset, yOffset );
     }
-    else if ( this.numberOfActiveSystemsProperty.value === 10000 ) {
+    else if ( this.numberOfActiveSystemsProperty.value === MAX_COINS ) {
 
       // REVIEW TODO: Encompass these three implementations in a method, see https://github.com/phetsims/quantum-measurement/issues/37
 
@@ -192,8 +185,21 @@ export default class MultiCoinTestBox extends HBox {
    * Get the radius that should be used for coin nodes in this test box based on the number of them that will be shown.
    */
   public static getRadiusFromCoinQuantity( coinQuantity: number ): number {
-    assert && assert( MAP_OF_COIN_QUANTITY_TO_RADIUS.has( coinQuantity ), 'unsupported number of coins for test box' );
-    return MAP_OF_COIN_QUANTITY_TO_RADIUS.get( coinQuantity ) || 1000;
+    assert && assert(
+      MULTI_COIN_EXPERIMENT_QUANTITIES.includes( coinQuantity ),
+      'unsupported number of coins for test box'
+    );
+    let radius;
+    if ( coinQuantity === 10 ) {
+      radius = 12;
+    }
+    else if ( coinQuantity === 100 ) {
+      radius = 6;
+    }
+    else {
+      radius = QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS_RADII;
+    }
+    return radius;
   }
 }
 

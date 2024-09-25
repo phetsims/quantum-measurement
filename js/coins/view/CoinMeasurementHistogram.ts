@@ -22,6 +22,7 @@ import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstant
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
 import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
+import { MAX_COINS } from '../model/CoinsExperimentSceneModel.js';
 
 type SelfOptions = EmptySelfOptions;
 export type CoinMeasurementHistogramOptions = SelfOptions & PickRequired<NodeOptions, 'tandem' | 'visibleProperty'>;
@@ -30,7 +31,7 @@ const HISTOGRAM_SIZE = new Dimension2( 200, 180 ); // size excluding labels at b
 const AXIS_STROKE = Color.BLACK;
 const AXIS_LINE_WIDTH = 2;
 const LABEL_FONT = new PhetFont( { size: 20, weight: 'bold' } );
-const NUMBER_DISPLAY_RANGE = new Range( 0, 10000 );
+const NUMBER_DISPLAY_RANGE = new Range( 0, MAX_COINS );
 const NUMBER_DISPLAY_MAX_WIDTH = HISTOGRAM_SIZE.width / 2 * 0.85;
 const HISTOGRAM_BAR_WIDTH = HISTOGRAM_SIZE.width / 6;
 const NUMBER_DISPLAY_OPTIONS: NumberDisplayOptions = {

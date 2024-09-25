@@ -29,6 +29,14 @@ type SelfOptions = {
 };
 type CoinExperimentSceneModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
+// constants
+
+// allowed values for the number of coins to use in the multi-coin experiment
+export const MULTI_COIN_EXPERIMENT_QUANTITIES = [ 10, 100, 10000 ];
+
+// max coins used in any of the experiments
+export const MAX_COINS = Math.max( ...MULTI_COIN_EXPERIMENT_QUANTITIES );
+
 export default class CoinsExperimentSceneModel extends PhetioObject {
 
   // whether this scene is active, which is mostly about whether it is shown in the view

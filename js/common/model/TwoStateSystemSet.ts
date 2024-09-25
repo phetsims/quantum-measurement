@@ -19,6 +19,7 @@ import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import { ExperimentMeasurementState, ExperimentMeasurementStateValues } from '../../coins/model/ExperimentMeasurementState.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementConstants from '../QuantumMeasurementConstants.js';
+import { MULTI_COIN_EXPERIMENT_QUANTITIES } from '../../coins/model/CoinsExperimentSceneModel.js';
 
 type SelfOptions = {
   initialBias?: number;
@@ -72,7 +73,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
 
     this.validValues = stateValues;
 
-    this.numberOfActiveSystemsProperty = new NumberProperty( 100, {
+    this.numberOfActiveSystemsProperty = new NumberProperty( MULTI_COIN_EXPERIMENT_QUANTITIES[ 1 ], {
       range: new Range( 1, options.maxNumberOfSystems ),
       tandem: options.tandem.createTandem( 'numberOfActiveSystemsProperty' )
     } );

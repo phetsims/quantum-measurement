@@ -32,7 +32,7 @@ import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstant
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
-import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
+import CoinsExperimentSceneModel, { MAX_COINS, MULTI_COIN_EXPERIMENT_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
 import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
 import ClassicalCoinNode from './ClassicalCoinNode.js';
 import CoinExperimentButtonSet from './CoinExperimentButtonSet.js';
@@ -54,9 +54,6 @@ const SINGLE_COIN_TEST_BOX_UNREVEALED_FILL = new LinearGradient( 0, 0, SINGLE_CO
 const COIN_FLIP_RATE = 3; // full flips per second
 const COIN_TRAVEL_ANIMATION_DURATION = QuantumMeasurementConstants.PREPARING_TO_BE_MEASURED_TIME * 0.95;
 const RADIO_BUTTON_FONT = new PhetFont( 12 );
-
-// allowed values for the number of coins to use in the multi-coin experiment
-export const MULTI_COIN_EXPERIMENT_QUANTITIES = [ 10, 100, 10000 ];
 
 export default class CoinExperimentMeasurementArea extends VBox {
 
@@ -254,7 +251,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
         sceneModel.coinSet.measurementStateProperty
       ],
       ( numberOfActiveSystems, state ) => {
-        if ( numberOfActiveSystems === 10000 && state === 'measuredAndRevealed' ) {
+        if ( numberOfActiveSystems === MAX_COINS && state === 'measuredAndRevealed' ) {
           this.measuredCoinsPixelRepresentation.redraw( sceneModel.coinSet.measuredValues );
           this.measuredCoinsPixelRepresentation.visible = true;
         }
@@ -478,16 +475,6 @@ export default class CoinExperimentMeasurementArea extends VBox {
       this.coinSetInTestBoxProperty.value = false;
 
       // Create the coins that will travel from the preparation area into this measurement area.
-      // const coinRadius = MultiCoinTestBox.getRadiusFromCoinQuantity(
-      //   sceneModel.coinSet.numberOfActiveSystemsProperty.value
-      // );
-      // const coinSetNodes: SmallCoinNode[] = [];
-      // const coinsToDraw = sceneModel.coinSet.numberOfActiveSystemsProperty.value === 10000 ?
-      //                     QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS : sceneModel.coinSet.numberOfActiveSystemsProperty.value;
-      // _.times( coinsToDraw, i => {
-      //   const smallCoinTandem = tandem.createTandem( `multiCoin${i}` );
-      //   coinSetNodes.push( new SmallCoinNode( coinRadius, { tandem: smallCoinTandem } ) );
-      // } );
       assert && assert(
         movingCoinNodes.has( sceneModel.coinSet.numberOfActiveSystemsProperty.value ),
         'No coin nodes exist for the needed quantity.'
