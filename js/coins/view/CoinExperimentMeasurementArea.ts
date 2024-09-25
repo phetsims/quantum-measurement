@@ -5,54 +5,39 @@
  * multiple coins - where users can flip and reveal coins. Depending on how this is parameterized, the coins may either
  * be classical or quantum coins.
  *
- * REVIEW TODO: Move some of the animation logic into its own subclass https://github.com/phetsims/quantum-measurement/issues/34
- *
  * @author John Blanco, PhET Interactive Simulations
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
-import stepTimer from '../../../../axon/js/stepTimer.js';
-import { TEmitterListener } from '../../../../axon/js/TEmitter.js';
 import TProperty from '../../../../axon/js/TProperty.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
-import dotRandom from '../../../../dot/js/dotRandom.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Circle, Color, HBox, LinearGradient, Node, Rectangle, Text, VBox } from '../../../../scenery/js/imports.js';
 import VerticalAquaRadioButtonGroup from '../../../../sun/js/VerticalAquaRadioButtonGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import Animation from '../../../../twixt/js/Animation.js';
-import Easing from '../../../../twixt/js/Easing.js';
 import TwoStateSystem from '../../common/model/TwoStateSystem.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
-import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
 import CoinsExperimentSceneModel, { MAX_COINS, MULTI_COIN_EXPERIMENT_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
-import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
-import ClassicalCoinNode from './ClassicalCoinNode.js';
 import CoinExperimentButtonSet from './CoinExperimentButtonSet.js';
 import CoinMeasurementHistogram from './CoinMeasurementHistogram.js';
-import CoinNode from './CoinNode.js';
 import CoinSetPixelRepresentation from './CoinSetPixelRepresentation.js';
-import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
 import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
 import MultiCoinTestBox from './MultiCoinTestBox.js';
-import QuantumCoinNode from './QuantumCoinNode.js';
+import MultipleCoinAnimations from './MultipleCoinAnimations.js';
 import SceneSectionHeader from './SceneSectionHeader.js';
-import SmallCoinNode from './SmallCoinNode.js';
+import SingleCoinAnimations from './SingleCoinAnimations.js';
 
 const SINGLE_COIN_AREA_RECT_LINE_WIDTH = 36;
 const SINGLE_COIN_TEST_BOX_SIZE = new Dimension2( 165, 145 );
 const SINGLE_COIN_TEST_BOX_UNREVEALED_FILL = new LinearGradient( 0, 0, SINGLE_COIN_TEST_BOX_SIZE.width, 0 )
   .addColorStop( 0, new Color( '#eeeeee' ) )
   .addColorStop( 0.9, new Color( '#bae3e0' ) );
-const COIN_FLIP_RATE = 3; // full flips per second
-const COIN_TRAVEL_ANIMATION_DURATION = QuantumMeasurementConstants.PREPARING_TO_BE_MEASURED_TIME * 0.95;
 const RADIO_BUTTON_FONT = new PhetFont( 12 );
 
 export default class CoinExperimentMeasurementArea extends VBox {
@@ -103,6 +88,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
                                         SINGLE_COIN_TEST_BOX_UNREVEALED_FILL;
     } );
 
+    // TODO: This is a Node, but MultiCoinTestBox is a MultiCoinTestBox https://github.com/phetsims/quantum-measurement/issues/20
     const singleCoinTestBox = new Node( {
       children: [ singleCoinTestBoxRectangle ],
       clipArea: Shape.bounds( singleCoinTestBoxRectangle.getRectBounds() )
@@ -156,19 +142,6 @@ export default class CoinExperimentMeasurementArea extends VBox {
     // in the multi-coin mode.
     const numberOfCoinsSelectorTitle = new Text( QuantumMeasurementStrings.identicalCoinsStringProperty, {
       font: new PhetFont( 14 )
-    } );
-
-    // Create the nodes that will be used to animate coin motion for the multiple coin experiments.  These are sized
-    // differently based on the quantity being animated.
-    const movingCoinNodes = new Map<number, SmallCoinNode[]>();
-    MULTI_COIN_EXPERIMENT_QUANTITIES.forEach( quantity => {
-      const quantityToCreate = Math.min( quantity, QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS );
-      const radius = MultiCoinTestBox.getRadiusFromCoinQuantity( quantity );
-      const coinNodes: SmallCoinNode[] = [];
-      _.times( quantityToCreate, () => {
-        coinNodes.push( new SmallCoinNode( radius ) );
-      } );
-      movingCoinNodes.set( quantity, coinNodes );
     } );
 
     const createRadioButtonGroupItem = ( value: number ) => {
@@ -276,299 +249,21 @@ export default class CoinExperimentMeasurementArea extends VBox {
     singleCoinTestBox.addChild( coinMask );
     coinMask.moveToBack();
 
-    // variables to support the coin animations
-    let singleCoinNode: CoinNode | null = null;
-    let singleCoinAnimationFromPrepAreaToEdgeOfTestBox: Animation | null = null;
-    let singleCoinAnimationFromEdgeOfTestBoxToInside: Animation | null = null;
-    let flippingAnimationStepListener: null | TEmitterListener<number[]> = null;
+    const singleCoinAnimations = new SingleCoinAnimations(
+      sceneModel,
+      this,
+      coinMask,
+      singleCoinTestBox,
+      singleCoinMeasurementArea,
+      this.singleCoinInTestBoxProperty
+    );
 
-    // Create a closure function for clearing out the single coin test box.
-    const clearSingleCoinTestBox = () => {
-      assert && assert(
-      !singleCoinAnimationFromPrepAreaToEdgeOfTestBox && !singleCoinAnimationFromEdgeOfTestBoxToInside,
-        'this function should not be invoked while animations are in progress'
-      );
-      if ( singleCoinNode && singleCoinTestBox.hasChild( singleCoinNode ) ) {
-        singleCoinTestBox.removeChild( singleCoinNode );
-        singleCoinNode.dispose();
-        singleCoinNode = null;
-      }
-      coinMask.right = singleCoinTestBox.left;
-      coinMask.y = singleCoinTestBox.centerY;
-      this.singleCoinInTestBoxProperty.value = false;
-    };
-
-    // Create a closure function for aborting the animation of the incoming single coin. This is intended to be called
-    // when a state change occurs that prevents the ingress animation from finishing normally. If no animation is in
-    // progress, this does nothing, so it safe to call as a preventative measure.
-    const abortIngressAnimationForSingleCoin = () => {
-
-      // Stop any of the animations that exist.
-      singleCoinAnimationFromPrepAreaToEdgeOfTestBox && singleCoinAnimationFromPrepAreaToEdgeOfTestBox.stop();
-      singleCoinAnimationFromEdgeOfTestBoxToInside && singleCoinAnimationFromEdgeOfTestBoxToInside.stop();
-
-      // Create a typed reference to the parent node, since we'll need to invoke some methods on it.
-      assert && assert( this.getParent() instanceof CoinsExperimentSceneView );
-      const sceneGraphParent = this.getParent() as CoinsExperimentSceneView;
-
-      if ( singleCoinNode ) {
-        if ( sceneGraphParent.hasChild( singleCoinNode ) ) {
-          sceneGraphParent.removeChild( singleCoinNode );
-        }
-        else if ( singleCoinTestBox.hasChild( singleCoinNode ) ) {
-          singleCoinTestBox.removeChild( singleCoinNode );
-        }
-        singleCoinNode.dispose();
-        singleCoinNode = null;
-      }
-    };
-
-    // Create a closure function for creating and starting the animation of a single coin coming from the preparation
-    // area into the single coin test box.
-    const startIngressAnimationForSingleCoin = ( forReprepare: boolean ) => {
-
-      // Create a typed reference to the parent node, since we'll need to invoke some methods on it.
-      assert && assert( this.getParent() instanceof CoinsExperimentSceneView );
-      const sceneGraphParent = this.getParent() as CoinsExperimentSceneView;
-
-      // Clear out the test box if there's anything in there.
-      clearSingleCoinTestBox();
-
-      // Create the coin that will travel from the preparation area into this measurement area.
-      if ( sceneModel.systemType === 'classical' ) {
-        singleCoinNode = new ClassicalCoinNode(
-          sceneModel.singleCoin.measuredValueProperty as TReadOnlyProperty<ClassicalCoinStates>,
-          InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS,
-          Tandem.OPT_OUT
-        );
-      }
-      else {
-        singleCoinNode = new QuantumCoinNode(
-          sceneModel.singleCoin.measuredValueProperty as TReadOnlyProperty<QuantumCoinStates>,
-          sceneModel.upProbabilityProperty,
-          InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS,
-          Tandem.OPT_OUT
-        );
-      }
-
-      // Add the coin to our parent node. This is done so that we don't change our bounds, which could mess up the
-      // layout. It will be added back to this area when it is back within the bounds.
-      sceneGraphParent.addSingleCoinNode( singleCoinNode );
-
-      // Make sure the coin mask is outside the test box so that it isn't visible until it slides into the test box.
-      coinMask.x = -SINGLE_COIN_TEST_BOX_SIZE.width * 2;
-
-      // Create and start an animation to move the single coin to the side of the single coin test box. The entire
-      // process consists of two animations, one to move the coin to the left edge of the test box while the test box is
-      // potentially also moving, then a second one to move the coin into the box. The durations must be set up such
-      // that the test box is in place before the 2nd animation begins or the coin won't end up in the right place.
-      const testAreaXOffset = forReprepare ? 200 : 420; // empirically determined
-      const leftOfTestArea = singleCoinMeasurementArea.center.minusXY( testAreaXOffset, 0 );
-      const leftOfTestAreaInParentCoords = this.localToParentPoint( leftOfTestArea );
-      singleCoinAnimationFromPrepAreaToEdgeOfTestBox = new Animation( {
-        setValue: value => { singleCoinNode!.center = value; },
-        getValue: () => singleCoinNode!.center,
-        to: leftOfTestAreaInParentCoords,
-        duration: COIN_TRAVEL_ANIMATION_DURATION / 2,
-        easing: Easing.LINEAR
-      } );
-      singleCoinAnimationFromPrepAreaToEdgeOfTestBox.finishEmitter.addListener( () => {
-
-        assert && assert( singleCoinNode, 'There should be a singleCoinNode instance at the end of this animation.' );
-
-        // Get a reference to the coin Node that allows the code to omit all the exclamation points and such.
-        const assuredSingleCoinNode = singleCoinNode!;
-        assuredSingleCoinNode.moveToBack();
-
-        // Move the mask to be on top of the coin Node.
-        coinMask.center = singleCoinTestBox.parentToLocalPoint( this.parentToLocalPoint( assuredSingleCoinNode.center ) );
-
-        // Start the 2nd portion of the animation, which moves the masked coin into the test box.
-        singleCoinAnimationFromEdgeOfTestBoxToInside = new Animation( {
-          setValue: value => {
-            assuredSingleCoinNode.center = value;
-            coinMask.center = singleCoinMeasurementArea.parentToLocalPoint(
-              singleCoinTestBox.parentToLocalPoint( this.parentToLocalPoint( assuredSingleCoinNode.center ) )
-            );
-          },
-          getValue: () => assuredSingleCoinNode.center,
-          to: this.localToParentPoint( singleCoinMeasurementArea.localToParentPoint( singleCoinTestBox.center ) ),
-          duration: COIN_TRAVEL_ANIMATION_DURATION / 2,
-          easing: Easing.CUBIC_OUT
-        } );
-        singleCoinAnimationFromEdgeOfTestBoxToInside.finishEmitter.addListener( () => {
-
-          // Now that the coin is within the bounds of the test box, remove it from the parent and add it as a child.
-          sceneGraphParent.removeChild( assuredSingleCoinNode );
-          assuredSingleCoinNode.center = singleCoinTestBox.center;
-          singleCoinTestBox.insertChild( 0, assuredSingleCoinNode );
-          coinMask.center = singleCoinTestBox.center;
-
-          if ( sceneModel.systemType === 'quantum' ) {
-
-            // "Collapse" the state of the coin node so that it shows a single state, not a superposed one.
-            const quantumCoinNode = singleCoinNode as QuantumCoinNode;
-            quantumCoinNode.showSuperpositionProperty.value = false;
-            sceneModel.singleCoin.prepareInstantly();
-          }
-
-          // The coin is in the test box, so update the flag that makes this known.
-          this.singleCoinInTestBoxProperty.value = true;
-        } );
-
-        // Regardless of how the animation terminated its reference needs to be cleared when it is done.
-        singleCoinAnimationFromEdgeOfTestBoxToInside.endedEmitter.addListener( () => {
-          singleCoinAnimationFromEdgeOfTestBoxToInside = null;
-        } );
-
-        // Kick off the 2nd animation.
-        singleCoinAnimationFromEdgeOfTestBoxToInside.start();
-      } );
-
-      // Regardless of how the animation terminated its reference needs to be cleared when it is done.
-      singleCoinAnimationFromPrepAreaToEdgeOfTestBox.endedEmitter.addListener( () => {
-        singleCoinAnimationFromPrepAreaToEdgeOfTestBox = null;
-      } );
-
-      // Kick off the 1st animation.
-      singleCoinAnimationFromPrepAreaToEdgeOfTestBox.start();
-    };
-
-    const animationsToEdgeOfMultiCoinTestBox: Animation[] = [];
-    const animationsFromEdgeOfMultiCoinBoxToInside: Animation[] = [];
-
-    // Create a closure function for aborting the animation of the incoming single coin. This is intended to be called
-    // when a state change occurs that prevents the ingress animation from finishing normally. If no animation is in
-    // progress, this does nothing, so it safe to call as a preventative measure.
-    const abortIngressAnimationForCoinSet = () => {
-
-      // Create a typed reference to the parent node, since we'll need to invoke some methods on it.
-      assert && assert( this.getParent() instanceof CoinsExperimentSceneView );
-      const sceneGraphParent = this.getParent() as CoinsExperimentSceneView;
-
-      // Stop any of the animations that exist.
-      animationsToEdgeOfMultiCoinTestBox.forEach( animation => animation.stop() );
-      animationsFromEdgeOfMultiCoinBoxToInside.forEach( animation => animation.stop() );
-
-      // Clear out any coins that made it to the test box.
-      multipleCoinTestBox.clearContents();
-
-      // Remove any coin nodes that are moving from the prep area out from the scene graph parent.
-      sceneGraphParent.children.filter( child => child instanceof SmallCoinNode ).forEach( smallCoinNode => {
-        sceneGraphParent.removeChild( smallCoinNode );
-      } );
-
-      // Set the flag to indicate that the coins are not in the box.
-      this.coinSetInTestBoxProperty.value = false;
-    };
-
-    const startIngressAnimationForCoinSet = ( forReprepare: boolean ) => {
-
-      // Create a typed reference to the parent node, since we'll need to invoke some methods on it.
-      assert && assert( this.getParent() instanceof CoinsExperimentSceneView );
-      const sceneGraphParent = this.getParent() as CoinsExperimentSceneView;
-
-      // Make sure the test box is empty.
-      multipleCoinTestBox.clearContents();
-
-      // Set the flag to indicate that the coins aren't in the box.
-      this.coinSetInTestBoxProperty.value = false;
-
-      // Create the coins that will travel from the preparation area into this measurement area.
-      assert && assert(
-        movingCoinNodes.has( sceneModel.coinSet.numberOfActiveSystemsProperty.value ),
-        'No coin nodes exist for the needed quantity.'
-      );
-      const coinsToAnimate = movingCoinNodes.get( sceneModel.coinSet.numberOfActiveSystemsProperty.value );
-
-      // Add the coins to our parent node. This is done so that we don't change our bounds, which could mess up the
-      // layout. It will be added back to this area when it is back within the bounds.
-      sceneGraphParent.addCoinNodeSet( coinsToAnimate! );
-
-      // Create and start a set of animations to move these new created coin nodes to the side of the multiple coin test
-      // box. The entire process consists of two animations, one to move a coin to the left edge of the test box while
-      // the test box is potentially also moving, then a second one to move the coin into the box. The durations must
-      // be set up such that the test box is in place before the 2nd animation begins or the coins won't end up in the
-      // right places.
-      const testAreaXOffset = forReprepare ? 100 : 300;
-      const multipleCoinTestBoxBounds = this.globalToLocalBounds( multipleCoinTestBox.getGlobalBounds() );
-      const leftOfTestBox = multipleCoinTestBoxBounds.center.minusXY( testAreaXOffset, 0 );
-      const leftOfTestAreaInParentCoords = this.localToParentPoint( leftOfTestBox );
-      coinsToAnimate!.forEach( ( coinNode, index ) => {
-
-        // Get the final destination for this coin node in terms of its offset from the center of the test box.
-        const finalDestinationOffset = multipleCoinTestBox.getOffsetFromCenter( index );
-
-        // Calculate a destination at the edge of the test box such that this coin will just move right to its final
-        // position.
-        const destinationAtBoxEdge = leftOfTestAreaInParentCoords.plusXY( 0, finalDestinationOffset.y );
-
-        // Create an animation that will move this coin node to the edge of the multi-coin test box.
-        const animationToTestBoxEdge = new Animation( {
-          setValue: value => { coinNode.center = value; },
-          getValue: () => coinNode.center,
-          to: destinationAtBoxEdge,
-          duration: COIN_TRAVEL_ANIMATION_DURATION / 2,
-          easing: Easing.LINEAR
-        } );
-        animationsToEdgeOfMultiCoinTestBox.push( animationToTestBoxEdge );
-        animationToTestBoxEdge.finishEmitter.addListener( () => {
-
-          const boxCenter = this.globalToParentBounds( multipleCoinTestBox.getGlobalBounds() ).center;
-
-          // Start the 2nd portion of the animation, which moves the coin into the test box.
-          const animationFromTestBoxEdgeToInside = new Animation( {
-            setValue: value => { coinNode.center = value; },
-            getValue: () => coinNode.center,
-            to: boxCenter.plus( finalDestinationOffset ),
-            duration: COIN_TRAVEL_ANIMATION_DURATION / 2,
-            easing: Easing.CUBIC_OUT
-          } );
-          animationsFromEdgeOfMultiCoinBoxToInside.push( animationFromTestBoxEdgeToInside );
-          animationFromTestBoxEdgeToInside.finishEmitter.addListener( () => {
-
-            // The coin node should now be within the bounds of the multi-coin test box. Remove the coin node from the
-            // scene graph parent and add it to the test box.
-            sceneGraphParent.removeChild( coinNode );
-            const offset = multipleCoinTestBox.getOffsetFromCenter( coinsToAnimate!.indexOf( coinNode ) );
-            coinNode.center = multipleCoinTestBox.getLocalBounds().center.plus( offset );
-            multipleCoinTestBox.addCoinNodeToBox( coinNode );
-
-            if ( sceneModel.systemType === 'quantum' ) {
-              sceneModel.coinSet.prepareInstantly();
-            }
-
-            // If all animations have completed, set the flag that indicates the coins are fully in the box.
-            const runningAnimations = animationsFromEdgeOfMultiCoinBoxToInside.filter(
-              animation => animation.animatingProperty.value
-            );
-            if ( runningAnimations.length === 0 ) {
-              this.coinSetInTestBoxProperty.value = true;
-            }
-          } );
-
-          // Regardless of how the animation terminated its reference needs to be removed when it is done.
-          animationFromTestBoxEdgeToInside.endedEmitter.addListener( () => {
-
-            // Remove the now-completed animation from the list of active ones.
-            animationsFromEdgeOfMultiCoinBoxToInside.filter(
-              animation => animation !== animationFromTestBoxEdgeToInside
-            );
-          } );
-
-          // Kick off the 2nd animation, which moves the coin from the edge of the test box to inside.
-          animationFromTestBoxEdgeToInside.start();
-        } );
-
-        // Regardless of how the animation terminated its reference needs to be removed when it is done.
-        animationToTestBoxEdge.endedEmitter.addListener( () => {
-          animationsToEdgeOfMultiCoinTestBox.filter( animation => animation !== animationToTestBoxEdge );
-        } );
-
-        // Kick off the animation to the test box edge.
-        animationToTestBoxEdge.start();
-      } );
-    };
+    const multipleCoinAnimations = new MultipleCoinAnimations(
+      sceneModel,
+      this,
+      multipleCoinTestBox,
+      this.coinSetInTestBoxProperty
+    );
 
     // Monitor the preparation state and start or stop animations as needed.
     sceneModel.preparingExperimentProperty.lazyLink( preparingExperiment => {
@@ -576,11 +271,11 @@ export default class CoinExperimentMeasurementArea extends VBox {
 
         // Abort any in-progress animations - the scene model is going back into the preparation mode. If there are no
         // such animations, this has no effect.
-        abortIngressAnimationForSingleCoin();
-        abortIngressAnimationForCoinSet();
+        singleCoinAnimations.abortIngressAnimationForSingleCoin();
+        multipleCoinAnimations.abortIngressAnimationForCoinSet();
 
         // Clear out the test boxes.
-        clearSingleCoinTestBox();
+        singleCoinAnimations.clearSingleCoinTestBox();
         multipleCoinTestBox.clearContents();
 
       }
@@ -588,93 +283,27 @@ export default class CoinExperimentMeasurementArea extends VBox {
 
         // The user is ready to make measurements on the coins, so animate the coins for both the single and multi-coin
         // experiments moving from the preparation area to the measurement area.
-        startIngressAnimationForSingleCoin( false );
-        startIngressAnimationForCoinSet( false );
+        singleCoinAnimations.startIngressAnimationForSingleCoin( false );
+        multipleCoinAnimations.startIngressAnimationForCoinSet( false );
       }
     } );
 
     // Listen to the state of the coin and animate a flipping motion for the classical coin or a travel-from-the-prep-
     // area animation for the quantum coin.
     // REVIEW: Want to change this snake case description for the actual name? https://github.com/phetsims/quantum-measurement/issues/20
-    sceneModel.singleCoin.measurementStateProperty.lazyLink( singleCoinMeasurementState => {
-      if ( sceneModel.systemType === 'classical' ) {
-
-        if ( singleCoinMeasurementState === 'preparingToBeMeasured' ) {
-
-          // state checking
-          assert && assert( !flippingAnimationStepListener, 'something is off - there should be no listener' );
-          assert && assert( singleCoinNode, 'something is off - there should be a coin node' );
-
-          // Set the initial state of things prior to starting the animation.
-          let flippingAnimationPhase = 0;
-          const rotation = dotRandom.nextDouble() * Math.PI;
-          let previousXScale = 0;
-          coinMask.setRotation( rotation );
-          singleCoinNode!.setRotation( rotation );
-
-          // Create and hook up a step listener to perform the animation.
-          flippingAnimationStepListener = ( dt: number ) => {
-            flippingAnimationPhase += 2 * Math.PI * COIN_FLIP_RATE * dt;
-            let xScale = Math.sin( flippingAnimationPhase );
-
-            // Handle the case where we hit zero, since the scale can't be set to that value.
-            if ( xScale === 0 ) {
-              xScale = previousXScale < 0 ? 0.01 : -0.01;
-            }
-
-            // Scale the coin on the x-axis to make it look like they are rotating.
-            // REVIEW: Why not check for coinMask? https://github.com/phetsims/quantum-measurement/issues/20
-            coinMask.setScaleMagnitude( xScale, 1 );
-            singleCoinNode && singleCoinNode.setScaleMagnitude( xScale, 1 );
-
-            // Save state for handling the zero case.
-            previousXScale = xScale;
-          };
-          stepTimer.addListener( flippingAnimationStepListener );
-        }
-        else if ( flippingAnimationStepListener ) {
-
-          // The coin is no longer in the flipping state, so set it to be fully round and in the center of the test box.
-          // The transform is being reset here because floating point errors were piling up during the animation, and
-          // this just worked better.
-          coinMask.resetTransform();
-          coinMask.center = singleCoinTestBox.center;
-          if ( singleCoinNode ) {
-            singleCoinNode.resetTransform();
-            singleCoinNode.center = singleCoinTestBox.center;
-          }
-
-          // Remove the step listener that was performing the flip animation.
-          stepTimer.removeListener( flippingAnimationStepListener );
-          flippingAnimationStepListener = null;
-        }
-      }
-      else if ( sceneModel.systemType === 'quantum' ) {
-
-        if ( singleCoinMeasurementState === 'preparingToBeMeasured' ) {
-
-          // Abort any previous animations and clear out the test box.
-          abortIngressAnimationForSingleCoin();
-          clearSingleCoinTestBox();
-
-          // Animate a coin from the prep area to the single coin test box to indicate that a new "quantum coin" is
-          // being prepared for measurement.
-          startIngressAnimationForSingleCoin( true );
-        }
-      }
-    } );
+    sceneModel.singleCoin.measurementStateProperty.lazyLink( singleCoinAnimations.flipCoin );
 
     sceneModel.coinSet.measurementStateProperty.link( measurementState => {
 
       if ( measurementState === 'preparingToBeMeasured' && sceneModel.systemType === 'quantum' ) {
 
         // Abort any previous animations and clear out the test box.
-        abortIngressAnimationForCoinSet();
+        multipleCoinAnimations.abortIngressAnimationForCoinSet();
         multipleCoinTestBox.clearContents();
 
         // Animate a coin from the prep area to the single coin test box to indicate that a new "quantum coin" is
         // being prepared for measurement.
-        startIngressAnimationForCoinSet( true );
+        multipleCoinAnimations.startIngressAnimationForCoinSet( true );
       }
     } );
   }
