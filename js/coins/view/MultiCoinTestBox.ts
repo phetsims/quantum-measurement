@@ -183,9 +183,7 @@ export default class MultiCoinTestBox extends HBox {
    */
   public static getRadiusFromCoinQuantity( coinQuantity: number ): number {
     assert && assert(
-      MULTI_COIN_EXPERIMENT_QUANTITIES.includes( coinQuantity ),
-      'unsupported number of coins for test box'
-    );
+      MULTI_COIN_EXPERIMENT_QUANTITIES.includes( coinQuantity ), 'unsupported number of coins' );
     let radius;
     if ( coinQuantity === 10 ) {
       radius = 12;
