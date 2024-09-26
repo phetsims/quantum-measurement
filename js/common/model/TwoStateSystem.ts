@@ -1,157 +1,77 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * TwoStateSystem is a simple model for a system that can be in one of two states, and can be prepared (similar to
- * flipping a coin) and measured (similar to reading how the flip turned out).
- *
- * REVIEW TODO: This file is very similar to TwoStateSystemSet.ts. Couldn't this work as a 1 element set? https://github.com/phetsims/quantum-measurement/issues/36
+ * TwoStateSystem is a model for a system that can be in one of two states, and can be prepared (similar to flipping a
+ * coin) and measured (similar to reading how the flip turned out).
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import Property from '../../../../axon/js/Property.js';
-import stepTimer from '../../../../axon/js/stepTimer.js';
-import { TimerListener } from '../../../../axon/js/Timer.js';
-import dotRandom from '../../../../dot/js/dotRandom.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
-import NullableIO from '../../../../tandem/js/types/NullableIO.js';
-import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
-import { ExperimentMeasurementState, ExperimentMeasurementStateValues } from '../../coins/model/ExperimentMeasurementState.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import QuantumMeasurementConstants from '../QuantumMeasurementConstants.js';
+import TwoStateSystemSet, { StateSetMeasurementResult, TwoStateSystemSetOptions } from './TwoStateSystemSet.js';
+import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
+import Property from '../../../../axon/js/Property.js';
+import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
+import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 
-type SelfOptions = {
-  initialBias?: number;
-};
-type TwoStateSystemOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
+type SelfOptions = EmptySelfOptions;
+type TwoStateSystemOptions = SelfOptions & StrictOmit<TwoStateSystemSetOptions, 'maxNumberOfSystems'>;
 
-export default class TwoStateSystem<T extends string> extends PhetioObject {
-
-  // the state of the measurement for this system
-  public readonly measurementStateProperty: Property<ExperimentMeasurementState>;
-
-  // valid values for a measurement
-  public readonly validValues: readonly T[];
+export default class TwoStateSystem<T extends string> extends TwoStateSystemSet<T> {
 
   // the value of most recent measurement, null indicates indeterminate
   public readonly measuredValueProperty: Property<T | null>;
-
-  // Currently one because this is a single system.
-  public readonly numberOfActiveSystemsProperty: NumberProperty;
-
-  // Timeout for the preparingToBeMeasured state.
-  private preparingToBeMeasuredTimeoutListener: null | TimerListener = null;
-
-  // The bias for this two-state system, and specifically the probability of the system being found in the first of the
-  // two provided values. A value of 1 means it will always be found in the first provided state, 0 means always the
-  // second, and 0.5 means no bias.
-  public readonly biasProperty: NumberProperty;
 
   public constructor( stateValues: readonly T[],
                       initialState: T | null,
                       biasProperty: NumberProperty,
                       providedOptions: TwoStateSystemOptions ) {
 
-    assert && assert( stateValues.length === 2, 'there must be exactly two valid values' );
-
-    const options = optionize<TwoStateSystemOptions, SelfOptions, PhetioObjectOptions>()( {
-      initialBias: 0.5,
-      phetioState: false
+    const options = optionize<TwoStateSystemOptions, SelfOptions, TwoStateSystemSetOptions>()( {
+      maxNumberOfSystems: 1
     }, providedOptions );
 
-    super( options );
+    super( stateValues, initialState, biasProperty, options );
 
-    this.validValues = stateValues;
-
-    this.numberOfActiveSystemsProperty = new NumberProperty( 1 );
-
-    this.measurementStateProperty = new Property<ExperimentMeasurementState>( 'readyToBeMeasured', {
-      tandem: options.tandem.createTandem( 'measurementStateProperty' ),
-      phetioValueType: StringUnionIO( ExperimentMeasurementStateValues ),
-      phetioReadOnly: true
-    } );
     this.measuredValueProperty = new Property( initialState, {
       tandem: options.tandem.createTandem( 'measuredValueProperty' ),
       phetioValueType: NullableIO( StringUnionIO( stateValues ) ),
       validValues: [ ...stateValues, null ]
     } );
-    this.biasProperty = biasProperty;
   }
 
   /**
-   * Prepare this system to be measured. This is analogous to initiating the flipping of a classical coin or setting up
-   * a quantum system into a superposed state. After a timeout, this system will transition to a state where it is
-   * ready to be measured.
-   */
-  public prepare( measureWhenPrepared = false ): void {
-
-    // Set the state to preparingToBeMeasured and start a timeout for the state to end.
-    this.measurementStateProperty.value = 'preparingToBeMeasured';
-    this.measuredValueProperty.value = null; // indeterminate state until measured
-
-    this.preparingToBeMeasuredTimeoutListener = stepTimer.setTimeout( () => {
-      this.preparingToBeMeasuredTimeoutListener = null;
-      this.measurementStateProperty.value = 'readyToBeMeasured';
-      if ( measureWhenPrepared ) {
-        this.measure();
-      }
-    }, QuantumMeasurementConstants.PREPARING_TO_BE_MEASURED_TIME * 1000 );
-  }
-
-  /**
-   * Prepare the system for measurement without transitioning through the 'preparingToBeMeasured' state. This is more
-   * the exception than the rule, but is needed in a case or two.
-   */
-  public prepareInstantly(): void {
-    this.measuredValueProperty.value = null; // indeterminate state until measured
-    this.measurementStateProperty.value = 'readyToBeMeasured';
-  }
-
-  /**
-   * Measure the system, which will either cause a value to be chosen if one hasn't been since the last preparation, or
+   * Measure the system, which will either cause a value to be chosen if one hasn't been since the last preparation or
    * will just return the value of the most recent measurement.
    */
-  public measure(): T {
-    assert && assert(
-      this.measurementStateProperty.value !== 'preparingToBeMeasured',
-      'The system should not be measured if it is not ready for measurement.'
-    );
-
-    if ( this.measuredValueProperty.value === null ) {
-
-      // Make a new measurement, which essentially means to randomly choose a new value.
-      const index = dotRandom.nextDouble() < this.biasProperty.value ? 0 : 1;
-      this.measuredValueProperty.value = this.validValues[ index ];
-    }
-    this.measurementStateProperty.value = 'measuredAndRevealed';
-    return this.measuredValueProperty.value;
+  public measureSystem(): T {
+    const result = super.measure();
+    assert && assert( result.length === 1, 'unexpected length for measurement set' );
+    assert && assert( result.measuredValues[ 0 ] !== null, 'measurement result should not be indeterminate' );
+    const measurementValue: T = result.measuredValues[ 0 ]!;
+    this.measuredValueProperty.set( measurementValue );
+    return measurementValue;
   }
 
   /**
-   * Go back to the 'readyToBeMeasured' state without re-preparing the measurement.
+   * Override the measure function
    */
-  public hide(): void {
-    this.measurementStateProperty.value = 'readyToBeMeasured';
+  public override measure(): StateSetMeasurementResult<T> {
+    const measurementResults = super.measure();
+    assert && assert( measurementResults.length === 1, 'unexpected length for measurement set' );
+    assert && assert( measurementResults.measuredValues[ 0 ] !== null, 'measurement result should not be indeterminate' );
+    this.measuredValueProperty.set( measurementResults.measuredValues[ 0 ] );
+    return measurementResults;
   }
 
   /**
-   * Set the measurement value immediately, i.e. without transitioning through the 'preparingToBeMeasured' state.
+   * Set the measurement value immediately for this system without transitioning through the 'preparingToBeMeasured'
+   * state.
    */
   public setMeasurementValueImmediate( value: T ): void {
-    if ( this.preparingToBeMeasuredTimeoutListener ) {
-      stepTimer.clearTimeout( this.preparingToBeMeasuredTimeoutListener );
-      this.preparingToBeMeasuredTimeoutListener = null;
-    }
-    this.measuredValueProperty.value = value;
-    this.measurementStateProperty.value = 'readyToBeMeasured';
-  }
-
-  public reset(): void {
-    this.measuredValueProperty.reset();
-    this.measurementStateProperty.reset();
+    super.setMeasurementValuesImmediate( value );
   }
 }
 

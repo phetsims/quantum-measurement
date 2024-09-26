@@ -25,7 +25,7 @@ type SelfOptions = {
   initialBias?: number;
   maxNumberOfSystems?: number;
 };
-type TwoStateSystemOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
+export type TwoStateSystemSetOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
 export type StateSetMeasurementResult<T> = {
   length: number;
@@ -59,11 +59,11 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
   public constructor( stateValues: readonly T[],
                       initialState: T | null,
                       biasProperty: NumberProperty,
-                      providedOptions: TwoStateSystemOptions ) {
+                      providedOptions: TwoStateSystemSetOptions ) {
 
     assert && assert( stateValues.length === 2, 'there must be exactly two valid values' );
 
-    const options = optionize<TwoStateSystemOptions, SelfOptions, PhetioObjectOptions>()( {
+    const options = optionize<TwoStateSystemSetOptions, SelfOptions, PhetioObjectOptions>()( {
       initialBias: 0.5,
       maxNumberOfSystems: 10000,
       phetioState: false
@@ -156,8 +156,10 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
     };
   }
 
-  // Set the measurement value immediately for all elements in this set without transitioning through the
-  // 'preparingToBeMeasured' state.
+  /**
+   * Set the measurement value immediately for all elements in this set without transitioning through the
+   * 'preparingToBeMeasured' state.
+   */
   public setMeasurementValuesImmediate( value: T ): void {
     if ( this.preparingToBeMeasuredTimeoutListener ) {
       stepTimer.clearTimeout( this.preparingToBeMeasuredTimeoutListener );
@@ -168,7 +170,6 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
     } );
     this.measurementStateProperty.value = 'readyToBeMeasured';
   }
-
 
   /**
    * Go back to the 'readyToBeMeasured' state without re-preparing the measurement.
