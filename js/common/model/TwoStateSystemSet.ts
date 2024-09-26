@@ -75,7 +75,9 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
 
     this.validValues = stateValues;
 
-    this.numberOfActiveSystemsProperty = new NumberProperty( MULTI_COIN_EXPERIMENT_QUANTITIES[ 1 ], {
+    const initialNumberOfActiveSystems = options.maxNumberOfSystems === 1 ? 1 : MULTI_COIN_EXPERIMENT_QUANTITIES[ 1 ];
+
+    this.numberOfActiveSystemsProperty = new NumberProperty( initialNumberOfActiveSystems, {
       range: new Range( 1, options.maxNumberOfSystems ),
       tandem: options.tandem.createTandem( 'numberOfActiveSystemsProperty' )
     } );
