@@ -88,7 +88,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
                                         SINGLE_COIN_TEST_BOX_UNREVEALED_FILL;
     } );
 
-    // TODO: singleCoinTestBox is a Node, but multiCoinTestBox is a MultiCoinTestBox https://github.com/phetsims/quantum-measurement/issues/20
+    // TODO: singleCoinTestBox is a Node, but multiCoinTestBox is a MultiCoinTestBox, see https://github.com/phetsims/quantum-measurement/issues/41
     const singleCoinTestBox = new Node( {
       children: [ singleCoinTestBoxRectangle ],
       clipArea: Shape.bounds( singleCoinTestBoxRectangle.getRectBounds() )
