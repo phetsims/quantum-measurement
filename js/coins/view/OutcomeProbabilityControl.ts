@@ -142,7 +142,6 @@ export default class OutcomeProbabilityControl extends VBox {
         [ outcomeProbabilityProperty ],
         outcomeProbability => {
 
-          // TODO: Make sure the values are correct here, see https://github.com/phetsims/quantum-measurement/issues/23
           const alphaValue = Utils.toFixed( Math.sqrt( outcomeProbability ), 3 );
           const betaValue = Utils.toFixed( Math.sqrt( 1 - outcomeProbability ), 3 );
           return `${alphaValue}|${UP}${KET} + ${MAGENTA_SPAN( betaValue )}|${MAGENTA_SPAN( DOWN )}${KET}`;

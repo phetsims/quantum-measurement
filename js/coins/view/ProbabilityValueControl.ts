@@ -14,6 +14,7 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
+import Utils from '../../../../dot/js/Utils.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { HBox, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
@@ -65,6 +66,7 @@ export default class ProbabilityValueControl extends VBox {
       thumbSize: new Dimension2( 12, 26 ),
       majorTickLength: 10,
       tickLabelSpacing: 4,
+      constrainValue: ( number: number ) => Utils.toFixedNumber( number, 2 ),
       tandem: tandem.createTandem( 'slider' )
     } );
     slider.addMajorTick( RANGE.min, new Text( RANGE.min.toString(), { font: TICK_MARK_FONT } ) );
