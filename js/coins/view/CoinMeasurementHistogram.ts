@@ -9,10 +9,12 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import NumberDisplay, { NumberDisplayOptions } from '../../../../scenery-phet/js/NumberDisplay.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { AlignBox, AlignGroup, Color, HBox, Line, Node, NodeOptions, Rectangle, Text } from '../../../../scenery/js/imports.js';
@@ -20,6 +22,7 @@ import { SystemType } from '../../common/model/SystemType.js';
 import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
 import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
 import { MAX_COINS } from '../model/CoinsExperimentSceneModel.js';
@@ -27,7 +30,7 @@ import { MAX_COINS } from '../model/CoinsExperimentSceneModel.js';
 type SelfOptions = EmptySelfOptions;
 export type CoinMeasurementHistogramOptions = SelfOptions & PickRequired<NodeOptions, 'tandem' | 'visibleProperty'>;
 
-const HISTOGRAM_SIZE = new Dimension2( 200, 180 ); // size excluding labels at bottom, in screen coordinates
+const HISTOGRAM_SIZE = new Dimension2( 200, 160 ); // size excluding labels at bottom, in screen coordinates
 const AXIS_STROKE = Color.BLACK;
 const AXIS_LINE_WIDTH = 2;
 const LABEL_FONT = new PhetFont( { size: 20, weight: 'bold' } );
@@ -69,6 +72,21 @@ export default class CoinMeasurementHistogram extends Node {
       lineWidth: AXIS_LINE_WIDTH,
       centerX: 0,
       bottom: 0
+    } );
+
+
+    const numberOfCoinsStringProperty = new DerivedStringProperty(
+      [ coinSet.numberOfActiveSystemsProperty ],
+      numberOfCoins => StringUtils.fillIn(
+        QuantumMeasurementStrings.numberOfCoinsPatternStringProperty,
+        { number: numberOfCoins }
+      )
+    );
+
+    const numberOfSystemsText = new Text( numberOfCoinsStringProperty, {
+      font: new PhetFont( 16 ),
+      centerX: 0,
+      centerY: yAxis.top * 1.2
     } );
 
     // Create the labels for the X axis.
@@ -183,6 +201,7 @@ export default class CoinMeasurementHistogram extends Node {
 
     const options = optionize<CoinMeasurementHistogramOptions, SelfOptions, NodeOptions>()( {
       children: [
+        numberOfSystemsText,
         numberBars,
         yAxis,
         xAxis,
