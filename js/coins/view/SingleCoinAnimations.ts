@@ -35,9 +35,6 @@ const SINGLE_COIN_TEST_BOX_SIZE = new Dimension2( 165, 145 );
 const COIN_FLIP_RATE = 3; // full flips per second
 const COIN_TRAVEL_ANIMATION_DURATION = QuantumMeasurementConstants.PREPARING_TO_BE_MEASURED_TIME * 0.95;
 
-// allowed values for the number of coins to use in the multi-coin experiment
-export const MULTI_COIN_EXPERIMENT_QUANTITIES = [ 10, 100, 10000 ];
-
 export default class SingleCoinAnimations {
 
   public readonly abortIngressAnimationForSingleCoin: () => void;

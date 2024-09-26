@@ -13,16 +13,13 @@ import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
+import CoinsExperimentSceneModel, { MULTI_COIN_EXPERIMENT_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
 import CoinExperimentMeasurementArea from './CoinExperimentMeasurementArea.js';
 import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
 import MultiCoinTestBox from './MultiCoinTestBox.js';
 import SmallCoinNode from './SmallCoinNode.js';
 
 const COIN_TRAVEL_ANIMATION_DURATION = QuantumMeasurementConstants.PREPARING_TO_BE_MEASURED_TIME * 0.95;
-
-// allowed values for the number of coins to use in the multi-coin experiment
-export const MULTI_COIN_EXPERIMENT_QUANTITIES = [ 10, 100, 10000 ];
 
 export default class MultipleCoinAnimations {
 
