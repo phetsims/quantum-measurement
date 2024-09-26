@@ -18,6 +18,7 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Circle, Color, Node, NodeOptions, Text } from '../../../../scenery/js/imports.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
+import { MEASUREMENT_PREPARATION_TIME } from '../../common/model/TwoStateSystemSet.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
@@ -137,7 +138,7 @@ export default class SmallCoinNode extends Node {
       },
       getValue: () => flipPhase,
       to: Math.PI * destinationPhaseMultiplier,
-      duration: QuantumMeasurementConstants.PREPARING_TO_BE_MEASURED_TIME,
+      duration: MEASUREMENT_PREPARATION_TIME,
       easing: Easing.LINEAR
     } );
     this.flippingAnimation.endedEmitter.addListener( () => {

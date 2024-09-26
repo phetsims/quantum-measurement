@@ -18,7 +18,7 @@ import { Circle, HBox, Node } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
-import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
+import { MEASUREMENT_PREPARATION_TIME } from '../../common/model/TwoStateSystemSet.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
 import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
@@ -33,7 +33,7 @@ import QuantumCoinNode from './QuantumCoinNode.js';
 
 const SINGLE_COIN_TEST_BOX_SIZE = new Dimension2( 165, 145 );
 const COIN_FLIP_RATE = 3; // full flips per second
-const COIN_TRAVEL_ANIMATION_DURATION = QuantumMeasurementConstants.PREPARING_TO_BE_MEASURED_TIME * 0.95;
+const COIN_TRAVEL_ANIMATION_DURATION = MEASUREMENT_PREPARATION_TIME * 0.95;
 
 export default class SingleCoinAnimations {
 

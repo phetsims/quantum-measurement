@@ -11,6 +11,7 @@
 import TProperty from '../../../../axon/js/TProperty.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
+import { MEASUREMENT_PREPARATION_TIME } from '../../common/model/TwoStateSystemSet.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import CoinsExperimentSceneModel, { MULTI_COIN_EXPERIMENT_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
@@ -19,7 +20,7 @@ import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
 import MultiCoinTestBox from './MultiCoinTestBox.js';
 import SmallCoinNode from './SmallCoinNode.js';
 
-const COIN_TRAVEL_ANIMATION_DURATION = QuantumMeasurementConstants.PREPARING_TO_BE_MEASURED_TIME * 0.95;
+const COIN_TRAVEL_ANIMATION_DURATION = MEASUREMENT_PREPARATION_TIME * 0.95;
 
 export default class MultipleCoinAnimations {
 

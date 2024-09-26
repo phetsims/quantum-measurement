@@ -22,7 +22,6 @@ const QuantumMeasurementConstants = {
   KET: '\u27e9',
   COIN_SET_AREA_PROPORTION: 0.9, // Side of the explicit coin area with respect to the measurement area
 
-  PREPARING_TO_BE_MEASURED_TIME: 1, // in seconds
   HOLLYWOODED_MAX_COINS: 400, // This number should be used when *showing* fewer coins than the max allowed.
   HOLLYWOODED_MAX_COINS_RADII: 2
   /**

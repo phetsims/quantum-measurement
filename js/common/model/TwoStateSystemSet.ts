@@ -18,7 +18,6 @@ import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioO
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import { ExperimentMeasurementState, ExperimentMeasurementStateValues } from '../../coins/model/ExperimentMeasurementState.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import QuantumMeasurementConstants from '../QuantumMeasurementConstants.js';
 import { MULTI_COIN_EXPERIMENT_QUANTITIES } from '../../coins/model/CoinsExperimentSceneModel.js';
 
 type SelfOptions = {
@@ -31,6 +30,9 @@ export type StateSetMeasurementResult<T> = {
   length: number;
   measuredValues: Array<T | null>;
 };
+
+// Define the time that it will take to prepare a measurement, in seconds.  This is empirically determined.
+export const MEASUREMENT_PREPARATION_TIME = 1;
 
 // REVIEW: Should T only extend string or some system type? See https://github.com/phetsims/quantum-measurement/issues/20
 export default class TwoStateSystemSet<T extends string> extends PhetioObject {
@@ -112,7 +114,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
       if ( measureWhenPrepared ) {
         this.measure();
       }
-    }, QuantumMeasurementConstants.PREPARING_TO_BE_MEASURED_TIME * 1000 );
+    }, MEASUREMENT_PREPARATION_TIME * 1000 );
   }
 
   /**
