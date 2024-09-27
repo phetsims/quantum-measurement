@@ -19,6 +19,10 @@ import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import { ExperimentMeasurementState, ExperimentMeasurementStateValues } from '../../coins/model/ExperimentMeasurementState.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { MULTI_COIN_EXPERIMENT_QUANTITIES } from '../../coins/model/CoinsExperimentSceneModel.js';
+import IOType from '../../../../tandem/js/types/IOType.js';
+import ArrayIO from '../../../../tandem/js/types/ArrayIO.js';
+import StringIO from '../../../../tandem/js/types/StringIO.js';
+import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 
 type SelfOptions = {
   initialBias?: number;
@@ -68,7 +72,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
     const options = optionize<TwoStateSystemSetOptions, SelfOptions, PhetioObjectOptions>()( {
       initialBias: 0.5,
       maxNumberOfSystems: 10000,
-      phetioState: false
+      phetioType: TwoStateSystemSet.TwoStateSystemSetIO
     }, providedOptions );
 
     super( options );
@@ -186,6 +190,27 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
     this.measurementStateProperty.reset();
     this.numberOfActiveSystemsProperty.reset();
   }
+
+  /**
+   * TwoStateSystemSetIO uses reference type serialization because in this sim the instances are created once when the
+   * sim is initialized.
+   */
+  public static readonly TwoStateSystemSetIO = new IOType<TwoStateSystemSet<string>, TwoStateSystemSetStateObject>(
+    'TwoStateSystemSetIO',
+    {
+      valueType: TwoStateSystemSet,
+      stateSchema: {
+        measuredValues: ArrayIO( NullableIO( StringIO ) )
+      },
+      applyState: ( twoStateSystemSet: TwoStateSystemSet<string>, stateObject: TwoStateSystemSetStateObject ) => {
+        stateObject.measuredValues.forEach( ( value, i ) => { twoStateSystemSet.measuredValues[ i ] = value; } );
+      }
+    }
+  );
 }
+
+export type TwoStateSystemSetStateObject = {
+  measuredValues: Array<string | null>;
+};
 
 quantumMeasurement.register( 'TwoStateSystemSet', TwoStateSystemSet );
