@@ -13,7 +13,7 @@ import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, HBox, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Color, GatedVisibleProperty, HBox, Text, VBox } from '../../../../scenery/js/imports.js';
 import RectangularRadioButton, { RectangularRadioButtonOptions } from '../../../../sun/js/buttons/RectangularRadioButton.js';
 import Panel from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -33,7 +33,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
 
   public readonly orientationIndicatorCoinNode: CoinNode;
 
-  public constructor( initialCoinStateProperty: TReadOnlyProperty<ClassicalCoinStates> | TReadOnlyProperty<QuantumUncollapsedCoinStates>,
+  public constructor( initialCoinStateProperty: Property<ClassicalCoinStates> | Property<QuantumUncollapsedCoinStates>,
                       upProbabilityProperty: TReadOnlyProperty<number>,
                       preparingExperimentProperty: TReadOnlyProperty<boolean>,
                       systemType: SystemType,
@@ -110,9 +110,11 @@ export default class InitialCoinStateSelectorNode extends VBox {
       stroke: null,
       yMargin: 10,
       minWidth: 270,
-      visibleProperty: preparingExperimentProperty, // TODO: Gated visible prop, see https://github.com/phetsims/quantum-measurement/issues/28
+      visibleProperty: new GatedVisibleProperty( preparingExperimentProperty, radioButtonGroupTandem ),
       tandem: radioButtonGroupTandem
     } );
+
+    selectorPanel.addLinkedElement( initialCoinStateProperty );
 
     // Add the Node that will indicate the initial orientation of the coin.
     let orientationIndicatorCoinNode;
