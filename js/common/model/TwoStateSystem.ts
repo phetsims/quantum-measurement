@@ -43,19 +43,6 @@ export default class TwoStateSystem<T extends string> extends TwoStateSystemSet<
   }
 
   /**
-   * Measure the system, which will either cause a value to be chosen if one hasn't been since the last preparation or
-   * will just return the value of the most recent measurement.
-   */
-  public measureSystem(): T {
-    const result = super.measure();
-    assert && assert( result.length === 1, 'unexpected length for measurement set' );
-    assert && assert( result.measuredValues[ 0 ] !== null, 'measurement result should not be indeterminate' );
-    const measurementValue: T = result.measuredValues[ 0 ]!;
-    this.measuredValueProperty.set( measurementValue );
-    return measurementValue;
-  }
-
-  /**
    * Override the measure function
    */
   public override measure(): StateSetMeasurementResult<T> {
