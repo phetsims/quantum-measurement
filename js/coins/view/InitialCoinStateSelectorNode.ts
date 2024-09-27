@@ -110,7 +110,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
       stroke: null,
       yMargin: 10,
       minWidth: 270,
-      visibleProperty: preparingExperimentProperty,
+      visibleProperty: preparingExperimentProperty, // TODO: Gated visible prop, see https://github.com/phetsims/quantum-measurement/issues/28
       tandem: radioButtonGroupTandem
     } );
 
