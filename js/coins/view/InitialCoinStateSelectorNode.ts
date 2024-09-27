@@ -61,13 +61,15 @@ export default class InitialCoinStateSelectorNode extends VBox {
         baseColor: Color.WHITE
       };
 
+    const radioButtonGroupTandem = tandem.createTandem( 'radioButtonGroup' );
+
     const createCoinRadioButton = ( stateValue: string, coinNode: CoinNode ) => {
       return new RectangularRadioButton(
         initialCoinStateProperty as Property<ClassicalCoinStates>,
         stateValue,
         combineOptions<RectangularRadioButtonOptions>( {
           content: coinNode,
-          tandem: tandem.createTandem( `${stateValue.toLowerCase()}RadioButton` )
+          tandem: radioButtonGroupTandem.createTandem( `${stateValue.toLowerCase()}RadioButton` )
         }, radioButtonOptions )
       );
     };
@@ -108,7 +110,8 @@ export default class InitialCoinStateSelectorNode extends VBox {
       stroke: null,
       yMargin: 10,
       minWidth: 270,
-      visibleProperty: preparingExperimentProperty
+      visibleProperty: preparingExperimentProperty,
+      tandem: radioButtonGroupTandem
     } );
 
     // Add the Node that will indicate the initial orientation of the coin.
