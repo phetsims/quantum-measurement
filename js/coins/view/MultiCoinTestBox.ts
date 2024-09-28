@@ -22,6 +22,7 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import { ExperimentMeasurementState } from '../model/ExperimentMeasurementState.js';
 import SmallCoinNode from './SmallCoinNode.js';
 import { MAX_COINS, MULTI_COIN_EXPERIMENT_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 
 type SelfOptions = EmptySelfOptions;
 export type MultiCoinTestBoxOptions = SelfOptions & PickRequired<HBoxOptions, 'tandem'>;
@@ -92,46 +93,62 @@ export default class MultiCoinTestBox extends HBox {
                                           TEST_BOX_CONTENTS_HIDDEN_FILL;
 
       // Update the appearance of the coin nodes.
-      this.residentCoinNodes.forEach( ( coinNode, index ) => {
+      this.updateCoinNodes( coinSet, measurementState );
+    } );
 
-        if ( measurementState === 'measuredAndRevealed' ) {
+    // When phet-io state is being set, it is possible for the coin states to change without there being any change in
+    // the state of the experiment.  The following code makes sure that coin nodes are updated if necessary.
+    isSettingPhetioStateProperty.lazyLink( isSettingPhetioState => {
+      if ( !isSettingPhetioState && measurementStateProperty.value === 'measuredAndRevealed' ) {
+        this.updateCoinNodes( coinSet, measurementStateProperty.value );
+      }
+    } );
+  }
 
-          if ( coinNode.isFlipping ) {
-            coinNode.stopFlipping();
-          }
+  /**
+   * Update the appearance of the coin nodes.  This is done in a batch rather than having separate model elements and
+   * nodes that automatically update because there can be many thousands of coins, so this approach is needed to get
+   * reasonable performance.
+   */
+  private updateCoinNodes( coinSet: TwoStateSystemSet<string>, measurementState: ExperimentMeasurementState ): void {
+    this.residentCoinNodes.forEach( ( coinNode, index ) => {
 
-          // Reveal the coin's state.
-          const state = coinSet.measuredValues[ index ];
-          if ( state === null ) {
-            coinNode.displayModeProperty.value = 'masked';
-          }
-          else if ( state === 'up' ) {
-            coinNode.displayModeProperty.value = 'up';
-          }
-          else if ( state === 'down' ) {
-            coinNode.displayModeProperty.value = 'down';
-          }
-          else if ( state === 'heads' ) {
-            coinNode.displayModeProperty.value = 'heads';
-          }
-          else if ( state === 'tails' ) {
-            coinNode.displayModeProperty.value = 'tails';
-          }
+      if ( measurementState === 'measuredAndRevealed' ) {
+
+        if ( coinNode.isFlipping ) {
+          coinNode.stopFlipping();
         }
-        else if ( measurementState === 'preparingToBeMeasured' ) {
 
-          assert && assert( !coinNode.isFlipping, 'coin node should not already be flipping' );
-
-          coinNode.displayModeProperty.value = 'masked';
-          coinNode.startFlipping();
-        }
-        else if ( measurementState === 'readyToBeMeasured' ) {
-          if ( coinNode.isFlipping ) {
-            coinNode.stopFlipping();
-          }
+        const state = coinSet.measuredValues[ index ];
+        if ( state === null ) {
           coinNode.displayModeProperty.value = 'masked';
         }
-      } );
+        else if ( state === 'up' ) {
+          coinNode.displayModeProperty.value = 'up';
+        }
+        else if ( state === 'down' ) {
+          coinNode.displayModeProperty.value = 'down';
+        }
+        else if ( state === 'heads' ) {
+          coinNode.displayModeProperty.value = 'heads';
+        }
+        else if ( state === 'tails' ) {
+          coinNode.displayModeProperty.value = 'tails';
+        }
+      }
+      else if ( measurementState === 'preparingToBeMeasured' ) {
+
+        assert && assert( !coinNode.isFlipping, 'coin node should not already be flipping' );
+
+        coinNode.displayModeProperty.value = 'masked';
+        coinNode.startFlipping();
+      }
+      else if ( measurementState === 'readyToBeMeasured' ) {
+        if ( coinNode.isFlipping ) {
+          coinNode.stopFlipping();
+        }
+        coinNode.displayModeProperty.value = 'masked';
+      }
     } );
   }
 

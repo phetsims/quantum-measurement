@@ -33,6 +33,7 @@ import CoinExperimentPreparationArea from './CoinExperimentPreparationArea.js';
 import CoinNode from './CoinNode.js';
 import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
 import SmallCoinNode from './SmallCoinNode.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 
 type SelfOptions = EmptySelfOptions;
 export type CoinsExperimentSceneViewOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
@@ -133,11 +134,14 @@ export default class CoinsExperimentSceneView extends Node {
         this.dividerMovementAnimation.stop();
       }
 
+      // Set the animation time, but use zero if phet-io state is being set.
+      const dividerAnimationDuration = isSettingPhetioStateProperty.value ? 0 : 0.5;
+
       // Start an animation to move the divider and the center positions of the activity areas.
       this.dividerMovementAnimation = new Animation( {
         property: this.dividerXPositionProperty,
         to: preparingExperiment ? DIVIDER_X_POSITION_DURING_PREPARATION : DIVIDER_X_POSITION_DURING_MEASUREMENT,
-        duration: 0.5,
+        duration: dividerAnimationDuration,
         easing: Easing.CUBIC_OUT
       } );
 

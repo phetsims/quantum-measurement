@@ -19,6 +19,7 @@ import CoinExperimentMeasurementArea from './CoinExperimentMeasurementArea.js';
 import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
 import MultiCoinTestBox from './MultiCoinTestBox.js';
 import SmallCoinNode from './SmallCoinNode.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 
 const COIN_TRAVEL_ANIMATION_DURATION = MEASUREMENT_PREPARATION_TIME * 0.95;
 
@@ -115,12 +116,15 @@ public readonly startIngressAnimationForCoinSet: ( forReprepare: boolean ) => vo
         // position.
         const destinationAtBoxEdge = leftOfTestAreaInParentCoords.plusXY( 0, finalDestinationOffset.y );
 
+        // Determine the total animation duration, but use zero if phet-io state is being set.
+        const totalAnimationDuration = isSettingPhetioStateProperty.value ? 0 : COIN_TRAVEL_ANIMATION_DURATION;
+
         // Create an animation that will move this coin node to the edge of the multi-coin test box.
         const animationToTestBoxEdge = new Animation( {
           setValue: value => { coinNode.center = value; },
           getValue: () => coinNode.center,
           to: destinationAtBoxEdge,
-          duration: COIN_TRAVEL_ANIMATION_DURATION / 2,
+          duration: totalAnimationDuration / 2,
           easing: Easing.LINEAR
         } );
         animationsToEdgeOfMultiCoinTestBox.push( animationToTestBoxEdge );
@@ -133,7 +137,7 @@ public readonly startIngressAnimationForCoinSet: ( forReprepare: boolean ) => vo
             setValue: value => { coinNode.center = value; },
             getValue: () => coinNode.center,
             to: boxCenter.plus( finalDestinationOffset ),
-            duration: COIN_TRAVEL_ANIMATION_DURATION / 2,
+            duration: totalAnimationDuration / 2,
             easing: Easing.CUBIC_OUT
           } );
           animationsFromEdgeOfMultiCoinBoxToInside.push( animationFromTestBoxEdgeToInside );

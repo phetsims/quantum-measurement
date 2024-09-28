@@ -30,6 +30,7 @@ import CoinNode from './CoinNode.js';
 import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
 import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
 import QuantumCoinNode from './QuantumCoinNode.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 
 const SINGLE_COIN_TEST_BOX_SIZE = new Dimension2( 165, 145 );
 const COIN_FLIP_RATE = 3; // full flips per second
@@ -132,6 +133,9 @@ export default class SingleCoinAnimations {
       // Make sure the coin mask is outside the test box so that it isn't visible until it slides into the test box.
       coinMask.x = -SINGLE_COIN_TEST_BOX_SIZE.width * 2;
 
+      // Determine the total animation duration, but use zero if phet-io state is being set.
+      const totalAnimationDuration = isSettingPhetioStateProperty.value ? 0 : COIN_TRAVEL_ANIMATION_DURATION;
+
       // Create and start an animation to move the single coin to the side of the single coin test box. The entire
       // process consists of two animations, one to move the coin to the left edge of the test box while the test box is
       // potentially also moving, then a second one to move the coin into the box. The durations must be set up such
@@ -143,7 +147,7 @@ export default class SingleCoinAnimations {
         setValue: value => { singleCoinNode!.center = value; },
         getValue: () => singleCoinNode!.center,
         to: leftOfTestAreaInParentCoords,
-        duration: COIN_TRAVEL_ANIMATION_DURATION / 2,
+        duration: totalAnimationDuration / 2,
         easing: Easing.LINEAR
       } );
       singleCoinAnimationFromPrepAreaToEdgeOfTestBox.finishEmitter.addListener( () => {
@@ -167,7 +171,7 @@ export default class SingleCoinAnimations {
           },
           getValue: () => assuredSingleCoinNode.center,
           to: measurementArea.localToParentPoint( singleCoinMeasurementArea.localToParentPoint( singleCoinTestBox.center ) ),
-          duration: COIN_TRAVEL_ANIMATION_DURATION / 2,
+          duration: totalAnimationDuration / 2,
           easing: Easing.CUBIC_OUT
         } );
         singleCoinAnimationFromEdgeOfTestBoxToInside.finishEmitter.addListener( () => {

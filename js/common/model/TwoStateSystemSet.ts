@@ -47,8 +47,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
   // valid values for a measurement
   public readonly validValues: readonly T[];
 
-  // REVIEW: Any reason why here it's Array<> and above is T[]? https://github.com/phetsims/quantum-measurement/issues/20
-  // the values of most recent measurement, null indicates indeterminate
+  // the values of most recent measurement, null indicates superposed (which only applies to quantum systems)
   public readonly measuredValues: Array<T | null>;
 
   // The number of systems that will be measured each time a measurement is made.
@@ -79,6 +78,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
 
     this.validValues = stateValues;
 
+    // TODO: This isn't how we should do this.  See https://github.com/phetsims/quantum-measurement/issues/43.
     const initialNumberOfActiveSystems = options.maxNumberOfSystems === 1 ? 1 : MULTI_COIN_EXPERIMENT_QUANTITIES[ 1 ];
 
     this.numberOfActiveSystemsProperty = new NumberProperty( initialNumberOfActiveSystems, {
@@ -201,9 +201,6 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
       valueType: TwoStateSystemSet,
       stateSchema: {
         measuredValues: ArrayIO( NullableIO( StringIO ) )
-      },
-      applyState: ( twoStateSystemSet: TwoStateSystemSet<string>, stateObject: TwoStateSystemSetStateObject ) => {
-        stateObject.measuredValues.forEach( ( value, i ) => { twoStateSystemSet.measuredValues[ i ] = value; } );
       }
     }
   );
