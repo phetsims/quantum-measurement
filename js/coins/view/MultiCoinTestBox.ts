@@ -142,7 +142,7 @@ export default class MultiCoinTestBox extends HBox {
 
         coinNode.displayModeProperty.value = 'masked';
 
-        if ( !coinSet.isQuantum ) {
+        if ( coinSet.systemType === 'classical' ) {
           coinNode.startFlipping();
         }
       }

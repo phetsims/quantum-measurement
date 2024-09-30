@@ -23,9 +23,10 @@ import IOType from '../../../../tandem/js/types/IOType.js';
 import ArrayIO from '../../../../tandem/js/types/ArrayIO.js';
 import StringIO from '../../../../tandem/js/types/StringIO.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
+import { SystemType } from './SystemType.js';
 
 type SelfOptions = {
-  isQuantum?: boolean;
+  systemType?: SystemType;
   initialBias?: number;
   maxNumberOfSystems?: number;
 };
@@ -42,7 +43,7 @@ export const MEASUREMENT_PREPARATION_TIME = 1;
 // TODO AV: Should T only extend string or some system type? See https://github.com/phetsims/quantum-measurement/issues/20
 export default class TwoStateSystemSet<T extends string> extends PhetioObject {
 
-  public readonly isQuantum: boolean;
+  public readonly systemType: SystemType;
 
   // the state of the measurement for this system
   public readonly measurementStateProperty: Property<ExperimentMeasurementState>;
@@ -72,7 +73,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
     assert && assert( stateValues.length === 2, 'there must be exactly two valid values' );
 
     const options = optionize<TwoStateSystemSetOptions, SelfOptions, PhetioObjectOptions>()( {
-      isQuantum: true,
+      systemType: 'quantum',
       initialBias: 0.5,
       maxNumberOfSystems: 10000,
       phetioType: TwoStateSystemSet.TwoStateSystemSetIO
@@ -82,7 +83,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
 
     this.validValues = stateValues;
 
-    this.isQuantum = options.isQuantum;
+    this.systemType = options.systemType;
 
     // TODO: This isn't how we should do this.  See https://github.com/phetsims/quantum-measurement/issues/43.
     const initialNumberOfActiveSystems = options.maxNumberOfSystems === 1 ? 1 : MULTI_COIN_EXPERIMENT_QUANTITIES[ 1 ];
