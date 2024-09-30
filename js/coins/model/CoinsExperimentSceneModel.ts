@@ -94,13 +94,13 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
         ClassicalCoinStateValues,
         'heads',
         this.upProbabilityProperty,
-        { tandem: singleCoinTandem }
+        { tandem: singleCoinTandem, isQuantum: false }
       );
       this.coinSet = new TwoStateSystemSet<ClassicalCoinStates>(
         ClassicalCoinStateValues,
         'heads',
         this.upProbabilityProperty,
-        { tandem: coinSetTandem }
+        { tandem: coinSetTandem, isQuantum: false }
       );
     }
     else {

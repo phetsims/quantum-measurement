@@ -141,7 +141,10 @@ export default class MultiCoinTestBox extends HBox {
         assert && assert( !coinNode.isFlipping, 'coin node should not already be flipping' );
 
         coinNode.displayModeProperty.value = 'masked';
-        coinNode.startFlipping();
+
+        if ( !coinSet.isQuantum ) {
+          coinNode.startFlipping();
+        }
       }
       else if ( measurementState === 'readyToBeMeasured' ) {
         if ( coinNode.isFlipping ) {
