@@ -290,7 +290,6 @@ export default class CoinExperimentMeasurementArea extends VBox {
 
     // Listen to the state of the coin and animate a flipping motion for the classical coin or a travel-from-the-prep-
     // area animation for the quantum coin.
-    // REVIEW: Want to change this snake case description for the actual name? https://github.com/phetsims/quantum-measurement/issues/20
     sceneModel.singleCoin.measurementStateProperty.lazyLink( singleCoinAnimations.flipCoin );
 
     sceneModel.coinSet.measurementStateProperty.link( measurementState => {

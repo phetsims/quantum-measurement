@@ -38,7 +38,7 @@ export type StateSetMeasurementResult<T> = {
 // Define the time that it will take to prepare a measurement, in seconds.  This is empirically determined.
 export const MEASUREMENT_PREPARATION_TIME = 1;
 
-// REVIEW: Should T only extend string or some system type? See https://github.com/phetsims/quantum-measurement/issues/20
+// TODO AV: Should T only extend string or some system type? See https://github.com/phetsims/quantum-measurement/issues/20
 export default class TwoStateSystemSet<T extends string> extends PhetioObject {
 
   // the state of the measurement for this system
@@ -113,7 +113,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
       this.measuredValues[ i ] = null;
     } );
 
-    // REVIEW: Document how the stepTimer operates here https://github.com/phetsims/quantum-measurement/issues/20
+    // Create a timeout that will move the measurement state to 'readyToBeMeasured' after a fixed amount of time.
     this.preparingToBeMeasuredTimeoutListener = stepTimer.setTimeout( () => {
       this.preparingToBeMeasuredTimeoutListener = null;
       this.measurementStateProperty.value = 'readyToBeMeasured';
@@ -139,8 +139,6 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
   /**
    * Measure the system, which will either cause a value to be chosen if one hasn't been since the last preparation, or
    * will just return the value of the most recent measurement.
-   *
-   * REVIEW TODO: The return value of this method is never used anywhere! See https://github.com/phetsims/quantum-measurement/issues/20
    */
   public measure(): StateSetMeasurementResult<T> {
     assert && assert(

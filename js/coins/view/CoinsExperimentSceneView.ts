@@ -230,9 +230,6 @@ export default class CoinsExperimentSceneView extends Node {
   }
 
   public reset(): void {
-
-    // REVIEW: Shouldn't this also reset the divider to the original position? https://github.com/phetsims/quantum-measurement/issues/20
-
     if ( this.dividerMovementAnimation ) {
       this.dividerMovementAnimation.stop();
     }

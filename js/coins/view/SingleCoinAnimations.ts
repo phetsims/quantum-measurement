@@ -239,9 +239,8 @@ export default class SingleCoinAnimations {
             }
 
             // Scale the coin on the x-axis to make it look like they are rotating.
-            // REVIEW: Why not check for coinMask? https://github.com/phetsims/quantum-measurement/issues/20
             coinMask.setScaleMagnitude( xScale, 1 );
-            singleCoinNode && singleCoinNode.setScaleMagnitude( xScale, 1 );
+            singleCoinNode!.setScaleMagnitude( xScale, 1 );
 
             // Save state for handling the zero case.
             previousXScale = xScale;
