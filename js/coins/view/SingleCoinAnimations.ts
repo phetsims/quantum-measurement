@@ -14,7 +14,7 @@ import TProperty from '../../../../axon/js/TProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
-import { Circle, HBox, Node } from '../../../../scenery/js/imports.js';
+import { Circle, Node } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
@@ -47,7 +47,6 @@ export default class SingleCoinAnimations {
                       measurementArea: CoinExperimentMeasurementArea,
                       coinMask: Circle,
                       singleCoinTestBox: Node,
-                      singleCoinMeasurementArea: HBox,
                       singleCoinInTestBoxProperty: TProperty<boolean> ) {
 
     // variables to support the coin animations
@@ -139,13 +138,15 @@ export default class SingleCoinAnimations {
       // process consists of two animations, one to move the coin to the left edge of the test box while the test box is
       // potentially also moving, then a second one to move the coin into the box. The durations must be set up such
       // that the test box is in place before the 2nd animation begins or the coin won't end up in the right place.
-      const testAreaXOffset = forReprepare ? 200 : 470; // empirically determined
-      const leftOfTestArea = singleCoinMeasurementArea.center.minusXY( testAreaXOffset, 0 );
-      const leftOfTestAreaInParentCoords = measurementArea.localToParentPoint( leftOfTestArea );
+      const testBoxXOffset = forReprepare ? 180 : 390; // empirically determined
+      const leftOfTestBoxGlobal = singleCoinTestBox.parentToGlobalPoint(
+        singleCoinTestBox.center.minusXY( testBoxXOffset, 0 )
+      );
+      const leftOfTestBoxInParentCoords = measurementArea.globalToParentPoint( leftOfTestBoxGlobal );
       singleCoinAnimationFromPrepAreaToEdgeOfTestBox = new Animation( {
         setValue: value => { singleCoinNode!.center = value; },
         getValue: () => singleCoinNode!.center,
-        to: leftOfTestAreaInParentCoords,
+        to: leftOfTestBoxInParentCoords,
         duration: totalAnimationDuration / 2,
         easing: Easing.LINEAR
       } );

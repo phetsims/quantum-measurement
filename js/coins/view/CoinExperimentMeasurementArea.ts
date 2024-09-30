@@ -229,7 +229,6 @@ export default class CoinExperimentMeasurementArea extends VBox {
       this,
       coinMask,
       singleCoinTestBox.clippedTestBox,
-      singleCoinMeasurementArea,
       this.singleCoinInTestBoxProperty
     );
 
