@@ -43,14 +43,13 @@ export default class SingleCoinAnimations {
   public readonly clearSingleCoinTestBox: () => void;
   public readonly flipCoin: ( singleCoinMeasurementState: ExperimentMeasurementState ) => void;
 
-  public constructor(
-    sceneModel: CoinsExperimentSceneModel,
-    measurementArea: CoinExperimentMeasurementArea,
-    coinMask: Circle,
-    singleCoinTestBox: Node,
-    singleCoinMeasurementArea: HBox,
-    singleCoinInTestBoxProperty: TProperty<boolean>
-  ) {
+  public constructor( sceneModel: CoinsExperimentSceneModel,
+                      measurementArea: CoinExperimentMeasurementArea,
+                      coinMask: Circle,
+                      singleCoinTestBox: Node,
+                      singleCoinMeasurementArea: HBox,
+                      singleCoinInTestBoxProperty: TProperty<boolean> ) {
+
     // variables to support the coin animations
     let singleCoinNode: CoinNode | null = null;
     let singleCoinAnimationFromPrepAreaToEdgeOfTestBox: Animation | null = null;
@@ -104,7 +103,7 @@ export default class SingleCoinAnimations {
 
       // Create a typed reference to the parent node, since we'll need to invoke some methods on it.
       assert && assert( measurementArea.getParent() instanceof CoinsExperimentSceneView );
-      const sceneGraphParent = measurementArea.getParent() as CoinsExperimentSceneView;
+      const coinsExperimentSceneView = measurementArea.getParent() as CoinsExperimentSceneView;
 
       // Clear out the test box if there's anything in there.
       this.clearSingleCoinTestBox();
@@ -128,7 +127,7 @@ export default class SingleCoinAnimations {
 
       // Add the coin to our parent node. This is done so that we don't change our bounds, which could mess up the
       // layout. It will be added back to this area when it is back within the bounds.
-      sceneGraphParent.addSingleCoinNode( singleCoinNode );
+      coinsExperimentSceneView.addSingleCoinNode( singleCoinNode );
 
       // Make sure the coin mask is outside the test box so that it isn't visible until it slides into the test box.
       coinMask.x = -SINGLE_COIN_TEST_BOX_SIZE.width * 2;
@@ -140,7 +139,7 @@ export default class SingleCoinAnimations {
       // process consists of two animations, one to move the coin to the left edge of the test box while the test box is
       // potentially also moving, then a second one to move the coin into the box. The durations must be set up such
       // that the test box is in place before the 2nd animation begins or the coin won't end up in the right place.
-      const testAreaXOffset = forReprepare ? 200 : 420; // empirically determined
+      const testAreaXOffset = forReprepare ? 200 : 470; // empirically determined
       const leftOfTestArea = singleCoinMeasurementArea.center.minusXY( testAreaXOffset, 0 );
       const leftOfTestAreaInParentCoords = measurementArea.localToParentPoint( leftOfTestArea );
       singleCoinAnimationFromPrepAreaToEdgeOfTestBox = new Animation( {
@@ -158,28 +157,28 @@ export default class SingleCoinAnimations {
         const assuredSingleCoinNode = singleCoinNode!;
         assuredSingleCoinNode.moveToBack();
 
-        // Move the mask to be on top of the coin Node.
-        coinMask.center = singleCoinTestBox.parentToLocalPoint( measurementArea.parentToLocalPoint( assuredSingleCoinNode.center ) );
-
-        // Start the 2nd portion of the animation, which moves the masked coin into the test box.
+        // Start the 2nd portion of the animation, which moves the coin and the mask that covers it into the test box.
         singleCoinAnimationFromEdgeOfTestBoxToInside = new Animation( {
           setValue: value => {
+
+            // Position the coin.
             assuredSingleCoinNode.center = value;
-            coinMask.center = singleCoinMeasurementArea.parentToLocalPoint(
-              singleCoinTestBox.parentToLocalPoint( measurementArea.parentToLocalPoint( assuredSingleCoinNode.center ) )
-            );
+
+            // Position the mask that is covering the coin.
+            const coinCenterInGlobalCoords = assuredSingleCoinNode.parentToGlobalPoint( assuredSingleCoinNode.center );
+            coinMask.center = coinMask.globalToParentPoint( coinCenterInGlobalCoords );
           },
           getValue: () => assuredSingleCoinNode.center,
-          to: measurementArea.localToParentPoint( singleCoinMeasurementArea.localToParentPoint( singleCoinTestBox.center ) ),
+          to: assuredSingleCoinNode.globalToParentPoint( singleCoinTestBox.parentToGlobalPoint( singleCoinTestBox.center ) ),
           duration: totalAnimationDuration / 2,
-          easing: Easing.CUBIC_OUT
+          easing: Easing.QUADRATIC_OUT
         } );
         singleCoinAnimationFromEdgeOfTestBoxToInside.finishEmitter.addListener( () => {
 
           // Now that the coin is within the bounds of the test box, remove it from the parent and add it as a child.
-          sceneGraphParent.removeChild( assuredSingleCoinNode );
-          assuredSingleCoinNode.center = singleCoinTestBox.center;
+          coinsExperimentSceneView.removeChild( assuredSingleCoinNode );
           singleCoinTestBox.insertChild( 0, assuredSingleCoinNode );
+          assuredSingleCoinNode.center = singleCoinTestBox.center;
           coinMask.center = singleCoinTestBox.center;
 
           if ( sceneModel.systemType === 'quantum' ) {

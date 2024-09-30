@@ -29,8 +29,8 @@ import MultiCoinTestBox from './MultiCoinTestBox.js';
 import MultipleCoinAnimations from './MultipleCoinAnimations.js';
 import SceneSectionHeader from './SceneSectionHeader.js';
 import SingleCoinAnimations from './SingleCoinAnimations.js';
-import SingleCoinTestBox from './SingleCoinTestBox.js';
 import TwoStateSystem from '../../common/model/TwoStateSystem.js';
+import SingleCoinTestBox from './SingleCoinTestBox.js';
 
 const RADIO_BUTTON_FONT = new PhetFont( 12 );
 
@@ -252,7 +252,6 @@ export default class CoinExperimentMeasurementArea extends VBox {
         // Clear out the test boxes.
         singleCoinAnimations.clearSingleCoinTestBox();
         multipleCoinTestBox.clearContents();
-
       }
       else {
 
