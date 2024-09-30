@@ -13,13 +13,10 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import Dimension2 from '../../../../dot/js/Dimension2.js';
-import { Shape } from '../../../../kite/js/imports.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Circle, Color, HBox, LinearGradient, Node, Rectangle, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Circle, Color, HBox, Node, Text, VBox } from '../../../../scenery/js/imports.js';
 import VerticalAquaRadioButtonGroup from '../../../../sun/js/VerticalAquaRadioButtonGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import TwoStateSystem from '../../common/model/TwoStateSystem.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
@@ -32,12 +29,9 @@ import MultiCoinTestBox from './MultiCoinTestBox.js';
 import MultipleCoinAnimations from './MultipleCoinAnimations.js';
 import SceneSectionHeader from './SceneSectionHeader.js';
 import SingleCoinAnimations from './SingleCoinAnimations.js';
+import SingleCoinTestBox from './SingleCoinTestBox.js';
+import TwoStateSystem from '../../common/model/TwoStateSystem.js';
 
-const SINGLE_COIN_AREA_RECT_LINE_WIDTH = 36;
-const SINGLE_COIN_TEST_BOX_SIZE = new Dimension2( 165, 145 );
-const SINGLE_COIN_TEST_BOX_UNREVEALED_FILL = new LinearGradient( 0, 0, SINGLE_COIN_TEST_BOX_SIZE.width, 0 )
-  .addColorStop( 0, new Color( '#eeeeee' ) )
-  .addColorStop( 0.9, new Color( '#bae3e0' ) );
 const RADIO_BUTTON_FONT = new PhetFont( 12 );
 
 export default class CoinExperimentMeasurementArea extends VBox {
@@ -68,31 +62,12 @@ export default class CoinExperimentMeasurementArea extends VBox {
       { textColor: textColor }
     );
 
-    // Add the area where the single coin will be hidden and revealed.
-    const singleCoinTestBoxRectangle = new Rectangle(
-      0,
-      0,
-      SINGLE_COIN_TEST_BOX_SIZE.width,
-      SINGLE_COIN_TEST_BOX_SIZE.height,
-      {
-        lineWidth: SINGLE_COIN_AREA_RECT_LINE_WIDTH,
-        stroke: new Color( '#555555' ),
-        opacity: 0.8
-      }
-    );
-
-    // Make the single-coin test box transparent when the state of the coin is being revealed to the user.
-    sceneModel.singleCoin.measurementStateProperty.link( singleCoinMeasurementState => {
-      singleCoinTestBoxRectangle.fill = singleCoinMeasurementState === 'measuredAndRevealed' ?
-                                        Color.TRANSPARENT :
-                                        SINGLE_COIN_TEST_BOX_UNREVEALED_FILL;
+    // Create the box where the single coin will be placed while it is experimented with.
+    const singleCoinTestBox = new SingleCoinTestBox( sceneModel.singleCoin.measurementStateProperty, {
+      tandem: tandem.createTandem( 'singleCoinTestBox' )
     } );
 
-    // TODO: singleCoinTestBox is a Node, but multiCoinTestBox is a MultiCoinTestBox, see https://github.com/phetsims/quantum-measurement/issues/41
-    const singleCoinTestBox = new Node( {
-      children: [ singleCoinTestBoxRectangle ],
-      clipArea: Shape.bounds( singleCoinTestBoxRectangle.getRectBounds() )
-    } );
+    // Create the buttons that will be used to control the single-coin test box.
     const singleCoinExperimentButtonSet = new CoinExperimentButtonSet(
       sceneModel.singleCoin as TwoStateSystem<string>,
       sceneModel.systemType,
@@ -246,14 +221,14 @@ export default class CoinExperimentMeasurementArea extends VBox {
           !preparingExperiment && singleCoinExperimentState !== 'measuredAndRevealed'
       )
     } );
-    singleCoinTestBox.addChild( coinMask );
+    singleCoinTestBox.clippedTestBox.addChild( coinMask );
     coinMask.moveToBack();
 
     const singleCoinAnimations = new SingleCoinAnimations(
       sceneModel,
       this,
       coinMask,
-      singleCoinTestBox,
+      singleCoinTestBox.clippedTestBox,
       singleCoinMeasurementArea,
       this.singleCoinInTestBoxProperty
     );
