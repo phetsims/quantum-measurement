@@ -271,10 +271,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
     sceneModel.coinSet.measurementStateProperty.link( measurementState => {
 
       if ( measurementState === 'preparingToBeMeasured' ) {
-        if ( sceneModel.systemType === 'classical' && sceneModel.coinSet.numberOfActiveSystemsProperty.value === 10000 ) {
-          this.measuredCoinsPixelRepresentation.startFlippingAnimation();
-        }
-        else {
+        if ( sceneModel.systemType === 'quantum' ) {
           // Abort any previous animations and clear out the test box.
           multipleCoinAnimations.abortIngressAnimationForCoinSet();
           this.measuredCoinsPixelRepresentation.abortAllAnimations();
@@ -283,6 +280,10 @@ export default class CoinExperimentMeasurementArea extends VBox {
           // Animate a coin from the prep area to the single coin test box to indicate that a new "quantum coin" is
           // being prepared for measurement.
           multipleCoinAnimations.startIngressAnimationForCoinSet( true );
+          this.measuredCoinsPixelRepresentation.startPopulatingAnimation();
+        }
+        else if ( sceneModel.coinSet.numberOfActiveSystemsProperty.value === 10000 ) {
+          this.measuredCoinsPixelRepresentation.startFlippingAnimation();
         }
       }
     } );
