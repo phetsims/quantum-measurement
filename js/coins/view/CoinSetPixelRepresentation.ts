@@ -79,7 +79,7 @@ export default class CoinSetPixelRepresentation extends CanvasNode {
           for ( let j = 0; j < this.sideLength; j++ ) {
             const index = i * this.sideLength + j;
             // Set a random value between 0 and 1 for each pixel
-            this.pixels[ index ] = dotRandom.nextInt( 2 );
+            this.pixels[ index ] = ( dotRandom.nextInt( 2 ) + 1 ) / 2;
           }
         }
         this.invalidatePaint();
@@ -124,7 +124,9 @@ export default class CoinSetPixelRepresentation extends CanvasNode {
     switch( this.experimentStateProperty.value ) {
       case 'preparingToBeMeasured':
         getColor = ( value: number ) => {
-          return value === 1 ? 'grey' : 'transparent';
+          return value === 1 ? '#555' : // dark grey
+                 value === 0.5 ? '#AAA' : // light grey
+                 'transparent';
         };
         break;
       case 'measuredAndRevealed':
