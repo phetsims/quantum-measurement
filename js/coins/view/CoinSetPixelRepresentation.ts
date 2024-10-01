@@ -20,6 +20,7 @@ export default class CoinSetPixelRepresentation extends CanvasNode {
   private readonly sideLength = 100;
   private pixels = new Array( 100 * 100 ).fill( 0 );
   private pixelScale = 1;
+  private currentFrame = 0;
 
   public readonly populatingAnimation: Animation;
   public readonly flippingAnimation: Animation;
@@ -35,12 +36,11 @@ export default class CoinSetPixelRepresentation extends CanvasNode {
     const maxRadius = Math.sqrt( 2 ) * center * 1.1; // 10% extra radius to avoid missed pixels at the corners
     const fps = 40;
     const totalFrames = 4 * MEASUREMENT_PREPARATION_TIME / fps;
-    let currentFrame = 0;
 
     this.populatingAnimation = new Animation( {
       to: totalFrames,
       duration: MEASUREMENT_PREPARATION_TIME,
-      getValue: () => currentFrame,
+      getValue: () => this.currentFrame,
       setValue: frame => {
         {
           const progress = frame / totalFrames;
@@ -65,7 +65,7 @@ export default class CoinSetPixelRepresentation extends CanvasNode {
           }
 
           this.invalidatePaint();
-          currentFrame = frame;
+          this.currentFrame = frame;
         }
       }
     } );
@@ -73,7 +73,7 @@ export default class CoinSetPixelRepresentation extends CanvasNode {
     this.flippingAnimation = new Animation( {
       to: 100,
       duration: MEASUREMENT_PREPARATION_TIME,
-      getValue: () => currentFrame,
+      getValue: () => this.currentFrame,
       setValue: frame => {
         for ( let i = 0; i < this.sideLength; i++ ) {
           for ( let j = 0; j < this.sideLength; j++ ) {
@@ -83,20 +83,28 @@ export default class CoinSetPixelRepresentation extends CanvasNode {
           }
         }
         this.invalidatePaint();
-        currentFrame = frame;
+        this.currentFrame = frame;
       }
     } );
 
     this.populatingAnimation.finishEmitter.addListener( () => {
-      this.pixels = new Array( this.sideLength * this.sideLength ).fill( 1 );
-      currentFrame = 0;
+      this.setAllPixels( 1 );
+      this.currentFrame = 0;
     } );
 
     this.flippingAnimation.finishEmitter.addListener( () => {
-      this.pixels = new Array( this.sideLength * this.sideLength ).fill( 1 );
-      currentFrame = 0;
+      this.setAllPixels( 1 );
+      this.currentFrame = 0;
     } );
 
+    this.setAllPixels( 0 );
+
+    this.experimentStateProperty.lazyLink( state => {
+      this.invalidatePaint();
+      if ( state === 'readyToBeMeasured' ) {
+        this.setAllPixels( 1 );
+      }
+    } );
   }
 
   public redraw( measuredValues: Array<string | null> ): void {
@@ -124,8 +132,8 @@ export default class CoinSetPixelRepresentation extends CanvasNode {
     switch( this.experimentStateProperty.value ) {
       case 'preparingToBeMeasured':
         getColor = ( value: number ) => {
-          return value === 1 ? '#555' : // dark grey
-                 value === 0.5 ? '#AAA' : // light grey
+          return value === 1 ? 'grey' :
+                 value === 0.5 ? '#aaa' : // light grey
                  'transparent';
         };
         break;
@@ -141,7 +149,7 @@ export default class CoinSetPixelRepresentation extends CanvasNode {
         break;
       default:
         getColor = () => {
-          return 'transparent';
+          return 'red';
         };
         break;
     }
@@ -161,13 +169,27 @@ export default class CoinSetPixelRepresentation extends CanvasNode {
 
   public startPopulatingAnimation(): void {
     // Set all pixels to 0
-    this.pixels = new Array( this.sideLength * this.sideLength ).fill( 0 );
+    this.setAllPixels( 0 );
 
     this.populatingAnimation.start();
   }
 
   public startFlippingAnimation(): void {
     this.flippingAnimation.start();
+  }
+
+  /**
+   * Closure function to stop all ongoing animations and revert pixels back to their initial state.
+   */
+  public abortAllAnimations( pixelState = 1 ): void {
+    this.flippingAnimation.stop();
+    this.populatingAnimation.stop();
+    this.currentFrame = 0;
+    this.setAllPixels( pixelState );
+  }
+
+  public setAllPixels( value: number ): void {
+    this.pixels = new Array( this.sideLength * this.sideLength ).fill( value );
   }
 }
 

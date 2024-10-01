@@ -145,8 +145,12 @@ export default class CoinExperimentMeasurementArea extends VBox {
       sceneModel.systemType,
       sceneModel.coinSet.measurementStateProperty,
       {
-        visibleProperty: new DerivedProperty( [ sceneModel.coinSet.numberOfActiveSystemsProperty ], numberOfActiveSystems =>
-          numberOfActiveSystems === MAX_COINS )
+        visibleProperty: new DerivedProperty( [
+          sceneModel.coinSet.numberOfActiveSystemsProperty,
+          sceneModel.preparingExperimentProperty
+        ], ( numberOfActiveSystems, preparingExperiment ) => {
+          return numberOfActiveSystems === MAX_COINS && !preparingExperiment;
+        } )
       } );
 
     const multipleCoinTestBoxContainer = new Node( {
@@ -203,6 +207,8 @@ export default class CoinExperimentMeasurementArea extends VBox {
       }
     } );
 
+    sceneModel.preparingExperimentProperty.link( () => this.measuredCoinsPixelRepresentation.abortAllAnimations( 0 ) );
+
     // Create the node that will be used to cover (aka "mask") the coin so that its state can't be seen.
     const maskRadius = InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS * 1.02;
     const coinMask = new Circle( maskRadius, {
@@ -241,6 +247,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
         // such animations, this has no effect.
         singleCoinAnimations.abortIngressAnimationForSingleCoin();
         multipleCoinAnimations.abortIngressAnimationForCoinSet();
+        this.measuredCoinsPixelRepresentation.abortAllAnimations();
 
         // Clear out the test boxes.
         singleCoinAnimations.clearSingleCoinTestBox();
@@ -270,6 +277,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
         else {
           // Abort any previous animations and clear out the test box.
           multipleCoinAnimations.abortIngressAnimationForCoinSet();
+          this.measuredCoinsPixelRepresentation.abortAllAnimations();
           multipleCoinTestBox.clearContents();
 
           // Animate a coin from the prep area to the single coin test box to indicate that a new "quantum coin" is
