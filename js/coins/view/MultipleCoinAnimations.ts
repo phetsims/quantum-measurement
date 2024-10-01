@@ -9,6 +9,7 @@
  */
 
 import TProperty from '../../../../axon/js/TProperty.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import { MEASUREMENT_PREPARATION_TIME } from '../../common/model/TwoStateSystemSet.js';
@@ -43,7 +44,7 @@ public readonly startIngressAnimationForCoinSet: ( forReprepare: boolean ) => vo
       const radius = MultiCoinTestBox.getRadiusFromCoinQuantity( quantity );
       const coinNodes: SmallCoinNode[] = [];
       _.times( quantityToCreate, () => {
-        coinNodes.push( new SmallCoinNode( radius ) );
+        coinNodes.push( new SmallCoinNode( radius, { visible: quantity !== 10000, tandem: Tandem.OPT_OUT } ) ); // TODO: Find a better way to not display these coins https://github.com/phetsims/quantum-measurement/issues/39
       } );
       movingCoinNodes.set( quantity, coinNodes );
     } );

@@ -13,7 +13,7 @@ import TProperty from '../../../../axon/js/TProperty.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Circle, Color, Node, NodeOptions, Text } from '../../../../scenery/js/imports.js';
 import Animation from '../../../../twixt/js/Animation.js';
@@ -23,7 +23,7 @@ import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstant
 import quantumMeasurement from '../../quantumMeasurement.js';
 
 type SelfOptions = EmptySelfOptions;
-export type SmallCoinNodeOptions = SelfOptions & PickRequired<NodeOptions, 'tandem'>;
+export type SmallCoinNodeOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
 
 export type SmallCoinDisplayMode = 'masked' | 'heads' | 'tails' | 'up' | 'down';
 

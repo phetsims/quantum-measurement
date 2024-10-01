@@ -8,16 +8,95 @@
  *
  */
 
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import { CanvasNode, CanvasNodeOptions } from '../../../../scenery/js/imports.js';
+import Animation from '../../../../twixt/js/Animation.js';
+import { MEASUREMENT_PREPARATION_TIME } from '../../common/model/TwoStateSystemSet.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import { ExperimentMeasurementState } from '../model/ExperimentMeasurementState.js';
 
 export default class CoinSetPixelRepresentation extends CanvasNode {
   private readonly sideLength = 100;
-  private pixels: number[] = [];
+  private pixels = new Array( 100 * 100 ).fill( 0 );
   private pixelScale = 1;
 
-  public constructor( private readonly systemType: 'classical' | 'quantum', providedOptions?: CanvasNodeOptions ) {
+  public readonly populatingAnimation: Animation;
+  public readonly flippingAnimation: Animation;
+
+  public constructor(
+    private readonly systemType: 'classical' | 'quantum',
+    private readonly experimentStateProperty: TReadOnlyProperty<ExperimentMeasurementState>,
+    providedOptions?: CanvasNodeOptions
+  ) {
     super( providedOptions );
+
+    const center = Math.floor( this.sideLength / 2 );
+    const maxRadius = Math.sqrt( 2 ) * center * 1.1; // 10% extra radius to avoid missed pixels at the corners
+    const fps = 40;
+    const totalFrames = 4 * MEASUREMENT_PREPARATION_TIME / fps;
+    let currentFrame = 0;
+
+    this.populatingAnimation = new Animation( {
+      to: totalFrames,
+      duration: MEASUREMENT_PREPARATION_TIME,
+      getValue: () => currentFrame,
+      setValue: frame => {
+        {
+          const progress = frame / totalFrames;
+          const currentRadius = progress * maxRadius;
+
+          for ( let i = 0; i < this.sideLength; i++ ) {
+            for ( let j = 0; j < this.sideLength; j++ ) {
+              const dx = i - center;
+              const dy = j - center;
+              const distance = Math.sqrt( dx * dx + dy * dy );
+
+              if ( distance <= currentRadius ) {
+                const index = i * this.sideLength + j;
+                if ( this.pixels[ index ] === 0 ) {
+                  // Some chance to populate a pixel
+                  if ( dotRandom.nextDouble() < 0.3 ) {
+                    this.pixels[ index ] = 1; // Set to grey
+                  }
+                }
+              }
+            }
+          }
+
+          this.invalidatePaint();
+          currentFrame = frame;
+        }
+      }
+    } );
+
+    this.flippingAnimation = new Animation( {
+      to: 100,
+      duration: MEASUREMENT_PREPARATION_TIME,
+      getValue: () => currentFrame,
+      setValue: frame => {
+        for ( let i = 0; i < this.sideLength; i++ ) {
+          for ( let j = 0; j < this.sideLength; j++ ) {
+            const index = i * this.sideLength + j;
+            // Set a random value between 0 and 1 for each pixel
+            this.pixels[ index ] = dotRandom.nextInt( 2 );
+          }
+        }
+        this.invalidatePaint();
+        currentFrame = frame;
+      }
+    } );
+
+    this.populatingAnimation.finishEmitter.addListener( () => {
+      this.pixels = new Array( this.sideLength * this.sideLength ).fill( 1 );
+      currentFrame = 0;
+    } );
+
+    this.flippingAnimation.finishEmitter.addListener( () => {
+      this.pixels = new Array( this.sideLength * this.sideLength ).fill( 1 );
+      currentFrame = 0;
+    } );
+
   }
 
   public redraw( measuredValues: Array<string | null> ): void {
@@ -41,17 +120,52 @@ export default class CoinSetPixelRepresentation extends CanvasNode {
    */
   public paintCanvas( context: CanvasRenderingContext2D ): void {
 
+    let getColor: ( value: number ) => string;
+    switch( this.experimentStateProperty.value ) {
+      case 'preparingToBeMeasured':
+        getColor = ( value: number ) => {
+          return value === 1 ? 'grey' : 'transparent';
+        };
+        break;
+      case 'measuredAndRevealed':
+        getColor = ( value: number ) => {
+          return value === 1 ? 'black' : 'fuchsia';
+        };
+        break;
+      case 'readyToBeMeasured':
+        getColor = ( value: number ) => {
+          return value === 1 ? 'grey' : 'transparent';
+        };
+        break;
+      default:
+        getColor = () => {
+          return 'transparent';
+        };
+        break;
+    }
+
     context.save();
     // Draw pixels on canvas
     for ( let i = 0; i < this.sideLength; i++ ) {
       for ( let j = 0; j < this.sideLength; j++ ) {
         const index = i * this.sideLength + j;
-        context.fillStyle = this.pixels[ index ] === 1 ? 'black' : 'fuchsia';
+        context.fillStyle = getColor( this.pixels[ index ] );
         context.fillRect( j * this.pixelScale, i * this.pixelScale, this.pixelScale, this.pixelScale );
       }
     }
 
     context.restore();
+  }
+
+  public startPopulatingAnimation(): void {
+    // Set all pixels to 0
+    this.pixels = new Array( this.sideLength * this.sideLength ).fill( 0 );
+
+    this.populatingAnimation.start();
+  }
+
+  public startFlippingAnimation(): void {
+    this.flippingAnimation.start();
   }
 }
 

@@ -14,18 +14,18 @@ import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import { Color, HBox, HBoxOptions, LinearGradient, Node, Rectangle } from '../../../../scenery/js/imports.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import { MAX_COINS, MULTI_COIN_EXPERIMENT_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
 import { ExperimentMeasurementState } from '../model/ExperimentMeasurementState.js';
 import SmallCoinNode from './SmallCoinNode.js';
-import { MAX_COINS, MULTI_COIN_EXPERIMENT_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
-import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 
 type SelfOptions = EmptySelfOptions;
-export type MultiCoinTestBoxOptions = SelfOptions & PickRequired<HBoxOptions, 'tandem'>;
+export type MultiCoinTestBoxOptions = SelfOptions & WithRequired<HBoxOptions, 'tandem'>;
 
 // constants
 const BOX_SIZE = new Dimension2( 200, 200 );

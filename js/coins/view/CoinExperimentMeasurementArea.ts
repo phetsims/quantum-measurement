@@ -10,7 +10,6 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import Multilink from '../../../../axon/js/Multilink.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -142,14 +141,19 @@ export default class CoinExperimentMeasurementArea extends VBox {
       visibleProperty: sceneModel.preparingExperimentProperty
     } );
 
-    const measuredCoinsPixelRepresentation = new CoinSetPixelRepresentation( sceneModel.systemType );
+    const measuredCoinsPixelRepresentation = new CoinSetPixelRepresentation(
+      sceneModel.systemType,
+      sceneModel.coinSet.measurementStateProperty,
+      {
+        visibleProperty: new DerivedProperty( [ sceneModel.coinSet.numberOfActiveSystemsProperty ], numberOfActiveSystems =>
+          numberOfActiveSystems === MAX_COINS )
+      } );
 
     const multipleCoinTestBoxContainer = new Node( {
       children: [
         multipleCoinTestBox,
         measuredCoinsPixelRepresentation
-      ],
-      localBounds: multipleCoinTestBox.getGlobalBounds()
+      ]
     } );
 
     // Create the composite node that represents to test box and controls where the user will experiment with multiple
@@ -193,21 +197,11 @@ export default class CoinExperimentMeasurementArea extends VBox {
     this.measuredCoinsPixelRepresentation.setX( offset );
     this.measuredCoinsPixelRepresentation.setY( offset );
 
-    Multilink.multilink(
-      [
-        sceneModel.coinSet.numberOfActiveSystemsProperty,
-        sceneModel.coinSet.measurementStateProperty
-      ],
-      ( numberOfActiveSystems, state ) => {
-        if ( numberOfActiveSystems === MAX_COINS && state === 'measuredAndRevealed' ) {
-          this.measuredCoinsPixelRepresentation.redraw( sceneModel.coinSet.measuredValues );
-          this.measuredCoinsPixelRepresentation.visible = true;
-        }
-        else {
-          this.measuredCoinsPixelRepresentation.visible = false;
-        }
+    sceneModel.coinSet.measurementStateProperty.link( measurementState => {
+      if ( measurementState === 'measuredAndRevealed' ) {
+        this.measuredCoinsPixelRepresentation.redraw( sceneModel.coinSet.measuredValues );
       }
-    );
+    } );
 
     // Create the node that will be used to cover (aka "mask") the coin so that its state can't be seen.
     const maskRadius = InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS * 1.02;
@@ -258,6 +252,8 @@ export default class CoinExperimentMeasurementArea extends VBox {
         // experiments moving from the preparation area to the measurement area.
         singleCoinAnimations.startIngressAnimationForSingleCoin( false );
         multipleCoinAnimations.startIngressAnimationForCoinSet( false );
+
+        this.measuredCoinsPixelRepresentation.startPopulatingAnimation();
       }
     } );
 
@@ -267,15 +263,19 @@ export default class CoinExperimentMeasurementArea extends VBox {
 
     sceneModel.coinSet.measurementStateProperty.link( measurementState => {
 
-      if ( measurementState === 'preparingToBeMeasured' && sceneModel.systemType === 'quantum' ) {
+      if ( measurementState === 'preparingToBeMeasured' ) {
+        if ( sceneModel.systemType === 'classical' && sceneModel.coinSet.numberOfActiveSystemsProperty.value === 10000 ) {
+          this.measuredCoinsPixelRepresentation.startFlippingAnimation();
+        }
+        else {
+          // Abort any previous animations and clear out the test box.
+          multipleCoinAnimations.abortIngressAnimationForCoinSet();
+          multipleCoinTestBox.clearContents();
 
-        // Abort any previous animations and clear out the test box.
-        multipleCoinAnimations.abortIngressAnimationForCoinSet();
-        multipleCoinTestBox.clearContents();
-
-        // Animate a coin from the prep area to the single coin test box to indicate that a new "quantum coin" is
-        // being prepared for measurement.
-        multipleCoinAnimations.startIngressAnimationForCoinSet( true );
+          // Animate a coin from the prep area to the single coin test box to indicate that a new "quantum coin" is
+          // being prepared for measurement.
+          multipleCoinAnimations.startIngressAnimationForCoinSet( true );
+        }
       }
     } );
   }
