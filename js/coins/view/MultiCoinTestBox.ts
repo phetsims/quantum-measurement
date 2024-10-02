@@ -123,21 +123,21 @@ export default class MultiCoinTestBox extends HBox {
           coinNode.stopFlipping();
         }
 
-        const state = coinSet.measuredValues[ index ];
-        if ( state === null ) {
-          coinNode.displayModeProperty.value = 'masked';
-        }
-        else if ( state === 'up' ) {
+        const measuredValue = coinSet.measuredValues[ index ];
+        if ( measuredValue === 'up' ) {
           coinNode.displayModeProperty.value = 'up';
         }
-        else if ( state === 'down' ) {
+        else if ( measuredValue === 'down' ) {
           coinNode.displayModeProperty.value = 'down';
         }
-        else if ( state === 'heads' ) {
+        else if ( measuredValue === 'heads' ) {
           coinNode.displayModeProperty.value = 'heads';
         }
-        else if ( state === 'tails' ) {
+        else if ( measuredValue === 'tails' ) {
           coinNode.displayModeProperty.value = 'tails';
+        }
+        else {
+          assert && assert( false, `unexpected measurement value: ${measuredValue} for index ${index}` );
         }
       }
       else if ( measurementState === 'preparingToBeMeasured' ) {
@@ -150,7 +150,7 @@ export default class MultiCoinTestBox extends HBox {
           coinNode.startFlipping();
         }
       }
-      else if ( measurementState === 'readyToBeMeasured' ) {
+      else if ( measurementState === 'readyToBeMeasured' || measurementState === 'measuredAndHidden' ) {
         if ( coinNode.isFlipping ) {
           coinNode.stopFlipping();
         }

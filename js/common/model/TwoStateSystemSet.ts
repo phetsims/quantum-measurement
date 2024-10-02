@@ -23,7 +23,6 @@ import { SystemType } from './SystemType.js';
 import Random from '../../../../dot/js/Random.js';
 import TEmitter from '../../../../axon/js/TEmitter.js';
 import Emitter from '../../../../axon/js/Emitter.js';
-import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 
 type SelfOptions = {
   systemType?: SystemType;
@@ -65,15 +64,19 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
   // second, and 0.5 means no bias.
   public readonly biasProperty: NumberProperty;
 
-  // The seed that was used to generate the most recent set of measured values.  This exists solely to support phet-io -
-  // it is conveyed in the state information and used to regenerate the data when phet-io state is set.  This is done
-  // to avoid sending values for every individual measurement, which could be 10000 values.
+  // The seed that is used to generate the most recent set of measured values.  This exists primarily as a way to
+  // support phet-io - it is conveyed in the state information and used to generate the data when phet-io state is set.
+  // This is done to avoid sending values for every individual measurement, which could be 10000 values.
+  //
+  // The contained value ranges from 0 to 1 inclusive, and 0 and 1 have special meaning - they indicate that all
+  // measurement values should be set to either the 0th or 1st valid value.  All other values are used as a seed to a
+  // random number generator to produce random measurement values.
   public readonly seedProperty: NumberProperty;
 
   // An emitter that fires when the measured data changed, which is essentially any time a new measurement is made after
   // the system has been prepared for measurement.  This is intended to be used as a signal to the view that and update
   // of the information being presented to the user is needed.
-  public readonly measuredDataChanged: TEmitter = new Emitter();
+  public readonly measuredDataChangedEmitter: TEmitter = new Emitter();
 
   public constructor( stateValues: readonly T[],
                       initialState: T,
@@ -92,7 +95,6 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
     super( options );
 
     this.validValues = stateValues;
-
     this.systemType = options.systemType;
 
     // TODO: This isn't how we should do this.  See https://github.com/phetsims/quantum-measurement/issues/43.
@@ -111,39 +113,37 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
       phetioReadOnly: true
     } );
 
-    this.measuredValues = new Array<T>( options.maxNumberOfSystems );
-    _.times( options.maxNumberOfSystems, i => {
-      this.measuredValues[ i ] = initialState;
-    } );
-
     this.biasProperty = biasProperty;
+    this.measuredValues = new Array<T>( options.maxNumberOfSystems );
 
-    // Create the seed Property.
-    this.seedProperty = new NumberProperty( 1, {
+    // Create the seed Property.  It's initial value is controlled by the specified initial value for measurements.
+    this.seedProperty = new NumberProperty( stateValues.indexOf( initialState ), {
       range: new Range( 0, 1 ),
       tandem: options.tandem.createTandem( 'seedProperty' )
     } );
 
-    // Monitor the seed for the random number generator.  If this changes while setting phet-io state, the data will
-    // need to be updated.
-    this.seedProperty.lazyLink( seed => {
+    // Monitor the seed that is used to create the measurement values.
+    this.seedProperty.link( seed => {
 
-      if ( isSettingPhetioStateProperty.value && this.measurementStateProperty.value === 'revealed' ) {
+      // Handle the "special case" values of 0 and 1, which sets all measurement values to one of the two valid values.
+      if ( seed === 0 || seed === 1 ) {
+        const valueToSet = stateValues[ seed ];
+        _.times( this.numberOfActiveSystemsProperty.value, i => {
+          this.measuredValues[ i ] = valueToSet;
+        } );
+      }
+      else {
 
-        this.generateNewMeasurementValues();
-
-        // Create the measured values.
+        // Use the seed value to generate random values.
         const random = new Random( { seed: seed } );
         _.times( this.numberOfActiveSystemsProperty.value, i => {
-
-          // Only make a new measurement if one doesn't exist for this element. Otherwise, just keep the existing value.
           const valueSetIndex = random.nextDouble() < this.biasProperty.value ? 0 : 1;
           this.measuredValues[ i ] = this.validValues[ valueSetIndex ];
         } );
-
-        // Signal that the data has been updated.
-        this.measuredDataChanged.emit();
       }
+
+      // Fire the emitter that signals a change to the data.
+      this.measuredDataChangedEmitter.emit();
     } );
   }
 
@@ -176,7 +176,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
     if ( this.systemType === 'classical' ) {
 
       // Classical systems have deterministic values when measured.
-      this.generateNewMeasurementValues();
+      this.generateNewRandomMeasurementValues();
       this.measurementStateProperty.value = 'measuredAndHidden';
     }
     else {
@@ -201,7 +201,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
 
     if ( this.measurementStateProperty.value === 'readyToBeMeasured' ) {
       assert && assert( this.systemType === 'quantum', 'This point should only be reached for quantum systems' );
-      this.generateNewMeasurementValues();
+      this.generateNewRandomMeasurementValues();
     }
 
     // Update the measurement state to indicate revealed.  When this happens, the view should present the values to the
@@ -237,7 +237,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
     // If the system is ready to be measured, but hasn't yet been, do it now.
     if ( this.measurementStateProperty.value === 'readyToBeMeasured' ) {
 
-      this.generateNewMeasurementValues();
+      this.generateNewRandomMeasurementValues();
 
       // Change the state to represent that this system has now been measured.
       this.measurementStateProperty.value = 'revealed';
@@ -249,40 +249,45 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
     };
   }
 
-  private generateNewMeasurementValues(): void {
+  /**
+   * Generate new random measured values for this system.
+   */
+  private generateNewRandomMeasurementValues(): void {
 
-    // Generate a new seed that will subsequently be used to generate the random data.
-    this.seedProperty.value = dotRandom.nextDouble();
-
-    // Create the measured values.
-    const random = new Random( { seed: this.seedProperty.value } );
-    _.times( this.numberOfActiveSystemsProperty.value, i => {
-      const valueSetIndex = random.nextDouble() < this.biasProperty.value ? 0 : 1;
-      this.measuredValues[ i ] = this.validValues[ valueSetIndex ];
-    } );
-
-    // Signal that the data has been updated.
-    this.measuredDataChanged.emit();
+    // New values are generated by create a new random seed and setting it.  The listener for the seedProperty does the
+    // actual generation.  Note that the value of 0 is not allowed because it has special significance.
+    let newSeed;
+    do {
+      newSeed = dotRandom.nextDouble();
+    } while ( newSeed === 0 );
+    this.seedProperty.value = newSeed;
   }
 
   /**
-   * Set the measurement value immediately for all elements in this set without transitioning through the
-   * 'preparingToBeMeasured' state.
+   * Set the measurement values immediately to the provided value for all elements in this set without transitioning
+   * through the 'preparingToBeMeasured' state.
    */
   public setMeasurementValuesImmediate( value: T ): void {
+
+    // Cancel any in-progress preparation.
     if ( this.preparingToBeMeasuredTimeoutListener ) {
       stepTimer.clearTimeout( this.preparingToBeMeasuredTimeoutListener );
       this.preparingToBeMeasuredTimeoutListener = null;
     }
-    _.times( this.numberOfActiveSystemsProperty.value, i => {
-      this.measuredValues[ i ] = value;
-    } );
+
+    // Set the seed value to the value that will incite its listener to update the data to the provided value.
+    const valueIndex = this.validValues.indexOf( value );
+    assert && assert( valueIndex === 0 || valueIndex === 1 );
+    this.seedProperty.value = valueIndex;
+
+    // Update the measurement state.
     this.measurementStateProperty.value = this.systemType === 'classical' ? 'measuredAndHidden' : 'readyToBeMeasured';
   }
 
   public reset(): void {
     this.measurementStateProperty.reset();
     this.numberOfActiveSystemsProperty.reset();
+    this.seedProperty.reset();
   }
 }
 

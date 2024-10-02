@@ -134,13 +134,16 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
       }
       else {
 
-        // The scene is moving from preparation mode to measurement mode. Force the coins to be in the initial state
-        // chosen by the user.
-        const singleCoinInitialState = this.systemType === 'classical' ?
-                                       this.initialCoinStateProperty.value as never :
-                                       null as never;
-        this.singleCoin.setMeasurementValueImmediate( singleCoinInitialState );
-        this.coinSet.setMeasurementValuesImmediate( this.initialCoinStateProperty.value as QuantumCoinStates | ClassicalCoinStates );
+        // The scene is moving from preparation mode to measurement mode. Set the coins to be in the initial state
+        // chosen by the user.  If these are quantum coins and the initial state is set to superposed, set an arbitrary
+        // initial state, which is okay because the values won't be shown to the user.
+        let initialState = this.initialCoinStateProperty.value;
+        if ( this.systemType === 'quantum' && initialState === 'superposed' ) {
+          initialState = 'up';
+        }
+        // TODO: How can this be better and avoid the "as never" weirdness?  See https://github.com/phetsims/quantum-measurement/issues/42.
+        this.singleCoin.setMeasurementValuesImmediate( initialState as never );
+        this.coinSet.setMeasurementValuesImmediate( initialState as never );
       }
     } );
 

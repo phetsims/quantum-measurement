@@ -94,7 +94,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
       sceneModel.coinSet,
       sceneModel.coinSet.measurementStateProperty,
       sceneModel.coinSet.numberOfActiveSystemsProperty,
-      sceneModel.coinSet.measuredDataChanged,
+      sceneModel.coinSet.measuredDataChangedEmitter,
       { tandem: tandem.createTandem( 'multipleCoinTestBox' ) }
     );
     const multiCoinExperimentHistogram = new CoinMeasurementHistogram( sceneModel.coinSet, sceneModel.systemType, {

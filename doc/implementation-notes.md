@@ -23,6 +23,7 @@ to parameterize the model and view in quite a number of places.
 - Each of these experiments moves back and forth between preparation and measurement, starting in preparation.
 - In the docs, note the parallel between flipping the coin in the classical scene and re-preparing it in the quantum 
   scene.
+- Describe how the "seed" is used in two-state system to avoid having to send 10000 pieces of data.
 
 ### Photons Screen
 
