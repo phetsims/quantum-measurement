@@ -14,7 +14,6 @@ import TwoStateSystemSet, { TwoStateSystemSetOptions } from './TwoStateSystemSet
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import Property from '../../../../axon/js/Property.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
-import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 
 type SelfOptions = EmptySelfOptions;
 type TwoStateSystemOptions = SelfOptions & StrictOmit<TwoStateSystemSetOptions, 'maxNumberOfSystems'>;
@@ -22,7 +21,7 @@ type TwoStateSystemOptions = SelfOptions & StrictOmit<TwoStateSystemSetOptions, 
 export default class TwoStateSystem<T extends string> extends TwoStateSystemSet<T> {
 
   // the value of most recent measurement, null indicates indeterminate
-  public readonly measuredValueProperty: Property<T | null>;
+  public readonly measuredValueProperty: Property<T>;
 
   public constructor( stateValues: readonly T[],
                       initialState: T,
@@ -37,8 +36,8 @@ export default class TwoStateSystem<T extends string> extends TwoStateSystemSet<
 
     this.measuredValueProperty = new Property( initialState, {
       tandem: options.tandem.createTandem( 'measuredValueProperty' ),
-      phetioValueType: NullableIO( StringUnionIO( stateValues ) ),
-      validValues: [ ...stateValues, null ]
+      phetioValueType: StringUnionIO( stateValues ),
+      validValues: [ ...stateValues ]
     } );
 
     // Hook up to the data-changed emitter to update the data Property.

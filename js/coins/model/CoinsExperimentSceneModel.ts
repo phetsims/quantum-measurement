@@ -29,6 +29,8 @@ type SelfOptions = {
 };
 type CoinExperimentSceneModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
+type MeasuredCoinStates = ClassicalCoinStates | QuantumCoinStates;
+
 // constants
 
 // allowed values for the number of coins to use in the multi-coin experiment
@@ -51,7 +53,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
   // The coins that are flipped/prepared and then measured during the experiment.
   public readonly singleCoin: TwoStateSystem<ClassicalCoinStates> | TwoStateSystem<QuantumCoinStates>;
 
-  public readonly coinSet: TwoStateSystemSet<ClassicalCoinStates | QuantumCoinStates>;
+  public readonly coinSet: TwoStateSystemSet<ClassicalCoinStates> | TwoStateSystemSet<QuantumCoinStates>;
 
   // The initial state of the coin(s) before any flipping or other experiment preparation occurs.
   public readonly initialCoinStateProperty: Property<ClassicalCoinStates> | Property<QuantumUncollapsedCoinStates>;
@@ -136,11 +138,10 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
 
         // The scene is moving from preparation mode to measurement mode. Set the coins to be in the initial state
         // chosen by the user.  If these are quantum coins and the initial state is set to superposed, set an arbitrary
-        // initial state, which is okay because the values won't be shown to the user.
-        let initialState = this.initialCoinStateProperty.value;
-        if ( this.systemType === 'quantum' && initialState === 'superposed' ) {
-          initialState = 'up';
-        }
+        // initial state.  This is okay because the values won't be shown to the user.
+        const initialState: MeasuredCoinStates = this.initialCoinStateProperty.value === 'superposed' ?
+                                                 'up' :
+                                                 this.initialCoinStateProperty.value;
         // TODO: How can this be better and avoid the "as never" weirdness?  See https://github.com/phetsims/quantum-measurement/issues/42.
         this.singleCoin.setMeasurementValuesImmediate( initialState as never );
         this.coinSet.setMeasurementValuesImmediate( initialState as never );
