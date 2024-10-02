@@ -167,13 +167,6 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
     }
   }
 
-  /**
-   * Prepare the single coin for measurement. For the classical coin, this is essentially starting to flip it.
-   */
-  public prepareSingleCoinExperiment( revealWhenComplete = false ): void {
-    this.singleCoin.prepare( revealWhenComplete );
-  }
-
   public reset(): void {
     this.preparingExperimentProperty.reset();
     this.initialCoinStateProperty.reset();
