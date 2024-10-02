@@ -19,11 +19,11 @@ import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import { ExperimentMeasurementState, ExperimentMeasurementStateValues } from '../../coins/model/ExperimentMeasurementState.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { MULTI_COIN_EXPERIMENT_QUANTITIES } from '../../coins/model/CoinsExperimentSceneModel.js';
-import IOType from '../../../../tandem/js/types/IOType.js';
-import ArrayIO from '../../../../tandem/js/types/ArrayIO.js';
-import StringIO from '../../../../tandem/js/types/StringIO.js';
-import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import { SystemType } from './SystemType.js';
+import Random from '../../../../dot/js/Random.js';
+import TEmitter from '../../../../axon/js/TEmitter.js';
+import Emitter from '../../../../axon/js/Emitter.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 
 type SelfOptions = {
   systemType?: SystemType;
@@ -51,8 +51,8 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
   // valid values for a measurement
   public readonly validValues: readonly T[];
 
-  // the values of most recent measurement, null indicates superposed (which only applies to quantum systems)
-  public readonly measuredValues: Array<T | null>;
+  // The values of most recent measurement.  These are only valid in some - and not all - measurement states.
+  public readonly measuredValues: Array<T>;
 
   // The number of systems that will be measured each time a measurement is made.
   public readonly numberOfActiveSystemsProperty: NumberProperty;
@@ -65,8 +65,18 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
   // second, and 0.5 means no bias.
   public readonly biasProperty: NumberProperty;
 
+  // The seed that was used to generate the most recent set of measured values.  This exists solely to support phet-io -
+  // it is conveyed in the state information and used to regenerate the data when phet-io state is set.  This is done
+  // to avoid sending values for every individual measurement, which could be 10000 values.
+  public readonly seedProperty: NumberProperty;
+
+  // An emitter that fires when the measured data changed, which is essentially any time a new measurement is made after
+  // the system has been prepared for measurement.  This is intended to be used as a signal to the view that and update
+  // of the information being presented to the user is needed.
+  public readonly measuredDataChanged: TEmitter = new Emitter();
+
   public constructor( stateValues: readonly T[],
-                      initialState: T | null,
+                      initialState: T,
                       biasProperty: NumberProperty,
                       providedOptions: TwoStateSystemSetOptions ) {
 
@@ -76,7 +86,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
       systemType: 'quantum',
       initialBias: 0.5,
       maxNumberOfSystems: 10000,
-      phetioType: TwoStateSystemSet.TwoStateSystemSetIO
+      phetioState: false
     }, providedOptions );
 
     super( options );
@@ -93,16 +103,48 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
       tandem: options.tandem.createTandem( 'numberOfActiveSystemsProperty' )
     } );
 
-    this.measurementStateProperty = new Property<ExperimentMeasurementState>( 'readyToBeMeasured', {
+    // The initial system state differs for classical versus quantum systems.
+    const initialMeasurementState = this.systemType === 'classical' ? 'measuredAndHidden' : 'readyToBeMeasured';
+    this.measurementStateProperty = new Property<ExperimentMeasurementState>( initialMeasurementState, {
       tandem: options.tandem.createTandem( 'measurementStateProperty' ),
       phetioValueType: StringUnionIO( ExperimentMeasurementStateValues ),
       phetioReadOnly: true
     } );
-    this.measuredValues = new Array<T | null>( options.maxNumberOfSystems );
+
+    this.measuredValues = new Array<T>( options.maxNumberOfSystems );
     _.times( options.maxNumberOfSystems, i => {
       this.measuredValues[ i ] = initialState;
     } );
+
     this.biasProperty = biasProperty;
+
+    // Create the seed Property.
+    this.seedProperty = new NumberProperty( 1, {
+      range: new Range( 0, 1 ),
+      tandem: options.tandem.createTandem( 'seedProperty' )
+    } );
+
+    // Monitor the seed for the random number generator.  If this changes while setting phet-io state, the data will
+    // need to be updated.
+    this.seedProperty.lazyLink( seed => {
+
+      if ( isSettingPhetioStateProperty.value && this.measurementStateProperty.value === 'revealed' ) {
+
+        this.generateNewMeasurementValues();
+
+        // Create the measured values.
+        const random = new Random( { seed: seed } );
+        _.times( this.numberOfActiveSystemsProperty.value, i => {
+
+          // Only make a new measurement if one doesn't exist for this element. Otherwise, just keep the existing value.
+          const valueSetIndex = random.nextDouble() < this.biasProperty.value ? 0 : 1;
+          this.measuredValues[ i ] = this.validValues[ valueSetIndex ];
+        } );
+
+        // Signal that the data has been updated.
+        this.measuredDataChanged.emit();
+      }
+    } );
   }
 
   /**
@@ -110,37 +152,75 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
    * a quantum system into a superposed state. After a timeout, this system will transition to a state where it is
    * ready to be measured.
    */
-  public prepare( measureWhenPrepared = false ): void {
+  public prepare( revealWhenPrepared = false ): void {
 
     // Set the state to preparingToBeMeasured and start a timeout for the state to end.
     this.measurementStateProperty.value = 'preparingToBeMeasured';
 
-    // Set the measured values to an indeterminate state until they are measured.
-    _.times( this.measuredValues.length, i => {
-      this.measuredValues[ i ] = null;
-    } );
-
-    // Create a timeout that will move the measurement state to 'readyToBeMeasured' after a fixed amount of time.
+    // Set a timeout for the preparation interval and automatically move to the next state when it fires.
     this.preparingToBeMeasuredTimeoutListener = stepTimer.setTimeout( () => {
       this.preparingToBeMeasuredTimeoutListener = null;
-      this.measurementStateProperty.value = 'readyToBeMeasured';
-      if ( measureWhenPrepared ) {
-        this.measure();
+      this.prepareNow();
+
+      if ( revealWhenPrepared ) {
+        this.reveal();
       }
     }, MEASUREMENT_PREPARATION_TIME * 1000 );
   }
 
   /**
-   * Prepare the system for measurement without transitioning through the 'preparingToBeMeasured' state. This is more
-   * the exception than the rule, but is needed in a case or two.
+   * Prepare the system for measurement now, i.e. without transitioning through the 'preparingToBeMeasured' state.
    */
-  public prepareInstantly(): void {
+  public prepareNow(): void {
 
-    // Set the measured values to an indeterminate state until they are measured.
-    _.times( this.measuredValues.length, i => {
-      this.measuredValues[ i ] = null;
-    } );
-    this.measurementStateProperty.value = 'readyToBeMeasured';
+    if ( this.systemType === 'classical' ) {
+
+      // Classical systems have deterministic values when measured.
+      this.generateNewMeasurementValues();
+      this.measurementStateProperty.value = 'measuredAndHidden';
+    }
+    else {
+
+      // Quantum systems don't create values until revealed, so mark it as 'readyToBeMeasured';
+      this.measurementStateProperty.value = 'readyToBeMeasured';
+    }
+  }
+
+  /**
+   * Set the system into a state that indicates that its values are revealed to the world.  For a quantum system, this
+   * may cause new measured values to be set.
+   */
+  public reveal(): void {
+
+    // state checking
+    assert && assert(
+      this.measurementStateProperty.value === 'measuredAndHidden' ||
+      this.measurementStateProperty.value === 'readyToBeMeasured',
+      'This system is not in an appropriate state to be revealed'
+    );
+
+    if ( this.measurementStateProperty.value === 'readyToBeMeasured' ) {
+      assert && assert( this.systemType === 'quantum', 'This point should only be reached for quantum systems' );
+      this.generateNewMeasurementValues();
+    }
+
+    // Update the measurement state to indicate revealed.  When this happens, the view should present the values to the
+    // observer(s).
+    this.measurementStateProperty.value = 'revealed';
+  }
+
+  /**
+   * Set the system into a state where its values are hidden from the world.
+   */
+  public hide(): void {
+
+    // state checking
+    assert && assert(
+      this.measurementStateProperty.value === 'revealed',
+      'This system is not in an appropriate state to be hidden'
+    );
+
+    this.measurementStateProperty.value = 'measuredAndHidden';
   }
 
   /**
@@ -148,25 +228,41 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
    * will just return the value of the most recent measurement.
    */
   public measure(): StateSetMeasurementResult<T> {
+
     assert && assert(
-      this.measurementStateProperty.value === 'readyToBeMeasured' || this.measurementStateProperty.value === 'measuredAndRevealed',
+      this.measurementStateProperty.value !== 'preparingToBeMeasured',
       'The system should be ready for measurement or have already been measured.'
     );
 
-    _.times( this.numberOfActiveSystemsProperty.value, i => {
+    // If the system is ready to be measured, but hasn't yet been, do it now.
+    if ( this.measurementStateProperty.value === 'readyToBeMeasured' ) {
 
-      // Only make a new measurement if one doesn't exist for this element. Otherwise, just keep the existing value.
-      if ( this.measuredValues[ i ] === null ) {
-        const valueSetIndex = dotRandom.nextDouble() < this.biasProperty.value ? 0 : 1;
-        this.measuredValues[ i ] = this.validValues[ valueSetIndex ];
-      }
-    } );
+      this.generateNewMeasurementValues();
 
-    this.measurementStateProperty.value = 'measuredAndRevealed';
+      // Change the state to represent that this system has now been measured.
+      this.measurementStateProperty.value = 'revealed';
+    }
+
     return {
       length: this.numberOfActiveSystemsProperty.value,
       measuredValues: this.measuredValues
     };
+  }
+
+  private generateNewMeasurementValues(): void {
+
+    // Generate a new seed that will subsequently be used to generate the random data.
+    this.seedProperty.value = dotRandom.nextDouble();
+
+    // Create the measured values.
+    const random = new Random( { seed: this.seedProperty.value } );
+    _.times( this.numberOfActiveSystemsProperty.value, i => {
+      const valueSetIndex = random.nextDouble() < this.biasProperty.value ? 0 : 1;
+      this.measuredValues[ i ] = this.validValues[ valueSetIndex ];
+    } );
+
+    // Signal that the data has been updated.
+    this.measuredDataChanged.emit();
   }
 
   /**
@@ -181,38 +277,13 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
     _.times( this.numberOfActiveSystemsProperty.value, i => {
       this.measuredValues[ i ] = value;
     } );
-    this.measurementStateProperty.value = 'readyToBeMeasured';
-  }
-
-  /**
-   * Go back to the 'readyToBeMeasured' state without re-preparing the measurement.
-   */
-  public hide(): void {
-    this.measurementStateProperty.value = 'readyToBeMeasured';
+    this.measurementStateProperty.value = this.systemType === 'classical' ? 'measuredAndHidden' : 'readyToBeMeasured';
   }
 
   public reset(): void {
     this.measurementStateProperty.reset();
     this.numberOfActiveSystemsProperty.reset();
   }
-
-  /**
-   * TwoStateSystemSetIO uses reference type serialization because in this sim the instances are created once when the
-   * sim is initialized.
-   */
-  public static readonly TwoStateSystemSetIO = new IOType<TwoStateSystemSet<string>, TwoStateSystemSetStateObject>(
-    'TwoStateSystemSetIO',
-    {
-      valueType: TwoStateSystemSet,
-      stateSchema: {
-        measuredValues: ArrayIO( NullableIO( StringIO ) )
-      }
-    }
-  );
 }
-
-export type TwoStateSystemSetStateObject = {
-  measuredValues: Array<string | null>;
-};
 
 quantumMeasurement.register( 'TwoStateSystemSet', TwoStateSystemSet );

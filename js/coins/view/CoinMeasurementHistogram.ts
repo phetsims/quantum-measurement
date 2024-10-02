@@ -56,7 +56,7 @@ export default class CoinMeasurementHistogram extends Node {
     // Create a Property that controls whether the values should be displayed.
     const displayValuesProperty = DerivedProperty.valueEqualsConstant(
       coinSet.measurementStateProperty,
-      'measuredAndRevealed'
+      'revealed'
     );
 
     // Create the X and Y axes.
@@ -116,7 +116,7 @@ export default class CoinMeasurementHistogram extends Node {
         const testValue = systemType === 'classical' ? 'heads' : 'up';
         let total = 0;
 
-        if ( measurementState === 'measuredAndRevealed' ) {
+        if ( measurementState === 'revealed' ) {
           _.times( numberOfActiveSystems, i => {
             if ( coinSet.measuredValues[ i ] === testValue ) {
               total++;
@@ -134,7 +134,7 @@ export default class CoinMeasurementHistogram extends Node {
         const testValue = systemType === 'classical' ? 'tails' : 'down';
         let total = 0;
 
-        if ( measurementState === 'measuredAndRevealed' ) {
+        if ( measurementState === 'revealed' ) {
           _.times( numberOfActiveSystems, i => {
             if ( coinSet.measuredValues[ i ] === testValue ) {
               total++;

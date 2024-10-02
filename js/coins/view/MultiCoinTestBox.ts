@@ -23,6 +23,7 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import { MAX_COINS, MULTI_COIN_EXPERIMENT_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
 import { ExperimentMeasurementState } from '../model/ExperimentMeasurementState.js';
 import SmallCoinNode from './SmallCoinNode.js';
+import TEmitter from '../../../../axon/js/TEmitter.js';
 
 type SelfOptions = EmptySelfOptions;
 export type MultiCoinTestBoxOptions = SelfOptions & WithRequired<HBoxOptions, 'tandem'>;
@@ -45,6 +46,7 @@ export default class MultiCoinTestBox extends HBox {
   public constructor( coinSet: TwoStateSystemSet<string>,
                       measurementStateProperty: Property<ExperimentMeasurementState>,
                       numberOfActiveSystemsProperty: TReadOnlyProperty<number>,
+                      measuredDataChangedEmitter: TEmitter,
                       providedOptions?: MultiCoinTestBoxOptions ) {
 
     // Create the main rectangle that will represent the area where the coins will be hidden and shown.
@@ -88,7 +90,7 @@ export default class MultiCoinTestBox extends HBox {
     measurementStateProperty.link( measurementState => {
 
       // Make the box look hazy when the measurement is not revealed.
-      multipleCoinTestBoxRectangle.fill = measurementState === 'measuredAndRevealed' ?
+      multipleCoinTestBoxRectangle.fill = measurementState === 'revealed' ?
                                           TEST_BOX_CONTENTS_REVEALED_FILL :
                                           TEST_BOX_CONTENTS_HIDDEN_FILL;
 
@@ -96,10 +98,12 @@ export default class MultiCoinTestBox extends HBox {
       this.updateCoinNodes( coinSet, measurementState );
     } );
 
-    // When phet-io state is being set, it is possible for the coin states to change without there being any change in
-    // the state of the experiment.  The following code makes sure that coin nodes are updated if necessary.
-    isSettingPhetioStateProperty.lazyLink( isSettingPhetioState => {
-      if ( !isSettingPhetioState && measurementStateProperty.value === 'measuredAndRevealed' ) {
+    // Update the appearance of the coin nodes when the data changes.
+    measuredDataChangedEmitter.addListener( () => {
+
+      // When phet-io state is being set, the measured data can change without any change to the measurement state of
+      // the coin set.  This makes sure that the coin nodes are updated in that situation.
+      if ( isSettingPhetioStateProperty.value ) {
         this.updateCoinNodes( coinSet, measurementStateProperty.value );
       }
     } );
@@ -113,7 +117,7 @@ export default class MultiCoinTestBox extends HBox {
   private updateCoinNodes( coinSet: TwoStateSystemSet<string>, measurementState: ExperimentMeasurementState ): void {
     this.residentCoinNodes.forEach( ( coinNode, index ) => {
 
-      if ( measurementState === 'measuredAndRevealed' ) {
+      if ( measurementState === 'revealed' ) {
 
         if ( coinNode.isFlipping ) {
           coinNode.stopFlipping();

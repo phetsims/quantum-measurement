@@ -10,7 +10,7 @@
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import TwoStateSystemSet, { StateSetMeasurementResult, TwoStateSystemSetOptions } from './TwoStateSystemSet.js';
+import TwoStateSystemSet, { TwoStateSystemSetOptions } from './TwoStateSystemSet.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import Property from '../../../../axon/js/Property.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
@@ -25,7 +25,7 @@ export default class TwoStateSystem<T extends string> extends TwoStateSystemSet<
   public readonly measuredValueProperty: Property<T | null>;
 
   public constructor( stateValues: readonly T[],
-                      initialState: T | null,
+                      initialState: T,
                       biasProperty: NumberProperty,
                       providedOptions: TwoStateSystemOptions ) {
 
@@ -40,17 +40,11 @@ export default class TwoStateSystem<T extends string> extends TwoStateSystemSet<
       phetioValueType: NullableIO( StringUnionIO( stateValues ) ),
       validValues: [ ...stateValues, null ]
     } );
-  }
 
-  /**
-   * Override the measure function
-   */
-  public override measure(): StateSetMeasurementResult<T> {
-    const measurementResults = super.measure();
-    assert && assert( measurementResults.length === 1, 'unexpected length for measurement set' );
-    assert && assert( measurementResults.measuredValues[ 0 ] !== null, 'measurement result should not be indeterminate' );
-    this.measuredValueProperty.set( measurementResults.measuredValues[ 0 ] );
-    return measurementResults;
+    // Hook up to the data-changed emitter to update the data Property.
+    this.measuredDataChanged.addListener( () => {
+      this.measuredValueProperty.value = this.measuredValues[ 0 ];
+    } );
   }
 
   /**

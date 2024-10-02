@@ -152,7 +152,7 @@ public readonly startIngressAnimationForCoinSet: ( forReprepare: boolean ) => vo
             multipleCoinTestBox.addCoinNodeToBox( coinNode );
 
             if ( sceneModel.systemType === 'quantum' ) {
-              sceneModel.coinSet.prepareInstantly();
+              sceneModel.coinSet.prepareNow();
             }
 
             // If all animations have completed, set the flag that indicates the coins are fully in the box.

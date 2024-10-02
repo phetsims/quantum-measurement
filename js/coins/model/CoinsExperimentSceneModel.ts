@@ -129,8 +129,8 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
       if ( preparingExperiment ) {
 
         // Set the coin measurement states back to their initial values.
-        this.singleCoin.prepareInstantly();
-        this.coinSet.prepareInstantly();
+        this.singleCoin.prepareNow();
+        this.coinSet.prepareNow();
       }
       else {
 

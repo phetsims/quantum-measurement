@@ -16,8 +16,6 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Color, NodeOptions, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
 import TextPushButton, { TextPushButtonOptions } from '../../../../sun/js/buttons/TextPushButton.js';
-import { SystemType } from '../../common/model/SystemType.js';
-import TwoStateSystem from '../../common/model/TwoStateSystem.js';
 import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
@@ -31,8 +29,7 @@ const BUTTON_WIDTH = 160; // empirically determined to match spec
 
 export default class CoinExperimentButtonSet extends VBox {
 
-  public constructor( system: TwoStateSystem<string> | TwoStateSystemSet<string>,
-                      systemType: SystemType,
+  public constructor( system: TwoStateSystemSet<string>,
                       testBoxReadyProperty: TProperty<boolean>,
                       providedOptions: CoinExperimentButtonSetOptions ) {
 
@@ -62,10 +59,10 @@ export default class CoinExperimentButtonSet extends VBox {
       ],
       ( hideString, revealString, observeString, experimentState ) => {
         let labelString;
-        if ( experimentState === 'measuredAndRevealed' ) {
+        if ( experimentState === 'revealed' ) {
           labelString = hideString;
         }
-        else if ( systemType === 'classical' ) {
+        else if ( system.systemType === 'classical' ) {
           labelString = revealString;
         }
         else {
@@ -80,10 +77,12 @@ export default class CoinExperimentButtonSet extends VBox {
       revealHideButtonTextProperty,
       combineOptions<TextPushButtonOptions>( commonButtonOptions, {
         listener: () => {
-          if ( system.measurementStateProperty.value === 'readyToBeMeasured' ) {
-            system.measure();
+          if ( system.measurementStateProperty.value === 'readyToBeMeasured' ||
+               system.measurementStateProperty.value === 'measuredAndHidden' ) {
+
+            system.reveal();
           }
-          else if ( system.measurementStateProperty.value === 'measuredAndRevealed' ) {
+          else if ( system.measurementStateProperty.value === 'revealed' ) {
             system.hide();
           }
         },
@@ -92,7 +91,7 @@ export default class CoinExperimentButtonSet extends VBox {
     );
 
     const flipOrReprepareButton = new TextPushButton(
-      systemType === 'classical' ?
+      system.systemType === 'classical' ?
       QuantumMeasurementStrings.flipStringProperty :
       QuantumMeasurementStrings.reprepareStringProperty,
       combineOptions<TextPushButtonOptions>( commonButtonOptions, {
@@ -102,7 +101,7 @@ export default class CoinExperimentButtonSet extends VBox {
     );
 
     const flipOrReprepareAndRevealButton = new TextPushButton(
-      systemType === 'classical' ?
+      system.systemType === 'classical' ?
       QuantumMeasurementStrings.flipAndRevealStringProperty :
       QuantumMeasurementStrings.reprepareAndRevealStringProperty,
       combineOptions<TextPushButtonOptions>( commonButtonOptions, {

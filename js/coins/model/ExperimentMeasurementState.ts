@@ -2,25 +2,27 @@
 
 /**
  * ExperimentMeasurementState is a string union that functions as an enumeration of the possible states for a basic
- * measurement experiment. It essentially encodes two pieces of information, one being whether the state of the
- * experiment has been measured and the other being whether the state is hidden or shown. Because the combination
- * of not measured and shown is not possible, this amounts to three states. See the comments below for each state for
- * more details.
+ * measurement experiment. The possible values of the states are intended to support the measurement of both classical
+ * and quantum systems.  The states used and the transitions between them will be somewhat different for classical
+ * versus quantum systems.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
 
 export const ExperimentMeasurementStateValues = [
 
-  // The experiment is prepared and can be measured, but hasn't been yet.
-  'readyToBeMeasured',
-
   // The experiment is in the process of preparing to be measured. For example, in the case of a coin flipping
   // experiment, this is the state when the coin is being flipped.
   'preparingToBeMeasured',
 
-  // The experiment's state has been measured and revealed to the observer(s).
-  'measuredAndRevealed'
+  // The experiment is prepared and can be measured, but hasn't been yet.  This state only applies to quantum systems.
+  'readyToBeMeasured',
+
+  // The experiment is in a state where the values are determined but are not currently being shown to the user.
+  'measuredAndHidden',
+
+  // The experiment's state has been revealed to the observer(s).
+  'revealed'
 
 ] as const;
 

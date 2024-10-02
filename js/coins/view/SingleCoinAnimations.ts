@@ -187,7 +187,7 @@ export default class SingleCoinAnimations {
             // "Collapse" the state of the coin node so that it shows a single state, not a superposed one.
             const quantumCoinNode = singleCoinNode as QuantumCoinNode;
             quantumCoinNode.showSuperpositionProperty.value = false;
-            sceneModel.singleCoin.prepareInstantly();
+            sceneModel.singleCoin.prepareNow();
           }
 
           // The coin is in the test box, so update the flag that makes this known.

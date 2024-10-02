@@ -28,7 +28,6 @@ import MultiCoinTestBox from './MultiCoinTestBox.js';
 import MultipleCoinAnimations from './MultipleCoinAnimations.js';
 import SceneSectionHeader from './SceneSectionHeader.js';
 import SingleCoinAnimations from './SingleCoinAnimations.js';
-import TwoStateSystem from '../../common/model/TwoStateSystem.js';
 import SingleCoinTestBox from './SingleCoinTestBox.js';
 
 const RADIO_BUTTON_FONT = new PhetFont( 12 );
@@ -68,8 +67,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
 
     // Create the buttons that will be used to control the single-coin test box.
     const singleCoinExperimentButtonSet = new CoinExperimentButtonSet(
-      sceneModel.singleCoin as TwoStateSystem<string>,
-      sceneModel.systemType,
+      sceneModel.singleCoin,
       singleCoinInTestBoxProperty,
       {
         tandem: tandem.createTandem( 'singleCoinExperimentButtonSet' ),
@@ -96,6 +94,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
       sceneModel.coinSet,
       sceneModel.coinSet.measurementStateProperty,
       sceneModel.coinSet.numberOfActiveSystemsProperty,
+      sceneModel.coinSet.measuredDataChanged,
       { tandem: tandem.createTandem( 'multipleCoinTestBox' ) }
     );
     const multiCoinExperimentHistogram = new CoinMeasurementHistogram( sceneModel.coinSet, sceneModel.systemType, {
@@ -104,7 +103,6 @@ export default class CoinExperimentMeasurementArea extends VBox {
     } );
     const multipleCoinExperimentButtonSet = new CoinExperimentButtonSet(
       sceneModel.coinSet,
-      sceneModel.systemType,
       coinSetInTestBoxProperty,
       {
         tandem: tandem.createTandem( 'multipleCoinExperimentButtonSet' ),
@@ -202,7 +200,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
     this.measuredCoinsPixelRepresentation.setY( offset );
 
     sceneModel.coinSet.measurementStateProperty.link( measurementState => {
-      if ( measurementState === 'measuredAndRevealed' ) {
+      if ( measurementState === 'revealed' ) {
         this.measuredCoinsPixelRepresentation.redraw( sceneModel.coinSet.measuredValues );
       }
     } );
@@ -218,7 +216,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
       visibleProperty: new DerivedProperty(
         [ sceneModel.preparingExperimentProperty, sceneModel.singleCoin.measurementStateProperty ],
         ( preparingExperiment, singleCoinExperimentState ) =>
-          !preparingExperiment && singleCoinExperimentState !== 'measuredAndRevealed'
+          !preparingExperiment && singleCoinExperimentState !== 'revealed'
       )
     } );
     singleCoinTestBox.clippedTestBox.addChild( coinMask );
