@@ -13,7 +13,6 @@ import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js'
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import NumberDisplay, { NumberDisplayOptions } from '../../../../scenery-phet/js/NumberDisplay.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -26,9 +25,12 @@ import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
 import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
 import { MAX_COINS } from '../model/CoinsExperimentSceneModel.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 
 type SelfOptions = EmptySelfOptions;
-export type CoinMeasurementHistogramOptions = SelfOptions & PickRequired<NodeOptions, 'tandem' | 'visibleProperty'>;
+export type CoinMeasurementHistogramOptions = SelfOptions & WithRequired<NodeOptions, 'tandem' | 'visibleProperty'>;
 
 const HISTOGRAM_SIZE = new Dimension2( 200, 160 ); // size excluding labels at bottom, in screen coordinates
 const AXIS_STROKE = Color.BLACK;
@@ -51,7 +53,7 @@ export default class CoinMeasurementHistogram extends Node {
 
   public constructor( coinSet: TwoStateSystemSet<ClassicalCoinStates | QuantumCoinStates>,
                       systemType: SystemType,
-                      providedOptions?: CoinMeasurementHistogramOptions ) {
+                      providedOptions: CoinMeasurementHistogramOptions ) {
 
     // Create a Property that controls whether the values should be displayed.
     const displayValuesProperty = DerivedProperty.valueEqualsConstant(
@@ -108,42 +110,44 @@ export default class CoinMeasurementHistogram extends Node {
       }
     );
 
-    // Create the numeric displays for the right and left sides.
-    const leftNumberProperty = new DerivedProperty(
-      [ coinSet.numberOfActiveSystemsProperty, coinSet.measurementStateProperty ],
-      ( numberOfActiveSystems, measurementState ) => {
+    // Create the number Properties for the left and right histogram bars.
+    const leftNumberProperty = new NumberProperty( 0, {
+      tandem: providedOptions.tandem.createTandem( 'leftNumberProperty' )
+    } );
+    const rightNumberProperty = new NumberProperty( 0, {
+      tandem: providedOptions.tandem.createTandem( 'rightNumberProperty' )
+    } );
 
-        const testValue = systemType === 'classical' ? 'heads' : 'up';
-        let total = 0;
+    // Define a function to update the left and right number Properties.
+    const updateNumberProperties = () => {
 
-        if ( measurementState === 'revealed' ) {
-          _.times( numberOfActiveSystems, i => {
-            if ( coinSet.measuredValues[ i ] === testValue ) {
-              total++;
-            }
-          } );
-        }
-        return total;
+      const leftTestValue = systemType === 'classical' ? 'heads' : 'up';
+      const rightTestValue = systemType === 'classical' ? 'tails' : 'down';
+      let leftTotal = 0;
+      let rightTotal = 0;
+
+      if ( coinSet.measurementStateProperty.value === 'revealed' ) {
+        _.times( coinSet.numberOfActiveSystemsProperty.value, i => {
+          if ( coinSet.measuredValues[ i ] === leftTestValue ) {
+            leftTotal++;
+          }
+          else if ( coinSet.measuredValues[ i ] === rightTestValue ) {
+            rightTotal++;
+          }
+        } );
       }
+      leftNumberProperty.value = leftTotal;
+      rightNumberProperty.value = rightTotal;
+    };
+
+    Multilink.multilink(
+      [ coinSet.numberOfActiveSystemsProperty, coinSet.measurementStateProperty ],
+      updateNumberProperties
     );
 
-    const rightNumberProperty = new DerivedProperty(
-      [ coinSet.numberOfActiveSystemsProperty, coinSet.measurementStateProperty ],
-      ( numberOfActiveSystems, measurementState ) => {
+    coinSet.measuredDataChangedEmitter.addListener( updateNumberProperties );
 
-        const testValue = systemType === 'classical' ? 'tails' : 'down';
-        let total = 0;
-
-        if ( measurementState === 'revealed' ) {
-          _.times( numberOfActiveSystems, i => {
-            if ( coinSet.measuredValues[ i ] === testValue ) {
-              total++;
-            }
-          } );
-        }
-        return total;
-      }
-    );
+    // Create the textual displays for the numbers.
     const leftNumberDisplay = new NumberDisplay( leftNumberProperty, NUMBER_DISPLAY_RANGE, NUMBER_DISPLAY_OPTIONS );
     const rightNumberDisplay = new NumberDisplay( rightNumberProperty, NUMBER_DISPLAY_RANGE, NUMBER_DISPLAY_OPTIONS );
 
