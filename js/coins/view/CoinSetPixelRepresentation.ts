@@ -147,6 +147,11 @@ export default class CoinSetPixelRepresentation extends CanvasNode {
           return value === 1 ? 'grey' : 'transparent';
         };
         break;
+      case 'measuredAndHidden':
+        getColor = ( value: number ) => {
+          return value === 1 ? 'grey' : 'transparent';
+        };
+        break;
       default:
         getColor = () => {
           return 'red';
