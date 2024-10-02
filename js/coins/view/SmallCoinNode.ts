@@ -21,11 +21,14 @@ import Easing from '../../../../twixt/js/Easing.js';
 import { MEASUREMENT_PREPARATION_TIME } from '../../common/model/TwoStateSystemSet.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
+import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
 
 type SelfOptions = EmptySelfOptions;
 export type SmallCoinNodeOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
 
-export type SmallCoinDisplayMode = 'masked' | 'heads' | 'tails' | 'up' | 'down';
+// Define a type for the display mode that composes all possible coin values plus one for when the coin is masked.
+export type SmallCoinDisplayMode = ClassicalCoinStates | QuantumCoinStates | 'masked';
 
 // constants
 const DEFAULT_ARROW_FONT = new PhetFont( { size: 8, weight: 'bold' } );
@@ -43,8 +46,7 @@ export default class SmallCoinNode extends Node {
   private coinCircle: Circle;
   private flippingAnimation: Animation | null = null;
 
-  public constructor( radius: number,
-                      providedOptions?: SmallCoinNodeOptions ) {
+  public constructor( radius: number, providedOptions?: SmallCoinNodeOptions ) {
 
     const coinCircle = new Circle( radius, {
       fill: MASKED_FILL,

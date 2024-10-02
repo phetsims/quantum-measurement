@@ -22,7 +22,7 @@ import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstant
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { MAX_COINS, MULTI_COIN_EXPERIMENT_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
 import { ExperimentMeasurementState } from '../model/ExperimentMeasurementState.js';
-import SmallCoinNode from './SmallCoinNode.js';
+import SmallCoinNode, { SmallCoinDisplayMode } from './SmallCoinNode.js';
 import TEmitter from '../../../../axon/js/TEmitter.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -119,31 +119,19 @@ export default class MultiCoinTestBox extends HBox {
 
       if ( measurementState === 'revealed' ) {
 
+        // Stop any in-progress animation.
         if ( coinNode.isFlipping ) {
           coinNode.stopFlipping();
         }
 
-        const measuredValue = coinSet.measuredValues[ index ];
-        if ( measuredValue === 'up' ) {
-          coinNode.displayModeProperty.value = 'up';
-        }
-        else if ( measuredValue === 'down' ) {
-          coinNode.displayModeProperty.value = 'down';
-        }
-        else if ( measuredValue === 'heads' ) {
-          coinNode.displayModeProperty.value = 'heads';
-        }
-        else if ( measuredValue === 'tails' ) {
-          coinNode.displayModeProperty.value = 'tails';
-        }
-        else {
-          assert && assert( false, `unexpected measurement value: ${measuredValue} for index ${index}` );
-        }
+        // Set the coin node to display the revealed face of the coin.
+        coinNode.displayModeProperty.value = coinSet.measuredValues[ index ] as SmallCoinDisplayMode;
       }
       else if ( measurementState === 'preparingToBeMeasured' ) {
 
         assert && assert( !coinNode.isFlipping, 'coin node should not already be flipping' );
 
+        // Hide the faces of the coin.
         coinNode.displayModeProperty.value = 'masked';
 
         if ( coinSet.systemType === 'classical' ) {
