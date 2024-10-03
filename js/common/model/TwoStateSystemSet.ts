@@ -128,7 +128,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
       // Handle the "special case" values of 0 and 1, which sets all measurement values to one of the two valid values.
       if ( seed === 0 || seed === 1 ) {
         const valueToSet = stateValues[ seed ];
-        _.times( this.numberOfActiveSystemsProperty.value, i => {
+        _.times( options.maxNumberOfSystems, i => {
           this.measuredValues[ i ] = valueToSet;
         } );
       }
