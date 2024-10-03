@@ -20,7 +20,7 @@ import { Color, HBox, HBoxOptions, LinearGradient, Node, Rectangle } from '../..
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { MULTI_COIN_EXPERIMENT_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
+import { MULTI_COIN_ANIMATION_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
 import { ExperimentMeasurementState } from '../model/ExperimentMeasurementState.js';
 import SmallCoinNode, { SmallCoinDisplayMode } from './SmallCoinNode.js';
 
@@ -185,17 +185,15 @@ export default class MultiCoinTestBox extends HBox {
    */
   public static getRadiusFromCoinQuantity( coinQuantity: number ): number {
     assert && assert(
-      MULTI_COIN_EXPERIMENT_QUANTITIES.includes( coinQuantity ), 'unsupported number of coins' );
+      MULTI_COIN_ANIMATION_QUANTITIES.includes( coinQuantity ), 'unsupported number of coins' );
     let radius;
     if ( coinQuantity === 10 ) {
       radius = 12;
     }
-    else if ( coinQuantity === 100 ) {
+    else {
       radius = 6;
     }
-    else {
-      radius = 2;
-    }
+
     return radius;
   }
 }

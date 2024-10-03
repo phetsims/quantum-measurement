@@ -36,6 +36,9 @@ type MeasuredCoinStates = ClassicalCoinStates | QuantumCoinStates;
 // allowed values for the number of coins to use in the multi-coin experiment
 export const MULTI_COIN_EXPERIMENT_QUANTITIES = [ 10, 100, 10000 ];
 
+// Excluding the 10000 as they are represented as pixels
+export const MULTI_COIN_ANIMATION_QUANTITIES = MULTI_COIN_EXPERIMENT_QUANTITIES.filter( quantity => quantity !== 10000 );
+
 // max coins used in any of the experiments
 export const MAX_COINS = Math.max( ...MULTI_COIN_EXPERIMENT_QUANTITIES );
 

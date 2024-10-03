@@ -15,7 +15,7 @@ import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import { MEASUREMENT_PREPARATION_TIME } from '../../common/model/TwoStateSystemSet.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import CoinsExperimentSceneModel, { MULTI_COIN_EXPERIMENT_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
+import CoinsExperimentSceneModel, { MULTI_COIN_ANIMATION_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
 import CoinExperimentMeasurementArea from './CoinExperimentMeasurementArea.js';
 import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
 import MultiCoinTestBox from './MultiCoinTestBox.js';
@@ -40,8 +40,7 @@ public readonly startIngressAnimationForCoinSet: ( forReprepare: boolean ) => vo
     const movingCoinNodes = new Map<number, SmallCoinNode[]>();
 
     // The 10000 coins case will be animated separately
-    const ANIMATION_QUANTITIES = MULTI_COIN_EXPERIMENT_QUANTITIES.filter( quantity => quantity !== 10000 );
-    ANIMATION_QUANTITIES.forEach( quantity => {
+    MULTI_COIN_ANIMATION_QUANTITIES.forEach( quantity => {
       const radius = MultiCoinTestBox.getRadiusFromCoinQuantity( quantity );
       const coinNodes: SmallCoinNode[] = [];
       _.times( quantity, () => {
