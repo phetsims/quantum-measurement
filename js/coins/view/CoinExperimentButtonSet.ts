@@ -29,15 +29,15 @@ const BUTTON_WIDTH = 160; // empirically determined to match spec
 
 export default class CoinExperimentButtonSet extends VBox {
 
-  public constructor( system: TwoStateSystemSet<string>,
-                      testBoxReadyProperty: TProperty<boolean>,
+  public constructor( coinSet: TwoStateSystemSet<string>,
+                      coinSetInTestBoxProperty: TProperty<boolean>,
                       providedOptions: CoinExperimentButtonSetOptions ) {
 
     // Create an enabledProperty for the buttons, since interaction with the test boxes is only possible if they have
     // coins in them and the coins are not in the process of being prepared (e.g. flipped).
     const buttonsEnabledProperty = new DerivedProperty(
-      [ testBoxReadyProperty, system.measurementStateProperty ],
-      ( testBoxReady, coinState ) => testBoxReady && coinState !== 'preparingToBeMeasured'
+      [ coinSetInTestBoxProperty, coinSet.measurementStateProperty ],
+      ( coinSetInTestBox, coinState ) => coinSetInTestBox && coinState !== 'preparingToBeMeasured'
     );
 
     // common options for all buttons in the set
@@ -55,14 +55,14 @@ export default class CoinExperimentButtonSet extends VBox {
         QuantumMeasurementStrings.hideStringProperty,
         QuantumMeasurementStrings.revealStringProperty,
         QuantumMeasurementStrings.observeStringProperty,
-        system.measurementStateProperty
+        coinSet.measurementStateProperty
       ],
       ( hideString, revealString, observeString, experimentState ) => {
         let labelString;
         if ( experimentState === 'revealed' ) {
           labelString = hideString;
         }
-        else if ( system.systemType === 'classical' ) {
+        else if ( coinSet.systemType === 'classical' ) {
           labelString = revealString;
         }
         else {
@@ -77,13 +77,13 @@ export default class CoinExperimentButtonSet extends VBox {
       revealHideButtonTextProperty,
       combineOptions<TextPushButtonOptions>( commonButtonOptions, {
         listener: () => {
-          if ( system.measurementStateProperty.value === 'readyToBeMeasured' ||
-               system.measurementStateProperty.value === 'measuredAndHidden' ) {
+          if ( coinSet.measurementStateProperty.value === 'readyToBeMeasured' ||
+               coinSet.measurementStateProperty.value === 'measuredAndHidden' ) {
 
-            system.reveal();
+            coinSet.reveal();
           }
-          else if ( system.measurementStateProperty.value === 'revealed' ) {
-            system.hide();
+          else if ( coinSet.measurementStateProperty.value === 'revealed' ) {
+            coinSet.hide();
           }
         },
         tandem: providedOptions.tandem.createTandem( 'revealHideButton' )
@@ -91,21 +91,21 @@ export default class CoinExperimentButtonSet extends VBox {
     );
 
     const flipOrReprepareButton = new TextPushButton(
-      system.systemType === 'classical' ?
+      coinSet.systemType === 'classical' ?
       QuantumMeasurementStrings.flipStringProperty :
       QuantumMeasurementStrings.reprepareStringProperty,
       combineOptions<TextPushButtonOptions>( commonButtonOptions, {
-        listener: () => system.prepare(),
+        listener: () => coinSet.prepare(),
         tandem: providedOptions.tandem.createTandem( 'flipOrReprepareButton' )
       } )
     );
 
     const flipOrReprepareAndRevealButton = new TextPushButton(
-      system.systemType === 'classical' ?
+      coinSet.systemType === 'classical' ?
       QuantumMeasurementStrings.flipAndRevealStringProperty :
       QuantumMeasurementStrings.reprepareAndRevealStringProperty,
       combineOptions<TextPushButtonOptions>( commonButtonOptions, {
-        listener: () => system.prepare( true ),
+        listener: () => coinSet.prepare( true ),
         tandem: providedOptions.tandem.createTandem( 'flipOrReprepareAndRevealButton' )
       } )
     );
