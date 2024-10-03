@@ -9,6 +9,7 @@
  */
 
 import Property from '../../../../axon/js/Property.js';
+import TEmitter from '../../../../axon/js/TEmitter.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -18,12 +19,10 @@ import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import { Color, HBox, HBoxOptions, LinearGradient, Node, Rectangle } from '../../../../scenery/js/imports.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
-import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { MAX_COINS, MULTI_COIN_EXPERIMENT_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
+import { MULTI_COIN_EXPERIMENT_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
 import { ExperimentMeasurementState } from '../model/ExperimentMeasurementState.js';
 import SmallCoinNode, { SmallCoinDisplayMode } from './SmallCoinNode.js';
-import TEmitter from '../../../../axon/js/TEmitter.js';
 
 type SelfOptions = EmptySelfOptions;
 export type MultiCoinTestBoxOptions = SelfOptions & WithRequired<HBoxOptions, 'tandem'>;
@@ -178,15 +177,6 @@ export default class MultiCoinTestBox extends HBox {
     else if ( this.numberOfActiveSystemsProperty.value === 100 ) {
       setOffsets( BOX_SIZE, 10, 10 );
     }
-    else if ( this.numberOfActiveSystemsProperty.value === MAX_COINS ) {
-      // N rows of N = sqrt( Hollywooded number of coins )
-      const sideLength = Math.sqrt( QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS );
-      const BoxDimension = new Dimension2(
-        BOX_SIZE.width * QuantumMeasurementConstants.COIN_SET_AREA_PROPORTION + 3 * QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS_RADII,
-        BOX_SIZE.height * QuantumMeasurementConstants.COIN_SET_AREA_PROPORTION + 3 * QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS_RADII
-      );
-      setOffsets( BoxDimension, sideLength, sideLength );
-    }
     return offset;
   }
 
@@ -204,7 +194,7 @@ export default class MultiCoinTestBox extends HBox {
       radius = 6;
     }
     else {
-      radius = QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS_RADII;
+      radius = 2;
     }
     return radius;
   }

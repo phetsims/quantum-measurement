@@ -9,18 +9,17 @@
  */
 
 import TProperty from '../../../../axon/js/TProperty.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import { MEASUREMENT_PREPARATION_TIME } from '../../common/model/TwoStateSystemSet.js';
-import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import CoinsExperimentSceneModel, { MULTI_COIN_EXPERIMENT_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
 import CoinExperimentMeasurementArea from './CoinExperimentMeasurementArea.js';
 import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
 import MultiCoinTestBox from './MultiCoinTestBox.js';
 import SmallCoinNode from './SmallCoinNode.js';
-import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 
 const COIN_TRAVEL_ANIMATION_DURATION = MEASUREMENT_PREPARATION_TIME * 0.95;
 
@@ -43,11 +42,10 @@ public readonly startIngressAnimationForCoinSet: ( forReprepare: boolean ) => vo
     // The 10000 coins case will be animated separately
     const ANIMATION_QUANTITIES = MULTI_COIN_EXPERIMENT_QUANTITIES.filter( quantity => quantity !== 10000 );
     ANIMATION_QUANTITIES.forEach( quantity => {
-      const quantityToCreate = Math.min( quantity, QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS );
       const radius = MultiCoinTestBox.getRadiusFromCoinQuantity( quantity );
       const coinNodes: SmallCoinNode[] = [];
-      _.times( quantityToCreate, () => {
-        coinNodes.push( new SmallCoinNode( radius, { visible: quantity !== 10000, tandem: Tandem.OPT_OUT } ) ); // TODO: Find a better way to not display these coins https://github.com/phetsims/quantum-measurement/issues/39
+      _.times( quantity, () => {
+        coinNodes.push( new SmallCoinNode( radius, { tandem: Tandem.OPT_OUT } ) );
       } );
       movingCoinNodes.set( quantity, coinNodes );
     } );
