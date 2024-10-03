@@ -8,6 +8,7 @@
  *
  */
 
+import TProperty from '../../../../axon/js/TProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import { CanvasNode, CanvasNodeOptions } from '../../../../scenery/js/imports.js';
@@ -28,6 +29,7 @@ export default class CoinSetPixelRepresentation extends CanvasNode {
   public constructor(
     private readonly systemType: 'classical' | 'quantum',
     private readonly experimentStateProperty: TReadOnlyProperty<ExperimentMeasurementState>,
+    private readonly coinSetInTestBoxProperty: TProperty<boolean>,
     providedOptions?: CanvasNodeOptions
   ) {
     super( providedOptions );
@@ -90,6 +92,7 @@ export default class CoinSetPixelRepresentation extends CanvasNode {
     this.populatingAnimation.finishEmitter.addListener( () => {
       this.setAllPixels( 1 );
       this.currentFrame = 0;
+      this.coinSetInTestBoxProperty.value = true;
     } );
 
     this.flippingAnimation.finishEmitter.addListener( () => {
@@ -173,14 +176,18 @@ export default class CoinSetPixelRepresentation extends CanvasNode {
   }
 
   public startPopulatingAnimation(): void {
-    // Set all pixels to 0
-    this.setAllPixels( 0 );
+    if ( this.visible ) {
+      // Set all pixels to 0
+      this.setAllPixels( 0 );
 
-    this.populatingAnimation.start();
+      this.populatingAnimation.start();
+    }
   }
 
   public startFlippingAnimation(): void {
-    this.flippingAnimation.start();
+    if ( this.visible ) {
+      this.flippingAnimation.start();
+    }
   }
 
   /**
@@ -191,6 +198,9 @@ export default class CoinSetPixelRepresentation extends CanvasNode {
     this.populatingAnimation.stop();
     this.currentFrame = 0;
     this.setAllPixels( pixelState );
+
+    // Set the flag to indicate that the coins aren't in the box.
+    this.coinSetInTestBoxProperty.value = false;
   }
 
   public setAllPixels( value: number ): void {

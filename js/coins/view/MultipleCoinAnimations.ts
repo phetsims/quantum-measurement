@@ -39,7 +39,10 @@ public readonly startIngressAnimationForCoinSet: ( forReprepare: boolean ) => vo
     // Create the nodes that will be used to animate coin motion for the multiple coin experiments.  These are sized
     // differently based on the quantity being animated.
     const movingCoinNodes = new Map<number, SmallCoinNode[]>();
-    MULTI_COIN_EXPERIMENT_QUANTITIES.forEach( quantity => {
+
+    // The 10000 coins case will be animated separately
+    const ANIMATION_QUANTITIES = MULTI_COIN_EXPERIMENT_QUANTITIES.filter( quantity => quantity !== 10000 );
+    ANIMATION_QUANTITIES.forEach( quantity => {
       const quantityToCreate = Math.min( quantity, QuantumMeasurementConstants.HOLLYWOODED_MAX_COINS );
       const radius = MultiCoinTestBox.getRadiusFromCoinQuantity( quantity );
       const coinNodes: SmallCoinNode[] = [];
@@ -65,6 +68,10 @@ public readonly startIngressAnimationForCoinSet: ( forReprepare: boolean ) => vo
       animationsToEdgeOfMultiCoinTestBox.forEach( animation => animation.stop() );
       animationsFromEdgeOfMultiCoinBoxToInside.forEach( animation => animation.stop() );
 
+      // Remove the animations from the list of active ones.
+      animationsToEdgeOfMultiCoinTestBox.length = 0;
+      animationsFromEdgeOfMultiCoinBoxToInside.length = 0;
+
       // Clear out any coins that made it to the test box.
       multipleCoinTestBox.clearContents();
 
@@ -73,11 +80,15 @@ public readonly startIngressAnimationForCoinSet: ( forReprepare: boolean ) => vo
         sceneGraphParent.removeChild( smallCoinNode );
       } );
 
-      // Set the flag to indicate that the coins are not in the box.
+      // Set the flag to indicate that the coins aren't in the box.
       coinSetInTestBoxProperty.value = false;
     };
 
     this.startIngressAnimationForCoinSet = ( forReprepare: boolean ) => {
+
+      if ( sceneModel.coinSet.numberOfActiveSystemsProperty.value === 10000 ) {
+        return;
+      }
 
       // Create a typed reference to the parent node, since we'll need to invoke some methods on it.
       assert && assert( measurementArea.getParent() instanceof CoinsExperimentSceneView );
@@ -85,9 +96,6 @@ public readonly startIngressAnimationForCoinSet: ( forReprepare: boolean ) => vo
 
       // Make sure the test box is empty.
       multipleCoinTestBox.clearContents();
-
-      // Set the flag to indicate that the coins aren't in the box.
-      coinSetInTestBoxProperty.value = false;
 
       assert && assert(
         movingCoinNodes.has( sceneModel.coinSet.numberOfActiveSystemsProperty.value ),

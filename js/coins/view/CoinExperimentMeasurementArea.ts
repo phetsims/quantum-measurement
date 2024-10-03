@@ -142,6 +142,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
     const measuredCoinsPixelRepresentation = new CoinSetPixelRepresentation(
       sceneModel.systemType,
       sceneModel.coinSet.measurementStateProperty,
+      coinSetInTestBoxProperty,
       {
         visibleProperty: new DerivedProperty( [
           sceneModel.coinSet.numberOfActiveSystemsProperty,
