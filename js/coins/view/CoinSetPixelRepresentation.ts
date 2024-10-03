@@ -134,6 +134,7 @@ export default class CoinSetPixelRepresentation extends CanvasNode {
     let getColor: ( value: number ) => string;
     switch( this.experimentStateProperty.value ) {
       case 'preparingToBeMeasured':
+        // Coins are flipping, so alternate between grey and light grey. 0 is used when repreparing.
         getColor = ( value: number ) => {
           return value === 1 ? 'grey' :
                  value === 0.5 ? '#aaa' : // light grey
@@ -146,16 +147,25 @@ export default class CoinSetPixelRepresentation extends CanvasNode {
         };
         break;
       case 'readyToBeMeasured':
+        // Quantum case for coins traveling to the box
         getColor = ( value: number ) => {
           return value === 1 ? 'grey' : 'transparent';
         };
         break;
       case 'measuredAndHidden':
-        getColor = ( value: number ) => {
-          return value === 1 ? 'grey' : 'transparent';
-        };
+        if ( this.coinSetInTestBoxProperty.value ) {
+          // The coins are already in the box, just show them as grey.
+          getColor = () => 'grey';
+        }
+        else {
+          // Classical case for coins traveling to the box
+          getColor = ( value: number ) => {
+            return value === 1 ? 'grey' : 'transparent';
+          };
+        }
         break;
       default:
+        assert && assert( false, 'Not all states are being considered in CoinSetPixelRepresentation' );
         getColor = () => {
           return 'red';
         };
