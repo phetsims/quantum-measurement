@@ -20,7 +20,7 @@ import TwoStateSystem from '../../common/model/TwoStateSystem.js';
 import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { ClassicalCoinStates, ClassicalCoinStateValues } from './ClassicalCoinStates.js';
-import { QuantumCoinStates, QuantumCoinStateValues, QuantumUncollapsedCoinStates, QuantumUncollapsedCoinStateValues } from './QuantumCoinStates.js';
+import { QuantumCoinStates, QuantumCoinStateValues } from './QuantumCoinStates.js';
 
 type SelfOptions = {
   initiallyActive?: boolean;
@@ -32,6 +32,10 @@ type CoinExperimentSceneModelOptions = SelfOptions & PickRequired<PhetioObjectOp
 type MeasuredCoinStates = ClassicalCoinStates | QuantumCoinStates;
 
 // constants
+
+// Uncollapsed states when preparing the coin
+const QuantumUncollapsedCoinStateValues = [ 'up', 'down', 'superposed' ] as const;
+export type QuantumUncollapsedCoinStates = ( typeof QuantumUncollapsedCoinStateValues )[number];
 
 // allowed values for the number of coins to use in the multi-coin experiment
 export const MULTI_COIN_EXPERIMENT_QUANTITIES = [ 10, 100, 10000 ];

@@ -9,7 +9,3 @@
 // Collapsed states after measurements
 export const QuantumCoinStateValues = [ 'up', 'down' ] as const;
 export type QuantumCoinStates = ( typeof QuantumCoinStateValues )[number];
-
-// Uncollapsed states when preparing the coin
-export const QuantumUncollapsedCoinStateValues = [ 'up', 'down', 'superposed' ] as const;
-export type QuantumUncollapsedCoinStates = ( typeof QuantumUncollapsedCoinStateValues )[number];
