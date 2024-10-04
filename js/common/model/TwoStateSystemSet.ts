@@ -267,7 +267,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
    * Set the measurement values immediately to the provided value for all elements in this set without transitioning
    * through the 'preparingToBeMeasured' state.
    */
-  public setMeasurementValuesImmediate( whatIsUpHere: T ): void {
+  public setMeasurementValuesImmediate( value: T ): void {
 
     // Cancel any in-progress preparation.
     if ( this.preparingToBeMeasuredTimeoutListener ) {
@@ -276,7 +276,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
     }
 
     // Set the seed value to the value that will incite its listener to update the data to the provided value.
-    const valueIndex = this.validValues.indexOf( whatIsUpHere );
+    const valueIndex = this.validValues.indexOf( value );
     assert && assert( valueIndex === 0 || valueIndex === 1 );
     this.seedProperty.value = valueIndex;
 
