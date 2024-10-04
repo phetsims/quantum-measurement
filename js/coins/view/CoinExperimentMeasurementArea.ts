@@ -206,6 +206,10 @@ export default class CoinExperimentMeasurementArea extends VBox {
       }
     } );
 
+    sceneModel.coinSet.measuredDataChangedEmitter.addListener( () => {
+      this.measuredCoinsPixelRepresentation.redraw( sceneModel.coinSet.measuredValues );
+    } );
+
     sceneModel.preparingExperimentProperty.link( () => this.measuredCoinsPixelRepresentation.abortAllAnimations( 0 ) );
 
     // Create the node that will be used to cover (aka "mask") the coin so that its state can't be seen.

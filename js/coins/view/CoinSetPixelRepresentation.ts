@@ -39,6 +39,8 @@ export default class CoinSetPixelRepresentation extends CanvasNode {
     const fps = 40;
     const totalFrames = 4 * MEASUREMENT_PREPARATION_TIME / fps;
 
+
+    // TODO: Try isSettingPhetioStateProperty.value ? 0 : MEASUREMENT_PREPARATION_TIME, https://github.com/phetsims/quantum-measurement/issues/39
     this.populatingAnimation = new Animation( {
       to: totalFrames,
       duration: MEASUREMENT_PREPARATION_TIME,
