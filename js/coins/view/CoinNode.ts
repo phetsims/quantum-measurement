@@ -1,6 +1,5 @@
 // Copyright 2024, University of Colorado Boulder
 
-
 /**
  * CoinNode portrays a coin with two faces. It can show one or the other, and also supports cross-fading between the
  * two faces in order to produce a "transposed" look.
