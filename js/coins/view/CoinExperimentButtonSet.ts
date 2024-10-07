@@ -14,16 +14,16 @@ import TProperty from '../../../../axon/js/TProperty.js';
 import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, NodeOptions, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
+import { NodeOptions, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
 import TextPushButton, { TextPushButtonOptions } from '../../../../sun/js/buttons/TextPushButton.js';
 import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 
 type SelfOptions = EmptySelfOptions;
 export type CoinExperimentButtonSetOptions = SelfOptions & PickRequired<NodeOptions, 'tandem' | 'visibleProperty'>;
 
-const BUTTON_COLOR = new Color( '#0ffdfd' );
 const BUTTON_FONT = new PhetFont( 14 );
 const BUTTON_WIDTH = 160; // empirically determined to match spec
 
@@ -42,7 +42,7 @@ export default class CoinExperimentButtonSet extends VBox {
 
     // common options for all buttons in the set
     const commonButtonOptions: TextPushButtonOptions = {
-      baseColor: BUTTON_COLOR,
+      baseColor: QuantumMeasurementColors.experimentButtonColorProperty,
       font: BUTTON_FONT,
       minWidth: BUTTON_WIDTH,
       maxWidth: BUTTON_WIDTH,

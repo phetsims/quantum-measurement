@@ -7,6 +7,7 @@
  */
 
 import CoinsModel from 'model/CoinsModel.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 import LocalizedStringProperty from '../../../../chipper/js/LocalizedStringProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -76,9 +77,11 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
         radioButtonOptions: {
           xMargin: 10,
           baseColor: QuantumMeasurementColors.selectorButtonSelectedColorProperty,
+          stroke: QuantumMeasurementColors.selectorButtonSelectedStrokeProperty,
           buttonAppearanceStrategyOptions: {
             deselectedButtonOpacity: deselectedRadioButtonOpacity,
-            deselectedFill: QuantumMeasurementColors.selectorButtonDeselectedColorProperty
+            deselectedFill: QuantumMeasurementColors.selectorButtonDeselectedColorProperty,
+            deselectedStroke: QuantumMeasurementColors.selectorButtonDeselectedStrokeProperty
           },
           contentAppearanceStrategyOptions: {
             deselectedContentOpacity: deselectedRadioButtonOpacity
@@ -105,6 +108,17 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
     if ( this.mockupImage ) {
       this.mockupImage.moveToFront();
     }
+
+    // Changing the background color based on the experiment type
+    Multilink.multilink(
+      [
+        model.experimentTypeProperty,
+        QuantumMeasurementColors.classicalBackgroundColorProperty,
+        QuantumMeasurementColors.quantumBackgroundColorProperty
+      ],
+      ( experimentType, classicalBackgroundColor, quantumBackgroundColor ) => {
+      QuantumMeasurementColors.screenBackgroundColorProperty.value = experimentType === 'classical' ? classicalBackgroundColor : quantumBackgroundColor;
+    } );
   }
 
   public override reset(): void {

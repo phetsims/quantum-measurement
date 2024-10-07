@@ -23,43 +23,34 @@ const QuantumMeasurementColors = {
   screenBackgroundColorProperty: new ProfileColorProperty( quantumMeasurement, 'background', {
     default: 'white'
   } ),
+
   selectorButtonSelectedColorProperty: new ProfileColorProperty( quantumMeasurement, 'selectorButtonSelected', {
-    default: 'cyan'
+    default: '#0FF'
   } ),
   selectorButtonDeselectedColorProperty: new ProfileColorProperty( quantumMeasurement, 'selectorButtonDeselected', {
     default: '#aaa'
   } ),
+  selectorButtonSelectedStrokeProperty: new ProfileColorProperty( quantumMeasurement, 'selectorButtonSelectedStroke', {
+    default: '#000'
+  } ),
+  selectorButtonDeselectedStrokeProperty: new ProfileColorProperty( quantumMeasurement, 'selectorButtonDeselectedStroke', {
+    default: '#000'
+  } ),
 
   // Separate background colors for classical & quantum
   classicalBackgroundColorProperty: new ProfileColorProperty( quantumMeasurement, 'classicalBackground', {
-    default: '#e0e0e0' // Placeholder color
+    default: '#fff' // Placeholder color
   } ),
   quantumBackgroundColorProperty: new ProfileColorProperty( quantumMeasurement, 'quantumBackground', {
-    default: '#e0e0e0' // Placeholder color
-  } ),
-
-  // Experiment Type radio button stroke (selected & deselected)
-  experimentTypeRadioButtonStrokeSelectedProperty: new ProfileColorProperty( quantumMeasurement, 'experimentTypeRadioButtonStrokeSelected', {
-    default: '#007ACC' // Placeholder color
-  } ),
-  experimentTypeRadioButtonStrokeDeselectedProperty: new ProfileColorProperty( quantumMeasurement, 'experimentTypeRadioButtonStrokeDeselected', {
-    default: '#777' // Placeholder color
-  } ),
-
-  // Experiment Type radio button fill (selected & deselected)
-  experimentTypeRadioButtonFillSelectedProperty: new ProfileColorProperty( quantumMeasurement, 'experimentTypeRadioButtonFillSelected', {
-    default: '#3399FF' // Placeholder color
-  } ),
-  experimentTypeRadioButtonFillDeselectedProperty: new ProfileColorProperty( quantumMeasurement, 'experimentTypeRadioButtonFillDeselected', {
-    default: '#CCC' // Placeholder color
+    default: '#fff' // Placeholder color
   } ),
 
   // Text color for the quantum scene (for the currently blue text)
   classicalSceneTextColorProperty: new ProfileColorProperty( quantumMeasurement, 'classicalSceneText', {
-    default: '#000' // Placeholder color
+    default: '#000'
   } ),
   quantumSceneTextColorProperty: new ProfileColorProperty( quantumMeasurement, 'quantumSceneText', {
-    default: '#0000FF' // Placeholder color
+    default: '#0000FF'
   } ),
 
   // Color representation of the possible states of the coins
@@ -110,7 +101,7 @@ const QuantumMeasurementColors = {
 
   // Experiment button sets
   experimentButtonColorProperty: new ProfileColorProperty( quantumMeasurement, 'experimentButton', {
-    default: '#87CEEB' // Placeholder color (skyblue)
+    default: '#0ffdfd'
   } ),
 
   // Initial Orientation/Basis States panel stroke
