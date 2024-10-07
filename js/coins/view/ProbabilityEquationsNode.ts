@@ -22,6 +22,8 @@ export default class ProbabilityEquationsNode extends RichText {
   public constructor( biasProperty: TReadOnlyProperty<number>, systemType: SystemType ) {
     const equationsStringProperty = new DerivedProperty( [ biasProperty ], bias => {
 
+      // TODO: Include color into the span https://github.com/phetsims/quantum-measurement/issues/49
+
       const upperFunctionParameter = systemType === 'classical' ? QuantumMeasurementConstants.CLASSICAL_UP_SYMBOL : QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
       const lowerFunctionParameter = systemType === 'classical' ? QuantumMeasurementConstants.CLASSICAL_DOWN_SYMBOL : QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER;
       const upperEquation = `P(<b>${upperFunctionParameter}</b>) = ${Utils.toFixed( bias, 2 )}`;

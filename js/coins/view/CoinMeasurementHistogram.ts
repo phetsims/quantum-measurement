@@ -11,9 +11,10 @@
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, NodeOptions, RichText } from '../../../../scenery/js/imports.js';
+import { NodeOptions, RichText } from '../../../../scenery/js/imports.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHistogram.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
@@ -38,7 +39,8 @@ export default class CoinMeasurementHistogram extends QuantumMeasurementHistogra
         QuantumMeasurementConstants.CLASSICAL_UP_SYMBOL :
         QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER,
         {
-          font: LABEL_FONT
+          font: LABEL_FONT,
+          fill: systemType === 'classical' ? QuantumMeasurementColors.headsColorProperty : QuantumMeasurementColors.upColorProperty
         }
       ),
       new RichText(
@@ -47,7 +49,7 @@ export default class CoinMeasurementHistogram extends QuantumMeasurementHistogra
         QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER,
         {
           font: LABEL_FONT,
-          fill: Color.MAGENTA
+          fill: systemType === 'classical' ? QuantumMeasurementColors.tailsColorProperty : QuantumMeasurementColors.downColorProperty
         }
       )
     ];

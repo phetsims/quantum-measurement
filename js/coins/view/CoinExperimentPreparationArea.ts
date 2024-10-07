@@ -12,8 +12,9 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
-import { Color, VBox } from '../../../../scenery/js/imports.js';
+import { VBox } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
@@ -28,7 +29,8 @@ export default class CoinExperimentPreparationArea extends VBox {
 
   public constructor( sceneModel: CoinsExperimentSceneModel, tandem: Tandem ) {
 
-    const textColor = sceneModel.systemType === 'quantum' ? Color.BLUE : Color.BLACK;
+    const textColorProperty = sceneModel.systemType === 'quantum' ?
+                      QuantumMeasurementColors.quantumSceneTextColorProperty : QuantumMeasurementColors.classicalSceneTextColorProperty;
 
     // Create the header. It is somewhat different depending on whether this is for a classical or quantum system.
     const prepAreaHeadingTextProperty: TReadOnlyProperty<string> = new DerivedProperty(
@@ -62,7 +64,7 @@ export default class CoinExperimentPreparationArea extends VBox {
     const preparationAreaHeader = new SceneSectionHeader(
       prepAreaHeadingTextProperty,
       prepAreaHeaderLineWidthProperty,
-      { textColor: textColor }
+      { textColor: textColorProperty }
     );
 
     // Create the UI element that will allow the user to specify the initial state of the coin.

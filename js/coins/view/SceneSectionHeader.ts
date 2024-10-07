@@ -14,6 +14,7 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Color, Line, Text, TPaint, VBox } from '../../../../scenery/js/imports.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
 type SceneSectionHeaderOptions = {
@@ -27,7 +28,7 @@ export default class SceneSectionHeader extends VBox {
                       providedOptions?: SceneSectionHeaderOptions ) {
 
     const options = optionize<SceneSectionHeaderOptions>()( {
-      textColor: Color.BLACK
+      textColor: QuantumMeasurementColors.classicalSceneTextColorProperty
     }, providedOptions );
 
     const heading = new Text( textProperty, {

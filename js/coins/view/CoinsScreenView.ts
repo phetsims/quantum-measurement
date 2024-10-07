@@ -10,7 +10,7 @@ import CoinsModel from 'model/CoinsModel.js';
 import LocalizedStringProperty from '../../../../chipper/js/LocalizedStringProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, Text } from '../../../../scenery/js/imports.js';
+import { Text } from '../../../../scenery/js/imports.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import { SystemType, SystemTypeValues } from '../../common/model/SystemType.js';
@@ -53,7 +53,9 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
           SYSTEM_TYPE_TO_STRING_MAP.get( systemType )!,
           {
             font: new PhetFont( { size: 28, weight: 'bold' } ),
-            fill: systemType === 'quantum' ? Color.BLUE : Color.BLACK,
+            fill: systemType === 'quantum' ?
+                  QuantumMeasurementColors.quantumSceneTextColorProperty :
+                  QuantumMeasurementColors.classicalSceneTextColorProperty,
             maxWidth: 300
           }
         );

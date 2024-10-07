@@ -25,6 +25,7 @@ import { SystemType } from '../../common/model/SystemType.js';
 import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
+import QuantumMeasurementColors from '../QuantumMeasurementColors.js';
 
 type SelfOptions = EmptySelfOptions;
 export type QuantumMeasurementHistogramOptions = SelfOptions & WithRequired<NodeOptions, 'tandem' | 'visibleProperty'>;
@@ -136,8 +137,10 @@ export default class QuantumMeasurementHistogram extends Node {
 
     // Create the histogram bars for the right and left sides.
     const maxBarHeight = yAxis.height - leftNumberDisplay.height;
-    const leftHistogramBar = new Rectangle( 0, 0, HISTOGRAM_BAR_WIDTH, maxBarHeight, { fill: Color.BLACK } );
-    const rightHistogramBar = new Rectangle( 0, 0, HISTOGRAM_BAR_WIDTH, maxBarHeight, { fill: Color.MAGENTA } );
+    const leftFillColorProperty = systemType === 'classical' ? QuantumMeasurementColors.headsColorProperty : QuantumMeasurementColors.upColorProperty;
+    const rightFillColorProperty = systemType === 'classical' ? QuantumMeasurementColors.tailsColorProperty : QuantumMeasurementColors.downColorProperty;
+    const leftHistogramBar = new Rectangle( 0, 0, HISTOGRAM_BAR_WIDTH, maxBarHeight, { fill: leftFillColorProperty } );
+    const rightHistogramBar = new Rectangle( 0, 0, HISTOGRAM_BAR_WIDTH, maxBarHeight, { fill: rightFillColorProperty } );
 
     const leftAlignGroup = new AlignGroup( { matchVertical: false } );
     const rightAlignGroup = new AlignGroup( { matchVertical: false } );

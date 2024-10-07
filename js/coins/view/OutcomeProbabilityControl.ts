@@ -27,6 +27,8 @@ import ProbabilityValueControl from './ProbabilityValueControl.js';
 type SelfOptions = EmptySelfOptions;
 type OutcomeProbabilityControlOptions = SelfOptions & PickRequired<VBox, 'tandem' | 'visibleProperty'>;
 
+// TODO: Include color into the span https://github.com/phetsims/quantum-measurement/issues/49
+
 // constants
 const MAGENTA_SPAN = ( text: string ) => `<span style="color: magenta;">${text}</span>`;
 const TITLE_AND_LABEL_FONT = new PhetFont( 16 );

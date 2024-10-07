@@ -24,6 +24,7 @@ import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushBut
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
@@ -103,7 +104,7 @@ export default class CoinsExperimentSceneView extends Node {
 
     // Add the button for switching from preparation mode to measurement mode.
     const startMeasurementButton = new RectangularPushButton( {
-      baseColor: Color.GREEN,
+      baseColor: QuantumMeasurementColors.startMeasurementButtonColorProperty,
       content: new ArrowNode( 0, 0, 60, 0, {
         headWidth: 20,
         headHeight: 15
@@ -164,7 +165,7 @@ export default class CoinsExperimentSceneView extends Node {
     // Create and add the button for starting a new experiment by preparing a new coin.
     this.newCoinButton = new TextPushButton( QuantumMeasurementStrings.newCoinStringProperty, {
       visibleProperty: DerivedProperty.not( sceneModel.preparingExperimentProperty ),
-      baseColor: Color.GREEN,
+      baseColor: QuantumMeasurementColors.newCoinButtonColorProperty,
       font: new PhetFont( 14 ),
       listener: () => {
         sceneModel.preparingExperimentProperty.value = true;

@@ -18,6 +18,7 @@ import RectangularRadioButton, { RectangularRadioButtonOptions } from '../../../
 import Panel from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import { SystemType } from '../../common/model/SystemType.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { ClassicalCoinStates, ClassicalCoinStateValues } from '../model/ClassicalCoinStates.js';
@@ -107,8 +108,8 @@ export default class InitialCoinStateSelectorNode extends VBox {
     } );
 
     const selectorPanel = new Panel( selectorPanelContent, {
-      fill: new Color( '#eeeeee' ),
-      stroke: null,
+      fill: QuantumMeasurementColors.basisStatesPanelFillColorProperty,
+      stroke: QuantumMeasurementColors.basisStatesPanelStrokeColorProperty,
       yMargin: 10,
       minWidth: 270,
       visibleProperty: new GatedVisibleProperty( preparingExperimentProperty, radioButtonGroupTandem ),

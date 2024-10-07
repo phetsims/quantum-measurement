@@ -11,17 +11,14 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, Text } from '../../../../scenery/js/imports.js';
+import { Text } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
 import CoinNode, { CoinFaceParameters } from './CoinNode.js';
 
-const UP_FILL = new Color( '#00FFFF' );
-const UP_STROKE_AND_ARROW_COLOR = Color.BLACK;
-const DOWN_FILL = new Color( '#FFFF00' );
-const DOWN_STROKE_AND_ARROW_COLOR = Color.MAGENTA;
 const FONT = new PhetFont( { size: 40, weight: 'bold' } );
 
 export default class QuantumCoinNode extends CoinNode {
@@ -34,20 +31,20 @@ export default class QuantumCoinNode extends CoinNode {
                       tandem: Tandem ) {
 
     const upFaceOptions: CoinFaceParameters = {
-      fill: UP_FILL,
-      stroke: UP_STROKE_AND_ARROW_COLOR,
+      fill: QuantumMeasurementColors.upFillColorProperty,
+      stroke: QuantumMeasurementColors.upColorProperty,
       content: new Text( QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER, {
         font: FONT,
-        fill: UP_STROKE_AND_ARROW_COLOR
+        fill: QuantumMeasurementColors.upColorProperty
       } )
     };
 
     const downFaceOptions: CoinFaceParameters = {
-      fill: DOWN_FILL,
-      stroke: DOWN_STROKE_AND_ARROW_COLOR,
+      fill: QuantumMeasurementColors.downFillColorProperty,
+      stroke: QuantumMeasurementColors.downColorProperty,
       content: new Text( QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER, {
         font: FONT,
-        fill: DOWN_STROKE_AND_ARROW_COLOR
+        fill: QuantumMeasurementColors.downColorProperty
       } )
     };
 

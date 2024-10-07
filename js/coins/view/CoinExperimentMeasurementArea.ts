@@ -13,9 +13,10 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Circle, Color, HBox, Node, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Circle, HBox, Node, Text, VBox } from '../../../../scenery/js/imports.js';
 import VerticalAquaRadioButtonGroup from '../../../../sun/js/VerticalAquaRadioButtonGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
@@ -43,7 +44,8 @@ export default class CoinExperimentMeasurementArea extends VBox {
 
   public constructor( sceneModel: CoinsExperimentSceneModel, tandem: Tandem ) {
 
-    const textColor = sceneModel.systemType === 'quantum' ? Color.BLUE : Color.BLACK;
+    const textColorProperty = sceneModel.systemType === 'quantum' ?
+                      QuantumMeasurementColors.quantumSceneTextColorProperty : QuantumMeasurementColors.classicalSceneTextColorProperty;
     const singleCoinInTestBoxProperty = new BooleanProperty( false );
     const coinSetInTestBoxProperty = new BooleanProperty( false );
 
@@ -57,7 +59,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
     const singleCoinSectionHeader = new SceneSectionHeader(
       QuantumMeasurementStrings.singleCoinMeasurementsStringProperty,
       measurementAreaHeaderLineWidthProperty,
-      { textColor: textColor }
+      { textColor: textColorProperty }
     );
 
     // Create the box where the single coin will be placed while it is experimented with.
@@ -86,7 +88,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
     const multiCoinSectionHeader = new SceneSectionHeader(
       QuantumMeasurementStrings.multipleCoinMeasurementsStringProperty,
       measurementAreaHeaderLineWidthProperty,
-      { textColor: textColor }
+      { textColor: textColorProperty }
     );
 
     // Add the area where the multiple coins will be hidden and revealed.
@@ -215,8 +217,8 @@ export default class CoinExperimentMeasurementArea extends VBox {
     // Create the node that will be used to cover (aka "mask") the coin so that its state can't be seen.
     const maskRadius = InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS * 1.02;
     const coinMask = new Circle( maskRadius, {
-      fill: new Color( '#cccccc' ),
-      stroke: new Color( '#888888' ),
+      fill: QuantumMeasurementColors.maskedFillColorProperty,
+      stroke: QuantumMeasurementColors.coinStrokeColorProperty,
       lineWidth: 7,
       visibleProperty: new DerivedProperty(
         [ sceneModel.preparingExperimentProperty, sceneModel.singleCoin.measurementStateProperty ],

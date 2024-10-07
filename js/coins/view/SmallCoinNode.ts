@@ -19,6 +19,7 @@ import { Circle, Color, Node, NodeOptions, Text } from '../../../../scenery/js/i
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import { MEASUREMENT_PREPARATION_TIME } from '../../common/model/TwoStateSystemSet.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
@@ -32,12 +33,12 @@ export type SmallCoinDisplayMode = ClassicalCoinStates | QuantumCoinStates | 'ma
 
 // constants
 const DEFAULT_ARROW_FONT = new PhetFont( { size: 8, weight: 'bold' } );
-const COIN_STROKE = new Color( '#888888' );
-const MASKED_FILL = new Color( '#cccccc' );
-const HEADS_FILL = Color.BLACK;
-const TAILS_FILL = Color.MAGENTA;
-const UP_COLOR = Color.BLACK;
-const DOWN_COLOR = Color.MAGENTA;
+const COIN_STROKE_COLOR_PROPERTY = QuantumMeasurementColors.coinStrokeColorProperty;
+const MASKED_FILL_COLOR_PROPERTY = QuantumMeasurementColors.maskedFillColorProperty;
+const HEADS_FILL_COLOR_PROPERTY = QuantumMeasurementColors.headsColorProperty;
+const TAILS_FILL_COLOR_PROPERTY = QuantumMeasurementColors.tailsColorProperty;
+const UP_COLOR_PROPERTY = QuantumMeasurementColors.upColorProperty;
+const DOWN_COLOR_PROPERTY = QuantumMeasurementColors.downColorProperty;
 
 export default class SmallCoinNode extends Node {
 
@@ -49,18 +50,18 @@ export default class SmallCoinNode extends Node {
   public constructor( radius: number, providedOptions?: SmallCoinNodeOptions ) {
 
     const coinCircle = new Circle( radius, {
-      fill: MASKED_FILL,
-      stroke: COIN_STROKE,
+      fill: MASKED_FILL_COLOR_PROPERTY,
+      stroke: COIN_STROKE_COLOR_PROPERTY,
       lineWidth: Math.max( Math.floor( radius / 4 ), 1 )
     } );
 
     // Create the up and down arrows as Text nodes.
     const upArrow = new Text( QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER, {
-      fill: UP_COLOR,
+      fill: UP_COLOR_PROPERTY,
       font: DEFAULT_ARROW_FONT
     } );
     const downArrow = new Text( QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER, {
-      fill: DOWN_COLOR,
+      fill: DOWN_COLOR_PROPERTY,
       font: DEFAULT_ARROW_FONT
     } );
 
@@ -85,32 +86,32 @@ export default class SmallCoinNode extends Node {
       if ( displayMode === 'masked' ) {
         upArrow.visible = false;
         downArrow.visible = false;
-        coinCircle.fill = MASKED_FILL;
-        coinCircle.stroke = COIN_STROKE;
+        coinCircle.fill = MASKED_FILL_COLOR_PROPERTY;
+        coinCircle.stroke = COIN_STROKE_COLOR_PROPERTY;
       }
       else if ( displayMode === 'heads' ) {
         upArrow.visible = false;
         downArrow.visible = false;
-        coinCircle.fill = HEADS_FILL;
-        coinCircle.stroke = COIN_STROKE;
+        coinCircle.fill = HEADS_FILL_COLOR_PROPERTY;
+        coinCircle.stroke = COIN_STROKE_COLOR_PROPERTY;
       }
       else if ( displayMode === 'tails' ) {
         upArrow.visible = false;
         downArrow.visible = false;
-        coinCircle.fill = TAILS_FILL;
-        coinCircle.stroke = COIN_STROKE;
+        coinCircle.fill = TAILS_FILL_COLOR_PROPERTY;
+        coinCircle.stroke = COIN_STROKE_COLOR_PROPERTY;
       }
       else if ( displayMode === 'up' ) {
         upArrow.visible = true;
         downArrow.visible = false;
         coinCircle.fill = Color.TRANSPARENT;
-        coinCircle.stroke = UP_COLOR;
+        coinCircle.stroke = UP_COLOR_PROPERTY;
       }
       else if ( displayMode === 'down' ) {
         upArrow.visible = false;
         downArrow.visible = true;
         coinCircle.fill = Color.TRANSPARENT;
-        coinCircle.stroke = DOWN_COLOR;
+        coinCircle.stroke = DOWN_COLOR_PROPERTY;
       }
     };
 
