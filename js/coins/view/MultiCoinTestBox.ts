@@ -19,6 +19,7 @@ import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import { Color, HBox, HBoxOptions, LinearGradient, Node, Rectangle } from '../../../../scenery/js/imports.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
+import quantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { MULTI_COIN_ANIMATION_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
 import { ExperimentMeasurementState } from '../model/ExperimentMeasurementState.js';
@@ -30,11 +31,11 @@ export type MultiCoinTestBoxOptions = SelfOptions & WithRequired<HBoxOptions, 't
 // constants TODO: Colors https://github.com/phetsims/quantum-measurement/issues/49
 const BOX_SIZE = new Dimension2( 200, 200 );
 const TEST_BOX_CONTENTS_HIDDEN_FILL = new LinearGradient( 0, 0, BOX_SIZE.width, 0 )
-  .addColorStop( 0, new Color( '#eeeeee' ) )
-  .addColorStop( 1, new Color( '#cceae8' ) );
-const TEST_BOX_CONTENTS_REVEALED_FILL = Color.WHITE.withAlpha( 0 );
+  .addColorStop( 0, quantumMeasurementColors.multiCoinFirstGradientColorProperty )
+  .addColorStop( 1, quantumMeasurementColors.multiCoinSecondGradientColorProperty );
+const TEST_BOX_CONTENTS_REVEALED_FILL_COLOR_PROPERTY = quantumMeasurementColors.testBoxContentsRevealedFillColorProperty;
 const LANDING_ZONE_WIDTH = 1;
-const LANDING_ZONE_FILL = 'rgba( 255, 192, 203, 0.5 )'; // useful for debug, opacity should be 0 in production version
+const LANDING_ZONE_FILL_COLOR_PROPERTY = quantumMeasurementColors.landingZoneFillColorProperty; // useful for debug, opacity should be 0 in production version
 
 export default class MultiCoinTestBox extends HBox {
 
@@ -73,7 +74,7 @@ export default class MultiCoinTestBox extends HBox {
     // placed before moving into it. This is done so that the bounds of this node don't change when the coins and the
     // masks for those coins are added as children.
     const coinLandingZone = new Rectangle( 0, 0, LANDING_ZONE_WIDTH, BOX_SIZE.height, {
-      fill: LANDING_ZONE_FILL
+      fill: LANDING_ZONE_FILL_COLOR_PROPERTY
     } );
 
     const options = optionize<MultiCoinTestBoxOptions, SelfOptions, HBoxOptions>()( {
@@ -90,7 +91,7 @@ export default class MultiCoinTestBox extends HBox {
 
       // Make the box look hazy when the measurement is not revealed.
       multipleCoinTestBoxRectangle.fill = measurementState === 'revealed' ?
-                                          TEST_BOX_CONTENTS_REVEALED_FILL :
+                                          TEST_BOX_CONTENTS_REVEALED_FILL_COLOR_PROPERTY :
                                           TEST_BOX_CONTENTS_HIDDEN_FILL;
 
       // Update the appearance of the coin nodes.

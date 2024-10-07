@@ -112,6 +112,19 @@ const QuantumMeasurementColors = {
   // Initial Orientation/Basis States panel fill
   basisStatesPanelFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'basisStatesPanelFill', {
     default: '#EEE'
+  } ),
+
+  multiCoinFirstGradientColorProperty: new ProfileColorProperty( quantumMeasurement, 'multiCoinFirstGradient', {
+    default: '#EEE'
+  } ),
+  multiCoinSecondGradientColorProperty: new ProfileColorProperty( quantumMeasurement, 'multiCoinSecondGradient', {
+    default: '#cceae8'
+  } ),
+  testBoxContentsRevealedFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'testBoxContentsRevealedFill', {
+    default: 'rgba( 255, 255, 255, 0 )'
+  } ),
+  landingZoneFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'landingZoneFill', {
+    default: 'rgba( 255, 192, 203, 0.5 )'
   } )
 };
 
