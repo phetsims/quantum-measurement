@@ -12,22 +12,25 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { RichText } from '../../../../scenery/js/imports.js';
+import { Color, RichText } from '../../../../scenery/js/imports.js';
 import { SystemType } from '../../common/model/SystemType.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
 export default class ProbabilityEquationsNode extends RichText {
 
   public constructor( biasProperty: TReadOnlyProperty<number>, systemType: SystemType ) {
-    const equationsStringProperty = new DerivedProperty( [ biasProperty ], bias => {
-
-      // TODO: Include color into the span https://github.com/phetsims/quantum-measurement/issues/49
-
+    const equationsStringProperty = new DerivedProperty( [
+      biasProperty,
+      QuantumMeasurementColors.tailsColorProperty,
+      QuantumMeasurementColors.downColorProperty
+    ], ( bias, tailsColor, downColor ) => {
       const upperFunctionParameter = systemType === 'classical' ? QuantumMeasurementConstants.CLASSICAL_UP_SYMBOL : QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
       const lowerFunctionParameter = systemType === 'classical' ? QuantumMeasurementConstants.CLASSICAL_DOWN_SYMBOL : QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER;
       const upperEquation = `P(<b>${upperFunctionParameter}</b>) = ${Utils.toFixed( bias, 2 )}`;
-      const lowerEquation = `P(<span style="color: magenta;"><b>${lowerFunctionParameter}</b></span>) = <span style="color: magenta;">${Utils.toFixed( 1 - bias, 2 )}</span>`;
+      const COLOR_SPAN = ( text: string ) => ProbabilityEquationsNode.COLOR_SPAN( text, systemType === 'classical' ? tailsColor : downColor );
+      const lowerEquation = `P(<b>${COLOR_SPAN( lowerFunctionParameter )}</b>) = ${COLOR_SPAN( Utils.toFixed( 1 - bias, 2 ) )}`;
       return `${upperEquation}<br>${lowerEquation}`;
     } );
 
@@ -35,6 +38,10 @@ export default class ProbabilityEquationsNode extends RichText {
       font: new PhetFont( 18 ),
       leading: 7
     } );
+  }
+
+  public static COLOR_SPAN( text: string, color: Color ): string {
+    return `<span style="color: ${color.toCSS()};">${text}</span>`;
   }
 }
 

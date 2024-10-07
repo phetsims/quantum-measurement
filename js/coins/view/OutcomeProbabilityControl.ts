@@ -11,6 +11,7 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
@@ -19,35 +20,51 @@ import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Node, RichText, Text, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
 import { SystemType } from '../../common/model/SystemType.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
+import ProbabilityEquationsNode from './ProbabilityEquationsNode.js';
 import ProbabilityValueControl from './ProbabilityValueControl.js';
 
 type SelfOptions = EmptySelfOptions;
 type OutcomeProbabilityControlOptions = SelfOptions & PickRequired<VBox, 'tandem' | 'visibleProperty'>;
 
-// TODO: Include color into the span https://github.com/phetsims/quantum-measurement/issues/49
 
-// constants
-const MAGENTA_SPAN = ( text: string ) => `<span style="color: magenta;">${text}</span>`;
+// constants that don't rely on systemType for the color
 const TITLE_AND_LABEL_FONT = new PhetFont( 16 );
 const ALPHA = QuantumMeasurementConstants.ALPHA;
 const BETA = QuantumMeasurementConstants.BETA;
 const UP = QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
 const DOWN = QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER;
 const KET = QuantumMeasurementConstants.KET;
-const BRA_KET_TITLE_STRING = `( ${ALPHA}|${UP}${KET} + ${MAGENTA_SPAN( BETA )}|${MAGENTA_SPAN( DOWN )}${KET} )`;
-
 const MAGNITUDE_OF_ALPHA_SQUARED = `|${ALPHA}|<sup>2`;
-const MAGNITUDE_OF_BETA_SQUARED = MAGENTA_SPAN( `|${BETA}|<sup>2` );
-
 
 export default class OutcomeProbabilityControl extends VBox {
 
   public constructor( systemType: SystemType,
                       outcomeProbabilityProperty: NumberProperty,
                       providedOptions: OutcomeProbabilityControlOptions ) {
+
+    let COLOR_SPAN: ( text: string ) => string = text => text;
+
+    let BRA_KET_TITLE_STRING = `( ${ALPHA}|${UP}${KET} + ${COLOR_SPAN( BETA )}|${COLOR_SPAN( DOWN )}${KET} )`;
+    let MAGNITUDE_OF_BETA_SQUARED = COLOR_SPAN( `|${BETA}|<sup>2` );
+
+    Multilink.multilink(
+      [
+        QuantumMeasurementColors.tailsColorProperty,
+        QuantumMeasurementColors.downColorProperty
+      ],
+      ( tailsColor, downColor ) => {
+        COLOR_SPAN = ( text: string ) => {
+          return ProbabilityEquationsNode.COLOR_SPAN( text, systemType === 'classical' ? tailsColor : downColor );
+        };
+        BRA_KET_TITLE_STRING = `( ${ALPHA}|${UP}${KET} + ${COLOR_SPAN( BETA )}|${COLOR_SPAN( DOWN )}${KET} )`;
+        MAGNITUDE_OF_BETA_SQUARED = COLOR_SPAN( `|${BETA}|<sup>2` );
+      }
+    );
+
 
     let title: Node;
     if ( systemType === 'classical' ) {
@@ -58,7 +75,11 @@ export default class OutcomeProbabilityControl extends VBox {
     }
     else {
       const titleStringProperty = new DerivedStringProperty(
-        [ QuantumMeasurementStrings.stateToPrepareStringProperty ],
+        [
+          QuantumMeasurementStrings.stateToPrepareStringProperty,
+          QuantumMeasurementColors.tailsColorProperty,
+          QuantumMeasurementColors.downColorProperty
+        ],
         stateToPrepareString => `<b>${stateToPrepareString}</b> ${BRA_KET_TITLE_STRING}`
       );
       title = new RichText( titleStringProperty, {
@@ -96,9 +117,11 @@ export default class OutcomeProbabilityControl extends VBox {
 
     const classicalDownTitleProperty = new DerivedProperty( [
         QuantumMeasurementStrings.probabilityStringProperty,
-        QuantumMeasurementStrings.probabilityOfValuePatternStringProperty
+        QuantumMeasurementStrings.probabilityOfValuePatternStringProperty,
+        QuantumMeasurementColors.tailsColorProperty,
+        QuantumMeasurementColors.downColorProperty
       ], ( probabilityString, probabilityOfValuePatternString ) => {
-        const POfV = StringUtils.fillIn( probabilityOfValuePatternString, { value: MAGENTA_SPAN( `<b>${QuantumMeasurementConstants.CLASSICAL_DOWN_SYMBOL}</b>` ) } );
+        const POfV = StringUtils.fillIn( probabilityOfValuePatternString, { value: COLOR_SPAN( `<b>${QuantumMeasurementConstants.CLASSICAL_DOWN_SYMBOL}</b>` ) } );
         return `${probabilityString} ${POfV}`;
       }
     );
@@ -114,9 +137,11 @@ export default class OutcomeProbabilityControl extends VBox {
 
     const quantumDownTitleProperty = new DerivedProperty( [
         QuantumMeasurementStrings.probabilityStringProperty,
-        QuantumMeasurementStrings.probabilityOfValuePatternStringProperty
+        QuantumMeasurementStrings.probabilityOfValuePatternStringProperty,
+        QuantumMeasurementColors.tailsColorProperty,
+        QuantumMeasurementColors.downColorProperty
       ], ( probabilityString, probabilityOfValuePatternString ) => {
-        const POfV = StringUtils.fillIn( probabilityOfValuePatternString, { value: MAGENTA_SPAN( `<b>${QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER}</b>` ) } );
+        const POfV = StringUtils.fillIn( probabilityOfValuePatternString, { value: COLOR_SPAN( `<b>${QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER}</b>` ) } );
         return `${probabilityString} ${POfV} = ${MAGNITUDE_OF_BETA_SQUARED}`;
       }
     );
@@ -141,12 +166,16 @@ export default class OutcomeProbabilityControl extends VBox {
 
       // There is an additional child node in the quantum case that shows the quantum state and updates dynamically.
       const quantumStateReadoutStringProperty = new DerivedProperty(
-        [ outcomeProbabilityProperty ],
+        [
+          outcomeProbabilityProperty,
+          QuantumMeasurementColors.tailsColorProperty,
+          QuantumMeasurementColors.downColorProperty
+        ],
         outcomeProbability => {
 
           const alphaValue = Utils.toFixed( Math.sqrt( outcomeProbability ), 3 );
           const betaValue = Utils.toFixed( Math.sqrt( 1 - outcomeProbability ), 3 );
-          return `${alphaValue}|${UP}${KET} + ${MAGENTA_SPAN( betaValue )}|${MAGENTA_SPAN( DOWN )}${KET}`;
+          return `${alphaValue}|${UP}${KET} + ${COLOR_SPAN( betaValue )}|${COLOR_SPAN( DOWN )}${KET}`;
         }
       );
 

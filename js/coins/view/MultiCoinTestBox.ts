@@ -28,7 +28,7 @@ import SmallCoinNode, { SmallCoinDisplayMode } from './SmallCoinNode.js';
 type SelfOptions = EmptySelfOptions;
 export type MultiCoinTestBoxOptions = SelfOptions & WithRequired<HBoxOptions, 'tandem'>;
 
-// constants TODO: Colors https://github.com/phetsims/quantum-measurement/issues/49
+// constants
 const BOX_SIZE = new Dimension2( 200, 200 );
 const TEST_BOX_CONTENTS_HIDDEN_FILL = new LinearGradient( 0, 0, BOX_SIZE.width, 0 )
   .addColorStop( 0, quantumMeasurementColors.multiCoinFirstGradientColorProperty )
