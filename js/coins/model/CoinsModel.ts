@@ -35,7 +35,7 @@ export default class CoinsModel implements TModel {
     } );
     this.quantumCoinExperimentSceneModel = new CoinsExperimentSceneModel( {
       systemType: 'quantum',
-      initialBias: 1.0,
+      initialBias: 0.5,
       tandem: providedOptions.tandem.createTandem( 'quantumCoinExperimentSceneModel' )
     } );
 

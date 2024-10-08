@@ -6,6 +6,7 @@
  */
 
 import Multilink from '../../../../axon/js/Multilink.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
@@ -37,6 +38,8 @@ const AXES_OPTIONS = {
 
 export default class BlochSphereNode extends Node {
 
+  public readonly xAxisOffsetAngleProperty: NumberProperty;
+
   public constructor(
     blochSphere: AbstractBlochSphere,
     providedOptions: BlochSphereNodeOptions ) {
@@ -58,51 +61,32 @@ export default class BlochSphereNode extends Node {
       AXES_OPTIONS
     );
 
-    const xAxisOffsetAngle = Utils.toRadians( -20 );
-    const pointOnTheEquator = ( azimuth: number ) => {
+    const xAxisOffsetAngleProperty = new NumberProperty( Utils.toRadians( -20 ) );
+
+    let pointOnTheEquator = ( azimuth: number ) => {
       return new Vector2(
-        equatorSemiMajorAxis * Math.sin( azimuth + xAxisOffsetAngle ),
-        equatorSemiMajorAxis * Math.cos( azimuth + xAxisOffsetAngle ) * Math.sin( equatorInclinationAngle )
+        equatorSemiMajorAxis * Math.sin( azimuth + xAxisOffsetAngleProperty.value ),
+        equatorSemiMajorAxis * Math.cos( azimuth + xAxisOffsetAngleProperty.value ) * Math.sin( equatorInclinationAngle )
       );
     };
 
-    const pointOnTheSphere = ( azimuth: number, polar: number ) => {
+    let pointOnTheSphere = ( azimuth: number, polar: number ) => {
       return new Vector2(
-        equatorSemiMajorAxis * Math.sin( azimuth + xAxisOffsetAngle ) * Math.cos( polar ),
+        equatorSemiMajorAxis * Math.sin( azimuth + xAxisOffsetAngleProperty.value ) * Math.cos( polar ),
         equatorSemiMajorAxis *
-        ( -Math.sin( polar ) + Math.cos( azimuth + xAxisOffsetAngle ) * Math.sin( equatorInclinationAngle ) * Math.cos( polar ) )
+        ( -Math.sin( polar ) + Math.cos( azimuth + xAxisOffsetAngleProperty.value ) * Math.sin( equatorInclinationAngle ) * Math.cos( polar ) )
       );
     };
 
-    const plusX = pointOnTheEquator( 0 );
-    const minusX = pointOnTheEquator( Math.PI );
-    const xAxis = new Path(
-      new Shape().moveTo( plusX.x, plusX.y ).lineTo( minusX.x, minusX.y ),
-      AXES_OPTIONS
-    );
-
-
-    const plusY = pointOnTheEquator( Math.PI / 2 );
-    const minusY = pointOnTheEquator( -Math.PI / 2 );
-    const yAxis = new Path(
-      new Shape().moveTo( plusY.x, plusY.y ).lineTo( minusY.x, minusY.y ),
-      AXES_OPTIONS
-    );
-
-    const zAxis = new Path(
-      new Shape().moveTo( 0, -sphereRadius ).lineTo( 0, sphereRadius ),
-      AXES_OPTIONS
-    );
+    const xAxis = new Path( null, AXES_OPTIONS );
+    const yAxis = new Path( null, AXES_OPTIONS );
+    const zAxis = new Path( null, AXES_OPTIONS );
 
     const xAxisLabel = new Text( 'X', {
-      centerX: plusX.x + LABELS_OFFSET,
-      centerY: plusX.y,
       fill: 'black',
       font: LABELS_FONT
     } );
     const yAxisLabel = new Text( 'Y', {
-      centerX: plusY.x,
-      centerY: plusY.y - LABELS_OFFSET,
       fill: 'black',
       font: LABELS_FONT
     } );
@@ -111,6 +95,38 @@ export default class BlochSphereNode extends Node {
       centerY: -sphereRadius + LABELS_OFFSET,
       fill: 'black',
       font: LABELS_FONT
+    } );
+
+    xAxisOffsetAngleProperty.link( xAxisOffsetAngle => {
+      pointOnTheEquator = ( azimuth: number ) => {
+        return new Vector2(
+          equatorSemiMajorAxis * Math.sin( azimuth + xAxisOffsetAngle ),
+          equatorSemiMajorAxis * Math.cos( azimuth + xAxisOffsetAngle ) * Math.sin( equatorInclinationAngle )
+        );
+      };
+
+      pointOnTheSphere = ( azimuth: number, polar: number ) => {
+        return new Vector2(
+          equatorSemiMajorAxis * Math.sin( azimuth + xAxisOffsetAngle ) * Math.cos( polar ),
+          equatorSemiMajorAxis *
+          ( -Math.sin( polar ) + Math.cos( azimuth + xAxisOffsetAngle ) * Math.sin( equatorInclinationAngle ) * Math.cos( polar ) )
+        );
+      };
+
+      const plusX = pointOnTheEquator( 0 );
+      const minusX = pointOnTheEquator( Math.PI );
+      xAxis.shape = new Shape().moveTo( plusX.x, plusX.y ).lineTo( minusX.x, minusX.y );
+
+      const plusY = pointOnTheEquator( Math.PI / 2 );
+      const minusY = pointOnTheEquator( -Math.PI / 2 );
+      yAxis.shape = new Shape().moveTo( plusY.x, plusY.y ).lineTo( minusY.x, minusY.y );
+      zAxis.shape = new Shape().moveTo( 0, -sphereRadius ).lineTo( 0, sphereRadius );
+
+      xAxisLabel.centerX = plusX.x + LABELS_OFFSET;
+      xAxisLabel.centerY = plusX.y;
+      yAxisLabel.centerX = plusY.x;
+      yAxisLabel.centerY = plusY.y - LABELS_OFFSET;
+
     } );
 
     const UP = QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
@@ -139,31 +155,33 @@ export default class BlochSphereNode extends Node {
       fill: 'black'
     } );
 
-    const ANGLE_INDICATOR_PATH_OPTIONS = {
-      stroke: 'gray',
-      lineWidth: 1,
-      lineDash: [ 1, 1 ]
-    };
-    const polarAngleIndicator = new Path( null, ANGLE_INDICATOR_PATH_OPTIONS );
-    const azimutalAngleIndicator = new Path( null, ANGLE_INDICATOR_PATH_OPTIONS );
+    // const ANGLE_INDICATOR_PATH_OPTIONS = {
+    //   stroke: 'gray',
+    //   lineWidth: 1,
+    //   lineDash: [ 1, 1 ]
+    // };
+    // const polarAngleIndicator = new Path( null, ANGLE_INDICATOR_PATH_OPTIONS );
+    // const azimutalAngleIndicator = new Path( null, ANGLE_INDICATOR_PATH_OPTIONS );
 
     Multilink.multilink(
       [
         blochSphere.azimutalAngleProperty,
-        blochSphere.polarAngleProperty
-      ], ( azimutalAngle, polarAngle ) => {
+        blochSphere.polarAngleProperty,
+        xAxisOffsetAngleProperty
+      ], ( azimutalAngle, polarAngle, xAxisOffsetAngle ) => {
         const tip = pointOnTheSphere( azimutalAngle, polarAngle );
         stateVector.setTip( tip.x, tip.y );
         stateVector.opacity = Math.cos( azimutalAngle + xAxisOffsetAngle ) < 0 ? 0.4 : 1;
 
-        const shiftedPolar = polarAngle - equatorInclinationAngle;
-        polarAngleIndicator.shape = new Shape().ellipticalArc(
-          0, 0, Math.max( tip.x, equatorSemiMinorAxis ) / 2, equatorSemiMajorAxis / 2, 0, equatorInclinationAngle, -shiftedPolar, shiftedPolar > 0
-        );
-
-        const shiftedazimuth = Math.atan( tip.x / tip.y );
-        azimutalAngleIndicator.shape = new Shape().ellipticalArc(
-          0, 0, equatorSemiMajorAxis / 2, equatorSemiMinorAxis / 2, 0, xAxisOffsetAngle, shiftedazimuth, false );
+        //   const shiftedPolar = polarAngle - equatorInclinationAngle;
+        //   polarAngleIndicator.shape = new Shape().ellipticalArc(
+        //     0, 0, Math.max( tip.x, equatorSemiMinorAxis ) / 2, equatorSemiMajorAxis / 2, 0, equatorInclinationAngle, -shiftedPolar, shiftedPolar > 0
+        //   );
+        //
+        //   const shiftedazimuth = Math.atan( tip.x / tip.y );
+        //   azimutalAngleIndicator.shape = new Shape().ellipticalArc(
+        //     0, 0, equatorSemiMajorAxis / 2, equatorSemiMinorAxis / 2, 0, xAxisOffsetAngleProperty.value, shiftedazimuth, false );
+        // }
       }
     );
 
@@ -186,6 +204,8 @@ export default class BlochSphereNode extends Node {
     }, providedOptions );
 
     super( options );
+
+    this.xAxisOffsetAngleProperty = xAxisOffsetAngleProperty;
   }
 }
 

@@ -7,6 +7,7 @@
  */
 
 import BlochSphereModel from 'model/BlochSphereModel.js';
+import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -28,7 +29,7 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
   public constructor( model: BlochSphereModel, tandem: Tandem ) {
 
     super( {
-      // initialMockupOpacity: 0,
+      initialMockupOpacity: 0,
       mockupImage: new Image( blochSphereScreenMockup_png, {
         scale: ScreenView.DEFAULT_LAYOUT_BOUNDS.width / blochSphereScreenMockup_png.width
       } ),
@@ -75,7 +76,8 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
       children: [
         new Text( 'State to Prepare', { font: new PhetFont( { size: 20, weight: 'bolder' } ) } ),
         blochSphereNode,
-        slidersPanel
+        slidersPanel,
+        new Slider( blochSphereNode.xAxisOffsetAngleProperty, new Range( 0, 2 * Math.PI ) )
       ]
     } );
 

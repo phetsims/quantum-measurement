@@ -6,11 +6,13 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
+import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Image, Text, VBox } from '../../../../scenery/js/imports.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
+import Slider from '../../../../sun/js/Slider.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import spinScreenMockup_png from '../../../images/spinScreenMockup_png.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
@@ -87,7 +89,8 @@ export default class SpinScreenView extends QuantumMeasurementScreenView {
       children: [
         new Text( 'State to Prepare', { font: new PhetFont( { size: 20, weight: 'bolder' } ) } ),
         blochSphereNode,
-        spinStatePanel
+        spinStatePanel,
+        new Slider( blochSphereNode.xAxisOffsetAngleProperty, new Range( 0, 2 * Math.PI ) )
       ]
     } );
 
