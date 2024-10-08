@@ -29,6 +29,7 @@ export default class QuantumMeasurementScreenView extends ScreenView {
 
   // Mockup image, made available to subclasses in case they want to adjust the Z-order.
   protected readonly mockupImage: Image | null = null;
+  protected readonly mockupOpacityProperty: NumberProperty | null = null;
 
   public constructor( providedOptions: QuantumMeasurementScreenViewOptions ) {
 
@@ -48,10 +49,10 @@ export default class QuantumMeasurementScreenView extends ScreenView {
       this.addChild( options.mockupImage );
 
       assert && assert( options.initialMockupOpacity >= 0 && options.initialMockupOpacity <= 1 );
-      const mockupOpacityProperty = new NumberProperty( options.initialMockupOpacity );
+      this.mockupOpacityProperty = new NumberProperty( options.initialMockupOpacity );
 
       // Add a slider that can be used to control the mockup opacity.
-      this.addChild( new MockupOpacitySlider( mockupOpacityProperty, options.mockupImage ) );
+      this.addChild( new MockupOpacitySlider( this.mockupOpacityProperty, options.mockupImage ) );
     }
 
     const resetAllButton = new ResetAllButton( {
