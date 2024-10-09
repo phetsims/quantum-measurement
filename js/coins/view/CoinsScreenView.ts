@@ -10,13 +10,11 @@ import CoinsModel from 'model/CoinsModel.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import LocalizedStringProperty from '../../../../chipper/js/LocalizedStringProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Text } from '../../../../scenery/js/imports.js';
-import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import { SystemType, SystemTypeValues } from '../../common/model/SystemType.js';
+import { SystemType } from '../../common/model/SystemType.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
+import SceneSelectorRadioButtonGroup from '../../common/view/SceneSelectorRadioButtonGroup.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
@@ -47,46 +45,11 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
     this.model = model;
 
     // Add the radio buttons at the top of the screen that will allow users to pick between classical and quantum coins.
-    const experimentTypeItems = SystemTypeValues.map( systemType => ( {
-      createNode: () => {
-        assert && assert( SYSTEM_TYPE_TO_STRING_MAP.has( systemType ), 'no string Property for system type' );
-        return new Text(
-          SYSTEM_TYPE_TO_STRING_MAP.get( systemType )!,
-          {
-            font: new PhetFont( { size: 28, weight: 'bold' } ),
-            fill: systemType === 'quantum' ?
-                  QuantumMeasurementColors.quantumSceneTextColorProperty :
-                  QuantumMeasurementColors.classicalSceneTextColorProperty,
-            maxWidth: 300
-          }
-        );
-      },
-      value: systemType,
-      tandemName: `${systemType.toLowerCase()}RadioButton`,
-      options: { minWidth: 80 }
-    } ) );
-    const deselectedRadioButtonOpacity = 0.3;
-    const experimentTypeRadioButtonGroup = new RectangularRadioButtonGroup<SystemType>(
+    const experimentTypeRadioButtonGroup = new SceneSelectorRadioButtonGroup<SystemType>(
       model.experimentTypeProperty,
-      experimentTypeItems,
+      SYSTEM_TYPE_TO_STRING_MAP,
       {
-        orientation: 'horizontal',
-        spacing: 3,
         centerX: this.layoutBounds.centerX,
-        y: 10,
-        radioButtonOptions: {
-          xMargin: 10,
-          baseColor: QuantumMeasurementColors.selectorButtonSelectedColorProperty,
-          stroke: QuantumMeasurementColors.selectorButtonSelectedStrokeProperty,
-          buttonAppearanceStrategyOptions: {
-            deselectedButtonOpacity: deselectedRadioButtonOpacity,
-            deselectedFill: QuantumMeasurementColors.selectorButtonDeselectedColorProperty,
-            deselectedStroke: QuantumMeasurementColors.selectorButtonDeselectedStrokeProperty
-          },
-          contentAppearanceStrategyOptions: {
-            deselectedContentOpacity: deselectedRadioButtonOpacity
-          }
-        },
         tandem: tandem.createTandem( 'experimentTypeRadioButtonGroup' )
       }
     );

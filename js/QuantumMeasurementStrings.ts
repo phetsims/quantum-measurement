@@ -30,6 +30,7 @@ type StringsType = {
   'initialOrientationStringProperty': LocalizedStringProperty;
   'basisStateStringProperty': LocalizedStringProperty;
   'itemToPreparePatternStringProperty': LocalizedStringProperty;
+  'manyPhotonsStringProperty': LocalizedStringProperty;
   'multipleCoinMeasurementsStringProperty': LocalizedStringProperty;
   'newCoinStringProperty': LocalizedStringProperty;
   'observeStringProperty': LocalizedStringProperty;
@@ -43,6 +44,7 @@ type StringsType = {
   'reprepareAndRevealStringProperty': LocalizedStringProperty;
   'revealStringProperty': LocalizedStringProperty;
   'singleCoinMeasurementsStringProperty': LocalizedStringProperty;
+  'singlePhotonStringProperty': LocalizedStringProperty;
   'stateToPrepareStringProperty': LocalizedStringProperty;
   'tailsStringProperty': LocalizedStringProperty;
   'upStringProperty': LocalizedStringProperty;

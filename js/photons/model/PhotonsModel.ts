@@ -13,12 +13,14 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import TModel from '../../../../joist/js/TModel.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
+import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import PhotonDetector from './PhotonDetector.js';
 import PolarizingBeamSplitter from './PolarizingBeamSplitter.js';
@@ -26,7 +28,13 @@ import PolarizingBeamSplitter from './PolarizingBeamSplitter.js';
 type SelfOptions = EmptySelfOptions;
 type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
+export const ExperimentModeTypeValues = [ 'singlePhoton', 'multiplePhotons' ] as const;
+export type ExperimentModeType = ( typeof ExperimentModeTypeValues )[number];
+
 export default class PhotonsModel implements TModel {
+
+  // The experiment mode, either single-photon or multiple-photon.
+  public readonly experimentModeProperty: Property<ExperimentModeType>;
 
   // The polarizing beam splitter that the photons will encounter.
   public readonly polarizingBeamSplitter: PolarizingBeamSplitter;
@@ -39,6 +47,11 @@ export default class PhotonsModel implements TModel {
   public readonly horizontalPolarizationDetector: PhotonDetector;
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
+
+    this.experimentModeProperty = new Property<ExperimentModeType>( 'singlePhoton', {
+      tandem: providedOptions.tandem.createTandem( 'experimentModeProperty' ),
+      phetioValueType: StringUnionIO( ExperimentModeTypeValues )
+    } );
 
     this.polarizingBeamSplitter = new PolarizingBeamSplitter( new Vector2( 0, 0 ), {
       tandem: providedOptions.tandem.createTandem( 'polarizingBeamSplitter' )
@@ -63,6 +76,7 @@ export default class PhotonsModel implements TModel {
    * Resets the model.
    */
   public reset(): void {
+    this.experimentModeProperty.reset();
     this.photonPolarizationAngleProperty.reset();
   }
 
