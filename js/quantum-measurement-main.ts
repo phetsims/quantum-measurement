@@ -16,8 +16,8 @@ import QuantumMeasurementStrings from './QuantumMeasurementStrings.js';
 import './common/QuantumMeasurementQueryParameters.js';
 import SpinScreen from './spin/SpinScreen.js';
 
-// Launch the sim. Beware that scenery Image nodes created outside simLauncher.launch() will have zero bounds
-// until the images are fully loaded. See https://github.com/phetsims/coulombs-law/issues/70#issuecomment-429037461
+// Launch the sim. Beware that scenery Image nodes created outside simLauncher.launch() will have zero bounds until the
+// images are fully loaded, see https://github.com/phetsims/coulombs-law/issues/70#issuecomment-429037461.
 simLauncher.launch( () => {
 
   const titleStringProperty = QuantumMeasurementStrings[ 'quantum-measurement' ].titleStringProperty;
