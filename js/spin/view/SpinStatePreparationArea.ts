@@ -8,8 +8,6 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -25,7 +23,7 @@ import { SpinTypes, SpinValues } from '../model/SpinModel.js';
 
 export default class SpinStatePreparationArea extends VBox {
 
-  public constructor( blochSphere: SimpleBlochSphere, layoutBounds: Bounds2, mockupOpacityProperty: TReadOnlyProperty<number>, tandem: Tandem ) {
+  public constructor( blochSphere: SimpleBlochSphere, tandem: Tandem ) {
 
     // TODO: This in the strings file https://github.com/phetsims/quantum-measurement/issues/53
     const spinLabelsMap = new Map<SpinTypes, string>( [
@@ -76,12 +74,6 @@ export default class SpinStatePreparationArea extends VBox {
       ],
       spacing: 20,
       margin: 20
-    } );
-
-
-    // TODO: This is a temporary workaround to make the mockup opacity work. We need to refactor this to use the mockup https://github.com/phetsims/quantum-measurement/issues/53
-    mockupOpacityProperty.link( opacity => {
-      this.opacity = 1 - opacity;
     } );
   }
 }
