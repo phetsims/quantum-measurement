@@ -14,12 +14,14 @@ import { Line } from '../../../../kite/js/imports.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
+import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
 type SelfOptions = EmptySelfOptions;
 type PolarizingBeamSplitterOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
-export type PresetPolarizationDirections = ( [ 'vertical', 'horizontal', 'fortyFiveDegrees', 'custom' ] )[number];
+const PresetPolarizationValues = [ 'vertical', 'horizontal', 'fortyFiveDegrees', 'custom' ] as const;
+export type PresetPolarizationDirections = ( typeof PresetPolarizationValues )[number];
 
 // constants
 const WIDTH = 0.1; // the width, in meters, of the beam splitter
@@ -50,7 +52,9 @@ export default class PolarizingBeamSplitter {
     this.positionalLine = new Line( endpoint1, endpoint2 );
 
     this.presetPolarizationDirectionProperty = new Property<PresetPolarizationDirections>( 'fortyFiveDegrees', {
-      tandem: providedOptions.tandem.createTandem( 'presetPolarizationDirectionProperty' )
+      tandem: providedOptions.tandem.createTandem( 'presetPolarizationDirectionProperty' ),
+      phetioValueType: StringUnionIO( PresetPolarizationValues ),
+      validValues: PresetPolarizationValues
     } );
     this.customPolarizationAngleProperty = new NumberProperty( 45, {
       tandem: providedOptions.tandem.createTandem( 'customPolarizationAngleProperty' )
