@@ -11,12 +11,12 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import AbstractBlochSphere, { AbstractBlochSphereOptions } from '../../common/model/AbstractBlochSphere.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import { SpinValues } from './SpinModel.js';
 
 type SelfOptions = EmptySelfOptions;
 
 export type SimpleBlochSphereOptions = SelfOptions & AbstractBlochSphereOptions;
 
-export const SPIN_VALUES = [ 'Z_PLUS', 'Z_MINUS', 'X_PLUS' ];
 
 export default class SimpleBlochSphere extends AbstractBlochSphere {
 
@@ -31,7 +31,7 @@ export default class SimpleBlochSphere extends AbstractBlochSphere {
     super( options );
 
     this.spinStateProperty = new Property<string>( 'Z_PLUS', {
-      validValues: SPIN_VALUES
+      validValues: SpinValues
     } );
 
     this.spinStateProperty.link( spinState => {

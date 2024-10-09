@@ -63,7 +63,7 @@ export default class BlochSphereNode extends Node {
       AXES_OPTIONS
     );
 
-    const xAxisOffsetAngleProperty = new NumberProperty( Utils.toRadians( -20 ) );
+    const xAxisOffsetAngleProperty = new NumberProperty( Utils.toRadians( 20 ) );
 
     let pointOnTheEquator = ( azimuth: number ) => {
       return new Vector2(
