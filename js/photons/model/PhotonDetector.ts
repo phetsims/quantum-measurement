@@ -16,8 +16,6 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhotonDetectorOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
-
-// constants
 export type DetectionDirection = ( [ 'up', 'down' ] )[number];
 
 export default class PhotonDetector {

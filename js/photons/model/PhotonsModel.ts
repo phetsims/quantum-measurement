@@ -4,14 +4,16 @@
  * PhotonsModel is the primary model class for the Photons screen.  It manages the general model state and behavior for
  * the photons that travel from the source to the detectors.
  *
- * Part of what this model does is position photons in two-dimensional space.  This space is set up to center on the
+ * Part of what this model does is move photons in two-dimensional space.  This space is set up to center on the
  * polarizing beam splitter, which is at the center of the screen.  The x-axis is horizontal and the y-axis is vertical.
- * Units are in meters.
+ * Units are in meters.  The photons are emitted from a source, travel to the polarizing beam splitter, and then are
+ * either reflected or transmitted.  The photons are then detected by two photon detectors.
  *
  * @author John Blanco, PhET Interactive Simulations
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import TModel from '../../../../joist/js/TModel.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
@@ -19,13 +21,17 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import PhotonDetector from './PhotonDetector.js';
+import PolarizingBeamSplitter from './PolarizingBeamSplitter.js';
 
 type SelfOptions = EmptySelfOptions;
 type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
 export default class PhotonsModel implements TModel {
 
-  // The angle of polarization for the polarizing beam splitter.
+  // The polarizing beam splitter that the photons will encounter.
+  public readonly polarizingBeamSplitter: PolarizingBeamSplitter;
+
+  // The angle of polarization for the polarizing beam splitter, in degrees.  Zero is horizontal and 90 is vertical.
   public readonly photonPolarizationAngleProperty: NumberProperty;
 
   // photon detectors
@@ -34,7 +40,12 @@ export default class PhotonsModel implements TModel {
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
-    this.photonPolarizationAngleProperty = new NumberProperty( 0, {
+    this.polarizingBeamSplitter = new PolarizingBeamSplitter( new Vector2( 0, 0 ), {
+      tandem: providedOptions.tandem.createTandem( 'polarizingBeamSplitter' )
+    } );
+
+    this.photonPolarizationAngleProperty = new NumberProperty( 45, {
+      range: new Range( 0, 90 ),
       tandem: providedOptions.tandem.createTandem( 'photonPolarizationAngleProperty' )
     } );
 
