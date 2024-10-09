@@ -2,6 +2,8 @@
 /**
  * Visual representation of the Bloch Sphere, meaning an orb with axis and the state vector.
  *
+ * // TODO: Show the angle indicators and clean code, see https://github.com/phetsims/quantum-measurement/issues/44
+ *
  * @author Agustín Vallejo
  */
 
