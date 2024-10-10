@@ -12,23 +12,19 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
-import Range from '../../../../dot/js/Range.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
 import TModel from '../../../../joist/js/TModel.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import PhotonDetector from './PhotonDetector.js';
-import PolarizingBeamSplitter from './PolarizingBeamSplitter.js';
+import PhotonsExperimentSceneModel from './PhotonsExperimentSceneModel.js';
 
 type SelfOptions = EmptySelfOptions;
-type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
+type PhotonsModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
-export const ExperimentModeTypeValues = [ 'singlePhoton', 'multiplePhotons' ] as const;
+export const ExperimentModeTypeValues = [ 'singlePhoton', 'manyPhotons' ] as const;
 export type ExperimentModeType = ( typeof ExperimentModeTypeValues )[number];
 
 export default class PhotonsModel implements TModel {
@@ -36,39 +32,21 @@ export default class PhotonsModel implements TModel {
   // The experiment mode, either single-photon or multiple-photon.
   public readonly experimentModeProperty: Property<ExperimentModeType>;
 
-  // The polarizing beam splitter that the photons will encounter.
-  public readonly polarizingBeamSplitter: PolarizingBeamSplitter;
+  // The two scene models for the Photons screen.
+  public readonly singlePhotonSceneModel: PhotonsExperimentSceneModel;
+  public readonly manyPhotonsExperimentSceneModel: PhotonsExperimentSceneModel;
 
-  // The angle of polarization for the polarizing beam splitter, in degrees.  Zero is horizontal and 90 is vertical.
-  public readonly photonPolarizationAngleProperty: NumberProperty;
-
-  // photon detectors
-  public readonly verticalPolarizationDetector: PhotonDetector;
-  public readonly horizontalPolarizationDetector: PhotonDetector;
-
-  public constructor( providedOptions: QuantumMeasurementModelOptions ) {
+  public constructor( providedOptions: PhotonsModelOptions ) {
 
     this.experimentModeProperty = new Property<ExperimentModeType>( 'singlePhoton', {
       tandem: providedOptions.tandem.createTandem( 'experimentModeProperty' ),
       phetioValueType: StringUnionIO( ExperimentModeTypeValues )
     } );
-
-    this.polarizingBeamSplitter = new PolarizingBeamSplitter( new Vector2( 0, 0 ), {
-      tandem: providedOptions.tandem.createTandem( 'polarizingBeamSplitter' )
+    this.singlePhotonSceneModel = new PhotonsExperimentSceneModel( {
+      tandem: providedOptions.tandem.createTandem( 'singlePhotonSceneModel' )
     } );
-
-    this.photonPolarizationAngleProperty = new NumberProperty( 45, {
-      range: new Range( 0, 90 ),
-      tandem: providedOptions.tandem.createTandem( 'photonPolarizationAngleProperty' )
-    } );
-
-    // Create the photon detectors that will measure the rate at which photons are arriving after being either reflected
-    // or transmitted by the polarizing beam splitter.
-    this.verticalPolarizationDetector = new PhotonDetector( new Vector2( 0, 0.5 ), 'up', {
-      tandem: providedOptions.tandem.createTandem( 'verticalPolarizationDetector' )
-    } );
-    this.horizontalPolarizationDetector = new PhotonDetector( new Vector2( 0.25, -0.5 ), 'down', {
-      tandem: providedOptions.tandem.createTandem( 'horizontalPolarizationDetector' )
+    this.manyPhotonsExperimentSceneModel = new PhotonsExperimentSceneModel( {
+      tandem: providedOptions.tandem.createTandem( 'manyPhotonsExperimentSceneModel' )
     } );
   }
 
@@ -77,7 +55,6 @@ export default class PhotonsModel implements TModel {
    */
   public reset(): void {
     this.experimentModeProperty.reset();
-    this.photonPolarizationAngleProperty.reset();
   }
 
   /**
