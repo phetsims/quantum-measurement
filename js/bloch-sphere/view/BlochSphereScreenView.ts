@@ -56,8 +56,8 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
         azimuthSlider
       ]
     } ), {
-      fill: QuantumMeasurementColors.basisStatesPanelFillColorProperty,
-      stroke: QuantumMeasurementColors.basisStatesPanelStrokeColorProperty,
+      fill: QuantumMeasurementColors.controlPanelFillColorProperty,
+      stroke: QuantumMeasurementColors.controlPanelStrokeColorProperty,
       yMargin: 10,
       minWidth: 270
     } );

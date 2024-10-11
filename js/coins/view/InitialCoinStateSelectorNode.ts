@@ -108,8 +108,8 @@ export default class InitialCoinStateSelectorNode extends VBox {
     } );
 
     const selectorPanel = new Panel( selectorPanelContent, {
-      fill: QuantumMeasurementColors.basisStatesPanelFillColorProperty,
-      stroke: QuantumMeasurementColors.basisStatesPanelStrokeColorProperty,
+      fill: QuantumMeasurementColors.controlPanelFillColorProperty,
+      stroke: QuantumMeasurementColors.controlPanelStrokeColorProperty,
       yMargin: 10,
       minWidth: 270,
       visibleProperty: new GatedVisibleProperty( preparingExperimentProperty, radioButtonGroupTandem ),

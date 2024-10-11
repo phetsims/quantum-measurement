@@ -104,13 +104,13 @@ const QuantumMeasurementColors = {
     default: '#0ffdfd'
   } ),
 
-  // Initial Orientation/Basis States panel stroke
-  basisStatesPanelStrokeColorProperty: new ProfileColorProperty( quantumMeasurement, 'basisStatesPanelStroke', {
+  // control panel stroke
+  controlPanelStrokeColorProperty: new ProfileColorProperty( quantumMeasurement, 'basisStatesPanelStroke', {
     default: 'transparent'
   } ),
 
-  // Initial Orientation/Basis States panel fill
-  basisStatesPanelFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'basisStatesPanelFill', {
+  // control panel fill
+  controlPanelFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'basisStatesPanelFill', {
     default: '#EEE'
   } ),
 
@@ -125,6 +125,14 @@ const QuantumMeasurementColors = {
   } ),
   landingZoneFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'landingZoneFill', {
     default: 'rgba( 255, 192, 203, 0.5 )'
+  } ),
+
+  // Colors for the photon polarization
+  horizontalPolarizationColorProperty: new ProfileColorProperty( quantumMeasurement, 'horizontalPolarization', {
+    default: '#F0F'
+  } ),
+  verticalPolarizationColorProperty: new ProfileColorProperty( quantumMeasurement, 'verticalPolarization', {
+    default: '#00F'
   } )
 };
 

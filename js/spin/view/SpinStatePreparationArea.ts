@@ -47,7 +47,7 @@ export default class SpinStatePreparationArea extends VBox {
         center: new Vector2( 100, 100 ),
         tandem: tandem.createTandem( 'numberOfCoinsRadioButtonGroup' ),
         radioButtonOptions: {
-          baseColor: QuantumMeasurementColors.basisStatesPanelFillColorProperty
+          baseColor: QuantumMeasurementColors.controlPanelFillColorProperty
         }
       }
     );

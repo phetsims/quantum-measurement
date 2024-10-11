@@ -59,6 +59,15 @@ export default class PolarizingBeamSplitter {
     this.customPolarizationAngleProperty = new NumberProperty( 45, {
       tandem: providedOptions.tandem.createTandem( 'customPolarizationAngleProperty' )
     } );
+
+    // TODO: This is temporary code to log changes to the properties.  It will be removed later.  See https://github.com/phetsims/quantum-measurement/issues/52.
+    this.presetPolarizationDirectionProperty.lazyLink( presetPolarizationDirection => {
+      console.log( `presetPolarizationDirection = ${presetPolarizationDirection}` );
+    } );
+    this.customPolarizationAngleProperty.lazyLink( customPolarizationAngleProperty => {
+      console.log( `customPolarizationAngleProperty = ${customPolarizationAngleProperty}` );
+    } );
+
   }
 }
 
