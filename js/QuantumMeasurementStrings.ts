@@ -21,11 +21,14 @@ type StringsType = {
   };
   'coinStringProperty': LocalizedStringProperty;
   'coinBiasStringProperty': LocalizedStringProperty;
+  'customStringProperty': LocalizedStringProperty;
   'downStringProperty': LocalizedStringProperty;
   'flipStringProperty': LocalizedStringProperty;
   'flipAndRevealStringProperty': LocalizedStringProperty;
+  'fortyFiveDegreesStringProperty': LocalizedStringProperty;
   'headsStringProperty': LocalizedStringProperty;
   'hideStringProperty': LocalizedStringProperty;
+  'horizontalStringProperty': LocalizedStringProperty;
   'identicalCoinsStringProperty': LocalizedStringProperty;
   'initialOrientationStringProperty': LocalizedStringProperty;
   'basisStateStringProperty': LocalizedStringProperty;
@@ -34,6 +37,7 @@ type StringsType = {
   'multipleCoinMeasurementsStringProperty': LocalizedStringProperty;
   'newCoinStringProperty': LocalizedStringProperty;
   'observeStringProperty': LocalizedStringProperty;
+  'photonPolarizationAngleStringProperty': LocalizedStringProperty;
   'classicalCoinStringProperty': LocalizedStringProperty;
   'preparedStateStringProperty': LocalizedStringProperty;
   'probabilityStringProperty': LocalizedStringProperty;
@@ -48,6 +52,7 @@ type StringsType = {
   'stateToPrepareStringProperty': LocalizedStringProperty;
   'tailsStringProperty': LocalizedStringProperty;
   'upStringProperty': LocalizedStringProperty;
+  'verticalStringProperty': LocalizedStringProperty;
 };
 
 const QuantumMeasurementStrings = getStringModule( 'QUANTUM_MEASUREMENT' ) as StringsType;

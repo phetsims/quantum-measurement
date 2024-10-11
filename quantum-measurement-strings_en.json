@@ -20,6 +20,9 @@
   "coinBias": {
     "value": "Coin Bias (State)"
   },
+  "custom": {
+    "value": "custom"
+  },
   "down": {
     "value": "Down"
   },
@@ -29,11 +32,17 @@
   "flipAndReveal": {
     "value": "Flip and Reveal"
   },
+  "fortyFiveDegrees": {
+    "value": "45 degrees"
+  },
   "heads": {
     "value": "Heads"
   },
   "hide": {
     "value": "Hide"
+  },
+  "horizontal": {
+    "value": "Horizontal"
   },
   "identicalCoins": {
     "value": "Identical Coins"
@@ -58,6 +67,9 @@
   },
   "observe": {
     "value": "Observe"
+  },
+  "photonPolarizationAngle": {
+    "value": "Photon Polarization Angle"
   },
   "classicalCoin": {
     "value": "Classical Coin"
@@ -100,5 +112,8 @@
   },
   "up": {
     "value": "Up"
+  },
+  "vertical": {
+    "value": "Vertical"
   }
 }

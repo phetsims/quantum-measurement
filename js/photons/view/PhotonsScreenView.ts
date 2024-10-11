@@ -38,7 +38,8 @@ export default class PhotonsScreenView extends QuantumMeasurementScreenView {
         [ model.experimentModeProperty ],
         experimentMode => experimentMode === 'singlePhoton'
       ),
-      center: ScreenView.DEFAULT_LAYOUT_BOUNDS.center,
+      centerX: ScreenView.DEFAULT_LAYOUT_BOUNDS.centerX,
+      bottom: ScreenView.DEFAULT_LAYOUT_BOUNDS.height - 15,
       tandem: tandem.createTandem( 'singlePhotonExperimentSceneView' )
     } );
     const manyPhotonExperimentSceneView = new PhotonsExperimentSceneView( model.manyPhotonsExperimentSceneModel, {
@@ -46,7 +47,8 @@ export default class PhotonsScreenView extends QuantumMeasurementScreenView {
         [ model.experimentModeProperty ],
         experimentMode => experimentMode === 'manyPhotons'
       ),
-      center: ScreenView.DEFAULT_LAYOUT_BOUNDS.center.plusXY( 5, 5 ),
+      centerX: ScreenView.DEFAULT_LAYOUT_BOUNDS.centerX + 2,
+      bottom: ScreenView.DEFAULT_LAYOUT_BOUNDS.height - 13,
       tandem: tandem.createTandem( 'manyPhotonExperimentSceneView' )
     } );
 
