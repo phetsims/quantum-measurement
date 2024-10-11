@@ -34,7 +34,7 @@ const EXPERIMENTS = [
 ] as const;
 type ValidExperiments = typeof EXPERIMENTS[number];
 
-export const SpinValues = [ 'Z_PLUS', 'Z_MINUS', 'X_PLUS' ] as const;
+export const SpinValues = [ 'Z_PLUS', 'X_PLUS', 'Z_MINUS' ] as const;
 export type SpinTypes = typeof SpinValues[number]; // Creates a union type of 'Z_PLUS' | 'Z_MINUS' | 'X_PLUS'
 
 export default class SpinModel implements TModel {

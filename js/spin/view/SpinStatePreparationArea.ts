@@ -28,8 +28,8 @@ export default class SpinStatePreparationArea extends VBox {
     // TODO: This in the strings file https://github.com/phetsims/quantum-measurement/issues/53
     const spinLabelsMap = new Map<SpinTypes, string>( [
       [ 'Z_PLUS', '"+Z"    ⟨Sz⟩ = +ħ/2' ],
-      [ 'Z_MINUS', '"-Z"    ⟨Sz⟩ = -ħ/2' ],
-      [ 'X_PLUS', '"+X"    ⟨Sz⟩ = 0' ]
+      [ 'X_PLUS', '"+X"    ⟨Sz⟩ = 0' ], //
+      [ 'Z_MINUS', '"-Z"    ⟨Sz⟩ = -ħ/2' ]
       ] );
 
     const createRadioButtonGroupItem = ( value: SpinTypes ) => {
@@ -72,7 +72,7 @@ export default class SpinStatePreparationArea extends VBox {
         new Slider( blochSphereNode.xAxisOffsetAngleProperty, new Range( 0, 2 * Math.PI ) ),
         spinStatePanel
       ],
-      spacing: 20,
+      spacing: 10,
       margin: 20
     } );
   }

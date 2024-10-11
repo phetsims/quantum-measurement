@@ -9,6 +9,7 @@
 
 import Multilink from '../../../../axon/js/Multilink.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
@@ -202,7 +203,9 @@ export default class BlochSphereNode extends Node {
         // polarAngleIndicator,
         // azimutalAngleIndicator,
         stateVector
-      ]
+      ],
+      // Increasing bounds horizontally so the labels have space to move
+      localBounds: new Bounds2( -1.5 * sphereRadius, -sphereRadius, 1.5 * sphereRadius, sphereRadius )
     }, providedOptions );
 
     super( options );
