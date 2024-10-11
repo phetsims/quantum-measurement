@@ -16,6 +16,8 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import SimpleBlochSphere from './SimpleBlochSphere.js';
+import SpinExperiments from './SpinExperiments.js';
+import SternGerlachModel from './SternGerlachModel.js';
 
 type SelfOptions = {
   // TODO add options that are specific to QuantumMeasurementModel here, see see https://github.com/phetsims/quantum-measurement/issues/1.
@@ -23,34 +25,57 @@ type SelfOptions = {
 
 type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
-const EXPERIMENTS = [
-  'Experiment 1 [SGz]',
-  'Experiment 2 [SGx]',
-  'Experiment 3 [Sz, Sx]',
-  'Experiment 4 [Sz, Sz]',
-  'Experiment 5 [Sx, Sz]',
-  'Experiment 6 [Sx, Sx]',
-  'Custom'
-] as const;
-type ValidExperiments = typeof EXPERIMENTS[number];
 
+// TODO: Consider using EnumerationValues for these, see https://github.com/phetsims/quantum-measurement/issues/53
 export const SpinValues = [ 'Z_PLUS', 'X_PLUS', 'Z_MINUS' ] as const;
 export type SpinTypes = typeof SpinValues[number]; // Creates a union type of 'Z_PLUS' | 'Z_MINUS' | 'X_PLUS'
 
+export const SourceModes = [ 'single', 'continuous' ] as const;
+export type SourceModeTypes = typeof SourceModes[number];
+
 export default class SpinModel implements TModel {
+
+  public readonly sourceModeProperty: Property<SourceModeTypes>;
 
   public readonly blochSphere: SimpleBlochSphere;
 
-  public readonly experiments = EXPERIMENTS;
-  public readonly currentExperimentProperty: Property<ValidExperiments>;
+  public readonly currentExperimentProperty: Property<SpinExperiments>;
+
+  // Models for the three available Stern-Gerlach experiments. Second and Third are counted top to bottom.
+  public readonly firstSternGerlachModel: SternGerlachModel;
+  public readonly secondSternGerlachModel: SternGerlachModel;
+  public readonly thirdSternGerlachModel: SternGerlachModel;
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
+
+    this.sourceModeProperty = new Property<SourceModeTypes>( 'single' );
 
     this.blochSphere = new SimpleBlochSphere( {
       tandem: providedOptions.tandem.createTandem( 'blochSphere' )
     } );
 
-    this.currentExperimentProperty = new Property<ValidExperiments>( 'Experiment 1 [SGz]' );
+    this.currentExperimentProperty = new Property<SpinExperiments>( SpinExperiments.EXPERIMENT_1 );
+
+    const sternGerlachModelsTandem = providedOptions.tandem.createTandem( 'sternGerlachModels' );
+    this.firstSternGerlachModel = new SternGerlachModel( true, sternGerlachModelsTandem.createTandem( 'firstSternGerlachModel' ) );
+    this.secondSternGerlachModel = new SternGerlachModel( false, sternGerlachModelsTandem.createTandem( 'secondSternGerlachModel' ) );
+    this.thirdSternGerlachModel = new SternGerlachModel( false, sternGerlachModelsTandem.createTandem( 'thirdSternGerlachModel' ) );
+
+    const sternGerlachModels = [ this.firstSternGerlachModel, this.secondSternGerlachModel, this.thirdSternGerlachModel ];
+
+    this.currentExperimentProperty.link( experiment => {
+      sternGerlachModels.forEach( ( sternGerlachModel, index ) => {
+        if ( experiment.experimentSettings.length > index ) {
+          // TODO: Should visibility be only handled via the View? https://github.com/phetsims/quantum-measurement/issues/53
+          sternGerlachModel.isVisibleProperty.set( experiment.experimentSettings[ index ].active );
+          sternGerlachModel.isZOrientedProperty.set( experiment.experimentSettings[ index ].isZOriented );
+        }
+        else {
+          sternGerlachModel.isVisibleProperty.set( false );
+        }
+      } );
+    } );
+
   }
 
   /**
