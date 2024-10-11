@@ -1,11 +1,10 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * SpinStatePreparationArea is a composite UI component that allows users to configure a two-state classical or
- * quantum system - basically a classical or quantum coin - for a set of experiments where the user can flip and reveal
- * the coins. This is implemented as a VBox that acts as a column in the UI.
+ * SpinStatePreparationArea is a composite UI component that allows users to prepare the spin state of a quantum system
+ * between three options: Z+, X+, Z-. It also shows a Bloch Sphere that represents the quantum state of the system.
  *
- * @author John Blanco, PhET Interactive Simulations
+ * @author Agustín Vallejo
  */
 
 import Range from '../../../../dot/js/Range.js';
@@ -28,7 +27,7 @@ export default class SpinStatePreparationArea extends VBox {
     // TODO: This in the strings file https://github.com/phetsims/quantum-measurement/issues/53
     const spinLabelsMap = new Map<SpinTypes, string>( [
       [ 'Z_PLUS', '"+Z"    ⟨Sz⟩ = +ħ/2' ],
-      [ 'X_PLUS', '"+X"    ⟨Sz⟩ = 0' ], //
+      [ 'X_PLUS', '"+X"    ⟨Sz⟩ = 0' ],
       [ 'Z_MINUS', '"-Z"    ⟨Sz⟩ = -ħ/2' ]
       ] );
 

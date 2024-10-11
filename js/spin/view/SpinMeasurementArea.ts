@@ -7,16 +7,15 @@
  * @author Agustín Vallejo
  */
 
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import { Shape } from '../../../../kite/js/imports.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { HBox, Node, Path, Text, VBox } from '../../../../scenery/js/imports.js';
+import { HBox, Node, Text, VBox } from '../../../../scenery/js/imports.js';
 import ComboBox, { ComboBoxItem } from '../../../../sun/js/ComboBox.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import SpinExperiments from '../model/SpinExperiments.js';
 import SpinModel from '../model/SpinModel.js';
+import ParticleSourceNode from './ParticleSourceNode.js';
+import SternGerlachNode from './SternGerlachNode.js';
 
 export default class SpinMeasurementArea extends VBox {
 
@@ -40,41 +39,13 @@ export default class SpinMeasurementArea extends VBox {
         new HBox( {
           spacing: 50,
           children: [
-            new Path( new Shape().rect( 0, 0, 100, 100 ),
-              { fill: 'black' } ),
-            new Node( {
-              children: [
-                new Path( new Shape().rect( 0, 0, 100, 100 ),
-                  { fill: 'red', visibleProperty: model.firstSternGerlachModel.isVisibleProperty } ),
-                new Text( new DerivedProperty(
-                  [ model.firstSternGerlachModel.isZOrientedProperty ],
-                  ( isZOriented: boolean ) => isZOriented ? 'Z' : 'X' ),
-                  { font: new PhetFont( 16 ), fill: 'white', center: new Vector2( 50, 50 ) } )
-              ]
-            } ),
+            new ParticleSourceNode( model.sourceModeProperty, tandem ),
+            new SternGerlachNode( model.firstSternGerlachModel, tandem ),
             new VBox( {
               spacing: 20,
               children: [
-                new Node( {
-                  children: [
-                    new Path( new Shape().rect( 0, 0, 100, 100 ),
-                      { fill: 'green', visibleProperty: model.secondSternGerlachModel.isVisibleProperty } ),
-                    new Text( new DerivedProperty(
-                      [ model.secondSternGerlachModel.isZOrientedProperty ],
-                      ( isZOriented: boolean ) => isZOriented ? 'Z' : 'X' ),
-                      { font: new PhetFont( 16 ), fill: 'white', center: new Vector2( 50, 50 ) } )
-                  ]
-                } ),
-                new Node( {
-                  children: [
-                    new Path( new Shape().rect( 0, 0, 100, 100 ),
-                      { fill: 'blue', visibleProperty: model.secondSternGerlachModel.isVisibleProperty } ),
-                    new Text( new DerivedProperty(
-                      [ model.secondSternGerlachModel.isZOrientedProperty ],
-                      ( isZOriented: boolean ) => isZOriented ? 'Z' : 'X' ),
-                      { font: new PhetFont( 16 ), fill: 'white', center: new Vector2( 50, 50 ) } )
-                  ]
-                } )
+                new SternGerlachNode( model.secondSternGerlachModel, tandem ),
+                new SternGerlachNode( model.secondSternGerlachModel, tandem )
               ]
             } )
           ]
