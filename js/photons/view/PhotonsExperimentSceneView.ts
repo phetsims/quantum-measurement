@@ -11,7 +11,7 @@ import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import { Color, HBox, HBoxOptions, Rectangle } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import PhotonsExperimentSceneModel from '../model/PhotonsExperimentSceneModel.js';
-import PhotonPolarizationAngleControl from './PhotonPolarizationAngleControl.js';
+// import PhotonPolarizationAngleControl from './PhotonPolarizationAngleControl.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhotonsExperimentSceneViewOptions = SelfOptions & WithRequired<HBoxOptions, 'tandem'>;
@@ -38,16 +38,19 @@ export default class PhotonsExperimentSceneView extends HBox {
       lineWidth: 2
     } );
 
-    const photonPolarizationAngleControl = new PhotonPolarizationAngleControl(
-      model.polarizingBeamSplitter.presetPolarizationDirectionProperty,
-      model.polarizingBeamSplitter.customPolarizationAngleProperty,
-      {
-        tandem: providedOptions.tandem.createTandem( 'photonPolarizationAngleControl' )
-      }
-    );
+    // const photonPolarizationAngleControl = new PhotonPolarizationAngleControl(
+    //   model.polarizingBeamSplitter.presetPolarizationDirectionProperty,
+    //   model.polarizingBeamSplitter.customPolarizationAngleProperty,
+    //   {
+    //     tandem: providedOptions.tandem.createTandem( 'photonPolarizationAngleControl' )
+    //   }
+    // );
 
     const options = optionize<PhotonsExperimentSceneViewOptions, SelfOptions, HBoxOptions>()( {
-      children: [ photonPolarizationAngleControl, testRect2, testRect3, testRect4 ],
+      children: [
+        // photonPolarizationAngleControl,
+
+        testRect2, testRect3, testRect4 ],
       spacing: 3,
       align: 'bottom'
     }, providedOptions );
