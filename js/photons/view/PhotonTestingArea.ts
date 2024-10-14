@@ -11,10 +11,11 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import { Color, Node, NodeOptions, Rectangle } from '../../../../scenery/js/imports.js';
+import { Node, NodeOptions } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import PhotonsExperimentSceneModel from '../model/PhotonsExperimentSceneModel.js';
 import PolarizingBeamSplitterNode from './PolarizingBeamSplitterNode.js';
+import PhotonEmitterNode from './PhotonEmitterNode.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhotonTestingAreaOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
@@ -23,20 +24,16 @@ export default class PhotonTestingArea extends Node {
 
   public constructor( model: PhotonsExperimentSceneModel, providedOptions: PhotonTestingAreaOptions ) {
 
-    const sizingRectColor = new Color( '#947A0C' );
-    const sizingRect = new Rectangle( 0, 0, 370, 505, {
-      fill: sizingRectColor,
-      stroke: sizingRectColor.darkerColor( 0.5 ),
-      opacity: 0.5,
-      lineWidth: 2
-    } );
-
     const photonTestingAreaModelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       // TODO: Revise and document this when all element have been added, see https://github.com/phetsims/quantum-measurement/issues/52
       Vector2.ZERO,
       new Vector2( 100, 100 ),
       500 // empirically determined
     );
+
+    const photonEmitterNode = new PhotonEmitterNode( model.photonEmitter, photonTestingAreaModelViewTransform, {
+      tandem: providedOptions.tandem.createTandem( 'photonEmitterNode' )
+    } );
 
     const polarizingBeamSplitterNode = new PolarizingBeamSplitterNode(
       model.polarizingBeamSplitter,
@@ -47,7 +44,7 @@ export default class PhotonTestingArea extends Node {
     );
 
     const options = optionize<PhotonTestingAreaOptions, SelfOptions, NodeOptions>()( {
-      children: [ sizingRect, polarizingBeamSplitterNode ]
+      children: [ photonEmitterNode, polarizingBeamSplitterNode ]
     }, providedOptions );
 
     super( options );

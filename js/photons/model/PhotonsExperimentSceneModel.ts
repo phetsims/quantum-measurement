@@ -15,6 +15,7 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import PhotonDetector from './PhotonDetector.js';
+import PhotonEmitter from './PhotonEmitter.js';
 import PolarizingBeamSplitter from './PolarizingBeamSplitter.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -31,6 +32,8 @@ export default class PhotonsExperimentSceneModel {
   // The angle of polarization for the polarizing beam splitter, in degrees.  Zero is horizontal and 90 is vertical.
   public readonly photonPolarizationAngleProperty: NumberProperty;
 
+  public readonly photonEmitter: PhotonEmitter;
+
   // photon detectors
   public readonly verticalPolarizationDetector: PhotonDetector;
   public readonly horizontalPolarizationDetector: PhotonDetector;
@@ -44,6 +47,11 @@ export default class PhotonsExperimentSceneModel {
     this.photonPolarizationAngleProperty = new NumberProperty( 45, {
       range: new Range( 0, 90 ),
       tandem: providedOptions.tandem.createTandem( 'photonPolarizationAngleProperty' )
+    } );
+
+    // Create the photon emitter that will produce the photons that will be sent toward the polarizing beam splitter.
+    this.photonEmitter = new PhotonEmitter( new Vector2( -0.25, 0 ), {
+      tandem: providedOptions.tandem.createTandem( 'photonEmitter' )
     } );
 
     // Create the photon detectors that will measure the rate at which photons are arriving after being either reflected

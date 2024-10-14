@@ -32,7 +32,7 @@ export default class PolarizingBeamSplitterNode extends Rectangle {
     const lineNode = new Line( 0, nodeSize.height, nodeSize.width, 0, {
       stroke: new Color( '#50FFFF' ),
       lineWidth: 2,
-      lineCap: 'round'
+      lineCap: 'butt'
     } );
 
     const options = optionize<PolarizingBeamSplitterNodeOptions, SelfOptions, RectangleOptions>()( {
