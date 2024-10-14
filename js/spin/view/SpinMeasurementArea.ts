@@ -12,7 +12,7 @@ import { HBox, Node, Text, VBox } from '../../../../scenery/js/imports.js';
 import ComboBox, { ComboBoxItem } from '../../../../sun/js/ComboBox.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import SpinExperiments from '../model/SpinExperiments.js';
+import SpinExperiment from '../model/SpinExperiment.js';
 import SpinModel from '../model/SpinModel.js';
 import ParticleSourceNode from './ParticleSourceNode.js';
 import SternGerlachNode from './SternGerlachNode.js';
@@ -21,7 +21,7 @@ export default class SpinMeasurementArea extends VBox {
 
   public constructor( model: SpinModel, parentNode: Node, tandem: Tandem ) {
 
-    const items: ComboBoxItem<SpinExperiments>[] = SpinExperiments.enumeration.values.map( experiment => {
+    const items: ComboBoxItem<SpinExperiment>[] = SpinExperiment.enumeration.values.map( experiment => {
       return {
         value: experiment,
         createNode: () => new Text( experiment.experimentName, { font: new PhetFont( 16 ) } )

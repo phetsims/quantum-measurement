@@ -16,7 +16,7 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import SimpleBlochSphere from './SimpleBlochSphere.js';
-import SpinExperiments from './SpinExperiments.js';
+import SpinExperiment from './SpinExperiment.js';
 import SternGerlachModel from './SternGerlachModel.js';
 
 type SelfOptions = {
@@ -39,7 +39,7 @@ export default class SpinModel implements TModel {
 
   public readonly blochSphere: SimpleBlochSphere;
 
-  public readonly currentExperimentProperty: Property<SpinExperiments>;
+  public readonly currentExperimentProperty: Property<SpinExperiment>;
 
   // Models for the three available Stern-Gerlach experiments. Second and Third are counted top to bottom.
   public readonly firstSternGerlachModel: SternGerlachModel;
@@ -54,7 +54,7 @@ export default class SpinModel implements TModel {
       tandem: providedOptions.tandem.createTandem( 'blochSphere' )
     } );
 
-    this.currentExperimentProperty = new Property<SpinExperiments>( SpinExperiments.EXPERIMENT_1 );
+    this.currentExperimentProperty = new Property<SpinExperiment>( SpinExperiment.EXPERIMENT_1 );
 
     const sternGerlachModelsTandem = providedOptions.tandem.createTandem( 'sternGerlachModels' );
     this.firstSternGerlachModel = new SternGerlachModel( true, sternGerlachModelsTandem.createTandem( 'firstSternGerlachModel' ) );
