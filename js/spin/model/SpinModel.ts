@@ -45,12 +45,22 @@ export class SpinValue extends EnumerationValue {
   }
 }
 
-export const SourceModes = [ 'single', 'continuous' ] as const;
-export type SourceModeTypes = typeof SourceModes[number];
+export class SourceMode extends EnumerationValue {
+  
+  public static readonly SINGLE = new SourceMode( 'Single Particle', 'singleParticle' );
+  
+  public static readonly CONTINUOUS = new SourceMode( 'Continuous', 'continuous' );
+  
+  public static readonly enumeration = new Enumeration( SourceMode );
+  
+  public constructor( public readonly sourceName: string | TReadOnlyProperty<string>, public readonly tandemName: string ) {
+    super();
+  }
+}
 
 export default class SpinModel implements TModel {
 
-  public readonly sourceModeProperty: Property<SourceModeTypes>;
+  public readonly sourceModeProperty: Property<SourceMode>;
 
   public readonly blochSphere: SimpleBlochSphere;
 
@@ -63,7 +73,7 @@ export default class SpinModel implements TModel {
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
-    this.sourceModeProperty = new Property<SourceModeTypes>( 'single' );
+    this.sourceModeProperty = new Property<SourceMode>( SourceMode.SINGLE );
 
     this.blochSphere = new SimpleBlochSphere( {
       tandem: providedOptions.tandem.createTandem( 'blochSphere' )

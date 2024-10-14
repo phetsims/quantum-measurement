@@ -8,23 +8,33 @@
 
 import Property from '../../../../axon/js/Property.js';
 import { Shape } from '../../../../kite/js/imports.js';
-import { Path, Text, VBox } from '../../../../scenery/js/imports.js';
-import AquaRadioButton from '../../../../sun/js/AquaRadioButton.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import { Path, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
+import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { SourceModeTypes } from '../model/SpinModel.js';
+import { SourceMode } from '../model/SpinModel.js';
 
 export default class ParticleSourceNode extends VBox {
 
-  public constructor( sourceModeProperty: Property<SourceModeTypes>, tandem: Tandem ) {
+  public constructor( sourceModeProperty: Property<SourceMode>, tandem: Tandem ) {
     super( {
       tandem: tandem.createTandem( 'particleSourceNode' ),
+      spacing: 20,
       children: [
+        new RichText( 'Spin ℏ/2 Source', { font: new PhetFont( 20 ) } ),
         new Path( new Shape().roundRect( 0, 0, 100, 100, 10, 10 ),
           { fill: 'blue' } ),
-        new AquaRadioButton( sourceModeProperty, sourceModeProperty.value, new Text( 'Source Mode' ),
-          {
-          tandem: tandem.createTandem( 'sourceModeRadioButton' )
+        new RichText( 'Source Mode', { font: new PhetFont( { size: 20, weight: 'bold' } ) } ),
+        new AquaRadioButtonGroup( sourceModeProperty, SourceMode.enumeration.values.map( sourceMode => {
+          return {
+            value: sourceMode,
+            labelContent: sourceMode.sourceName,
+            createNode: () => new Text( sourceMode.sourceName, { font: new PhetFont( 15 ) } ),
+            tandemName: `${sourceMode.tandemName}RadioButton`
+          };
+        } ), {
+          spacing: 10
         } )
       ]
     } );
