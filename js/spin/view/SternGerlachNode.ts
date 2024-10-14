@@ -19,7 +19,7 @@ export default class SternGerlachNode extends Node {
 
   public constructor( experimentModel: SternGerlachModel, tandem: Tandem ) {
     super( {
-      tandem: tandem.createTandem( 'sternGerlachNode' ),
+      tandem: tandem,
       children: [
         new Path( new Shape().rect( 0, 0, 150, 100 ),
           { fill: 'black', visibleProperty: experimentModel.isVisibleProperty } ),

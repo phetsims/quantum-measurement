@@ -41,10 +41,12 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
     } );
 
     const azimuthSlider = new Slider( this.blochSphere.azimutalAngleProperty, this.blochSphere.azimutalAngleProperty.range, {
-      center: new Vector2( 100, 100 )
+      center: new Vector2( 100, 100 ),
+      tandem: tandem.createTandem( 'azimuthSlider' )
     } );
     const polarSlider = new Slider( this.blochSphere.polarAngleProperty, this.blochSphere.polarAngleProperty.range, {
-      center: new Vector2( 100, 200 )
+      center: new Vector2( 100, 200 ),
+      tandem: tandem.createTandem( 'polarSlider' )
     } );
 
     const slidersPanel = new Panel( new VBox( {
@@ -77,7 +79,9 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
         new Text( 'State to Prepare', { font: new PhetFont( { size: 20, weight: 'bolder' } ) } ),
         blochSphereNode,
         slidersPanel,
-        new Slider( blochSphereNode.xAxisOffsetAngleProperty, new Range( 0, 2 * Math.PI ) )
+        new Slider( blochSphereNode.xAxisOffsetAngleProperty, new Range( 0, 2 * Math.PI ), {
+          tandem: Tandem.OPT_OUT
+        } )
       ]
     } );
 

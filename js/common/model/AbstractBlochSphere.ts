@@ -32,7 +32,7 @@ export default abstract class AbstractBlochSphere extends PhetioObject {
   protected constructor( providedOptions: AbstractBlochSphereOptions ) {
 
     const options = optionize<AbstractBlochSphereOptions, SelfOptions, PhetioObjectOptions>()( {
-
+      phetioState: false
     }, providedOptions );
 
     super( options );

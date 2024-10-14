@@ -11,7 +11,10 @@
  */
 
 import Property from '../../../../axon/js/Property.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import TModel from '../../../../joist/js/TModel.js';
+import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
@@ -26,9 +29,21 @@ type SelfOptions = {
 type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
 
-// TODO: Consider using EnumerationValues for these, see https://github.com/phetsims/quantum-measurement/issues/53
-export const SpinValues = [ 'Z_PLUS', 'X_PLUS', 'Z_MINUS' ] as const;
-export type SpinTypes = typeof SpinValues[number]; // Creates a union type of 'Z_PLUS' | 'Z_MINUS' | 'X_PLUS'
+export class SpinValue extends EnumerationValue {
+
+  // TODO: This should go in the strings file https://github.com/phetsims/quantum-measurement/issues/53
+  public static readonly Z_PLUS = new SpinValue( 'Z_PLUS', '"+Z"    ⟨Sz⟩ = +ħ/2', 'ZPlus' );
+  public static readonly X_PLUS = new SpinValue( 'X_PLUS', '"+X"    ⟨Sz⟩ = 0', 'XPlus' );
+  public static readonly Z_MINUS = new SpinValue( 'Z_MINUS', '"-Z"    ⟨Sz⟩ = -ħ/2', 'ZMinus' );
+
+  public static readonly enumeration = new Enumeration( SpinValue );
+
+  public constructor( public readonly value: string,
+                      public readonly description: string | TReadOnlyProperty<string>,
+                      public readonly tandemName: string ) {
+    super();
+  }
+}
 
 export const SourceModes = [ 'single', 'continuous' ] as const;
 export type SourceModeTypes = typeof SourceModes[number];

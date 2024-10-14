@@ -18,30 +18,23 @@ import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import SimpleBlochSphere from '../model/SimpleBlochSphere.js';
-import { SpinTypes, SpinValues } from '../model/SpinModel.js';
+import { SpinValue } from '../model/SpinModel.js';
 
 export default class SpinStatePreparationArea extends VBox {
 
   public constructor( blochSphere: SimpleBlochSphere, tandem: Tandem ) {
 
-    // TODO: This in the strings file https://github.com/phetsims/quantum-measurement/issues/53
-    const spinLabelsMap = new Map<SpinTypes, string>( [
-      [ 'Z_PLUS', '"+Z"    ⟨Sz⟩ = +ħ/2' ],
-      [ 'X_PLUS', '"+X"    ⟨Sz⟩ = 0' ],
-      [ 'Z_MINUS', '"-Z"    ⟨Sz⟩ = -ħ/2' ]
-      ] );
-
-    const createRadioButtonGroupItem = ( value: SpinTypes ) => {
-      const valueText = spinLabelsMap.get( value ) || value; // Map the value to the formatted string
+    const createRadioButtonGroupItem = ( spinValue: SpinValue ) => {
       return {
-        createNode: () => new Text( valueText, { font: new PhetFont( 15 ) } ),
-        value: value
+        createNode: () => new Text( spinValue.description, { font: new PhetFont( 15 ) } ),
+        value: spinValue,
+        tandemName: `${spinValue.tandemName}SpinValueRadioButton`
       };
     };
 
     const numberOfCoinsRadioButtonGroup = new RectangularRadioButtonGroup(
       blochSphere.spinStateProperty,
-      SpinValues.map( quantity => createRadioButtonGroupItem( quantity ) ),
+      SpinValue.enumeration.values.map( quantity => createRadioButtonGroupItem( quantity ) ),
       {
         spacing: 10,
         center: new Vector2( 100, 100 ),
@@ -68,7 +61,9 @@ export default class SpinStatePreparationArea extends VBox {
       children: [
         new Text( 'State to Prepare', { font: new PhetFont( { size: 20, weight: 'bolder' } ) } ),
         blochSphereNode,
-        new Slider( blochSphereNode.xAxisOffsetAngleProperty, new Range( 0, 2 * Math.PI ) ),
+        new Slider( blochSphereNode.xAxisOffsetAngleProperty, new Range( 0, 2 * Math.PI ), {
+          tandem: Tandem.OPT_OUT
+        } ),
         spinStatePanel
       ],
       spacing: 10,

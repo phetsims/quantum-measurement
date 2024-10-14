@@ -28,7 +28,9 @@ export default class SpinMeasurementArea extends VBox {
       };
     } );
 
-    const experimentComboBox = new ComboBox( model.currentExperimentProperty, items, parentNode, {} );
+    const experimentComboBox = new ComboBox( model.currentExperimentProperty, items, parentNode, {
+      tandem: tandem.createTandem( 'experimentComboBox' )
+    } );
 
     super( {
       children: [
@@ -40,12 +42,12 @@ export default class SpinMeasurementArea extends VBox {
           spacing: 50,
           children: [
             new ParticleSourceNode( model.sourceModeProperty, tandem ),
-            new SternGerlachNode( model.firstSternGerlachModel, tandem ),
+            new SternGerlachNode( model.firstSternGerlachModel, tandem.createTandem( 'firstSternGerlachNode' ) ),
             new VBox( {
               spacing: 20,
               children: [
-                new SternGerlachNode( model.secondSternGerlachModel, tandem ),
-                new SternGerlachNode( model.secondSternGerlachModel, tandem )
+                new SternGerlachNode( model.secondSternGerlachModel, tandem.createTandem( 'secondSternGerlachNode' ) ),
+                new SternGerlachNode( model.secondSternGerlachModel, tandem.createTandem( 'thirdSternGerlachNode' ) )
               ]
             } )
           ]
