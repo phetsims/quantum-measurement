@@ -12,6 +12,7 @@ import { Color, HBox, HBoxOptions, Rectangle } from '../../../../scenery/js/impo
 import quantumMeasurement from '../../quantumMeasurement.js';
 import PhotonsExperimentSceneModel from '../model/PhotonsExperimentSceneModel.js';
 import PhotonPolarizationAngleControl from './PhotonPolarizationAngleControl.js';
+import PhotonTestingArea from './PhotonTestingArea.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhotonsExperimentSceneViewOptions = SelfOptions & WithRequired<HBoxOptions, 'tandem'>;
@@ -20,13 +21,20 @@ export default class PhotonsExperimentSceneView extends HBox {
 
   public constructor( model: PhotonsExperimentSceneModel, providedOptions: PhotonsExperimentSceneViewOptions ) {
 
+    const photonPolarizationAngleControl = new PhotonPolarizationAngleControl(
+      model.polarizingBeamSplitter.presetPolarizationDirectionProperty,
+      model.polarizingBeamSplitter.customPolarizationAngleProperty,
+      {
+        tandem: providedOptions.tandem.createTandem( 'photonPolarizationAngleControl' )
+      }
+    );
+
+    const photonTestingArea = new PhotonTestingArea( model, {
+      tandem: providedOptions.tandem.createTandem( 'photonTestingArea' )
+    } );
+
     // TODO: This set of rectangles is a placeholder for working on layout, see https://github.com/phetsims/quantum-measurement/issues/52
     const testRectHeight = 510;
-    const testRect2 = new Rectangle( 0, 0, 370, testRectHeight, {
-      fill: new Color( '#947A0C' ),
-      stroke: new Color( '#947A0C' ).darkerColor( 0.5 ),
-      lineWidth: 2
-    } );
     const testRect3 = new Rectangle( 0, 0, 180, testRectHeight, {
       fill: new Color( '#44673A' ),
       stroke: new Color( '#44673A' ).darkerColor( 0.5 ),
@@ -38,16 +46,8 @@ export default class PhotonsExperimentSceneView extends HBox {
       lineWidth: 2
     } );
 
-    const photonPolarizationAngleControl = new PhotonPolarizationAngleControl(
-      model.polarizingBeamSplitter.presetPolarizationDirectionProperty,
-      model.polarizingBeamSplitter.customPolarizationAngleProperty,
-      {
-        tandem: providedOptions.tandem.createTandem( 'photonPolarizationAngleControl' )
-      }
-    );
-
     const options = optionize<PhotonsExperimentSceneViewOptions, SelfOptions, HBoxOptions>()( {
-      children: [ photonPolarizationAngleControl, testRect2, testRect3, testRect4 ],
+      children: [ photonPolarizationAngleControl, photonTestingArea, testRect3, testRect4 ],
       spacing: 3,
       align: 'bottom'
     }, providedOptions );
