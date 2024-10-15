@@ -91,6 +91,7 @@ export default class ParticleSourceNode extends VBox {
             tandemName: `${sourceMode.tandemName}RadioButton`
           };
         } ), {
+          tandem: tandem.createTandem( 'sourceModeRadioButtonGroup' ),
           spacing: 10
         } )
       ]
