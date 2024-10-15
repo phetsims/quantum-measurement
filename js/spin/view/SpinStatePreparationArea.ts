@@ -7,6 +7,7 @@
  * @author Agustín Vallejo
  */
 
+import Property from '../../../../axon/js/Property.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -22,7 +23,7 @@ import { SpinValue } from '../model/SpinModel.js';
 
 export default class SpinStatePreparationArea extends VBox {
 
-  public constructor( blochSphere: SimpleBlochSphere, tandem: Tandem ) {
+  public constructor( spinStateProperty: Property<SpinValue>, blochSphere: SimpleBlochSphere, tandem: Tandem ) {
 
     const createRadioButtonGroupItem = ( spinValue: SpinValue ) => {
       return {
@@ -33,7 +34,7 @@ export default class SpinStatePreparationArea extends VBox {
     };
 
     const numberOfCoinsRadioButtonGroup = new RectangularRadioButtonGroup(
-      blochSphere.spinStateProperty,
+      spinStateProperty,
       SpinValue.enumeration.values.map( quantity => createRadioButtonGroupItem( quantity ) ),
       {
         spacing: 10,

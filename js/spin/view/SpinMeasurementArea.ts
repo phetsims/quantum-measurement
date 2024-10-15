@@ -45,6 +45,7 @@ export default class SpinMeasurementArea extends VBox {
 
     const particleRayPath = new ParticleRayPath(
       model.sourceModeProperty,
+      model.singleParticles,
       tandem.createTandem( 'particleRayPath' )
     );
 

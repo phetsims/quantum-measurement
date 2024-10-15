@@ -50,20 +50,20 @@ export default class SternGerlachModel {
    * Measures incoming particles with a given state (Z+, Z-, X+), and returns the probability of spin up
    * in the direction of the Stern Gerlach experiment.
    */
-  public measure( incomingState: SpinValue | null ): void {
+  public measure( incomingState: SpinValue | null ): number {
 
     // Using a XZ vector to calculate the projected probability.
     // The experiment has a measurement vector and the incoming state has a spin vector
     // Based on the dot product we'll obtain the probability
 
-    const incomingStateVector = incomingState === SpinValue.Z_PLUS ? new Vector2( 0, 1 ) :
-                                        incomingState === SpinValue.Z_MINUS ? new Vector2( 0, -1 ) :
-                                        incomingState === SpinValue.X_PLUS ? new Vector2( 1, 0 ) : new Vector2( -1, 0 );
+    const incomingStateVector = SpinValue.spinToVector( incomingState );
 
     const experimentMeasurementVector = this.isZOrientedProperty.value ? new Vector2( 0, 1 ) : new Vector2( 1, 0 );
 
     // <Z|Z> = 1, <Z|X> = 0, <-Z|Z> = -1 so we need to re-scale into the [0, 1] range
     this.upProbabilityProperty.value = ( incomingStateVector.dot( experimentMeasurementVector ) + 1 ) / 2;
+
+    return this.upProbabilityProperty.value;
   }
 
 

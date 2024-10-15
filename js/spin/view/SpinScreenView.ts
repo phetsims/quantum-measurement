@@ -28,7 +28,7 @@ export default class SpinScreenView extends QuantumMeasurementScreenView {
       tandem: tandem
     } );
 
-    const spinStatePreparationArea = new SpinStatePreparationArea( model.blochSphere, tandem.createTandem( 'spinStatePreparationArea' ) );
+    const spinStatePreparationArea = new SpinStatePreparationArea( model.spinStateProperty, model.blochSphere, tandem.createTandem( 'spinStatePreparationArea' ) );
     this.addChild( spinStatePreparationArea );
 
     // Add the vertical line that will sit between the preparation and measurement areas.

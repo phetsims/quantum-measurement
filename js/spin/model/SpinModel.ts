@@ -14,7 +14,9 @@ import Emitter from '../../../../axon/js/Emitter.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import TModel from '../../../../joist/js/TModel.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
@@ -22,6 +24,7 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import { ParticleWithSpinModel } from './ParticleWithSpinModel.js';
 import SimpleBlochSphere from './SimpleBlochSphere.js';
 import SpinExperiment from './SpinExperiment.js';
 import SternGerlachModel from './SternGerlachModel.js';
@@ -47,6 +50,14 @@ export class SpinValue extends EnumerationValue {
                       public readonly tandemName: string ) {
     super();
   }
+
+  public static spinToVector( spin: SpinValue | null ): Vector2 {
+    // Since X_MINUS is not a valid initial state, we support null here to represent that case as a vector
+    return spin === SpinValue.Z_PLUS ? new Vector2( 0, 1 ) :
+           spin === SpinValue.Z_MINUS ? new Vector2( 0, -1 ) :
+           spin === SpinValue.X_PLUS ? new Vector2( 1, 0 ) : new Vector2( -1, 0 );
+
+  }
 }
 
 export class SourceMode extends EnumerationValue {
@@ -66,7 +77,12 @@ export default class SpinModel implements TModel {
 
   public readonly sourceModeProperty: Property<SourceMode>;
 
+  public readonly spinStateProperty: Property<SpinValue>;
+
   public readonly blochSphere: SimpleBlochSphere;
+
+  // Single particles shot by the user transversing the experiment
+  public readonly singleParticles: ParticleWithSpinModel[];
 
   public readonly currentExperimentProperty: Property<SpinExperiment>;
 
@@ -77,6 +93,7 @@ export default class SpinModel implements TModel {
 
   public readonly currentlyShootingParticlesProperty: Property<boolean>;
 
+  // Mapped from [0, 1] to control the Continuous mode, 0 is 'None' and 1 is 'Lots'
   public readonly particleAmmountProperty: NumberProperty;
 
   // Used to update the opacities of the particle rays
@@ -87,9 +104,16 @@ export default class SpinModel implements TModel {
 
     this.sourceModeProperty = new Property<SourceMode>( SourceMode.SINGLE );
 
-    this.blochSphere = new SimpleBlochSphere( {
-      tandem: providedOptions.tandem.createTandem( 'blochSphere' )
+    this.spinStateProperty = new Property<SpinValue>( SpinValue.Z_PLUS, {
+      validValues: SpinValue.enumeration.values
     } );
+
+    this.blochSphere = new SimpleBlochSphere(
+      this.spinStateProperty, {
+        tandem: providedOptions.tandem.createTandem( 'blochSphere' )
+      } );
+
+    const MAX_NUMBER_OF_SINGLE_PARTICLES = 1;
 
     this.currentExperimentProperty = new Property<SpinExperiment>( SpinExperiment.EXPERIMENT_1 );
 
@@ -97,6 +121,35 @@ export default class SpinModel implements TModel {
     this.firstSternGerlachModel = new SternGerlachModel( true, sternGerlachModelsTandem.createTandem( 'firstSternGerlachModel' ) );
     this.secondSternGerlachModel = new SternGerlachModel( false, sternGerlachModelsTandem.createTandem( 'secondSternGerlachModel' ) );
     this.thirdSternGerlachModel = new SternGerlachModel( false, sternGerlachModelsTandem.createTandem( 'thirdSternGerlachModel' ) );
+
+    this.singleParticles = _.times( MAX_NUMBER_OF_SINGLE_PARTICLES, id => {
+      const particle = new ParticleWithSpinModel( id );
+
+      particle.readyToMeasureEmitter.addListener( () => {
+
+        let upProbability = 0;
+        switch( Math.floor( particle.lifetime ) ) {
+          case 1:
+            upProbability = this.firstSternGerlachModel.measure( this.spinStateProperty.value );
+            particle.secondSpinUp = dotRandom.nextDouble() < upProbability;
+            break;
+          case 3:
+            if ( particle.secondSpinUp ) {
+              upProbability = this.secondSternGerlachModel.measure( this.firstSternGerlachModel.isZOrientedProperty ? SpinValue.Z_PLUS : SpinValue.X_PLUS );
+              particle.thirdSpinUp = dotRandom.nextDouble() < upProbability;
+            }
+            else {
+              const upProbability = this.thirdSternGerlachModel.measure( this.firstSternGerlachModel.isZOrientedProperty ? SpinValue.Z_MINUS : null );
+              particle.thirdSpinUp = dotRandom.nextDouble() < upProbability;
+            }
+            break;
+          default:
+            break;
+        }
+      } );
+
+      return particle;
+    } );
 
     const sternGerlachModels = [ this.firstSternGerlachModel, this.secondSternGerlachModel, this.thirdSternGerlachModel ];
 
@@ -118,13 +171,28 @@ export default class SpinModel implements TModel {
       this.measure();
     } );
 
-    this.blochSphere.spinStateProperty.link( () => {
+    this.spinStateProperty.link( () => {
       this.measure();
     } );
 
     this.currentlyShootingParticlesProperty = new Property<boolean>( false, {
       tandem: providedOptions.tandem.createTandem( 'currentlyShootingParticlesProperty' ),
       phetioValueType: BooleanIO
+    } );
+
+    // Find the first inactive single particle and activate it
+    this.currentlyShootingParticlesProperty.link( shooting => {
+      if ( shooting ) {
+        for ( let i = 0; i < MAX_NUMBER_OF_SINGLE_PARTICLES; i++ ) {
+          if ( !this.singleParticles[ i ].activeProperty.value ) {
+            const particleToActivate = this.singleParticles[ i ];
+            particleToActivate.reset();
+            particleToActivate.firstSpinValue = SpinValue.spinToVector( this.spinStateProperty.value );
+            particleToActivate.activeProperty.value = true;
+            break;
+          }
+        }
+      }
     } );
 
     this.particleAmmountProperty = new NumberProperty( 1, {
@@ -138,7 +206,7 @@ export default class SpinModel implements TModel {
     const experimentSetting = this.currentExperimentProperty.value.experimentSetting;
 
     // Measure on the first SG, this will change its upProbabilityProperty
-    this.firstSternGerlachModel.measure( this.blochSphere.spinStateProperty.value );
+    this.firstSternGerlachModel.measure( this.spinStateProperty.value );
 
     if ( experimentSetting.length > 1 ) {
       // Measure on the second SG according to the orientation of the first one
@@ -169,7 +237,7 @@ export default class SpinModel implements TModel {
    * @param dt - time step, in seconds
    */
   public step( dt: number ): void {
-    // TODO, see https://github.com/phetsims/quantum-measurement/issues/1
+    this.singleParticles.forEach( particle => particle.step( dt ) );
   }
 }
 
