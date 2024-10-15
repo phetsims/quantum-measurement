@@ -16,8 +16,9 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import PhotonsExperimentSceneModel from '../model/PhotonsExperimentSceneModel.js';
 import MirrorNode from './MirrorNode.js';
 import PhotonDetectorNode from './PhotonDetectorNode.js';
-import PolarizingBeamSplitterNode from './PolarizingBeamSplitterNode.js';
 import PhotonEmitterNode from './PhotonEmitterNode.js';
+import PhotonNode from './PhotonNode.js';
+import PolarizingBeamSplitterNode from './PolarizingBeamSplitterNode.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhotonTestingAreaOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
@@ -64,13 +65,16 @@ export default class PhotonTestingArea extends Node {
       tandem: providedOptions.tandem.createTandem( 'mirror' )
     } );
 
+    const photonNodes = model.photons.map( photon => new PhotonNode( photon, photonTestingAreaModelViewTransform ) );
+
     const options = optionize<PhotonTestingAreaOptions, SelfOptions, NodeOptions>()( {
       children: [
         photonEmitterNode,
         polarizingBeamSplitterNode,
         verticalPolarizationDetector,
         horizontalPolarizationDetector,
-        mirror
+        mirror,
+        ...photonNodes
       ]
     }, providedOptions );
 

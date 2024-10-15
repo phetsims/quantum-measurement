@@ -7,7 +7,6 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
@@ -26,11 +25,7 @@ export default class PhotonEmitterNode extends Node {
                       modelViewTransform: ModelViewTransform2,
                       providedOptions: PhotonEmitterNodeOptions ) {
 
-    // const testRect = new Rectangle( 0, 0, 50, 30, {
-    //   fill: Color.LIGHT_GRAY,
-    //   stroke: Color.DARK_GRAY
-    // } );
-    const testRect = new LaserPointerNode( new BooleanProperty( false ), {
+    const photonSourceNode = new LaserPointerNode( model.photonProductionEnabledProperty, {
       bodySize: new Dimension2( 50, 30 ),
       nozzleSize: new Dimension2( 10, 25 ),
       buttonRadius: 12,
@@ -39,8 +34,8 @@ export default class PhotonEmitterNode extends Node {
     } );
 
     const options = optionize<PhotonEmitterNodeOptions, SelfOptions, NodeOptions>()( {
-      children: [ testRect ],
-      left: modelViewTransform.modelToViewX( model.position.x ),
+      children: [ photonSourceNode ],
+      right: modelViewTransform.modelToViewX( model.position.x ),
       centerY: modelViewTransform.modelToViewY( model.position.y )
     }, providedOptions );
 

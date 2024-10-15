@@ -55,6 +55,8 @@ export default class PhotonsModel implements TModel {
    */
   public reset(): void {
     this.experimentModeProperty.reset();
+    this.singlePhotonSceneModel.reset();
+    this.manyPhotonsExperimentSceneModel.reset();
   }
 
   /**
@@ -62,7 +64,12 @@ export default class PhotonsModel implements TModel {
    * @param dt - time step, in seconds
    */
   public step( dt: number ): void {
-    // TODO, see https://github.com/phetsims/quantum-measurement/issues/1
+    if ( this.experimentModeProperty.value === 'singlePhoton' ) {
+      this.singlePhotonSceneModel.step( dt );
+    }
+    else {
+      this.manyPhotonsExperimentSceneModel.step( dt );
+    }
   }
 }
 
