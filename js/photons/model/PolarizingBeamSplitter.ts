@@ -72,7 +72,8 @@ export default class PolarizingBeamSplitter {
   }
 
   public testForPhotonInteraction( photon: Photon, dt: number ): PhotonInteraction {
-    if ( photon.positionProperty.value.x + photon.directionProperty.value.x * PHOTON_SPEED * dt > this.centerPosition.x ) {
+    if ( this.presetPolarizationDirectionProperty.value !== 'horizontal' &&
+         photon.positionProperty.value.x + photon.directionProperty.value.x * PHOTON_SPEED * dt > this.centerPosition.x ) {
       return { interactionType: 'reflected', reflectionDirection: new Vector2( 0, 1 ) };
     }
     else {
