@@ -96,6 +96,10 @@ export default class ParticleSourceNode extends VBox {
       ]
     } );
   }
+
+  public updateGlobalPositions(): void {
+    this.particleExitGlobalPosition = this.localToGlobalPoint( new Vector2( PARTICLE_SOURCE_WIDTH, 3 * PARTICLE_SOURCE_HEIGHT / 4 ) );
+  }
 }
 
 quantumMeasurement.register( 'ParticleSourceNode', ParticleSourceNode );

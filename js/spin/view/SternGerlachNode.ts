@@ -80,6 +80,12 @@ export default class SternGerlachNode extends Node {
       ]
     } );
   }
+
+  public updateGlobalPositions(): void {
+    this.entranceGlobalPosition = this.localToGlobalPoint( new Vector2( 0, STERN_GERLACH_HEIGHT / 2 ) );
+    this.topExitGlobalPosition = this.localToGlobalPoint( new Vector2( STERN_GERLACH_WIDTH + PARTICLE_HOLE_WIDTH, STERN_GERLACH_HEIGHT / 4 ) );
+    this.bottomExitGlobalPosition = this.localToGlobalPoint( new Vector2( STERN_GERLACH_WIDTH + PARTICLE_HOLE_WIDTH, 3 * STERN_GERLACH_HEIGHT / 4 ) );
+  }
 }
 
 quantumMeasurement.register( 'SternGerlachNode', SternGerlachNode );

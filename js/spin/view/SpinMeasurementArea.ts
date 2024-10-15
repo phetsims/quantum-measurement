@@ -17,8 +17,8 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import SpinExperiment from '../model/SpinExperiment.js';
 import SpinModel from '../model/SpinModel.js';
 import ParticleRayPath from './ParticleRayPath.js';
-import ParticleSourceNode, { PARTICLE_SOURCE_HEIGHT, PARTICLE_SOURCE_WIDTH } from './ParticleSourceNode.js';
-import SternGerlachNode, { PARTICLE_HOLE_WIDTH, STERN_GERLACH_HEIGHT, STERN_GERLACH_WIDTH } from './SternGerlachNode.js';
+import ParticleSourceNode from './ParticleSourceNode.js';
+import SternGerlachNode from './SternGerlachNode.js';
 
 export default class SpinMeasurementArea extends VBox {
 
@@ -77,34 +77,33 @@ export default class SpinMeasurementArea extends VBox {
     model.currentExperimentProperty.link( experiment => {
 
       // Adjust the global positions of the nodes
-      particleSourceNode.particleExitGlobalPosition = particleSourceNode.localToGlobalPoint( new Vector2( PARTICLE_SOURCE_WIDTH, PARTICLE_SOURCE_HEIGHT ) );
-
-      firstSternGerlachNode.entranceGlobalPosition = firstSternGerlachNode.localToGlobalPoint( new Vector2( 0, STERN_GERLACH_HEIGHT / 2 ) );
-      firstSternGerlachNode.topExitGlobalPosition = firstSternGerlachNode.localToGlobalPoint( new Vector2( STERN_GERLACH_WIDTH + PARTICLE_HOLE_WIDTH, STERN_GERLACH_HEIGHT / 4 ) );
-      firstSternGerlachNode.bottomExitGlobalPosition = firstSternGerlachNode.localToGlobalPoint( new Vector2( STERN_GERLACH_WIDTH + PARTICLE_HOLE_WIDTH, 3 * STERN_GERLACH_HEIGHT / 4 ) );
-
-      secondSternGerlachNode.entranceGlobalPosition = secondSternGerlachNode.localToGlobalPoint( new Vector2( -PARTICLE_HOLE_WIDTH, STERN_GERLACH_HEIGHT / 2 ) );
-
-      thirdSternGerlachNode.entranceGlobalPosition = thirdSternGerlachNode.localToGlobalPoint( new Vector2( -PARTICLE_HOLE_WIDTH, STERN_GERLACH_HEIGHT / 2 ) );
+      particleSourceNode.updateGlobalPositions();
+      firstSternGerlachNode.updateGlobalPositions();
+      secondSternGerlachNode.updateGlobalPositions();
+      thirdSternGerlachNode.updateGlobalPositions();
 
       // Update the paths of the particle rays according to the current experiment (if 2nd and 3rd SG are not visible, the rays keep going on)
       const primaryRayPoints = [ particleSourceNode.particleExitGlobalPosition, firstSternGerlachNode.entranceGlobalPosition ];
 
-      console.log( 'jiji', firstSternGerlachNode.topExitGlobalPosition );
+      const endOfRays = layoutBounds.maxX * 5;
 
       if ( experiment.experimentSettings.length === 1 ) {
-        particleRayPath.updatePaths(
+        particleRayPath.updatePaths( [
           primaryRayPoints,
-          [ firstSternGerlachNode.topExitGlobalPosition, new Vector2( layoutBounds.maxX * 5, firstSternGerlachNode.topExitGlobalPosition.y ) ],
-          [ firstSternGerlachNode.bottomExitGlobalPosition, new Vector2( layoutBounds.maxX * 5, firstSternGerlachNode.bottomExitGlobalPosition.y ) ]
-        );
+          [ firstSternGerlachNode.topExitGlobalPosition, new Vector2( endOfRays, firstSternGerlachNode.topExitGlobalPosition.y ) ],
+          [ firstSternGerlachNode.bottomExitGlobalPosition, new Vector2( endOfRays, firstSternGerlachNode.bottomExitGlobalPosition.y ) ]
+          ] );
       }
       else {
-        particleRayPath.updatePaths(
+        particleRayPath.updatePaths( [
           primaryRayPoints,
           [ firstSternGerlachNode.topExitGlobalPosition, secondSternGerlachNode.entranceGlobalPosition ],
-          [ firstSternGerlachNode.bottomExitGlobalPosition, thirdSternGerlachNode.entranceGlobalPosition ]
-        );
+          [ firstSternGerlachNode.bottomExitGlobalPosition, thirdSternGerlachNode.entranceGlobalPosition ],
+          [ secondSternGerlachNode.topExitGlobalPosition, new Vector2( endOfRays, secondSternGerlachNode.topExitGlobalPosition.y ) ],
+          [ secondSternGerlachNode.bottomExitGlobalPosition, new Vector2( endOfRays, secondSternGerlachNode.bottomExitGlobalPosition.y ) ],
+          [ thirdSternGerlachNode.topExitGlobalPosition, new Vector2( endOfRays, thirdSternGerlachNode.topExitGlobalPosition.y ) ],
+          [ thirdSternGerlachNode.bottomExitGlobalPosition, new Vector2( endOfRays, thirdSternGerlachNode.bottomExitGlobalPosition.y ) ]
+          ] );
       }
     } );
   }

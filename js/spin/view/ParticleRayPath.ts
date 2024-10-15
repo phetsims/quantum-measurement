@@ -2,7 +2,7 @@
 
 /**
  * ParticleRayPath is the visual representation of a particle ray path in the UI.
- * Coordinates for the three possible rays are provided, and the paths are drawn accordingly.
+ * Coordinates for the possible rays are provided, and the paths are drawn accordingly.
  *
  * @author Agustín Vallejo
  */
@@ -16,14 +16,14 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
-// Constants
-
 export default class ParticleRayPath extends Node {
 
   public readonly updatePaths: (
-    primaryRayPoints: Vector2[],
-    secondaryRayPoints: Vector2[],
-    tertiaryRayPoints: Vector2[]
+    rayPointsPairs: Vector2[][]
+  ) => void;
+
+  public readonly updateOpacities: (
+    opacities: number[]
   ) => void;
 
   public constructor(
@@ -36,47 +36,59 @@ export default class ParticleRayPath extends Node {
       lineCap: 'round'
     };
 
-    const primaryRayPath = new Path( null, rayPathOptions );
-    const secondaryRayPath = new Path( null, rayPathOptions );
-    const tertiaryRayPath = new Path( null, rayPathOptions );
+    let rayOpacity = 1;
+
+    // Create 7 paths for the possible rays
+    const rayPaths = _.range( 7 ).map( i => {
+      return new Path( null, rayPathOptions );
+    } );
+
+    super( {
+      tandem: tandem,
+      localBounds: null,
+      children: [ ...rayPaths ]
+    } );
+
+    this.updatePaths = (
+      rayPointsPairs: Vector2[][]
+    ) => {
+      // Grab all the pairs of points and create rays for each pair
+      for ( let i = 0; i < 7; i++ ) {
+        if ( i < rayPointsPairs.length ) {
+          // If the ray exists, update its shape, otherwise set it to null
+          const rayPointsPair = rayPointsPairs[ i ];
+          const mappedRayPoints = rayPointsPair.map( point => this.globalToLocalPoint( point ) );
+          rayPaths[ i ].shape = new Shape().moveTo( mappedRayPoints[ 0 ].x, mappedRayPoints[ 0 ].y )
+            .lineTo( mappedRayPoints[ 1 ].x, mappedRayPoints[ 1 ].y );
+          rayPaths[ i ].opacity = rayOpacity;
+        }
+        else {
+          rayPaths[ i ].shape = null;
+        }
+      }
+    };
+
+    this.updateOpacities = (
+      opacities: number[]
+    ) => {
+      for ( let i = 0; i < 7; i++ ) {
+        if ( i < opacities.length ) {
+          rayPaths[ i ].opacity = opacities[ i ];
+        }
+        else {
+          rayPaths[ i ].opacity = 0;
+        }
+      }
+    };
 
     // TODO: Multilink for when we have another value in the model for the opacity of secondary and tertiary rays https://github.com/phetsims/quantum-measurement/issues/53
     Multilink.multilink(
       [ particleAmmountProperty ],
       particleAmmount => {
-        primaryRayPath.opacity = particleAmmount;
-        secondaryRayPath.opacity = particleAmmount;
-        tertiaryRayPath.opacity = particleAmmount;
+        rayOpacity = particleAmmount;
+        this.updateOpacities( _.times( 7, () => rayOpacity ) );
       }
     );
-
-    super( {
-      tandem: tandem,
-      localBounds: null,
-      children: [
-        primaryRayPath,
-        secondaryRayPath,
-        tertiaryRayPath
-      ]
-    } );
-
-    this.updatePaths = (
-      primaryRayPoints: Vector2[],
-      secondaryRayPoints: Vector2[],
-      tertiaryRayPoints: Vector2[]
-    ) => {
-      const mappedPrimaryRayPoints = primaryRayPoints.map( point => this.globalToLocalPoint( point ) );
-      const mappedSecondaryRayPoints = secondaryRayPoints.map( point => this.globalToLocalPoint( point ) );
-      const mappedTertiaryRayPoints = tertiaryRayPoints.map( point => this.globalToLocalPoint( point ) );
-
-      primaryRayPath.shape = new Shape().moveTo( mappedPrimaryRayPoints[ 0 ].x, mappedPrimaryRayPoints[ 0 ].y )
-        .lineTo( mappedPrimaryRayPoints[ 1 ].x, mappedPrimaryRayPoints[ 1 ].y );
-      secondaryRayPath.shape = new Shape().moveTo( mappedSecondaryRayPoints[ 0 ].x, mappedSecondaryRayPoints[ 0 ].y )
-        .lineTo( mappedSecondaryRayPoints[ 1 ].x, mappedSecondaryRayPoints[ 1 ].y );
-      tertiaryRayPath.shape = new Shape().moveTo( mappedTertiaryRayPoints[ 0 ].x, mappedTertiaryRayPoints[ 0 ].y )
-        .lineTo( mappedTertiaryRayPoints[ 1 ].x, mappedTertiaryRayPoints[ 1 ].y );
-    };
-
   }
 }
 
