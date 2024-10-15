@@ -44,7 +44,7 @@ export default class SpinMeasurementArea extends VBox {
     const thirdSternGerlachNode = new SternGerlachNode( model.thirdSternGerlachModel, tandem.createTandem( 'thirdSternGerlachNode' ) );
 
     const particleRayPath = new ParticleRayPath(
-      model.particleAmmountProperty,
+      model.sourceModeProperty,
       tandem.createTandem( 'particleRayPath' )
     );
 

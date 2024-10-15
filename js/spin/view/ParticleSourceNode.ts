@@ -34,13 +34,30 @@ export default class ParticleSourceNode extends VBox {
   public constructor( model: SpinModel, tandem: Tandem ) {
 
     // Main shape of the component
-    const particleSourceView = new Path( new Shape().roundRect( 0, 0, PARTICLE_SOURCE_WIDTH, PARTICLE_SOURCE_HEIGHT, PARTICLE_SOURCE_CORNER_RADIUS, PARTICLE_SOURCE_CORNER_RADIUS ),
+    const particleSourceView = new Path( new Shape()
+        .roundRect( 0, 0, PARTICLE_SOURCE_WIDTH, PARTICLE_SOURCE_HEIGHT, PARTICLE_SOURCE_CORNER_RADIUS, PARTICLE_SOURCE_CORNER_RADIUS ),
       {
+        stroke: 'black',
+        lineWidth: 0.5,
         fill: new LinearGradient( 0, 0, 0, 100 )
           .addColorStop( 0, '#88f' )
           .addColorStop( 0.2, 'white' )
           .addColorStop( 1, 'blue' )
       } );
+
+    const particleSourceBarrelWidth = PARTICLE_SOURCE_WIDTH / 5;
+    const particleSourceBarrel = new Path( new Shape()
+      .roundRect( PARTICLE_SOURCE_WIDTH - particleSourceBarrelWidth / 2,
+        PARTICLE_SOURCE_HEIGHT / 2 - particleSourceBarrelWidth / 2, particleSourceBarrelWidth, particleSourceBarrelWidth, 4, 4 ),
+      {
+        stroke: 'black',
+        lineWidth: 0.5,
+        fill: new LinearGradient( 0, 0, 0, PARTICLE_SOURCE_WIDTH / 10 )
+          .addColorStop( 0, '#88f' )
+          .addColorStop( 0.2, 'white' )
+          .addColorStop( 1, 'blue' )
+      } );
+    particleSourceBarrel.rotateAround( particleSourceBarrel.center, Math.PI / 4 );
 
     // Button for 'single' mode
     const shootParticleButton = new RoundMomentaryButton<boolean>(
@@ -77,6 +94,7 @@ export default class ParticleSourceNode extends VBox {
         new RichText( 'Spin ℏ/2 Source', { font: new PhetFont( 20 ) } ),
         new Node( {
           children: [
+            particleSourceBarrel,
             particleSourceView,
             shootParticleButton,
             particleAmmountSlider
@@ -99,7 +117,7 @@ export default class ParticleSourceNode extends VBox {
   }
 
   public updateGlobalPositions(): void {
-    this.particleExitGlobalPosition = this.localToGlobalPoint( new Vector2( PARTICLE_SOURCE_WIDTH, 3 * PARTICLE_SOURCE_HEIGHT / 4 ) );
+    this.particleExitGlobalPosition = this.localToGlobalPoint( new Vector2( PARTICLE_SOURCE_WIDTH + 15, 3.5 * PARTICLE_SOURCE_HEIGHT / 4 ) );
   }
 }
 

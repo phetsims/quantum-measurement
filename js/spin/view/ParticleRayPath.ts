@@ -7,6 +7,7 @@
  * @author Agustín Vallejo
  */
 
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
@@ -14,6 +15,7 @@ import { Node, Path, PathOptions } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import { SourceMode } from '../model/SpinModel.js';
 
 export default class ParticleRayPath extends Node {
 
@@ -26,7 +28,7 @@ export default class ParticleRayPath extends Node {
   ) => void;
 
   public constructor(
-    particleAmmountProperty: TReadOnlyProperty<number>,
+    sourceModeProperty: TReadOnlyProperty<SourceMode>,
     tandem: Tandem ) {
 
     const rayPathOptions: PathOptions = {
@@ -43,7 +45,8 @@ export default class ParticleRayPath extends Node {
     super( {
       tandem: tandem,
       localBounds: null,
-      children: [ ...rayPaths ]
+      children: [ ...rayPaths ],
+      visibleProperty: new DerivedProperty( [ sourceModeProperty ], sourceMode => sourceMode === SourceMode.CONTINUOUS )
     } );
 
     this.updatePaths = (
