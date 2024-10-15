@@ -15,7 +15,7 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import Mirror from './Mirror.js';
-import Photon from './Photon.js';
+import Photon, { PHOTON_SPEED } from './Photon.js';
 import PhotonDetector from './PhotonDetector.js';
 import PhotonEmitter from './PhotonEmitter.js';
 import PolarizingBeamSplitter from './PolarizingBeamSplitter.js';
@@ -91,17 +91,34 @@ export default class PhotonsExperimentSceneModel {
 
   public step( dt: number ): void {
 
-    // Check each photon for potential interaction with the various model elements.
-    this.photons.forEach( photon => {
-      if ( photon.activeProperty.value ) {
-        const interaction = this.polarizingBeamSplitter.testForPhotonInteraction( photon, dt );
-        if ( interaction.interactionType === 'reflected' ) {
-          photon.directionProperty.set( interaction.reflectionDirection! );
-        }
+    // Step the photon emitter, which could potentially add new photons.
+    this.photonEmitter.step( dt );
+
+    // Make a list of active photons.
+    const activePhotons = this.photons.filter( photon => photon.activeProperty.value );
+
+    // Update each active photon's position based on its direction and speed and whether it interacts with any other
+    // model elements.
+    activePhotons.forEach( photon => {
+      const interaction = this.polarizingBeamSplitter.testForPhotonInteraction( photon, dt );
+      if ( interaction.interactionType === 'reflected' ) {
+
+        // This photon was reflected.  First step it to the reflection point.
+        const dtToReflection = photon.positionProperty.value.distance( interaction.reflectionPoint! ) / PHOTON_SPEED;
+        assert && assert( dtToReflection <= dt );
+
+        // Change the direction of the photon to the reflection direction.
+        photon.directionProperty.set( interaction.reflectionDirection! );
+
+        // Step the photon the remaining time.
+        photon.step( dt - dtToReflection );
+      }
+      else {
+
+        // Just step the photon normally, which will move it forward in its current travel direction.
+        photon.step( dt );
       }
     } );
-    this.photons.forEach( photon => photon.step( dt ) );
-    this.photonEmitter.step( dt );
 
     // TODO: temporary - if any photons go too far, deactivate them, see https://github.com/phetsims/quantum-measurement/issues/52
     this.photons.forEach( photon => {

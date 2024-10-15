@@ -8,13 +8,14 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
-export const PHOTON_SPEED = 0.1; // meters per second
+export const PHOTON_SPEED = 0.15; // meters per second
 
 export default class Photon extends PhetioObject {
 
@@ -57,6 +58,31 @@ export default class Photon extends PhetioObject {
     this.positionProperty.reset();
     this.directionProperty.reset();
     this.activeProperty.reset();
+  }
+
+  /**
+   * Get the point where this photon would intersect the provided line segment if it were to move for the specified
+   * amount of time.  Returns null if the photon would not intersect the line segment.
+   * @param lineStart
+   * @param lineEnd
+   * @param dt - time step, in seconds
+   */
+  public getTravelPathIntersectionPoint( lineStart: Vector2, lineEnd: Vector2, dt: number ): Vector2 | null {
+
+    // Create a line that represents the path of the photon.
+    const photonPathEndPoint = this.positionProperty.value.plus( this.directionProperty.value.timesScalar( PHOTON_SPEED * dt ) );
+
+    // Return the intersection point if there is one, null if not.
+    return Utils.lineSegmentIntersection(
+      this.positionProperty.value.x,
+      this.positionProperty.value.y,
+      photonPathEndPoint.x,
+      photonPathEndPoint.y,
+      lineStart.x,
+      lineStart.y,
+      lineEnd.x,
+      lineEnd.y
+    );
   }
 }
 

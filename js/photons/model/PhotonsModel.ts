@@ -29,7 +29,8 @@ export const PhotonInteractionTypeValues = [ 'none', 'absorbed', 'reflected' ] a
 export type PhotonInteractionTypes = ( typeof PhotonInteractionTypeValues )[number];
 export type PhotonInteraction = {
   interactionType: PhotonInteractionTypes;
-  reflectionDirection: Vector2 | null;
+  reflectionPoint?: Vector2;
+  reflectionDirection?: Vector2;
 };
 
 export const ExperimentModeTypeValues = [ 'singlePhoton', 'manyPhotons' ] as const;
