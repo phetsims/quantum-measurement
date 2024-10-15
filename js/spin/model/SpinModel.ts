@@ -10,6 +10,7 @@
  * @author Agustín Vallejo
  */
 
+import Emitter from '../../../../axon/js/Emitter.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
@@ -49,13 +50,13 @@ export class SpinValue extends EnumerationValue {
 }
 
 export class SourceMode extends EnumerationValue {
-  
+
   public static readonly SINGLE = new SourceMode( 'Single Particle', 'singleParticle' );
-  
+
   public static readonly CONTINUOUS = new SourceMode( 'Continuous', 'continuous' );
-  
+
   public static readonly enumeration = new Enumeration( SourceMode );
-  
+
   public constructor( public readonly sourceName: string | TReadOnlyProperty<string>, public readonly tandemName: string ) {
     super();
   }
@@ -78,6 +79,10 @@ export default class SpinModel implements TModel {
 
   public readonly particleAmmountProperty: NumberProperty;
 
+  // Used to update the opacities of the particle rays
+  // TODO: Better naming?? https://github.com/phetsims/quantum-measurement/issues/53
+  public readonly probabilitiesUpdatedEmitter: Emitter = new Emitter();
+
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
     this.sourceModeProperty = new Property<SourceMode>( SourceMode.SINGLE );
@@ -97,15 +102,24 @@ export default class SpinModel implements TModel {
 
     this.currentExperimentProperty.link( experiment => {
       sternGerlachModels.forEach( ( sternGerlachModel, index ) => {
-        if ( experiment.experimentSettings.length > index ) {
+        if ( experiment.experimentSetting.length > index ) {
           // TODO: Should visibility be only handled via the View? https://github.com/phetsims/quantum-measurement/issues/53
-          sternGerlachModel.isVisibleProperty.set( experiment.experimentSettings[ index ].active );
-          sternGerlachModel.isZOrientedProperty.set( experiment.experimentSettings[ index ].isZOriented );
+          sternGerlachModel.isVisibleProperty.set( experiment.experimentSetting[ index ].active );
+          sternGerlachModel.isZOrientedProperty.set( experiment.experimentSetting[ index ].isZOriented );
         }
         else {
           sternGerlachModel.isVisibleProperty.set( false );
         }
       } );
+
+      // Set the probabilities of the experiment. In the continuous case, this immediately alters the shown rays
+      // In the single case, this prepares the probabilities for the particle that will be shot
+      // TODO: Given the above description, is measure() a correct name? https://github.com/phetsims/quantum-measurement/issues/53
+      this.measure();
+    } );
+
+    this.blochSphere.spinStateProperty.link( () => {
+      this.measure();
     } );
 
     this.currentlyShootingParticlesProperty = new Property<boolean>( false, {
@@ -118,6 +132,29 @@ export default class SpinModel implements TModel {
       range: new Range( 0, 1 )
     } );
 
+  }
+
+  public measure(): void {
+    const experimentSetting = this.currentExperimentProperty.value.experimentSetting;
+
+    // Measure on the first SG, this will change its upProbabilityProperty
+    this.firstSternGerlachModel.measure( this.blochSphere.spinStateProperty.value );
+
+    if ( experimentSetting.length > 1 ) {
+      // Measure on the second SG according to the orientation of the first one
+      this.secondSternGerlachModel.measure(
+        // SG1 passes the up-spin particles to SG2
+        this.firstSternGerlachModel.isZOrientedProperty.value ? SpinValue.Z_PLUS : SpinValue.X_PLUS
+      );
+
+      this.thirdSternGerlachModel.measure(
+        // SG1 passes the down-spin particles to SG3, and because X- is not in the initial spin values, we pass null
+        this.firstSternGerlachModel.isZOrientedProperty.value ? SpinValue.Z_MINUS : null
+      );
+
+    }
+
+    this.probabilitiesUpdatedEmitter.emit();
   }
 
   /**

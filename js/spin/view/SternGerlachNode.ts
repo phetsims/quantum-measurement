@@ -76,7 +76,7 @@ export default class SternGerlachNode extends Node {
         new RichText( new DerivedProperty(
             [ experimentModel.isZOrientedProperty ],
             ( isZOriented: boolean ) => isZOriented ? 'SG<sub>Z' : 'SG<sub>X' ),
-          { font: new PhetFont( 16 ), fill: 'white', center: new Vector2( 25, 80 ) } )
+          { font: new PhetFont( 20 ), fill: 'white', center: new Vector2( 25, 80 ) } )
       ]
     } );
   }

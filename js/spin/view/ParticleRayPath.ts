@@ -7,7 +7,6 @@
  * @author Agustín Vallejo
  */
 
-import Multilink from '../../../../axon/js/Multilink.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
@@ -36,8 +35,6 @@ export default class ParticleRayPath extends Node {
       lineCap: 'round'
     };
 
-    let rayOpacity = 1;
-
     // Create 7 paths for the possible rays
     const rayPaths = _.range( 7 ).map( i => {
       return new Path( null, rayPathOptions );
@@ -60,7 +57,7 @@ export default class ParticleRayPath extends Node {
           const mappedRayPoints = rayPointsPair.map( point => this.globalToLocalPoint( point ) );
           rayPaths[ i ].shape = new Shape().moveTo( mappedRayPoints[ 0 ].x, mappedRayPoints[ 0 ].y )
             .lineTo( mappedRayPoints[ 1 ].x, mappedRayPoints[ 1 ].y );
-          rayPaths[ i ].opacity = rayOpacity;
+          rayPaths[ i ].opacity = 1;
         }
         else {
           rayPaths[ i ].shape = null;
@@ -80,15 +77,6 @@ export default class ParticleRayPath extends Node {
         }
       }
     };
-
-    // TODO: Multilink for when we have another value in the model for the opacity of secondary and tertiary rays https://github.com/phetsims/quantum-measurement/issues/53
-    Multilink.multilink(
-      [ particleAmmountProperty ],
-      particleAmmount => {
-        rayOpacity = particleAmmount;
-        this.updateOpacities( _.times( 7, () => rayOpacity ) );
-      }
-    );
   }
 }
 

@@ -14,7 +14,7 @@ import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
 
-type SternGerlachOptions = {
+type SternGerlachExperimentSetting = {
   isZOriented: boolean;
   active: boolean;
 };
@@ -27,22 +27,22 @@ export default class SpinExperiment extends EnumerationValue {
   public static readonly EXPERIMENT_2 = new SpinExperiment( 'Experiment 2 [SGx]', [
     { isZOriented: false, active: true }
   ] );
-  public static readonly EXPERIMENT_3 = new SpinExperiment( 'Experiment 3 [Sz, Sx]', [
+  public static readonly EXPERIMENT_3 = new SpinExperiment( 'Experiment 3 [SGz, SGx]', [
     { isZOriented: true, active: true },
     { isZOriented: false, active: true },
     { isZOriented: false, active: true }
   ] );
-  public static readonly EXPERIMENT_4 = new SpinExperiment( 'Experiment 4 [Sz, Sz]', [
+  public static readonly EXPERIMENT_4 = new SpinExperiment( 'Experiment 4 [SGz, SGz]', [
     { isZOriented: true, active: true },
     { isZOriented: true, active: true },
     { isZOriented: true, active: true }
   ] );
-  public static readonly EXPERIMENT_5 = new SpinExperiment( 'Experiment 5 [Sx, Sz]', [
+  public static readonly EXPERIMENT_5 = new SpinExperiment( 'Experiment 5 [SGx, SGz]', [
     { isZOriented: false, active: true },
     { isZOriented: true, active: true },
     { isZOriented: true, active: true }
   ] );
-  public static readonly EXPERIMENT_6 = new SpinExperiment( 'Experiment 6 [Sx, Sx]', [
+  public static readonly EXPERIMENT_6 = new SpinExperiment( 'Experiment 6 [SGx, SGx]', [
     { isZOriented: false, active: true },
     { isZOriented: false, active: true },
     { isZOriented: false, active: true }
@@ -57,12 +57,12 @@ export default class SpinExperiment extends EnumerationValue {
 
   public readonly experimentName: string | TReadOnlyProperty<string>;
 
-  public readonly experimentSettings: SternGerlachOptions[];
+  public readonly experimentSetting: SternGerlachExperimentSetting[];
 
-  public constructor( experimentName: string | TReadOnlyProperty<string>, experimentSettings: SternGerlachOptions[] ) {
+  public constructor( experimentName: string | TReadOnlyProperty<string>, experimentSetting: SternGerlachExperimentSetting[] ) {
     super();
     this.experimentName = experimentName;
-    this.experimentSettings = experimentSettings;
+    this.experimentSetting = experimentSetting;
   }
 }
 
