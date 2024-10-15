@@ -10,6 +10,7 @@
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Line } from '../../../../kite/js/imports.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
@@ -84,12 +85,38 @@ export default class PolarizingBeamSplitter {
 
     if ( photonIntersectionPoint !== null ) {
 
-      // The photon is being reflected by the beam splitter.  The only direction supported currently is up.
-      return {
-        interactionType: 'reflected',
-        reflectionPoint: photonIntersectionPoint,
-        reflectionDirection: new Vector2( 0, 1 )
-      };
+      // Calculate the probability of reflection.
+      let probabilityOfReflection;
+      if ( this.presetPolarizationDirectionProperty.value === 'horizontal' ) {
+        probabilityOfReflection = 0;
+      }
+      else if ( this.presetPolarizationDirectionProperty.value === 'vertical' ) {
+        probabilityOfReflection = 1;
+      }
+      else if ( this.presetPolarizationDirectionProperty.value === 'fortyFiveDegrees' ) {
+        probabilityOfReflection = 0.5;
+      }
+      else {
+
+        // TODO: How is this supposed to be calculated? See https://github.com/phetsims/quantum-measurement/issues/52.
+        probabilityOfReflection = this.customPolarizationAngleProperty.value / 90;
+      }
+
+      if ( dotRandom.nextDouble() >= probabilityOfReflection ) {
+
+        // The photon is being reflected by the beam splitter.  The only direction supported currently is up.
+        return {
+          interactionType: 'reflected',
+          reflectionPoint: photonIntersectionPoint,
+          reflectionDirection: new Vector2( 0, 1 )
+        };
+      }
+      else {
+
+        // No reflection.  The photon is passing through the beam splitter.
+        return { interactionType: 'none' };
+      }
+
     }
     else {
       return { interactionType: 'none' };

@@ -13,6 +13,8 @@ import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import Photon from './Photon.js';
+import { PhotonInteraction } from './PhotonsModel.js';
 
 type SelfOptions = EmptySelfOptions;
 type MirrorOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
@@ -35,6 +37,32 @@ export default class Mirror {
     const endpoint1 = centerPosition.plus( new Vector2( MIRROR_LENGTH / 2, 0 ).rotated( -Math.PI / 4 ) );
     const endpoint2 = centerPosition.plus( new Vector2( -MIRROR_LENGTH / 2, 0 ).rotated( -Math.PI / 4 ) );
     this.mirrorSurfaceLine = new Line( endpoint1, endpoint2 );
+  }
+
+  public testForPhotonInteraction( photon: Photon, dt: number ): PhotonInteraction {
+
+    assert && assert( photon.activeProperty.value, 'save CPU cycles - don\'t use this method with inactive photons' );
+
+    // Test for whether this photon crosses the surface of the beam splitter.
+    const photonIntersectionPoint = photon.getTravelPathIntersectionPoint(
+      this.mirrorSurfaceLine.start,
+      this.mirrorSurfaceLine.end,
+      dt
+    );
+
+    if ( photonIntersectionPoint !== null ) {
+
+
+      // The photon is being reflected by this mirror.  The only direction supported currently is down.
+      return {
+        interactionType: 'reflected',
+        reflectionPoint: photonIntersectionPoint,
+        reflectionDirection: new Vector2( 0, -1 )
+      };
+    }
+    else {
+      return { interactionType: 'none' };
+    }
   }
 }
 

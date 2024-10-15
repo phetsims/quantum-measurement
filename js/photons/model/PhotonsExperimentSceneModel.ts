@@ -18,6 +18,7 @@ import Mirror from './Mirror.js';
 import Photon, { PHOTON_SPEED } from './Photon.js';
 import PhotonDetector from './PhotonDetector.js';
 import PhotonEmitter from './PhotonEmitter.js';
+import { PhotonInteraction } from './PhotonsModel.js';
 import PolarizingBeamSplitter from './PolarizingBeamSplitter.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -97,10 +98,22 @@ export default class PhotonsExperimentSceneModel {
     // Make a list of active photons.
     const activePhotons = this.photons.filter( photon => photon.activeProperty.value );
 
+    // Gather the things that can potentially interact with the photons
+    const potentialInteractors = [ this.polarizingBeamSplitter, this.mirror ];
+
     // Update each active photon's position based on its direction and speed and whether it interacts with any other
     // model elements.
     activePhotons.forEach( photon => {
-      const interaction = this.polarizingBeamSplitter.testForPhotonInteraction( photon, dt );
+
+      // Test for interactions with the potential interactors.
+      let interaction: PhotonInteraction = { interactionType: 'none' };
+      for ( const potentiallyInteractingElement of potentialInteractors ) {
+        interaction = potentiallyInteractingElement.testForPhotonInteraction( photon, dt );
+        if ( interaction.interactionType !== 'none' ) {
+          break;
+        }
+      }
+
       if ( interaction.interactionType === 'reflected' ) {
 
         // This photon was reflected.  First step it to the reflection point.
@@ -122,7 +135,8 @@ export default class PhotonsExperimentSceneModel {
 
     // TODO: temporary - if any photons go too far, deactivate them, see https://github.com/phetsims/quantum-measurement/issues/52
     this.photons.forEach( photon => {
-      if ( photon.activeProperty.value && ( photon.positionProperty.value.x > 0.28 || photon.positionProperty.value.y > 0.25 ) ) {
+      if ( photon.activeProperty.value &&
+           ( photon.positionProperty.value.x > 0.28 || photon.positionProperty.value.y > 0.25 || photon.positionProperty.value.y < -0.25 ) ) {
         photon.activeProperty.set( false );
         photon.positionProperty.set( Vector2.ZERO );
       }
