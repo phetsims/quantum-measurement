@@ -14,6 +14,7 @@ import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import Mirror from './Mirror.js';
 import PhotonDetector from './PhotonDetector.js';
 import PhotonEmitter from './PhotonEmitter.js';
 import PolarizingBeamSplitter from './PolarizingBeamSplitter.js';
@@ -31,6 +32,8 @@ export default class PhotonsExperimentSceneModel {
 
   // The angle of polarization for the polarizing beam splitter, in degrees.  Zero is horizontal and 90 is vertical.
   public readonly photonPolarizationAngleProperty: NumberProperty;
+
+  public readonly mirror: Mirror;
 
   public readonly photonEmitter: PhotonEmitter;
 
@@ -61,6 +64,10 @@ export default class PhotonsExperimentSceneModel {
     } );
     this.horizontalPolarizationDetector = new PhotonDetector( new Vector2( 0.25, -0.25 ), 'down', {
       tandem: providedOptions.tandem.createTandem( 'horizontalPolarizationDetector' )
+    } );
+
+    this.mirror = new Mirror( new Vector2( 0.25, 0 ), {
+      tandem: providedOptions.tandem.createTandem( 'mirror' )
     } );
   }
 

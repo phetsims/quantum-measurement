@@ -14,6 +14,7 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import { Node, NodeOptions } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import PhotonsExperimentSceneModel from '../model/PhotonsExperimentSceneModel.js';
+import MirrorNode from './MirrorNode.js';
 import PhotonDetectorNode from './PhotonDetectorNode.js';
 import PolarizingBeamSplitterNode from './PolarizingBeamSplitterNode.js';
 import PhotonEmitterNode from './PhotonEmitterNode.js';
@@ -59,12 +60,17 @@ export default class PhotonTestingArea extends Node {
       }
     );
 
+    const mirror = new MirrorNode( model.mirror, photonTestingAreaModelViewTransform, {
+      tandem: providedOptions.tandem.createTandem( 'mirror' )
+    } );
+
     const options = optionize<PhotonTestingAreaOptions, SelfOptions, NodeOptions>()( {
       children: [
         photonEmitterNode,
         polarizingBeamSplitterNode,
         verticalPolarizationDetector,
-        horizontalPolarizationDetector
+        horizontalPolarizationDetector,
+        mirror
       ]
     }, providedOptions );
 
