@@ -25,7 +25,7 @@ type SelfOptions = EmptySelfOptions;
 type PhotonsExperimentSceneModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
 // The width of the photon beam, in meters.  5 cm seemed a reasonable width, but it is essentially arbitrary.
-export const PHOTON_BEAM_WIDTH = 0.05;
+export const PHOTON_BEAM_WIDTH = 0.08;
 
 export default class PhotonsExperimentSceneModel {
 

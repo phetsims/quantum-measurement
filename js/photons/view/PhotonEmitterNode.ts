@@ -26,11 +26,9 @@ export default class PhotonEmitterNode extends Node {
                       providedOptions: PhotonEmitterNodeOptions ) {
 
     const photonSourceNode = new LaserPointerNode( model.photonProductionEnabledProperty, {
-      bodySize: new Dimension2( 50, 30 ),
-      nozzleSize: new Dimension2( 10, 25 ),
-      buttonRadius: 12,
-      buttonXMargin: 1,
-      buttonYMargin: 1
+      bodySize: new Dimension2( 95, 55 ),
+      nozzleSize: new Dimension2( 15, 45 ),
+      buttonRadius: 18
     } );
 
     const options = optionize<PhotonEmitterNodeOptions, SelfOptions, NodeOptions>()( {

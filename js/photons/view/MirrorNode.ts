@@ -25,7 +25,7 @@ export default class MirrorNode extends Line {
 
     const options = optionize<MirrorNodeOptions, SelfOptions, RectangleOptions>()( {
       stroke: Color.LIGHT_GRAY,
-      lineWidth: 3
+      lineWidth: 5
     }, providedOptions );
 
     super(

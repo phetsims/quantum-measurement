@@ -15,7 +15,7 @@ import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
-export const PHOTON_SPEED = 0.15; // meters per second
+export const PHOTON_SPEED = 0.2; // meters per second
 
 export default class Photon extends PhetioObject {
 

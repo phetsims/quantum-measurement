@@ -20,7 +20,7 @@ type SelfOptions = EmptySelfOptions;
 type MirrorOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
 // constants
-const MIRROR_LENGTH = 0.1126; // meters
+const MIRROR_LENGTH = 0.15; // meters
 
 export default class Mirror {
 
