@@ -38,12 +38,14 @@ export default class PhotonsExperimentSceneView extends HBox {
     const testRect3 = new Rectangle( 0, 0, 180, testRectHeight, {
       fill: new Color( '#44673A' ),
       stroke: new Color( '#44673A' ).darkerColor( 0.5 ),
-      lineWidth: 2
+      lineWidth: 2,
+      opacity: 0.1
     } );
     const testRect4 = new Rectangle( 0, 0, 210, testRectHeight, {
       fill: new Color( '#E8AA93' ),
       stroke: new Color( '#E8AA93' ).darkerColor( 0.5 ),
-      lineWidth: 2
+      lineWidth: 2,
+      opacity: 0.1
     } );
 
     const options = optionize<PhotonsExperimentSceneViewOptions, SelfOptions, HBoxOptions>()( {

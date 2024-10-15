@@ -90,12 +90,22 @@ export default class PhotonsExperimentSceneModel {
   }
 
   public step( dt: number ): void {
+
+    // Check each photon for potential interaction with the various model elements.
+    this.photons.forEach( photon => {
+      if ( photon.activeProperty.value ) {
+        const interaction = this.polarizingBeamSplitter.testForPhotonInteraction( photon, dt );
+        if ( interaction.interactionType === 'reflected' ) {
+          photon.directionProperty.set( interaction.reflectionDirection! );
+        }
+      }
+    } );
     this.photons.forEach( photon => photon.step( dt ) );
     this.photonEmitter.step( dt );
 
     // TODO: temporary - if any photons go too far, deactivate them, see https://github.com/phetsims/quantum-measurement/issues/52
     this.photons.forEach( photon => {
-      if ( photon.activeProperty.value && photon.positionProperty.value.x > 0.28 ) {
+      if ( photon.activeProperty.value && ( photon.positionProperty.value.x > 0.28 || photon.positionProperty.value.y > 0.25 ) ) {
         photon.activeProperty.set( false );
         photon.positionProperty.set( Vector2.ZERO );
       }

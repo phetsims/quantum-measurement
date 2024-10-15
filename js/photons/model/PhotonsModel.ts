@@ -13,6 +13,7 @@
  */
 
 import Property from '../../../../axon/js/Property.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import TModel from '../../../../joist/js/TModel.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
@@ -23,6 +24,13 @@ import PhotonsExperimentSceneModel from './PhotonsExperimentSceneModel.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhotonsModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
+
+export const PhotonInteractionTypeValues = [ 'none', 'absorbed', 'reflected' ] as const;
+export type PhotonInteractionTypes = ( typeof PhotonInteractionTypeValues )[number];
+export type PhotonInteraction = {
+  interactionType: PhotonInteractionTypes;
+  reflectionDirection: Vector2 | null;
+};
 
 export const ExperimentModeTypeValues = [ 'singlePhoton', 'manyPhotons' ] as const;
 export type ExperimentModeType = ( typeof ExperimentModeTypeValues )[number];

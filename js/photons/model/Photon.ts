@@ -14,7 +14,7 @@ import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
-const SPEED = 0.1; // meters per second
+export const PHOTON_SPEED = 0.1; // meters per second
 
 export default class Photon extends PhetioObject {
 
@@ -49,7 +49,7 @@ export default class Photon extends PhetioObject {
 
   public step( dt: number ): void {
     if ( this.activeProperty.value ) {
-      this.positionProperty.set( this.positionProperty.value.plus( this.directionProperty.value.timesScalar( SPEED * dt ) ) );
+      this.positionProperty.set( this.positionProperty.value.plus( this.directionProperty.value.timesScalar( PHOTON_SPEED * dt ) ) );
     }
   }
 

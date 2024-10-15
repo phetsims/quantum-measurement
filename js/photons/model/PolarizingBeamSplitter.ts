@@ -17,6 +17,8 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import { PhotonInteraction } from './PhotonsModel.js';
+import Photon, { PHOTON_SPEED } from './Photon.js';
 
 type SelfOptions = EmptySelfOptions;
 type PolarizingBeamSplitterOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
@@ -67,6 +69,15 @@ export default class PolarizingBeamSplitter {
     this.customPolarizationAngleProperty.lazyLink( customPolarizationAngleProperty => {
       console.log( `customPolarizationAngleProperty = ${customPolarizationAngleProperty}` );
     } );
+  }
+
+  public testForPhotonInteraction( photon: Photon, dt: number ): PhotonInteraction {
+    if ( photon.positionProperty.value.x + photon.directionProperty.value.x * PHOTON_SPEED * dt > this.centerPosition.x ) {
+      return { interactionType: 'reflected', reflectionDirection: new Vector2( 0, 1 ) };
+    }
+    else {
+      return { interactionType: 'none', reflectionDirection: null };
+    }
   }
 }
 
