@@ -1,14 +1,15 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * ParticleSourceNode contains the UI elements around the particle source, including the particle-shooting apparatus,
- * and other UI elements to control the source mode.
+ * ParticleSourceNode contains the UI elements of the particle source, including the particle-shooter,
+ * and other UI elements to control the source mode between 'single particle' and 'continuous' ray.
  *
  * @author Agustín Vallejo
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { LinearGradient, Node, Path, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
@@ -21,14 +22,18 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import SpinModel, { SourceMode } from '../model/SpinModel.js';
 
 // Constants
-const PARTICLE_SOURCE_WIDTH = 100;
-const PARTICLE_SOURCE_HEIGHT = 100;
+export const PARTICLE_SOURCE_WIDTH = 120;
+export const PARTICLE_SOURCE_HEIGHT = 120;
 const PARTICLE_SOURCE_CORNER_RADIUS = 10;
 
 export default class ParticleSourceNode extends VBox {
 
+  // Global position vector for the particle ray, it is updated outside of the constructor
+  public particleExitGlobalPosition = new Vector2( 0, 0 );
+
   public constructor( model: SpinModel, tandem: Tandem ) {
 
+    // Main shape of the component
     const particleSourceView = new Path( new Shape().roundRect( 0, 0, PARTICLE_SOURCE_WIDTH, PARTICLE_SOURCE_HEIGHT, PARTICLE_SOURCE_CORNER_RADIUS, PARTICLE_SOURCE_CORNER_RADIUS ),
       {
         fill: new LinearGradient( 0, 0, 0, 100 )
@@ -37,6 +42,7 @@ export default class ParticleSourceNode extends VBox {
           .addColorStop( 1, 'blue' )
       } );
 
+    // Button for 'single' mode
     const shootParticleButton = new RoundMomentaryButton<boolean>(
       model.currentlyShootingParticlesProperty, false, true, {
         scale: 0.7,
@@ -46,6 +52,7 @@ export default class ParticleSourceNode extends VBox {
         tandem: tandem.createTandem( 'shootParticleButton' )
       } );
 
+    // Slider for 'continuous' mode
     const sliderRange = model.particleAmmountProperty.range;
     const particleAmmountSlider = new HSlider( model.particleAmmountProperty, sliderRange, {
       thumbFill: QuantumMeasurementColors.downColorProperty,

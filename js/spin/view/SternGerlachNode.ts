@@ -16,19 +16,21 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import SternGerlachModel from '../model/SternGerlachModel.js';
 
 // Constants
-const STERN_GERLACH_WIDTH = 150;
-const STERN_GERLACH_HEIGHT = 100;
-const PARTICLE_HOLE_WIDTH = 5;
+export const STERN_GERLACH_WIDTH = 150;
+export const STERN_GERLACH_HEIGHT = 100;
+export const PARTICLE_HOLE_WIDTH = 5;
 const PARTICLE_HOLE_HEIGHT = 20;
 
 export default class SternGerlachNode extends Node {
 
-  public readonly entranceGlobalPosition: Vector2;
-  public readonly boxWidth = STERN_GERLACH_WIDTH;
-  public readonly boxHeight = STERN_GERLACH_HEIGHT;
+  // Global position vectors, they are to be updated outside of the constructor
+  public entranceGlobalPosition = new Vector2( 0, 0 );
+  public topExitGlobalPosition = new Vector2( 0, 0 );
+  public bottomExitGlobalPosition = new Vector2( 0, 0 );
 
   public constructor( experimentModel: SternGerlachModel, tandem: Tandem ) {
 
+    // Component for the entry and exit points of the SG apparatus
     const createParticleHole = ( x: number, y: number ) => {
       return new Path( new Shape().rect( x, y, PARTICLE_HOLE_WIDTH, PARTICLE_HOLE_HEIGHT ),
         {
@@ -42,6 +44,7 @@ export default class SternGerlachNode extends Node {
       return Math.pow( x, 2 );
     };
 
+    // Decoration curves that go in the front of the main rectangle
     const curveUpShape = new Shape().moveTo( 0, STERN_GERLACH_HEIGHT / 2 );
     const curveDownShape = new Shape().moveTo( 0, STERN_GERLACH_HEIGHT / 2 );
 
@@ -76,8 +79,6 @@ export default class SternGerlachNode extends Node {
           { font: new PhetFont( 16 ), fill: 'white', center: new Vector2( 25, 80 ) } )
       ]
     } );
-
-    this.entranceGlobalPosition = this.localToGlobalPoint( new Vector2( 0, STERN_GERLACH_HEIGHT / 2 ) );
   }
 }
 

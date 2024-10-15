@@ -29,21 +29,26 @@ export default class SpinExperiment extends EnumerationValue {
   ] );
   public static readonly EXPERIMENT_3 = new SpinExperiment( 'Experiment 3 [Sz, Sx]', [
     { isZOriented: true, active: true },
+    { isZOriented: false, active: true },
     { isZOriented: false, active: true }
   ] );
   public static readonly EXPERIMENT_4 = new SpinExperiment( 'Experiment 4 [Sz, Sz]', [
+    { isZOriented: true, active: true },
     { isZOriented: true, active: true },
     { isZOriented: true, active: true }
   ] );
   public static readonly EXPERIMENT_5 = new SpinExperiment( 'Experiment 5 [Sx, Sz]', [
     { isZOriented: false, active: true },
+    { isZOriented: true, active: true },
     { isZOriented: true, active: true }
   ] );
   public static readonly EXPERIMENT_6 = new SpinExperiment( 'Experiment 6 [Sx, Sx]', [
     { isZOriented: false, active: true },
+    { isZOriented: false, active: true },
     { isZOriented: false, active: true }
   ] );
   public static readonly CUSTOM = new SpinExperiment( 'Custom', [
+    { isZOriented: false, active: false },
     { isZOriented: false, active: false },
     { isZOriented: false, active: false }
   ] );

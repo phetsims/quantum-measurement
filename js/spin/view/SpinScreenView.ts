@@ -40,7 +40,7 @@ export default class SpinScreenView extends QuantumMeasurementScreenView {
     } );
     this.addChild( dividingLine );
 
-    const spinMeasurementArea = new SpinMeasurementArea( model, this, tandem.createTandem( 'spinMeasurementArea' ) );
+    const spinMeasurementArea = new SpinMeasurementArea( model, this, this.layoutBounds, tandem.createTandem( 'spinMeasurementArea' ) );
     spinMeasurementArea.centerX = 2 * dividingLineX;
     this.addChild( spinMeasurementArea );
 
@@ -49,6 +49,8 @@ export default class SpinScreenView extends QuantumMeasurementScreenView {
       spinStatePreparationArea.opacity = 1 - opacity;
       spinMeasurementArea.opacity = 1 - opacity;
     } );
+
+    model.currentExperimentProperty.notifyListenersStatic();
   }
 
   public override reset(): void {
