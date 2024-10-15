@@ -10,13 +10,16 @@
  * @author Agustín Vallejo
  */
 
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Range from '../../../../dot/js/Range.js';
 import TModel from '../../../../joist/js/TModel.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
+import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import SimpleBlochSphere from './SimpleBlochSphere.js';
 import SpinExperiment from './SpinExperiment.js';
@@ -71,6 +74,10 @@ export default class SpinModel implements TModel {
   public readonly secondSternGerlachModel: SternGerlachModel;
   public readonly thirdSternGerlachModel: SternGerlachModel;
 
+  public readonly currentlyShootingParticlesProperty: Property<boolean>;
+
+  public readonly particleAmmountProperty: NumberProperty;
+
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
     this.sourceModeProperty = new Property<SourceMode>( SourceMode.SINGLE );
@@ -99,6 +106,16 @@ export default class SpinModel implements TModel {
           sternGerlachModel.isVisibleProperty.set( false );
         }
       } );
+    } );
+
+    this.currentlyShootingParticlesProperty = new Property<boolean>( false, {
+      tandem: providedOptions.tandem.createTandem( 'currentlyShootingParticlesProperty' ),
+      phetioValueType: BooleanIO
+    } );
+
+    this.particleAmmountProperty = new NumberProperty( 1, {
+      tandem: providedOptions.tandem.createTandem( 'particleAmmountProperty' ),
+      range: new Range( 0, 1 )
     } );
 
   }

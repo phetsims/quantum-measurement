@@ -41,7 +41,7 @@ export default class SpinMeasurementArea extends VBox {
         new HBox( {
           spacing: 50,
           children: [
-            new ParticleSourceNode( model.sourceModeProperty, tandem ),
+            new ParticleSourceNode( model, tandem ),
             new SternGerlachNode( model.firstSternGerlachModel, tandem.createTandem( 'firstSternGerlachNode' ) ),
             new VBox( {
               spacing: 20,
