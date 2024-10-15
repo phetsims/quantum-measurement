@@ -7,10 +7,13 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import Dimension2 from '../../../../dot/js/Dimension2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import { Color, Node, NodeOptions, Rectangle } from '../../../../scenery/js/imports.js';
+import LaserPointerNode from '../../../../scenery-phet/js/LaserPointerNode.js';
+import { Node, NodeOptions } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import PhotonEmitter from '../model/PhotonEmitter.js';
 
@@ -23,9 +26,16 @@ export default class PhotonEmitterNode extends Node {
                       modelViewTransform: ModelViewTransform2,
                       providedOptions: PhotonEmitterNodeOptions ) {
 
-    const testRect = new Rectangle( 0, 0, 50, 30, {
-      fill: Color.LIGHT_GRAY,
-      stroke: Color.DARK_GRAY
+    // const testRect = new Rectangle( 0, 0, 50, 30, {
+    //   fill: Color.LIGHT_GRAY,
+    //   stroke: Color.DARK_GRAY
+    // } );
+    const testRect = new LaserPointerNode( new BooleanProperty( false ), {
+      bodySize: new Dimension2( 50, 30 ),
+      nozzleSize: new Dimension2( 10, 25 ),
+      buttonRadius: 12,
+      buttonXMargin: 1,
+      buttonYMargin: 1
     } );
 
     const options = optionize<PhotonEmitterNodeOptions, SelfOptions, NodeOptions>()( {
