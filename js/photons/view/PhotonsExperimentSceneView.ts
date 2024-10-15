@@ -33,7 +33,7 @@ export default class PhotonsExperimentSceneView extends HBox {
       tandem: providedOptions.tandem.createTandem( 'photonTestingArea' )
     } );
 
-    // TODO: This set of rectangles is a placeholder for working on layout, see https://github.com/phetsims/quantum-measurement/issues/52
+    // TODO: These rectangles are placeholders for working on layout, see https://github.com/phetsims/quantum-measurement/issues/52
     const testRectHeight = 510;
     const testRect3 = new Rectangle( 0, 0, 180, testRectHeight, {
       fill: new Color( '#44673A' ),

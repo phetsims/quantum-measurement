@@ -14,6 +14,7 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import { Node, NodeOptions } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import PhotonsExperimentSceneModel from '../model/PhotonsExperimentSceneModel.js';
+import PhotonDetectorNode from './PhotonDetectorNode.js';
 import PolarizingBeamSplitterNode from './PolarizingBeamSplitterNode.js';
 import PhotonEmitterNode from './PhotonEmitterNode.js';
 
@@ -35,6 +36,21 @@ export default class PhotonTestingArea extends Node {
       tandem: providedOptions.tandem.createTandem( 'photonEmitterNode' )
     } );
 
+    const verticalPolarizationDetector = new PhotonDetectorNode(
+      model.verticalPolarizationDetector,
+      photonTestingAreaModelViewTransform,
+      {
+        tandem: providedOptions.tandem.createTandem( 'verticalPolarizationDetector' )
+      }
+    );
+    const horizontalPolarizationDetector = new PhotonDetectorNode(
+      model.horizontalPolarizationDetector,
+      photonTestingAreaModelViewTransform,
+      {
+        tandem: providedOptions.tandem.createTandem( 'horizontalPolarizationDetector' )
+      }
+    );
+
     const polarizingBeamSplitterNode = new PolarizingBeamSplitterNode(
       model.polarizingBeamSplitter,
       photonTestingAreaModelViewTransform,
@@ -44,7 +60,12 @@ export default class PhotonTestingArea extends Node {
     );
 
     const options = optionize<PhotonTestingAreaOptions, SelfOptions, NodeOptions>()( {
-      children: [ photonEmitterNode, polarizingBeamSplitterNode ]
+      children: [
+        photonEmitterNode,
+        polarizingBeamSplitterNode,
+        verticalPolarizationDetector,
+        horizontalPolarizationDetector
+      ]
     }, providedOptions );
 
     super( options );

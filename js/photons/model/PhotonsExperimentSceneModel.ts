@@ -56,10 +56,10 @@ export default class PhotonsExperimentSceneModel {
 
     // Create the photon detectors that will measure the rate at which photons are arriving after being either reflected
     // or transmitted by the polarizing beam splitter.
-    this.verticalPolarizationDetector = new PhotonDetector( new Vector2( 0, 0.5 ), 'up', {
+    this.verticalPolarizationDetector = new PhotonDetector( new Vector2( 0, 0.25 ), 'up', {
       tandem: providedOptions.tandem.createTandem( 'verticalPolarizationDetector' )
     } );
-    this.horizontalPolarizationDetector = new PhotonDetector( new Vector2( 0.25, -0.5 ), 'down', {
+    this.horizontalPolarizationDetector = new PhotonDetector( new Vector2( 0.25, -0.25 ), 'down', {
       tandem: providedOptions.tandem.createTandem( 'horizontalPolarizationDetector' )
     } );
   }
