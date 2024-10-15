@@ -23,6 +23,10 @@ const PARTICLE_HOLE_HEIGHT = 20;
 
 export default class SternGerlachNode extends Node {
 
+  public readonly entranceGlobalPosition: Vector2;
+  public readonly boxWidth = STERN_GERLACH_WIDTH;
+  public readonly boxHeight = STERN_GERLACH_HEIGHT;
+
   public constructor( experimentModel: SternGerlachModel, tandem: Tandem ) {
 
     const createParticleHole = ( x: number, y: number ) => {
@@ -72,6 +76,8 @@ export default class SternGerlachNode extends Node {
           { font: new PhetFont( 16 ), fill: 'white', center: new Vector2( 25, 80 ) } )
       ]
     } );
+
+    this.entranceGlobalPosition = this.localToGlobalPoint( new Vector2( 0, STERN_GERLACH_HEIGHT / 2 ) );
   }
 }
 

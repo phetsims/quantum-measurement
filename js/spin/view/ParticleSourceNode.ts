@@ -56,11 +56,12 @@ export default class ParticleSourceNode extends VBox {
       majorTickLength: 15
     } );
 
-    // major ticks
+    // major ticks at 0%, 33%, 66%, 100%
     const tickLabelOptions = { font: new PhetFont( 12 ) };
     particleAmmountSlider.addMajorTick( sliderRange.min, new Text( 'None', tickLabelOptions ) );
-    particleAmmountSlider.addMajorTick( sliderRange.getCenter() );
     particleAmmountSlider.addMajorTick( sliderRange.max, new Text( 'Lots', tickLabelOptions ) );
+    particleAmmountSlider.addMajorTick( sliderRange.min + ( sliderRange.max - sliderRange.min ) / 3 );
+    particleAmmountSlider.addMajorTick( sliderRange.min + 2 * ( sliderRange.max - sliderRange.min ) / 3 );
 
     super( {
       tandem: tandem.createTandem( 'particleSourceNode' ),
