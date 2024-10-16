@@ -48,7 +48,7 @@ export class ParticleWithSpinModel {
   public readyToMeasureEmitter = new Emitter();
 
   public positionProperty: Vector2Property;
-  public speed = 1;
+  public speed = 70;
 
   public constructor( public readonly id: number ) {
     this.activeProperty = new BooleanProperty( false );
@@ -61,7 +61,7 @@ export class ParticleWithSpinModel {
 
       this.calculatePosition();
 
-      if ( this.lifetime > 4 ) {
+      if ( this.lifetime > 10 ) {
         this.reset();
       }
     }
@@ -76,10 +76,6 @@ export class ParticleWithSpinModel {
    * t = 4 to t = 5: Traveling onwards from SG2 or SG3 -> Paths 3 - 6
    */
   public calculatePosition(): void {
-
-    // Set the speed so it takes t=1 to travel the first path
-    this.speed = this.mappedPaths[ 0 ][ 0 ].distance( this.mappedPaths[ 0 ][ 1 ] );
-
     // Travel from vector a to vector b based on speed and t
     const travel = ( a: Vector2, b: Vector2, t: number ): Vector2 => {
       const direction = b.minus( a ).normalized();
@@ -111,7 +107,8 @@ export class ParticleWithSpinModel {
           this.readyToMeasureEmitter.emit();
         }
         else {
-          this.positionProperty.value = travel( this.mappedPaths[ path ][ 0 ], this.mappedPaths[ path ][ 1 ], this.lifetime - 3 );
+          path = this.secondSpinUp ? 1 : 2;
+          this.positionProperty.value = travel( this.mappedPaths[ path ][ 0 ], this.mappedPaths[ path ][ 1 ], this.lifetime - 2 );
         }
         break;
       default:
@@ -120,8 +117,12 @@ export class ParticleWithSpinModel {
           path = this.secondSpinUp ? // Went from SG1 to SG3
                  this.thirdSpinUp ? 3 : 4 : // Spin up?
                   this.thirdSpinUp ? 5 : 6; // Spin up?
+          this.positionProperty.value = travel( this.mappedPaths[ path ][ 0 ], this.mappedPaths[ path ][ 1 ], this.lifetime - 4 );
         }
-        this.positionProperty.value = travel( this.mappedPaths[ path ][ 0 ], this.mappedPaths[ path ][ 1 ], this.lifetime - 3 );
+        else {
+          path = this.secondSpinUp ? 1 : 2;
+          this.positionProperty.value = travel( this.mappedPaths[ path ][ 0 ], this.mappedPaths[ path ][ 1 ], this.lifetime - 2 );
+        }
         break;
 
     }
