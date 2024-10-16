@@ -25,14 +25,15 @@ export default class PhotonEmitterNode extends Node {
                       modelViewTransform: ModelViewTransform2,
                       providedOptions: PhotonEmitterNodeOptions ) {
 
-    const photonSourceNode = new LaserPointerNode( model.photonProductionEnabledProperty, {
+    const laserPointerNode = new LaserPointerNode( model.photonProductionEnabledProperty, {
       bodySize: new Dimension2( 95, 55 ),
       nozzleSize: new Dimension2( 15, 45 ),
-      buttonRadius: 18
+      buttonRadius: 18,
+      tandem: providedOptions.tandem.createTandem( 'laserPointerNode' )
     } );
 
     const options = optionize<PhotonEmitterNodeOptions, SelfOptions, NodeOptions>()( {
-      children: [ photonSourceNode ],
+      children: [ laserPointerNode ],
       right: modelViewTransform.modelToViewX( model.position.x ),
       centerY: modelViewTransform.modelToViewY( model.position.y )
     }, providedOptions );
