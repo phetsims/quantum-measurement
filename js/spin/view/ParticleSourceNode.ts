@@ -19,7 +19,8 @@ import HSlider from '../../../../sun/js/HSlider.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import SpinModel, { SourceMode } from '../model/SpinModel.js';
+import { SourceMode } from '../model/SourceMode.js';
+import SpinModel from '../model/SpinModel.js';
 
 // Constants
 export const PARTICLE_SOURCE_WIDTH = 120;

@@ -19,23 +19,23 @@ import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import SimpleBlochSphere from '../model/SimpleBlochSphere.js';
-import { SpinValue } from '../model/SpinModel.js';
+import { SpinDirection } from '../model/SpinDirection.js';
 
 export default class SpinStatePreparationArea extends VBox {
 
-  public constructor( spinStateProperty: Property<SpinValue>, blochSphere: SimpleBlochSphere, tandem: Tandem ) {
+  public constructor( spinStateProperty: Property< SpinDirection>, blochSphere: SimpleBlochSphere, tandem: Tandem ) {
 
-    const createRadioButtonGroupItem = ( spinValue: SpinValue ) => {
+    const createRadioButtonGroupItem = ( SpinDirection: SpinDirection ) => {
       return {
-        createNode: () => new Text( spinValue.description, { font: new PhetFont( 15 ) } ),
-        value: spinValue,
-        tandemName: `${spinValue.tandemName}SpinValueRadioButton`
+        createNode: () => new Text( SpinDirection.description, { font: new PhetFont( 15 ) } ),
+        value: SpinDirection,
+        tandemName: `${SpinDirection.tandemName}SpinDirectionRadioButton`
       };
     };
 
     const numberOfCoinsRadioButtonGroup = new RectangularRadioButtonGroup(
       spinStateProperty,
-      SpinValue.enumeration.values.map( quantity => createRadioButtonGroupItem( quantity ) ),
+      SpinDirection.enumeration.values.map( quantity => createRadioButtonGroupItem( quantity ) ),
       {
         spacing: 10,
         center: new Vector2( 100, 100 ),

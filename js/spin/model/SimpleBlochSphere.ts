@@ -11,7 +11,7 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import AbstractBlochSphere, { AbstractBlochSphereOptions } from '../../common/model/AbstractBlochSphere.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { SpinValue } from './SpinModel.js';
+import { SpinDirection } from './SpinDirection.js';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -20,7 +20,7 @@ export type SimpleBlochSphereOptions = SelfOptions & AbstractBlochSphereOptions;
 
 export default class SimpleBlochSphere extends AbstractBlochSphere {
 
-  public constructor( spinStateProperty: TReadOnlyProperty<SpinValue>, providedOptions?: SimpleBlochSphereOptions ) {
+  public constructor( spinStateProperty: TReadOnlyProperty<SpinDirection>, providedOptions?: SimpleBlochSphereOptions ) {
 
     const options = optionize<SimpleBlochSphereOptions, SelfOptions, PhetioObjectOptions>()( {
 
@@ -30,13 +30,13 @@ export default class SimpleBlochSphere extends AbstractBlochSphere {
 
     spinStateProperty.link( spinState => {
       this.azimutalAngleProperty.value = 0;
-      if ( spinState === SpinValue.Z_PLUS ) {
+      if ( spinState === SpinDirection.Z_PLUS ) {
         this.polarAngleProperty.value = Math.PI / 2;
       }
-      else if ( spinState === SpinValue.Z_MINUS ) {
+      else if ( spinState === SpinDirection.Z_MINUS ) {
         this.polarAngleProperty.value = -Math.PI / 2;
       }
-      else if ( spinState === SpinValue.X_PLUS ) {
+      else if ( spinState === SpinDirection.X_PLUS ) {
         this.polarAngleProperty.value = 0;
       }
     } );

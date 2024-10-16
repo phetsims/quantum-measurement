@@ -13,19 +13,17 @@
 import Emitter from '../../../../axon/js/Emitter.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
 import TModel from '../../../../joist/js/TModel.js';
-import Enumeration from '../../../../phet-core/js/Enumeration.js';
-import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { ParticleWithSpinModel } from './ParticleWithSpinModel.js';
 import SimpleBlochSphere from './SimpleBlochSphere.js';
+import { SourceMode } from './SourceMode.js';
+import { SpinDirection } from './SpinDirection.js';
 import SpinExperiment from './SpinExperiment.js';
 import SternGerlachModel from './SternGerlachModel.js';
 
@@ -35,49 +33,11 @@ type SelfOptions = {
 
 type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
-
-export class SpinValue extends EnumerationValue {
-
-  // TODO: This should go in the strings file https://github.com/phetsims/quantum-measurement/issues/53
-  public static readonly Z_PLUS = new SpinValue( 'Z_PLUS', '"+Z"    ⟨Sz⟩ = +ħ/2', 'ZPlus' );
-  public static readonly X_PLUS = new SpinValue( 'X_PLUS', '"+X"    ⟨Sz⟩ = 0', 'XPlus' );
-  public static readonly Z_MINUS = new SpinValue( 'Z_MINUS', '"-Z"    ⟨Sz⟩ = -ħ/2', 'ZMinus' );
-
-  public static readonly enumeration = new Enumeration( SpinValue );
-
-  public constructor( public readonly value: string,
-                      public readonly description: string | TReadOnlyProperty<string>,
-                      public readonly tandemName: string ) {
-    super();
-  }
-
-  public static spinToVector( spin: SpinValue | null ): Vector2 {
-    // Since X_MINUS is not a valid initial state, we support null here to represent that case as a vector
-    return spin === SpinValue.Z_PLUS ? new Vector2( 0, 1 ) :
-           spin === SpinValue.Z_MINUS ? new Vector2( 0, -1 ) :
-           spin === SpinValue.X_PLUS ? new Vector2( 1, 0 ) : new Vector2( -1, 0 );
-
-  }
-}
-
-export class SourceMode extends EnumerationValue {
-
-  public static readonly SINGLE = new SourceMode( 'Single Particle', 'singleParticle' );
-
-  public static readonly CONTINUOUS = new SourceMode( 'Continuous', 'continuous' );
-
-  public static readonly enumeration = new Enumeration( SourceMode );
-
-  public constructor( public readonly sourceName: string | TReadOnlyProperty<string>, public readonly tandemName: string ) {
-    super();
-  }
-}
-
 export default class SpinModel implements TModel {
 
   public readonly sourceModeProperty: Property<SourceMode>;
 
-  public readonly spinStateProperty: Property<SpinValue>;
+  public readonly spinStateProperty: Property<SpinDirection>;
 
   public readonly blochSphere: SimpleBlochSphere;
 
@@ -104,8 +64,8 @@ export default class SpinModel implements TModel {
 
     this.sourceModeProperty = new Property<SourceMode>( SourceMode.SINGLE );
 
-    this.spinStateProperty = new Property<SpinValue>( SpinValue.Z_PLUS, {
-      validValues: SpinValue.enumeration.values
+    this.spinStateProperty = new Property<SpinDirection>( SpinDirection.Z_PLUS, {
+      validValues: SpinDirection.enumeration.values
     } );
 
     this.blochSphere = new SimpleBlochSphere(
@@ -135,11 +95,11 @@ export default class SpinModel implements TModel {
             break;
           case 3:
             if ( particle.secondSpinUp ) {
-              upProbability = this.secondSternGerlachModel.measure( this.firstSternGerlachModel.isZOrientedProperty ? SpinValue.Z_PLUS : SpinValue.X_PLUS );
+              upProbability = this.secondSternGerlachModel.measure( this.firstSternGerlachModel.isZOrientedProperty ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS );
               particle.thirdSpinUp = dotRandom.nextDouble() < upProbability;
             }
             else {
-              const upProbability = this.thirdSternGerlachModel.measure( this.firstSternGerlachModel.isZOrientedProperty ? SpinValue.Z_MINUS : null );
+              const upProbability = this.thirdSternGerlachModel.measure( this.firstSternGerlachModel.isZOrientedProperty ? SpinDirection.Z_MINUS : null );
               particle.thirdSpinUp = dotRandom.nextDouble() < upProbability;
             }
             break;
@@ -187,7 +147,7 @@ export default class SpinModel implements TModel {
           if ( !this.singleParticles[ i ].activeProperty.value ) {
             const particleToActivate = this.singleParticles[ i ];
             particleToActivate.reset();
-            particleToActivate.firstSpinValue = SpinValue.spinToVector( this.spinStateProperty.value );
+            particleToActivate.firstSpinVector = SpinDirection.spinToVector( this.spinStateProperty.value );
             particleToActivate.activeProperty.value = true;
             break;
           }
@@ -212,12 +172,12 @@ export default class SpinModel implements TModel {
       // Measure on the second SG according to the orientation of the first one
       this.secondSternGerlachModel.measure(
         // SG1 passes the up-spin particles to SG2
-        this.firstSternGerlachModel.isZOrientedProperty.value ? SpinValue.Z_PLUS : SpinValue.X_PLUS
+        this.firstSternGerlachModel.isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS
       );
 
       this.thirdSternGerlachModel.measure(
         // SG1 passes the down-spin particles to SG3, and because X- is not in the initial spin values, we pass null
-        this.firstSternGerlachModel.isZOrientedProperty.value ? SpinValue.Z_MINUS : null
+        this.firstSternGerlachModel.isZOrientedProperty.value ? SpinDirection.Z_MINUS : null
       );
 
     }

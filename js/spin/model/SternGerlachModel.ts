@@ -16,7 +16,7 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { SpinValue } from './SpinModel.js';
+import { SpinDirection } from './SpinDirection.js';
 
 export default class SternGerlachModel {
 
@@ -50,13 +50,13 @@ export default class SternGerlachModel {
    * Measures incoming particles with a given state (Z+, Z-, X+), and returns the probability of spin up
    * in the direction of the Stern Gerlach experiment.
    */
-  public measure( incomingState: SpinValue | null ): number {
+  public measure( incomingState: SpinDirection | null ): number {
 
     // Using a XZ vector to calculate the projected probability.
     // The experiment has a measurement vector and the incoming state has a spin vector
     // Based on the dot product we'll obtain the probability
 
-    const incomingStateVector = SpinValue.spinToVector( incomingState );
+    const incomingStateVector = SpinDirection.spinToVector( incomingState );
 
     const experimentMeasurementVector = this.isZOrientedProperty.value ? new Vector2( 0, 1 ) : new Vector2( 1, 0 );
 

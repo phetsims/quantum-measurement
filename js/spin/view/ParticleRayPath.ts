@@ -17,7 +17,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { ParticleWithSpinModel } from '../model/ParticleWithSpinModel.js';
-import { SourceMode } from '../model/SpinModel.js';
+import { SourceMode } from '../model/SourceMode.js';
 
 export default class ParticleRayPath extends Node {
 

@@ -35,9 +35,9 @@ export class ParticleWithSpinModel {
   public mappedPaths: Vector2[][] = [];
 
   // Spin values of the particle in the XZ plane along its lifetime
-  public firstSpinValue = new Vector2( 0, 0 );
-  public secondSpinValue = new Vector2( 0, 0 ); // After passing through SG1
-  public thirdSpinValue = new Vector2( 0, 0 ); // After passing through SG2 or SG3
+  public firstSpinVector = new Vector2( 0, 0 );
+  public secondSpinVector = new Vector2( 0, 0 ); // After passing through SG1
+  public thirdSpinVector = new Vector2( 0, 0 ); // After passing through SG2 or SG3
 
   // Same but simplified to spinUp booleans
   public firstSpinUp = false;
@@ -131,9 +131,9 @@ export class ParticleWithSpinModel {
   public reset(): void {
     this.lifetime = 0;
     this.activeProperty.value = false;
-    this.firstSpinValue.setXY( 0, 0 );
-    this.secondSpinValue.setXY( 0, 0 );
-    this.thirdSpinValue.setXY( 0, 0 );
+    this.firstSpinVector.setXY( 0, 0 );
+    this.secondSpinVector.setXY( 0, 0 );
+    this.thirdSpinVector.setXY( 0, 0 );
     this.positionProperty.reset();
   }
 }
