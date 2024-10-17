@@ -44,11 +44,11 @@ export default class PhotonsExperimentSceneModel {
 
   public constructor( providedOptions: PhotonsExperimentSceneModelOptions ) {
 
-    this.polarizingBeamSplitter = new PolarizingBeamSplitter( new Vector2( 0, 0 ), {
+    this.polarizingBeamSplitter = new PolarizingBeamSplitter( Vector2.ZERO, {
       tandem: providedOptions.tandem.createTandem( 'polarizingBeamSplitter' )
     } );
 
-    // Create the photon emitter that will produce the photons that will be sent toward the polarizing beam splitter.
+    // Create the laser that will emit the photons that will be sent toward the polarizing beam splitter.
     this.laser = new Laser( new Vector2( -0.15, 0 ), this.photons, {
       tandem: providedOptions.tandem.createTandem( 'laser' )
     } );

@@ -15,7 +15,7 @@ import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import Photon from './Photon.js';
+import Photon, { RIGHT } from './Photon.js';
 import { PHOTON_BEAM_WIDTH } from './PhotonsExperimentSceneModel.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -27,7 +27,7 @@ export default class Laser {
   public readonly position: Vector2;
 
   // The direction in which the photons should be emitted, as a unit vector.
-  public readonly emissionDirection = new Vector2( 1, 0 );
+  public readonly emissionDirection = RIGHT;
 
   public readonly emittedBeamWidth = PHOTON_BEAM_WIDTH;
 

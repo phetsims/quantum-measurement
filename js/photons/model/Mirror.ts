@@ -13,7 +13,7 @@ import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import Photon from './Photon.js';
+import Photon, { DOWN } from './Photon.js';
 import { PhotonInteraction } from './PhotonsModel.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -57,7 +57,7 @@ export default class Mirror {
       return {
         interactionType: 'reflected',
         reflectionPoint: photonIntersectionPoint,
-        reflectionDirection: new Vector2( 0, -1 )
+        reflectionDirection: DOWN
       };
     }
     else {

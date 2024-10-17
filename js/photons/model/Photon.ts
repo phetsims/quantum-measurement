@@ -17,6 +17,12 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 
 export const PHOTON_SPEED = 0.2; // meters per second
 
+// pre-fab unit vectors for the four cardinal directions
+export const UP = new Vector2( 0, 1 );
+export const DOWN = new Vector2( 0, -1 );
+export const LEFT = new Vector2( -1, 0 );
+export const RIGHT = new Vector2( 1, 0 );
+
 export default class Photon extends PhetioObject {
 
   // position in 2D space
@@ -39,7 +45,7 @@ export default class Photon extends PhetioObject {
       tandem: tandem.createTandem( 'positionProperty' )
     } );
 
-    this.directionProperty = new Vector2Property( new Vector2( 1, 0 ), {
+    this.directionProperty = new Vector2Property( RIGHT, {
       tandem: tandem.createTandem( 'directionProperty' )
     } );
 
