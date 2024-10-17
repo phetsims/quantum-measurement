@@ -39,13 +39,14 @@ export class ParticleWithSpinModel {
   public secondSpinVector = new Vector2( 0, 0 ); // After passing through SG1
   public thirdSpinVector = new Vector2( 0, 0 ); // After passing through SG2 or SG3
 
+  // TODO: This is very specific to the model!! https://github.com/phetsims/quantum-measurement/issues/53
   // Same but simplified to spinUp booleans
   public firstSpinUp = false;
   public secondSpinUp = false;
   public thirdSpinUp = false;
 
   // Emitter to trigger a measurement by the model
-  public readyToMeasureEmitter = new Emitter();
+  public readyToBeMeasuredEmitter = new Emitter();
 
   public positionProperty: Vector2Property;
   public speed = 70;
@@ -93,7 +94,7 @@ export class ParticleWithSpinModel {
       case 1:
         // In the middle of the SG1 apparatus
         this.positionProperty.value = travel( this.mappedPaths[ 0 ][ 1 ], this.mappedPaths[ 1 ][ 0 ], 0.5 );
-        this.readyToMeasureEmitter.emit();
+        this.readyToBeMeasuredEmitter.emit();
         break;
       case 2:
         // Along the second or third paths
@@ -104,7 +105,7 @@ export class ParticleWithSpinModel {
         // Inside a SG2 or SG3 apparatus
         if ( this.mappedPaths.length > 3 ) {
           this.positionProperty.value = travel( this.mappedPaths[ 0 ][ 1 ], this.mappedPaths[ 1 ][ 0 ], 0.5 );
-          this.readyToMeasureEmitter.emit();
+          this.readyToBeMeasuredEmitter.emit();
         }
         else {
           path = this.secondSpinUp ? 1 : 2;

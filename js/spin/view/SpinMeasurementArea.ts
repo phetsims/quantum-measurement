@@ -50,12 +50,14 @@ export default class SpinMeasurementArea extends VBox {
     );
 
     // Since this is a VBox, we add the ray path to the container node
-    // TODO: Currently parent is screenVies, Will this cause trouble if an intermediate parent is added? see https://github.com/phetsims/quantum-measurement/issues/53
+    // TODO: Currently parent is screenView, Will this cause trouble if an intermediate parent is added? see https://github.com/phetsims/quantum-measurement/issues/53
     parentNode.addChild( particleRayPath );
 
     super( {
       children: [
         experimentComboBox,
+
+        // TODO: Translatable! https://github.com/phetsims/quantum-measurement/issues/53
         new Text( 'Stern-Gerlach (SG) Measurements', { font: new PhetFont( { size: 20, weight: 'bolder' } ) } ),
 
         // TODO: Really really rough sketch of the behavior of the SG experiments, see https://github.com/phetsims/quantum-measurement/issues/53

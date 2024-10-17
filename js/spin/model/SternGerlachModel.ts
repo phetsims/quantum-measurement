@@ -47,7 +47,7 @@ export default class SternGerlachModel {
 
 
   /**
-   * Measures incoming particles with a given state (Z+, Z-, X+), and returns the probability of spin up
+   * Measures incoming particles with a given state (Z+, Z-, X+, X-), and returns the probability of spin up
    * in the direction of the Stern Gerlach experiment.
    */
   public measure( incomingState: SpinDirection | null ): number {

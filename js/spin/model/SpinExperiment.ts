@@ -3,7 +3,7 @@
 /**
  * SpinExperiment contains the details for all posisble Stern-Gerlach configurations of the Spin Screen.
  *
- * // TODO: So far basing off OrbitalSystem.ts https://github.com/phetsims/quantum-measurement/issues/53
+ * // TODO: Think of a better logic for blocking https://github.com/phetsims/quantum-measurement/issues/53
  *
  * @author Agustín Vallejo
  */

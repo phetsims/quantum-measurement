@@ -73,7 +73,7 @@ export default class SpinModel implements TModel {
         tandem: providedOptions.tandem.createTandem( 'blochSphere' )
       } );
 
-    const MAX_NUMBER_OF_SINGLE_PARTICLES = 1;
+    const MAX_NUMBER_OF_SINGLE_PARTICLES = 10;
 
     this.currentExperimentProperty = new Property<SpinExperiment>( SpinExperiment.EXPERIMENT_1 );
 
@@ -85,7 +85,7 @@ export default class SpinModel implements TModel {
     this.singleParticles = _.times( MAX_NUMBER_OF_SINGLE_PARTICLES, id => {
       const particle = new ParticleWithSpinModel( id );
 
-      particle.readyToMeasureEmitter.addListener( () => {
+      particle.readyToBeMeasuredEmitter.addListener( () => {
 
         let upProbability = 0;
         switch( Math.floor( particle.lifetime ) ) {
@@ -127,7 +127,7 @@ export default class SpinModel implements TModel {
 
       // Set the probabilities of the experiment. In the continuous case, this immediately alters the shown rays
       // In the single case, this prepares the probabilities for the particle that will be shot
-      // TODO: Given the above description, is measure() a correct name? https://github.com/phetsims/quantum-measurement/issues/53
+      // TODO: Given the above description, is measure() a correct name? Maybe prepare https://github.com/phetsims/quantum-measurement/issues/53
       this.measure();
     } );
 
@@ -145,6 +145,8 @@ export default class SpinModel implements TModel {
       if ( shooting ) {
         for ( let i = 0; i < MAX_NUMBER_OF_SINGLE_PARTICLES; i++ ) {
           if ( !this.singleParticles[ i ].activeProperty.value ) {
+
+            // TODO: filter? https://github.com/phetsims/quantum-measurement/issues/53
             const particleToActivate = this.singleParticles[ i ];
             particleToActivate.reset();
             particleToActivate.firstSpinVector = SpinDirection.spinToVector( this.spinStateProperty.value );
