@@ -57,20 +57,20 @@ export default class PhotonPolarizationAngleControl extends Panel {
 
     const radioButtonGroupItems = [
       {
-        value: 'horizontal',
-        createNode: () => new Text( QuantumMeasurementStrings.horizontalStringProperty, {
-          font: new PhetFont( FONT_SIZE ),
-          fill: QuantumMeasurementColors.horizontalPolarizationColorProperty
-        } ),
-        tandemName: 'horizontalRadioButton'
-      },
-      {
         value: 'vertical',
         createNode: () => new Text( QuantumMeasurementStrings.verticalStringProperty, {
           font: new PhetFont( FONT_SIZE ),
           fill: QuantumMeasurementColors.verticalPolarizationColorProperty
         } ),
         tandemName: 'verticalRadioButton'
+      },
+      {
+        value: 'horizontal',
+        createNode: () => new Text( QuantumMeasurementStrings.horizontalStringProperty, {
+          font: new PhetFont( FONT_SIZE ),
+          fill: QuantumMeasurementColors.horizontalPolarizationColorProperty
+        } ),
+        tandemName: 'horizontalRadioButton'
       },
       {
         value: 'fortyFiveDegrees',

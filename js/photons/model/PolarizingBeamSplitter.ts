@@ -98,11 +98,12 @@ export default class PolarizingBeamSplitter {
       }
       else {
 
-        // TODO: How is this supposed to be calculated? See https://github.com/phetsims/quantum-measurement/issues/52.
-        probabilityOfReflection = this.customPolarizationAngleProperty.value / 90;
+        // Calculate the probability of reflection based on the custom angle according to Malus's Law
+        const angleInRadians = this.customPolarizationAngleProperty.value * Math.PI / 180;
+        probabilityOfReflection = Math.pow( Math.cos( angleInRadians ), 2 );
       }
 
-      if ( dotRandom.nextDouble() >= probabilityOfReflection ) {
+      if ( dotRandom.nextDouble() <= probabilityOfReflection ) {
 
         // The photon is being reflected by the beam splitter.  The only direction supported currently is up.
         return {
