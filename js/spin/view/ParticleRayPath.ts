@@ -16,6 +16,7 @@ import { Node, Path, PathOptions } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import ParticleRays from '../model/ParticleRays.js';
 import { ParticleWithSpinModel } from '../model/ParticleWithSpinModel.js';
 import { SourceMode } from '../model/SourceMode.js';
 
@@ -25,11 +26,8 @@ export default class ParticleRayPath extends Node {
     rayPointsPairs: Vector2[][]
   ) => void;
 
-  public readonly updateOpacities: (
-    opacities: number[]
-  ) => void;
-
   public constructor(
+    particleRays: ParticleRays,
     sourceModeProperty: TReadOnlyProperty<SourceMode>,
     particles: ParticleWithSpinModel[],
     tandem: Tandem ) {
@@ -93,18 +91,16 @@ export default class ParticleRayPath extends Node {
       } );
     };
 
-    this.updateOpacities = (
-      opacities: number[]
-    ) => {
-      for ( let i = 0; i < 7; i++ ) {
-        if ( i < opacities.length ) {
-          rayPaths[ i ].opacity = opacities[ i ];
+    particleRays.probabilitiesUpdatedEmitter.addListener( () => {
+      rayPaths.forEach( ( rayPath, i ) => {
+        if ( i < particleRays.pathProbabilities.length ) {
+          rayPath.opacity = particleRays.pathProbabilities[ i ];
         }
         else {
-          rayPaths[ i ].opacity = 0;
+          rayPath.opacity = 0;
         }
-      }
-    };
+      } );
+    } );
   }
 }
 

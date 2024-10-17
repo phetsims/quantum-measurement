@@ -11,6 +11,7 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { LinearGradient, Node, Path, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
@@ -19,8 +20,8 @@ import HSlider from '../../../../sun/js/HSlider.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import ParticleSourceModel from '../model/ParticleSourceModel.js';
 import { SourceMode } from '../model/SourceMode.js';
-import SpinModel from '../model/SpinModel.js';
 
 // Constants
 export const PARTICLE_SOURCE_WIDTH = 120;
@@ -32,10 +33,13 @@ export default class ParticleSourceNode extends VBox {
   // Global position vector for the particle ray, it is updated outside of the constructor
   public particleExitGlobalPosition = new Vector2( 0, 0 );
 
-  public constructor( model: SpinModel, tandem: Tandem ) {
+  public constructor(
+    particleSourceModel: ParticleSourceModel,
+    modelViewTransform: ModelViewTransform2,
+    tandem: Tandem ) {
 
     // Main shape of the component
-    const particleSourceView = new Path( new Shape()
+    const particleSourceRectangle = new Path( new Shape()
         .roundRect( 0, 0, PARTICLE_SOURCE_WIDTH, PARTICLE_SOURCE_HEIGHT, PARTICLE_SOURCE_CORNER_RADIUS, PARTICLE_SOURCE_CORNER_RADIUS ),
       {
         stroke: 'black',
@@ -59,23 +63,24 @@ export default class ParticleSourceNode extends VBox {
           .addColorStop( 1, 'blue' )
       } );
     particleSourceBarrel.rotateAround( particleSourceBarrel.center, Math.PI / 4 );
+    particleSourceBarrel.center.y = particleSourceRectangle.center.y;
 
     // Button for 'single' mode
     const shootParticleButton = new RoundMomentaryButton<boolean>(
-      model.currentlyShootingParticlesProperty, false, true, {
+      particleSourceModel.currentlyShootingParticlesProperty, false, true, {
         scale: 0.7,
         baseColor: QuantumMeasurementColors.downColorProperty,
-        visibleProperty: new DerivedProperty( [ model.sourceModeProperty ], sourceMode => sourceMode === SourceMode.SINGLE ),
-        center: particleSourceView.center,
+        visibleProperty: new DerivedProperty( [ particleSourceModel.sourceModeProperty ], sourceMode => sourceMode === SourceMode.SINGLE ),
+        center: particleSourceRectangle.center,
         tandem: tandem.createTandem( 'shootParticleButton' )
       } );
 
     // Slider for 'continuous' mode
-    const sliderRange = model.particleAmmountProperty.range;
-    const particleAmmountSlider = new HSlider( model.particleAmmountProperty, sliderRange, {
+    const sliderRange = particleSourceModel.particleAmmountProperty.range;
+    const particleAmmountSlider = new HSlider( particleSourceModel.particleAmmountProperty, sliderRange, {
       thumbFill: QuantumMeasurementColors.downColorProperty,
-      visibleProperty: new DerivedProperty( [ model.sourceModeProperty ], sourceMode => sourceMode === SourceMode.CONTINUOUS ),
-      center: particleSourceView.center,
+      visibleProperty: new DerivedProperty( [ particleSourceModel.sourceModeProperty ], sourceMode => sourceMode === SourceMode.CONTINUOUS ),
+      center: particleSourceRectangle.center,
       trackSize: new Dimension2( PARTICLE_SOURCE_WIDTH * 0.7, 1 ),
       tandem: tandem.createTandem( 'particleAmmountSlider' ),
       majorTickLength: 15
@@ -96,13 +101,13 @@ export default class ParticleSourceNode extends VBox {
         new Node( {
           children: [
             particleSourceBarrel,
-            particleSourceView,
+            particleSourceRectangle,
             shootParticleButton,
             particleAmmountSlider
           ]
         } ),
         new RichText( 'Source Mode', { font: new PhetFont( { size: 20, weight: 'bold' } ) } ),
-        new AquaRadioButtonGroup( model.sourceModeProperty, SourceMode.enumeration.values.map( sourceMode => {
+        new AquaRadioButtonGroup( particleSourceModel.sourceModeProperty, SourceMode.enumeration.values.map( sourceMode => {
           return {
             value: sourceMode,
             labelContent: sourceMode.sourceName,
@@ -114,6 +119,10 @@ export default class ParticleSourceNode extends VBox {
           spacing: 10
         } )
       ]
+    } );
+
+    particleSourceModel.positionProperty.link( position => {
+      this.center = modelViewTransform.modelToViewPosition( position ).plusXY( -PARTICLE_SOURCE_WIDTH / 2, particleSourceRectangle.center.y / 2 );
     } );
   }
 

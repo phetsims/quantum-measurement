@@ -9,11 +9,12 @@
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { LinearGradient, Node, Path, RichText } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import SternGerlachModel from '../model/SternGerlachModel.js';
+import SternGerlach from '../model/SternGerlach.js';
 
 // Constants
 export const STERN_GERLACH_WIDTH = 150;
@@ -28,7 +29,10 @@ export default class SternGerlachNode extends Node {
   public topExitGlobalPosition = new Vector2( 0, 0 );
   public bottomExitGlobalPosition = new Vector2( 0, 0 );
 
-  public constructor( experimentModel: SternGerlachModel, tandem: Tandem ) {
+  public constructor(
+    experimentModel: SternGerlach,
+    modelViewTransform: ModelViewTransform2,
+    tandem: Tandem ) {
 
     // Component for the entry and exit points of the SG apparatus
     const createParticleHole = ( x: number, y: number ) => {
@@ -78,6 +82,10 @@ export default class SternGerlachNode extends Node {
             ( isZOriented: boolean ) => isZOriented ? 'SG<sub>Z' : 'SG<sub>X' ),
           { font: new PhetFont( 20 ), fill: 'white', center: new Vector2( 25, 80 ) } )
       ]
+    } );
+
+    experimentModel.positionProperty.link( position => {
+      this.center = modelViewTransform.modelToViewPosition( position ).minusXY( STERN_GERLACH_WIDTH / 2, 0 );
     } );
   }
 

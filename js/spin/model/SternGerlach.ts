@@ -1,7 +1,7 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * SternGerlachModel handles the internal states of the Stern Gerlach experiment. This includes:
+ * SternGerlach handles the internal states of the Stern Gerlach experiment. This includes:
  * - The direction of the experiment (currently constrained to X and +-Z)
  * - The state of the incoming particles
  * - The state of the particles after the experiment
@@ -14,11 +14,14 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { SpinDirection } from './SpinDirection.js';
 
-export default class SternGerlachModel {
+export default class SternGerlach {
+
+  public readonly positionProperty: Vector2Property;
 
   public readonly isZOrientedProperty: BooleanProperty;
 
@@ -27,7 +30,16 @@ export default class SternGerlachModel {
   public readonly upProbabilityProperty: NumberProperty;
   public readonly downProbabilityProperty: TReadOnlyProperty<number>;
 
-  public constructor( isZOriented: boolean, tandem: Tandem ) {
+  // Global position vectors, they are to be updated outside of the constructor
+  public entranceGlobalPosition = new Vector2( 0, 0 );
+  public topExitGlobalPosition = new Vector2( 0, 0 );
+  public bottomExitGlobalPosition = new Vector2( 0, 0 );
+
+  public constructor( position: Vector2, isZOriented: boolean, tandem: Tandem ) {
+
+    this.positionProperty = new Vector2Property( position, {
+      tandem: tandem.createTandem( 'positionProperty' )
+    } );
 
     this.isZOrientedProperty = new BooleanProperty( isZOriented, {
       tandem: tandem.createTandem( 'isZOrientedProperty' )
@@ -47,10 +59,11 @@ export default class SternGerlachModel {
 
 
   /**
-   * Measures incoming particles with a given state (Z+, Z-, X+, X-), and returns the probability of spin up
-   * in the direction of the Stern Gerlach experiment.
+   * Prepares and returns the probability distribution of a Stern-Gerlach
+   * spin measurement of particles with a given state (Z+, Z-, X+, X-) passing
+   * through the apparatus.
    */
-  public measure( incomingState: SpinDirection | null ): number {
+  public prepare( incomingState: SpinDirection | null ): number {
 
     // Using a XZ vector to calculate the projected probability.
     // The experiment has a measurement vector and the incoming state has a spin vector
@@ -73,4 +86,4 @@ export default class SternGerlachModel {
 
 }
 
-quantumMeasurement.register( 'SternGerlachModel', SternGerlachModel );
+quantumMeasurement.register( 'SternGerlach', SternGerlach );

@@ -9,8 +9,9 @@
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { HBox, Node, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Node, Text, VBox } from '../../../../scenery/js/imports.js';
 import ComboBox, { ComboBoxItem } from '../../../../sun/js/ComboBox.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
@@ -37,21 +38,17 @@ export default class SpinMeasurementArea extends VBox {
       tandem: tandem.createTandem( 'experimentComboBox' )
     } );
 
-    const particleSourceNode = new ParticleSourceNode( model, tandem.createTandem( 'particleSourceNode' ) );
-
-    const firstSternGerlachNode = new SternGerlachNode( model.firstSternGerlachModel, tandem.createTandem( 'firstSternGerlachNode' ) );
-    const secondSternGerlachNode = new SternGerlachNode( model.secondSternGerlachModel, tandem.createTandem( 'secondSternGerlachNode' ) );
-    const thirdSternGerlachNode = new SternGerlachNode( model.thirdSternGerlachModel, tandem.createTandem( 'thirdSternGerlachNode' ) );
-
-    const particleRayPath = new ParticleRayPath(
-      model.sourceModeProperty,
-      model.singleParticles,
-      tandem.createTandem( 'particleRayPath' )
+    const modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
+      Vector2.ZERO,
+      new Vector2( 100, 100 ),
+      200 // empirically determined
     );
 
-    // Since this is a VBox, we add the ray path to the container node
-    // TODO: Currently parent is screenView, Will this cause trouble if an intermediate parent is added? see https://github.com/phetsims/quantum-measurement/issues/53
-    parentNode.addChild( particleRayPath );
+    const particleSourceNode = new ParticleSourceNode( model.particleSourceModel, modelViewTransform, tandem.createTandem( 'particleSourceNode' ) );
+
+    const firstSternGerlachNode = new SternGerlachNode( model.firstSternGerlach, modelViewTransform, tandem.createTandem( 'firstSternGerlachNode' ) );
+    const secondSternGerlachNode = new SternGerlachNode( model.secondSternGerlach, modelViewTransform, tandem.createTandem( 'secondSternGerlachNode' ) );
+    const thirdSternGerlachNode = new SternGerlachNode( model.thirdSternGerlach, modelViewTransform, tandem.createTandem( 'thirdSternGerlachNode' ) );
 
     super( {
       children: [
@@ -61,18 +58,12 @@ export default class SpinMeasurementArea extends VBox {
         new Text( 'Stern-Gerlach (SG) Measurements', { font: new PhetFont( { size: 20, weight: 'bolder' } ) } ),
 
         // TODO: Really really rough sketch of the behavior of the SG experiments, see https://github.com/phetsims/quantum-measurement/issues/53
-        new HBox( {
-          spacing: 50,
+        new Node( {
           children: [
             particleSourceNode,
             firstSternGerlachNode,
-            new VBox( {
-              spacing: 20,
-              children: [
-                secondSternGerlachNode,
-                thirdSternGerlachNode
-              ]
-            } )
+            secondSternGerlachNode,
+            thirdSternGerlachNode
           ]
         } )
 
@@ -81,27 +72,16 @@ export default class SpinMeasurementArea extends VBox {
       margin: 20
     } );
 
-    this.particleRayPath = particleRayPath;
+    this.particleRayPath = new ParticleRayPath(
+      model.particleRays,
+      model.particleSourceModel.sourceModeProperty,
+      model.singleParticles,
+      tandem.createTandem( 'particleRayPath' )
+    );
+    // Since this is a VBox, we add the ray path to the container node
+    // TODO: Currently parent is screenView, Will this cause trouble if an intermediate parent is added? see https://github.com/phetsims/quantum-measurement/issues/53
+    parentNode.addChild( this.particleRayPath );
 
-    const updateRayOpacities = ( particleAmmount: number ) => {
-      particleRayPath.updateOpacities( [
-        particleAmmount, // First ray only depends on the initial particle ammount
-        model.firstSternGerlachModel.upProbabilityProperty.value * particleAmmount,
-        model.firstSternGerlachModel.downProbabilityProperty.value * particleAmmount,
-        model.firstSternGerlachModel.upProbabilityProperty.value * model.secondSternGerlachModel.upProbabilityProperty.value * particleAmmount,
-        model.firstSternGerlachModel.upProbabilityProperty.value * model.secondSternGerlachModel.downProbabilityProperty.value * particleAmmount,
-        model.firstSternGerlachModel.downProbabilityProperty.value * model.thirdSternGerlachModel.upProbabilityProperty.value * particleAmmount,
-        model.firstSternGerlachModel.downProbabilityProperty.value * model.thirdSternGerlachModel.downProbabilityProperty.value * particleAmmount
-      ] );
-    };
-
-    model.particleAmmountProperty.link( particleAmmount => {
-      updateRayOpacities( particleAmmount );
-    } );
-
-    model.probabilitiesUpdatedEmitter.addListener( () => {
-      updateRayOpacities( model.particleAmmountProperty.value );
-    } );
 
     model.currentExperimentProperty.link( experiment => {
 
@@ -117,14 +97,14 @@ export default class SpinMeasurementArea extends VBox {
       const endOfRays = layoutBounds.maxX * 5;
 
       if ( experiment.experimentSetting.length === 1 ) {
-        particleRayPath.updatePaths( [
+        this.particleRayPath.updatePaths( [
           primaryRayPoints,
           [ firstSternGerlachNode.topExitGlobalPosition, new Vector2( endOfRays, firstSternGerlachNode.topExitGlobalPosition.y ) ],
           [ firstSternGerlachNode.bottomExitGlobalPosition, new Vector2( endOfRays, firstSternGerlachNode.bottomExitGlobalPosition.y ) ]
           ] );
       }
       else {
-        particleRayPath.updatePaths( [
+        this.particleRayPath.updatePaths( [
           primaryRayPoints,
           [ firstSternGerlachNode.topExitGlobalPosition, secondSternGerlachNode.entranceGlobalPosition ],
           [ firstSternGerlachNode.bottomExitGlobalPosition, thirdSternGerlachNode.entranceGlobalPosition ],
@@ -135,7 +115,7 @@ export default class SpinMeasurementArea extends VBox {
           ] );
       }
 
-      updateRayOpacities( model.particleAmmountProperty.value );
+      model.particleRays.probabilitiesUpdatedEmitter.emit();
     } );
   }
 }
