@@ -7,8 +7,6 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
@@ -17,7 +15,7 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import Mirror from './Mirror.js';
 import Photon, { PHOTON_SPEED } from './Photon.js';
 import PhotonDetector from './PhotonDetector.js';
-import PhotonEmitter from './PhotonEmitter.js';
+import Laser from './Laser.js';
 import { PhotonInteraction } from './PhotonsModel.js';
 import PolarizingBeamSplitter from './PolarizingBeamSplitter.js';
 
@@ -32,12 +30,11 @@ export default class PhotonsExperimentSceneModel {
   // The polarizing beam splitter that the photons will encounter.
   public readonly polarizingBeamSplitter: PolarizingBeamSplitter;
 
-  // The angle of polarization for the polarizing beam splitter, in degrees.  Zero is horizontal and 90 is vertical.
-  public readonly photonPolarizationAngleProperty: NumberProperty;
-
+  // The mirror that reflects the photons that pass through the beam splitter downward to the detector.
   public readonly mirror: Mirror;
 
-  public readonly photonEmitter: PhotonEmitter;
+  // The laser, which emits the photons.
+  public readonly laser: Laser;
 
   // photon detectors
   public readonly verticalPolarizationDetector: PhotonDetector;
@@ -51,14 +48,9 @@ export default class PhotonsExperimentSceneModel {
       tandem: providedOptions.tandem.createTandem( 'polarizingBeamSplitter' )
     } );
 
-    this.photonPolarizationAngleProperty = new NumberProperty( 45, {
-      range: new Range( 0, 90 ),
-      tandem: providedOptions.tandem.createTandem( 'photonPolarizationAngleProperty' )
-    } );
-
     // Create the photon emitter that will produce the photons that will be sent toward the polarizing beam splitter.
-    this.photonEmitter = new PhotonEmitter( new Vector2( -0.15, 0 ), this.photons, {
-      tandem: providedOptions.tandem.createTandem( 'photonEmitter' )
+    this.laser = new Laser( new Vector2( -0.15, 0 ), this.photons, {
+      tandem: providedOptions.tandem.createTandem( 'laser' )
     } );
 
     // Create the photon detectors that will measure the rate at which photons are arriving after being either reflected
@@ -85,15 +77,14 @@ export default class PhotonsExperimentSceneModel {
    * Resets the scene model.
    */
   public reset(): void {
-    this.photonPolarizationAngleProperty.reset();
-    this.photonEmitter.reset();
+    this.laser.reset();
     this.photons.forEach( photon => photon.reset() );
   }
 
   public step( dt: number ): void {
 
     // Step the photon emitter, which could potentially add new photons.
-    this.photonEmitter.step( dt );
+    this.laser.step( dt );
 
     // Make a list of active photons.
     const activePhotons = this.photons.filter( photon => photon.activeProperty.value );
@@ -119,6 +110,7 @@ export default class PhotonsExperimentSceneModel {
         // This photon was reflected.  First step it to the reflection point.
         const dtToReflection = photon.positionProperty.value.distance( interaction.reflectionPoint! ) / PHOTON_SPEED;
         assert && assert( dtToReflection <= dt );
+        photon.step( dtToReflection );
 
         // Change the direction of the photon to the reflection direction.
         photon.directionProperty.set( interaction.reflectionDirection! );

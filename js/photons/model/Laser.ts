@@ -1,7 +1,7 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * PhotonEmitter is the model element that produces photons and sends them toward the polarizing beam splitter.  It can
+ * Laser is the model element that produces photons and sends them toward the polarizing beam splitter.  It can
  * produce photons one at a time or at a continuous, controllable rate.
  *
  * @author John Blanco, PhET Interactive Simulations
@@ -19,9 +19,9 @@ import Photon from './Photon.js';
 import { PHOTON_BEAM_WIDTH } from './PhotonsExperimentSceneModel.js';
 
 type SelfOptions = EmptySelfOptions;
-type PhotonEmitterOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
+type LaserOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
-export default class PhotonEmitter {
+export default class Laser {
 
   // The position of the detector in two-dimensional space.  Units are in meters.
   public readonly position: Vector2;
@@ -42,7 +42,7 @@ export default class PhotonEmitter {
 
   private timeSinceLastPhoton = 0; // seconds
 
-  public constructor( position: Vector2, photons: Photon[], providedOptions: PhotonEmitterOptions ) {
+  public constructor( position: Vector2, photons: Photon[], providedOptions: LaserOptions ) {
 
     this.position = position;
     this.photons = photons;
@@ -79,4 +79,4 @@ export default class PhotonEmitter {
   }
 }
 
-quantumMeasurement.register( 'PhotonEmitter', PhotonEmitter );
+quantumMeasurement.register( 'Laser', Laser );

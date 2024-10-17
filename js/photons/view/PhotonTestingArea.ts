@@ -16,7 +16,7 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import PhotonsExperimentSceneModel from '../model/PhotonsExperimentSceneModel.js';
 import MirrorNode from './MirrorNode.js';
 import PhotonDetectorNode from './PhotonDetectorNode.js';
-import PhotonEmitterNode from './PhotonEmitterNode.js';
+import LaserNode from './LaserNode.js';
 import PhotonNode from './PhotonNode.js';
 import PolarizingBeamSplitterNode from './PolarizingBeamSplitterNode.js';
 
@@ -34,8 +34,8 @@ export default class PhotonTestingArea extends Node {
       500 // empirically determined
     );
 
-    const photonEmitterNode = new PhotonEmitterNode( model.photonEmitter, photonTestingAreaModelViewTransform, {
-      tandem: providedOptions.tandem.createTandem( 'photonEmitterNode' )
+    const laserNode = new LaserNode( model.laser, photonTestingAreaModelViewTransform, {
+      tandem: providedOptions.tandem.createTandem( 'laserNode' )
     } );
 
     const verticalPolarizationDetector = new PhotonDetectorNode(
@@ -69,7 +69,7 @@ export default class PhotonTestingArea extends Node {
 
     const options = optionize<PhotonTestingAreaOptions, SelfOptions, NodeOptions>()( {
       children: [
-        photonEmitterNode,
+        laserNode,
         polarizingBeamSplitterNode,
         verticalPolarizationDetector,
         horizontalPolarizationDetector,

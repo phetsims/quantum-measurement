@@ -1,8 +1,8 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * PhotonEmitterNode represents the photon emitter in the view.  It allows the user to set the rate at which photons are
- * produced, or to produce them one at a time.
+ * LaserNode represents the laser, which emits photons, in the view.  It allows the user to set the rate at which
+ * photons are produced, or to produce them one at a time.
  *
  * @author John Blanco, PhET Interactive Simulations
  */
@@ -14,16 +14,16 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import LaserPointerNode from '../../../../scenery-phet/js/LaserPointerNode.js';
 import { Node, NodeOptions } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import PhotonEmitter from '../model/PhotonEmitter.js';
+import Laser from '../model/Laser.js';
 
 type SelfOptions = EmptySelfOptions;
-type PhotonEmitterNodeOptions = SelfOptions & PickRequired<NodeOptions, 'tandem'>;
+type LaserNodeOptions = SelfOptions & PickRequired<NodeOptions, 'tandem'>;
 
-export default class PhotonEmitterNode extends Node {
+export default class LaserNode extends Node {
 
-  public constructor( model: PhotonEmitter,
+  public constructor( model: Laser,
                       modelViewTransform: ModelViewTransform2,
-                      providedOptions: PhotonEmitterNodeOptions ) {
+                      providedOptions: LaserNodeOptions ) {
 
     const laserPointerNode = new LaserPointerNode( model.photonProductionEnabledProperty, {
       bodySize: new Dimension2( 95, 55 ),
@@ -32,7 +32,7 @@ export default class PhotonEmitterNode extends Node {
       tandem: providedOptions.tandem.createTandem( 'laserPointerNode' )
     } );
 
-    const options = optionize<PhotonEmitterNodeOptions, SelfOptions, NodeOptions>()( {
+    const options = optionize<LaserNodeOptions, SelfOptions, NodeOptions>()( {
       children: [ laserPointerNode ],
       right: modelViewTransform.modelToViewX( model.position.x ),
       centerY: modelViewTransform.modelToViewY( model.position.y )
@@ -42,4 +42,4 @@ export default class PhotonEmitterNode extends Node {
   }
 }
 
-quantumMeasurement.register( 'PhotonEmitterNode', PhotonEmitterNode );
+quantumMeasurement.register( 'LaserNode', LaserNode );
