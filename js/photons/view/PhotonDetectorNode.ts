@@ -11,14 +11,16 @@ import Dimension2 from '../../../../dot/js/Dimension2.js';
 import optionize, { EmptySelfOptions, OptionizeDefaults } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import { Color, Node, NodeOptions, Rectangle } from '../../../../scenery/js/imports.js';
+import { Color, LinearGradient, Node, NodeOptions, Rectangle } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import PhotonDetector from '../model/PhotonDetector.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhotonDetectorNodeOptions = SelfOptions & PickRequired<NodeOptions, 'tandem'>;
 
-const DETECTOR_BODY_SIZE = new Dimension2( 50, 75 );
+// The size of the detector body.  The width is for the dimension perpendicular to the detection direction, and the
+// height (which is really more like the depth) is for the dimension parallel to the detection direction.
+const DETECTOR_BODY_SIZE = new Dimension2( 85, 100 );
 
 export default class PhotonDetectorNode extends Node {
 
@@ -27,13 +29,17 @@ export default class PhotonDetectorNode extends Node {
                       providedOptions: PhotonDetectorNodeOptions ) {
 
     // detector body
-    const bodyRectangle = Rectangle.dimension( DETECTOR_BODY_SIZE, {
+    const bodyRectangle = new Rectangle( 0, 0, DETECTOR_BODY_SIZE.width, DETECTOR_BODY_SIZE.height, {
+      cornerRadius: 10,
       fill: new Color( '#D1E2FA' )
     } );
 
     // detection aperture
-    const aperture = new Rectangle( 0, 0, -modelViewTransform.modelToViewDeltaY( model.apertureDiameter ), 10, {
-      fill: Color.GRAY
+    const apertureDiameterInView = -modelViewTransform.modelToViewDeltaY( model.apertureDiameter );
+    const aperture = new Rectangle( 0, 0, apertureDiameterInView, 8, {
+      fill: new LinearGradient( 0, 0, apertureDiameterInView, 0 )
+        .addColorStop( 0, new Color( '#FFDDEE' ) )
+        .addColorStop( 1, Color.DARK_GRAY )
     } );
 
     const internalOptions: OptionizeDefaults<EmptySelfOptions, NodeOptions, PhotonDetectorNodeOptions> = {
