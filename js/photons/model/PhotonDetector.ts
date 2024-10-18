@@ -9,22 +9,34 @@
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import { Line } from '../../../../kite/js/imports.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import Photon from './Photon.js';
+import { PHOTON_BEAM_WIDTH } from './PhotonsExperimentSceneModel.js';
+import { PhotonInteractionTestResult } from './PhotonsModel.js';
+import { TPhotonInteraction } from './TPhotonInteraction.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhotonDetectorOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 export type DetectionDirection = ( [ 'up', 'down' ] )[number];
 
-export default class PhotonDetector {
+export default class PhotonDetector implements TPhotonInteraction {
 
   // The position of the detector in two-dimensional space.  Units are in meters.
   public readonly position: Vector2;
 
   // The direction in which the detector is looking for photons.
   public readonly detectionDirection: DetectionDirection;
+
+  // detection aperture width, in meters
+  public readonly apertureDiameter = PHOTON_BEAM_WIDTH * 1.1;
+
+  // A line in model space that represents the position of the detection aperture.  If a photon crosses this line, it
+  // will be absorbed and detected.
+  public readonly detectionLine: Line;
 
   // The rate at which photons are detected, in arrival events per second.
   public readonly detectionRateProperty: NumberProperty;
@@ -33,10 +45,28 @@ export default class PhotonDetector {
 
     this.position = position;
     this.detectionDirection = detectionDirection;
+    this.detectionLine = new Line(
+      position.plus( new Vector2( -this.apertureDiameter / 2, 0 ) ),
+      position.plus( new Vector2( this.apertureDiameter / 2, 0 ) )
+    );
 
     this.detectionRateProperty = new NumberProperty( 0, {
       tandem: providedOptions.tandem.createTandem( 'detectionRateProperty' )
     } );
+  }
+
+  public testForPhotonInteraction( photon: Photon, dt: number ): PhotonInteractionTestResult {
+
+    assert && assert( photon.activeProperty.value, 'save CPU cycles - don\'t use this method with inactive photons' );
+
+    // Test for whether this photon would cross the detection aperture.
+    const photonIntersectionPoint = photon.getTravelPathIntersectionPoint(
+      this.detectionLine.start,
+      this.detectionLine.end,
+      dt
+    );
+
+    return photonIntersectionPoint !== null ? { interactionType: 'absorbed' } : { interactionType: 'none' };
   }
 
   /**
@@ -44,14 +74,6 @@ export default class PhotonDetector {
    */
   public reset(): void {
     this.detectionRateProperty.reset();
-  }
-
-  /**
-   * Steps the model.
-   * @param dt - time step, in seconds
-   */
-  public step( dt: number ): void {
-    // TBD - update the detection rate based on the number of photons that have arrived during this step.
   }
 }
 

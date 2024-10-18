@@ -14,7 +14,8 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import Photon, { DOWN } from './Photon.js';
-import { PhotonInteraction } from './PhotonsModel.js';
+import { PhotonInteractionTestResult } from './PhotonsModel.js';
+import { TPhotonInteraction } from './TPhotonInteraction.js';
 
 type SelfOptions = EmptySelfOptions;
 type MirrorOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
@@ -22,7 +23,7 @@ type MirrorOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 // constants
 const MIRROR_LENGTH = 0.15; // meters
 
-export default class Mirror {
+export default class Mirror implements TPhotonInteraction {
 
   // The position of the center of the mirror in 2D space.  Units are in meters.
   public readonly centerPosition: Vector2;
@@ -39,7 +40,7 @@ export default class Mirror {
     this.mirrorSurfaceLine = new Line( endpoint1, endpoint2 );
   }
 
-  public testForPhotonInteraction( photon: Photon, dt: number ): PhotonInteraction {
+  public testForPhotonInteraction( photon: Photon, dt: number ): PhotonInteractionTestResult {
 
     assert && assert( photon.activeProperty.value, 'save CPU cycles - don\'t use this method with inactive photons' );
 

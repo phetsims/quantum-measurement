@@ -16,14 +16,15 @@ import Mirror from './Mirror.js';
 import Photon, { PHOTON_SPEED } from './Photon.js';
 import PhotonDetector from './PhotonDetector.js';
 import Laser from './Laser.js';
-import { PhotonInteraction } from './PhotonsModel.js';
+import { PhotonInteractionTestResult } from './PhotonsModel.js';
 import PolarizingBeamSplitter from './PolarizingBeamSplitter.js';
+import { TPhotonInteraction } from './TPhotonInteraction.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhotonsExperimentSceneModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
 // The width of the photon beam, in meters.  5 cm seemed a reasonable width, but it is essentially arbitrary.
-export const PHOTON_BEAM_WIDTH = 0.08;
+export const PHOTON_BEAM_WIDTH = 0.06;
 
 export default class PhotonsExperimentSceneModel {
 
@@ -90,14 +91,19 @@ export default class PhotonsExperimentSceneModel {
     const activePhotons = this.photons.filter( photon => photon.activeProperty.value );
 
     // Gather the things that can potentially interact with the photons
-    const potentialInteractors = [ this.polarizingBeamSplitter, this.mirror ];
+    const potentialInteractors : TPhotonInteraction[] = [
+      this.polarizingBeamSplitter,
+      this.mirror,
+      this.horizontalPolarizationDetector,
+      this.verticalPolarizationDetector
+    ];
 
     // Update each active photon's position based on its direction and speed and whether it interacts with any other
     // model elements.
     activePhotons.forEach( photon => {
 
       // Test for interactions with the potential interactors.
-      let interaction: PhotonInteraction = { interactionType: 'none' };
+      let interaction: PhotonInteractionTestResult = { interactionType: 'none' };
       for ( const potentiallyInteractingElement of potentialInteractors ) {
         interaction = potentiallyInteractingElement.testForPhotonInteraction( photon, dt );
         if ( interaction.interactionType !== 'none' ) {
@@ -118,19 +124,16 @@ export default class PhotonsExperimentSceneModel {
         // Step the photon the remaining time.
         photon.step( dt - dtToReflection );
       }
+      else if ( interaction.interactionType === 'absorbed' ) {
+
+        // The photon was absorbed, so deactivate it.
+        photon.activeProperty.set( false );
+        photon.positionProperty.set( Vector2.ZERO );
+      }
       else {
 
         // Just step the photon normally, which will move it forward in its current travel direction.
         photon.step( dt );
-      }
-    } );
-
-    // TODO: temporary - if any photons go too far, deactivate them, see https://github.com/phetsims/quantum-measurement/issues/52
-    this.photons.forEach( photon => {
-      if ( photon.activeProperty.value &&
-           ( photon.positionProperty.value.x > 0.28 || photon.positionProperty.value.y > 0.25 || photon.positionProperty.value.y < -0.25 ) ) {
-        photon.activeProperty.set( false );
-        photon.positionProperty.set( Vector2.ZERO );
       }
     } );
   }

@@ -19,7 +19,8 @@ import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import Photon, { UP } from './Photon.js';
-import { PhotonInteraction } from './PhotonsModel.js';
+import { PhotonInteractionTestResult } from './PhotonsModel.js';
+import { TPhotonInteraction } from './TPhotonInteraction.js';
 
 type SelfOptions = EmptySelfOptions;
 type PolarizingBeamSplitterOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
@@ -27,7 +28,7 @@ type PolarizingBeamSplitterOptions = SelfOptions & PickRequired<PhetioObjectOpti
 const PresetPolarizationValues = [ 'vertical', 'horizontal', 'fortyFiveDegrees', 'custom' ] as const;
 export type PresetPolarizationDirections = ( typeof PresetPolarizationValues )[number];
 
-export default class PolarizingBeamSplitter {
+export default class PolarizingBeamSplitter implements TPhotonInteraction {
 
   // The position of the center of the beam splitter in two-dimensional space.  Units are in meters.
   public readonly centerPosition: Vector2;
@@ -72,7 +73,7 @@ export default class PolarizingBeamSplitter {
     } );
   }
 
-  public testForPhotonInteraction( photon: Photon, dt: number ): PhotonInteraction {
+  public testForPhotonInteraction( photon: Photon, dt: number ): PhotonInteractionTestResult {
 
     assert && assert( photon.activeProperty.value, 'save CPU cycles - don\'t use this method with inactive photons' );
 

@@ -65,12 +65,12 @@ export default class Laser {
    */
   public step( dt: number ): void {
     this.timeSinceLastPhoton += dt;
-    if ( this.photonProductionEnabledProperty.value && this.timeSinceLastPhoton >= 0.05 ) {
+    if ( this.photonProductionEnabledProperty.value && this.timeSinceLastPhoton >= 0.01 ) {
       this.timeSinceLastPhoton = 0;
       const photonToActivate = this.photons.find( photon => !photon.activeProperty.value );
       if ( photonToActivate ) {
 
-        const yOffset = this.emittedBeamWidth / 2 * ( dotRandom.nextDouble() - 0.5 );
+        const yOffset = this.emittedBeamWidth / 2 * ( 1 - dotRandom.nextDouble() * 2 );
         photonToActivate.positionProperty.set( this.position.plusXY( 0, yOffset ) );
         photonToActivate.activeProperty.set( true );
         photonToActivate.directionProperty.set( this.emissionDirection );

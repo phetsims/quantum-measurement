@@ -14,7 +14,6 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import { Color, Node, NodeOptions, Rectangle } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import PhotonDetector from '../model/PhotonDetector.js';
-import { PHOTON_BEAM_WIDTH } from '../model/PhotonsExperimentSceneModel.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhotonDetectorNodeOptions = SelfOptions & PickRequired<NodeOptions, 'tandem'>;
@@ -33,7 +32,7 @@ export default class PhotonDetectorNode extends Node {
     } );
 
     // detection aperture
-    const aperture = new Rectangle( 0, 0, -modelViewTransform.modelToViewDeltaY( PHOTON_BEAM_WIDTH * 1.1 ), 10, {
+    const aperture = new Rectangle( 0, 0, -modelViewTransform.modelToViewDeltaY( model.apertureDiameter ), 10, {
       fill: Color.GRAY
     } );
 

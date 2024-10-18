@@ -27,7 +27,7 @@ type PhotonsModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tand
 
 export const PhotonInteractionTypeValues = [ 'none', 'absorbed', 'reflected' ] as const;
 export type PhotonInteractionTypes = ( typeof PhotonInteractionTypeValues )[number];
-export type PhotonInteraction = {
+export type PhotonInteractionTestResult = {
   interactionType: PhotonInteractionTypes;
   reflectionPoint?: Vector2;
   reflectionDirection?: Vector2;
