@@ -80,6 +80,8 @@ export default class PhotonsExperimentSceneModel {
   public reset(): void {
     this.laser.reset();
     this.photons.forEach( photon => photon.reset() );
+    this.verticalPolarizationDetector.reset();
+    this.horizontalPolarizationDetector.reset();
   }
 
   public step( dt: number ): void {

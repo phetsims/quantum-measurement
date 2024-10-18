@@ -11,7 +11,8 @@ import Dimension2 from '../../../../dot/js/Dimension2.js';
 import optionize, { EmptySelfOptions, OptionizeDefaults } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import { Color, LinearGradient, Node, NodeOptions, Rectangle } from '../../../../scenery/js/imports.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import { Color, LinearGradient, Node, NodeOptions, Rectangle, Text } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import PhotonDetector from '../model/PhotonDetector.js';
 
@@ -42,8 +43,21 @@ export default class PhotonDetectorNode extends Node {
         .addColorStop( 1, Color.DARK_GRAY )
     } );
 
+    // Add a readout of either the detection rate or the detection count.
+    // TODO: This is just a placeholder for now.  We'll need to add the actual readout later.  See https://github.com/phetsims/quantum-measurement/issues/52.
+    const countReadout = new Text( '0', {
+      font: new PhetFont( 20 ),
+      maxWidth: DETECTOR_BODY_SIZE.width * 0.95
+    } );
+
+    // Update the readout when the count changes.
+    model.detectionCountProperty.link( count => {
+      countReadout.setString( count );
+      countReadout.center = bodyRectangle.center;
+    } );
+
     const internalOptions: OptionizeDefaults<EmptySelfOptions, NodeOptions, PhotonDetectorNodeOptions> = {
-      children: [ aperture, bodyRectangle ]
+      children: [ aperture, bodyRectangle, countReadout ]
     };
 
     // Position the detector body and aperture based on the detection direction.
@@ -72,7 +86,8 @@ export default class PhotonDetectorNode extends Node {
     }
 
     const options = optionize<PhotonDetectorNodeOptions, SelfOptions, NodeOptions>()(
-      internalOptions, providedOptions );
+      internalOptions, providedOptions
+    );
 
     super( options );
   }

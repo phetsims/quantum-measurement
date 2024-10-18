@@ -41,6 +41,9 @@ export default class PhotonDetector implements TPhotonInteraction {
   // The rate at which photons are detected, in arrival events per second.
   public readonly detectionRateProperty: NumberProperty;
 
+  // The photons detected by this detector since the last reset.
+  public readonly detectionCountProperty: NumberProperty;
+
   public constructor( position: Vector2, detectionDirection: DetectionDirection, providedOptions: PhotonDetectorOptions ) {
 
     this.position = position;
@@ -52,6 +55,10 @@ export default class PhotonDetector implements TPhotonInteraction {
 
     this.detectionRateProperty = new NumberProperty( 0, {
       tandem: providedOptions.tandem.createTandem( 'detectionRateProperty' )
+    } );
+
+    this.detectionCountProperty = new NumberProperty( 0, {
+      tandem: providedOptions.tandem.createTandem( 'detectionCountProperty' )
     } );
   }
 
@@ -66,7 +73,15 @@ export default class PhotonDetector implements TPhotonInteraction {
       dt
     );
 
-    return photonIntersectionPoint !== null ? { interactionType: 'absorbed' } : { interactionType: 'none' };
+    const detectionResult: PhotonInteractionTestResult = photonIntersectionPoint !== null ?
+      { interactionType: 'absorbed' } :
+      { interactionType: 'none' };
+
+    if ( detectionResult.interactionType === 'absorbed' ) {
+      this.detectionCountProperty.value = this.detectionCountProperty.value + 1;
+    }
+
+    return detectionResult;
   }
 
   /**
@@ -74,6 +89,7 @@ export default class PhotonDetector implements TPhotonInteraction {
    */
   public reset(): void {
     this.detectionRateProperty.reset();
+    this.detectionCountProperty.reset();
   }
 }
 
