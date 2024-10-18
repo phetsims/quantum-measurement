@@ -1,103 +1,103 @@
 {
-  "comment": "# quantum-measurement 1.0.0-dev.5 Tue Oct 01 2024 16:40:29 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# quantum-measurement 1.0.0-dev.6 Fri Oct 18 2024 10:06:27 GMT-0600 (Mountain Daylight Time)",
   "assert": {
     "sha": "31e3cab3f1de126d53782b5700e52c4fed423b09",
     "branch": "main"
   },
   "axon": {
-    "sha": "edcccbdb7c3b3785e2e8a2348425727cc659cc8a",
+    "sha": "c89a7faa78fe3fb89ad8e5433648a20d48dd73bd",
     "branch": "main"
   },
   "brand": {
-    "sha": "509a2a99877f7cec8475bb5b421c9d0cda9cbdf8",
+    "sha": "4c40945fc7acf41fd627e8fbad85593ccb8f0ec7",
     "branch": "main"
   },
   "chipper": {
-    "sha": "223cc8e331aa87b46cf35283358b341ec4e78a46",
+    "sha": "7c07e0fce43f066ccf8e40b8c36d947037991c7f",
     "branch": "main"
   },
   "dot": {
-    "sha": "9322db8f05d75dcd325f1f966fb9d87a0d713907",
+    "sha": "5a6653caf69ac24cbc7eaa29ef4dda1c64590c1a",
     "branch": "main"
   },
   "joist": {
-    "sha": "5a7fe1707bd7161d08182ee61004f2ca65e6c134",
+    "sha": "f1acec823144ea29c68ea409fd12dbfee151548f",
     "branch": "main"
   },
   "kite": {
-    "sha": "ca23a3b26120ddde2b5fabfcbe14fa1f05efe691",
+    "sha": "6c0133724e27586a4fe55bb6bcf7fa70f7b2b229",
     "branch": "main"
   },
   "perennial-alias": {
-    "sha": "a898675b09ee771c215633df10c3d534d16db61f",
+    "sha": "ae515be16fbe8971a4f984879102ca2bc9bfd434",
     "branch": "main"
   },
   "phet-core": {
-    "sha": "bfcfa8d4daeb2442467d6cf54da53da7ce499ab7",
+    "sha": "fc359c549923916a5e29dc81f62709944b514a29",
     "branch": "main"
   },
   "phet-io": {
-    "sha": "e6e195ed17c7d3051a61895ed4609e786ac64ebf",
+    "sha": "2d13454302d40e6a9b5258d1c07f34e85a9a0f79",
     "branch": "main"
   },
   "phet-io-sim-specific": {
-    "sha": "eb4acf43300ec212a1eb239d2c566e309491027f",
+    "sha": "8dcba5bd8ebb8c25c8dcf99eda52c8ed6e8e2a04",
     "branch": "main"
   },
   "phet-io-wrappers": {
-    "sha": "a64c47d48c339e9a156eec9df7d0ebbbda380360",
+    "sha": "4d7a9c9c6314becba189519224f01841a3597a2d",
     "branch": "main"
   },
   "phetcommon": {
-    "sha": "5b768d9c49baeaaa7552ef25ea7509a340dd59ad",
+    "sha": "ede03768004a460da29d2e90d9fb8141d414b3b7",
     "branch": "main"
   },
   "phetmarks": {
-    "sha": "7ba9b4d2603ed07aa7fac8e3ef802cbf51e60730",
+    "sha": "8001d4e8825e467e73bcd6cde1a779b277b79c0e",
     "branch": "main"
   },
   "quantum-measurement": {
-    "sha": "e8af1d6301f0ca8758981a8e2db8057cdbaa500a",
+    "sha": "417b832d660d77f029793595fe723ab69a528849",
     "branch": "main"
   },
   "query-string-machine": {
-    "sha": "aa09f61ed143f36fd13e55677c6ae6b3ea437bbb",
+    "sha": "e1672bb3a1d3de4f0d7c21b88504c9fa1ddd73fe",
     "branch": "main"
   },
   "scenery": {
-    "sha": "68f08a8da8075d6dd7706986d938c271d9d5e5bf",
+    "sha": "e8fffa399832458f7a370a71331d95873bd31582",
     "branch": "main"
   },
   "scenery-phet": {
-    "sha": "ad2afb03851998f27263fa83d5583bf03b7cc976",
+    "sha": "e933b539708092d2d0bcf6cb8a58ce3fd927b1f5",
     "branch": "main"
   },
   "sherpa": {
-    "sha": "43037b2fab162af61adae3a301283007195b3986",
+    "sha": "2b6b0af613517a011915f86ad0c9a00193edde44",
     "branch": "main"
   },
   "studio": {
-    "sha": "0a679872a99c560e1e7f90c83f1f465cd36570ab",
+    "sha": "bbc8eebbd67dc68d5eb05d65e6f57905b17367ef",
     "branch": "main"
   },
   "sun": {
-    "sha": "29355c912c245dde158fde3e58d9f2a5763635e8",
+    "sha": "76d43aaa6451557264af363dad2f7316d0f9a5e8",
     "branch": "main"
   },
   "tambo": {
-    "sha": "95fb84624ec5c5ab0e39a1035f1b11ba551b5f75",
+    "sha": "ecd9572b9da68440966e7455db2131b76d3c2667",
     "branch": "main"
   },
   "tandem": {
-    "sha": "735ecdd289cdb4f64d682b754b153348b7787420",
+    "sha": "c32f3be4b474e29313f317d42ed8c5820d88802c",
     "branch": "main"
   },
   "twixt": {
-    "sha": "ad123945281c173ff0e8ee918ce0a438a0e65626",
+    "sha": "292388ad10fdf1fe254992d27c883b790e600351",
     "branch": "main"
   },
   "utterance-queue": {
-    "sha": "cad2e63d6c536a79bae6d126808b2133e93f14eb",
+    "sha": "3e0381896750570c09ed05f77fe31661ef6791e8",
     "branch": "main"
   }
 }
