@@ -52,9 +52,11 @@ export default class PhotonsModel implements TModel {
       phetioValueType: StringUnionIO( ExperimentModeTypeValues )
     } );
     this.singlePhotonSceneModel = new PhotonsExperimentSceneModel( {
+      photonEmissionMode: 'singlePhoton',
       tandem: providedOptions.tandem.createTandem( 'singlePhotonSceneModel' )
     } );
     this.manyPhotonsExperimentSceneModel = new PhotonsExperimentSceneModel( {
+      photonEmissionMode: 'manyPhotons',
       tandem: providedOptions.tandem.createTandem( 'manyPhotonsExperimentSceneModel' )
     } );
   }

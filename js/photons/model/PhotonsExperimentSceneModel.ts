@@ -8,19 +8,20 @@
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
-import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import Laser, { PhotonEmissionMode } from './Laser.js';
 import Mirror from './Mirror.js';
 import Photon, { PHOTON_SPEED } from './Photon.js';
 import PhotonDetector from './PhotonDetector.js';
-import Laser from './Laser.js';
 import { PhotonInteractionTestResult } from './PhotonsModel.js';
 import PolarizingBeamSplitter from './PolarizingBeamSplitter.js';
 import { TPhotonInteraction } from './TPhotonInteraction.js';
 
-type SelfOptions = EmptySelfOptions;
+type SelfOptions = {
+  photonEmissionMode: PhotonEmissionMode;
+};
 type PhotonsExperimentSceneModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
 // The width of the photon beam, in meters.  5 cm seemed a reasonable width, but it is essentially arbitrary.
@@ -41,7 +42,8 @@ export default class PhotonsExperimentSceneModel {
   public readonly verticalPolarizationDetector: PhotonDetector;
   public readonly horizontalPolarizationDetector: PhotonDetector;
 
-  public readonly photons: Photon[] = []; // array of photons
+  // The photons that will be emitted and reflected in the experiment.
+  public readonly photons: Photon[] = [];
 
   public constructor( providedOptions: PhotonsExperimentSceneModelOptions ) {
 
@@ -51,6 +53,7 @@ export default class PhotonsExperimentSceneModel {
 
     // Create the laser that will emit the photons that will be sent toward the polarizing beam splitter.
     this.laser = new Laser( new Vector2( -0.15, 0 ), this.photons, {
+      emissionMode: providedOptions.photonEmissionMode,
       tandem: providedOptions.tandem.createTandem( 'laser' )
     } );
 
