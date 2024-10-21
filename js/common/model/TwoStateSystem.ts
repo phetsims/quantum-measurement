@@ -8,15 +8,14 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import TwoStateSystemSet, { TwoStateSystemSetOptions } from './TwoStateSystemSet.js';
-import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
-import Property from '../../../../axon/js/Property.js';
-import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 
 type SelfOptions = EmptySelfOptions;
-type TwoStateSystemOptions = SelfOptions & StrictOmit<TwoStateSystemSetOptions, 'maxNumberOfSystems'>;
+type TwoStateSystemOptions = SelfOptions & TwoStateSystemSetOptions;
 
 export default class TwoStateSystem<T extends string> extends TwoStateSystemSet<T> {
 
@@ -28,11 +27,9 @@ export default class TwoStateSystem<T extends string> extends TwoStateSystemSet<
                       biasProperty: NumberProperty,
                       providedOptions: TwoStateSystemOptions ) {
 
-    const options = optionize<TwoStateSystemOptions, SelfOptions, TwoStateSystemSetOptions>()( {
-      maxNumberOfSystems: 1
-    }, providedOptions );
+    const options = optionize<TwoStateSystemOptions, SelfOptions, TwoStateSystemSetOptions>()( {}, providedOptions );
 
-    super( stateValues, initialState, biasProperty, options );
+    super( stateValues, 1, 1, initialState, biasProperty, options );
 
     this.measuredValueProperty = new Property( initialState, {
       tandem: options.tandem.createTandem( 'measuredValueProperty' ),

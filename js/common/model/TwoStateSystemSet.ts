@@ -6,11 +6,14 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
+import Emitter from '../../../../axon/js/Emitter.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import stepTimer from '../../../../axon/js/stepTimer.js';
+import TEmitter from '../../../../axon/js/TEmitter.js';
 import { TimerListener } from '../../../../axon/js/Timer.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
+import Random from '../../../../dot/js/Random.js';
 import Range from '../../../../dot/js/Range.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
@@ -18,16 +21,11 @@ import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioO
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import { ExperimentMeasurementState, ExperimentMeasurementStateValues } from '../../coins/model/ExperimentMeasurementState.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { MULTI_COIN_EXPERIMENT_QUANTITIES } from '../../coins/model/CoinsExperimentSceneModel.js';
 import { SystemType } from './SystemType.js';
-import Random from '../../../../dot/js/Random.js';
-import TEmitter from '../../../../axon/js/TEmitter.js';
-import Emitter from '../../../../axon/js/Emitter.js';
 
 type SelfOptions = {
   systemType?: SystemType;
   initialBias?: number;
-  maxNumberOfSystems?: number;
 };
 export type TwoStateSystemSetOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
@@ -79,6 +77,8 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
   public readonly measuredDataChangedEmitter: TEmitter = new Emitter();
 
   public constructor( stateValues: readonly T[],
+                      maxNumberOfActiveSystems: number,
+                      initialNumberOfActiveSystems: number,
                       initialState: T,
                       biasProperty: NumberProperty,
                       providedOptions: TwoStateSystemSetOptions ) {
@@ -88,7 +88,6 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
     const options = optionize<TwoStateSystemSetOptions, SelfOptions, PhetioObjectOptions>()( {
       systemType: 'quantum',
       initialBias: 0.5,
-      maxNumberOfSystems: 10000,
       phetioState: false
     }, providedOptions );
 
@@ -97,11 +96,8 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
     this.validValues = stateValues;
     this.systemType = options.systemType;
 
-    // TODO: This isn't how we should do this.  See https://github.com/phetsims/quantum-measurement/issues/43.
-    const initialNumberOfActiveSystems = options.maxNumberOfSystems === 1 ? 1 : MULTI_COIN_EXPERIMENT_QUANTITIES[ 1 ];
-
     this.numberOfActiveSystemsProperty = new NumberProperty( initialNumberOfActiveSystems, {
-      range: new Range( 1, options.maxNumberOfSystems ),
+      range: new Range( 1, maxNumberOfActiveSystems ),
       tandem: options.tandem.createTandem( 'numberOfActiveSystemsProperty' )
     } );
 
@@ -114,7 +110,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
     } );
 
     this.biasProperty = biasProperty;
-    this.measuredValues = new Array<T>( options.maxNumberOfSystems );
+    this.measuredValues = new Array<T>( maxNumberOfActiveSystems );
 
     // Create the seed Property.  It's initial value is controlled by the specified initial value for measurements.
     this.seedProperty = new NumberProperty( stateValues.indexOf( initialState ), {
@@ -128,7 +124,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
       // Handle the "special case" values of 0 and 1, which sets all measurement values to one of the two valid values.
       if ( seed === 0 || seed === 1 ) {
         const valueToSet = stateValues[ seed ];
-        _.times( options.maxNumberOfSystems, i => {
+        _.times( maxNumberOfActiveSystems, i => {
           this.measuredValues[ i ] = valueToSet;
         } );
       }

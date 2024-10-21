@@ -107,6 +107,8 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
       );
       this.coinSet = new TwoStateSystemSet<ClassicalCoinStates>(
         ClassicalCoinStateValues,
+        MAX_COINS,
+        MULTI_COIN_EXPERIMENT_QUANTITIES[ 1 ], // use the middle value as the default
         'heads',
         this.upProbabilityProperty,
         { tandem: coinSetTandem, systemType: 'classical' }
@@ -127,6 +129,8 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
       );
       this.coinSet = new TwoStateSystemSet<QuantumCoinStates>(
         QuantumCoinStateValues,
+        MAX_COINS,
+        MULTI_COIN_EXPERIMENT_QUANTITIES[ 1 ], // use the middle value as the default
         'up',
         this.upProbabilityProperty,
         { tandem: coinSetTandem }
