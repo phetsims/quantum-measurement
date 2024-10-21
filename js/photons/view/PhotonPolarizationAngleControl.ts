@@ -23,7 +23,7 @@ import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
-import { PresetPolarizationDirections } from '../model/PolarizingBeamSplitter.js';
+import { PresetPolarizationDirections } from '../model/Laser.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhotonPolarizationAngleControlOptions = SelfOptions & WithRequired<PanelOptions, 'tandem'>;

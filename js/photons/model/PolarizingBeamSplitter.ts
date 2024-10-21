@@ -7,8 +7,6 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import Property from '../../../../axon/js/Property.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -16,7 +14,6 @@ import { Line } from '../../../../kite/js/imports.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
-import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import Photon, { UP } from './Photon.js';
 import { PhotonInteractionTestResult } from './PhotonsModel.js';
@@ -24,9 +21,6 @@ import { TPhotonInteraction } from './TPhotonInteraction.js';
 
 type SelfOptions = EmptySelfOptions;
 type PolarizingBeamSplitterOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
-
-const PresetPolarizationValues = [ 'vertical', 'horizontal', 'fortyFiveDegrees', 'custom' ] as const;
-export type PresetPolarizationDirections = ( typeof PresetPolarizationValues )[number];
 
 export default class PolarizingBeamSplitter implements TPhotonInteraction {
 
@@ -39,14 +33,6 @@ export default class PolarizingBeamSplitter implements TPhotonInteraction {
   // A line in model space that represents the position of the polarizing beam splitter.
   public readonly polarizingSurfaceLine: Line;
 
-  // The direction of polarization that the beam splitter is set to.  This can be one of the preset directions or a
-  // custom angle.
-  public readonly presetPolarizationDirectionProperty: Property<PresetPolarizationDirections>;
-
-  // The custom angle at which the beam splitter is set, in degrees.  This is only used when the preset direction is
-  // "custom".
-  public readonly customPolarizationAngleProperty: NumberProperty;
-
   public constructor( centerPosition: Vector2, providedOptions: PolarizingBeamSplitterOptions ) {
     this.centerPosition = centerPosition;
 
@@ -54,23 +40,6 @@ export default class PolarizingBeamSplitter implements TPhotonInteraction {
     const endpoint1 = new Vector2( centerPosition.x - this.size.width / 2, centerPosition.y - this.size.height / 2 );
     const endpoint2 = new Vector2( centerPosition.x + this.size.width / 2, centerPosition.y + this.size.height / 2 );
     this.polarizingSurfaceLine = new Line( endpoint1, endpoint2 );
-
-    this.presetPolarizationDirectionProperty = new Property<PresetPolarizationDirections>( 'fortyFiveDegrees', {
-      tandem: providedOptions.tandem.createTandem( 'presetPolarizationDirectionProperty' ),
-      phetioValueType: StringUnionIO( PresetPolarizationValues ),
-      validValues: PresetPolarizationValues
-    } );
-    this.customPolarizationAngleProperty = new NumberProperty( 45, {
-      tandem: providedOptions.tandem.createTandem( 'customPolarizationAngleProperty' )
-    } );
-
-    // TODO: This is temporary code to log changes to the properties.  It will be removed later.  See https://github.com/phetsims/quantum-measurement/issues/52.
-    this.presetPolarizationDirectionProperty.lazyLink( presetPolarizationDirection => {
-      console.log( `presetPolarizationDirection = ${presetPolarizationDirection}` );
-    } );
-    this.customPolarizationAngleProperty.lazyLink( customPolarizationAngleProperty => {
-      console.log( `customPolarizationAngleProperty = ${customPolarizationAngleProperty}` );
-    } );
   }
 
   public testForPhotonInteraction( photon: Photon, dt: number ): PhotonInteractionTestResult {
@@ -84,45 +53,27 @@ export default class PolarizingBeamSplitter implements TPhotonInteraction {
       dt
     );
 
+    // Assume no interaction until proven otherwise.
+    let interaction: PhotonInteractionTestResult = { interactionType: 'none' };
+
     if ( photonIntersectionPoint !== null ) {
 
-      // Calculate the probability of reflection.
-      let probabilityOfReflection;
-      if ( this.presetPolarizationDirectionProperty.value === 'horizontal' ) {
-        probabilityOfReflection = 0;
-      }
-      else if ( this.presetPolarizationDirectionProperty.value === 'vertical' ) {
-        probabilityOfReflection = 1;
-      }
-      else if ( this.presetPolarizationDirectionProperty.value === 'fortyFiveDegrees' ) {
-        probabilityOfReflection = 0.5;
-      }
-      else {
-
-        // Calculate the probability of reflection based on the custom angle according to Malus's Law
-        const angleInRadians = this.customPolarizationAngleProperty.value * Math.PI / 180;
-        probabilityOfReflection = Math.pow( Math.cos( angleInRadians ), 2 );
-      }
+      // Calculate the probability of reflection based on the custom angle according to Malus's Law
+      const angleInRadians = photon.polarizationAngleProperty.value * Math.PI / 180;
+      const probabilityOfReflection = 1 - Math.pow( Math.cos( angleInRadians ), 2 );
 
       if ( dotRandom.nextDouble() <= probabilityOfReflection ) {
 
         // The photon is being reflected by the beam splitter.  The only direction supported currently is up.
-        return {
+        interaction = {
           interactionType: 'reflected',
           reflectionPoint: photonIntersectionPoint,
           reflectionDirection: UP
         };
       }
-      else {
-
-        // No reflection.  The photon is passing through the beam splitter.
-        return { interactionType: 'none' };
-      }
-
     }
-    else {
-      return { interactionType: 'none' };
-    }
+
+    return interaction;
   }
 }
 

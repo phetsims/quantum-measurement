@@ -22,8 +22,8 @@ export default class PhotonsExperimentSceneView extends HBox {
   public constructor( model: PhotonsExperimentSceneModel, providedOptions: PhotonsExperimentSceneViewOptions ) {
 
     const photonPolarizationAngleControl = new PhotonPolarizationAngleControl(
-      model.polarizingBeamSplitter.presetPolarizationDirectionProperty,
-      model.polarizingBeamSplitter.customPolarizationAngleProperty,
+      model.laser.presetPolarizationDirectionProperty,
+      model.laser.customPolarizationAngleProperty,
       {
         tandem: providedOptions.tandem.createTandem( 'photonPolarizationAngleControl' )
       }

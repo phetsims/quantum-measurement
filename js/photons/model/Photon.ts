@@ -8,6 +8,7 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
@@ -34,6 +35,9 @@ export default class Photon extends PhetioObject {
   // whether this photon is active, and should thus be moved by the model and shown in the view
   public readonly activeProperty: BooleanProperty;
 
+  // the angle of polarization for this photon, in degrees
+  public readonly polarizationAngleProperty: NumberProperty;
+
   public constructor( tandem: Tandem ) {
 
     super( {
@@ -43,6 +47,10 @@ export default class Photon extends PhetioObject {
 
     this.positionProperty = new Vector2Property( Vector2.ZERO, {
       tandem: tandem.createTandem( 'positionProperty' )
+    } );
+
+    this.polarizationAngleProperty = new NumberProperty( 0, {
+      tandem: tandem.createTandem( 'polarizationAngleProperty' )
     } );
 
     this.directionProperty = new Vector2Property( RIGHT, {

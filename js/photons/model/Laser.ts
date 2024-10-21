@@ -8,11 +8,13 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
+import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import Photon, { RIGHT } from './Photon.js';
 import { PHOTON_BEAM_WIDTH } from './PhotonsExperimentSceneModel.js';
@@ -24,8 +26,18 @@ type SelfOptions = {
 };
 type LaserOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
+const PresetPolarizationValues = [ 'vertical', 'horizontal', 'fortyFiveDegrees', 'custom' ] as const;
+export type PresetPolarizationDirections = ( typeof PresetPolarizationValues )[number];
+
 // constants
 const MAX_PHOTON_EMISSION_RATE = 200; // photons per second
+const MAP_OF_PRESET_POLARIZATION_ANGLES = new Map(
+  [
+    [ 'horizontal', 0 ],
+    [ 'vertical', 90 ],
+    [ 'fortyFiveDegrees', 45 ]
+  ]
+);
 
 export default class Laser {
 
@@ -42,6 +54,12 @@ export default class Laser {
 
   // The rate at which photons are created, in photons per second.
   public readonly emissionRateProperty: NumberProperty;
+
+  // The preset values of polarization direction that are available for the photons that are emitted.
+  public readonly presetPolarizationDirectionProperty: Property<PresetPolarizationDirections>;
+
+  // The custom polarization angle for the emitted photons.  This is only used when the preset direction is "custom".
+  public readonly customPolarizationAngleProperty: NumberProperty;
 
   // The set of photons that are used for emission.  This is a reference to the same array that is used in the scene model.
   private readonly photons: Photon[];
@@ -65,8 +83,28 @@ export default class Laser {
     this.emissionRateProperty.link( emissionRate => {
       this.timeBetweenPhotons = emissionRate > 0 ? 1 / emissionRate : Number.POSITIVE_INFINITY;
     } );
+
+    this.presetPolarizationDirectionProperty = new Property<PresetPolarizationDirections>( 'fortyFiveDegrees', {
+      tandem: providedOptions.tandem.createTandem( 'presetPolarizationDirectionProperty' ),
+      phetioValueType: StringUnionIO( PresetPolarizationValues ),
+      validValues: PresetPolarizationValues
+    } );
+    this.customPolarizationAngleProperty = new NumberProperty( 45, {
+      tandem: providedOptions.tandem.createTandem( 'customPolarizationAngleProperty' )
+    } );
+
+    // TODO: This is temporary code to log changes to the properties.  It will be removed later.  See https://github.com/phetsims/quantum-measurement/issues/52.
+    this.presetPolarizationDirectionProperty.lazyLink( presetPolarizationDirection => {
+      console.log( `presetPolarizationDirection = ${presetPolarizationDirection}` );
+    } );
+    this.customPolarizationAngleProperty.lazyLink( customPolarizationAngleProperty => {
+      console.log( `customPolarizationAngleProperty = ${customPolarizationAngleProperty}` );
+    } );
   }
 
+  /**
+   * Emits a photon from the laser.
+   */
   public emitAPhoton(): void {
     const photonToActivate = this.photons.find( photon => !photon.activeProperty.value );
     assert && assert( photonToActivate, 'no inactive photons available, increase the initial creation amount' );
@@ -75,10 +113,16 @@ export default class Laser {
       // Randomize the y position of the emitted photon so that the beam has some thickness.
       const yOffset = this.emittedBeamWidth / 2 * ( 1 - dotRandom.nextDouble() * 2 );
 
-      // Activate the photon and set its position and direction.
+      // Determine the polarization angle for the emitted photon.
+      const polarizationAngle = this.presetPolarizationDirectionProperty.value === 'custom' ?
+                                this.customPolarizationAngleProperty.value :
+                                MAP_OF_PRESET_POLARIZATION_ANGLES.get( this.presetPolarizationDirectionProperty.value )!;
+
+      // Activate the photon and set its position, direction, and polarization angle.
       photonToActivate.activeProperty.set( true );
       photonToActivate.positionProperty.set( this.position.plusXY( 0, yOffset ) );
       photonToActivate.directionProperty.set( this.emissionDirection );
+      photonToActivate.polarizationAngleProperty.set( polarizationAngle );
     }
   }
 
