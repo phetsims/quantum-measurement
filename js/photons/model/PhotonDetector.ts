@@ -14,8 +14,8 @@ import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import { PHOTON_BEAM_WIDTH } from './Laser.js';
 import Photon from './Photon.js';
-import { PHOTON_BEAM_WIDTH } from './PhotonsExperimentSceneModel.js';
 import { PhotonInteractionTestResult } from './PhotonsModel.js';
 import { TPhotonInteraction } from './TPhotonInteraction.js';
 
@@ -32,7 +32,7 @@ export default class PhotonDetector implements TPhotonInteraction {
   public readonly detectionDirection: DetectionDirection;
 
   // detection aperture width, in meters
-  public readonly apertureDiameter = PHOTON_BEAM_WIDTH * 1.1;
+  public readonly apertureDiameter = PHOTON_BEAM_WIDTH * 1.75;
 
   // A line in model space that represents the position of the detection aperture.  If a photon crosses this line, it
   // will be absorbed and detected.

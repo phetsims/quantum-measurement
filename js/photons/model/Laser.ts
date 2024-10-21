@@ -17,7 +17,6 @@ import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import Photon, { RIGHT } from './Photon.js';
-import { PHOTON_BEAM_WIDTH } from './PhotonsExperimentSceneModel.js';
 
 export type PhotonEmissionMode = 'singlePhoton' | 'manyPhotons';
 
@@ -30,6 +29,10 @@ const PresetPolarizationValues = [ 'vertical', 'horizontal', 'fortyFiveDegrees',
 export type PresetPolarizationDirections = ( typeof PresetPolarizationValues )[number];
 
 // constants
+
+// The width of the emitted photon beam, in meters, empirically determined.
+export const PHOTON_BEAM_WIDTH = 0.04;
+
 const MAX_PHOTON_EMISSION_RATE = 200; // photons per second
 const MAP_OF_PRESET_POLARIZATION_ANGLES = new Map(
   [
