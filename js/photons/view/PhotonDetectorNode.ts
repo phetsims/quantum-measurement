@@ -33,44 +33,31 @@ export default class PhotonDetectorNode extends Node {
                       modelViewTransform: ModelViewTransform2,
                       providedOptions: PhotonDetectorNodeOptions ) {
 
-    // detector body
-    const bodyRectangle = new Rectangle( 0, 0, DETECTOR_BODY_SIZE.width, DETECTOR_BODY_SIZE.height, {
-      cornerRadius: 10,
-      fill: new Color( '#D1E2FA' )
-    } );
-
-    // detection aperture
+    // Create the detection aperture.  This is essentially the anchor point for reset of the layout, meaning that the
+    // other nodes are positioned relative to this.
     const apertureDiameterInView = -modelViewTransform.modelToViewDeltaY( model.apertureDiameter );
     const aperture = new Rectangle( 0, 0, apertureDiameterInView, 8, {
       fill: new LinearGradient( 0, 0, apertureDiameterInView, 0 )
         .addColorStop( 0, new Color( '#FFDDEE' ) )
-        .addColorStop( 1, Color.DARK_GRAY )
+        .addColorStop( 1, Color.DARK_GRAY ),
+      center: modelViewTransform.modelToViewPosition( model.position )
     } );
 
-    // Add a readout of either the detection rate or the detection count.
-    // TODO: This is just a placeholder for now.  We'll need to add the actual readout later.  See https://github.com/phetsims/quantum-measurement/issues/52.
-    const countReadout = new Text( '0', {
-      font: new PhetFont( 20 ),
-      maxWidth: DETECTOR_BODY_SIZE.width * 0.95
+    // detector body
+    const bodyRectangle = new Rectangle( 0, 0, DETECTOR_BODY_SIZE.width, DETECTOR_BODY_SIZE.height, {
+      cornerRadius: 10,
+      fill: new Color( '#D1E2FA' ),
+      centerX: aperture.centerX
     } );
 
-    // Update the readout when the count changes.
-    model.detectionCountProperty.link( count => {
-      countReadout.setString( count );
-      countReadout.center = bodyRectangle.center;
-    } );
-
-    // Declare the label.  It's value and position will be set later.
+    // Declare the label.  Its value and position will be set later.
     let label: RichText;
-
-    let centerY = 0;
 
     // Position the detector body and aperture based on the detection direction.
     if ( model.detectionDirection === 'up' ) {
 
-      // Position the aperture at the bottom of the detector body.
-      aperture.centerX = bodyRectangle.centerX;
-      aperture.top = bodyRectangle.bottom;
+      // Position the body above the aperture.
+      bodyRectangle.bottom = aperture.top;
 
       // Create a derived property for the label.
       const labelStringProperty = new DerivedProperty(
@@ -91,14 +78,11 @@ export default class PhotonDetectorNode extends Node {
         centerX: bodyRectangle.centerX,
         bottom: bodyRectangle.top - 5
       } );
-
-      centerY = modelViewTransform.modelToViewY( model.position.y ) - bodyRectangle.height / 2;
     }
     else if ( model.detectionDirection === 'down' ) {
 
-      // Position the aperture at the top of the detector body.
-      aperture.centerX = bodyRectangle.centerX;
-      aperture.bottom = bodyRectangle.top;
+      // Position the body below the aperture.
+      bodyRectangle.top = aperture.bottom;
 
       // Create a derived property for the label.
       const labelStringProperty = new DerivedProperty(
@@ -119,19 +103,28 @@ export default class PhotonDetectorNode extends Node {
         centerX: bodyRectangle.centerX,
         top: bodyRectangle.bottom + 5
       } );
-
-      centerY = modelViewTransform.modelToViewY( model.position.y ) + bodyRectangle.height / 2;
     }
     else {
       assert && assert( false, `unsupported detection direction: ${model.detectionDirection}` );
       label = new RichText( '' );
     }
 
+    // Add a readout of either the detection rate or the detection count.
+    // TODO: This is just a placeholder for now.  We'll need to add the actual readout later.  See https://github.com/phetsims/quantum-measurement/issues/52.
+    const countReadout = new Text( '0', {
+      font: new PhetFont( 20 ),
+      maxWidth: DETECTOR_BODY_SIZE.width * 0.95
+    } );
+
+    // Update the readout when the count changes.
+    model.detectionCountProperty.link( count => {
+      countReadout.setString( count );
+      countReadout.center = bodyRectangle.center;
+    } );
+
     const options = optionize<PhotonDetectorNodeOptions, SelfOptions, NodeOptions>()(
       {
-        children: [ aperture, bodyRectangle, countReadout, label ],
-        centerX: modelViewTransform.modelToViewX( model.position.x ),
-        centerY: centerY
+        children: [ aperture, bodyRectangle, countReadout, label ]
       },
       providedOptions
     );
