@@ -69,12 +69,12 @@ export default class PhotonTestingArea extends Node {
 
     const options = optionize<PhotonTestingAreaOptions, SelfOptions, NodeOptions>()( {
       children: [
+        ...photonNodes,
         laserNode,
         polarizingBeamSplitterNode,
         verticalPolarizationDetector,
         horizontalPolarizationDetector,
-        mirror,
-        ...photonNodes
+        mirror
       ]
     }, providedOptions );
 

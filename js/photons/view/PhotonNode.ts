@@ -19,7 +19,8 @@ const STAR_RADIUS = PHOTON_RADIUS * 0.9;
 const STAR_CORE_RADIUS = STAR_RADIUS / 3;
 const NUMBER_OF_STAR_POINTS = 6;
 
-// Create the shape that will be used for the star in all photons.
+// Create the shape that will be used f
+// or the star in all photons.
 const starShape = new Shape().moveTo( STAR_CORE_RADIUS, 0 );
 _.times( NUMBER_OF_STAR_POINTS, i => {
   const angle = i * 2 * Math.PI / NUMBER_OF_STAR_POINTS;

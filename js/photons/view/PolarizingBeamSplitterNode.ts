@@ -38,6 +38,7 @@ export default class PolarizingBeamSplitterNode extends Rectangle {
     const options = optionize<PolarizingBeamSplitterNodeOptions, SelfOptions, RectangleOptions>()( {
       fill: new Color( '#A3FFFF' ),
       center: modelViewTransform.modelToViewPosition( model.centerPosition ),
+      opacity: 0.5,
       children: [ lineNode ]
     }, providedOptions );
 
