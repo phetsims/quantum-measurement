@@ -34,10 +34,12 @@ type StringsType = {
   'basisStateStringProperty': LocalizedStringProperty;
   'itemToPreparePatternStringProperty': LocalizedStringProperty;
   'manyPhotonsStringProperty': LocalizedStringProperty;
+  'mirrorStringProperty': LocalizedStringProperty;
   'multipleCoinMeasurementsStringProperty': LocalizedStringProperty;
   'newCoinStringProperty': LocalizedStringProperty;
   'observeStringProperty': LocalizedStringProperty;
   'photonPolarizationAngleStringProperty': LocalizedStringProperty;
+  'polarizingBeamSplitterStringProperty': LocalizedStringProperty;
   'classicalCoinStringProperty': LocalizedStringProperty;
   'preparedStateStringProperty': LocalizedStringProperty;
   'probabilityStringProperty': LocalizedStringProperty;

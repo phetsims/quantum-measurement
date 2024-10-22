@@ -10,29 +10,39 @@
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import { Color, Line, RectangleOptions } from '../../../../scenery/js/imports.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import { Color, Line, Node, NodeOptions, Text } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import Mirror from '../model/Mirror.js';
 
 type SelfOptions = EmptySelfOptions;
-type MirrorNodeOptions = SelfOptions & PickRequired<RectangleOptions, 'tandem'>;
+type MirrorNodeOptions = SelfOptions & PickRequired<NodeOptions, 'tandem'>;
 
-export default class MirrorNode extends Line {
+export default class MirrorNode extends Node {
 
   public constructor( model: Mirror,
                       modelViewTransform: ModelViewTransform2,
                       providedOptions: MirrorNodeOptions ) {
 
-    const options = optionize<MirrorNodeOptions, SelfOptions, RectangleOptions>()( {
+    const mirrorLine = new Line(
+      modelViewTransform.modelToViewPosition( model.mirrorSurfaceLine.start ),
+      modelViewTransform.modelToViewPosition( model.mirrorSurfaceLine.end ), {
       stroke: Color.LIGHT_GRAY,
       lineWidth: 5
+    } );
+
+    const label = new Text( QuantumMeasurementStrings.mirrorStringProperty, {
+      font: new PhetFont( 12 ),
+      left: mirrorLine.centerX + 2,
+      bottom: mirrorLine.centerY
+    } );
+
+    const options = optionize<MirrorNodeOptions, SelfOptions, NodeOptions>()( {
+      children: [ mirrorLine, label ]
     }, providedOptions );
 
-    super(
-      modelViewTransform.modelToViewPosition( model.mirrorSurfaceLine.start ),
-      modelViewTransform.modelToViewPosition( model.mirrorSurfaceLine.end ),
-      options
-    );
+    super( options );
   }
 }
 
