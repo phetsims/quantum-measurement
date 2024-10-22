@@ -109,6 +109,8 @@ export default class SpinModel implements TModel {
       return new ParticleWithSpinModel( id );
     } );
 
+    // TODO: Maybe integrate with the ParticleRay constructor? https://github.com/phetsims/quantum-preparement/issues/53
+
     const updateProbabilities = ( particleAmmount: number ) => {
       if ( this.particleRays.isShortExperiment ) {
         this.particleRays.updateProbabilities( [
