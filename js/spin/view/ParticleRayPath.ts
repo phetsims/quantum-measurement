@@ -9,8 +9,8 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
+import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import ShadedSphereNode from '../../../../scenery-phet/js/ShadedSphereNode.js';
 import { Node, Path, PathOptions } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -22,12 +22,9 @@ import { SourceMode } from '../model/SourceMode.js';
 
 export default class ParticleRayPath extends Node {
 
-  public readonly updatePaths: (
-    rayPointsPairs: Vector2[][]
-  ) => void;
-
   public constructor(
     particleRays: ParticleRays,
+    modelViewTransform: ModelViewTransform2,
     sourceModeProperty: TReadOnlyProperty<SourceMode>,
     particles: ParticleWithSpinModel[],
     tandem: Tandem ) {
@@ -39,8 +36,8 @@ export default class ParticleRayPath extends Node {
       visibleProperty: new DerivedProperty( [ sourceModeProperty ], sourceMode => sourceMode === SourceMode.CONTINUOUS )
     };
 
-    // Create 7 paths for the possible rays
-    const rayPaths = _.range( 7 ).map( i => {
+    // Create 9 paths for the possible rays
+    const rayPaths = _.range( 9 ).map( i => {
       return new Path( null, rayPathOptions );
     } );
 
@@ -52,7 +49,7 @@ export default class ParticleRayPath extends Node {
       } );
 
       particle.positionProperty.link( position => {
-        particleNode.translation = position;
+        particleNode.translation = modelViewTransform.modelToViewPosition( position );
       } );
 
       return particleNode;
@@ -64,37 +61,20 @@ export default class ParticleRayPath extends Node {
       children: [ ...rayPaths, ...singleParticleNodes ]
     } );
 
-    this.updatePaths = (
-      rayPointsPairs: Vector2[][]
-    ) => {
-      // Grab all the pairs of points and create rays for each pair
-      const allMappedRayPoints: Vector2[][] = [];
-      for ( let i = 0; i < 7; i++ ) {
-        if ( i < rayPointsPairs.length ) {
-          // If the ray exists, update its shape, otherwise set it to null
-          const rayPointsPair = rayPointsPairs[ i ];
-          const mappedRayPoints = rayPointsPair.map( point => this.globalToLocalPoint( point ) );
-          rayPaths[ i ].shape = new Shape().moveTo( mappedRayPoints[ 0 ].x, mappedRayPoints[ 0 ].y )
-            .lineTo( mappedRayPoints[ 1 ].x, mappedRayPoints[ 1 ].y );
-          rayPaths[ i ].opacity = 1;
-          allMappedRayPoints.push( mappedRayPoints );
-        }
-        else {
-          rayPaths[ i ].shape = null;
-        }
-      }
-
-      // Update the particles' positions
-      particles.forEach( ( particle, i ) => {
-        // TODO: YUCK! https://github.com/phetsims/quantum-measurement/issues/53
-        particle.mappedPaths = allMappedRayPoints;
-      } );
-    };
-
-    particleRays.probabilitiesUpdatedEmitter.addListener( () => {
+    particleRays.updatedEmitter.addListener( () => {
       rayPaths.forEach( ( rayPath, i ) => {
         if ( i < particleRays.pathProbabilities.length ) {
           rayPath.opacity = particleRays.pathProbabilities[ i ];
+
+          const shapePoints = particleRays.activePaths[ i ];
+
+          if ( shapePoints ) {
+            const pointFromTransformed = modelViewTransform.modelToViewPosition( shapePoints[ 0 ] );
+            const pointToTransformed = modelViewTransform.modelToViewPosition( shapePoints[ 1 ] );
+
+            rayPath.shape = new Shape().moveToPoint( pointFromTransformed )
+              .lineToPoint( pointToTransformed );
+          }
         }
         else {
           rayPath.opacity = 0;

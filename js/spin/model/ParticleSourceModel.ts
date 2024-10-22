@@ -21,13 +21,19 @@ export default class ParticleSourceModel {
 
   public readonly sourceModeProperty: Property<SourceMode>;
 
-  // Position of the particle source
+  // Position of the particle source, the tip will be at (0,0)
   public readonly positionProperty: Vector2Property;
+  public readonly exitPosition: Vector2;
 
   public readonly currentlyShootingParticlesProperty: Property<boolean>;
 
   // Mapped from [0, 1] to control the Continuous mode, 0 is 'None' and 1 is 'Lots'
   public readonly particleAmmountProperty: NumberProperty;
+
+  // Constants
+  public static readonly PARTICLE_SOURCE_WIDTH = 120 / 200;
+  public static readonly PARTICLE_SOURCE_HEIGHT = 120 / 200;
+  public static readonly PARTICLE_SOURCE_CORNER_RADIUS = 10 / 200;
 
   public constructor( position: Vector2, tandem: Tandem ) {
 
@@ -36,6 +42,8 @@ export default class ParticleSourceModel {
     this.positionProperty = new Vector2Property( position, {
       tandem: tandem.createTandem( 'positionProperty' )
     } );
+
+    this.exitPosition = new Vector2( 0, 0 );
 
     this.currentlyShootingParticlesProperty = new Property<boolean>( false, {
       tandem: tandem.createTandem( 'currentlyShootingParticlesProperty' ),

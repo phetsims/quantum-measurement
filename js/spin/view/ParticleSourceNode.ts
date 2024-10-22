@@ -23,11 +23,6 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import ParticleSourceModel from '../model/ParticleSourceModel.js';
 import { SourceMode } from '../model/SourceMode.js';
 
-// Constants
-export const PARTICLE_SOURCE_WIDTH = 120;
-export const PARTICLE_SOURCE_HEIGHT = 120;
-const PARTICLE_SOURCE_CORNER_RADIUS = 10;
-
 export default class ParticleSourceNode extends VBox {
 
   // Global position vector for the particle ray, it is updated outside of the constructor
@@ -37,6 +32,11 @@ export default class ParticleSourceNode extends VBox {
     particleSourceModel: ParticleSourceModel,
     modelViewTransform: ModelViewTransform2,
     tandem: Tandem ) {
+
+    // Constants
+    const PARTICLE_SOURCE_WIDTH = modelViewTransform.modelToViewDeltaX( ParticleSourceModel.PARTICLE_SOURCE_WIDTH );
+    const PARTICLE_SOURCE_HEIGHT = modelViewTransform.modelToViewDeltaY( -ParticleSourceModel.PARTICLE_SOURCE_HEIGHT ); // Minus because of inverted Y
+    const PARTICLE_SOURCE_CORNER_RADIUS = modelViewTransform.modelToViewDeltaX( ParticleSourceModel.PARTICLE_SOURCE_CORNER_RADIUS );
 
     // Main shape of the component
     const particleSourceRectangle = new Path( new Shape()
@@ -97,6 +97,7 @@ export default class ParticleSourceNode extends VBox {
       tandem: tandem.createTandem( 'particleSourceNode' ),
       spacing: 20,
       children: [
+        // TODO: Translatable! https://github.com/phetsims/quantum-measurement/issues/53
         new RichText( 'Spin ℏ/2 Source', { font: new PhetFont( 20 ) } ),
         new Node( {
           children: [
@@ -106,6 +107,7 @@ export default class ParticleSourceNode extends VBox {
             particleAmmountSlider
           ]
         } ),
+        // TODO: Translatable! https://github.com/phetsims/quantum-measurement/issues/53
         new RichText( 'Source Mode', { font: new PhetFont( { size: 20, weight: 'bold' } ) } ),
         new AquaRadioButtonGroup( particleSourceModel.sourceModeProperty, SourceMode.enumeration.values.map( sourceMode => {
           return {
@@ -122,12 +124,9 @@ export default class ParticleSourceNode extends VBox {
     } );
 
     particleSourceModel.positionProperty.link( position => {
-      this.center = modelViewTransform.modelToViewPosition( position ).plusXY( -PARTICLE_SOURCE_WIDTH / 2, particleSourceRectangle.center.y / 2 );
+      const referencePoint = particleSourceBarrel.localToParentPoint( particleSourceBarrel.center );
+      this.center = modelViewTransform.modelToViewPosition( position ).plusXY( -referencePoint.x / 2, referencePoint.y / 2 );
     } );
-  }
-
-  public updateGlobalPositions(): void {
-    this.particleExitGlobalPosition = this.localToGlobalPoint( new Vector2( PARTICLE_SOURCE_WIDTH + 15, 3.5 * PARTICLE_SOURCE_HEIGHT / 4 ) );
   }
 }
 

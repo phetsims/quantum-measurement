@@ -25,14 +25,12 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
-const TIME_SCALING = 2;
-
 export class ParticleWithSpinModel {
 
   public lifetime = 0;
   public activeProperty: BooleanProperty;
 
-  public mappedPaths: Vector2[][] = [];
+  public path: Vector2[][] = [];
 
   // Spin values of the particle in the XZ plane along its lifetime
   public firstSpinVector = new Vector2( 0, 0 );
@@ -49,7 +47,7 @@ export class ParticleWithSpinModel {
   public readyToBeMeasuredEmitter = new Emitter();
 
   public positionProperty: Vector2Property;
-  public speed = 70;
+  public speed = 1;
 
   public constructor( public readonly id: number ) {
     this.activeProperty = new BooleanProperty( false );
@@ -58,7 +56,7 @@ export class ParticleWithSpinModel {
 
   public step( dt: number ): void {
     if ( this.activeProperty.value ) {
-      this.lifetime += dt * TIME_SCALING;
+      this.lifetime += dt;
 
       this.calculatePosition();
 
@@ -83,50 +81,44 @@ export class ParticleWithSpinModel {
       return a.plus( direction.times( this.speed * t ) );
     };
 
-    let path = 0;
     const fractionalLifetime = this.lifetime % 1;
 
     switch( Math.floor( this.lifetime ) ) {
       case 0:
         // Between the first two points of the first path
-        this.positionProperty.value = travel( this.mappedPaths[ 0 ][ 0 ], this.mappedPaths[ 0 ][ 1 ], fractionalLifetime );
+        this.positionProperty.value = travel( this.path[ 0 ][ 0 ], this.path[ 0 ][ 1 ], fractionalLifetime );
         break;
       case 1:
         // In the middle of the SG1 apparatus
-        this.positionProperty.value = travel( this.mappedPaths[ 0 ][ 1 ], this.mappedPaths[ 1 ][ 0 ], 0.5 );
+        this.positionProperty.value = travel( this.path[ 0 ][ 1 ], this.path[ 1 ][ 0 ], 0.5 );
         this.readyToBeMeasuredEmitter.emit();
         break;
       case 2:
         // Along the second or third paths
-        path = this.secondSpinUp ? 1 : 2;
-        this.positionProperty.value = travel( this.mappedPaths[ path ][ 0 ], this.mappedPaths[ path ][ 1 ], fractionalLifetime );
+        this.positionProperty.value = travel( this.path[ 1 ][ 0 ], this.path[ 1 ][ 1 ], fractionalLifetime );
         break;
       case 3:
         // Inside a SG2 or SG3 apparatus
-        if ( this.mappedPaths.length > 3 ) {
-          this.positionProperty.value = travel( this.mappedPaths[ 0 ][ 1 ], this.mappedPaths[ 1 ][ 0 ], 0.5 );
+        if ( this.path.length > 3 ) {
+          this.positionProperty.value = travel( this.path[ 0 ][ 1 ], this.path[ 1 ][ 0 ], 0.5 );
           this.readyToBeMeasuredEmitter.emit();
         }
         else {
-          path = this.secondSpinUp ? 1 : 2;
-          this.positionProperty.value = travel( this.mappedPaths[ path ][ 0 ], this.mappedPaths[ path ][ 1 ], this.lifetime - 2 );
+          this.positionProperty.value = travel( this.path[ 1 ][ 0 ], this.path[ 1 ][ 1 ], this.lifetime - 2 );
         }
         break;
       default:
         // Along the last paths
-        if ( this.mappedPaths.length > 3 ) {
-          path = this.secondSpinUp ? // Went from SG1 to SG3
-                 this.thirdSpinUp ? 3 : 4 : // Spin up?
-                  this.thirdSpinUp ? 5 : 6; // Spin up?
-          this.positionProperty.value = travel( this.mappedPaths[ path ][ 0 ], this.mappedPaths[ path ][ 1 ], this.lifetime - 4 );
+        if ( this.path.length > 3 ) {
+          this.positionProperty.value = travel( this.path[ 2 ][ 0 ], this.path[ 2 ][ 1 ], this.lifetime - 4 );
         }
         else {
-          path = this.secondSpinUp ? 1 : 2;
-          this.positionProperty.value = travel( this.mappedPaths[ path ][ 0 ], this.mappedPaths[ path ][ 1 ], this.lifetime - 2 );
+          this.positionProperty.value = travel( this.path[ 1 ][ 0 ], this.path[ 1 ][ 1 ], this.lifetime - 2 );
         }
         break;
-
     }
+
+    console.log( this.positionProperty.value );
   }
 
   public reset(): void {

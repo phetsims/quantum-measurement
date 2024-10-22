@@ -16,32 +16,29 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import SternGerlach from '../model/SternGerlach.js';
 
-// Constants
-export const STERN_GERLACH_WIDTH = 150;
-export const STERN_GERLACH_HEIGHT = 100;
-export const PARTICLE_HOLE_WIDTH = 5;
-const PARTICLE_HOLE_HEIGHT = 20;
-
 export default class SternGerlachNode extends Node {
-
-  // Global position vectors, they are to be updated outside of the constructor
-  public entranceGlobalPosition = new Vector2( 0, 0 );
-  public topExitGlobalPosition = new Vector2( 0, 0 );
-  public bottomExitGlobalPosition = new Vector2( 0, 0 );
 
   public constructor(
     experimentModel: SternGerlach,
     modelViewTransform: ModelViewTransform2,
     tandem: Tandem ) {
 
+    // Transformed constants
+    const STERN_GERLACH_WIDTH = modelViewTransform.modelToViewDeltaX( experimentModel.STERN_GERLACH_WIDTH );
+    const STERN_GERLACH_HEIGHT = modelViewTransform.modelToViewDeltaY( -experimentModel.STERN_GERLACH_HEIGHT ); // Minus because of inverted Y
+    const PARTICLE_HOLE_WIDTH = modelViewTransform.modelToViewDeltaX( experimentModel.PARTICLE_HOLE_WIDTH );
+    const PARTICLE_HOLE_HEIGHT = modelViewTransform.modelToViewDeltaY( -experimentModel.PARTICLE_HOLE_HEIGHT ); // Minus because of inverted Y
+
     // Component for the entry and exit points of the SG apparatus
-    const createParticleHole = ( x: number, y: number ) => {
-      return new Path( new Shape().rect( x, y, PARTICLE_HOLE_WIDTH, PARTICLE_HOLE_HEIGHT ),
+    const createParticleHole = ( center: Vector2 ) => {
+      const path = new Path( new Shape().rect( 0, 0, PARTICLE_HOLE_WIDTH, PARTICLE_HOLE_HEIGHT ),
         {
-          fill: new LinearGradient( x, y, x, y + PARTICLE_HOLE_HEIGHT )
+          fill: new LinearGradient( 0, 0, 0, PARTICLE_HOLE_HEIGHT )
             .addColorStop( 0, 'grey' )
             .addColorStop( 1, 'black' )
         } );
+      path.center = modelViewTransform.modelToViewDelta( center );
+      return path;
     };
 
     const curveFunction = ( x: number ) => {
@@ -49,13 +46,20 @@ export default class SternGerlachNode extends Node {
     };
 
     // Decoration curves that go in the front of the main rectangle
-    const curveUpShape = new Shape().moveTo( 0, STERN_GERLACH_HEIGHT / 2 );
-    const curveDownShape = new Shape().moveTo( 0, STERN_GERLACH_HEIGHT / 2 );
+    const curveUpShape = new Shape().moveTo( -STERN_GERLACH_WIDTH / 2, 0 );
+    const curveDownShape = new Shape().moveTo( -STERN_GERLACH_WIDTH / 2, 0 );
 
     for ( let i = 0; i < 1; i += 0.1 ) {
-      curveUpShape.lineTo( i * STERN_GERLACH_WIDTH, curveFunction( i ) * STERN_GERLACH_HEIGHT / 4 + STERN_GERLACH_HEIGHT / 2 );
-      curveDownShape.lineTo( i * STERN_GERLACH_WIDTH, -curveFunction( i ) * STERN_GERLACH_HEIGHT / 4 + STERN_GERLACH_HEIGHT / 2 );
+      curveUpShape.lineTo( -STERN_GERLACH_WIDTH / 2 + i * STERN_GERLACH_WIDTH, curveFunction( i ) * STERN_GERLACH_HEIGHT / 4 );
+      curveDownShape.lineTo( -STERN_GERLACH_WIDTH / 2 + i * STERN_GERLACH_WIDTH, -curveFunction( i ) * STERN_GERLACH_HEIGHT / 4 );
     }
+
+    const particleEntrance = createParticleHole( experimentModel.entrancePosition );
+    const topParticleExit = createParticleHole( experimentModel.topExitPosition );
+    const bottomParticleExit = createParticleHole( experimentModel.bottomExitPosition );
+
+    const mainRect = new Path( new Shape().rect( -STERN_GERLACH_WIDTH / 2, -STERN_GERLACH_HEIGHT / 2, STERN_GERLACH_WIDTH, STERN_GERLACH_HEIGHT ),
+        { fill: 'black' } );
 
     super( {
       tandem: tandem,
@@ -63,36 +67,30 @@ export default class SternGerlachNode extends Node {
       children: [
 
         // Main body of the SG apparatus
-        new Path( new Shape().rect( 0, 0, STERN_GERLACH_WIDTH, STERN_GERLACH_HEIGHT ),
-          { fill: 'black' } ),
+        mainRect,
 
         // Curved paths for the particle to follow
         new Path( curveUpShape, { stroke: '#aff', lineWidth: 4 } ),
         new Path( curveDownShape, { stroke: '#aff', lineWidth: 4 } ),
 
         // Particle entry point
-        createParticleHole( -PARTICLE_HOLE_WIDTH, STERN_GERLACH_HEIGHT / 2 - PARTICLE_HOLE_HEIGHT / 2 ),
+        particleEntrance,
 
         // Particle exit points
-        createParticleHole( STERN_GERLACH_WIDTH, STERN_GERLACH_HEIGHT / 4 - PARTICLE_HOLE_HEIGHT / 2 ),
-        createParticleHole( STERN_GERLACH_WIDTH, 3 * STERN_GERLACH_HEIGHT / 4 - PARTICLE_HOLE_HEIGHT / 2 ),
+        topParticleExit,
+        bottomParticleExit,
 
+        // TODO: Translatable! https://github.com/phetsims/quantum-measurement/issues/53
         new RichText( new DerivedProperty(
             [ experimentModel.isZOrientedProperty ],
             ( isZOriented: boolean ) => isZOriented ? 'SG<sub>Z' : 'SG<sub>X' ),
-          { font: new PhetFont( 20 ), fill: 'white', center: new Vector2( 25, 80 ) } )
+          { font: new PhetFont( 20 ), fill: 'white', center: new Vector2( -STERN_GERLACH_WIDTH / 2 + 25, -STERN_GERLACH_HEIGHT / 2 + 80 ) } )
       ]
     } );
 
     experimentModel.positionProperty.link( position => {
-      this.center = modelViewTransform.modelToViewPosition( position ).minusXY( STERN_GERLACH_WIDTH / 2, 0 );
+      this.center = modelViewTransform.modelToViewPosition( position );
     } );
-  }
-
-  public updateGlobalPositions(): void {
-    this.entranceGlobalPosition = this.localToGlobalPoint( new Vector2( 0, STERN_GERLACH_HEIGHT / 2 ) );
-    this.topExitGlobalPosition = this.localToGlobalPoint( new Vector2( STERN_GERLACH_WIDTH + PARTICLE_HOLE_WIDTH, STERN_GERLACH_HEIGHT / 4 ) );
-    this.bottomExitGlobalPosition = this.localToGlobalPoint( new Vector2( STERN_GERLACH_WIDTH + PARTICLE_HOLE_WIDTH, 3 * STERN_GERLACH_HEIGHT / 4 ) );
   }
 }
 

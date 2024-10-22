@@ -48,7 +48,6 @@ export default class SpinScreenView extends QuantumMeasurementScreenView {
     this.mockupOpacityProperty && this.mockupOpacityProperty.link( opacity => {
       spinStatePreparationArea.opacity = 1 - opacity;
       spinMeasurementArea.opacity = 1 - opacity;
-      spinMeasurementArea.particleRayPath.opacity = 1 - opacity;
     } );
 
     model.currentExperimentProperty.notifyListenersStatic();

@@ -75,54 +75,68 @@ export default class SpinModel implements TModel {
 
     this.currentExperimentProperty = new Property<SpinExperiment>( SpinExperiment.EXPERIMENT_1 );
 
-    this.particleRays = new ParticleRays();
-
     this.particleSourceModel = new ParticleSourceModel( new Vector2( 0, 0 ), providedOptions.tandem.createTandem( 'particleSourceModel' ) );
 
     const SternGerlachsTandem = providedOptions.tandem.createTandem( 'SternGerlachs' );
-    this.firstSternGerlach = new SternGerlach( new Vector2( 1, 0 ), true, SternGerlachsTandem.createTandem( 'firstSternGerlach' ) );
+    this.firstSternGerlach = new SternGerlach( new Vector2( 0.8, 0 ), true, SternGerlachsTandem.createTandem( 'firstSternGerlach' ) );
     this.secondSternGerlach = new SternGerlach( new Vector2( 2, 0.3 ), false, SternGerlachsTandem.createTandem( 'secondSternGerlach' ) );
     this.thirdSternGerlach = new SternGerlach( new Vector2( 2, -0.3 ), false, SternGerlachsTandem.createTandem( 'thirdSternGerlach' ) );
 
+    this.particleRays = new ParticleRays(
+      [
+        this.particleSourceModel.exitPosition.plus( this.particleSourceModel.positionProperty.value ),
+        this.firstSternGerlach.entrancePosition.plus( this.firstSternGerlach.positionProperty.value )
+      ], [
+      {
+        destination: this.firstSternGerlach,
+        afterDestination: 'infinity'
+      },
+      {
+        source: this.firstSternGerlach,
+        exit: 'top',
+        destination: this.secondSternGerlach,
+        afterDestination: 'infinity'
+      },
+      {
+        source: this.firstSternGerlach,
+        exit: 'bottom',
+        destination: this.thirdSternGerlach,
+        afterDestination: 'infinity'
+      }
+    ] );
+
+    this.currentExperimentProperty.link( experiment => {
+      const experimentSetting = experiment.experimentSetting;
+      this.particleRays.reset();
+      this.particleRays.isShortExperiment = experimentSetting.length === 1;
+      this.particleRays.updateExperiment();
+    } );
+
     this.singleParticles = _.times( MAX_NUMBER_OF_SINGLE_PARTICLES, id => {
-      const particle = new ParticleWithSpinModel( id );
-
-      particle.readyToBeMeasuredEmitter.addListener( () => {
-
-        let upProbability = 0;
-        switch( Math.floor( particle.lifetime ) ) {
-          case 1:
-            upProbability = this.firstSternGerlach.prepare( this.spinStateProperty.value );
-            particle.secondSpinUp = dotRandom.nextDouble() < upProbability;
-            break;
-          case 3:
-            if ( particle.secondSpinUp ) {
-              upProbability = this.secondSternGerlach.prepare( this.firstSternGerlach.isZOrientedProperty ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS );
-              particle.thirdSpinUp = dotRandom.nextDouble() < upProbability;
-            }
-            else {
-              const upProbability = this.thirdSternGerlach.prepare( this.firstSternGerlach.isZOrientedProperty ? SpinDirection.Z_MINUS : null );
-              particle.thirdSpinUp = dotRandom.nextDouble() < upProbability;
-            }
-            break;
-          default:
-            break;
-        }
-      } );
-
-      return particle;
+      return new ParticleWithSpinModel( id );
     } );
 
     const updateProbabilities = ( particleAmmount: number ) => {
-      this.particleRays.updateProbabilities( [
-        particleAmmount, // First ray only depends on the initial particle ammount
-        this.firstSternGerlach.upProbabilityProperty.value * particleAmmount,
-        this.firstSternGerlach.downProbabilityProperty.value * particleAmmount,
-        this.firstSternGerlach.upProbabilityProperty.value * this.secondSternGerlach.upProbabilityProperty.value * particleAmmount,
-        this.firstSternGerlach.upProbabilityProperty.value * this.secondSternGerlach.downProbabilityProperty.value * particleAmmount,
-        this.firstSternGerlach.downProbabilityProperty.value * this.thirdSternGerlach.upProbabilityProperty.value * particleAmmount,
-        this.firstSternGerlach.downProbabilityProperty.value * this.thirdSternGerlach.downProbabilityProperty.value * particleAmmount
-      ] );
+      if ( this.particleRays.isShortExperiment ) {
+        this.particleRays.updateProbabilities( [
+          particleAmmount, // First ray only depends on the initial particle ammount
+          this.firstSternGerlach.upProbabilityProperty.value * particleAmmount, // From first to infinity
+          this.firstSternGerlach.downProbabilityProperty.value * particleAmmount, // From first to infinity
+          this.firstSternGerlach.upProbabilityProperty.value * particleAmmount, // From first to second
+          this.firstSternGerlach.downProbabilityProperty.value * particleAmmount // From first to third
+        ] );
+      }
+      else {
+        this.particleRays.updateProbabilities( [
+          particleAmmount, // First ray only depends on the initial particle ammount
+          this.firstSternGerlach.upProbabilityProperty.value * particleAmmount, // From first to second
+          this.firstSternGerlach.upProbabilityProperty.value * this.secondSternGerlach.upProbabilityProperty.value * particleAmmount,
+          this.firstSternGerlach.upProbabilityProperty.value * this.secondSternGerlach.downProbabilityProperty.value * particleAmmount,
+          this.firstSternGerlach.downProbabilityProperty.value * particleAmmount, // From first to third
+          this.firstSternGerlach.downProbabilityProperty.value * this.thirdSternGerlach.upProbabilityProperty.value * particleAmmount,
+          this.firstSternGerlach.downProbabilityProperty.value * this.thirdSternGerlach.downProbabilityProperty.value * particleAmmount
+        ] );
+      }
     };
 
     this.particleSourceModel.particleAmmountProperty.link( particleAmmount => {
@@ -149,7 +163,6 @@ export default class SpinModel implements TModel {
 
       // Set the probabilities of the experiment. In the continuous case, this immediately alters the shown rays
       // In the single case, this prepares the probabilities for the particle that will be shot
-      // TODO: Given the above description, is prepare() a correct name? Maybe prepare https://github.com/phetsims/quantum-preparement/issues/53
       this.prepare();
 
       updateProbabilities( this.particleSourceModel.particleAmmountProperty.value );
@@ -168,7 +181,21 @@ export default class SpinModel implements TModel {
             // TODO: filter? https://github.com/phetsims/quantum-preparement/issues/53
             const particleToActivate = this.singleParticles[ i ];
             particleToActivate.reset();
-            particleToActivate.firstSpinVector = SpinDirection.spinToVector( this.spinStateProperty.value );
+
+            let upProbability = 1;
+            upProbability = this.firstSternGerlach.prepare( this.spinStateProperty.value );
+            particleToActivate.secondSpinUp = dotRandom.nextDouble() < upProbability;
+            if ( particleToActivate.secondSpinUp ) {
+              upProbability = this.secondSternGerlach.prepare( this.firstSternGerlach.isZOrientedProperty ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS );
+              particleToActivate.thirdSpinUp = dotRandom.nextDouble() < upProbability;
+            }
+            else {
+              const upProbability = this.thirdSternGerlach.prepare( this.firstSternGerlach.isZOrientedProperty ? SpinDirection.Z_MINUS : null );
+              particleToActivate.thirdSpinUp = dotRandom.nextDouble() < upProbability;
+            }
+
+            this.particleRays.assignRayToParticle( particleToActivate );
+
             particleToActivate.activeProperty.value = true;
             break;
           }

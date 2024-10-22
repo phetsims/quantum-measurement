@@ -21,6 +21,8 @@ import { SpinDirection } from './SpinDirection.js';
 
 export default class SternGerlach {
 
+  // TODO: Document! https://github.com/phetsims/quantum-measurement/issues/53
+  //
   public readonly positionProperty: Vector2Property;
 
   public readonly isZOrientedProperty: BooleanProperty;
@@ -31,15 +33,30 @@ export default class SternGerlach {
   public readonly downProbabilityProperty: TReadOnlyProperty<number>;
 
   // Global position vectors, they are to be updated outside of the constructor
-  public entranceGlobalPosition = new Vector2( 0, 0 );
-  public topExitGlobalPosition = new Vector2( 0, 0 );
-  public bottomExitGlobalPosition = new Vector2( 0, 0 );
+  public entrancePosition: Vector2;
+  public topExitPosition: Vector2;
+  public bottomExitPosition: Vector2;
+
+  // Constants
+  public readonly STERN_GERLACH_WIDTH = 150 / 200;
+  public readonly STERN_GERLACH_HEIGHT = 100 / 200;
+  public readonly PARTICLE_HOLE_WIDTH = 5 / 200;
+  public readonly PARTICLE_HOLE_HEIGHT = 20 / 200;
 
   public constructor( position: Vector2, isZOriented: boolean, tandem: Tandem ) {
 
     this.positionProperty = new Vector2Property( position, {
       tandem: tandem.createTandem( 'positionProperty' )
     } );
+
+    this.entrancePosition = new Vector2(
+      -this.STERN_GERLACH_WIDTH / 2 - this.PARTICLE_HOLE_WIDTH / 2, 0 );
+
+    this.topExitPosition = new Vector2(
+      this.STERN_GERLACH_WIDTH / 2 + this.PARTICLE_HOLE_WIDTH / 2, this.STERN_GERLACH_HEIGHT / 4 );
+
+    this.bottomExitPosition = new Vector2(
+      this.STERN_GERLACH_WIDTH / 2 + this.PARTICLE_HOLE_WIDTH / 2, -this.STERN_GERLACH_HEIGHT / 4 );
 
     this.isZOrientedProperty = new BooleanProperty( isZOriented, {
       tandem: tandem.createTandem( 'isZOrientedProperty' )
