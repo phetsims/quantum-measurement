@@ -7,13 +7,17 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
-import optionize, { EmptySelfOptions, OptionizeDefaults } from '../../../../phet-core/js/optionize.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, LinearGradient, Node, NodeOptions, Rectangle, Text } from '../../../../scenery/js/imports.js';
+import { Color, LinearGradient, Node, NodeOptions, Rectangle, RichText, Text } from '../../../../scenery/js/imports.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import PhotonDetector from '../model/PhotonDetector.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -56,9 +60,10 @@ export default class PhotonDetectorNode extends Node {
       countReadout.center = bodyRectangle.center;
     } );
 
-    const internalOptions: OptionizeDefaults<EmptySelfOptions, NodeOptions, PhotonDetectorNodeOptions> = {
-      children: [ aperture, bodyRectangle, countReadout ]
-    };
+    // Declare the label.  It's value and position will be set later.
+    let label: RichText;
+
+    let centerY = 0;
 
     // Position the detector body and aperture based on the detection direction.
     if ( model.detectionDirection === 'up' ) {
@@ -67,9 +72,27 @@ export default class PhotonDetectorNode extends Node {
       aperture.centerX = bodyRectangle.centerX;
       aperture.top = bodyRectangle.bottom;
 
-      // Set up the position options for the node as a whole.
-      internalOptions.centerX = modelViewTransform.modelToViewX( model.position.x );
-      internalOptions.bottom = modelViewTransform.modelToViewY( model.position.y );
+      // Create a derived property for the label.
+      const labelStringProperty = new DerivedProperty(
+        [
+          QuantumMeasurementStrings.polarizationDetectorLabelPatternStringProperty,
+          QuantumMeasurementStrings.verticalStringProperty,
+          QuantumMeasurementColors.verticalPolarizationColorProperty
+        ],
+        ( labelStringPattern, orientationString, highlightColor ) => StringUtils.fillIn( labelStringPattern, {
+          orientation: getBoldColoredString( orientationString, highlightColor )
+        } )
+      );
+
+      // Create the label and position it above the detector body.
+      label = new RichText( labelStringProperty, {
+        font: new PhetFont( 12 ),
+        align: 'center',
+        centerX: bodyRectangle.centerX,
+        bottom: bodyRectangle.top - 5
+      } );
+
+      centerY = modelViewTransform.modelToViewY( model.position.y ) - bodyRectangle.height / 2;
     }
     else if ( model.detectionDirection === 'down' ) {
 
@@ -77,20 +100,48 @@ export default class PhotonDetectorNode extends Node {
       aperture.centerX = bodyRectangle.centerX;
       aperture.bottom = bodyRectangle.top;
 
-      // Set up the position options for the node as a whole.
-      internalOptions.centerX = modelViewTransform.modelToViewX( model.position.x );
-      internalOptions.top = modelViewTransform.modelToViewY( model.position.y );
+      // Create a derived property for the label.
+      const labelStringProperty = new DerivedProperty(
+        [
+          QuantumMeasurementStrings.polarizationDetectorLabelPatternStringProperty,
+          QuantumMeasurementStrings.horizontalStringProperty,
+          QuantumMeasurementColors.horizontalPolarizationColorProperty
+        ],
+        ( labelStringPattern, orientationString, highlightColor ) => StringUtils.fillIn( labelStringPattern, {
+          orientation: getBoldColoredString( orientationString, highlightColor )
+        } )
+      );
+
+      // Create the label and position it below the detector body.
+      label = new RichText( labelStringProperty, {
+        font: new PhetFont( 12 ),
+        align: 'center',
+        centerX: bodyRectangle.centerX,
+        top: bodyRectangle.bottom + 5
+      } );
+
+      centerY = modelViewTransform.modelToViewY( model.position.y ) + bodyRectangle.height / 2;
     }
     else {
       assert && assert( false, `unsupported detection direction: ${model.detectionDirection}` );
+      label = new RichText( '' );
     }
 
     const options = optionize<PhotonDetectorNodeOptions, SelfOptions, NodeOptions>()(
-      internalOptions, providedOptions
+      {
+        children: [ aperture, bodyRectangle, countReadout, label ],
+        centerX: modelViewTransform.modelToViewX( model.position.x ),
+        centerY: centerY
+      },
+      providedOptions
     );
 
     super( options );
   }
 }
+
+const getBoldColoredString = ( text: string, color: Color ): string => {
+  return `<span style="font-weight: bold; color: ${color.toCSS()};">${text}</span>`;
+};
 
 quantumMeasurement.register( 'PhotonDetectorNode', PhotonDetectorNode );
