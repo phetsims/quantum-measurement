@@ -88,25 +88,28 @@ export class ParticleWithSpinModel {
   public calculatePosition(): void {
 
     // Travel until the final point, then stop
-    const clampTravel = ( a: Vector2, b: Vector2, t: number ): Vector2 => {
+    const travel = ( a: Vector2, b: Vector2, t: number ): Vector2 => {
       const direction = b.minus( a ).normalized();
       const distance = this.speed * t;
-      return distance < a.distance( b ) ? a.plus( direction.times( distance ) ) : b;
+      return a.plus( direction.times( distance ) );
     };
 
-    // Similar to clampTravel but if it reached the end, move to the next pair of vectors until the end
+    // Similar to travel but if it reached the end, move to the next pair of vectors until the end
     const pathTravel = ( path: Vector2[], t: number ): Vector2 => {
       let traveledTime = t;
       let traveledDistance = this.speed * t;
       let currentPosition = path[ 0 ];
+      let start = path[ 0 ];
+      let end = path[ 1 ];
+      let segmentDistance = start.distance( end );
 
       for ( let i = 0; i < path.length - 1; i++ ) {
-        const start = path[ i ];
-        const end = path[ i + 1 ];
-        const segmentDistance = start.distance( end );
+        start = path[ i ];
+        end = path[ i + 1 ];
+        segmentDistance = start.distance( end );
 
         if ( traveledDistance < segmentDistance ) {
-          return clampTravel( start, end, traveledTime );
+          return travel( start, end, traveledTime );
         }
         else {
           traveledTime -= segmentDistance / this.speed;
@@ -114,8 +117,9 @@ export class ParticleWithSpinModel {
           currentPosition = end;
         }
       }
+      traveledTime += segmentDistance / this.speed;
 
-      return currentPosition;
+      return travel( path[ path.length - 2 ], currentPosition, traveledTime );
     };
 
     // Travel along the path

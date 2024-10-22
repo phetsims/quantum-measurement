@@ -12,6 +12,7 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
@@ -31,6 +32,7 @@ export default class SternGerlach {
 
   public readonly upProbabilityProperty: NumberProperty;
   public readonly downProbabilityProperty: TReadOnlyProperty<number>;
+  public readonly expectedSpinProperty: Property<SpinDirection>;
 
   // Global position vectors, they are to be updated outside of the constructor
   public entrancePosition: Vector2;
@@ -66,6 +68,10 @@ export default class SternGerlach {
       tandem: tandem.createTandem( 'isVisibleProperty' )
     } );
 
+    this.expectedSpinProperty = new Property<SpinDirection>( SpinDirection.Z_PLUS, {
+      validValues: SpinDirection.enumeration.values
+    } );
+
     this.upProbabilityProperty = new NumberProperty( 0.5, {
       tandem: tandem.createTandem( 'upProbabilityProperty' )
     } );
@@ -93,12 +99,18 @@ export default class SternGerlach {
     // <Z|Z> = 1, <Z|X> = 0, <-Z|Z> = -1 so we need to re-scale into the [0, 1] range
     this.upProbabilityProperty.value = ( incomingStateVector.dot( experimentMeasurementVector ) + 1 ) / 2;
 
+    // TODO this is wrong! https://github.com/phetsims/quantum-measurement/issues/53
+    this.expectedSpinProperty.value = this.isZOrientedProperty.value ?
+                                      this.upProbabilityProperty.value === 0.5 ? SpinDirection.X_PLUS : SpinDirection.Z_MINUS :
+                                      this.upProbabilityProperty.value === 0.5 ? SpinDirection.Z_PLUS : SpinDirection.Z_MINUS;
+
     return this.upProbabilityProperty.value;
   }
 
 
   public reset(): void {
-    // no-op TODO https://github.com/phetsims/quantum-measurement/issues/53
+    this.upProbabilityProperty.reset();
+    this.expectedSpinProperty.reset();
   }
 
 }

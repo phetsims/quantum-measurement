@@ -9,6 +9,7 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import ShadedSphereNode from '../../../../scenery-phet/js/ShadedSphereNode.js';
@@ -57,7 +58,7 @@ export default class ParticleRayPath extends Node {
 
     super( {
       tandem: tandem,
-      localBounds: null,
+      localBounds: new Bounds2( 0, 0, 0, 0 ),
       children: [ ...rayPaths, ...singleParticleNodes ]
     } );
 

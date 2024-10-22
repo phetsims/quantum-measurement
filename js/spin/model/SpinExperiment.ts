@@ -59,10 +59,14 @@ export default class SpinExperiment extends EnumerationValue {
 
   public readonly experimentSetting: SternGerlachExperimentSetting[];
 
+  public readonly isShortExperiment: boolean;
+
   public constructor( experimentName: string | TReadOnlyProperty<string>, experimentSetting: SternGerlachExperimentSetting[] ) {
     super();
     this.experimentName = experimentName;
     this.experimentSetting = experimentSetting;
+
+    this.isShortExperiment = this.experimentSetting.length === 1;
   }
 }
 

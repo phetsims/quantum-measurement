@@ -34,8 +34,6 @@ type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOpt
 
 export default class SpinModel implements TModel {
 
-  public readonly spinStateProperty: Property<SpinDirection>;
-
   public readonly blochSphere: SimpleBlochSphere;
 
   // Single particles shot by the user transversing the experiment
@@ -62,20 +60,16 @@ export default class SpinModel implements TModel {
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
-    this.spinStateProperty = new Property<SpinDirection>( SpinDirection.Z_PLUS, {
-      validValues: SpinDirection.enumeration.values
-    } );
-
-    this.blochSphere = new SimpleBlochSphere(
-      this.spinStateProperty, {
-        tandem: providedOptions.tandem.createTandem( 'blochSphere' )
-      } );
-
     const MAX_NUMBER_OF_SINGLE_PARTICLES = 50;
 
     this.currentExperimentProperty = new Property<SpinExperiment>( SpinExperiment.EXPERIMENT_1 );
 
     this.particleSourceModel = new ParticleSourceModel( new Vector2( 0, 0 ), providedOptions.tandem.createTandem( 'particleSourceModel' ) );
+
+    this.blochSphere = new SimpleBlochSphere(
+      this.particleSourceModel.spinStateProperty, {
+        tandem: providedOptions.tandem.createTandem( 'blochSphere' )
+      } );
 
     const SternGerlachsTandem = providedOptions.tandem.createTandem( 'SternGerlachs' );
     this.firstSternGerlach = new SternGerlach( new Vector2( 0.8, 0 ), true, SternGerlachsTandem.createTandem( 'firstSternGerlach' ) );
@@ -106,9 +100,8 @@ export default class SpinModel implements TModel {
     ] );
 
     this.currentExperimentProperty.link( experiment => {
-      const experimentSetting = experiment.experimentSetting;
       this.particleRays.reset();
-      this.particleRays.isShortExperiment = experimentSetting.length === 1;
+      this.particleRays.isShortExperiment = experiment.isShortExperiment;
       this.particleRays.updateExperiment();
     } );
 
@@ -170,7 +163,7 @@ export default class SpinModel implements TModel {
       updateProbabilities( this.particleSourceModel.particleAmmountProperty.value );
     } );
 
-    this.spinStateProperty.link( () => {
+    this.particleSourceModel.spinStateProperty.link( () => {
       this.prepare();
     } );
 
@@ -185,7 +178,7 @@ export default class SpinModel implements TModel {
             particleToActivate.reset();
 
             let upProbability = 1;
-            upProbability = this.firstSternGerlach.prepare( this.spinStateProperty.value );
+            upProbability = this.firstSternGerlach.prepare( this.particleSourceModel.spinStateProperty.value );
             particleToActivate.secondSpinUp = dotRandom.nextDouble() < upProbability;
 
             if ( this.currentExperimentProperty.value.experimentSetting.length > 1 ) {
@@ -213,7 +206,7 @@ export default class SpinModel implements TModel {
     const experimentSetting = this.currentExperimentProperty.value.experimentSetting;
 
     // Measure on the first SG, this will change its upProbabilityProperty
-    this.firstSternGerlach.prepare( this.spinStateProperty.value );
+    this.firstSternGerlach.prepare( this.particleSourceModel.spinStateProperty.value );
 
     if ( experimentSetting.length > 1 ) {
       // Measure on the second SG according to the orientation of the first one
@@ -238,7 +231,7 @@ export default class SpinModel implements TModel {
   public reset(): void {
     this.singleParticles.forEach( particle => particle.reset() );
     this.currentExperimentProperty.reset();
-    this.spinStateProperty.reset();
+    this.particleSourceModel.spinStateProperty.reset();
     this.firstSternGerlach.reset();
     this.secondSternGerlach.reset();
     this.thirdSternGerlach.reset();

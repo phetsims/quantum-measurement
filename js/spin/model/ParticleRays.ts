@@ -59,7 +59,7 @@ export default class ParticleRays {
       }
 
       // Set the destination apparatus exit allPossiblePaths to go either to infinity or to the blocking
-      const afterDestinationVector = connection.afterDestination === 'infinity' ? new Vector2( 1, 0 ) : new Vector2( 0.1, 0 );
+      const afterDestinationVector = connection.afterDestination === 'infinity' ? new Vector2( 10, 0 ) : new Vector2( 0.1, 0 );
       this.allPossiblePaths.push( [ destination.topExitPosition.plus( destination.positionProperty.value ), destination.topExitPosition.plus( destination.positionProperty.value ).plus( afterDestinationVector ) ] );
       this.allPossiblePaths.push( [ destination.bottomExitPosition.plus( destination.positionProperty.value ), destination.bottomExitPosition.plus( destination.positionProperty.value ).plus( afterDestinationVector ) ] );
     } );

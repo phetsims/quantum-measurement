@@ -16,8 +16,11 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { SourceMode } from './SourceMode.js';
+import { SpinDirection } from './SpinDirection.js';
 
 export default class ParticleSourceModel {
+
+  public readonly spinStateProperty: Property<SpinDirection>;
 
   public readonly sourceModeProperty: Property<SourceMode>;
 
@@ -44,6 +47,10 @@ export default class ParticleSourceModel {
     } );
 
     this.exitPosition = new Vector2( 0, 0 );
+
+    this.spinStateProperty = new Property<SpinDirection>( SpinDirection.Z_PLUS, {
+      validValues: SpinDirection.enumeration.values
+    } );
 
     this.currentlyShootingParticlesProperty = new Property<boolean>( false, {
       tandem: tandem.createTandem( 'currentlyShootingParticlesProperty' ),
