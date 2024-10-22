@@ -25,12 +25,15 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
+// constants
+const SPEED_MULTIPLIER = 1.5;
+
 export class ParticleWithSpinModel {
 
   public lifetime = 0;
   public activeProperty: BooleanProperty;
 
-  public path: Vector2[][] = [];
+  public path: Vector2[] = [];
 
   // Spin values of the particle in the XZ plane along its lifetime
   public firstSpinVector = new Vector2( 0, 0 );
@@ -54,6 +57,14 @@ export class ParticleWithSpinModel {
     this.positionProperty = new Vector2Property( new Vector2( 0, 0 ) );
   }
 
+  /**
+   * Updates the speed of the particle based on the distance between the first two points of the path.
+   * When the multiplier is 1, it takes 1s to transverse from the emitting source to the first SG apparatus.
+   */
+  public updateSpeed(): void {
+    this.speed = SPEED_MULTIPLIER * this.path[ 0 ].distance( this.path[ 1 ] );
+  }
+
   public step( dt: number ): void {
     if ( this.activeProperty.value ) {
       this.lifetime += dt;
@@ -75,50 +86,41 @@ export class ParticleWithSpinModel {
    * t = 4 to t = 5: Traveling onwards from SG2 or SG3 -> Paths 3 - 6
    */
   public calculatePosition(): void {
-    // Travel from vector a to vector b based on speed and t
-    const travel = ( a: Vector2, b: Vector2, t: number ): Vector2 => {
+
+    // Travel until the final point, then stop
+    const clampTravel = ( a: Vector2, b: Vector2, t: number ): Vector2 => {
       const direction = b.minus( a ).normalized();
-      return a.plus( direction.times( this.speed * t ) );
+      const distance = this.speed * t;
+      return distance < a.distance( b ) ? a.plus( direction.times( distance ) ) : b;
     };
 
-    const fractionalLifetime = this.lifetime % 1;
+    // Similar to clampTravel but if it reached the end, move to the next pair of vectors until the end
+    const pathTravel = ( path: Vector2[], t: number ): Vector2 => {
+      let traveledTime = t;
+      let traveledDistance = this.speed * t;
+      let currentPosition = path[ 0 ];
 
-    switch( Math.floor( this.lifetime ) ) {
-      case 0:
-        // Between the first two points of the first path
-        this.positionProperty.value = travel( this.path[ 0 ][ 0 ], this.path[ 0 ][ 1 ], fractionalLifetime );
-        break;
-      case 1:
-        // In the middle of the SG1 apparatus
-        this.positionProperty.value = travel( this.path[ 0 ][ 1 ], this.path[ 1 ][ 0 ], 0.5 );
-        this.readyToBeMeasuredEmitter.emit();
-        break;
-      case 2:
-        // Along the second or third paths
-        this.positionProperty.value = travel( this.path[ 1 ][ 0 ], this.path[ 1 ][ 1 ], fractionalLifetime );
-        break;
-      case 3:
-        // Inside a SG2 or SG3 apparatus
-        if ( this.path.length > 3 ) {
-          this.positionProperty.value = travel( this.path[ 0 ][ 1 ], this.path[ 1 ][ 0 ], 0.5 );
-          this.readyToBeMeasuredEmitter.emit();
+      for ( let i = 0; i < path.length - 1; i++ ) {
+        const start = path[ i ];
+        const end = path[ i + 1 ];
+        const segmentDistance = start.distance( end );
+
+        if ( traveledDistance < segmentDistance ) {
+          return clampTravel( start, end, traveledTime );
         }
         else {
-          this.positionProperty.value = travel( this.path[ 1 ][ 0 ], this.path[ 1 ][ 1 ], this.lifetime - 2 );
+          traveledTime -= segmentDistance / this.speed;
+          traveledDistance -= segmentDistance;
+          currentPosition = end;
         }
-        break;
-      default:
-        // Along the last paths
-        if ( this.path.length > 3 ) {
-          this.positionProperty.value = travel( this.path[ 2 ][ 0 ], this.path[ 2 ][ 1 ], this.lifetime - 4 );
-        }
-        else {
-          this.positionProperty.value = travel( this.path[ 1 ][ 0 ], this.path[ 1 ][ 1 ], this.lifetime - 2 );
-        }
-        break;
-    }
+      }
 
-    console.log( this.positionProperty.value );
+      return currentPosition;
+    };
+
+    // Travel along the path
+    this.positionProperty.value = pathTravel( this.path, this.lifetime );
+
   }
 
   public reset(): void {

@@ -9,6 +9,7 @@
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import { Shape } from '../../../../kite/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Node, Text, VBox } from '../../../../scenery/js/imports.js';
@@ -61,14 +62,13 @@ export default class SpinMeasurementArea extends VBox {
         particleSourceNode,
         firstSternGerlachNode,
         secondSternGerlachNode,
-        thirdSternGerlachNode,
-        particleRayPath
+        thirdSternGerlachNode
       ]
     } );
 
-    // experimentAreaNode.clipArea = Shape.bounds( experimentAreaNode.localBounds );
+    experimentAreaNode.clipArea = Shape.bounds( experimentAreaNode.localBounds );
 
-    // experimentAreaNode.insertChild( 0, particleRayPath );
+    experimentAreaNode.insertChild( 0, particleRayPath );
 
     super( {
       children: [
@@ -81,7 +81,7 @@ export default class SpinMeasurementArea extends VBox {
 
       ],
       spacing: 20,
-      margin: 20
+      margin: 30
     } );
 
   }

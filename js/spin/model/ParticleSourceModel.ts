@@ -56,6 +56,13 @@ export default class ParticleSourceModel {
     } );
 
   }
+
+  public reset(): void {
+    this.sourceModeProperty.reset();
+    this.positionProperty.reset();
+    this.currentlyShootingParticlesProperty.reset();
+    this.particleAmmountProperty.reset();
+  }
 }
 
 quantumMeasurement.register( 'ParticleSourceModel', ParticleSourceModel );

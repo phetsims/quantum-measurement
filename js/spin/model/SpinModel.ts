@@ -71,7 +71,7 @@ export default class SpinModel implements TModel {
         tandem: providedOptions.tandem.createTandem( 'blochSphere' )
       } );
 
-    const MAX_NUMBER_OF_SINGLE_PARTICLES = 10;
+    const MAX_NUMBER_OF_SINGLE_PARTICLES = 50;
 
     this.currentExperimentProperty = new Property<SpinExperiment>( SpinExperiment.EXPERIMENT_1 );
 
@@ -150,6 +150,8 @@ export default class SpinModel implements TModel {
     const SternGerlachs = [ this.firstSternGerlach, this.secondSternGerlach, this.thirdSternGerlach ];
 
     this.currentExperimentProperty.link( experiment => {
+      this.singleParticles.forEach( particle => particle.reset() );
+
       SternGerlachs.forEach( ( SternGerlach, index ) => {
         if ( experiment.experimentSetting.length > index ) {
           // TODO: Should visibility be only handled via the View? https://github.com/phetsims/quantum-preparement/issues/53
@@ -185,13 +187,16 @@ export default class SpinModel implements TModel {
             let upProbability = 1;
             upProbability = this.firstSternGerlach.prepare( this.spinStateProperty.value );
             particleToActivate.secondSpinUp = dotRandom.nextDouble() < upProbability;
-            if ( particleToActivate.secondSpinUp ) {
-              upProbability = this.secondSternGerlach.prepare( this.firstSternGerlach.isZOrientedProperty ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS );
-              particleToActivate.thirdSpinUp = dotRandom.nextDouble() < upProbability;
-            }
-            else {
-              const upProbability = this.thirdSternGerlach.prepare( this.firstSternGerlach.isZOrientedProperty ? SpinDirection.Z_MINUS : null );
-              particleToActivate.thirdSpinUp = dotRandom.nextDouble() < upProbability;
+
+            if ( this.currentExperimentProperty.value.experimentSetting.length > 1 ) {
+              if ( particleToActivate.secondSpinUp ) {
+                upProbability = this.secondSternGerlach.prepare( this.firstSternGerlach.isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS );
+                particleToActivate.thirdSpinUp = dotRandom.nextDouble() < upProbability;
+              }
+              else {
+                const upProbability = this.thirdSternGerlach.prepare( this.firstSternGerlach.isZOrientedProperty.value ? SpinDirection.Z_MINUS : null );
+                particleToActivate.thirdSpinUp = dotRandom.nextDouble() < upProbability;
+              }
             }
 
             this.particleRays.assignRayToParticle( particleToActivate );
@@ -231,7 +236,13 @@ export default class SpinModel implements TModel {
    * Resets the model.
    */
   public reset(): void {
-    // TODO, see https://github.com/phetsims/quantum-preparement/issues/1
+    this.singleParticles.forEach( particle => particle.reset() );
+    this.currentExperimentProperty.reset();
+    this.spinStateProperty.reset();
+    this.firstSternGerlach.reset();
+    this.secondSternGerlach.reset();
+    this.thirdSternGerlach.reset();
+    this.particleSourceModel.reset();
   }
 
   /**

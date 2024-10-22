@@ -3,6 +3,17 @@
 /**
  * ParticleRays contains the data for the particle ray paths in the UI.
  *
+ * All possible paths are indexed as such:
+ * 0 - Source to SG1
+ * 1 - SG1 to infinity (top)
+ * 2 - SG1 to infinity (bottom)
+ * 3 - SG1 to SG2
+ * 4 - SG2 to infinity (top)
+ * 5 - SG2 to infinity (bottom)
+ * 6 - SG2 to SG3
+ * 7 - SG3 to infinity (top)
+ * 8 - SG3 to infinity (bottom)
+ *
  * @author Agustín Vallejo
  */
 
@@ -63,28 +74,22 @@ export default class ParticleRays {
     this.updatedEmitter.emit();
   }
 
-  public updateFirstRay( rayPoints: Vector2[] ): void {
-    this.allPossiblePaths[ 0 ] = rayPoints;
-  }
-
   public assignRayToParticle( particle: ParticleWithSpinModel ): void {
     if ( this.isShortExperiment ) {
       particle.path = [
-        this.activePaths[ 0 ],
-        this.activePaths[ particle.secondSpinUp ? 1 : 2 ]
+        ...this.allPossiblePaths[ 0 ], // Source to SG1
+        ...this.allPossiblePaths[ particle.secondSpinUp ? 1 : 2 ] // SG1 to infinity
       ];
     }
     else {
       particle.path = [
-        this.activePaths[ 0 ],
-        this.activePaths[ particle.secondSpinUp ? 1 : 2 ],
-        this.activePaths[ 3 + ( particle.secondSpinUp ? 2 : 0 ) + ( particle.thirdSpinUp ? 1 : 0 ) ]
+        ...this.allPossiblePaths[ 0 ], // Source to SG1
+        ...this.allPossiblePaths[ particle.secondSpinUp ? 3 : 6 ], // SG1 to SG2
+        ...this.allPossiblePaths[ 4 + ( particle.secondSpinUp ? 0 : 3 ) + ( particle.thirdSpinUp ? 0 : 1 ) ]
       ];
     }
 
-    // Set the speed so it takes 1s to travel the first ray
-    particle.speed = this.activePaths[ 0 ][ 0 ].distance( this.activePaths[ 0 ][ 1 ] );
-
+    particle.updateSpeed();
   }
 
   public updateProbabilities( probabilities: number[] ): void {
