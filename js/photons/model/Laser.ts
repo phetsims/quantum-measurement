@@ -55,7 +55,7 @@ export default class Laser {
 
   public readonly emittedBeamWidth = PHOTON_BEAM_WIDTH;
 
-  // The rate at which photons are created, in photons per second.
+  // The rate at which photons are emitted, in photons per second.
   public readonly emissionRateProperty: NumberProperty;
 
   // The preset values of polarization direction that are available for the photons that are emitted.
@@ -66,6 +66,10 @@ export default class Laser {
 
   // The set of photons that are used for emission.  This is a reference to the same array that is used in the scene model.
   private readonly photons: Photon[];
+
+  // The fractional emission backlog is used to track fractional amounts of photons that build up due to a mismatch
+  // between the stepping rate frequency and the emission rate.
+  private fractionalEmissionAccumulator = 0;
 
   // Values used in calculating the emission rate.
   private timeSinceLastPhoton = Number.POSITIVE_INFINITY; // seconds
@@ -135,8 +139,15 @@ export default class Laser {
   public step( dt: number ): void {
     this.timeSinceLastPhoton += dt;
     if ( this.timeSinceLastPhoton > this.timeBetweenPhotons ) {
+      const totalPhotonsToEmit = this.timeSinceLastPhoton / this.timeBetweenPhotons;
+      let wholeNumberPhotonsToEmit = Math.floor( totalPhotonsToEmit );
+      this.fractionalEmissionAccumulator += totalPhotonsToEmit - wholeNumberPhotonsToEmit;
+      if ( this.fractionalEmissionAccumulator >= 1 ) {
+        wholeNumberPhotonsToEmit++;
+        this.fractionalEmissionAccumulator -= 1;
+      }
+      _.times( wholeNumberPhotonsToEmit, this.emitAPhoton.bind( this ) );
       this.timeSinceLastPhoton = 0;
-      this.emitAPhoton();
     }
   }
 

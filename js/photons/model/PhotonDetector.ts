@@ -8,9 +8,10 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Line } from '../../../../kite/js/imports.js';
-import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
@@ -19,9 +20,26 @@ import Photon from './Photon.js';
 import { PhotonInteractionTestResult } from './PhotonsModel.js';
 import { TPhotonInteraction } from './TPhotonInteraction.js';
 
-type SelfOptions = EmptySelfOptions;
+type SelfOptions = {
+  displayMode?: DisplayMode;
+};
 type PhotonDetectorOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
+
+// Define a type for the direction in which the detector is looking for photons.
 export type DetectionDirection = ( [ 'up', 'down' ] )[number];
+
+// Define a type for the display mode of the detector, which can be either a count of photons detected or a rate of
+// detection.
+export type DisplayMode = ( [ 'count', 'rate' ] )[number];
+
+type DetectionCountSample = {
+  duration: number; // in seconds
+  count: number;
+};
+
+// constants used in the rate calculation
+const TOTAL_AVERAGING_PERIOD = 4; // in seconds
+const COUNT_SAMPLE_PERIOD = 0.5; // in seconds
 
 export default class PhotonDetector implements TPhotonInteraction {
 
@@ -38,27 +56,40 @@ export default class PhotonDetector implements TPhotonInteraction {
   // will be absorbed and detected.
   public readonly detectionLine: Line;
 
+  // The number of photons detected by this detector since the last reset.
+  public readonly detectionCountProperty: NumberProperty;
+
   // The rate at which photons are detected, in arrival events per second.
   public readonly detectionRateProperty: NumberProperty;
 
-  // The photons detected by this detector since the last reset.
-  public readonly detectionCountProperty: NumberProperty;
+  // variables used in the detection rate calculation
+  private currentDetectionCount = 0;
+  private detectionSampleHistory: DetectionCountSample[] = [];
+  private timeSinceLastCountSample = 0;
+
+  // The display mode defines the information that should be displayed by this detector in the view.
+  public readonly displayMode: DisplayMode;
 
   public constructor( position: Vector2, detectionDirection: DetectionDirection, providedOptions: PhotonDetectorOptions ) {
 
+    const options = combineOptions<PhotonDetectorOptions>( {
+      displayMode: 'count'
+    }, providedOptions );
+
     this.position = position;
     this.detectionDirection = detectionDirection;
+    this.displayMode = options.displayMode!;
     this.detectionLine = new Line(
       position.plus( new Vector2( -this.apertureDiameter / 2, 0 ) ),
       position.plus( new Vector2( this.apertureDiameter / 2, 0 ) )
     );
 
     this.detectionRateProperty = new NumberProperty( 0, {
-      tandem: providedOptions.tandem.createTandem( 'detectionRateProperty' )
+      tandem: options.tandem.createTandem( 'detectionRateProperty' )
     } );
 
     this.detectionCountProperty = new NumberProperty( 0, {
-      tandem: providedOptions.tandem.createTandem( 'detectionCountProperty' )
+      tandem: options.tandem.createTandem( 'detectionCountProperty' )
     } );
   }
 
@@ -78,10 +109,45 @@ export default class PhotonDetector implements TPhotonInteraction {
       { interactionType: 'none' };
 
     if ( detectionResult.interactionType === 'absorbed' ) {
-      this.detectionCountProperty.value = this.detectionCountProperty.value + 1;
+      this.detectionCountProperty.value++;
+      this.currentDetectionCount++;
     }
 
     return detectionResult;
+  }
+
+  public step( dt: number ): void {
+
+    // See if it's time to record a sample of the detection count.
+    this.timeSinceLastCountSample += dt;
+    if ( this.timeSinceLastCountSample >= COUNT_SAMPLE_PERIOD ) {
+
+      // Record this sample.
+      this.detectionSampleHistory.push( {
+        duration: this.timeSinceLastCountSample,
+        count: this.currentDetectionCount
+      } );
+
+      // Remove samples that are older than the averaging period.
+      const detectionSampleHistoryCopy = this.detectionSampleHistory.slice();
+      let totalTimeSoFar = 0;
+      for ( let i = detectionSampleHistoryCopy.length - 1; i >= 0; i-- ) {
+        totalTimeSoFar += detectionSampleHistoryCopy[ i ].duration;
+        if ( totalTimeSoFar > TOTAL_AVERAGING_PERIOD ) {
+          this.detectionSampleHistory.shift();
+        }
+      }
+
+      // Reset the counts for the next sample.
+      this.currentDetectionCount = 0;
+      this.timeSinceLastCountSample = 0;
+    }
+
+    // Update the detection rate.
+    const totalCount = this.detectionSampleHistory.reduce(
+      ( accumulatedCount, sample ) => accumulatedCount + sample.count, 0
+    );
+    this.detectionRateProperty.value = Utils.roundSymmetric( totalCount / TOTAL_AVERAGING_PERIOD );
   }
 
   /**
@@ -90,6 +156,9 @@ export default class PhotonDetector implements TPhotonInteraction {
   public reset(): void {
     this.detectionRateProperty.reset();
     this.detectionCountProperty.reset();
+    this.currentDetectionCount = 0;
+    this.detectionSampleHistory.length = 0;
+    this.timeSinceLastCountSample = 0;
   }
 }
 

@@ -8,13 +8,15 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, LinearGradient, Node, NodeOptions, Rectangle, RichText, Text } from '../../../../scenery/js/imports.js';
+import { Color, HBox, LinearGradient, Node, NodeOptions, Rectangle, RichText, Text } from '../../../../scenery/js/imports.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
@@ -110,17 +112,9 @@ export default class PhotonDetectorNode extends Node {
     }
 
     // Add a readout of either the detection rate or the detection count.
-    // TODO: This is just a placeholder for now.  We'll need to add the actual readout later.  See https://github.com/phetsims/quantum-measurement/issues/52.
-    const countReadout = new Text( '0', {
-      font: new PhetFont( 20 ),
-      maxWidth: DETECTOR_BODY_SIZE.width * 0.95
-    } );
-
-    // Update the readout when the count changes.
-    model.detectionCountProperty.link( count => {
-      countReadout.setString( count );
-      countReadout.center = bodyRectangle.center;
-    } );
+    const countReadout = model.displayMode === 'count' ?
+                         new PhotonCountDisplay( model.detectionCountProperty, bodyRectangle.center ) :
+                         new PhotonRateDisplay( model.detectionRateProperty, bodyRectangle.center );
 
     const options = optionize<PhotonDetectorNodeOptions, SelfOptions, NodeOptions>()(
       {
@@ -136,5 +130,42 @@ export default class PhotonDetectorNode extends Node {
 const getBoldColoredString = ( text: string, color: Color ): string => {
   return `<span style="font-weight: bold; color: ${color.toCSS()};">${text}</span>`;
 };
+
+class PhotonCountDisplay extends HBox {
+  public constructor( photonCountProperty: TReadOnlyProperty<number>, center: Vector2 ) {
+
+    // Create a string Property that will be used to display the photon count.
+    const photonCountStringProperty = new DerivedProperty( [ photonCountProperty ], count => count.toString() );
+
+    const countReadout = new Text( photonCountStringProperty, {
+      font: new PhetFont( 20 ),
+      maxWidth: DETECTOR_BODY_SIZE.width * 0.95
+    } );
+
+    super( {
+      children: [ countReadout ],
+      center: center
+    } );
+  }
+}
+
+class PhotonRateDisplay extends HBox {
+  public constructor( photonRateProperty: TReadOnlyProperty<number>, center: Vector2 ) {
+
+    // Create a string Property that will be used to display the photon count.
+    const photonCountStringProperty = new DerivedProperty( [ photonRateProperty ], count => count.toString() );
+
+    const countReadout = new Text( photonCountStringProperty, {
+      font: new PhetFont( 20 ),
+      fill: Color.GREEN.darkerColor( 0.5 ),
+      maxWidth: DETECTOR_BODY_SIZE.width * 0.95
+    } );
+
+    super( {
+      children: [ countReadout ],
+      center: center
+    } );
+  }
+}
 
 quantumMeasurement.register( 'PhotonDetectorNode', PhotonDetectorNode );

@@ -57,9 +57,11 @@ export default class PhotonsExperimentSceneModel {
     // Create the photon detectors that will measure the rate at which photons are arriving after being either reflected
     // or transmitted by the polarizing beam splitter.
     this.verticalPolarizationDetector = new PhotonDetector( new Vector2( 0, 0.25 ), 'up', {
+      displayMode: this.laser.emissionMode === 'singlePhoton' ? 'count' : 'rate',
       tandem: providedOptions.tandem.createTandem( 'verticalPolarizationDetector' )
     } );
     this.horizontalPolarizationDetector = new PhotonDetector( new Vector2( 0.25, -0.25 ), 'down', {
+      displayMode: this.laser.emissionMode === 'singlePhoton' ? 'count' : 'rate',
       tandem: providedOptions.tandem.createTandem( 'horizontalPolarizationDetector' )
     } );
 
@@ -116,12 +118,12 @@ export default class PhotonsExperimentSceneModel {
       if ( interaction.interactionType === 'reflected' ) {
 
         // This photon was reflected.  First step it to the reflection point.
-        const dtToReflection = photon.positionProperty.value.distance( interaction.reflectionPoint! ) / PHOTON_SPEED;
+        const dtToReflection = photon.positionProperty.value.distance( interaction.reflectionPoint ) / PHOTON_SPEED;
         assert && assert( dtToReflection <= dt );
         photon.step( dtToReflection );
 
         // Change the direction of the photon to the reflection direction.
-        photon.directionProperty.set( interaction.reflectionDirection! );
+        photon.directionProperty.set( interaction.reflectionDirection );
 
         // Step the photon the remaining time.
         photon.step( dt - dtToReflection );
@@ -138,6 +140,10 @@ export default class PhotonsExperimentSceneModel {
         photon.step( dt );
       }
     } );
+
+    // Step the photon detectors.
+    this.horizontalPolarizationDetector.step( dt );
+    this.verticalPolarizationDetector.step( dt );
   }
 }
 
