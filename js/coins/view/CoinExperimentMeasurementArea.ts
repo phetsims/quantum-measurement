@@ -101,7 +101,9 @@ export default class CoinExperimentMeasurementArea extends VBox {
     );
     const multiCoinExperimentHistogram = new CoinMeasurementHistogram( sceneModel.coinSet, sceneModel.systemType, {
       visibleProperty: DerivedProperty.not( sceneModel.preparingExperimentProperty ),
-      tandem: tandem.createTandem( 'multiCoinExperimentHistogram' )
+      tandem: tandem.createTandem( 'multiCoinExperimentHistogram' ),
+      leftFillColorProperty: sceneModel.systemType === 'classical' ? QuantumMeasurementColors.headsColorProperty : QuantumMeasurementColors.upColorProperty,
+      rightFillColorProperty: sceneModel.systemType === 'classical' ? QuantumMeasurementColors.tailsColorProperty : QuantumMeasurementColors.downColorProperty
     } );
     const multipleCoinExperimentButtonSet = new CoinExperimentButtonSet(
       sceneModel.coinSet,

@@ -7,27 +7,24 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
-import Multilink from '../../../../axon/js/Multilink.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
-import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import NumberDisplay, { NumberDisplayOptions } from '../../../../scenery-phet/js/NumberDisplay.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { AlignBox, AlignGroup, Color, HBox, Line, Node, NodeOptions, Rectangle, RichText, Text } from '../../../../scenery/js/imports.js';
-import { ClassicalCoinStates } from '../../coins/model/ClassicalCoinStates.js';
+import { AlignBox, AlignGroup, Color, HBox, Line, Node, NodeOptions, Rectangle, RichText } from '../../../../scenery/js/imports.js';
 import { MAX_COINS } from '../../coins/model/CoinsExperimentSceneModel.js';
-import { QuantumCoinStates } from '../../coins/model/QuantumCoinStates.js';
-import { SystemType } from '../../common/model/SystemType.js';
-import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import QuantumMeasurementColors from '../QuantumMeasurementColors.js';
 
-type SelfOptions = EmptySelfOptions;
+type SelfOptions = {
+  orientation?: 'horizontal' | 'vertical';
+  leftFillColorProperty?: TReadOnlyProperty<Color>;
+  rightFillColorProperty?: TReadOnlyProperty<Color>;
+};
 export type QuantumMeasurementHistogramOptions = SelfOptions & WithRequired<NodeOptions, 'tandem' | 'visibleProperty'>;
 
 const HISTOGRAM_SIZE = new Dimension2( 200, 160 ); // size excluding labels at bottom, in screen coordinates
@@ -49,15 +46,25 @@ const NUMBER_DISPLAY_OPTIONS: NumberDisplayOptions = {
 
 export default class QuantumMeasurementHistogram extends Node {
 
-  public constructor( coinSet: TwoStateSystemSet<ClassicalCoinStates | QuantumCoinStates>,
-                      systemType: SystemType,
+  protected xAxis: Line;
+  protected yAxis: Line;
+
+  public constructor( leftNumberProperty: NumberProperty,
+                      rightNumberProperty: NumberProperty,
                       providedXAxisLabels: [ RichText, RichText ],
+                      displayValuesProperty: TReadOnlyProperty<boolean>,
                       providedOptions: QuantumMeasurementHistogramOptions ) {
 
-    // Create a Property that controls whether the values should be displayed.
-    const displayValuesProperty = DerivedProperty.valueEqualsConstant(
-      coinSet.measurementStateProperty,
-      'revealed'
+    const options = optionize<QuantumMeasurementHistogramOptions, SelfOptions, NodeOptions>()( {
+      orientation: 'vertical',
+      leftFillColorProperty: QuantumMeasurementColors.headsColorProperty,
+      rightFillColorProperty: QuantumMeasurementColors.tailsColorProperty,
+      children: []
+    }, providedOptions );
+
+    const totalNumberProperty = new DerivedProperty(
+      [ leftNumberProperty, rightNumberProperty ],
+      ( leftNumber, rightNumber ) => leftNumber + rightNumber
     );
 
     // Create the X and Y axes.
@@ -75,61 +82,9 @@ export default class QuantumMeasurementHistogram extends Node {
       bottom: 0
     } );
 
-
-    const numberOfCoinsStringProperty = new DerivedStringProperty(
-      [ coinSet.numberOfActiveSystemsProperty ],
-      numberOfCoins => StringUtils.fillIn(
-        QuantumMeasurementStrings.numberOfCoinsPatternStringProperty,
-        { number: numberOfCoins }
-      )
-    );
-
-    const numberOfSystemsText = new Text( numberOfCoinsStringProperty, {
-      font: new PhetFont( 16 ),
-      centerX: 0,
-      centerY: yAxis.top * 1.2
-    } );
-
     // Create the labels for the X axis.
     const xAxisLeftLabel = providedXAxisLabels[ 0 ];
     const xAxisRightLabel = providedXAxisLabels[ 1 ];
-
-    // Create the number Properties for the left and right histogram bars.
-    const leftNumberProperty = new NumberProperty( 0, {
-      tandem: providedOptions.tandem.createTandem( 'leftNumberProperty' )
-    } );
-    const rightNumberProperty = new NumberProperty( 0, {
-      tandem: providedOptions.tandem.createTandem( 'rightNumberProperty' )
-    } );
-
-    // Define a function to update the left and right number Properties.
-    const updateNumberProperties = () => {
-
-      const leftTestValue = systemType === 'classical' ? 'heads' : 'up';
-      const rightTestValue = systemType === 'classical' ? 'tails' : 'down';
-      let leftTotal = 0;
-      let rightTotal = 0;
-
-      if ( coinSet.measurementStateProperty.value === 'revealed' ) {
-        _.times( coinSet.numberOfActiveSystemsProperty.value, i => {
-          if ( coinSet.measuredValues[ i ] === leftTestValue ) {
-            leftTotal++;
-          }
-          else if ( coinSet.measuredValues[ i ] === rightTestValue ) {
-            rightTotal++;
-          }
-        } );
-      }
-      leftNumberProperty.value = leftTotal;
-      rightNumberProperty.value = rightTotal;
-    };
-
-    Multilink.multilink(
-      [ coinSet.numberOfActiveSystemsProperty, coinSet.measurementStateProperty ],
-      updateNumberProperties
-    );
-
-    coinSet.measuredDataChangedEmitter.addListener( updateNumberProperties );
 
     // Create the textual displays for the numbers.
     const leftNumberDisplay = new NumberDisplay( leftNumberProperty, NUMBER_DISPLAY_RANGE, NUMBER_DISPLAY_OPTIONS );
@@ -137,8 +92,8 @@ export default class QuantumMeasurementHistogram extends Node {
 
     // Create the histogram bars for the right and left sides.
     const maxBarHeight = yAxis.height - leftNumberDisplay.height;
-    const leftFillColorProperty = systemType === 'classical' ? QuantumMeasurementColors.headsColorProperty : QuantumMeasurementColors.upColorProperty;
-    const rightFillColorProperty = systemType === 'classical' ? QuantumMeasurementColors.tailsColorProperty : QuantumMeasurementColors.downColorProperty;
+    const leftFillColorProperty = options.leftFillColorProperty;
+    const rightFillColorProperty = options.rightFillColorProperty;
     const leftHistogramBar = new Rectangle( 0, 0, HISTOGRAM_BAR_WIDTH, maxBarHeight, { fill: leftFillColorProperty } );
     const rightHistogramBar = new Rectangle( 0, 0, HISTOGRAM_BAR_WIDTH, maxBarHeight, { fill: rightFillColorProperty } );
 
@@ -179,28 +134,28 @@ export default class QuantumMeasurementHistogram extends Node {
     } );
 
     leftNumberProperty.link( leftNumber => {
-      const proportion = leftNumber / coinSet.numberOfActiveSystemsProperty.value;
+      const proportion = totalNumberProperty.value ? leftNumber / totalNumberProperty.value : 0;
       leftHistogramBar.setRect( 0, 0, HISTOGRAM_BAR_WIDTH, proportion * maxBarHeight );
       numberBars.bottom = xAxis.centerY;
     } );
     rightNumberProperty.link( rightNumber => {
-      const proportion = rightNumber / coinSet.numberOfActiveSystemsProperty.value;
+      const proportion = totalNumberProperty.value ? rightNumber / totalNumberProperty.value : 0;
       rightHistogramBar.setRect( 0, 0, HISTOGRAM_BAR_WIDTH, proportion * maxBarHeight );
       numberBars.bottom = xAxis.centerY; // TODO: This is being called twice! https://github.com/phetsims/quantum-measurement/issues/22
     } );
 
-    const options = optionize<QuantumMeasurementHistogramOptions, SelfOptions, NodeOptions>()( {
-      children: [
-        numberOfSystemsText,
-        numberBars,
-        yAxis,
-        xAxis,
-        xAxisLabels,
-        numberDisplays
-      ]
-    }, providedOptions );
+    options.children = [
+      numberBars,
+      yAxis,
+      xAxis,
+      xAxisLabels,
+      numberDisplays
+    ];
 
     super( options );
+
+    this.xAxis = xAxis;
+    this.yAxis = yAxis;
   }
 }
 

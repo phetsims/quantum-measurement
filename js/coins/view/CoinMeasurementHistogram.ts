@@ -8,21 +8,26 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
+import Multilink from '../../../../axon/js/Multilink.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
+import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { NodeOptions, RichText } from '../../../../scenery/js/imports.js';
+import { RichText, Text } from '../../../../scenery/js/imports.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHistogram.js';
+import QuantumMeasurementHistogram, { QuantumMeasurementHistogramOptions } from '../../common/view/QuantumMeasurementHistogram.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
 import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
 
 type SelfOptions = EmptySelfOptions;
-export type CoinMeasurementHistogramOptions = SelfOptions & WithRequired<NodeOptions, 'tandem' | 'visibleProperty'>;
+export type CoinMeasurementHistogramOptions = SelfOptions & QuantumMeasurementHistogramOptions;
 
 const LABEL_FONT = new PhetFont( { size: 20, weight: 'bold' } );
 
@@ -54,7 +59,72 @@ export default class CoinMeasurementHistogram extends QuantumMeasurementHistogra
       )
     ];
 
-    super( coinSet, systemType, xAxisLabels as [RichText, RichText], providedOptions );
+    // Create the number Properties for the left and right histogram bars.
+    const leftNumberProperty = new NumberProperty( 0, {
+      tandem: providedOptions.tandem.createTandem( 'leftNumberProperty' )
+    } );
+    const rightNumberProperty = new NumberProperty( 0, {
+      tandem: providedOptions.tandem.createTandem( 'rightNumberProperty' )
+    } );
+
+    // Define a function to update the left and right number Properties.
+    const updateNumberProperties = () => {
+
+      const leftTestValue = systemType === 'classical' ? 'heads' : 'up';
+      const rightTestValue = systemType === 'classical' ? 'tails' : 'down';
+      let leftTotal = 0;
+      let rightTotal = 0;
+
+      if ( coinSet.measurementStateProperty.value === 'revealed' ) {
+        _.times( coinSet.numberOfActiveSystemsProperty.value, i => {
+          if ( coinSet.measuredValues[ i ] === leftTestValue ) {
+            leftTotal++;
+          }
+          else if ( coinSet.measuredValues[ i ] === rightTestValue ) {
+            rightTotal++;
+          }
+        } );
+      }
+      leftNumberProperty.value = leftTotal;
+      rightNumberProperty.value = rightTotal;
+    };
+
+    Multilink.multilink(
+      [ coinSet.numberOfActiveSystemsProperty, coinSet.measurementStateProperty ],
+      updateNumberProperties
+    );
+
+    coinSet.measuredDataChangedEmitter.addListener( updateNumberProperties );
+
+    // Create a Property that controls whether the values should be displayed.
+    const displayValuesProperty = DerivedProperty.valueEqualsConstant(
+      coinSet.measurementStateProperty,
+      'revealed'
+    );
+
+    super(
+      leftNumberProperty,
+      rightNumberProperty,
+      xAxisLabels as [RichText, RichText],
+      displayValuesProperty,
+      providedOptions
+    );
+
+    const numberOfCoinsStringProperty = new DerivedStringProperty(
+      [ coinSet.numberOfActiveSystemsProperty ],
+      numberOfCoins => StringUtils.fillIn(
+        QuantumMeasurementStrings.numberOfCoinsPatternStringProperty,
+        { number: numberOfCoins }
+      )
+    );
+
+    const numberOfSystemsText = new Text( numberOfCoinsStringProperty, {
+      font: new PhetFont( 16 ),
+      centerX: 0,
+      centerY: this.yAxis.top * 1.2
+    } );
+
+    this.addChild( numberOfSystemsText );
   }
 }
 
