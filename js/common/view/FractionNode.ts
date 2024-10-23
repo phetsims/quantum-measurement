@@ -5,15 +5,15 @@
  * @author Agustín Vallejo
  */
 
-import quantumMeasurement from '../../quantumMeasurement.js';
-import { Line, Node, NodeOptions, VBoxOptions } from '../../../../scenery/js/imports.js';
 import Multilink from '../../../../axon/js/Multilink.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
+import { Line, Node, NodeOptions, VBoxOptions } from '../../../../scenery/js/imports.js';
+import quantumMeasurement from '../../quantumMeasurement.js';
 
-const FRACTION_LINE_MARGIN = 5;
-
-type SelfOptions = EmptySelfOptions;
+type SelfOptions = {
+  fractionLineMargin?: number;
+};
 
 type FractionNodeOptions = SelfOptions & StrictOmit<VBoxOptions, 'children'>;
 
@@ -23,6 +23,7 @@ export default class FractionNode extends Node {
     const fractionLine = new Line( 0, 0, 1, 0, { stroke: 'black', lineWidth: 1.5, lineCap: 'round' } );
 
     const options = optionize<FractionNodeOptions, SelfOptions, NodeOptions>()( {
+      fractionLineMargin: 5,
       children: [
         numeratorNode,
         fractionLine,
@@ -35,9 +36,9 @@ export default class FractionNode extends Node {
     // Dynamically size the fraction line.
     Multilink.multilink( [ numeratorNode.boundsProperty, denominatorNode.boundsProperty ],
       ( numeratorBounds, denominatorBounds ) => {
-        fractionLine.setLine( 0, 0, Math.max( numeratorBounds.width, denominatorBounds.width ) + FRACTION_LINE_MARGIN, 0 );
-        numeratorNode.centerBottom = fractionLine.centerTop.minusXY( 0, 5 );
-        denominatorNode.centerTop = fractionLine.centerBottom.plusXY( 0, 5 );
+        fractionLine.setLine( 0, 0, Math.max( numeratorBounds.width, denominatorBounds.width ) + options.fractionLineMargin, 0 );
+        numeratorNode.centerBottom = fractionLine.centerTop.minusXY( 0, options.fractionLineMargin );
+        denominatorNode.centerTop = fractionLine.centerBottom.plusXY( 0, options.fractionLineMargin );
       } );
   }
 }

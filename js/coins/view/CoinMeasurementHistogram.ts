@@ -105,8 +105,8 @@ export default class CoinMeasurementHistogram extends QuantumMeasurementHistogra
     super(
       leftNumberProperty,
       rightNumberProperty,
-      xAxisLabels as [RichText, RichText],
       displayValuesProperty,
+      xAxisLabels as [RichText, RichText],
       providedOptions
     );
 

@@ -7,17 +7,23 @@
  */
 
 import BlochSphereModel from 'model/BlochSphereModel.js';
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Image, Text, VBox } from '../../../../scenery/js/imports.js';
+import { HBox, Image, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import Panel from '../../../../sun/js/Panel.js';
 import Slider from '../../../../sun/js/Slider.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import Animation from '../../../../twixt/js/Animation.js';
+import Easing from '../../../../twixt/js/Easing.js';
 import blochSphereScreenMockup_png from '../../../images/blochSphereScreenMockup_png.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
+import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHistogram.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import ComplexBlochSphere from '../model/ComplexBlochSphere.js';
@@ -85,7 +91,76 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
       ]
     } );
 
-    this.addChild( blochSpherePreparationArea );
+    // this.addChild( blochSpherePreparationArea );
+
+    const leftProperty = new NumberProperty( 0 );
+    const rightProperty = new NumberProperty( 1 );
+
+
+    // TODO: These guys shouldn't live here, see https://github.com/phetsims/quantum-measurement/issues/22
+    this.addChild( new HBox( {
+        spacing: 10,
+        center: this.layoutBounds.center,
+        children: [
+          new QuantumMeasurementHistogram( leftProperty, rightProperty, new BooleanProperty( true ),
+            [
+              new RichText( 'V', { font: new PhetFont( { size: 17, weight: 'bold' } ) } ),
+              new RichText( 'H', { font: new PhetFont( { size: 17, weight: 'bold' } ) } )
+            ],
+            {
+              displayMode: 'number',
+              matchLabelColors: true,
+              visibleProperty: new BooleanProperty( true ),
+              tandem: Tandem.OPT_OUT
+            } ),
+          new QuantumMeasurementHistogram( leftProperty, rightProperty, new BooleanProperty( true ),
+            [
+              new RichText( 'V', { font: new PhetFont( { size: 17, weight: 'bold' } ), fill: QuantumMeasurementColors.verticalPolarizationColorProperty } ),
+              new RichText( 'H', { font: new PhetFont( { size: 17, weight: 'bold' } ) } )
+            ],
+            {
+              displayMode: 'fraction',
+              orientation: 'horizontal',
+              matchLabelColors: true,
+              leftFillColorProperty: QuantumMeasurementColors.verticalPolarizationColorProperty,
+              rightFillColorProperty: QuantumMeasurementColors.horizontalPolarizationColorProperty,
+              visibleProperty: new BooleanProperty( true ),
+              tandem: Tandem.OPT_OUT
+            } ),
+          new QuantumMeasurementHistogram( leftProperty, rightProperty, new BooleanProperty( true ),
+            [
+              new RichText( 'S<sub>z</sub>' + QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER, { font: new PhetFont( { size: 17, weight: 'bold' } ) } ),
+              new RichText( 'S<sub>z</sub>' + QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER, { font: new PhetFont( { size: 17, weight: 'bold' } ) } )
+            ],
+            {
+              displayMode: 'percent',
+              leftFillColorProperty: QuantumMeasurementColors.tailsColorProperty,
+              visibleProperty: new BooleanProperty( true ),
+              tandem: Tandem.OPT_OUT,
+              numberDisplayOptions: {
+                textOptions: {
+                  font: new PhetFont( 17 )
+                }
+              }
+            } )
+        ]
+      } )
+    );
+
+    const duration = 500;
+    const animation = new Animation( {
+      setValue: value => {
+        const T = 100;
+        leftProperty.value = T * ( Math.sin( value ) + 1 ) / 2;
+        rightProperty.value = T - leftProperty.value;
+      },
+      from: 0,
+      to: duration,
+      duration: duration,
+      easing: Easing.LINEAR
+    } );
+
+    animation.start();
 
 
     this.mockupOpacityProperty && this.mockupOpacityProperty.link( opacity => {
