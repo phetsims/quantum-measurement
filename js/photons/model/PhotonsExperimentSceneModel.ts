@@ -24,6 +24,11 @@ type SelfOptions = {
 };
 type PhotonsExperimentSceneModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
+// The number of photons created at construction time and pooled for usage in the experiment.  This value was
+// empirically determined to be sufficient to handle the maximum number of photons that could be active at any given
+// time, but may have to be adjusted if other aspects of the model are changed.
+const MAX_PHOTONS = 800;
+
 export default class PhotonsExperimentSceneModel {
 
   // The polarizing beam splitter that the photons will encounter.
@@ -70,7 +75,7 @@ export default class PhotonsExperimentSceneModel {
     } );
 
     // Create all photons that will be used in the experiment.
-    _.times( 1000, index => {
+    _.times( MAX_PHOTONS, index => {
       const photon = new Photon( providedOptions.tandem.createTandem( `photon${index}` ) );
       this.photons.push( photon );
     } );
