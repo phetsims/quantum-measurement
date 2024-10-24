@@ -117,13 +117,16 @@ export default class PhotonsExperimentSceneModel {
 
       if ( interaction.interactionType === 'reflected' ) {
 
+        assert && assert( interaction.reflectionPoint, 'reflection point should be defined' );
+        assert && assert( interaction.reflectionDirection, 'reflection direction should be defined' );
+
         // This photon was reflected.  First step it to the reflection point.
-        const dtToReflection = photon.positionProperty.value.distance( interaction.reflectionPoint ) / PHOTON_SPEED;
+        const dtToReflection = photon.positionProperty.value.distance( interaction.reflectionPoint! ) / PHOTON_SPEED;
         assert && assert( dtToReflection <= dt );
         photon.step( dtToReflection );
 
         // Change the direction of the photon to the reflection direction.
-        photon.directionProperty.set( interaction.reflectionDirection );
+        photon.directionProperty.set( interaction.reflectionDirection! );
 
         // Step the photon the remaining time.
         photon.step( dt - dtToReflection );

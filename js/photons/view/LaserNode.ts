@@ -8,14 +8,19 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
+import Utils from '../../../../dot/js/Utils.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import LaserPointerNode from '../../../../scenery-phet/js/LaserPointerNode.js';
-import { Color, Node, NodeOptions } from '../../../../scenery/js/imports.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import { AlignBox, Color, Node, NodeOptions, Text } from '../../../../scenery/js/imports.js';
 import HSlider from '../../../../sun/js/HSlider.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import Laser from '../model/Laser.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -27,8 +32,8 @@ export default class LaserNode extends Node {
                       modelViewTransform: ModelViewTransform2,
                       providedOptions: LaserNodeOptions ) {
 
-    // The button on the laser is only used in single-photon mode, but it has to be created and passed in to the node
-    // regardless of the mode.
+    // The button on the laser is only used in single-photon mode, but the property for it has to be created and passed
+    // in to the node regardless.
     const buttonOnProperty = new BooleanProperty( false );
     if ( model.emissionMode === 'singlePhoton' ) {
       buttonOnProperty.link( buttonOn => {
@@ -40,18 +45,22 @@ export default class LaserNode extends Node {
 
     // Create the laser pointer node using a common code component.
     const laserBodySize = new Dimension2( 95, 55 );
+    const nozzleSize = new Dimension2( 15, 45 );
     const laserPointerNode = new LaserPointerNode( buttonOnProperty, {
       bodySize: laserBodySize,
-      nozzleSize: new Dimension2( 15, 45 ),
+      nozzleSize: nozzleSize,
       hasButton: model.emissionMode === 'singlePhoton',
       buttonRadius: 18,
       buttonType: 'momentary',
+      right: modelViewTransform.modelToViewX( model.position.x ),
+      centerY: modelViewTransform.modelToViewY( model.position.y ),
       tandem: providedOptions.tandem.createTandem( 'laserPointerNode' )
     } );
 
     const nodeChildren: Node[] = [ laserPointerNode ];
 
-    // If the laser is in many-photon mode, we need a slider to control the rate of photon emission.
+    // If the laser is in many-photon mode, we need a slider to control the rate of photon emission.  And a label for
+    // the rate.
     if ( model.emissionMode === 'manyPhotons' ) {
       const emissionRateSlider = new HSlider( model.emissionRateProperty, model.emissionRateProperty.range, {
         trackSize: new Dimension2( laserBodySize.width * 0.67, 2 ),
@@ -60,16 +69,34 @@ export default class LaserNode extends Node {
         thumbSize: new Dimension2( laserBodySize.height * 0.25, laserBodySize.height * 0.5 ),
         thumbFill: 'rgb( 0, 255, 0)',
         thumbFillHighlighted: 'rgb( 0, 200, 0)',
-        centerX: laserPointerNode.left + laserBodySize.width / 2,
+        center: laserPointerNode.bounds.center.plusXY( -nozzleSize.width / 2, 0 ),
+        constrainValue: value => Utils.roundSymmetric( value ),
         tandem: providedOptions.tandem.createTandem( 'emissionRateSlider' )
       } );
       nodeChildren.push( emissionRateSlider );
-    }
 
+      const label = new Text(
+        new PatternStringProperty( QuantumMeasurementStrings.eventsPerSecondPatternStringProperty, {
+          events: model.emissionRateProperty
+        } ),
+        {
+          font: new PhetFont( 16 ),
+          fill: Color.GREEN
+        }
+      );
+      const labelAlignBox = new AlignBox( label, {
+        alignBounds: new Bounds2(
+          laserPointerNode.bounds.x,
+          laserPointerNode.bounds.y - +label.height * 1.5,
+          laserPointerNode.bounds.maxX,
+          laserPointerNode.bounds.y
+        ),
+        align: 'center'
+      } );
+      nodeChildren.push( labelAlignBox );
+    }
     const options = optionize<LaserNodeOptions, SelfOptions, NodeOptions>()( {
-      children: nodeChildren,
-      right: modelViewTransform.modelToViewX( model.position.x ),
-      centerY: modelViewTransform.modelToViewY( model.position.y )
+      children: nodeChildren
     }, providedOptions );
 
     super( options );

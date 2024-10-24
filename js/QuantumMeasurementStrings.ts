@@ -23,6 +23,7 @@ type StringsType = {
   'coinBiasStringProperty': LocalizedStringProperty;
   'customStringProperty': LocalizedStringProperty;
   'downStringProperty': LocalizedStringProperty;
+  'eventsPerSecondPatternStringProperty': LocalizedStringProperty;
   'flipStringProperty': LocalizedStringProperty;
   'flipAndRevealStringProperty': LocalizedStringProperty;
   'fortyFiveDegreesStringProperty': LocalizedStringProperty;
