@@ -24,7 +24,7 @@ import { Circle, Color, HBox, LinearGradient, Node, NodeOptions, RadialGradient,
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
-import PhotonDetector from '../model/PhotonDetector.js';
+import PhotonDetector, { DetectionDirection } from '../model/PhotonDetector.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhotonDetectorNodeOptions = SelfOptions & PickRequired<NodeOptions, 'tandem'>;
@@ -117,7 +117,7 @@ export default class PhotonDetectorNode extends Node {
 
     // Add a readout of either the detection rate or the detection count.
     const countReadout = model.displayMode === 'count' ?
-                         new PhotonCountDisplay( model.detectionCountProperty, bodyRectangle.center ) :
+                         new PhotonCountDisplay( model.detectionCountProperty, model.detectionDirection, bodyRectangle.center ) :
                          new PhotonRateDisplay( model.detectionRateProperty, bodyRectangle.center );
 
     const options = optionize<PhotonDetectorNodeOptions, SelfOptions, NodeOptions>()(
@@ -140,7 +140,9 @@ const getBoldColoredString = ( text: string, color: Color ): string => {
  */
 class PhotonCountDisplay extends HBox {
 
-  public constructor( photonCountProperty: TReadOnlyProperty<number>, center: Vector2 ) {
+  public constructor( photonCountProperty: TReadOnlyProperty<number>,
+                      detectionDirection: DetectionDirection,
+                      center: Vector2 ) {
 
     // Create a circular indicator that will blink when a photon is detected.
     const indicator = new Circle( PhotonCountDisplay.INDICATOR_RADIUS, {
@@ -171,7 +173,12 @@ class PhotonCountDisplay extends HBox {
       align: 'center',
       backgroundFill: QuantumMeasurementColors.photonDetectorBodyColor,
       backgroundStroke: null,
-      xMargin: 0
+      xMargin: 0,
+      textOptions: {
+        fill: detectionDirection === 'up' ?
+              QuantumMeasurementColors.verticalPolarizationColorProperty :
+              QuantumMeasurementColors.horizontalPolarizationColorProperty
+      }
     } );
 
     super( {
