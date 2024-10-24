@@ -20,7 +20,7 @@ import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import NumberDisplay from '../../../../scenery-phet/js/NumberDisplay.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Circle, Color, HBox, LinearGradient, Node, NodeOptions, RadialGradient, Rectangle, RichText, Text } from '../../../../scenery/js/imports.js';
+import { Circle, Color, HBox, LinearGradient, Node, NodeOptions, RadialGradient, Rectangle, RichText } from '../../../../scenery/js/imports.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
@@ -32,6 +32,8 @@ type PhotonDetectorNodeOptions = SelfOptions & PickRequired<NodeOptions, 'tandem
 // The size of the detector body.  The width is for the dimension perpendicular to the detection direction, and the
 // height (which is really more like the depth) is for the dimension parallel to the detection direction.
 const DETECTOR_BODY_SIZE = new Dimension2( 85, 100 );
+
+const DISPLAY_FONT = new PhetFont( { size: 20, weight: 'bold' } );
 
 export default class PhotonDetectorNode extends Node {
 
@@ -117,8 +119,17 @@ export default class PhotonDetectorNode extends Node {
 
     // Add a readout of either the detection rate or the detection count.
     const countReadout = model.displayMode === 'count' ?
-                         new PhotonCountDisplay( model.detectionCountProperty, model.detectionDirection, bodyRectangle.center ) :
-                         new PhotonRateDisplay( model.detectionRateProperty, bodyRectangle.center );
+                         new PhotonCountDisplay(
+                           model.detectionCountProperty,
+                           model.detectionDirection,
+                           bodyRectangle.center
+                         ) :
+                         new PhotonRateDisplay(
+                           model.detectionRateProperty,
+                           model.detectionDirection,
+                           DETECTOR_BODY_SIZE.width,
+                           bodyRectangle.center
+                         );
 
     const options = optionize<PhotonDetectorNodeOptions, SelfOptions, NodeOptions>()(
       {
@@ -175,6 +186,7 @@ class PhotonCountDisplay extends HBox {
       backgroundStroke: null,
       xMargin: 0,
       textOptions: {
+        font: DISPLAY_FONT,
         fill: detectionDirection === 'up' ?
               QuantumMeasurementColors.verticalPolarizationColorProperty :
               QuantumMeasurementColors.horizontalPolarizationColorProperty
@@ -210,21 +222,23 @@ class PhotonCountDisplay extends HBox {
 /**
  * PhotonRateDisplay shows the rate of photons detected by a detector.
  */
-class PhotonRateDisplay extends HBox {
-  public constructor( photonRateProperty: TReadOnlyProperty<number>, center: Vector2 ) {
+class PhotonRateDisplay extends NumberDisplay {
+  public constructor( photonRateProperty: TReadOnlyProperty<number>,
+                      detectionDirection: DetectionDirection,
+                      maxWidth: number,
+                      center: Vector2 ) {
 
-    // Create a string Property that will be used to display the photon count.
-    const photonCountStringProperty = new DerivedProperty( [ photonRateProperty ], count => count.toString() );
-
-    const countReadout = new Text( photonCountStringProperty, {
-      font: new PhetFont( 20 ),
-      fill: Color.GREEN.darkerColor( 0.5 ),
-      maxWidth: DETECTOR_BODY_SIZE.width * 0.95
-    } );
-
-    super( {
-      children: [ countReadout ],
-      center: center
+    super( photonRateProperty, new Range( 0, 999 ), {
+      valuePattern: QuantumMeasurementStrings.eventsPerSecondPatternStringProperty,
+      align: 'center',
+      center: center,
+      maxWidth: maxWidth,
+      textOptions: {
+        font: DISPLAY_FONT,
+        fill: detectionDirection === 'up' ?
+              QuantumMeasurementColors.verticalPolarizationColorProperty :
+              QuantumMeasurementColors.horizontalPolarizationColorProperty
+      }
     } );
   }
 }

@@ -77,7 +77,7 @@ export default class LaserNode extends Node {
 
       const label = new Text(
         new PatternStringProperty( QuantumMeasurementStrings.eventsPerSecondPatternStringProperty, {
-          events: model.emissionRateProperty
+          value: model.emissionRateProperty
         } ),
         {
           font: new PhetFont( 16 ),
