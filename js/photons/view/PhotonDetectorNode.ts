@@ -8,15 +8,19 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import stepTimer from '../../../../axon/js/stepTimer.js';
+import { TimerListener } from '../../../../axon/js/Timer.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
+import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import NumberDisplay from '../../../../scenery-phet/js/NumberDisplay.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, HBox, LinearGradient, Node, NodeOptions, Rectangle, RichText, Text } from '../../../../scenery/js/imports.js';
+import { Circle, Color, HBox, LinearGradient, Node, NodeOptions, RadialGradient, Rectangle, RichText, Text } from '../../../../scenery/js/imports.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
@@ -48,7 +52,7 @@ export default class PhotonDetectorNode extends Node {
     // detector body
     const bodyRectangle = new Rectangle( 0, 0, DETECTOR_BODY_SIZE.width, DETECTOR_BODY_SIZE.height, {
       cornerRadius: 10,
-      fill: new Color( '#D1E2FA' ),
+      fill: QuantumMeasurementColors.photonDetectorBodyColor,
       centerX: aperture.centerX
     } );
 
@@ -131,24 +135,74 @@ const getBoldColoredString = ( text: string, color: Color ): string => {
   return `<span style="font-weight: bold; color: ${color.toCSS()};">${text}</span>`;
 };
 
+/**
+ * PhotonCountDisplay shows the count of photons detected by a detector.
+ */
 class PhotonCountDisplay extends HBox {
+
   public constructor( photonCountProperty: TReadOnlyProperty<number>, center: Vector2 ) {
 
-    // Create a string Property that will be used to display the photon count.
-    const photonCountStringProperty = new DerivedProperty( [ photonCountProperty ], count => count.toString() );
+    // Create a circular indicator that will blink when a photon is detected.
+    const indicator = new Circle( PhotonCountDisplay.INDICATOR_RADIUS, {
+      stroke: Color.BLACK,
+      fill: PhotonCountDisplay.INACTIVE_INDICATOR_FILL
+    } );
 
-    const countReadout = new Text( photonCountStringProperty, {
-      font: new PhetFont( 20 ),
-      maxWidth: DETECTOR_BODY_SIZE.width * 0.95
+    // Blink the indicator when a photon is detected.
+    let blinkTimeoutListener: TimerListener | null = null;
+    photonCountProperty.lazyLink( count => {
+      if ( blinkTimeoutListener ) {
+        stepTimer.clearTimeout( blinkTimeoutListener );
+      }
+      if ( count > 0 ) {
+        indicator.fill = PhotonCountDisplay.ACTIVE_INDICATOR_FILL;
+        blinkTimeoutListener = stepTimer.setTimeout( () => {
+          indicator.fill = PhotonCountDisplay.INACTIVE_INDICATOR_FILL;
+          blinkTimeoutListener = null;
+        }, 200 );
+      }
+      else {
+        indicator.fill = PhotonCountDisplay.INACTIVE_INDICATOR_FILL;
+      }
+    } );
+
+    // Create a NumberDisplay that will show the count.
+    const numberDisplay = new NumberDisplay( photonCountProperty, new Range( 0, 999 ), {
+      align: 'center',
+      backgroundFill: QuantumMeasurementColors.photonDetectorBodyColor,
+      backgroundStroke: null,
+      xMargin: 0
     } );
 
     super( {
-      children: [ countReadout ],
+      children: [ indicator, numberDisplay ],
+      spacing: 5,
       center: center
     } );
   }
+
+  private static readonly INDICATOR_RADIUS = 10;
+  private static readonly INACTIVE_INDICATOR_FILL = new RadialGradient(
+    -PhotonCountDisplay.INDICATOR_RADIUS * 0.2,
+    -PhotonCountDisplay.INDICATOR_RADIUS * 0.2,
+    0,
+    -PhotonCountDisplay.INDICATOR_RADIUS * 0.2,
+    -PhotonCountDisplay.INDICATOR_RADIUS * 0.2,
+    PhotonCountDisplay.INDICATOR_RADIUS
+  ).addColorStop( 0, Color.LIGHT_GRAY ).addColorStop( 0.7, Color.GRAY );
+  private static readonly ACTIVE_INDICATOR_FILL = new RadialGradient(
+    -PhotonCountDisplay.INDICATOR_RADIUS * 0.2,
+    -PhotonCountDisplay.INDICATOR_RADIUS * 0.2,
+    0,
+    -PhotonCountDisplay.INDICATOR_RADIUS * 0.2,
+    -PhotonCountDisplay.INDICATOR_RADIUS * 0.2,
+    PhotonCountDisplay.INDICATOR_RADIUS
+  ).addColorStop( 0, new Color( '#aaffaa' ) ).addColorStop( 0.7, Color.GREEN );
 }
 
+/**
+ * PhotonRateDisplay shows the rate of photons detected by a detector.
+ */
 class PhotonRateDisplay extends HBox {
   public constructor( photonRateProperty: TReadOnlyProperty<number>, center: Vector2 ) {
 

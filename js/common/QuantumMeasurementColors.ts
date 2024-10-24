@@ -133,6 +133,11 @@ const QuantumMeasurementColors = {
   } ),
   verticalPolarizationColorProperty: new ProfileColorProperty( quantumMeasurement, 'verticalPolarization', {
     default: '#00F'
+  } ),
+
+  // Colors for elements on the "Photons" screen
+  photonDetectorBodyColor: new ProfileColorProperty( quantumMeasurement, 'photonDetectorBody', {
+    default: '#D1E2FA'
   } )
 };
 
