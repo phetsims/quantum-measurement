@@ -71,10 +71,6 @@ export default class Laser {
   // between the stepping rate frequency and the emission rate.
   private fractionalEmissionAccumulator = 0;
 
-  // Values used in calculating the emission rate.
-  private timeSinceLastPhoton = Number.POSITIVE_INFINITY; // seconds
-  private timeBetweenPhotons = Number.POSITIVE_INFINITY; // seconds
-
   public constructor( position: Vector2, photons: Photon[], providedOptions: LaserOptions ) {
 
     this.position = position;
@@ -84,11 +80,6 @@ export default class Laser {
     this.emissionRateProperty = new NumberProperty( 0, {
       range: new Range( 0, MAX_PHOTON_EMISSION_RATE ),
       tandem: providedOptions.tandem.createTandem( 'emissionRateProperty' )
-    } );
-
-    // Adjust the time between photons as the emission rate changes.
-    this.emissionRateProperty.link( emissionRate => {
-      this.timeBetweenPhotons = emissionRate > 0 ? 1 / emissionRate : Number.POSITIVE_INFINITY;
     } );
 
     this.presetPolarizationDirectionProperty = new Property<PresetPolarizationDirections>( 'fortyFiveDegrees', {
@@ -137,17 +128,14 @@ export default class Laser {
    * @param dt - time step, in seconds
    */
   public step( dt: number ): void {
-    this.timeSinceLastPhoton += dt;
-    if ( this.timeSinceLastPhoton > this.timeBetweenPhotons ) {
-      const totalPhotonsToEmit = this.timeSinceLastPhoton / this.timeBetweenPhotons;
-      let wholeNumberPhotonsToEmit = Math.floor( totalPhotonsToEmit );
-      this.fractionalEmissionAccumulator += totalPhotonsToEmit - wholeNumberPhotonsToEmit;
-      if ( this.fractionalEmissionAccumulator >= 1 ) {
-        wholeNumberPhotonsToEmit++;
-        this.fractionalEmissionAccumulator -= 1;
-      }
-      _.times( wholeNumberPhotonsToEmit, this.emitAPhoton.bind( this ) );
-      this.timeSinceLastPhoton = 0;
+    const photonsToEmit = this.emissionRateProperty.value * dt;
+    const wholeNumberPhotonsToEmit = Math.floor( photonsToEmit );
+    _.times( wholeNumberPhotonsToEmit, this.emitAPhoton.bind( this ) );
+    this.fractionalEmissionAccumulator += photonsToEmit - wholeNumberPhotonsToEmit;
+    if ( this.fractionalEmissionAccumulator >= 1 ) {
+      const additionalPhotonsToEmit = Math.floor( this.fractionalEmissionAccumulator );
+      _.times( additionalPhotonsToEmit, this.emitAPhoton.bind( this ) );
+      this.fractionalEmissionAccumulator = this.fractionalEmissionAccumulator - additionalPhotonsToEmit;
     }
   }
 

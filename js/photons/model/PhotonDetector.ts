@@ -38,7 +38,7 @@ type DetectionCountSample = {
 };
 
 // constants used in the rate calculation
-const TOTAL_AVERAGING_PERIOD = 4; // in seconds
+const TOTAL_AVERAGING_PERIOD = 2; // in seconds
 const COUNT_SAMPLE_PERIOD = 0.5; // in seconds
 
 export default class PhotonDetector implements TPhotonInteraction {
@@ -128,26 +128,35 @@ export default class PhotonDetector implements TPhotonInteraction {
         count: this.currentDetectionCount
       } );
 
-      // Remove samples that are older than the averaging period.
-      const detectionSampleHistoryCopy = this.detectionSampleHistory.slice();
-      let totalTimeSoFar = 0;
-      for ( let i = detectionSampleHistoryCopy.length - 1; i >= 0; i-- ) {
-        totalTimeSoFar += detectionSampleHistoryCopy[ i ].duration;
-        if ( totalTimeSoFar > TOTAL_AVERAGING_PERIOD ) {
-          this.detectionSampleHistory.shift();
+      // Count the number of samples needed to reach the averaging period and total the counts that they contain.  Since
+      // the new samples are added to the end of the array, we need to start at the end and work backwards.
+      let accumulatedSampleTime = 0;
+      let accumulatedEventCount = 0;
+      let sampleCount = 0;
+      for ( let i = this.detectionSampleHistory.length - 1; i >= 0; i-- ) {
+        accumulatedSampleTime += this.detectionSampleHistory[ i ].duration;
+        accumulatedEventCount += this.detectionSampleHistory[ i ].count;
+        sampleCount++;
+        if ( accumulatedSampleTime >= TOTAL_AVERAGING_PERIOD ) {
+          break;
         }
       }
 
-      // Reset the counts for the next sample.
+      // Update the detection rate.
+      if ( accumulatedSampleTime > 0 ) {
+        this.detectionRateProperty.value = Utils.roundSymmetric( accumulatedEventCount / accumulatedSampleTime );
+      }
+      else {
+        this.detectionRateProperty.value = 0;
+      }
+
+      // Remove samples that have aged out.
+      _.times( this.detectionSampleHistory.length - sampleCount, () => this.detectionSampleHistory.shift() );
+
+      // Reset the counts.
       this.currentDetectionCount = 0;
       this.timeSinceLastCountSample = 0;
     }
-
-    // Update the detection rate.
-    const totalCount = this.detectionSampleHistory.reduce(
-      ( accumulatedCount, sample ) => accumulatedCount + sample.count, 0
-    );
-    this.detectionRateProperty.value = Utils.roundSymmetric( totalCount / TOTAL_AVERAGING_PERIOD );
   }
 
   /**
