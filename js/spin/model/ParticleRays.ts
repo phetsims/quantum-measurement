@@ -54,14 +54,14 @@ export default class ParticleRays {
       // If there is a source, connect the source and destination
       if ( source ) {
         const initialPoint = connection.exit === 'top' ?
-                             source.topExitPosition.plus( source.positionProperty.value ) : source.bottomExitPosition.plus( source.positionProperty.value );
-        this.allPossiblePaths.push( [ initialPoint, destination.entrancePosition.plus( destination.positionProperty.value ) ] );
+                             source.topExitPositionProperty.value : source.bottomExitPositionProperty.value;
+        this.allPossiblePaths.push( [ initialPoint, destination.entrancePositionProperty.value ] );
       }
 
       // Set the destination apparatus exit allPossiblePaths to go either to infinity or to the blocking
       const afterDestinationVector = connection.afterDestination === 'infinity' ? new Vector2( 10, 0 ) : new Vector2( 0.1, 0 );
-      this.allPossiblePaths.push( [ destination.topExitPosition.plus( destination.positionProperty.value ), destination.topExitPosition.plus( destination.positionProperty.value ).plus( afterDestinationVector ) ] );
-      this.allPossiblePaths.push( [ destination.bottomExitPosition.plus( destination.positionProperty.value ), destination.bottomExitPosition.plus( destination.positionProperty.value ).plus( afterDestinationVector ) ] );
+      this.allPossiblePaths.push( [ destination.topExitPositionProperty.value, destination.topExitPositionProperty.value.plus( afterDestinationVector ) ] );
+      this.allPossiblePaths.push( [ destination.bottomExitPositionProperty.value, destination.bottomExitPositionProperty.value.plus( afterDestinationVector ) ] );
     } );
 
   }

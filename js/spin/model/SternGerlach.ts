@@ -34,10 +34,16 @@ export default class SternGerlach {
   public readonly downProbabilityProperty: TReadOnlyProperty<number>;
   public readonly expectedSpinProperty: Property<SpinDirection>;
 
-  // Global position vectors, they are to be updated outside of the constructor
-  public entrancePosition: Vector2;
-  public topExitPosition: Vector2;
-  public bottomExitPosition: Vector2;
+  // Local position vectors
+  public entranceLocalPosition: Vector2;
+  public topExitLocalPosition: Vector2;
+  public bottomExitLocalPosition: Vector2;
+
+  // Local position properties
+  public entrancePositionProperty: TReadOnlyProperty<Vector2>;
+  public topExitPositionProperty: TReadOnlyProperty<Vector2>;
+  public bottomExitPositionProperty: TReadOnlyProperty<Vector2>;
+
 
   // Constants
   public readonly STERN_GERLACH_WIDTH = 150 / 200;
@@ -51,14 +57,27 @@ export default class SternGerlach {
       tandem: tandem.createTandem( 'positionProperty' )
     } );
 
-    this.entrancePosition = new Vector2(
+    this.entranceLocalPosition = new Vector2(
       -this.STERN_GERLACH_WIDTH / 2 - this.PARTICLE_HOLE_WIDTH / 2, 0 );
 
-    this.topExitPosition = new Vector2(
+    this.topExitLocalPosition = new Vector2(
       this.STERN_GERLACH_WIDTH / 2 + this.PARTICLE_HOLE_WIDTH / 2, this.STERN_GERLACH_HEIGHT / 4 );
 
-    this.bottomExitPosition = new Vector2(
+    this.bottomExitLocalPosition = new Vector2(
       this.STERN_GERLACH_WIDTH / 2 + this.PARTICLE_HOLE_WIDTH / 2, -this.STERN_GERLACH_HEIGHT / 4 );
+
+    this.entrancePositionProperty = new DerivedProperty( [ this.positionProperty ], ( position: Vector2 ) => {
+      return position.plus( this.entranceLocalPosition );
+    } );
+
+    this.topExitPositionProperty = new DerivedProperty( [ this.positionProperty ], ( position: Vector2 ) => {
+      return position.plus( this.topExitLocalPosition );
+    } );
+
+    this.bottomExitPositionProperty = new DerivedProperty( [ this.positionProperty ], ( position: Vector2 ) => {
+      return position.plus( this.bottomExitLocalPosition );
+    } );
+
 
     this.isZOrientedProperty = new BooleanProperty( isZOriented, {
       tandem: tandem.createTandem( 'isZOrientedProperty' )

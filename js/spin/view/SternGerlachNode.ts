@@ -54,9 +54,9 @@ export default class SternGerlachNode extends Node {
       curveDownShape.lineTo( -STERN_GERLACH_WIDTH / 2 + i * STERN_GERLACH_WIDTH, -curveFunction( i ) * STERN_GERLACH_HEIGHT / 4 );
     }
 
-    const particleEntrance = createParticleHole( experimentModel.entrancePosition );
-    const topParticleExit = createParticleHole( experimentModel.topExitPosition );
-    const bottomParticleExit = createParticleHole( experimentModel.bottomExitPosition );
+    const particleEntrance = createParticleHole( experimentModel.entranceLocalPosition );
+    const topParticleExit = createParticleHole( experimentModel.topExitLocalPosition );
+    const bottomParticleExit = createParticleHole( experimentModel.bottomExitLocalPosition );
 
     const mainRect = new Path( new Shape().rect( -STERN_GERLACH_WIDTH / 2, -STERN_GERLACH_HEIGHT / 2, STERN_GERLACH_WIDTH, STERN_GERLACH_HEIGHT ),
         { fill: 'black' } );

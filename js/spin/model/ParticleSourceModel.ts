@@ -7,8 +7,10 @@
  * @author Agustín Vallejo
  */
 
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
@@ -26,7 +28,8 @@ export default class ParticleSourceModel {
 
   // Position of the particle source, the tip will be at (0,0)
   public readonly positionProperty: Vector2Property;
-  public readonly exitPosition: Vector2;
+  public readonly exitLocalPosition: Vector2;
+  public readonly exitPositionProperty: TReadOnlyProperty<Vector2>;
 
   public readonly currentlyShootingParticlesProperty: Property<boolean>;
 
@@ -46,7 +49,11 @@ export default class ParticleSourceModel {
       tandem: tandem.createTandem( 'positionProperty' )
     } );
 
-    this.exitPosition = new Vector2( 0, 0 );
+    this.exitLocalPosition = new Vector2( 0, 0 );
+
+    this.exitPositionProperty = new DerivedProperty( [ this.positionProperty ], ( position: Vector2 ) => {
+      return position.plus( this.exitLocalPosition );
+    } );
 
     this.spinStateProperty = new Property<SpinDirection>( SpinDirection.Z_PLUS, {
       validValues: SpinDirection.enumeration.values

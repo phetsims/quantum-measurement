@@ -73,18 +73,18 @@ export default class SpinMeasurementArea extends VBox {
     const tandems = { tandem: Tandem.OPT_OUT };
     const firstSimpleBlochSphere = new BlochSphereNode( new SimpleBlochSphere( model.particleSourceModel.spinStateProperty, tandems ),
       smallBlochSphereOptions(
-        model.particleSourceModel.exitPosition.plus( model.particleSourceModel.positionProperty.value ),
-        model.firstSternGerlach.entrancePosition.plus( model.firstSternGerlach.positionProperty.value )
+        model.particleSourceModel.exitPositionProperty.value,
+        model.firstSternGerlach.entrancePositionProperty.value
       ) );
     const secondSimpleBlochSphere = new BlochSphereNode( new SimpleBlochSphere( model.particleSourceModel.spinStateProperty, tandems ),
       smallBlochSphereOptions(
-        model.firstSternGerlach.topExitPosition.plus( model.firstSternGerlach.positionProperty.value ),
-        model.secondSternGerlach.entrancePosition.plus( model.secondSternGerlach.positionProperty.value )
+        model.firstSternGerlach.topExitPositionProperty.value,
+        model.secondSternGerlach.entrancePositionProperty.value
       ) );
     const thirdSimpleBlochSphere = new BlochSphereNode( new SimpleBlochSphere( model.particleSourceModel.spinStateProperty, tandems ),
       smallBlochSphereOptions(
-        model.secondSternGerlach.topExitPosition.plus( model.secondSternGerlach.positionProperty.value ),
-        model.secondSternGerlach.topExitPosition.plus( model.secondSternGerlach.positionProperty.value ).plusXY( 1, 0 )
+        model.secondSternGerlach.topExitPositionProperty.value,
+        model.secondSternGerlach.topExitPositionProperty.value.plusXY( 1, 0 )
       ) );
     thirdSimpleBlochSphere.visibleProperty = new DerivedProperty(
       [

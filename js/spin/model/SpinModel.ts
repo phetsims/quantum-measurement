@@ -78,8 +78,8 @@ export default class SpinModel implements TModel {
 
     this.particleRays = new ParticleRays(
       [
-        this.particleSourceModel.exitPosition.plus( this.particleSourceModel.positionProperty.value ),
-        this.firstSternGerlach.entrancePosition.plus( this.firstSternGerlach.positionProperty.value )
+        this.particleSourceModel.exitPositionProperty.value,
+        this.firstSternGerlach.entrancePositionProperty.value
       ], [
       {
         destination: this.firstSternGerlach,
