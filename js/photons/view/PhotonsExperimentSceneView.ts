@@ -7,10 +7,11 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, HBox, HBoxOptions, Rectangle, RichText } from '../../../../scenery/js/imports.js';
+import { Color, HBox, HBoxOptions, Rectangle, RichText, VBox } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHistogram.js';
@@ -18,6 +19,7 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import PhotonsExperimentSceneModel from '../model/PhotonsExperimentSceneModel.js';
 import PhotonPolarizationAngleControl from './PhotonPolarizationAngleControl.js';
 import PhotonTestingArea from './PhotonTestingArea.js';
+import PolarizationPlaneRepresentation from './PolarizationPlaneRepresentation.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhotonsExperimentSceneViewOptions = SelfOptions & WithRequired<HBoxOptions, 'tandem'>;
@@ -33,6 +35,23 @@ export default class PhotonsExperimentSceneView extends HBox {
         tandem: providedOptions.tandem.createTandem( 'photonPolarizationAngleControl' )
       }
     );
+
+    const polarizationAngleProperty = new DerivedProperty( [
+      model.laser.customPolarizationAngleProperty,
+      model.laser.presetPolarizationDirectionProperty
+    ], ( customPolarizationAngle, presetPolarizationDirection ) => {
+      return presetPolarizationDirection === 'vertical' ? 90 :
+             presetPolarizationDirection === 'horizontal' ? 0 :
+             presetPolarizationDirection === 'fortyFiveDegrees' ? 45 :
+             customPolarizationAngle;
+    } );
+    const polarizationAngleControlBox = new VBox( {
+      children: [
+        new PolarizationPlaneRepresentation( polarizationAngleProperty ),
+        photonPolarizationAngleControl
+      ],
+      align: 'center'
+    } );
 
     const photonTestingArea = new PhotonTestingArea( model, {
       tandem: providedOptions.tandem.createTandem( 'photonTestingArea' )
@@ -65,7 +84,7 @@ export default class PhotonsExperimentSceneView extends HBox {
       } );
 
     const options = optionize<PhotonsExperimentSceneViewOptions, SelfOptions, HBoxOptions>()( {
-      children: [ photonPolarizationAngleControl, photonTestingArea, testRect3, countHistogram ],
+      children: [ polarizationAngleControlBox, photonTestingArea, testRect3, countHistogram ],
       spacing: 3,
       align: 'bottom'
     }, providedOptions );
