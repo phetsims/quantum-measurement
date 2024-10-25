@@ -7,6 +7,7 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
@@ -19,12 +20,13 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { AlignBox, AlignGroup, Color, HBox, Line, Node, NodeOptions, Rectangle, RichText } from '../../../../scenery/js/imports.js';
 import { MAX_COINS } from '../../coins/model/CoinsExperimentSceneModel.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import QuantumMeasurementColors from '../QuantumMeasurementColors.js';
 import FractionNode from './FractionNode.js';
 
 type SelfOptions = {
   orientation?: 'horizontal' | 'vertical'; // If the histogram is pointing up or sideways
-  displayMode?: 'number' | 'fraction' | 'percent';
+  displayMode?: 'number' | 'fraction' | 'percent' | 'rate';
   matchLabelColors?: boolean; // If the labels should match the colors of the bars
   leftFillColorProperty?: TReadOnlyProperty<Color>;
   rightFillColorProperty?: TReadOnlyProperty<Color>;
@@ -99,20 +101,20 @@ export default class QuantumMeasurementHistogram extends Node {
 
     if ( options.displayMode === 'fraction' ) {
 
-      const FRACTION_FONT = new PhetFont( { size: 15, weight: 'bold' } );
+      const fractionFont = new PhetFont( { size: 15, weight: 'bold' } );
 
       leftNumberDisplay = new NumberDisplay( leftNumberProperty, NUMBER_DISPLAY_RANGE, combineOptions<NumberDisplayOptions>(
         {}, options.numberDisplayOptions, {
-          textOptions: { fill: options.matchLabelColors ? options.leftFillColorProperty : 'black', font: FRACTION_FONT }
+          textOptions: { fill: options.matchLabelColors ? options.leftFillColorProperty : 'black', font: fractionFont }
         } ) );
       rightNumberDisplay = new NumberDisplay( rightNumberProperty, NUMBER_DISPLAY_RANGE, combineOptions<NumberDisplayOptions>(
         {}, options.numberDisplayOptions, {
-          textOptions: { fill: options.matchLabelColors ? options.rightFillColorProperty : 'black', font: FRACTION_FONT }
+          textOptions: { fill: options.matchLabelColors ? options.rightFillColorProperty : 'black', font: fractionFont }
         } ) );
 
       const totalNumberDisplay = new NumberDisplay( totalNumberProperty, NUMBER_DISPLAY_RANGE, combineOptions<NumberDisplayOptions>(
         {}, options.numberDisplayOptions, {
-          textOptions: { font: FRACTION_FONT }
+          textOptions: { font: fractionFont }
         } ) );
 
       leftNumberDisplay = new FractionNode( leftNumberDisplay, totalNumberDisplay, {
@@ -125,27 +127,43 @@ export default class QuantumMeasurementHistogram extends Node {
       } );
     }
     else if ( options.displayMode === 'percent' ) {
-      const PERCENT_DISPLAY_OPTIONS: NumberDisplayOptions = {
+      const percentDisplayOptions: NumberDisplayOptions = {
         numberFormatter: value => `${Utils.toFixed( value * 100, 1 )}%`
       };
       leftNumberDisplay = new NumberDisplay( new DerivedProperty(
         [ leftNumberProperty, totalNumberProperty ],
         ( leftNumber, totalNumber ) => leftNumber / totalNumber
-      ), new Range( 0, 1 ), combineOptions<NumberDisplayOptions>( PERCENT_DISPLAY_OPTIONS, options.numberDisplayOptions ) );
+      ), new Range( 0, 1 ), combineOptions<NumberDisplayOptions>( percentDisplayOptions, options.numberDisplayOptions ) );
 
       rightNumberDisplay = new NumberDisplay( new DerivedProperty(
         [ rightNumberProperty, totalNumberProperty ],
         ( rightNumber, totalNumber ) => rightNumber / totalNumber
-      ), new Range( 0, 1 ), combineOptions<NumberDisplayOptions>( PERCENT_DISPLAY_OPTIONS, options.numberDisplayOptions ) );
+      ), new Range( 0, 1 ), combineOptions<NumberDisplayOptions>( percentDisplayOptions, options.numberDisplayOptions ) );
     }
-    else {
+    else if ( options.displayMode === 'rate' ) {
+      const rateDisplayOptions: NumberDisplayOptions = {
+        valuePattern: QuantumMeasurementStrings.eventsPerSecondPatternStringProperty,
+        rotation: options.orientation === 'vertical' ? 0 : -Math.PI / 2
+      };
+      leftNumberDisplay = new NumberDisplay( leftNumberProperty, NUMBER_DISPLAY_RANGE, combineOptions<NumberDisplayOptions>(
+        rateDisplayOptions, options.numberDisplayOptions, {
+          textOptions: { fill: options.matchLabelColors ? options.leftFillColorProperty : 'black' }
+        } ) );
+      rightNumberDisplay = new NumberDisplay( rightNumberProperty, NUMBER_DISPLAY_RANGE, combineOptions<NumberDisplayOptions>(
+        rateDisplayOptions, options.numberDisplayOptions, {
+          textOptions: { fill: options.matchLabelColors ? options.rightFillColorProperty : 'black' }
+        } ) );
+    }
+  else {
       leftNumberDisplay = new NumberDisplay( leftNumberProperty, NUMBER_DISPLAY_RANGE, combineOptions<NumberDisplayOptions>(
         {}, options.numberDisplayOptions, {
+          rotation: options.orientation === 'vertical' ? 0 : -Math.PI / 2,
           textOptions: { fill: options.matchLabelColors ? options.leftFillColorProperty : 'black' }
         } ) );
       rightNumberDisplay = new NumberDisplay( rightNumberProperty, NUMBER_DISPLAY_RANGE, combineOptions<NumberDisplayOptions>(
         {}, options.numberDisplayOptions, {
-          textOptions: { fill: options.matchLabelColors ? options.leftFillColorProperty : 'black' }
+          rotation: options.orientation === 'vertical' ? 0 : -Math.PI / 2,
+          textOptions: { fill: options.matchLabelColors ? options.rightFillColorProperty : 'black' }
         } ) );
     }
 
@@ -201,16 +219,20 @@ export default class QuantumMeasurementHistogram extends Node {
       stretch: false
     } );
 
-    leftNumberProperty.link( leftNumber => {
-      const proportion = totalNumberProperty.value ? leftNumber / totalNumberProperty.value : 0;
-      leftHistogramBar.setRect( 0, 0, options.barWidth, proportion * maxBarHeight );
-      numberBars.bottom = xAxis.centerY;
-    } );
-    rightNumberProperty.link( rightNumber => {
-      const proportion = totalNumberProperty.value ? rightNumber / totalNumberProperty.value : 0;
-      rightHistogramBar.setRect( 0, 0, options.barWidth, proportion * maxBarHeight );
-      numberBars.bottom = xAxis.centerY; // TODO: This is being called twice! https://github.com/phetsims/quantum-measurement/issues/22
-    } );
+    Multilink.multilink(
+      [
+        leftNumberProperty,
+        rightNumberProperty
+      ],
+      ( leftNumber, rightNumber ) => {
+        const leftProportion = totalNumberProperty.value ? leftNumber / totalNumberProperty.value : 0;
+        leftHistogramBar.setRect( 0, 0, options.barWidth, leftProportion * maxBarHeight );
+        numberBars.bottom = xAxis.centerY;
+        const rightProportion = totalNumberProperty.value ? rightNumber / totalNumberProperty.value : 0;
+        rightHistogramBar.setRect( 0, 0, options.barWidth, rightProportion * maxBarHeight );
+        numberBars.bottom = xAxis.centerY;
+      }
+    );
 
     // TODO: Why do alignboxes treat us so poorly? https://github.com/phetsims/quantum-measurement/issues/22
     options.children = [

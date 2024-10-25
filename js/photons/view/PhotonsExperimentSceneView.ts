@@ -7,7 +7,6 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -48,15 +47,15 @@ export default class PhotonsExperimentSceneView extends HBox {
       opacity: 0.1
     } );
 
-    const leftProperty = new NumberProperty( 10 );
-    const rightProperty = new NumberProperty( 30 );
+    const leftProperty = model.laser.emissionMode === 'singlePhoton' ? model.verticalPolarizationDetector.detectionCountProperty : model.verticalPolarizationDetector.detectionRateProperty;
+    const rightProperty = model.laser.emissionMode === 'singlePhoton' ? model.horizontalPolarizationDetector.detectionCountProperty : model.horizontalPolarizationDetector.detectionRateProperty;
     const countHistogram = new QuantumMeasurementHistogram( leftProperty, rightProperty, new BooleanProperty( true ),
       [
         new RichText( 'V', { font: new PhetFont( { size: 17, weight: 'bold' } ), fill: QuantumMeasurementColors.verticalPolarizationColorProperty } ),
         new RichText( 'H', { font: new PhetFont( { size: 17, weight: 'bold' } ) } )
       ],
       {
-        displayMode: 'fraction',
+        displayMode: model.laser.emissionMode === 'singlePhoton' ? 'fraction' : 'rate',
         orientation: 'horizontal',
         matchLabelColors: true,
         leftFillColorProperty: QuantumMeasurementColors.verticalPolarizationColorProperty,
