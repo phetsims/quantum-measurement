@@ -74,7 +74,8 @@ export default class PhotonsExperimentSceneModel {
       tandem: providedOptions.tandem.createTandem( 'mirror' )
     } );
 
-    // Create all photons that will be used in the experiment.
+    // Create all photons that will be used in the experiment.  It works better for phet-io if these are created at
+    // construction time and activated and deactivated as needed, rather than creating and destroying them.
     _.times( MAX_PHOTONS, index => {
       const photon = new Photon( providedOptions.tandem.createTandem( `photon${index}` ) );
       this.photons.push( photon );

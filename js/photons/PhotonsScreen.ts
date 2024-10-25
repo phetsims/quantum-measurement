@@ -26,7 +26,10 @@ export default class PhotonsScreen extends Screen<PhotonsModel, PhotonsScreenVie
 
     const options = optionize<QuantumMeasurementScreenOptions, SelfOptions, ScreenOptions>()( {
       name: QuantumMeasurementStrings.screen.photonsStringProperty,
-      backgroundColorProperty: QuantumMeasurementColors.screenBackgroundColorProperty
+      backgroundColorProperty: QuantumMeasurementColors.screenBackgroundColorProperty,
+
+      // Limit the max time step to 2x the nominal value.  This helps prevent add photon movements after screen changes.
+      maxDT: 1 / 30
     }, providedOptions );
 
     super(

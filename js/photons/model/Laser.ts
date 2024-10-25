@@ -16,7 +16,7 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import Photon, { RIGHT } from './Photon.js';
+import Photon, { PHOTON_SPEED, RIGHT } from './Photon.js';
 
 export type PhotonEmissionMode = 'singlePhoton' | 'manyPhotons';
 
@@ -102,14 +102,20 @@ export default class Laser {
 
   /**
    * Emits a photon from the laser.
+   * @param dt - Time step, in seconds.  This is used to set the x offset from the emission point.  If not provided, the
+   *             photon will be emitted at the exact X position of the laser.
    */
-  public emitAPhoton(): void {
+  public emitAPhoton( dt = 0 ): void {
     const photonToActivate = this.photons.find( photon => !photon.activeProperty.value );
     assert && assert( photonToActivate, 'no inactive photons available, increase the initial creation amount' );
     if ( photonToActivate ) {
 
       // Randomize the y position of the emitted photon so that the beam has some thickness.
       const yOffset = this.emittedBeamWidth / 2 * ( 1 - dotRandom.nextDouble() * 2 );
+
+      // Randomize the x position of the emitted photon so that we don't have big clumps of photons when large dt values
+      // occur.
+      const xOffset = dt * dotRandom.nextDouble() * PHOTON_SPEED;
 
       // Determine the polarization angle for the emitted photon.
       const polarizationAngle = this.presetPolarizationDirectionProperty.value === 'custom' ?
@@ -118,7 +124,7 @@ export default class Laser {
 
       // Activate the photon and set its position, direction, and polarization angle.
       photonToActivate.activeProperty.set( true );
-      photonToActivate.positionProperty.set( this.position.plusXY( 0, yOffset ) );
+      photonToActivate.positionProperty.set( this.position.plusXY( xOffset, yOffset ) );
       photonToActivate.directionProperty.set( this.emissionDirection );
       photonToActivate.polarizationAngleProperty.set( polarizationAngle );
     }
@@ -129,14 +135,18 @@ export default class Laser {
    */
   public step( dt: number ): void {
     const photonsToEmit = this.emissionRateProperty.value * dt;
+
+    // Emit the whole number of photons.
     const wholeNumberPhotonsToEmit = Math.floor( photonsToEmit );
-    _.times( wholeNumberPhotonsToEmit, this.emitAPhoton.bind( this ) );
+    _.times( wholeNumberPhotonsToEmit, () => this.emitAPhoton( dt ) );
+
+    // Update the fractional emission accumulator and emit any additional photons that are due to the fractional amount.
     this.fractionalEmissionAccumulator += photonsToEmit - wholeNumberPhotonsToEmit;
-    if ( this.fractionalEmissionAccumulator >= 1 ) {
-      const additionalPhotonsToEmit = Math.floor( this.fractionalEmissionAccumulator );
-      _.times( additionalPhotonsToEmit, this.emitAPhoton.bind( this ) );
-      this.fractionalEmissionAccumulator = this.fractionalEmissionAccumulator - additionalPhotonsToEmit;
-    }
+    const additionalPhotonsToEmit = Math.floor( this.fractionalEmissionAccumulator );
+    _.times( additionalPhotonsToEmit, () => {
+      this.emitAPhoton( dt );
+      this.fractionalEmissionAccumulator -= 1;
+    } );
   }
 
   /**
