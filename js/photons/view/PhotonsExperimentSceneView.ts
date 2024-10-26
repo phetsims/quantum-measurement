@@ -8,10 +8,12 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import Range from '../../../../dot/js/Range.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Color, HBox, HBoxOptions, Rectangle, RichText, VBox } from '../../../../scenery/js/imports.js';
+import Slider from '../../../../sun/js/Slider.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHistogram.js';
@@ -45,9 +47,16 @@ export default class PhotonsExperimentSceneView extends HBox {
              presetPolarizationDirection === 'fortyFiveDegrees' ? 45 :
              customPolarizationAngle;
     } );
+
+    const polarizationPlane = new PolarizationPlaneRepresentation(
+      polarizationAngleProperty, { scale: 2, tandem: providedOptions.tandem.createTandem( 'polarizationPlane' ) }
+    );
     const polarizationAngleControlBox = new VBox( {
       children: [
-        new PolarizationPlaneRepresentation( polarizationAngleProperty ),
+        polarizationPlane,
+        new Slider( polarizationPlane.xAxisOffsetAngleProperty, new Range( 0, 2 * Math.PI ), {
+          tandem: Tandem.OPT_OUT
+        } ),
         photonPolarizationAngleControl
       ],
       align: 'center'
