@@ -169,6 +169,13 @@ export default class PhotonDetector implements TPhotonInteraction {
     this.detectionSampleHistory.length = 0;
     this.timeSinceLastCountSample = 0;
   }
+
+  /**
+   * Resets just the detection count.
+   */
+  public resetDetectionCount(): void {
+    this.detectionCountProperty.reset();
+  }
 }
 
 quantumMeasurement.register( 'PhotonDetector', PhotonDetector );

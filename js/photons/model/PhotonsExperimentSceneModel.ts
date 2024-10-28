@@ -7,6 +7,7 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
+import Multilink from '../../../../axon/js/Multilink.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
@@ -70,6 +71,17 @@ export default class PhotonsExperimentSceneModel {
       tandem: providedOptions.tandem.createTandem( 'horizontalPolarizationDetector' )
     } );
 
+    // In the single photon mode, we want to reset the detection counts when the polarization direction changes.
+    if ( this.laser.emissionMode === 'singlePhoton' ) {
+      Multilink.multilink(
+        [ this.laser.presetPolarizationDirectionProperty, this.laser.customPolarizationAngleProperty ],
+        () => {
+          this.verticalPolarizationDetector.resetDetectionCount();
+          this.horizontalPolarizationDetector.resetDetectionCount();
+        }
+      );
+    }
+
     this.mirror = new Mirror( new Vector2( 0.25, 0 ), {
       tandem: providedOptions.tandem.createTandem( 'mirror' )
     } );
@@ -101,7 +113,7 @@ export default class PhotonsExperimentSceneModel {
     const activePhotons = this.photons.filter( photon => photon.activeProperty.value );
 
     // Gather the things that can potentially interact with the photons
-    const potentialInteractors : TPhotonInteraction[] = [
+    const potentialInteractors: TPhotonInteraction[] = [
       this.polarizingBeamSplitter,
       this.mirror,
       this.horizontalPolarizationDetector,
