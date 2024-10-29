@@ -40,19 +40,9 @@ export default class PhotonsExperimentSceneView extends Node {
 
         // Position empirically determined to match design doc.
         left: 55,
-        top: 90,
+        top: 20,
 
         tandem: providedOptions.tandem.createTandem( 'photonDetectionProbabilityPanel' )
-      }
-    );
-
-    const photonPolarizationAngleControl = new PhotonPolarizationAngleControl(
-      model.laser.presetPolarizationDirectionProperty,
-      model.laser.customPolarizationAngleProperty,
-      {
-        left: INSET,
-        bottom: QuantumMeasurementConstants.LAYOUT_BOUNDS.bottom - INSET,
-        tandem: providedOptions.tandem.createTandem( 'photonPolarizationAngleControl' )
       }
     );
 
@@ -70,7 +60,7 @@ export default class PhotonsExperimentSceneView extends Node {
     const photonTestingArea = new PhotonTestingArea( model, {
 
       // center position empirically determined to match design doc
-      center: new Vector2( 420, 335 ),
+      center: new Vector2( 420, 270 ),
 
       tandem: providedOptions.tandem.createTandem( 'photonTestingArea' )
     } );
@@ -81,6 +71,16 @@ export default class PhotonsExperimentSceneView extends Node {
       centerY: photonTestingArea.centerY,
       tandem: providedOptions.tandem.createTandem( 'polarizationIndicator' )
     } );
+
+    const photonPolarizationAngleControl = new PhotonPolarizationAngleControl(
+      model.laser.presetPolarizationDirectionProperty,
+      model.laser.customPolarizationAngleProperty,
+      {
+        left: INSET,
+        top: polarizationIndicator.bottom + 20,
+        tandem: providedOptions.tandem.createTandem( 'photonPolarizationAngleControl' )
+      }
+    );
 
     // Create the histogram that shows the detection counts for the vertical and horizontal detectors.
     const leftProperty = model.laser.emissionMode === 'singlePhoton' ? model.verticalPolarizationDetector.detectionCountProperty : model.verticalPolarizationDetector.detectionRateProperty;

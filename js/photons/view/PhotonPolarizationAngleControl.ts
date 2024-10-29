@@ -16,7 +16,7 @@ import Utils from '../../../../dot/js/Utils.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, Text, TextOptions, VBox } from '../../../../scenery/js/imports.js';
+import { Color, HBox, Text, TextOptions, VBox } from '../../../../scenery/js/imports.js';
 import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
 import HSlider from '../../../../sun/js/HSlider.js';
 import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
@@ -24,6 +24,7 @@ import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { PresetPolarizationDirections } from '../model/Laser.js';
+import PolarizationPlaneRepresentation from './PolarizationPlaneRepresentation.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhotonPolarizationAngleControlOptions = SelfOptions & WithRequired<PanelOptions, 'tandem'>;
@@ -118,9 +119,22 @@ export default class PhotonPolarizationAngleControl extends Panel {
     customAngleSlider.addMajorTick( 0, new Text( 0, TICK_MARK_TEXT_OPTIONS ) );
     customAngleSlider.addMajorTick( 90, new Text( 90, TICK_MARK_TEXT_OPTIONS ) );
 
-    const content = new VBox( {
+    // Assemble the title, radio button group, and slider into a VBox.
+    const leftPortionOfPanel = new VBox( {
       children: [ titleProperty, presetPolarizationDirectionRadioButtonGroup, customAngleSlider ],
       excludeInvisibleChildrenFromBounds: false,
+      align: 'left',
+      spacing: 10
+    } );
+
+    const polarizationIndicator = new PolarizationPlaneRepresentation( new NumberProperty( 0 ), {
+      scale: 1.2,
+      tandem: providedOptions.tandem.createTandem( 'polarizationIndicator' )
+    } );
+
+    // Put the left portion of the panel into and HBox with the polarization indicator.
+    const content = new HBox( {
+      children: [ leftPortionOfPanel, polarizationIndicator ],
       spacing: 10
     } );
 

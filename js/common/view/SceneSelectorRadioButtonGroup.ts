@@ -58,7 +58,7 @@ class SceneSelectorRadioButtonGroup<T extends string> extends RectangularRadioBu
           return new Text(
             stringProperty.value,
             {
-              font: new PhetFont( { size: 28, weight: 'bold' } ),
+              font: new PhetFont( { size: 26, weight: 'bold' } ),
               fill: value === 'quantum' ?
                     QuantumMeasurementColors.quantumSceneTextColorProperty :
                     QuantumMeasurementColors.classicalSceneTextColorProperty,

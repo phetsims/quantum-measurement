@@ -8,10 +8,12 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import LocalizedStringProperty from '../../../../chipper/js/LocalizedStringProperty.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
 import { Image } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import photonsScreenMockup_png from '../../../images/photonsScreenMockup_png.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
 import SceneSelectorRadioButtonGroup from '../../common/view/SceneSelectorRadioButtonGroup.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
@@ -32,14 +34,29 @@ export default class PhotonsScreenView extends QuantumMeasurementScreenView {
 
   public constructor( model: PhotonsModel, tandem: Tandem ) {
 
+    // Create the radio buttons that will sit at the top of the screen and will allow users to pick between the single-
+    // photon and many-photons experiment modes.
+    const experimentModeRadioButtonGroup = new SceneSelectorRadioButtonGroup<ExperimentModeType>(
+      model.experimentModeProperty,
+      EXPERIMENT_MODE_TO_STRING_MAP,
+      {
+        centerX: QuantumMeasurementConstants.LAYOUT_BOUNDS.centerX,
+        top: 15, // empirically determined to match design doc
+        tandem: tandem.createTandem( 'experimentModeRadioButtonGroup' )
+      }
+    );
+
+    // Create an "anchor point" for the scenes that is fixed relative to the screen.  This helps with the layout of the
+    // scenes - it keeps them in the same place relative to the screen regardless of the screen's size.
+    const sceneTranslation = new Vector2( 0, experimentModeRadioButtonGroup.bottom + 10 );
+
     // Create the views for the two scenes that can be shown on this screen.
     const singlePhotonExperimentSceneView = new PhotonsExperimentSceneView( model.singlePhotonSceneModel, {
       visibleProperty: new DerivedProperty(
         [ model.experimentModeProperty ],
         experimentMode => experimentMode === 'singlePhoton'
       ),
-      centerX: ScreenView.DEFAULT_LAYOUT_BOUNDS.centerX,
-      bottom: ScreenView.DEFAULT_LAYOUT_BOUNDS.height - 15,
+      translation: sceneTranslation,
       tandem: tandem.createTandem( 'singlePhotonExperimentSceneView' )
     } );
     const manyPhotonExperimentSceneView = new PhotonsExperimentSceneView( model.manyPhotonsExperimentSceneModel, {
@@ -47,8 +64,7 @@ export default class PhotonsScreenView extends QuantumMeasurementScreenView {
         [ model.experimentModeProperty ],
         experimentMode => experimentMode === 'manyPhotons'
       ),
-      centerX: ScreenView.DEFAULT_LAYOUT_BOUNDS.centerX + 2,
-      bottom: ScreenView.DEFAULT_LAYOUT_BOUNDS.height - 13,
+      translation: sceneTranslation,
       tandem: tandem.createTandem( 'manyPhotonExperimentSceneView' )
     } );
 
@@ -56,24 +72,12 @@ export default class PhotonsScreenView extends QuantumMeasurementScreenView {
       mockupImage: new Image( photonsScreenMockup_png, {
         scale: ScreenView.DEFAULT_LAYOUT_BOUNDS.width / photonsScreenMockup_png.width
       } ),
-      children: [ singlePhotonExperimentSceneView, manyPhotonExperimentSceneView ],
+      children: [ experimentModeRadioButtonGroup, singlePhotonExperimentSceneView, manyPhotonExperimentSceneView ],
       initialMockupOpacity: 0,
       tandem: tandem
     } );
 
     this.model = model;
-
-    // Add the radio buttons at the top of the screen that will allow users to pick between the single-photon and
-    // multi-photon experiment modes.
-    const experimentModeRadioButtonGroup = new SceneSelectorRadioButtonGroup<ExperimentModeType>(
-      model.experimentModeProperty,
-      EXPERIMENT_MODE_TO_STRING_MAP,
-      {
-        centerX: this.layoutBounds.centerX,
-        tandem: tandem.createTandem( 'experimentModeRadioButtonGroup' )
-      }
-    );
-    this.addChild( experimentModeRadioButtonGroup );
   }
 
   public override reset(): void {
