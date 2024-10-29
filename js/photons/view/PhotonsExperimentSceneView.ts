@@ -7,7 +7,6 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
@@ -34,8 +33,7 @@ export default class PhotonsExperimentSceneView extends Node {
   public constructor( model: PhotonsExperimentSceneModel, providedOptions: PhotonsExperimentSceneViewOptions ) {
 
     const photonDetectionProbabilityPanel = new PhotonDetectionProbabilityPanel(
-      model.laser.presetPolarizationDirectionProperty,
-      model.laser.customPolarizationAngleProperty,
+      model.laser.polarizationAngleProperty,
       {
 
         // Position empirically determined to match design doc.
@@ -46,17 +44,6 @@ export default class PhotonsExperimentSceneView extends Node {
       }
     );
 
-    // Derive the polarization angle from the model Properties.
-    const polarizationAngleProperty = new DerivedProperty( [
-      model.laser.customPolarizationAngleProperty,
-      model.laser.presetPolarizationDirectionProperty
-    ], ( customPolarizationAngle, presetPolarizationDirection ) => {
-      return presetPolarizationDirection === 'vertical' ? 90 :
-             presetPolarizationDirection === 'horizontal' ? 0 :
-             presetPolarizationDirection === 'fortyFiveDegrees' ? 45 :
-             customPolarizationAngle;
-    } );
-
     const photonTestingArea = new PhotonTestingArea( model, {
 
       // center position empirically determined to match design doc
@@ -65,17 +52,14 @@ export default class PhotonsExperimentSceneView extends Node {
       tandem: providedOptions.tandem.createTandem( 'photonTestingArea' )
     } );
 
-    const polarizationIndicator = new PolarizationPlaneRepresentation( polarizationAngleProperty, {
+    const polarizationIndicator = new PolarizationPlaneRepresentation( model.laser.polarizationAngleProperty, {
       scale: 1.5,
       centerX: photonDetectionProbabilityPanel.centerX,
       centerY: photonTestingArea.centerY,
       tandem: providedOptions.tandem.createTandem( 'polarizationIndicator' )
     } );
 
-    const photonPolarizationAngleControl = new PhotonPolarizationAngleControl(
-      model.laser.presetPolarizationDirectionProperty,
-      model.laser.customPolarizationAngleProperty,
-      {
+    const photonPolarizationAngleControl = new PhotonPolarizationAngleControl( model.laser, {
         left: INSET,
         top: polarizationIndicator.bottom + 20,
         tandem: providedOptions.tandem.createTandem( 'photonPolarizationAngleControl' )

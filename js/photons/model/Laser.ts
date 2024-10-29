@@ -7,8 +7,10 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -64,6 +66,10 @@ export default class Laser {
   // The custom polarization angle for the emitted photons.  This is only used when the preset direction is "custom".
   public readonly customPolarizationAngleProperty: NumberProperty;
 
+  // The polarization angle that is used for emission.  This is a derived - and thus read-only - property that is
+  // derived from the preset polarization direction and the custom polarization angle.
+  public readonly polarizationAngleProperty: TReadOnlyProperty<number>;
+
   // The set of photons that are used for emission.  This is a reference to the same array that is used in the scene model.
   private readonly photons: Photon[];
 
@@ -91,13 +97,20 @@ export default class Laser {
       tandem: providedOptions.tandem.createTandem( 'customPolarizationAngleProperty' )
     } );
 
-    // TODO: This is temporary code to log changes to the properties.  It will be removed later.  See https://github.com/phetsims/quantum-measurement/issues/52.
-    this.presetPolarizationDirectionProperty.lazyLink( presetPolarizationDirection => {
-      console.log( `presetPolarizationDirection = ${presetPolarizationDirection}` );
-    } );
-    this.customPolarizationAngleProperty.lazyLink( customPolarizationAngleProperty => {
-      console.log( `customPolarizationAngleProperty = ${customPolarizationAngleProperty}` );
-    } );
+
+    // Derive the polarization angle from the model Properties.
+    this.polarizationAngleProperty = new DerivedProperty(
+      [
+        this.customPolarizationAngleProperty,
+        this.presetPolarizationDirectionProperty
+      ],
+      ( customPolarizationAngle, presetPolarizationDirection ) => {
+        return presetPolarizationDirection === 'vertical' ? 90 :
+               presetPolarizationDirection === 'horizontal' ? 0 :
+               presetPolarizationDirection === 'fortyFiveDegrees' ? 45 :
+               customPolarizationAngle;
+      }
+    );
   }
 
   /**

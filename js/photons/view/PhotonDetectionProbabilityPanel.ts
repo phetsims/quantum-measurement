@@ -17,7 +17,6 @@ import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
-import { PresetPolarizationDirections } from '../model/Laser.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhotonDetectionProbabilityPanelOptions = SelfOptions & WithRequired<PanelOptions, 'tandem'>;
@@ -28,8 +27,7 @@ const BOLD_FONT = new PhetFont( { size: FONT_SIZE, weight: 'bold' } );
 
 export default class PhotonDetectionProbabilityPanel extends Panel {
 
-  public constructor( presetPolarizationDirectionProperty: TReadOnlyProperty<PresetPolarizationDirections>,
-                      customPolarizationAngleProperty: TReadOnlyProperty<number>,
+  public constructor( polarizationAngleProperty: TReadOnlyProperty<number>,
                       providedOptions: PhotonDetectionProbabilityPanelOptions ) {
 
     const options = optionize<PhotonDetectionProbabilityPanelOptions, SelfOptions, PanelOptions>()( {
@@ -37,19 +35,14 @@ export default class PhotonDetectionProbabilityPanel extends Panel {
       stroke: null
     }, providedOptions );
 
-    const probabilityOfVerticalProperty = new DerivedProperty(
-      [ presetPolarizationDirectionProperty, customPolarizationAngleProperty ],
-      ( presetPolarizationDirection, customPolarizationAngle ) => {
-        return presetPolarizationDirection === 'vertical' ? 1 :
-               presetPolarizationDirection === 'horizontal' ? 0 :
-               presetPolarizationDirection === 'fortyFiveDegrees' ? 0.5 :
-               1 - Math.cos( customPolarizationAngle ) ** 2;
-      }
+    const probabilityOfHorizontalProperty = new DerivedProperty(
+      [ polarizationAngleProperty ],
+      polarizationAngle => Math.cos( polarizationAngle * Math.PI / 180 ) ** 2
     );
 
-    const probabilityOfHorizontalProperty = new DerivedProperty(
-      [ probabilityOfVerticalProperty ],
-      probabilityOfVertical => 1 - probabilityOfVertical
+    const probabilityOfVerticalProperty = new DerivedProperty(
+      [ probabilityOfHorizontalProperty ],
+      probabilityOfHorizontal => 1 - probabilityOfHorizontal
     );
 
     const probabilityOfVerticalStringProperty = new DerivedProperty(

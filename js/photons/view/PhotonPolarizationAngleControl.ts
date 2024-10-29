@@ -8,8 +8,6 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import Property from '../../../../axon/js/Property.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
@@ -23,7 +21,7 @@ import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
-import { PresetPolarizationDirections } from '../model/Laser.js';
+import Laser from '../model/Laser.js';
 import PolarizationPlaneRepresentation from './PolarizationPlaneRepresentation.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -38,9 +36,7 @@ const TICK_MARK_TEXT_OPTIONS: TextOptions = {
 
 export default class PhotonPolarizationAngleControl extends Panel {
 
-  public constructor( presetPolarizationDirectionProperty: Property<PresetPolarizationDirections>,
-                      customPolarizationAngleProperty: NumberProperty,
-                      providedOptions: PhotonPolarizationAngleControlOptions ) {
+  public constructor( photonSource: Laser, providedOptions: PhotonPolarizationAngleControlOptions ) {
 
     const options = optionize<PhotonPolarizationAngleControlOptions, SelfOptions, PanelOptions>()( {
       fill: QuantumMeasurementColors.controlPanelFillColorProperty,
@@ -90,7 +86,7 @@ export default class PhotonPolarizationAngleControl extends Panel {
     ];
 
     const presetPolarizationDirectionRadioButtonGroup = new AquaRadioButtonGroup<string>(
-      presetPolarizationDirectionProperty,
+      photonSource.presetPolarizationDirectionProperty,
       radioButtonGroupItems,
       {
         spacing: 8,
@@ -103,8 +99,11 @@ export default class PhotonPolarizationAngleControl extends Panel {
 
     // Create a slider to control the custom angle of polarization.  It is only visible when the custom preset value
     // is selected.
-    const customAngleSlider = new HSlider( customPolarizationAngleProperty, new Range( 0, 90 ), {
-      visibleProperty: new DerivedProperty( [ presetPolarizationDirectionProperty ], value => value === 'custom' ),
+    const customAngleSlider = new HSlider( photonSource.customPolarizationAngleProperty, new Range( 0, 90 ), {
+      visibleProperty: new DerivedProperty(
+        [ photonSource.presetPolarizationDirectionProperty ],
+        value => value === 'custom'
+      ),
       trackSize: new Dimension2( 140, 1.5 ),
       thumbSize: new Dimension2( 13, 26 ),
       trackStroke: null,
@@ -127,7 +126,7 @@ export default class PhotonPolarizationAngleControl extends Panel {
       spacing: 10
     } );
 
-    const polarizationIndicator = new PolarizationPlaneRepresentation( new NumberProperty( 0 ), {
+    const polarizationIndicator = new PolarizationPlaneRepresentation( photonSource.polarizationAngleProperty, {
       scale: 1.2,
       tandem: providedOptions.tandem.createTandem( 'polarizationIndicator' )
     } );
