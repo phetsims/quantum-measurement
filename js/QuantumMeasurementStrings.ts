@@ -33,6 +33,7 @@ type StringsType = {
   'identicalCoinsStringProperty': LocalizedStringProperty;
   'initialOrientationStringProperty': LocalizedStringProperty;
   'basisStateStringProperty': LocalizedStringProperty;
+  'HStringProperty': LocalizedStringProperty;
   'itemToPreparePatternStringProperty': LocalizedStringProperty;
   'manyPhotonsStringProperty': LocalizedStringProperty;
   'mirrorStringProperty': LocalizedStringProperty;
@@ -43,6 +44,7 @@ type StringsType = {
   'polarizationDetectorLabelPatternStringProperty': LocalizedStringProperty;
   'polarizingBeamSplitterStringProperty': LocalizedStringProperty;
   'classicalCoinStringProperty': LocalizedStringProperty;
+  'PStringProperty': LocalizedStringProperty;
   'preparedStateStringProperty': LocalizedStringProperty;
   'probabilityStringProperty': LocalizedStringProperty;
   'probabilityOfValuePatternStringProperty': LocalizedStringProperty;
@@ -56,6 +58,7 @@ type StringsType = {
   'stateToPrepareStringProperty': LocalizedStringProperty;
   'tailsStringProperty': LocalizedStringProperty;
   'upStringProperty': LocalizedStringProperty;
+  'VStringProperty': LocalizedStringProperty;
   'verticalStringProperty': LocalizedStringProperty;
 };
 

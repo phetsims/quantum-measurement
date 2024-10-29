@@ -19,6 +19,7 @@ import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHistogram.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import PhotonsExperimentSceneModel from '../model/PhotonsExperimentSceneModel.js';
+import PhotonDetectionProbabilityPanel from './PhotonDetectionProbabilityPanel.js';
 import PhotonPolarizationAngleControl from './PhotonPolarizationAngleControl.js';
 import PhotonTestingArea from './PhotonTestingArea.js';
 import PolarizationPlaneRepresentation from './PolarizationPlaneRepresentation.js';
@@ -29,6 +30,11 @@ type PhotonsExperimentSceneViewOptions = SelfOptions & WithRequired<HBoxOptions,
 export default class PhotonsExperimentSceneView extends HBox {
 
   public constructor( model: PhotonsExperimentSceneModel, providedOptions: PhotonsExperimentSceneViewOptions ) {
+
+    const photonDetectionProbabilityPanel = new PhotonDetectionProbabilityPanel(
+      model.laser.presetPolarizationDirectionProperty,
+      model.laser.customPolarizationAngleProperty
+    );
 
     const photonPolarizationAngleControl = new PhotonPolarizationAngleControl(
       model.laser.presetPolarizationDirectionProperty,
@@ -53,6 +59,7 @@ export default class PhotonsExperimentSceneView extends HBox {
     );
     const polarizationAngleControlBox = new VBox( {
       children: [
+        photonDetectionProbabilityPanel,
         polarizationPlane,
         new Slider( polarizationPlane.xAxisOffsetAngleProperty, new Range( 0, 2 * Math.PI ), {
           tandem: Tandem.OPT_OUT
