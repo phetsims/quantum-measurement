@@ -7,11 +7,11 @@
  */
 
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import AbstractBlochSphere, { AbstractBlochSphereOptions } from '../../common/model/AbstractBlochSphere.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { SpinDirection } from './SpinDirection.js';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -20,7 +20,8 @@ export type SimpleBlochSphereOptions = SelfOptions & AbstractBlochSphereOptions;
 
 export default class SimpleBlochSphere extends AbstractBlochSphere {
 
-  public constructor( spinStateProperty: TReadOnlyProperty<SpinDirection>, providedOptions?: SimpleBlochSphereOptions ) {
+  // Spin state property is in XZ coordinates
+  public constructor( spinStateProperty: TReadOnlyProperty<Vector2>, providedOptions?: SimpleBlochSphereOptions ) {
 
     const options = optionize<SimpleBlochSphereOptions, SelfOptions, PhetioObjectOptions>()( {
 
@@ -29,16 +30,8 @@ export default class SimpleBlochSphere extends AbstractBlochSphere {
     super( options );
 
     spinStateProperty.link( spinState => {
-      this.azimutalAngleProperty.value = 0;
-      if ( spinState === SpinDirection.Z_PLUS ) {
-        this.polarAngleProperty.value = Math.PI / 2;
-      }
-      else if ( spinState === SpinDirection.Z_MINUS ) {
-        this.polarAngleProperty.value = -Math.PI / 2;
-      }
-      else if ( spinState === SpinDirection.X_PLUS ) {
-        this.polarAngleProperty.value = 0;
-      }
+      this.azimutalAngleProperty.value = Math.atan2( spinState.y, -spinState.x ) + Math.PI;
+      this.polarAngleProperty.value = Math.asin( spinState.y );
     } );
 
   }

@@ -7,13 +7,14 @@
  * @author Agustín Vallejo
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -23,7 +24,9 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import AbstractBlochSphere from '../model/AbstractBlochSphere.js';
 import QuantumMeasurementConstants from '../QuantumMeasurementConstants.js';
 
-type SelfOptions = EmptySelfOptions;
+type SelfOptions = {
+  drawKets?: boolean;
+};
 export type BlochSphereNodeOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
 
 // Constants
@@ -42,6 +45,8 @@ const AXES_OPTIONS = {
 export default class BlochSphereNode extends Node {
 
   public readonly xAxisOffsetAngleProperty: NumberProperty;
+
+  public readonly stateVectorVisibleProperty: BooleanProperty;
 
   public constructor(
     blochSphere: AbstractBlochSphere,
@@ -140,22 +145,26 @@ export default class BlochSphereNode extends Node {
       centerX: 0,
       centerY: -sphereRadius - 2 * LABELS_OFFSET,
       fill: 'black',
-      font: STATES_FONT
+      font: STATES_FONT,
+      visible: providedOptions.drawKets
     } );
 
     const downStateLabel = new Text( `|${DOWN}${KET}`, {
       centerX: 0,
       centerY: sphereRadius + 2 * LABELS_OFFSET,
       fill: 'black',
-      font: STATES_FONT
+      font: STATES_FONT,
+      visible: providedOptions.drawKets
     } );
 
+    const stateVectorVisibleProperty = new BooleanProperty( true );
     const stateVector = new ArrowNode( 0, 0, 0, -sphereRadius, {
       tandem: providedOptions.tandem.createTandem( 'stateVector' ),
       headWidth: 3,
       headHeight: 3,
       tailWidth: 0.1,
-      fill: 'black'
+      fill: 'black',
+      visibleProperty: stateVectorVisibleProperty
     } );
 
     // const ANGLE_INDICATOR_PATH_OPTIONS = {
@@ -205,12 +214,14 @@ export default class BlochSphereNode extends Node {
         stateVector
       ],
       // Increasing bounds horizontally so the labels have space to move
-      localBounds: new Bounds2( -1.5 * sphereRadius, -sphereRadius, 1.5 * sphereRadius, sphereRadius )
+      localBounds: new Bounds2( -1.5 * sphereRadius, -sphereRadius, 1.5 * sphereRadius, sphereRadius ),
+      drawKets: true
     }, providedOptions );
 
     super( options );
 
     this.xAxisOffsetAngleProperty = xAxisOffsetAngleProperty;
+    this.stateVectorVisibleProperty = stateVectorVisibleProperty;
   }
 }
 

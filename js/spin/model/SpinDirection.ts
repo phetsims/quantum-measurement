@@ -18,6 +18,7 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 
 export class SpinDirection extends EnumerationValue {
 
+
   // TODO: This should go in the strings file https://github.com/phetsims/quantum-measurement/issues/53
   public static readonly Z_PLUS = new SpinDirection( 'Z_PLUS', '"+Z"    ⟨Sz⟩ = +ħ/2', 'ZPlus' );
   public static readonly X_PLUS = new SpinDirection( 'X_PLUS', '"+X"    ⟨Sz⟩ = 0', 'XPlus' );

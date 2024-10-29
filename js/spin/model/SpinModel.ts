@@ -10,6 +10,8 @@
  * @author Agustín Vallejo
  */
 
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 import Property from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -17,10 +19,12 @@ import TModel from '../../../../joist/js/TModel.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import MeasurementLine, { MeasurementState } from './MeasurementLine.js';
 import ParticleRays from './ParticleRays.js';
 import ParticleSourceModel from './ParticleSourceModel.js';
 import { ParticleWithSpin } from './ParticleWithSpin.js';
 import SimpleBlochSphere from './SimpleBlochSphere.js';
+import { SourceMode } from './SourceMode.js';
 import { SpinDirection } from './SpinDirection.js';
 import SpinExperiment from './SpinExperiment.js';
 import SternGerlach from './SternGerlach.js';
@@ -53,6 +57,8 @@ export default class SpinModel implements TModel {
   public readonly secondSternGerlach: SternGerlach;
   public readonly thirdSternGerlach: SternGerlach;
 
+  public readonly measurementLines: MeasurementLine[];
+
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
     const MAX_NUMBER_OF_SINGLE_PARTICLES = 50;
@@ -61,15 +67,35 @@ export default class SpinModel implements TModel {
 
     this.particleSourceModel = new ParticleSourceModel( new Vector2( 0, 0 ), providedOptions.tandem.createTandem( 'particleSourceModel' ) );
 
+    const vectorSpinStateProperty = new DerivedProperty(
+      [ this.particleSourceModel.spinStateProperty ], spinState => SpinDirection.spinToVector( spinState )
+    );
     this.blochSphere = new SimpleBlochSphere(
-      this.particleSourceModel.spinStateProperty, {
-        tandem: providedOptions.tandem.createTandem( 'blochSphere' )
-      } );
+      vectorSpinStateProperty, { tandem: providedOptions.tandem.createTandem( 'blochSphere' ) }
+    );
 
-    const SternGerlachsTandem = providedOptions.tandem.createTandem( 'SternGerlachs' );
-    this.firstSternGerlach = new SternGerlach( new Vector2( 0.8, 0 ), true, SternGerlachsTandem.createTandem( 'firstSternGerlach' ) );
-    this.secondSternGerlach = new SternGerlach( new Vector2( 2, 0.3 ), false, SternGerlachsTandem.createTandem( 'secondSternGerlach' ) );
-    this.thirdSternGerlach = new SternGerlach( new Vector2( 2, -0.3 ), false, SternGerlachsTandem.createTandem( 'thirdSternGerlach' ) );
+    const sternGerlachsTandem = providedOptions.tandem.createTandem( 'SternGerlachs' );
+    this.firstSternGerlach = new SternGerlach( new Vector2( 0.8, 0 ), true, sternGerlachsTandem.createTandem( 'firstSternGerlach' ) );
+    this.secondSternGerlach = new SternGerlach( new Vector2( 2, 0.3 ), false, sternGerlachsTandem.createTandem( 'secondSternGerlach' ) );
+    this.thirdSternGerlach = new SternGerlach( new Vector2( 2, -0.3 ), false, sternGerlachsTandem.createTandem( 'thirdSternGerlach' ) );
+    const sternGerlachs = [ this.firstSternGerlach, this.secondSternGerlach, this.thirdSternGerlach ];
+
+
+    const measurementLinesTandem = providedOptions.tandem.createTandem( 'measurementLines' );
+    this.measurementLines = [
+      new MeasurementLine(
+        new Vector2( ( this.particleSourceModel.exitPositionProperty.value.x + this.firstSternGerlach.entrancePositionProperty.value.x ) / 2, 1 ),
+        { tandem: measurementLinesTandem.createTandem( 'firstMeasurementLine' ) }
+      ),
+      new MeasurementLine(
+        new Vector2( ( this.firstSternGerlach.topExitPositionProperty.value.x + this.secondSternGerlach.entrancePositionProperty.value.x ) / 2, 1 ),
+        { tandem: measurementLinesTandem.createTandem( 'secondMeasurementLine' ) }
+      ),
+      new MeasurementLine(
+        new Vector2( ( this.secondSternGerlach.topExitPositionProperty.value.x + this.secondSternGerlach.topExitPositionProperty.value.plusXY( 1, 0 ).x ) / 2, 1 ),
+        { tandem: measurementLinesTandem.createTandem( 'thirdMeasurementLine' ), isInitiallyActive: false }
+      )
+    ];
 
     this.particleRays = new ParticleRays(
       [
@@ -93,12 +119,6 @@ export default class SpinModel implements TModel {
         afterDestination: 'infinity'
       }
     ] );
-
-    this.currentExperimentProperty.link( experiment => {
-      this.particleRays.reset();
-      this.particleRays.isShortExperiment = experiment.isShortExperiment;
-      this.particleRays.updateExperiment();
-    } );
 
     this.singleParticles = _.times( MAX_NUMBER_OF_SINGLE_PARTICLES, id => {
       return new ParticleWithSpin( id );
@@ -129,16 +149,38 @@ export default class SpinModel implements TModel {
       }
     };
 
+    // Multilink for changes in the experiment either via source mode or experiment selection
+    Multilink.multilink(
+      [
+        this.currentExperimentProperty,
+        this.particleSourceModel.sourceModeProperty
+      ],
+      ( experiment, sourceMode ) => {
+        this.particleRays.reset();
+        this.particleRays.isShortExperiment = experiment.isShortExperiment;
+        this.particleRays.updateExperiment();
+        updateProbabilities( this.particleSourceModel.particleAmmountProperty.value );
+
+        const isSingle = sourceMode === SourceMode.SINGLE;
+        this.measurementLines[ 0 ].isActiveProperty.value = isSingle;
+        this.measurementLines[ 1 ].isActiveProperty.value = isSingle;
+        this.measurementLines[ 2 ].isActiveProperty.value = isSingle && !experiment.isShortExperiment;
+
+        this.measurementLines.forEach( line => line.measurementStateProperty.reset() );
+
+        this.singleParticles.forEach( particle => particle.reset() );
+      }
+    );
+
     this.particleSourceModel.particleAmmountProperty.link( particleAmmount => {
       updateProbabilities( particleAmmount );
     } );
 
-    const SternGerlachs = [ this.firstSternGerlach, this.secondSternGerlach, this.thirdSternGerlach ];
 
     this.currentExperimentProperty.link( experiment => {
       this.singleParticles.forEach( particle => particle.reset() );
 
-      SternGerlachs.forEach( ( SternGerlach, index ) => {
+      sternGerlachs.forEach( ( SternGerlach, index ) => {
         if ( experiment.experimentSetting.length > index ) {
           // TODO: Should visibility be only handled via the View? https://github.com/phetsims/quantum-measurement/issues/53
           SternGerlach.isVisibleProperty.set( experiment.experimentSetting[ index ].active );
@@ -170,18 +212,35 @@ export default class SpinModel implements TModel {
             const particleToActivate = this.singleParticles[ i ];
             particleToActivate.reset();
 
+            particleToActivate.firstSpinVector = SpinDirection.spinToVector( this.particleSourceModel.spinStateProperty.value );
+
             let upProbability = 1;
             upProbability = this.firstSternGerlach.prepare( this.particleSourceModel.spinStateProperty.value );
             particleToActivate.secondSpinUp = dotRandom.nextDouble() < upProbability;
+            particleToActivate.secondSpinVector = SpinDirection.spinToVector(
+              particleToActivate.secondSpinUp ?
+              this.firstSternGerlach.isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS :
+              this.firstSternGerlach.isZOrientedProperty.value ? SpinDirection.Z_MINUS : null
+            );
 
             if ( this.currentExperimentProperty.value.experimentSetting.length > 1 ) {
               if ( particleToActivate.secondSpinUp ) {
                 upProbability = this.secondSternGerlach.prepare( this.firstSternGerlach.isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS );
                 particleToActivate.thirdSpinUp = dotRandom.nextDouble() < upProbability;
+                particleToActivate.thirdSpinVector = SpinDirection.spinToVector(
+                  particleToActivate.thirdSpinUp ?
+                  this.secondSternGerlach.isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS :
+                  this.secondSternGerlach.isZOrientedProperty.value ? SpinDirection.Z_MINUS : null
+                );
               }
               else {
                 const upProbability = this.thirdSternGerlach.prepare( this.firstSternGerlach.isZOrientedProperty.value ? SpinDirection.Z_MINUS : null );
                 particleToActivate.thirdSpinUp = dotRandom.nextDouble() < upProbability;
+                particleToActivate.thirdSpinVector = SpinDirection.spinToVector(
+                  particleToActivate.thirdSpinUp ?
+                  this.thirdSternGerlach.isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS :
+                  this.thirdSternGerlach.isZOrientedProperty.value ? SpinDirection.Z_MINUS : null
+                );
               }
             }
 
@@ -221,6 +280,7 @@ export default class SpinModel implements TModel {
    */
   public reset(): void {
     this.singleParticles.forEach( particle => particle.reset() );
+    this.measurementLines.forEach( line => line.reset() );
     this.currentExperimentProperty.reset();
     this.particleSourceModel.spinStateProperty.reset();
     this.firstSternGerlach.reset();
@@ -234,7 +294,18 @@ export default class SpinModel implements TModel {
    * @param dt - time step, in seconds
    */
   public step( dt: number ): void {
-    this.singleParticles.forEach( particle => particle.step( dt ) );
+    this.singleParticles.forEach( particle => {
+      const behindMeasurementLine: boolean[] = this.measurementLines.map( line => line.isParticleBehind( particle.positionProperty.value ) );
+      particle.step( dt );
+
+      // If the particle crosses a measurement line, we update the line
+      this.measurementLines.forEach( ( line, index ) => {
+        if ( behindMeasurementLine[ index ] && !line.isParticleBehind( particle.positionProperty.value ) ) {
+          line.spinStateProperty.value = index === 0 ? particle.firstSpinVector : index === 1 ? particle.secondSpinVector : particle.thirdSpinVector;
+          line.measurementStateProperty.value = MeasurementState.MEASURING;
+        }
+      } );
+    } );
   }
 }
 
