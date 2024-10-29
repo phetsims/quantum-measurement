@@ -1,7 +1,8 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- *
+ * PhotonDetectionProbabilityPanel displays the probabilities for detection of photons being measured as vertically or
+ * horizontally polarized.
  *
  * @author John Blanco, PhET Interactive Simulations
  */
@@ -35,16 +36,30 @@ export default class PhotonDetectionProbabilityPanel extends Panel {
       stroke: null
     }, providedOptions );
 
+    // Calculate the probability of a photon being detected as horizontally polarized.
     const probabilityOfHorizontalProperty = new DerivedProperty(
       [ polarizationAngleProperty ],
       polarizationAngle => Math.cos( polarizationAngle * Math.PI / 180 ) ** 2
     );
 
+    // Calculate the probability of a photon being detected as vertically polarized.
     const probabilityOfVerticalProperty = new DerivedProperty(
       [ probabilityOfHorizontalProperty ],
       probabilityOfHorizontal => 1 - probabilityOfHorizontal
     );
 
+    // Create the string Properties that will be displayed in the panel.
+    const probabilityOfHorizontalStringProperty = new DerivedProperty(
+      [
+        probabilityOfHorizontalProperty,
+        QuantumMeasurementStrings.PStringProperty,
+        QuantumMeasurementStrings.HStringProperty,
+        QuantumMeasurementColors.horizontalPolarizationColorProperty
+      ],
+      ( probabilityOfHorizontal, pString, hString, horizontalColor ) => {
+        return `${pString}(${getColoredString( hString, horizontalColor )}) = ${Utils.toFixed( probabilityOfHorizontal, 2 )}`;
+      }
+    );
     const probabilityOfVerticalStringProperty = new DerivedProperty(
       [
         probabilityOfVerticalProperty,
@@ -57,18 +72,7 @@ export default class PhotonDetectionProbabilityPanel extends Panel {
       }
     );
 
-    const probabilityOfHorizontalStringProperty = new DerivedProperty(
-      [
-        probabilityOfHorizontalProperty,
-        QuantumMeasurementStrings.PStringProperty,
-        QuantumMeasurementStrings.HStringProperty,
-        QuantumMeasurementColors.horizontalPolarizationColorProperty
-      ],
-      ( probabilityOfHorizontal, pString, hString, horizontalColor ) => {
-        return `${pString}(${getColoredString( hString, horizontalColor )}) = ${Utils.toFixed( probabilityOfHorizontal, 2 )}`;
-      }
-    );
-
+    // Create the textual nodes and assemble them in a VBox.
     const title = new Text( QuantumMeasurementStrings.probabilityStringProperty, { font: BOLD_FONT } );
     const probabilityOfVerticalText = new RichText( probabilityOfVerticalStringProperty, { font: NORMAL_FONT } );
     const probabilityOfHorizontalText = new RichText( probabilityOfHorizontalStringProperty, { font: NORMAL_FONT } );
