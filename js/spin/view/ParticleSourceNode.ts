@@ -112,8 +112,10 @@ export default class ParticleSourceNode extends VBox {
         new AquaRadioButtonGroup( particleSourceModel.sourceModeProperty, SourceMode.enumeration.values.map( sourceMode => {
           return {
             value: sourceMode,
-            labelContent: sourceMode.sourceName,
             createNode: () => new Text( sourceMode.sourceName, { font: new PhetFont( 15 ) } ),
+            options: {
+              accessibleName: sourceMode.sourceName
+            },
             tandemName: `${sourceMode.tandemName}RadioButton`
           };
         } ), {
