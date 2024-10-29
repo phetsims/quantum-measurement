@@ -1,7 +1,7 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * ParticleWithSpinModel is the model for a particle with a predetermined spin. It has a lifetime, which will
+ * ParticleWithSpin is the model for a particle with a predetermined spin. It has a lifetime, which will
  * determine its position in the Ray Path, and a spin value, which will be modified as it passes through the SG apparatuses.
  *
  *
@@ -28,7 +28,7 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 // constants
 const SPEED_MULTIPLIER = 1.5;
 
-export class ParticleWithSpinModel {
+export class ParticleWithSpin {
 
   public lifetime = 0;
   public activeProperty: BooleanProperty;
@@ -138,4 +138,4 @@ export class ParticleWithSpinModel {
 }
 
 
-quantumMeasurement.register( 'ParticleWithSpinModel', ParticleWithSpinModel );
+quantumMeasurement.register( 'ParticleWithSpin', ParticleWithSpin );

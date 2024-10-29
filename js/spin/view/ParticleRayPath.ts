@@ -18,7 +18,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import ParticleRays from '../model/ParticleRays.js';
-import { ParticleWithSpinModel } from '../model/ParticleWithSpinModel.js';
+import { ParticleWithSpin } from '../model/ParticleWithSpin.js';
 import { SourceMode } from '../model/SourceMode.js';
 
 export default class ParticleRayPath extends Node {
@@ -27,7 +27,7 @@ export default class ParticleRayPath extends Node {
     particleRays: ParticleRays,
     modelViewTransform: ModelViewTransform2,
     sourceModeProperty: TReadOnlyProperty<SourceMode>,
-    particles: ParticleWithSpinModel[],
+    particles: ParticleWithSpin[],
     tandem: Tandem ) {
 
     const rayPathOptions: PathOptions = {

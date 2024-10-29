@@ -20,7 +20,7 @@
 import Emitter from '../../../../axon/js/Emitter.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { ParticleWithSpinModel } from './ParticleWithSpinModel.js';
+import { ParticleWithSpin } from './ParticleWithSpin.js';
 import SternGerlach from './SternGerlach.js';
 
 type SternGerlachConnection = {
@@ -74,7 +74,7 @@ export default class ParticleRays {
     this.updatedEmitter.emit();
   }
 
-  public assignRayToParticle( particle: ParticleWithSpinModel ): void {
+  public assignRayToParticle( particle: ParticleWithSpin ): void {
     if ( this.isShortExperiment ) {
       particle.path = [
         ...this.allPossiblePaths[ 0 ], // Source to SG1

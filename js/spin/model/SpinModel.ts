@@ -10,7 +10,6 @@
  * @author Agustín Vallejo
  */
 
-import Emitter from '../../../../axon/js/Emitter.js';
 import Property from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -20,14 +19,14 @@ import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import ParticleRays from './ParticleRays.js';
 import ParticleSourceModel from './ParticleSourceModel.js';
-import { ParticleWithSpinModel } from './ParticleWithSpinModel.js';
+import { ParticleWithSpin } from './ParticleWithSpin.js';
 import SimpleBlochSphere from './SimpleBlochSphere.js';
 import { SpinDirection } from './SpinDirection.js';
 import SpinExperiment from './SpinExperiment.js';
 import SternGerlach from './SternGerlach.js';
 
 type SelfOptions = {
-  // TODO add options that are specific to QuantumMeasurementModel here, see see https://github.com/phetsims/quantum-preparement/issues/1.
+  // TODO add options that are specific to QuantumMeasurementModel here, see see https://github.com/phetsims/quantum-measurement/issues/1.
 };
 
 type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
@@ -37,7 +36,7 @@ export default class SpinModel implements TModel {
   public readonly blochSphere: SimpleBlochSphere;
 
   // Single particles shot by the user transversing the experiment
-  public readonly singleParticles: ParticleWithSpinModel[];
+  public readonly singleParticles: ParticleWithSpin[];
 
   public readonly currentExperimentProperty: Property<SpinExperiment>;
 
@@ -53,10 +52,6 @@ export default class SpinModel implements TModel {
   public readonly firstSternGerlach: SternGerlach;
   public readonly secondSternGerlach: SternGerlach;
   public readonly thirdSternGerlach: SternGerlach;
-
-  // Used to update the opacities of the particle rays
-  // TODO: Better naming?? https://github.com/phetsims/quantum-preparement/issues/53
-  public readonly probabilitiesUpdatedEmitter: Emitter = new Emitter();
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
@@ -106,10 +101,10 @@ export default class SpinModel implements TModel {
     } );
 
     this.singleParticles = _.times( MAX_NUMBER_OF_SINGLE_PARTICLES, id => {
-      return new ParticleWithSpinModel( id );
+      return new ParticleWithSpin( id );
     } );
 
-    // TODO: Maybe integrate with the ParticleRay constructor? https://github.com/phetsims/quantum-preparement/issues/53
+    // TODO: Maybe integrate with the ParticleRay constructor? https://github.com/phetsims/quantum-measurement/issues/53
 
     const updateProbabilities = ( particleAmmount: number ) => {
       if ( this.particleRays.isShortExperiment ) {
@@ -138,10 +133,6 @@ export default class SpinModel implements TModel {
       updateProbabilities( particleAmmount );
     } );
 
-    this.probabilitiesUpdatedEmitter.addListener( () => {
-      updateProbabilities( this.particleSourceModel.particleAmmountProperty.value );
-    } );
-
     const SternGerlachs = [ this.firstSternGerlach, this.secondSternGerlach, this.thirdSternGerlach ];
 
     this.currentExperimentProperty.link( experiment => {
@@ -149,7 +140,7 @@ export default class SpinModel implements TModel {
 
       SternGerlachs.forEach( ( SternGerlach, index ) => {
         if ( experiment.experimentSetting.length > index ) {
-          // TODO: Should visibility be only handled via the View? https://github.com/phetsims/quantum-preparement/issues/53
+          // TODO: Should visibility be only handled via the View? https://github.com/phetsims/quantum-measurement/issues/53
           SternGerlach.isVisibleProperty.set( experiment.experimentSetting[ index ].active );
           SternGerlach.isZOrientedProperty.set( experiment.experimentSetting[ index ].isZOriented );
         }
@@ -175,7 +166,7 @@ export default class SpinModel implements TModel {
         for ( let i = 0; i < MAX_NUMBER_OF_SINGLE_PARTICLES; i++ ) {
           if ( !this.singleParticles[ i ].activeProperty.value ) {
 
-            // TODO: filter? https://github.com/phetsims/quantum-preparement/issues/53
+            // TODO: filter? https://github.com/phetsims/quantum-measurement/issues/53
             const particleToActivate = this.singleParticles[ i ];
             particleToActivate.reset();
 
@@ -223,8 +214,6 @@ export default class SpinModel implements TModel {
       );
 
     }
-
-    this.probabilitiesUpdatedEmitter.emit();
   }
 
   /**
