@@ -16,7 +16,7 @@ import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
-export const PHOTON_SPEED = 0.2; // meters per second
+export const PHOTON_SPEED = 0.3; // meters per second
 
 // pre-fab unit vectors for the four cardinal directions
 export const UP = new Vector2( 0, 1 );
