@@ -16,23 +16,27 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
-import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
+import ArrowNode, { ArrowNodeOptions } from '../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Node, NodeOptions, Path, Text } from '../../../../scenery/js/imports.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
 type SelfOptions = EmptySelfOptions;
 export type PolarizationPlaneRepresentationOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
 
 // Constants
-const AXES_STROKE = 'black';
+const AXES_COLOR = 'black';
 const AXES_LINE_WIDTH = 0.5;
-const LABELS_OFFSET = 5;
-const LABELS_FONT = new PhetFont( { size: 5, weight: 'bold' } );
+const LABELS_OFFSET = 15;
+const LABELS_FONT = new PhetFont( { size: 10, weight: 'bold' } );
 
-const AXES_OPTIONS = {
-  stroke: AXES_STROKE,
-  lineWidth: AXES_LINE_WIDTH
+const AXES_OPTIONS: ArrowNodeOptions = {
+  stroke: AXES_COLOR,
+  fill: AXES_COLOR,
+  tailWidth: AXES_LINE_WIDTH,
+  headWidth: 2,
+  headHeight: 2
 };
 
 export default class PolarizationPlaneRepresentation extends Node {
@@ -57,64 +61,31 @@ export default class PolarizationPlaneRepresentation extends Node {
       opacity: 0.3
     } );
 
-    const xAxis = new Path( null, AXES_OPTIONS );
-    const yAxis = new Path( null, AXES_OPTIONS );
-    const zAxis = new Path( null, AXES_OPTIONS );
+    const xAxis = new ArrowNode( 0, 0, 0, 0, AXES_OPTIONS );
+    const yAxis = new ArrowNode( 0, 0, 0, 0, AXES_OPTIONS );
+    const yAxisLine = new Path( null, {
+      stroke: AXES_COLOR,
+      lineWidth: AXES_LINE_WIDTH * 3,
+      lineDash: [ 2, 2 ]
+    } );
+    const zAxis = new ArrowNode( 0, 0, 0, -sphereRadius, AXES_OPTIONS );
 
-    const xAxisLabel = new Text( 'X', {
+    const yAxisLabel = new Text( 'Propagation', {
       fill: 'black',
+      font: new PhetFont( 8 )
+    } );
+    const xAxisLabel = new Text( 'H', {
+      fill: QuantumMeasurementColors.horizontalPolarizationColorProperty,
       font: LABELS_FONT
     } );
-    const yAxisLabel = new Text( 'Y', {
-      fill: 'black',
-      font: LABELS_FONT
-    } );
-    const zAxisLabel = new Text( 'Z', {
-      centerX: -LABELS_OFFSET,
-      centerY: -sphereRadius + LABELS_OFFSET,
-      fill: 'black',
+    const zAxisLabel = new Text( 'V', {
+      centerY: -sphereRadius - LABELS_OFFSET,
+      centerX: 0,
+      fill: QuantumMeasurementColors.verticalPolarizationColorProperty,
       font: LABELS_FONT
     } );
 
     const xAxisOffsetAngleProperty = new NumberProperty( Utils.toRadians( 320 ) );
-
-    xAxisOffsetAngleProperty.link( xAxisOffsetAngle => {
-      pointOnTheEquator = ( azimuth: number ) => {
-        return new Vector2(
-          equatorSemiMajorAxis * Math.sin( azimuth + xAxisOffsetAngle ),
-          equatorSemiMajorAxis * Math.cos( azimuth + xAxisOffsetAngle ) * Math.sin( equatorInclinationAngle )
-        );
-      };
-
-      pointOnTheSphere = ( azimuth: number, polar: number ) => {
-        return new Vector2(
-          equatorSemiMajorAxis * Math.sin( azimuth + xAxisOffsetAngle ) * Math.cos( polar ),
-          equatorSemiMajorAxis *
-          ( -Math.sin( polar ) + Math.cos( azimuth + xAxisOffsetAngle ) * Math.sin( equatorInclinationAngle ) * Math.cos( polar ) )
-        );
-      };
-
-      pointOnTheXZPlane = ( polarizationAngle: number ) => {
-        return pointOnTheSphere( 0, polarizationAngle );
-      };
-
-      const plusX = pointOnTheEquator( 0 );
-      const minusX = pointOnTheEquator( Math.PI );
-      xAxis.shape = new Shape().moveTo( plusX.x, plusX.y ).lineTo( minusX.x, minusX.y );
-
-      const plusY = pointOnTheEquator( Math.PI / 2 );
-      const minusY = pointOnTheEquator( -Math.PI / 2 );
-      yAxis.shape = new Shape().moveTo( plusY.x, plusY.y ).lineTo( minusY.x, minusY.y );
-      zAxis.shape = new Shape().moveTo( 0, -sphereRadius ).lineTo( 0, sphereRadius );
-
-      xAxisLabel.centerX = plusX.x + LABELS_OFFSET;
-      xAxisLabel.centerY = plusX.y;
-      yAxisLabel.centerX = plusY.x;
-      yAxisLabel.centerY = plusY.y - LABELS_OFFSET;
-
-      XZPlane.shape = new Shape().ellipse( 0, 0, sphereRadius * Math.sin( xAxisOffsetAngle ), sphereRadius, 0 );
-
-    } );
 
     const polarizationVectorOptions = {
       headWidth: 6,
@@ -126,31 +97,7 @@ export default class PolarizationPlaneRepresentation extends Node {
     const polarizationVectorPlus = new ArrowNode( 0, 0, 0, -sphereRadius, polarizationVectorOptions );
     const polarizationVectorMinus = new ArrowNode( 0, 0, 0, sphereRadius, polarizationVectorOptions );
 
-    Multilink.multilink(
-      [
-        polarizationAngleProperty,
-        xAxisOffsetAngleProperty
-      ], ( polarizationAngle, xAxisOffsetAngle ) => {
-        const tipPlus = pointOnTheXZPlane( Utils.toRadians( -polarizationAngle ) );
-        const tipMinus = pointOnTheXZPlane( Utils.toRadians( -polarizationAngle ) + Math.PI );
-
-        polarizationVectorPlus.setTip( tipPlus.x, tipPlus.y );
-        polarizationVectorMinus.setTip( tipMinus.x, tipMinus.y );
-      }
-    );
-
     const options = optionize<PolarizationPlaneRepresentationOptions, SelfOptions, NodeOptions>()( {
-      children: [
-        XZPlane,
-        polarizationVectorPlus,
-        polarizationVectorMinus,
-        xAxis,
-        yAxis,
-        zAxis,
-        xAxisLabel,
-        yAxisLabel,
-        zAxisLabel
-      ],
       // Increasing bounds horizontally so the labels have space to move
       localBounds: new Bounds2( -1.5 * sphereRadius, -sphereRadius, 1.5 * sphereRadius, sphereRadius )
     }, providedOptions );
@@ -158,6 +105,89 @@ export default class PolarizationPlaneRepresentation extends Node {
     super( options );
 
     this.xAxisOffsetAngleProperty = xAxisOffsetAngleProperty;
+
+
+    Multilink.multilink(
+      [
+        polarizationAngleProperty,
+        xAxisOffsetAngleProperty
+      ], ( polarizationAngle, xAxisOffsetAngle ) => {
+        pointOnTheEquator = ( azimuth: number ) => {
+          return new Vector2(
+            equatorSemiMajorAxis * Math.sin( azimuth + xAxisOffsetAngle ),
+            equatorSemiMajorAxis * Math.cos( azimuth + xAxisOffsetAngle ) * Math.sin( equatorInclinationAngle )
+          );
+        };
+
+        pointOnTheSphere = ( azimuth: number, polar: number ) => {
+          return new Vector2(
+            equatorSemiMajorAxis * Math.sin( azimuth + xAxisOffsetAngle ) * Math.cos( polar ),
+            equatorSemiMajorAxis *
+            ( -Math.sin( polar ) + Math.cos( azimuth + xAxisOffsetAngle ) * Math.sin( equatorInclinationAngle ) * Math.cos( polar ) )
+          );
+        };
+
+        pointOnTheXZPlane = ( polarizationAngle: number ) => {
+          return pointOnTheSphere( 0, polarizationAngle );
+        };
+
+        const tipPlus = pointOnTheXZPlane( Utils.toRadians( -polarizationAngle ) );
+        const tipMinus = pointOnTheXZPlane( Utils.toRadians( -polarizationAngle ) + Math.PI );
+
+        polarizationVectorPlus.setTip( tipPlus.x, tipPlus.y );
+        polarizationVectorMinus.setTip( tipMinus.x, tipMinus.y );
+
+        const plusX = pointOnTheEquator( 0 );
+        xAxis.setTip( plusX.x, plusX.y );
+
+        const plusY = pointOnTheEquator( Math.PI / 2 );
+        yAxis.setTip( plusY.x, plusY.y );
+        yAxis.setTail( plusY.times( 0.9 ).x, plusY.times( 0.9 ).y );
+        yAxisLine.shape = new Shape().moveTo( 0, 0 ).lineTo( plusY.x, plusY.y );
+
+
+        // Rotate the axis outside the arrow nodes
+        xAxisLabel.centerX = plusX.times( 1.4 ).x;
+        xAxisLabel.centerY = plusX.times( 1.4 ).y;
+
+        yAxisLabel.centerX = plusY.x;
+        yAxisLabel.centerY = plusY.y + 0.5 * LABELS_OFFSET;
+
+        XZPlane.shape = new Shape().ellipse( 0, 0, sphereRadius * Math.sin( xAxisOffsetAngle ), sphereRadius, 0 );
+
+        if ( Math.sin( xAxisOffsetAngle ) < 0 ) {
+          this.children = [
+            // Polarization vector drawn in front
+            XZPlane,
+            xAxis,
+            zAxis,
+            xAxisLabel,
+            zAxisLabel,
+            polarizationVectorPlus,
+            polarizationVectorMinus,
+            yAxis,
+            yAxisLine,
+            yAxisLabel
+          ];
+        }
+        else {
+          this.children = [
+            // Polarization vector drawn in the back
+            yAxis,
+            yAxisLine,
+            yAxisLabel,
+            polarizationVectorMinus,
+            polarizationVectorPlus,
+            XZPlane,
+            xAxis,
+            zAxis,
+            xAxisLabel,
+            zAxisLabel
+          ];
+        }
+      }
+    );
+
   }
 }
 
