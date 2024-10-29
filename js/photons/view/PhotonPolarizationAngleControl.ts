@@ -133,8 +133,7 @@ export default class PhotonPolarizationAngleControl extends Panel {
 
     // Put the left portion of the panel into and HBox with the polarization indicator.
     const content = new HBox( {
-      children: [ leftPortionOfPanel, polarizationIndicator ],
-      spacing: 10
+      children: [ leftPortionOfPanel, polarizationIndicator ]
     } );
 
     super( content, options );
