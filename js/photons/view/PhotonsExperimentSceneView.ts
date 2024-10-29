@@ -94,8 +94,8 @@ export default class PhotonsExperimentSceneView extends Node {
         new RichText( 'H', { font: new PhetFont( { size: 17, weight: 'bold' } ) } )
       ],
       {
-        right: QuantumMeasurementConstants.LAYOUT_BOUNDS.right - INSET,
-        centerY: QuantumMeasurementConstants.LAYOUT_BOUNDS.centerY,
+        right: QuantumMeasurementConstants.LAYOUT_BOUNDS.right - 180,
+        centerY: photonTestingArea.centerY,
         displayMode: model.laser.emissionMode === 'singlePhoton' ? 'fraction' : 'rate',
         orientation: 'horizontal',
         matchLabelColors: true,
