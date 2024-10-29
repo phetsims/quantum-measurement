@@ -1,6 +1,6 @@
 // Copyright 2024, University of Colorado Boulder
 /**
- * Visual representation of the Bloch Sphere, meaning an orb with axis and the state vector.
+ * Visual representation of the polarization plane, meaning a set of axes and an indicator of the polarization angle.
  *
  * // TODO: Show the angle indicators and clean code, see https://github.com/phetsims/quantum-measurement/issues/44
  *

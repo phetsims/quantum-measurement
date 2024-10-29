@@ -30,8 +30,8 @@ export default class PhotonTestingArea extends Node {
     const photonTestingAreaModelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       // TODO: Revise and document this when all element have been added, see https://github.com/phetsims/quantum-measurement/issues/52
       Vector2.ZERO,
-      new Vector2( 100, 100 ),
-      500 // empirically determined
+      Vector2.ZERO,
+      640 // empirically determined
     );
 
     const laserNode = new LaserNode( model.laser, photonTestingAreaModelViewTransform, {

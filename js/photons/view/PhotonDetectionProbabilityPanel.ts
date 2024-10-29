@@ -9,22 +9,33 @@
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Color, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
-import Panel from '../../../../sun/js/Panel.js';
+import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { PresetPolarizationDirections } from '../model/Laser.js';
 
-const FONT_SIZE = 16;
+type SelfOptions = EmptySelfOptions;
+type PhotonDetectionProbabilityPanelOptions = SelfOptions & WithRequired<PanelOptions, 'tandem'>;
+
+const FONT_SIZE = 18;
 const NORMAL_FONT = new PhetFont( FONT_SIZE );
 const BOLD_FONT = new PhetFont( { size: FONT_SIZE, weight: 'bold' } );
 
 export default class PhotonDetectionProbabilityPanel extends Panel {
 
   public constructor( presetPolarizationDirectionProperty: TReadOnlyProperty<PresetPolarizationDirections>,
-                      customPolarizationAngleProperty: TReadOnlyProperty<number> ) {
+                      customPolarizationAngleProperty: TReadOnlyProperty<number>,
+                      providedOptions: PhotonDetectionProbabilityPanelOptions ) {
+
+    const options = optionize<PhotonDetectionProbabilityPanelOptions, SelfOptions, PanelOptions>()( {
+      fill: QuantumMeasurementColors.screenBackgroundColorProperty,
+      stroke: null
+    }, providedOptions );
 
     const probabilityOfVerticalProperty = new DerivedProperty(
       [ presetPolarizationDirectionProperty, customPolarizationAngleProperty ],
@@ -33,7 +44,6 @@ export default class PhotonDetectionProbabilityPanel extends Panel {
                presetPolarizationDirection === 'horizontal' ? 0 :
                presetPolarizationDirection === 'fortyFiveDegrees' ? 0.5 :
                1 - Math.cos( customPolarizationAngle ) ** 2;
-        // Math.sin( ( customPolarizationAngle - 90 ) * Math.PI / 180 ) ** 2;
       }
     );
 
@@ -71,12 +81,10 @@ export default class PhotonDetectionProbabilityPanel extends Panel {
     const probabilityOfHorizontalText = new RichText( probabilityOfHorizontalStringProperty, { font: NORMAL_FONT } );
     const content = new VBox( {
       children: [ title, probabilityOfVerticalText, probabilityOfHorizontalText ],
-      spacing: 10
+      spacing: 15
     } );
-    super( content, {
-      fill: QuantumMeasurementColors.screenBackgroundColorProperty,
-      stroke: null
-    } );
+
+    super( content, options );
   }
 }
 
