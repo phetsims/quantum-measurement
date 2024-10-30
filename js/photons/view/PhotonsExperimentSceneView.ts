@@ -11,7 +11,8 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Node, NodeOptions, RichText } from '../../../../scenery/js/imports.js';
+import { Node, NodeOptions, RichText, Text } from '../../../../scenery/js/imports.js';
+import Panel from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
@@ -66,6 +67,21 @@ export default class PhotonsExperimentSceneView extends Node {
       }
     );
 
+    // Create a sort of "title panel" for the area on the right that shows information about the detection statistics.
+    const averagePolarizationRateTitlePanel = new Panel(
+      new Text( 'Average Polarization Rate', { font: new PhetFont( 18 ) } ),
+      {
+        fill: QuantumMeasurementColors.controlPanelFillColorProperty,
+        stroke: null,
+        cornerRadius: 4,
+        xMargin: 20,
+        yMargin: 10,
+        align: 'center',
+        right: QuantumMeasurementConstants.LAYOUT_BOUNDS.right - 20,
+        top: 0
+      }
+    );
+
     // Create the histogram that shows the detection counts for the vertical and horizontal detectors.
     const leftProperty = model.laser.emissionMode === 'singlePhoton' ? model.verticalPolarizationDetector.detectionCountProperty : model.verticalPolarizationDetector.detectionRateProperty;
     const rightProperty = model.laser.emissionMode === 'singlePhoton' ? model.horizontalPolarizationDetector.detectionCountProperty : model.horizontalPolarizationDetector.detectionRateProperty;
@@ -87,7 +103,8 @@ export default class PhotonsExperimentSceneView extends Node {
         rightFillColorProperty: QuantumMeasurementColors.horizontalPolarizationColorProperty,
         visibleProperty: new BooleanProperty( true ),
         tandem: Tandem.OPT_OUT
-      } );
+      }
+    );
 
     const options = optionize<PhotonsExperimentSceneViewOptions, SelfOptions, NodeOptions>()( {
       children: [
@@ -95,6 +112,7 @@ export default class PhotonsExperimentSceneView extends Node {
         polarizationIndicator,
         photonPolarizationAngleControl,
         photonTestingArea,
+        averagePolarizationRateTitlePanel,
         countHistogram
       ]
     }, providedOptions );

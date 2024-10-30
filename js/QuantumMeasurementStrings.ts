@@ -19,6 +19,7 @@ type StringsType = {
     'spinStringProperty': LocalizedStringProperty;
     'blochSphereStringProperty': LocalizedStringProperty;
   };
+  'averagePolarizationRateStringProperty': LocalizedStringProperty;
   'coinStringProperty': LocalizedStringProperty;
   'coinBiasStringProperty': LocalizedStringProperty;
   'customStringProperty': LocalizedStringProperty;
