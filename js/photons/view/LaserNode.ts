@@ -50,8 +50,10 @@ export default class LaserNode extends Node {
       bodySize: laserBodySize,
       nozzleSize: nozzleSize,
       hasButton: model.emissionMode === 'singlePhoton',
-      buttonRadius: 18,
       buttonType: 'momentary',
+      buttonOptions: {
+        radius: 18
+      },
       right: modelViewTransform.modelToViewX( model.position.x ),
       centerY: modelViewTransform.modelToViewY( model.position.y ),
       tandem: providedOptions.tandem.createTandem( 'laserPointerNode' )
