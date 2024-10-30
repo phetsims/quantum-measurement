@@ -53,25 +53,23 @@ export default class SpinMeasurementArea extends VBox {
 
     const particleSourceNode = new ParticleSourceNode( model.particleSourceModel, modelViewTransform, tandem.createTandem( 'particleSourceNode' ) );
 
-    const firstSternGerlachNode = new SternGerlachNode( model.firstSternGerlach, modelViewTransform, tandem.createTandem( 'firstSternGerlachNode' ) );
-    const secondSternGerlachNode = new SternGerlachNode( model.secondSternGerlach, modelViewTransform, tandem.createTandem( 'secondSternGerlachNode' ) );
-    const thirdSternGerlachNode = new SternGerlachNode( model.thirdSternGerlach, modelViewTransform, tandem.createTandem( 'thirdSternGerlachNode' ) );
+    const sternGerlachNodes = [
+      new SternGerlachNode( model.sternGerlachs[ 0 ], modelViewTransform, tandem.createTandem( 'firstSternGerlachNode' ) ),
+      new SternGerlachNode( model.sternGerlachs[ 1 ], modelViewTransform, tandem.createTandem( 'secondSternGerlachNode' ) ),
+      new SternGerlachNode( model.sternGerlachs[ 2 ], modelViewTransform, tandem.createTandem( 'thirdSternGerlachNode' ) )
+    ];
 
-    const firstMeasurementLine = new MeasurementLineNode( model.measurementLines[ 0 ], modelViewTransform, { tandem: tandem.createTandem( 'firstMeasurementLine' ) } );
-    const secondMeasurementLine = new MeasurementLineNode( model.measurementLines[ 1 ], modelViewTransform, { tandem: tandem.createTandem( 'secondMeasurementLine' ) } );
-    const thirdMeasurementLine = new MeasurementLineNode( model.measurementLines[ 2 ], modelViewTransform, { tandem: tandem.createTandem( 'thirdMeasurementLine' ) } );
+    const measurementLines = [
+      new MeasurementLineNode( model.measurementLines[ 0 ], modelViewTransform, { tandem: tandem.createTandem( 'firstMeasurementLine' ) } ),
+      new MeasurementLineNode( model.measurementLines[ 1 ], modelViewTransform, { tandem: tandem.createTandem( 'secondMeasurementLine' ) } ),
+      new MeasurementLineNode( model.measurementLines[ 2 ], modelViewTransform, { tandem: tandem.createTandem( 'thirdMeasurementLine' ) } )
+    ];
 
     const experimentAreaNode = new Node( {
       children: [
         particleSourceNode,
-        firstSternGerlachNode,
-        secondSternGerlachNode,
-        thirdSternGerlachNode,
-
-        // Mid experiment measurement Bloch Spheres
-        firstMeasurementLine,
-        secondMeasurementLine,
-        thirdMeasurementLine
+        ...sternGerlachNodes,
+        ...measurementLines
       ]
     } );
 
