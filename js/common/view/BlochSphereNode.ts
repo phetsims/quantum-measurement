@@ -34,7 +34,7 @@ const AXES_STROKE = 'gray';
 const AXES_LINE_WIDTH = 0.1;
 const AXES_LINE_DASH = [ 1, 1 ];
 const LABELS_OFFSET = 5;
-const LABELS_FONT = new PhetFont( { size: 5, weight: 'bold' } );
+const LABELS_FONT = new PhetFont( { size: 10, weight: 'bold' } );
 
 const AXES_OPTIONS = {
   stroke: AXES_STROKE,
@@ -160,9 +160,9 @@ export default class BlochSphereNode extends Node {
     const stateVectorVisibleProperty = new BooleanProperty( true );
     const stateVector = new ArrowNode( 0, 0, 0, -sphereRadius, {
       tandem: providedOptions.tandem.createTandem( 'stateVector' ),
-      headWidth: 3,
-      headHeight: 3,
-      tailWidth: 0.1,
+      headWidth: 6,
+      headHeight: 6,
+      tailWidth: 1,
       fill: 'black',
       visibleProperty: stateVectorVisibleProperty
     } );
