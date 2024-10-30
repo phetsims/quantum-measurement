@@ -77,7 +77,7 @@ export default class PhotonsExperimentSceneView extends Node {
         xMargin: 20,
         yMargin: 10,
         align: 'center',
-        right: QuantumMeasurementConstants.LAYOUT_BOUNDS.right - 20,
+        right: QuantumMeasurementConstants.LAYOUT_BOUNDS.right - 140,
         top: 0
       }
     );
