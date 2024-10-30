@@ -7,6 +7,7 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
+import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
@@ -25,12 +26,20 @@ export default class MirrorNode extends Node {
                       modelViewTransform: ModelViewTransform2,
                       providedOptions: MirrorNodeOptions ) {
 
+    // Define an offset for positioning the mirror.  This is needed because the photons reflect based on their center
+    // positions, and if the mirror isn't offset a bit, the photons can appear to go partially through the mirror.
+    // The value is in screen coordinates and is empirically determined.  This only works for a mirror that is oriented
+    // the way this one is, and isn't a general solution.
+    const mirrorPositionOffset = new Vector2( 2, -2 );
+
     const mirrorLine = new Line(
-      modelViewTransform.modelToViewPosition( model.mirrorSurfaceLine.start ),
-      modelViewTransform.modelToViewPosition( model.mirrorSurfaceLine.end ), {
-      stroke: Color.LIGHT_GRAY,
-      lineWidth: 5
-    } );
+      modelViewTransform.modelToViewPosition( model.mirrorSurfaceLine.start ).plus( mirrorPositionOffset ),
+      modelViewTransform.modelToViewPosition( model.mirrorSurfaceLine.end ).plus( mirrorPositionOffset ),
+      {
+        stroke: Color.LIGHT_GRAY,
+        lineWidth: 5
+      }
+    );
 
     const label = new Text( QuantumMeasurementStrings.mirrorStringProperty, {
       font: new PhetFont( 12 ),
