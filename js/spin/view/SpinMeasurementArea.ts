@@ -7,16 +7,25 @@
  * @author Agustín Vallejo
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Node, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Node, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import ComboBox, { ComboBoxItem } from '../../../../sun/js/ComboBox.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
+import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHistogram.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import { SourceMode } from '../model/SourceMode.js';
 import SpinExperiment from '../model/SpinExperiment.js';
 import SpinModel from '../model/SpinModel.js';
+import SternGerlach from '../model/SternGerlach.js';
 import MeasurementLineNode from './MeasurementLineNode.js';
 import ParticleRayPath from './ParticleRayPath.js';
 import ParticleSourceNode from './ParticleSourceNode.js';
@@ -65,11 +74,64 @@ export default class SpinMeasurementArea extends VBox {
       new MeasurementLineNode( model.measurementLines[ 2 ], modelViewTransform, { tandem: tandem.createTandem( 'thirdMeasurementLine' ) } )
     ];
 
+    const createPercentageHistogram = ( sternGerlach: SternGerlach, visibleProperty: TReadOnlyProperty<boolean> ) => {
+
+      // TODO: Translatable! https://github.com/phetsims/quantum-measurement/issues/53
+      const spinUpLabelStringProperty = new DerivedStringProperty(
+        [ sternGerlach.isZOrientedProperty ], isZOriented => isZOriented ?
+                                                             'S<sub>z</sub>' + QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER :
+                                                             'S<sub>x</sub>' + QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER
+      );
+      const spinDownLabelStringProperty = new DerivedStringProperty(
+        [ sternGerlach.isZOrientedProperty ], isZOriented => isZOriented ?
+                                                             'S<sub>z</sub>' + QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER :
+                                                             'S<sub>x</sub>' + QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER
+      );
+
+      return new QuantumMeasurementHistogram( sternGerlach.upProbabilityProperty, sternGerlach.downProbabilityProperty, new BooleanProperty( true ),
+        [
+          new RichText( spinUpLabelStringProperty, { font: new PhetFont( { size: 17, weight: 'bold' } ) } ),
+          new RichText( spinDownLabelStringProperty, { font: new PhetFont( { size: 17, weight: 'bold' } ) } )
+        ],
+        {
+          center: modelViewTransform.modelToViewPosition( new Vector2( sternGerlach.positionProperty.value.x, 1 ) ),
+          displayMode: 'percent',
+          scale: 0.8,
+          leftFillColorProperty: QuantumMeasurementColors.tailsColorProperty,
+          visibleProperty: visibleProperty,
+          tandem: Tandem.OPT_OUT,
+          numberDisplayOptions: {
+            textOptions: {
+              font: new PhetFont( 17 )
+            }
+          }
+        } );
+    };
+
+    const histograms = [
+      createPercentageHistogram(
+        model.sternGerlachs[ 0 ],
+        new DerivedProperty( [ model.particleSourceModel.sourceModeProperty ],
+          sourceMode => sourceMode === SourceMode.CONTINUOUS ) ),
+
+      createPercentageHistogram(
+        model.sternGerlachs[ 1 ],
+        new DerivedProperty(
+          [
+            model.particleSourceModel.sourceModeProperty,
+            model.currentExperimentProperty
+          ],
+          ( sourceMode, experiment ) => {
+            return sourceMode === SourceMode.CONTINUOUS && !experiment.isShortExperiment;
+          } ) )
+    ];
+
     const experimentAreaNode = new Node( {
       children: [
         particleSourceNode,
         ...sternGerlachNodes,
-        ...measurementLines
+        ...measurementLines,
+        ...histograms
       ]
     } );
 
