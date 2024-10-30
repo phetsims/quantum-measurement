@@ -183,7 +183,7 @@ export default class BlochSphereNode extends Node {
       ], ( azimutalAngle, polarAngle, xAxisOffsetAngle ) => {
         const tip = pointOnTheSphere( azimutalAngle, polarAngle );
         stateVector.setTip( tip.x, tip.y );
-        stateVector.opacity = Math.cos( azimutalAngle + xAxisOffsetAngle ) < 0 ? 0.4 : 1;
+        stateVector.opacity = Math.cos( polarAngle ) < 1e-5 || Math.cos( azimutalAngle + xAxisOffsetAngle ) > 0 ? 1 : 0.4;
 
         //   const shiftedPolar = polarAngle - equatorInclinationAngle;
         //   polarAngleIndicator.shape = new Shape().ellipticalArc(
