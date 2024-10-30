@@ -22,7 +22,7 @@ import PhotonsExperimentSceneModel from '../model/PhotonsExperimentSceneModel.js
 import PhotonDetectionProbabilityPanel from './PhotonDetectionProbabilityPanel.js';
 import PhotonPolarizationAngleControl from './PhotonPolarizationAngleControl.js';
 import PhotonTestingArea from './PhotonTestingArea.js';
-import PolarizationPlaneRepresentation from './PolarizationPlaneRepresentation.js';
+import ObliquePolarizationAngleIndicator from './ObliquePolarizationAngleIndicator.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhotonsExperimentSceneViewOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
@@ -53,7 +53,7 @@ export default class PhotonsExperimentSceneView extends Node {
       tandem: providedOptions.tandem.createTandem( 'photonTestingArea' )
     } );
 
-    const polarizationIndicator = new PolarizationPlaneRepresentation( model.laser.polarizationAngleProperty, {
+    const polarizationIndicator = new ObliquePolarizationAngleIndicator( model.laser.polarizationAngleProperty, {
       scale: 1.5,
       centerX: photonDetectionProbabilityPanel.centerX,
       centerY: photonTestingArea.centerY,
