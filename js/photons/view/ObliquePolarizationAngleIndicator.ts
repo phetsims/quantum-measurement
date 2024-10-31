@@ -3,22 +3,32 @@
 /**
  * Visual representation of the polarization angle in an oblique drawing, which gives some perspective.
  *
+ * The position of the axes are like this in this view:
+ *
+ *                            z
+ *                            ^
+ *                            |
+ *                            |
+ *                            +----> y
+ *                           /
+ *                         /
+ *                       /
+ *                     x
+ *
  * @author Agustín Vallejo (PhET Interactive Simulations)
  * @author John Blanco (PhET Interactive Simulations)
  */
 
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import ArrowNode, { ArrowNodeOptions } from '../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Node, NodeOptions, Path, Text } from '../../../../scenery/js/imports.js';
+import { Color, Node, NodeOptions, Path, Text } from '../../../../scenery/js/imports.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
@@ -27,19 +37,33 @@ type SelfOptions = EmptySelfOptions;
 export type PolarizationPlaneRepresentationOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
 
 // Constants
-const AXES_COLOR = 'black';
-const AXES_LINE_WIDTH = 0.5;
+const AXIS_COLOR = Color.BLACK;
+const AXIS_LINE_WIDTH = 0.5;
+const AXIS_LENGTH = 50; // Length of the axes in screen coordinates
+const AXIS_OPTIONS: ArrowNodeOptions = {
+  stroke: AXIS_COLOR,
+  fill: AXIS_COLOR,
+  tailWidth: AXIS_LINE_WIDTH,
+  headWidth: 2,
+  headHeight: 2
+};
 const LABELS_OFFSET = 10;
 const LABELS_FONT = new PhetFont( { size: 14, weight: 'bold' } );
 
-const AXIS_LENGTH = 50; // Length of the axes in screen coordinates
+// Define the unit length to use for the unit circle and the polarization vectors as a function of the graph size.
 const UNIT_LENGTH = AXIS_LENGTH * 0.75;
-const AXES_OPTIONS: ArrowNodeOptions = {
-  stroke: AXES_COLOR,
-  fill: AXES_COLOR,
-  tailWidth: AXES_LINE_WIDTH,
-  headWidth: 2,
-  headHeight: 2
+
+// Define the angle of projection for the oblique drawing.
+const PROJECTION_ANGLE_IN_DEGREES = 45;
+const PROJECTION_ANGLE_IN_RADIANS = Utils.toRadians( PROJECTION_ANGLE_IN_DEGREES );
+
+// Define a function that projects a 3D point into the 2D plane of the screen.  This uses what is called a "cabinet
+// projection" in engineering drawing, which is a specific type of oblique projection.
+const project3Dto2D = ( x: number, y: number, z: number ): Vector2 => {
+  return new Vector2(
+    y - 0.5 * x * Math.cos( PROJECTION_ANGLE_IN_RADIANS ),
+    -z + 0.5 * x * Math.sin( PROJECTION_ANGLE_IN_RADIANS )
+  );
 };
 
 export default class ObliquePolarizationAngleIndicator extends Node {
@@ -47,61 +71,33 @@ export default class ObliquePolarizationAngleIndicator extends Node {
   public constructor( polarizationAngleProperty: TReadOnlyProperty<number>,
                       providedOptions?: PolarizationPlaneRepresentationOptions ) {
 
-    const experimentalTransform = ModelViewTransform2.createOffsetXYScaleMapping( Vector2.ZERO, 0.5, 1 );
-
-    const transformMatrix = new Matrix3();
-
-    // transformMatrix.set20( 0.5 * Math.cos( Math.PI / 4 ) );
-    // transformMatrix.set21( 0.5 * Math.sin( Math.PI / 4 ) );
-    // transformMatrix.set22( 0 );
-    transformMatrix.setToScale( 0.5, 1 );
-
-    const projectedXYCircleRadius = AXIS_LENGTH * 0.75;
-    const unprojectedXYCircleShape = Shape.circle( 0, 0, projectedXYCircleRadius );
-    const projectedXYCircleShape = unprojectedXYCircleShape.transformed( experimentalTransform.getMatrix() );
-
-    const projectedXYCircle = new Path( projectedXYCircleShape, {
-      fill: 'black',
-      opacity: 0.3
-    } );
-
-    const xAxis = new ArrowNode( 0, 0, 0, 0, AXES_OPTIONS );
-
-    // Create the Y axis line with an arrow head.  This is pointing directly to the right.
-    const yAxisArrowHead = new ArrowNode( 0.9 * AXIS_LENGTH, 0, AXIS_LENGTH, 0, AXES_OPTIONS );
+    // Create the Y axis line with an arrow head.  This is pointing directly to the right.  We have to do this as a
+    // separate arrow head and line because the line has a dashed pattern, which doesn't work with ArrowNode.
+    const yAxisArrowHead = new ArrowNode( 0.9 * AXIS_LENGTH, 0, AXIS_LENGTH, 0, AXIS_OPTIONS );
     const yAxisLine = new Path(
       new Shape().moveTo( 0, 0 ).lineTo( AXIS_LENGTH, 0 ),
       {
-        stroke: AXES_COLOR,
-        lineWidth: AXES_LINE_WIDTH * 3,
+        stroke: AXIS_COLOR,
+        lineWidth: AXIS_LINE_WIDTH * 3,
         lineDash: [ 2, 2 ]
       }
     );
 
     // Add the label for the Y axis.
     const yAxisLabel = new Text( QuantumMeasurementStrings.propagationStringProperty, {
-      fill: 'black',
+      fill: AXIS_COLOR,
       font: new PhetFont( 8 ),
       maxWidth: 50,
 
       // position empirically determined to match design doc
-      left: 20,
-      top: 10
+      left: 14,
+      top: 4
     } );
 
-    const zAxis = new ArrowNode( 0, 0, 0, -AXIS_LENGTH, AXES_OPTIONS );
+    // Create the Z axis.  This is the up-and-down axis in the screen.
+    const zAxis = new ArrowNode( 0, 0, 0, -AXIS_LENGTH, AXIS_OPTIONS );
 
-    const xAxisLabel = new Text( QuantumMeasurementStrings.HStringProperty, {
-      fill: QuantumMeasurementColors.horizontalPolarizationColorProperty,
-      font: LABELS_FONT
-    } );
-
-    const xAxisTipPosition = new Vector2( -AXIS_LENGTH * Math.cos( Math.PI / 4 ), AXIS_LENGTH * Math.sin( Math.PI / 4 ) );
-    xAxis.setTip( xAxisTipPosition.x, xAxisTipPosition.y );
-
-    // Position the label.
-    xAxisLabel.center = xAxisTipPosition.times( 1.2 );
-
+    // Create and position the z-axis label.
     const zAxisLabel = new Text( QuantumMeasurementStrings.VStringProperty, {
       centerY: -AXIS_LENGTH - LABELS_OFFSET,
       centerX: 0,
@@ -109,10 +105,40 @@ export default class ObliquePolarizationAngleIndicator extends Node {
       font: LABELS_FONT
     } );
 
+    // Create the X axis.  This is the projected dimension that is perpendicular to the screen.
+    const xAxisTipPosition = project3Dto2D( AXIS_LENGTH, 0, 0 );
+    const xAxis = new ArrowNode( 0, 0, xAxisTipPosition.x, xAxisTipPosition.y, AXIS_OPTIONS );
+
+    // Create and position the x-axis label.
+    const xAxisLabel = new Text( QuantumMeasurementStrings.HStringProperty, {
+      fill: QuantumMeasurementColors.horizontalPolarizationColorProperty,
+      font: LABELS_FONT,
+      center: xAxisTipPosition.times( 1.4 )
+    } );
+
+    // Create a unit circle that is projected into the x-z plane.
+    const numberOfPoints = 100;
+    const projectedStartingPoint = project3Dto2D( UNIT_LENGTH, 0, 0 );
+    const segmentedEllipseShape = new Shape().moveTo( projectedStartingPoint.x, projectedStartingPoint.y );
+    _.times( numberOfPoints, i => {
+      const angle = i * 2 * Math.PI / numberOfPoints;
+      const x = UNIT_LENGTH * Math.cos( angle );
+      const z = UNIT_LENGTH * Math.sin( angle );
+      const projectedPoint = project3Dto2D( x, 0, z );
+      segmentedEllipseShape.lineTo( projectedPoint.x, projectedPoint.y );
+    } );
+    segmentedEllipseShape.lineToPoint( projectedStartingPoint );
+    segmentedEllipseShape.close();
+    const projectedXZUnitCircle = new Path( segmentedEllipseShape, {
+      fill: Color.GRAY,
+      opacity: 0.3
+    } );
+
+    // Create the polarization vectors, which are arrows.
     const polarizationVectorOptions = {
-      headWidth: 6,
-      headHeight: 6,
-      tailWidth: 0.5,
+      headWidth: 10,
+      headHeight: 10,
+      tailWidth: 2,
       stroke: '#0f0',
       fill: '#0f0'
     };
@@ -125,7 +151,7 @@ export default class ObliquePolarizationAngleIndicator extends Node {
       localBounds: new Bounds2( -1.5 * AXIS_LENGTH, -AXIS_LENGTH, 1.5 * AXIS_LENGTH, AXIS_LENGTH ),
 
       children: [
-        projectedXYCircle,
+        projectedXZUnitCircle,
         xAxis,
         zAxis,
         xAxisLabel,
@@ -140,17 +166,20 @@ export default class ObliquePolarizationAngleIndicator extends Node {
 
     super( options );
 
-    // Update the double-headed arrow that represents the polarization angle as the angle setting changes.
+    // Update the positions of the polarization vectors as the polarization angle changes.
     polarizationAngleProperty.link( polarizationAngle => {
 
-      const adjustedAngle = 2 / 3 * polarizationAngle + 30;
-      const angleInRadians = Utils.toRadians( adjustedAngle );
-      const unitVector = new Vector2( UNIT_LENGTH, 0 );
+      // Calculate the position of the polarization unit vector in the x-z plane.
+      const polarizationVectorPlusInXZPlane = new Vector2(
+        Math.cos( -Utils.toRadians( polarizationAngle ) ),
+        Math.sin( -Utils.toRadians( polarizationAngle ) )
+      ).times( UNIT_LENGTH );
+      const polarizationVectorMinusInXZPlane = polarizationVectorPlusInXZPlane.times( -1 );
 
-      const tipPlus = experimentalTransform.modelToViewPosition( unitVector.rotated( -angleInRadians ) );
-      const tipMinus = experimentalTransform.modelToViewPosition( unitVector.rotated( -angleInRadians - Math.PI ) );
-
+      // Project the vectors and set the tips of the arrows.
+      const tipPlus = project3Dto2D( polarizationVectorPlusInXZPlane.x, 0, polarizationVectorPlusInXZPlane.y );
       polarizationVectorPlus.setTip( tipPlus.x, tipPlus.y );
+      const tipMinus = project3Dto2D( polarizationVectorMinusInXZPlane.x, 0, polarizationVectorMinusInXZPlane.y );
       polarizationVectorMinus.setTip( tipMinus.x, tipMinus.y );
     } );
   }
