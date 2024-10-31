@@ -1,7 +1,8 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * Visual representation of the polarization angle in an oblique drawing, which gives some perspective.
+ * ObliquePolarizationAngleIndicator provides a visual representation of the photon polarization angle in an oblique
+ * drawing, which gives some perspective but keeps the angle of propagation horizontal.
  *
  * The position of the axes are like this in this view:
  *
@@ -36,7 +37,7 @@ import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 type SelfOptions = EmptySelfOptions;
 export type PolarizationPlaneRepresentationOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
 
-// Constants
+// constants
 const AXIS_COLOR = Color.BLACK;
 const AXIS_LINE_WIDTH = 0.5;
 const AXIS_LENGTH = 50; // Length of the axes in screen coordinates
@@ -50,7 +51,7 @@ const AXIS_OPTIONS: ArrowNodeOptions = {
 const LABELS_OFFSET = 10;
 const LABELS_FONT = new PhetFont( { size: 14, weight: 'bold' } );
 
-// Define the unit length to use for the unit circle and the polarization vectors as a function of the graph size.
+// Define the unit length to use for the unit circle and the polarization vectors.
 const UNIT_LENGTH = AXIS_LENGTH * 0.75;
 
 // Define the angle of projection for the oblique drawing.
@@ -176,7 +177,7 @@ export default class ObliquePolarizationAngleIndicator extends Node {
       ).times( UNIT_LENGTH );
       const polarizationVectorMinusInXZPlane = polarizationVectorPlusInXZPlane.times( -1 );
 
-      // Project the vectors and set the tips of the arrows.
+      // Project the vectors and set the tips of the arrows accordingly.
       const tipPlus = project3Dto2D( polarizationVectorPlusInXZPlane.x, 0, polarizationVectorPlusInXZPlane.y );
       polarizationVectorPlus.setTip( tipPlus.x, tipPlus.y );
       const tipMinus = project3Dto2D( polarizationVectorMinusInXZPlane.x, 0, polarizationVectorMinusInXZPlane.y );
