@@ -167,6 +167,8 @@ export default class Laser {
    */
   public reset(): void {
     this.emissionRateProperty.reset();
+    this.customPolarizationAngleProperty.reset();
+    this.presetPolarizationDirectionProperty.reset();
   }
 }
 
