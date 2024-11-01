@@ -22,7 +22,7 @@ import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import Laser from '../model/Laser.js';
-import ObliquePolarizationAngleIndicator from './ObliquePolarizationAngleIndicator.js';
+import FlatPolarizationAngleIndicator from './FlatPolarizationAngleIndicator.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhotonPolarizationAngleControlOptions = SelfOptions & WithRequired<PanelOptions, 'tandem'>;
@@ -126,7 +126,7 @@ export default class PhotonPolarizationAngleControl extends Panel {
       spacing: 10
     } );
 
-    const polarizationIndicator = new ObliquePolarizationAngleIndicator( photonSource.polarizationAngleProperty, {
+    const polarizationIndicator = new FlatPolarizationAngleIndicator( photonSource.polarizationAngleProperty, {
       scale: 1.2,
       tandem: providedOptions.tandem.createTandem( 'polarizationIndicator' )
     } );
