@@ -151,9 +151,11 @@ export default class SpinModel implements TModel {
     Multilink.multilink(
       [
         this.currentExperimentProperty,
-        this.particleSourceModel.sourceModeProperty
+        this.particleSourceModel.sourceModeProperty,
+        this.particleSourceModel.particleAmmountProperty,
+        this.particleSourceModel.spinStateProperty
       ],
-      ( experiment, sourceMode ) => {
+      ( experiment, sourceMode, particleAmmount ) => {
         this.particleRays.reset();
         this.particleRays.isShortExperiment = experiment.isShortExperiment;
         this.particleRays.updateExperiment();
@@ -167,38 +169,27 @@ export default class SpinModel implements TModel {
         this.measurementLines.forEach( line => line.measurementStateProperty.reset() );
 
         this.singleParticles.forEach( particle => particle.reset() );
+
+        this.singleParticles.forEach( particle => particle.reset() );
+
+        this.sternGerlachs.forEach( ( SternGerlach, index ) => {
+          if ( experiment.experimentSetting.length > index ) {
+            // TODO: Should visibility be only handled via the View? https://github.com/phetsims/quantum-measurement/issues/53
+            SternGerlach.isVisibleProperty.set( experiment.experimentSetting[ index ].active );
+            SternGerlach.isZOrientedProperty.set( experiment.experimentSetting[ index ].isZOriented );
+          }
+          else {
+            SternGerlach.isVisibleProperty.set( false );
+          }
+        } );
+
+        // Set the probabilities of the experiment. In the continuous case, this immediately alters the shown rays
+        // In the single case, this prepares the probabilities for the particle that will be shot
+        this.prepare();
+
+        updateProbabilities( particleAmmount );
       }
     );
-
-    this.particleSourceModel.particleAmmountProperty.link( particleAmmount => {
-      updateProbabilities( particleAmmount );
-    } );
-
-
-    this.currentExperimentProperty.link( experiment => {
-      this.singleParticles.forEach( particle => particle.reset() );
-
-      this.sternGerlachs.forEach( ( SternGerlach, index ) => {
-        if ( experiment.experimentSetting.length > index ) {
-          // TODO: Should visibility be only handled via the View? https://github.com/phetsims/quantum-measurement/issues/53
-          SternGerlach.isVisibleProperty.set( experiment.experimentSetting[ index ].active );
-          SternGerlach.isZOrientedProperty.set( experiment.experimentSetting[ index ].isZOriented );
-        }
-        else {
-          SternGerlach.isVisibleProperty.set( false );
-        }
-      } );
-
-      // Set the probabilities of the experiment. In the continuous case, this immediately alters the shown rays
-      // In the single case, this prepares the probabilities for the particle that will be shot
-      this.prepare();
-
-      updateProbabilities( this.particleSourceModel.particleAmmountProperty.value );
-    } );
-
-    this.particleSourceModel.spinStateProperty.link( () => {
-      this.prepare();
-    } );
 
     // Find the first inactive single particle and activate it
     this.particleSourceModel.currentlyShootingParticlesProperty.link( shooting => {
