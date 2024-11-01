@@ -23,12 +23,13 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import Laser from '../model/Laser.js';
 import FlatPolarizationAngleIndicator from './FlatPolarizationAngleIndicator.js';
+import VectorTailNode from './VectorTailNode.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhotonPolarizationAngleControlOptions = SelfOptions & WithRequired<PanelOptions, 'tandem'>;
 
-const FONT_SIZE = 16;
-const DEFAULT_LABEL_FONT = new PhetFont( FONT_SIZE );
+const DEFAULT_LABEL_FONT_SIZE = 16;
+const DEFAULT_LABEL_FONT = new PhetFont( DEFAULT_LABEL_FONT_SIZE );
 const TICK_MARK_TEXT_OPTIONS: TextOptions = {
   font: new PhetFont( 12 ),
   maxWidth: 50
@@ -56,7 +57,7 @@ export default class PhotonPolarizationAngleControl extends Panel {
       {
         value: 'vertical',
         createNode: () => new Text( QuantumMeasurementStrings.verticalStringProperty, {
-          font: new PhetFont( FONT_SIZE ),
+          font: new PhetFont( DEFAULT_LABEL_FONT_SIZE ),
           fill: QuantumMeasurementColors.verticalPolarizationColorProperty
         } ),
         tandemName: 'verticalRadioButton'
@@ -64,7 +65,7 @@ export default class PhotonPolarizationAngleControl extends Panel {
       {
         value: 'horizontal',
         createNode: () => new Text( QuantumMeasurementStrings.horizontalStringProperty, {
-          font: new PhetFont( FONT_SIZE ),
+          font: new PhetFont( DEFAULT_LABEL_FONT_SIZE ),
           fill: QuantumMeasurementColors.horizontalPolarizationColorProperty
         } ),
         tandemName: 'horizontalRadioButton'
@@ -126,14 +127,28 @@ export default class PhotonPolarizationAngleControl extends Panel {
       spacing: 10
     } );
 
+    // Create the polarization indicator and its caption.
     const polarizationIndicator = new FlatPolarizationAngleIndicator( photonSource.polarizationAngleProperty, {
       scale: 1.2,
       tandem: providedOptions.tandem.createTandem( 'polarizationIndicator' )
     } );
+    const polarizationIndicatorCaption = new HBox( {
+      children: [
+        new VectorTailNode( 6 ),
+        new Text( QuantumMeasurementStrings.propagationIntoPageStringProperty, { font: new PhetFont( 14 ) } )
+      ],
+      spacing: 5
+    } );
+
+    // Put the polarization indicator and its caption into a VBox.
+    const captionsPolarizationIndicator = new VBox( {
+      children: [ polarizationIndicator, polarizationIndicatorCaption ],
+      spacing: 5
+    } );
 
     // Put the left portion of the panel into and HBox with the polarization indicator.
     const content = new HBox( {
-      children: [ leftPortionOfPanel, polarizationIndicator ]
+      children: [ leftPortionOfPanel, captionsPolarizationIndicator ]
     } );
 
     super( content, options );

@@ -92,6 +92,9 @@
   "propagation": {
     "value": "Propagation"
   },
+  "propagationIntoPage": {
+    "value": "Propagation (into page)"
+  },
   "classicalCoin": {
     "value": "Classical Coin"
   },

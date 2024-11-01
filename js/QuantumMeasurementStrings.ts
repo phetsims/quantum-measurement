@@ -45,6 +45,7 @@ type StringsType = {
   'polarizationDetectorLabelPatternStringProperty': LocalizedStringProperty;
   'polarizingBeamSplitterStringProperty': LocalizedStringProperty;
   'propagationStringProperty': LocalizedStringProperty;
+  'propagationIntoPageStringProperty': LocalizedStringProperty;
   'classicalCoinStringProperty': LocalizedStringProperty;
   'PStringProperty': LocalizedStringProperty;
   'preparedStateStringProperty': LocalizedStringProperty;

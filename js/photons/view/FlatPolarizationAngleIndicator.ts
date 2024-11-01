@@ -11,14 +11,15 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ArrowNode, { ArrowNodeOptions } from '../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Circle, CircleOptions, Color, Line, Node, NodeOptions, Text } from '../../../../scenery/js/imports.js';
+import { Circle, Color, Node, NodeOptions, Text } from '../../../../scenery/js/imports.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
+import VectorTailNode from './VectorTailNode.js';
 
 type SelfOptions = EmptySelfOptions;
 export type PolarizationPlaneRepresentationOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
@@ -75,7 +76,7 @@ export default class FlatPolarizationAngleIndicator extends Node {
     } );
 
     // Create the vector tail symbol.
-    const vectorTailSymbol = new VectorTailSymbol( UNIT_LENGTH * 0.175 );
+    const vectorTailSymbol = new VectorTailNode( UNIT_LENGTH * 0.175 );
 
     const polarizationVectorNode = new ArrowNode( -AXIS_LENGTH, 0, AXIS_LENGTH, 0, {
       doubleHead: true,
@@ -118,31 +119,6 @@ export default class FlatPolarizationAngleIndicator extends Node {
       polarizationVectorNode.setTip( polarizationVectorTipPosition.x, polarizationVectorTipPosition.y );
       polarizationVectorNode.setTail( polarizationVectorTailPosition.x, polarizationVectorTailPosition.y );
     } );
-  }
-}
-
-class VectorTailSymbol extends Circle {
-  public constructor( radius: number, providedOptions?: CircleOptions ) {
-
-    const options = combineOptions<CircleOptions>( {
-      fill: null,
-      stroke: 'black',
-      lineWidth: 1
-    }, providedOptions );
-    const multiplier = Math.sqrt( 2 ) / 2;
-
-    super( radius, options );
-
-    const line1 = new Line( -multiplier * radius, -multiplier * radius, multiplier * radius, multiplier * radius, {
-      stroke: options.stroke,
-      lineWidth: options.lineWidth
-    } );
-    const line2 = new Line( -multiplier * radius, multiplier * radius, multiplier * radius, -multiplier * radius, {
-      stroke: options.stroke,
-      lineWidth: options.lineWidth
-    } );
-    this.addChild( line1 );
-    this.addChild( line2 );
   }
 }
 
