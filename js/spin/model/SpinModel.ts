@@ -194,50 +194,45 @@ export default class SpinModel implements TModel {
     // Find the first inactive single particle and activate it
     this.particleSourceModel.currentlyShootingParticlesProperty.link( shooting => {
       if ( shooting ) {
-        for ( let i = 0; i < MAX_NUMBER_OF_SINGLE_PARTICLES; i++ ) {
-          if ( !this.singleParticles[ i ].activeProperty.value ) {
+        const particleToActivate = this.singleParticles.find( particle => !particle.activeProperty.value );
 
-            // TODO: filter? https://github.com/phetsims/quantum-measurement/issues/53
-            const particleToActivate = this.singleParticles[ i ];
-            particleToActivate.reset();
+        if ( particleToActivate ) {
+          particleToActivate.reset();
 
-            particleToActivate.firstSpinVector = SpinDirection.spinToVector( this.particleSourceModel.spinStateProperty.value );
+          // Set the first spin vector to the state of the generated particles
+          particleToActivate.spinVectors[ 0 ] = SpinDirection.spinToVector( this.particleSourceModel.spinStateProperty.value );
 
-            let upProbability = 1;
-            upProbability = this.sternGerlachs[ 0 ].prepare( this.particleSourceModel.spinStateProperty.value );
-            particleToActivate.secondSpinUp = dotRandom.nextDouble() < upProbability;
-            particleToActivate.secondSpinVector = SpinDirection.spinToVector(
-              particleToActivate.secondSpinUp ?
-              this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS :
-              this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_MINUS : null
+          const measure = ( sternGerlach: SternGerlach, experimentStageIndex: number, incomingState: SpinDirection | null ) => {
+            const upProbability = sternGerlach.prepare( incomingState );
+            const isResultUp = dotRandom.nextDouble() < upProbability;
+            particleToActivate.isSpinUp[ experimentStageIndex ] = isResultUp;
+            particleToActivate.spinVectors[ experimentStageIndex ] = SpinDirection.spinToVector(
+              isResultUp ?
+              sternGerlach.isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS :
+              sternGerlach.isZOrientedProperty.value ? SpinDirection.Z_MINUS : null
             );
+            return isResultUp;
+          };
 
-            if ( this.currentExperimentProperty.value.experimentSetting.length > 1 ) {
-              if ( particleToActivate.secondSpinUp ) {
-                upProbability = this.sternGerlachs[ 1 ].prepare( this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS );
-                particleToActivate.thirdSpinUp = dotRandom.nextDouble() < upProbability;
-                particleToActivate.thirdSpinVector = SpinDirection.spinToVector(
-                  particleToActivate.thirdSpinUp ?
-                  this.sternGerlachs[ 1 ].isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS :
-                  this.sternGerlachs[ 1 ].isZOrientedProperty.value ? SpinDirection.Z_MINUS : null
-                );
-              }
-              else {
-                const upProbability = this.sternGerlachs[ 2 ].prepare( this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_MINUS : null );
-                particleToActivate.thirdSpinUp = dotRandom.nextDouble() < upProbability;
-                particleToActivate.thirdSpinVector = SpinDirection.spinToVector(
-                  particleToActivate.thirdSpinUp ?
-                  this.sternGerlachs[ 2 ].isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS :
-                  this.sternGerlachs[ 2 ].isZOrientedProperty.value ? SpinDirection.Z_MINUS : null
-                );
-              }
+          // First measurement: SG0 where the particle decides to go up or down
+          const isResultUp = measure( this.sternGerlachs[ 0 ], 1, this.particleSourceModel.spinStateProperty.value );
+
+          // If current experiment is short, the particle only goes through SG0
+          if ( !this.currentExperimentProperty.value.isShortExperiment ) {
+            if ( isResultUp ) {
+              // If it went up, go through SG1
+              measure( this.sternGerlachs[ 1 ], 2, this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS );
             }
-
-            this.particleRays.assignRayToParticle( particleToActivate );
-
-            particleToActivate.activeProperty.value = true;
-            break;
+            else {
+              // If it went down, go through SG2
+              measure( this.sternGerlachs[ 2 ], 2, this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_MINUS : null );
+            }
           }
+
+          // Once the particle knows the directions it took, we assign the path to it
+          this.particleRays.assignRayToParticle( particleToActivate );
+
+          particleToActivate.activeProperty.value = true;
         }
       }
     } );
@@ -252,12 +247,12 @@ export default class SpinModel implements TModel {
     if ( experimentSetting.length > 1 ) {
       // Measure on the second SG according to the orientation of the first one
       this.sternGerlachs[ 1 ].prepare(
-        // SG1 passes the up-spin particles to SG2
+        // SG0 passes the up-spin particles to SG1
         this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS
       );
 
       this.sternGerlachs[ 2 ].prepare(
-        // SG1 passes the down-spin particles to SG3, and because X- is not in the initial spin values, we pass null
+        // SG0 passes the down-spin particles to SG2, and because X- is not in the initial spin values, we pass null
         this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_MINUS : null
       );
 
@@ -288,7 +283,7 @@ export default class SpinModel implements TModel {
       // If the particle crosses a measurement line, we update the line
       this.measurementLines.forEach( ( line, index ) => {
         if ( behindMeasurementLine[ index ] && !line.isParticleBehind( particle.positionProperty.value ) ) {
-          line.spinStateProperty.value = index === 0 ? particle.firstSpinVector : index === 1 ? particle.secondSpinVector : particle.thirdSpinVector;
+          line.spinStateProperty.value = index === 0 ? particle.spinVectors[ 0 ] : index === 1 ? particle.spinVectors[ 1 ] : particle.spinVectors[ 2 ];
           line.measurementStateProperty.value = MeasurementState.MEASURING;
         }
       } );

@@ -7,12 +7,12 @@
  *
  * // TODO: Would this be better off as an enumeration or state machine??? https://github.com/phetsims/quantum-measurement/issues/53
  * The lifetime should determine the current position of the particle in the view, like so:
- * t = 0 to t = 1: Traveling from source to SG1
- * t = 1 to t = 2: Being measured inside SG1
- * t = 2 to t = 3: Traveling from SG1 to SG2 or SG3 (if applicable)
- * t = 3 to t = 4: Being measured inside SG2 or SG3 (if applicable)
- * t = 4 to t = 5: Traveling onwards from SG2 or SG3
- * ( For experiments with only SG1, t = 2 to t = 5 is just traveling along the Ray Path )
+ * t = 0 to t = 1: Traveling from source to SG0
+ * t = 1 to t = 2: Being measured inside SG0
+ * t = 2 to t = 3: Traveling from SG0 to SG1 or SG2 (if applicable)
+ * t = 3 to t = 4: Being measured inside SG1 or SG2 (if applicable)
+ * t = 4 to t = 5: Traveling onwards from SG1 or SG2
+ * ( For experiments with only SG0, t = 2 to t = 5 is just traveling along the Ray Path )
  *
  * This time is not measured in seconds, but rather, scaled to the different moments in the life of the particle.
  *
@@ -36,15 +36,10 @@ export class ParticleWithSpin {
   public path: Vector2[] = [];
 
   // Spin values of the particle in the XZ plane along its lifetime
-  public firstSpinVector = new Vector2( 0, 0 );
-  public secondSpinVector = new Vector2( 0, 0 ); // After passing through SG1
-  public thirdSpinVector = new Vector2( 0, 0 ); // After passing through SG2 or SG3
+  public spinVectors = [ new Vector2( 0, 0 ), new Vector2( 0, 0 ), new Vector2( 0, 0 ) ];
 
-  // TODO: This is very specific to the model!! https://github.com/phetsims/quantum-measurement/issues/53
   // Same but simplified to spinUp booleans
-  public firstSpinUp = false;
-  public secondSpinUp = false;
-  public thirdSpinUp = false;
+  public isSpinUp = [ false, false, false ];
 
   // Emitter to trigger a measurement by the model
   public readyToBeMeasuredEmitter = new Emitter();
@@ -79,11 +74,11 @@ export class ParticleWithSpin {
 
   /**
    * The lifetime should determine the current position of the particle in the view, like so:
-   * t = 0 to t = 1: Traveling from source to SG1 -> Path 0
-   * t = 1 to t = 2: Being measured inside SG1
-   * t = 2 to t = 3: Traveling from SG1 to SG2 or SG3 (if applicable) -> Path 1 or 2
-   * t = 3 to t = 4: Being measured inside SG2 or SG3 (if applicable)
-   * t = 4 to t = 5: Traveling onwards from SG2 or SG3 -> Paths 3 - 6
+   * t = 0 to t = 1: Traveling from source to SG0 -> Path 0
+   * t = 1 to t = 2: Being measured inside SG0
+   * t = 2 to t = 3: Traveling from SG0 to SG1 or SG2 (if applicable) -> Path 1 or 2
+   * t = 3 to t = 4: Being measured inside SG1 or SG2 (if applicable)
+   * t = 4 to t = 5: Traveling onwards from SG1 or SG2 -> Paths 3 - 6
    */
   public calculatePosition(): void {
 
@@ -130,9 +125,7 @@ export class ParticleWithSpin {
   public reset(): void {
     this.lifetime = 0;
     this.activeProperty.value = false;
-    this.firstSpinVector.setXY( 0, 0 );
-    this.secondSpinVector.setXY( 0, 0 );
-    this.thirdSpinVector.setXY( 0, 0 );
+    this.spinVectors.forEach( vector => vector.setXY( 0, 0 ) );
     this.positionProperty.reset();
   }
 }

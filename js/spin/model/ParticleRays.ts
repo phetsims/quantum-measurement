@@ -4,15 +4,15 @@
  * ParticleRays contains the data for the particle ray paths in the UI.
  *
  * All possible paths are indexed as such:
- * 0 - Source to SG1
- * 1 - SG1 to infinity (top)
- * 2 - SG1 to infinity (bottom)
- * 3 - SG1 to SG2
- * 4 - SG2 to infinity (top)
- * 5 - SG2 to infinity (bottom)
- * 6 - SG2 to SG3
- * 7 - SG3 to infinity (top)
- * 8 - SG3 to infinity (bottom)
+ * 0 - Source to SG0
+ * 1 - SG0 to infinity (top)
+ * 2 - SG0 to infinity (bottom)
+ * 3 - SG0 to SG1
+ * 4 - SG1 to infinity (top)
+ * 5 - SG1 to infinity (bottom)
+ * 6 - SG1 to SG2
+ * 7 - SG2 to infinity (top)
+ * 8 - SG2 to infinity (bottom)
  *
  * @author Agustín Vallejo
  */
@@ -77,15 +77,15 @@ export default class ParticleRays {
   public assignRayToParticle( particle: ParticleWithSpin ): void {
     if ( this.isShortExperiment ) {
       particle.path = [
-        ...this.allPossiblePaths[ 0 ], // Source to SG1
-        ...this.allPossiblePaths[ particle.secondSpinUp ? 1 : 2 ] // SG1 to infinity
+        ...this.allPossiblePaths[ 0 ], // Source to SG0
+        ...this.allPossiblePaths[ particle.isSpinUp[ 1 ] ? 1 : 2 ] // SG0 to infinity
       ];
     }
     else {
       particle.path = [
-        ...this.allPossiblePaths[ 0 ], // Source to SG1
-        ...this.allPossiblePaths[ particle.secondSpinUp ? 3 : 6 ], // SG1 to SG2
-        ...this.allPossiblePaths[ 4 + ( particle.secondSpinUp ? 0 : 3 ) + ( particle.thirdSpinUp ? 0 : 1 ) ]
+        ...this.allPossiblePaths[ 0 ], // Source to SG0
+        ...this.allPossiblePaths[ particle.isSpinUp[ 1 ] ? 3 : 6 ], // SG0 to SG1
+        ...this.allPossiblePaths[ 4 + ( particle.isSpinUp[ 1 ] ? 0 : 3 ) + ( particle.isSpinUp[ 2 ] ? 0 : 1 ) ]
       ];
     }
 
