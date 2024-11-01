@@ -11,11 +11,11 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ArrowNode, { ArrowNodeOptions } from '../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Circle, Color, Node, NodeOptions, Text } from '../../../../scenery/js/imports.js';
+import { Circle, CircleOptions, Color, Line, Node, NodeOptions, Text } from '../../../../scenery/js/imports.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
@@ -74,6 +74,9 @@ export default class FlatPolarizationAngleIndicator extends Node {
       opacity: 0.3
     } );
 
+    // Create the vector tail symbol.
+    const vectorTailSymbol = new VectorTailSymbol( UNIT_LENGTH * 0.175 );
+
     // Create the polarization vectors, which are arrows.
     const polarizationVectorOptions = {
       headWidth: 10,
@@ -97,7 +100,8 @@ export default class FlatPolarizationAngleIndicator extends Node {
         horizontalAxisLabel,
         verticalAxisLabel,
         polarizationVectorPlus,
-        polarizationVectorMinus
+        polarizationVectorMinus,
+        vectorTailSymbol
       ]
     }, providedOptions );
 
@@ -117,6 +121,31 @@ export default class FlatPolarizationAngleIndicator extends Node {
       polarizationVectorPlus.setTip( polarizationVectorPlusPosition.x, polarizationVectorPlusPosition.y );
       polarizationVectorMinus.setTip( polarizationVectorMinusPosition.x, polarizationVectorMinusPosition.y );
     } );
+  }
+}
+
+class VectorTailSymbol extends Circle {
+  public constructor( radius: number, providedOptions?: CircleOptions ) {
+
+    const options = combineOptions<CircleOptions>( {
+      fill: null,
+      stroke: 'black',
+      lineWidth: 1
+    }, providedOptions );
+    const multiplier = Math.sqrt( 2 ) / 2;
+
+    super( radius, options );
+
+    const line1 = new Line( -multiplier * radius, -multiplier * radius, multiplier * radius, multiplier * radius, {
+      stroke: options.stroke,
+      lineWidth: options.lineWidth
+    } );
+    const line2 = new Line( -multiplier * radius, multiplier * radius, multiplier * radius, -multiplier * radius, {
+      stroke: options.stroke,
+      lineWidth: options.lineWidth
+    } );
+    this.addChild( line1 );
+    this.addChild( line2 );
   }
 }
 
