@@ -77,16 +77,14 @@ export default class FlatPolarizationAngleIndicator extends Node {
     // Create the vector tail symbol.
     const vectorTailSymbol = new VectorTailSymbol( UNIT_LENGTH * 0.175 );
 
-    // Create the polarization vectors, which are arrows.
-    const polarizationVectorOptions = {
+    const polarizationVectorNode = new ArrowNode( -AXIS_LENGTH, 0, AXIS_LENGTH, 0, {
+      doubleHead: true,
       headWidth: 10,
       headHeight: 10,
       tailWidth: 2,
       stroke: '#0f0',
       fill: '#0f0'
-    };
-    const polarizationVectorPlus = new ArrowNode( 0, 0, 0, -AXIS_LENGTH, polarizationVectorOptions );
-    const polarizationVectorMinus = new ArrowNode( 0, 0, 0, AXIS_LENGTH, polarizationVectorOptions );
+    } );
 
     const options = optionize<PolarizationPlaneRepresentationOptions, SelfOptions, NodeOptions>()( {
 
@@ -99,8 +97,7 @@ export default class FlatPolarizationAngleIndicator extends Node {
         verticalAxis,
         horizontalAxisLabel,
         verticalAxisLabel,
-        polarizationVectorPlus,
-        polarizationVectorMinus,
+        polarizationVectorNode,
         vectorTailSymbol
       ]
     }, providedOptions );
@@ -110,16 +107,16 @@ export default class FlatPolarizationAngleIndicator extends Node {
     // Update the positions of the polarization vectors as the polarization angle changes.
     polarizationAngleProperty.link( polarizationAngle => {
 
-      // Calculate the position of the polarization unit vectors in the H-V plane.
-      const polarizationVectorPlusPosition = new Vector2(
+      // Calculate the positions for the two ends of the polarization vector.
+      const polarizationVectorTipPosition = new Vector2(
         Math.cos( -Utils.toRadians( polarizationAngle ) ),
         Math.sin( -Utils.toRadians( polarizationAngle ) )
       ).times( UNIT_LENGTH );
-      const polarizationVectorMinusPosition = polarizationVectorPlusPosition.times( -1 );
+      const polarizationVectorTailPosition = polarizationVectorTipPosition.times( -1 );
 
       // Project the vectors and set the tips of the arrows accordingly.
-      polarizationVectorPlus.setTip( polarizationVectorPlusPosition.x, polarizationVectorPlusPosition.y );
-      polarizationVectorMinus.setTip( polarizationVectorMinusPosition.x, polarizationVectorMinusPosition.y );
+      polarizationVectorNode.setTip( polarizationVectorTipPosition.x, polarizationVectorTipPosition.y );
+      polarizationVectorNode.setTail( polarizationVectorTailPosition.x, polarizationVectorTailPosition.y );
     } );
   }
 }
