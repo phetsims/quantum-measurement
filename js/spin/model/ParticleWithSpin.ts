@@ -4,16 +4,6 @@
  * ParticleWithSpin is the model for a particle with a predetermined spin. It has a lifetime, which will
  * determine its position in the Ray Path, and a spin value, which will be modified as it passes through the SG apparatuses.
  *
- *
- * // TODO: Would this be better off as an enumeration or state machine??? https://github.com/phetsims/quantum-measurement/issues/53
- * The lifetime should determine the current position of the particle in the view, like so:
- * t = 0 to t = 1: Traveling from source to SG0
- * t = 1 to t = 2: Being measured inside SG0
- * t = 2 to t = 3: Traveling from SG0 to SG1 or SG2 (if applicable)
- * t = 3 to t = 4: Being measured inside SG1 or SG2 (if applicable)
- * t = 4 to t = 5: Traveling onwards from SG1 or SG2
- * ( For experiments with only SG0, t = 2 to t = 5 is just traveling along the Ray Path )
- *
  * This time is not measured in seconds, but rather, scaled to the different moments in the life of the particle.
  *
  * @author Agustín Vallejo
@@ -72,14 +62,6 @@ export class ParticleWithSpin {
     }
   }
 
-  /**
-   * The lifetime should determine the current position of the particle in the view, like so:
-   * t = 0 to t = 1: Traveling from source to SG0 -> Path 0
-   * t = 1 to t = 2: Being measured inside SG0
-   * t = 2 to t = 3: Traveling from SG0 to SG1 or SG2 (if applicable) -> Path 1 or 2
-   * t = 3 to t = 4: Being measured inside SG1 or SG2 (if applicable)
-   * t = 4 to t = 5: Traveling onwards from SG1 or SG2 -> Paths 3 - 6
-   */
   public calculatePosition(): void {
 
     // Travel until the final point, then stop

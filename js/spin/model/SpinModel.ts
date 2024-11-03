@@ -170,8 +170,6 @@ export default class SpinModel implements TModel {
 
         this.singleParticles.forEach( particle => particle.reset() );
 
-        this.singleParticles.forEach( particle => particle.reset() );
-
         this.sternGerlachs.forEach( ( SternGerlach, index ) => {
           if ( experiment.experimentSetting.length > index ) {
             // TODO: Should visibility be only handled via the View? https://github.com/phetsims/quantum-measurement/issues/53
