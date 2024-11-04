@@ -29,7 +29,7 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ArrowNode, { ArrowNodeOptions } from '../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, Node, NodeOptions, Path, Text } from '../../../../scenery/js/imports.js';
+import { Color, Line, Node, NodeOptions, Path, Text } from '../../../../scenery/js/imports.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
@@ -75,14 +75,11 @@ export default class ObliquePolarizationAngleIndicator extends Node {
     // Create the Y axis line with an arrow head.  This is pointing directly to the right.  We have to do this as a
     // separate arrow head and line because the line has a dashed pattern, which doesn't work with ArrowNode.
     const yAxisArrowHead = new ArrowNode( 0.9 * AXIS_LENGTH, 0, AXIS_LENGTH, 0, AXIS_OPTIONS );
-    const yAxisLine = new Path(
-      new Shape().moveTo( 0, 0 ).lineTo( AXIS_LENGTH, 0 ),
-      {
-        stroke: AXIS_COLOR,
-        lineWidth: AXIS_LINE_WIDTH * 3,
-        lineDash: [ 2, 2 ]
-      }
-    );
+    const yAxisLine = new Line( 0, 0, AXIS_LENGTH, 0, {
+      stroke: AXIS_COLOR,
+      lineWidth: AXIS_LINE_WIDTH * 3,
+      lineDash: [ 2, 2 ]
+    } );
 
     // Add the label for the Y axis.
     const yAxisLabel = new Text( QuantumMeasurementStrings.propagationStringProperty, {
@@ -137,10 +134,11 @@ export default class ObliquePolarizationAngleIndicator extends Node {
 
     // Create the polarization vectors, which are arrows.
     const polarizationVectorOptions: ArrowNodeOptions = {
-      headWidth: 10,
-      headHeight: 10,
+      headWidth: 8,
+      headHeight: 8,
       tailWidth: 2,
-      stroke: '#0f0',
+      stroke: '#090',
+      lineWidth: 0.5,
       fill: '#0f0',
       doubleHead: true
     };

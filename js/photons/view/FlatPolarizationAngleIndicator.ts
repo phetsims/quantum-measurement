@@ -80,10 +80,11 @@ export default class FlatPolarizationAngleIndicator extends Node {
 
     const polarizationVectorNode = new ArrowNode( -AXIS_LENGTH, 0, AXIS_LENGTH, 0, {
       doubleHead: true,
-      headWidth: 10,
-      headHeight: 10,
+      headWidth: 8,
+      headHeight: 8,
       tailWidth: 2,
-      stroke: '#0f0',
+      stroke: '#090',
+      lineWidth: 0.5,
       fill: '#0f0'
     } );
 
