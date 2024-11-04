@@ -39,7 +39,7 @@ type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOpt
 
 const MAX_NUMBER_OF_SINGLE_PARTICLES = 50;
 const MAX_NUMBER_OF_MULTIPLE_PARTICLES = 5000;
-const PARTICLE_RAY_WIDTH = 0.03;
+const PARTICLE_RAY_WIDTH = 0.02;
 const PARTICLE_CREATION_BATCH_SIZE = 5; // Number of particles created per step at max source mode
 
 export default class SpinModel implements TModel {
@@ -133,31 +133,6 @@ export default class SpinModel implements TModel {
       return new ParticleWithSpin( new Vector2( PARTICLE_RAY_WIDTH * ( dotRandom.nextDouble() * 2 - 1 ), PARTICLE_RAY_WIDTH * ( dotRandom.nextDouble() * 2 - 1 ) ) );
     } );
 
-    // TODO: Maybe integrate with the ParticleRay constructor? https://github.com/phetsims/quantum-measurement/issues/53
-
-    const updateProbabilities = ( particleAmmount: number ) => {
-      if ( this.particleRays.isShortExperiment ) {
-        this.particleRays.updateProbabilities( [
-          particleAmmount, // First ray only depends on the initial particle ammount
-          this.sternGerlachs[ 0 ].upProbabilityProperty.value * particleAmmount, // From first to infinity
-          this.sternGerlachs[ 0 ].downProbabilityProperty.value * particleAmmount, // From first to infinity
-          this.sternGerlachs[ 0 ].upProbabilityProperty.value * particleAmmount, // From first to second
-          this.sternGerlachs[ 0 ].downProbabilityProperty.value * particleAmmount // From first to third
-        ] );
-      }
-      else {
-        this.particleRays.updateProbabilities( [
-          particleAmmount, // First ray only depends on the initial particle ammount
-          this.sternGerlachs[ 0 ].upProbabilityProperty.value * particleAmmount, // From first to second
-          this.sternGerlachs[ 0 ].upProbabilityProperty.value * this.sternGerlachs[ 1 ].upProbabilityProperty.value * particleAmmount,
-          this.sternGerlachs[ 0 ].upProbabilityProperty.value * this.sternGerlachs[ 1 ].downProbabilityProperty.value * particleAmmount,
-          this.sternGerlachs[ 0 ].downProbabilityProperty.value * particleAmmount, // From first to third
-          this.sternGerlachs[ 0 ].downProbabilityProperty.value * this.sternGerlachs[ 2 ].upProbabilityProperty.value * particleAmmount,
-          this.sternGerlachs[ 0 ].downProbabilityProperty.value * this.sternGerlachs[ 2 ].downProbabilityProperty.value * particleAmmount
-        ] );
-      }
-    };
-
     // Multilink for changes in the experiment either via source mode or experiment selection
     Multilink.multilink(
       [
@@ -195,13 +170,8 @@ export default class SpinModel implements TModel {
         // In the single case, this prepares the probabilities for the particle that will be shot
         this.prepare();
 
-        updateProbabilities( this.particleSourceModel.particleAmmountProperty.value );
       }
     );
-
-    this.particleSourceModel.particleAmmountProperty.link( particleAmmount => {
-      updateProbabilities( particleAmmount );
-    } );
 
     // Find the first inactive single particle and activate it
     this.particleSourceModel.currentlyShootingParticlesProperty.link( shooting => {
@@ -310,7 +280,7 @@ export default class SpinModel implements TModel {
 
     if ( this.particleSourceModel.sourceModeProperty.value === SourceMode.CONTINUOUS ) {
 
-      const batchSize = Math.floor( this.particleSourceModel.particleAmmountProperty.value * PARTICLE_CREATION_BATCH_SIZE );
+      const batchSize = Math.ceil( this.particleSourceModel.particleAmmountProperty.value * PARTICLE_CREATION_BATCH_SIZE );
 
       for ( let i = 0; i < batchSize; i++ ) {
         const particleToActivate = this.multipleParticles.find( particle => !particle.activeProperty.value );

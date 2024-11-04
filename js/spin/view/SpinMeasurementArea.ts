@@ -15,6 +15,7 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import ShadedSphereNode from '../../../../scenery-phet/js/ShadedSphereNode.js';
 import { Node, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import ComboBox, { ComboBoxItem } from '../../../../sun/js/ComboBox.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -26,12 +27,14 @@ import { SourceMode } from '../model/SourceMode.js';
 import SpinExperiment from '../model/SpinExperiment.js';
 import SpinModel from '../model/SpinModel.js';
 import SternGerlach from '../model/SternGerlach.js';
+import ManyParticlesCanvasNode from './ManyParticlesCanvasNode.js';
 import MeasurementLineNode from './MeasurementLineNode.js';
-import ParticleRayPath from './ParticleRayPath.js';
 import ParticleSourceNode from './ParticleSourceNode.js';
 import SternGerlachNode from './SternGerlachNode.js';
 
 export default class SpinMeasurementArea extends VBox {
+
+  private manyParticlesCanvasNode: ManyParticlesCanvasNode;
 
   public constructor( model: SpinModel, parentNode: Node, layoutBounds: Bounds2, tandem: Tandem ) {
 
@@ -50,15 +53,6 @@ export default class SpinMeasurementArea extends VBox {
       Vector2.ZERO,
       new Vector2( 100, 100 ),
       200 // empirically determined
-    );
-
-    const particleRayPath = new ParticleRayPath(
-      model.particleRays,
-      modelViewTransform,
-      model.particleSourceModel.sourceModeProperty,
-      model.singleParticles,
-      model.multipleParticles,
-      tandem.createTandem( 'particleRayPath' )
     );
 
     const particleSourceNode = new ParticleSourceNode( model.particleSourceModel, modelViewTransform, tandem.createTandem( 'particleSourceNode' ) );
@@ -127,8 +121,31 @@ export default class SpinMeasurementArea extends VBox {
           } ) )
     ];
 
+    const singleParticleNodes = model.singleParticles.map( particle => {
+      const particleNode = new ShadedSphereNode( 15, {
+        mainColor: 'magenta',
+        highlightColor: 'white',
+        visibleProperty: particle.activeProperty
+      } );
+
+      particle.positionProperty.link( position => {
+        particleNode.translation = modelViewTransform.modelToViewPosition( position );
+      } );
+
+      return particleNode;
+    } );
+
+    const manyParticlesCanvasNode = new ManyParticlesCanvasNode(
+      model.multipleParticles,
+      modelViewTransform,
+      layoutBounds,
+      { tandem: tandem.createTandem( 'manyParticlesCanvasNode' ) }
+    );
+
     const experimentAreaNode = new Node( {
       children: [
+        manyParticlesCanvasNode,
+        ...singleParticleNodes,
         particleSourceNode,
         ...sternGerlachNodes,
         ...measurementLines,
@@ -137,8 +154,6 @@ export default class SpinMeasurementArea extends VBox {
     } );
 
     // experimentAreaNode.clipArea = Shape.bounds( experimentAreaNode.localBounds );
-
-    experimentAreaNode.insertChild( 0, particleRayPath );
 
     super( {
       children: [
@@ -155,6 +170,11 @@ export default class SpinMeasurementArea extends VBox {
       yMargin: 10
     } );
 
+    this.manyParticlesCanvasNode = manyParticlesCanvasNode;
+  }
+
+  public step( dt: number ): void {
+    this.manyParticlesCanvasNode.step();
   }
 }
 

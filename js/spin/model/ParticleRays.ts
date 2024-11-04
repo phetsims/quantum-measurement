@@ -17,7 +17,6 @@
  * @author Agustín Vallejo
  */
 
-import Emitter from '../../../../axon/js/Emitter.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { ParticleWithSpin } from './ParticleWithSpin.js';
@@ -40,8 +39,6 @@ export default class ParticleRays {
   public pathProbabilities: number[] = [];
 
   public isShortExperiment = true;
-
-  public readonly updatedEmitter = new Emitter();
 
   public constructor( firstPair: Vector2[], allConnections: SternGerlachConnection[] ) {
 
@@ -70,8 +67,6 @@ export default class ParticleRays {
     this.activePaths = this.isShortExperiment ?
                        [ this.allPossiblePaths[ 0 ], this.allPossiblePaths[ 1 ], this.allPossiblePaths[ 2 ] ] :
                        [ this.allPossiblePaths[ 0 ], ...this.allPossiblePaths.slice( 3, this.allPossiblePaths.length ) ];
-
-    this.updatedEmitter.emit();
   }
 
   public assignRayToParticle( particle: ParticleWithSpin ): void {
@@ -90,11 +85,6 @@ export default class ParticleRays {
     }
 
     particle.updateSpeed();
-  }
-
-  public updateProbabilities( probabilities: number[] ): void {
-    this.pathProbabilities = probabilities;
-    this.updatedEmitter.emit();
   }
 
   public reset(): void {

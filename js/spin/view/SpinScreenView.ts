@@ -18,6 +18,8 @@ import SpinStatePreparationArea from './SpinStatePreparationArea.js';
 
 export default class SpinScreenView extends QuantumMeasurementScreenView {
 
+  private spinMeasurementArea: SpinMeasurementArea;
+
   public constructor( public readonly model: SpinModel, tandem: Tandem ) {
 
     super( {
@@ -40,14 +42,14 @@ export default class SpinScreenView extends QuantumMeasurementScreenView {
     } );
     this.addChild( dividingLine );
 
-    const spinMeasurementArea = new SpinMeasurementArea( model, this, this.layoutBounds, tandem.createTandem( 'spinMeasurementArea' ) );
-    spinMeasurementArea.left = dividingLineX;
-    this.addChild( spinMeasurementArea );
+    this.spinMeasurementArea = new SpinMeasurementArea( model, this, this.layoutBounds, tandem.createTandem( 'spinMeasurementArea' ) );
+    this.spinMeasurementArea.left = dividingLineX;
+    this.addChild( this.spinMeasurementArea );
 
     // TODO: This is a temporary workaround to make the mockup opacity work. We need to refactor this to use the mockup https://github.com/phetsims/quantum-measurement/issues/53
     this.mockupOpacityProperty && this.mockupOpacityProperty.link( opacity => {
       spinStatePreparationArea.opacity = 1 - opacity;
-      spinMeasurementArea.opacity = 1 - opacity;
+      this.spinMeasurementArea.opacity = 1 - opacity;
     } );
 
     model.currentExperimentProperty.notifyListenersStatic();
@@ -56,6 +58,11 @@ export default class SpinScreenView extends QuantumMeasurementScreenView {
   public override reset(): void {
     this.model.reset();
     super.reset();
+  }
+
+  public override step( dt: number ): void {
+    super.step( dt );
+    this.spinMeasurementArea.step( dt );
   }
 }
 
