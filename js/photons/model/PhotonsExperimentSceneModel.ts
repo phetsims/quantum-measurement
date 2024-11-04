@@ -71,11 +71,13 @@ export default class PhotonsExperimentSceneModel {
       tandem: providedOptions.tandem.createTandem( 'horizontalPolarizationDetector' )
     } );
 
-    // In the single photon mode, we want to reset the detection counts when the polarization direction changes.
+    // In the single photon mode, we want to reset the detection counts
+    // and reset all photons when the polarization direction changes.
     if ( this.laser.emissionMode === 'singlePhoton' ) {
       Multilink.multilink(
         [ this.laser.presetPolarizationDirectionProperty, this.laser.customPolarizationAngleProperty ],
         () => {
+          this.photons.forEach( photon => photon.reset() );
           this.verticalPolarizationDetector.resetDetectionCount();
           this.horizontalPolarizationDetector.resetDetectionCount();
         }
