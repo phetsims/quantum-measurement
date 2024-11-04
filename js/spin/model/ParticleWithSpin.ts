@@ -37,7 +37,7 @@ export class ParticleWithSpin {
   public positionProperty: Vector2Property;
   public speed = 1;
 
-  public constructor( public readonly id: number ) {
+  public constructor( private readonly offset: Vector2 ) {
     this.activeProperty = new BooleanProperty( false );
     this.positionProperty = new Vector2Property( new Vector2( 0, 0 ) );
   }
@@ -56,7 +56,7 @@ export class ParticleWithSpin {
 
       this.calculatePosition();
 
-      if ( this.lifetime > 10 ) {
+      if ( this.lifetime > 5 ) {
         this.reset();
       }
     }
@@ -100,7 +100,7 @@ export class ParticleWithSpin {
     };
 
     // Travel along the path
-    this.positionProperty.value = pathTravel( this.path, this.lifetime );
+    this.positionProperty.value = pathTravel( this.path, this.lifetime ).plus( this.offset );
 
   }
 

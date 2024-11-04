@@ -35,12 +35,20 @@ type SelfOptions = {
 
 type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
+// Constants
+
+const MAX_NUMBER_OF_SINGLE_PARTICLES = 50;
+const MAX_NUMBER_OF_MULTIPLE_PARTICLES = 5000;
+const PARTICLE_RAY_WIDTH = 0.03;
+const PARTICLE_CREATION_BATCH_SIZE = 5; // Number of particles created per step at max source mode
+
 export default class SpinModel implements TModel {
 
   public readonly blochSphere: SimpleBlochSphere;
 
   // Single particles shot by the user transversing the experiment
   public readonly singleParticles: ParticleWithSpin[];
+  public readonly multipleParticles: ParticleWithSpin[];
 
   public readonly currentExperimentProperty: Property<SpinExperiment>;
 
@@ -58,8 +66,6 @@ export default class SpinModel implements TModel {
   public readonly measurementLines: MeasurementLine[];
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
-
-    const MAX_NUMBER_OF_SINGLE_PARTICLES = 50;
 
     this.currentExperimentProperty = new Property<SpinExperiment>( SpinExperiment.EXPERIMENT_1 );
 
@@ -118,8 +124,13 @@ export default class SpinModel implements TModel {
       }
     ] );
 
-    this.singleParticles = _.times( MAX_NUMBER_OF_SINGLE_PARTICLES, id => {
-      return new ParticleWithSpin( id );
+    // Create all particles that will be used in the experiment.  It works better for phet-io if these are created at
+    // construction time and activated and deactivated as needed, rather than creating and destroying them.
+    this.singleParticles = _.times( MAX_NUMBER_OF_SINGLE_PARTICLES, index => {
+      return new ParticleWithSpin( Vector2.ZERO );
+    } );
+    this.multipleParticles = _.times( MAX_NUMBER_OF_MULTIPLE_PARTICLES, index => {
+      return new ParticleWithSpin( new Vector2( PARTICLE_RAY_WIDTH * ( dotRandom.nextDouble() * 2 - 1 ), PARTICLE_RAY_WIDTH * ( dotRandom.nextDouble() * 2 - 1 ) ) );
     } );
 
     // TODO: Maybe integrate with the ParticleRay constructor? https://github.com/phetsims/quantum-measurement/issues/53
@@ -152,14 +163,12 @@ export default class SpinModel implements TModel {
       [
         this.currentExperimentProperty,
         this.particleSourceModel.sourceModeProperty,
-        this.particleSourceModel.particleAmmountProperty,
         this.particleSourceModel.spinStateProperty
       ],
-      ( experiment, sourceMode, particleAmmount ) => {
+      ( experiment, sourceMode ) => {
         this.particleRays.reset();
         this.particleRays.isShortExperiment = experiment.isShortExperiment;
         this.particleRays.updateExperiment();
-        updateProbabilities( this.particleSourceModel.particleAmmountProperty.value );
 
         const isSingle = sourceMode === SourceMode.SINGLE;
         this.measurementLines[ 0 ].isActiveProperty.value = isSingle;
@@ -169,6 +178,7 @@ export default class SpinModel implements TModel {
         this.measurementLines.forEach( line => line.measurementStateProperty.reset() );
 
         this.singleParticles.forEach( particle => particle.reset() );
+        this.multipleParticles.forEach( particle => particle.reset() );
 
         this.sternGerlachs.forEach( ( SternGerlach, index ) => {
           if ( experiment.experimentSetting.length > index ) {
@@ -185,9 +195,13 @@ export default class SpinModel implements TModel {
         // In the single case, this prepares the probabilities for the particle that will be shot
         this.prepare();
 
-        updateProbabilities( particleAmmount );
+        updateProbabilities( this.particleSourceModel.particleAmmountProperty.value );
       }
     );
+
+    this.particleSourceModel.particleAmmountProperty.link( particleAmmount => {
+      updateProbabilities( particleAmmount );
+    } );
 
     // Find the first inactive single particle and activate it
     this.particleSourceModel.currentlyShootingParticlesProperty.link( shooting => {
@@ -195,45 +209,49 @@ export default class SpinModel implements TModel {
         const particleToActivate = this.singleParticles.find( particle => !particle.activeProperty.value );
 
         if ( particleToActivate ) {
-          particleToActivate.reset();
-
-          // Set the first spin vector to the state of the generated particles
-          particleToActivate.spinVectors[ 0 ] = SpinDirection.spinToVector( this.particleSourceModel.spinStateProperty.value );
-
-          const measure = ( sternGerlach: SternGerlach, experimentStageIndex: number, incomingState: SpinDirection | null ) => {
-            const upProbability = sternGerlach.prepare( incomingState );
-            const isResultUp = dotRandom.nextDouble() < upProbability;
-            particleToActivate.isSpinUp[ experimentStageIndex ] = isResultUp;
-            particleToActivate.spinVectors[ experimentStageIndex ] = SpinDirection.spinToVector(
-              isResultUp ?
-              sternGerlach.isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS :
-              sternGerlach.isZOrientedProperty.value ? SpinDirection.Z_MINUS : null
-            );
-            return isResultUp;
-          };
-
-          // First measurement: SG0 where the particle decides to go up or down
-          const isResultUp = measure( this.sternGerlachs[ 0 ], 1, this.particleSourceModel.spinStateProperty.value );
-
-          // If current experiment is short, the particle only goes through SG0
-          if ( !this.currentExperimentProperty.value.isShortExperiment ) {
-            if ( isResultUp ) {
-              // If it went up, go through SG1
-              measure( this.sternGerlachs[ 1 ], 2, this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS );
-            }
-            else {
-              // If it went down, go through SG2
-              measure( this.sternGerlachs[ 2 ], 2, this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_MINUS : null );
-            }
-          }
-
-          // Once the particle knows the directions it took, we assign the path to it
-          this.particleRays.assignRayToParticle( particleToActivate );
-
-          particleToActivate.activeProperty.value = true;
+          this.activateParticle( particleToActivate );
         }
       }
     } );
+  }
+
+  private activateParticle( particle: ParticleWithSpin ): void {
+    particle.reset();
+
+    // Set the first spin vector to the state of the generated particles
+    particle.spinVectors[ 0 ] = SpinDirection.spinToVector( this.particleSourceModel.spinStateProperty.value );
+
+    const measure = ( sternGerlach: SternGerlach, experimentStageIndex: number, incomingState: SpinDirection | null ) => {
+      const upProbability = sternGerlach.prepare( incomingState );
+      const isResultUp = dotRandom.nextDouble() < upProbability;
+      particle.isSpinUp[ experimentStageIndex ] = isResultUp;
+      particle.spinVectors[ experimentStageIndex ] = SpinDirection.spinToVector(
+        isResultUp ?
+        sternGerlach.isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS :
+        sternGerlach.isZOrientedProperty.value ? SpinDirection.Z_MINUS : null
+      );
+      return isResultUp;
+    };
+
+    // First measurement: SG0 where the particle decides to go up or down
+    const isResultUp = measure( this.sternGerlachs[ 0 ], 1, this.particleSourceModel.spinStateProperty.value );
+
+    // If current experiment is short, the particle only goes through SG0
+    if ( !this.currentExperimentProperty.value.isShortExperiment ) {
+      if ( isResultUp ) {
+        // If it went up, go through SG1
+        measure( this.sternGerlachs[ 1 ], 2, this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS );
+      }
+      else {
+        // If it went down, go through SG2
+        measure( this.sternGerlachs[ 2 ], 2, this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_MINUS : null );
+      }
+    }
+
+    // Once the particle knows the directions it took, we assign the path to it
+    this.particleRays.assignRayToParticle( particle );
+
+    particle.activeProperty.value = true;
   }
 
   public prepare(): void {
@@ -263,6 +281,7 @@ export default class SpinModel implements TModel {
   public reset(): void {
     this.sternGerlachs.forEach( sternGerlach => sternGerlach.reset() );
     this.singleParticles.forEach( particle => particle.reset() );
+    this.multipleParticles.forEach( particle => particle.reset() );
     this.measurementLines.forEach( line => line.reset() );
     this.currentExperimentProperty.reset();
     this.particleSourceModel.spinStateProperty.reset();
@@ -274,7 +293,9 @@ export default class SpinModel implements TModel {
    * @param dt - time step, in seconds
    */
   public step( dt: number ): void {
-    this.singleParticles.forEach( particle => {
+
+    const activeSingleParticles = this.singleParticles.filter( particle => particle.activeProperty.value );
+    activeSingleParticles.forEach( particle => {
       const behindMeasurementLine: boolean[] = this.measurementLines.map( line => line.isParticleBehind( particle.positionProperty.value ) );
       particle.step( dt );
 
@@ -285,6 +306,23 @@ export default class SpinModel implements TModel {
           line.measurementStateProperty.value = MeasurementState.MEASURING;
         }
       } );
+    } );
+
+    if ( this.particleSourceModel.sourceModeProperty.value === SourceMode.CONTINUOUS ) {
+
+      const batchSize = Math.floor( this.particleSourceModel.particleAmmountProperty.value * PARTICLE_CREATION_BATCH_SIZE );
+
+      for ( let i = 0; i < batchSize; i++ ) {
+        const particleToActivate = this.multipleParticles.find( particle => !particle.activeProperty.value );
+        if ( particleToActivate ) {
+          this.activateParticle( particleToActivate );
+        }
+      }
+    }
+
+    const activeMultipleParticles = this.multipleParticles.filter( particle => particle.activeProperty.value );
+    activeMultipleParticles.forEach( particle => {
+      particle.step( dt );
     } );
   }
 }

@@ -27,7 +27,8 @@ export default class ParticleRayPath extends Node {
     particleRays: ParticleRays,
     modelViewTransform: ModelViewTransform2,
     sourceModeProperty: TReadOnlyProperty<SourceMode>,
-    particles: ParticleWithSpin[],
+    singleParticles: ParticleWithSpin[],
+    multipleParticles: ParticleWithSpin[],
     tandem: Tandem ) {
 
     const rayPathOptions: PathOptions = {
@@ -42,7 +43,7 @@ export default class ParticleRayPath extends Node {
       return new Path( null, rayPathOptions );
     } );
 
-    const singleParticleNodes = particles.map( particle => {
+    const singleParticleNodes = singleParticles.map( particle => {
       const particleNode = new ShadedSphereNode( 15, {
         mainColor: 'magenta',
         highlightColor: 'white',
@@ -56,10 +57,23 @@ export default class ParticleRayPath extends Node {
       return particleNode;
     } );
 
+    const multipleParticleNodes = multipleParticles.map( particle => {
+      const particleNode = new Path( Shape.circle( 1 ), {
+        visibleProperty: particle.activeProperty,
+        fill: 'magenta'
+      } );
+
+      particle.positionProperty.link( position => {
+        particleNode.translation = modelViewTransform.modelToViewPosition( position );
+      } );
+
+      return particleNode;
+    } );
+
     super( {
       tandem: tandem,
       localBounds: new Bounds2( 0, 0, 0, 0 ),
-      children: [ ...rayPaths, ...singleParticleNodes ]
+      children: [ ...singleParticleNodes, ...multipleParticleNodes ]
     } );
 
     particleRays.updatedEmitter.addListener( () => {
