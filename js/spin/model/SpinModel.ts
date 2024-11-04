@@ -10,6 +10,7 @@
  * @author Agustín Vallejo
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import Property from '../../../../axon/js/Property.js';
@@ -44,12 +45,16 @@ const PARTICLE_CREATION_BATCH_SIZE = 5; // Number of particles created per step 
 
 export default class SpinModel implements TModel {
 
+  // Bloch Sphere that represents the current spin state
   public readonly blochSphere: SimpleBlochSphere;
 
-  // Single particles shot by the user transversing the experiment
+  // Single particles shot by the user
   public readonly singleParticles: ParticleWithSpin[];
+
+  // Particle beam for the continuous source mode
   public readonly multipleParticles: ParticleWithSpin[];
 
+  // Current experiment selected by the user
   public readonly currentExperimentProperty: Property<SpinExperiment>;
 
   // MODEL ELEMENTS OF UI COMPONENTS ------------------------------------------------
@@ -57,13 +62,17 @@ export default class SpinModel implements TModel {
   // Information of the particle paths
   public readonly particleRays: ParticleRays;
 
-  // Position of the particle source
+  // Model for the particle shooting apparatus
   public readonly particleSourceModel: ParticleSourceModel;
 
   // Models for the three available Stern-Gerlach experiments. Second and Third are counted top to bottom.
   public readonly sternGerlachs: SternGerlach[];
 
+  // Invisible lines that trigger measurement of the particles when they fly through them
   public readonly measurementLines: MeasurementLine[];
+
+  // Expected percentage of particles that should be visible in the histogram
+  public readonly expectedPercentageVisibleProperty: BooleanProperty;
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
@@ -182,6 +191,10 @@ export default class SpinModel implements TModel {
           this.activateParticle( particleToActivate );
         }
       }
+    } );
+
+    this.expectedPercentageVisibleProperty = new BooleanProperty( false, {
+      tandem: providedOptions.tandem.createTandem( 'expectedPercentageVisibleProperty' )
     } );
   }
 

@@ -9,7 +9,6 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -23,10 +22,9 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import ParticleSourceModel from '../model/ParticleSourceModel.js';
 import { SourceMode } from '../model/SourceMode.js';
 
-export default class ParticleSourceNode extends VBox {
+// TODO: Let's not have this be a VBox, rather, position things around it! https://github.com/phetsims/quantum-measurement/issues/53
 
-  // Global position vector for the particle ray, it is updated outside of the constructor
-  public particleExitGlobalPosition = new Vector2( 0, 0 );
+export default class ParticleSourceNode extends VBox {
 
   public constructor(
     particleSourceModel: ParticleSourceModel,

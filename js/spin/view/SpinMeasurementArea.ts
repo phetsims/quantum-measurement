@@ -13,10 +13,12 @@ import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js'
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import { Shape } from '../../../../kite/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ShadedSphereNode from '../../../../scenery-phet/js/ShadedSphereNode.js';
-import { Node, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
+import { HBox, Node, Path, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
+import Checkbox from '../../../../sun/js/Checkbox.js';
 import ComboBox, { ComboBoxItem } from '../../../../sun/js/ComboBox.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
@@ -142,6 +144,25 @@ export default class SpinMeasurementArea extends VBox {
       { tandem: tandem.createTandem( 'manyParticlesCanvasNode' ) }
     );
 
+    const expectedPercentageCheckbox = new Checkbox( model.expectedPercentageVisibleProperty, new HBox( {
+      children: [
+        new Text( 'Expected percentage', { font: new PhetFont( 16 ) } ),
+        new Path( new Shape().moveTo( 0, 0 ).lineTo( 20, 0 ), {
+          stroke: '#0f0',
+          lineWidth: 4
+        } )
+      ],
+      spacing: 5
+    } ), {
+      // TODO: Make checkbox smaller https://github.com/phetsims/quantum-measurement/issues/53
+      left: particleSourceNode.right,
+      top: particleSourceNode.bottom,
+      visibleProperty: new DerivedProperty(
+        [ model.particleSourceModel.sourceModeProperty ],
+        sourceMode => sourceMode === SourceMode.CONTINUOUS
+      )
+    } );
+
     const experimentAreaNode = new Node( {
       children: [
         manyParticlesCanvasNode,
@@ -149,7 +170,8 @@ export default class SpinMeasurementArea extends VBox {
         particleSourceNode,
         ...sternGerlachNodes,
         ...measurementLines,
-        ...histograms
+        ...histograms,
+        expectedPercentageCheckbox
       ]
     } );
 
