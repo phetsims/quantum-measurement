@@ -141,10 +141,10 @@ export default class ObliquePolarizationAngleIndicator extends Node {
       headHeight: 10,
       tailWidth: 2,
       stroke: '#0f0',
-      fill: '#0f0'
+      fill: '#0f0',
+      doubleHead: true
     };
-    const polarizationVectorPlus = new ArrowNode( 0, 0, 0, -AXIS_LENGTH, polarizationVectorOptions );
-    const polarizationVectorMinus = new ArrowNode( 0, 0, 0, AXIS_LENGTH, polarizationVectorOptions );
+    const polarizationVector = new ArrowNode( 0, AXIS_LENGTH, 0, -AXIS_LENGTH, polarizationVectorOptions );
 
     const options = optionize<PolarizationPlaneRepresentationOptions, SelfOptions, NodeOptions>()( {
 
@@ -157,8 +157,7 @@ export default class ObliquePolarizationAngleIndicator extends Node {
         zAxis,
         xAxisLabel,
         zAxisLabel,
-        polarizationVectorPlus,
-        polarizationVectorMinus,
+        polarizationVector,
         yAxisArrowHead,
         yAxisLine,
         yAxisLabel
@@ -178,10 +177,10 @@ export default class ObliquePolarizationAngleIndicator extends Node {
       const polarizationVectorMinusInXZPlane = polarizationVectorPlusInXZPlane.times( -1 );
 
       // Project the vectors and set the tips of the arrows accordingly.
-      const tipPlus = project3Dto2D( polarizationVectorPlusInXZPlane.x, 0, polarizationVectorPlusInXZPlane.y );
-      polarizationVectorPlus.setTip( tipPlus.x, tipPlus.y );
-      const tipMinus = project3Dto2D( polarizationVectorMinusInXZPlane.x, 0, polarizationVectorMinusInXZPlane.y );
-      polarizationVectorMinus.setTip( tipMinus.x, tipMinus.y );
+      const tip = project3Dto2D( polarizationVectorPlusInXZPlane.x, 0, polarizationVectorPlusInXZPlane.y );
+      polarizationVector.setTip( tip.x, tip.y );
+      const tail = project3Dto2D( polarizationVectorMinusInXZPlane.x, 0, polarizationVectorMinusInXZPlane.y );
+      polarizationVector.setTail( tail.x, tail.y );
     } );
   }
 }

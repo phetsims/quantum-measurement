@@ -11,7 +11,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Node, NodeOptions, RichText, Text } from '../../../../scenery/js/imports.js';
+import { Node, NodeOptions, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import Panel from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
@@ -19,10 +19,11 @@ import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstant
 import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHistogram.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import PhotonsExperimentSceneModel from '../model/PhotonsExperimentSceneModel.js';
+import ObliquePolarizationAngleIndicator from './ObliquePolarizationAngleIndicator.js';
 import PhotonDetectionProbabilityPanel from './PhotonDetectionProbabilityPanel.js';
 import PhotonPolarizationAngleControl from './PhotonPolarizationAngleControl.js';
+import PhotonsEquationNode from './PhotonsEquationNode.js';
 import PhotonTestingArea from './PhotonTestingArea.js';
-import ObliquePolarizationAngleIndicator from './ObliquePolarizationAngleIndicator.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhotonsExperimentSceneViewOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
@@ -76,15 +77,16 @@ export default class PhotonsExperimentSceneView extends Node {
         cornerRadius: 4,
         xMargin: 20,
         yMargin: 10,
-        align: 'center',
-        right: QuantumMeasurementConstants.LAYOUT_BOUNDS.right - 140,
-        top: 0
+        align: 'center'
       }
     );
 
     // Create the histogram that shows the detection counts for the vertical and horizontal detectors.
     const leftProperty = model.laser.emissionMode === 'singlePhoton' ? model.verticalPolarizationDetector.detectionCountProperty : model.verticalPolarizationDetector.detectionRateProperty;
     const rightProperty = model.laser.emissionMode === 'singlePhoton' ? model.horizontalPolarizationDetector.detectionCountProperty : model.horizontalPolarizationDetector.detectionRateProperty;
+
+    const equationsBox = new PhotonsEquationNode( leftProperty, rightProperty );
+
     const countHistogram = new QuantumMeasurementHistogram(
       leftProperty,
       rightProperty,
@@ -94,8 +96,6 @@ export default class PhotonsExperimentSceneView extends Node {
         new RichText( 'H', { font: new PhetFont( { size: 17, weight: 'bold' } ) } )
       ],
       {
-        right: QuantumMeasurementConstants.LAYOUT_BOUNDS.right - 180,
-        centerY: photonTestingArea.centerY,
         displayMode: model.laser.emissionMode === 'singlePhoton' ? 'fraction' : 'rate',
         orientation: 'horizontal',
         matchLabelColors: true,
@@ -106,14 +106,25 @@ export default class PhotonsExperimentSceneView extends Node {
       }
     );
 
+    // Working name
+    const dataDashboardBox = new VBox( {
+      children: [
+        averagePolarizationRateTitlePanel,
+        equationsBox,
+        countHistogram
+      ],
+      spacing: 20,
+      right: QuantumMeasurementConstants.LAYOUT_BOUNDS.right - 140,
+      top: 0
+    } );
+
     const options = optionize<PhotonsExperimentSceneViewOptions, SelfOptions, NodeOptions>()( {
       children: [
         photonDetectionProbabilityPanel,
         polarizationIndicator,
         photonPolarizationAngleControl,
         photonTestingArea,
-        averagePolarizationRateTitlePanel,
-        countHistogram
+        dataDashboardBox
       ]
     }, providedOptions );
 

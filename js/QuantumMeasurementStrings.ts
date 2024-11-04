@@ -62,6 +62,7 @@ type StringsType = {
   'tailsStringProperty': LocalizedStringProperty;
   'upStringProperty': LocalizedStringProperty;
   'VStringProperty': LocalizedStringProperty;
+  'NStringProperty': LocalizedStringProperty;
   'verticalStringProperty': LocalizedStringProperty;
 };
 

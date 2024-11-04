@@ -7,6 +7,7 @@
  */
 
 import ScreenView from '../../../joist/js/ScreenView.js';
+import { Color } from '../../../scenery/js/imports.js';
 import quantumMeasurement from '../quantumMeasurement.js';
 
 const QuantumMeasurementConstants = {
@@ -20,7 +21,12 @@ const QuantumMeasurementConstants = {
   SPIN_DOWN_ARROW_CHARACTER: '\u2b63',
   CLASSICAL_UP_SYMBOL: '\uD83C\uDF1E\uFE0E\uFE0E', // 🌞 Sun symbol
   CLASSICAL_DOWN_SYMBOL: '\u263D', // 🌙 Moon Symbol
-  KET: '\u27e9'
+  KET: '\u27e9',
+
+  CREATE_COLOR_SPAN: ( text: string, color: Color, bold = false ): string => {
+    const weight = bold ? 'bold' : 'normal';
+    return `<span style="font-weight: ${weight}; color: ${color.toCSS()};">${text}</span>`;
+  }
 };
 
 quantumMeasurement.register( 'QuantumMeasurementConstants', QuantumMeasurementConstants );
