@@ -6,15 +6,15 @@
  *
  * The position of the axes are like this in this view:
  *
- *                            z
+ *                            z (V)
  *                            ^
  *                            |
  *                            |
- *                            +----> y
+ *                            +----> y (Propagation)
  *                           /
  *                         /
  *                       /
- *                     x
+ *                     x (H)
  *
  * @author Agustín Vallejo (PhET Interactive Simulations)
  * @author John Blanco (PhET Interactive Simulations)
