@@ -62,17 +62,17 @@ export default class PhotonsExperimentSceneModel {
 
     // Create the photon detectors that will measure the rate at which photons are arriving after being either reflected
     // or transmitted by the polarizing beam splitter.
-    this.verticalPolarizationDetector = new PhotonDetector( new Vector2( 0, 0.175 ), 'up', {
+    this.verticalPolarizationDetector = new PhotonDetector( new Vector2( 0, 0.2 ), 'up', {
       displayMode: this.laser.emissionMode === 'singlePhoton' ? 'count' : 'rate',
       tandem: providedOptions.tandem.createTandem( 'verticalPolarizationDetector' )
     } );
-    this.horizontalPolarizationDetector = new PhotonDetector( new Vector2( 0.15, -0.175 ), 'down', {
+    this.horizontalPolarizationDetector = new PhotonDetector( new Vector2( 0.125, -0.075 ), 'down', {
       displayMode: this.laser.emissionMode === 'singlePhoton' ? 'count' : 'rate',
       tandem: providedOptions.tandem.createTandem( 'horizontalPolarizationDetector' )
     } );
 
-    // In the single photon mode, we want to reset the detection counts
-    // and reset all photons when the polarization direction changes.
+    // In the single photon mode, we want to reset the detection counts and remove all photons when the polarization
+    // direction changes.
     if ( this.laser.emissionMode === 'singlePhoton' ) {
       Multilink.multilink(
         [ this.laser.presetPolarizationDirectionProperty, this.laser.customPolarizationAngleProperty ],
@@ -84,7 +84,7 @@ export default class PhotonsExperimentSceneModel {
       );
     }
 
-    this.mirror = new Mirror( new Vector2( 0.15, 0 ), {
+    this.mirror = new Mirror( new Vector2( 0.125, 0 ), {
       tandem: providedOptions.tandem.createTandem( 'mirror' )
     } );
 

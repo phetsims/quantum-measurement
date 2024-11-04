@@ -49,7 +49,7 @@ export default class PhotonsExperimentSceneView extends Node {
     const photonTestingArea = new PhotonTestingArea( model, {
 
       // center position empirically determined to match design doc
-      center: new Vector2( 420, 270 ),
+      center: new Vector2( 420, 230 ),
 
       tandem: providedOptions.tandem.createTandem( 'photonTestingArea' )
     } );
@@ -57,7 +57,7 @@ export default class PhotonsExperimentSceneView extends Node {
     const polarizationIndicator = new ObliquePolarizationAngleIndicator( model.laser.polarizationAngleProperty, {
       scale: 1.5,
       centerX: photonDetectionProbabilityPanel.centerX,
-      centerY: photonTestingArea.centerY,
+      y: photonTestingArea.y,
       tandem: providedOptions.tandem.createTandem( 'polarizationIndicator' )
     } );
 
