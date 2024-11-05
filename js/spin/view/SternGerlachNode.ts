@@ -88,7 +88,7 @@ export default class SternGerlachNode extends Node {
               QuantumMeasurementStrings.SGSubXStringProperty
             ],
             ( isZOriented, SGSubZ, SGSubX ) => isZOriented ? SGSubZ : SGSubX ),
-          { font: new PhetFont( 20 ), fill: 'white', center: new Vector2( -STERN_GERLACH_WIDTH / 2 + 25, -STERN_GERLACH_HEIGHT / 2 + 80 ) } )
+          { font: new PhetFont( 18 ), fill: 'white', center: new Vector2( -STERN_GERLACH_WIDTH / 2 + 25, -STERN_GERLACH_HEIGHT / 2 + 70 ) } )
       ]
     } );
 
