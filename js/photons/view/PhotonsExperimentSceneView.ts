@@ -11,7 +11,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Node, NodeOptions, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
+import { HBox, Node, NodeOptions, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import Panel from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
@@ -19,6 +19,7 @@ import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstant
 import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHistogram.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import PhotonsExperimentSceneModel from '../model/PhotonsExperimentSceneModel.js';
+import NormalizedMeasurementProportionsGraph from './NormalizedMeasurementProportionsGraph.js';
 import ObliquePolarizationAngleIndicator from './ObliquePolarizationAngleIndicator.js';
 import PhotonDetectionProbabilityPanel from './PhotonDetectionProbabilityPanel.js';
 import PhotonPolarizationAngleControl from './PhotonPolarizationAngleControl.js';
@@ -82,12 +83,20 @@ export default class PhotonsExperimentSceneView extends Node {
       }
     );
 
-    // Create the histogram that shows the detection counts for the vertical and horizontal detectors.
-    const leftProperty = model.laser.emissionMode === 'singlePhoton' ? model.verticalPolarizationDetector.detectionCountProperty : model.verticalPolarizationDetector.detectionRateProperty;
-    const rightProperty = model.laser.emissionMode === 'singlePhoton' ? model.horizontalPolarizationDetector.detectionCountProperty : model.horizontalPolarizationDetector.detectionRateProperty;
+    // Create the equation representation that shows the detection counts for the vertical and horizontal detectors.
+    const leftProperty = model.laser.emissionMode === 'singlePhoton' ?
+                         model.verticalPolarizationDetector.detectionCountProperty :
+                         model.verticalPolarizationDetector.detectionRateProperty;
+    const rightProperty = model.laser.emissionMode === 'singlePhoton' ?
+                          model.horizontalPolarizationDetector.detectionCountProperty :
+                          model.horizontalPolarizationDetector.detectionRateProperty;
 
     const equationsBox = new PhotonsEquationNode( leftProperty, rightProperty );
 
+    // Create the graph that indicates the relative proportions of vertical and horizontal detections.
+    const normalizedMeasurementProportionsGraph = new NormalizedMeasurementProportionsGraph();
+
+    // Create the histogram that shows the detection counts for the vertical and horizontal detectors.
     const countHistogram = new QuantumMeasurementHistogram(
       leftProperty,
       rightProperty,
@@ -107,12 +116,19 @@ export default class PhotonsExperimentSceneView extends Node {
       }
     );
 
+    // Put the two dynamic data display nodes together in a horizontal box.
+    const dynamicDataDisplayBox = new HBox( {
+      children: [ normalizedMeasurementProportionsGraph, countHistogram ],
+      spacing: 20,
+      align: 'center'
+    } );
+
     // Working name
     const dataDashboardBox = new VBox( {
       children: [
         averagePolarizationRateTitlePanel,
         equationsBox,
-        countHistogram
+        dynamicDataDisplayBox
       ],
       align: 'left',
       spacing: 20,
