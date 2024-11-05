@@ -94,7 +94,7 @@ export default class PhotonsExperimentSceneView extends Node {
     const equationsBox = new PhotonsEquationNode( leftProperty, rightProperty );
 
     // Create the graph that indicates the relative proportions of vertical and horizontal detections.
-    const normalizedMeasurementProportionsGraph = new NormalizedOutcomeVectorGraph();
+    const normalizedMeasurementProportionsGraph = new NormalizedOutcomeVectorGraph( model.normalizedOutcomeValueProperty );
 
     // Create the histogram that shows the detection counts for the vertical and horizontal detectors.
     const countHistogram = new QuantumMeasurementHistogram(
@@ -102,8 +102,19 @@ export default class PhotonsExperimentSceneView extends Node {
       rightProperty,
       new BooleanProperty( true ),
       [
-        new RichText( 'V', { font: new PhetFont( { size: 17, weight: 'bold' } ), fill: QuantumMeasurementColors.verticalPolarizationColorProperty } ),
-        new RichText( 'H', { font: new PhetFont( { size: 17, weight: 'bold' } ) } )
+        new RichText(
+          'V',
+          {
+            font: new PhetFont( { size: 17, weight: 'bold' } ),
+            fill: QuantumMeasurementColors.verticalPolarizationColorProperty
+          }
+        ),
+        new RichText(
+          'H',
+          {
+            font: new PhetFont( { size: 17, weight: 'bold' } ),
+            fill: QuantumMeasurementColors.horizontalPolarizationColorProperty
+          } )
       ],
       {
         displayMode: model.laser.emissionMode === 'singlePhoton' ? 'fraction' : 'rate',

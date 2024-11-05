@@ -7,10 +7,13 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
+import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import Laser, { PhotonEmissionMode } from './Laser.js';
 import Mirror from './Mirror.js';
@@ -45,6 +48,9 @@ export default class PhotonsExperimentSceneModel {
   public readonly verticalPolarizationDetector: PhotonDetector;
   public readonly horizontalPolarizationDetector: PhotonDetector;
 
+  // The normalized outcome value for the experiment.
+  public readonly normalizedOutcomeValueProperty: TReadOnlyProperty<number>;
+
   // The photons that will be emitted and reflected in the experiment.
   public readonly photons: Photon[] = [];
 
@@ -70,6 +76,27 @@ export default class PhotonsExperimentSceneModel {
       displayMode: this.laser.emissionMode === 'singlePhoton' ? 'count' : 'rate',
       tandem: providedOptions.tandem.createTandem( 'horizontalPolarizationDetector' )
     } );
+
+    // Create a derived Property for the normalized outcome value.  This is a little different depending on the
+    // experiment mode, but the general idea is that it's the difference between the two measurements divided by the sum
+    // of the two measurements.
+    const verticalMeasurementProperty = this.laser.emissionMode === 'singlePhoton' ?
+                                        this.verticalPolarizationDetector.detectionCountProperty :
+                                        this.verticalPolarizationDetector.detectionRateProperty;
+    const horizontalMeasurementProperty = this.laser.emissionMode === 'singlePhoton' ?
+                                          this.horizontalPolarizationDetector.detectionCountProperty :
+                                          this.horizontalPolarizationDetector.detectionRateProperty;
+    this.normalizedOutcomeValueProperty = new DerivedProperty(
+      [ verticalMeasurementProperty, horizontalMeasurementProperty ],
+      ( verticalValue, horizontalValue ) => verticalValue + horizontalValue === 0 ?
+                                            0 :
+                                            ( horizontalValue - verticalValue ) / ( horizontalValue + verticalValue ),
+      {
+        tandem: providedOptions.tandem.createTandem( 'normalizedOutcomeValueProperty' ),
+        phetioReadOnly: true,
+        phetioValueType: NumberIO
+      }
+    );
 
     // In the single photon mode, we want to reset the detection counts and remove all photons when the polarization
     // direction changes.
