@@ -12,15 +12,17 @@ import Dimension2 from '../../../../dot/js/Dimension2.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { LinearGradient, Node, Path, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
+import { HBox, LinearGradient, Node, Path, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
 import RoundMomentaryButton from '../../../../sun/js/buttons/RoundMomentaryButton.js';
 import HSlider from '../../../../sun/js/HSlider.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import ParticleSourceModel from '../model/ParticleSourceModel.js';
 import { SourceMode } from '../model/SourceMode.js';
+import HBarFractionNode from './HBarFractionNode.js';
 
 // TODO: Let's not have this be a VBox, rather, position things around it! https://github.com/phetsims/quantum-measurement/issues/53
 
@@ -95,8 +97,13 @@ export default class ParticleSourceNode extends VBox {
       tandem: tandem.createTandem( 'particleSourceNode' ),
       spacing: 20,
       children: [
-        // TODO: Translatable! https://github.com/phetsims/quantum-measurement/issues/53
-        new RichText( 'Spin ℏ/2 Source', { font: new PhetFont( 20 ) } ),
+        new HBox( {
+          spacing: 10,
+          children: [
+            new HBarFractionNode( 20 ),
+            new RichText( QuantumMeasurementStrings.SpinSourceStringProperty, { font: new PhetFont( 20 ) } )
+          ]
+        } ),
         new Node( {
           children: [
             particleSourceBarrel,
@@ -105,8 +112,7 @@ export default class ParticleSourceNode extends VBox {
             particleAmmountSlider
           ]
         } ),
-        // TODO: Translatable! https://github.com/phetsims/quantum-measurement/issues/53
-        new RichText( 'Source Mode', { font: new PhetFont( { size: 20, weight: 'bold' } ) } ),
+        new RichText( QuantumMeasurementStrings.SourceModeStringProperty, { font: new PhetFont( { size: 20, weight: 'bold' } ) } ),
         new AquaRadioButtonGroup( particleSourceModel.sourceModeProperty, SourceMode.enumeration.values.map( sourceMode => {
           return {
             value: sourceMode,

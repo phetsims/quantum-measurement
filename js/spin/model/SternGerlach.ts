@@ -22,16 +22,20 @@ import { SpinDirection } from './SpinDirection.js';
 
 export default class SternGerlach {
 
-  // TODO: Document! https://github.com/phetsims/quantum-measurement/issues/53
-  //
+  // Position of the Stern Gerlach (SG) apparatus in the model coordinates
   public readonly positionProperty: Vector2Property;
 
+  // Wether the SG measures in the Z or X direction
   public readonly isZOrientedProperty: BooleanProperty;
 
+  // Visibility of the SG apparatus
   public readonly isVisibleProperty: BooleanProperty;
 
+  // Probability of a particle to be measured in the up and down states
   public readonly upProbabilityProperty: NumberProperty;
   public readonly downProbabilityProperty: TReadOnlyProperty<number>;
+
+  // Expected spin after the measurement
   public readonly expectedSpinProperty: Property<SpinDirection>;
 
   // Local position vectors

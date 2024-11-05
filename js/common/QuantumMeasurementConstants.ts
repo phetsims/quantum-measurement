@@ -22,6 +22,7 @@ const QuantumMeasurementConstants = {
   CLASSICAL_UP_SYMBOL: '\uD83C\uDF1E\uFE0E\uFE0E', // 🌞 Sun symbol
   CLASSICAL_DOWN_SYMBOL: '\u263D', // 🌙 Moon Symbol
   KET: '\u27e9',
+  HBAR: '\u210F',
 
   CREATE_COLOR_SPAN: ( text: string, color: Color, bold = false ): string => {
     const weight = bold ? 'bold' : 'normal';

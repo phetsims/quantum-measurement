@@ -1,11 +1,9 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * ManyParticlesCanvasNode handles the creation and display of an NxN grid of coins,
- * each represented by a pixel.
+ * ManyParticlesCanvasNode handles the ray of particles shot by the particle source.
  *
  * @author Agustín Vallejo
- *
  */
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';

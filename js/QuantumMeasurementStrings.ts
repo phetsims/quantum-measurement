@@ -64,6 +64,11 @@ type StringsType = {
   'VStringProperty': LocalizedStringProperty;
   'NStringProperty': LocalizedStringProperty;
   'verticalStringProperty': LocalizedStringProperty;
+  'SGSubZStringProperty': LocalizedStringProperty;
+  'SGSubXStringProperty': LocalizedStringProperty;
+  'SternGerlachMeasurementsStringProperty': LocalizedStringProperty;
+  'SourceModeStringProperty': LocalizedStringProperty;
+  'SpinSourceStringProperty': LocalizedStringProperty;
 };
 
 const QuantumMeasurementStrings = getStringModule( 'QUANTUM_MEASUREMENT' ) as StringsType;

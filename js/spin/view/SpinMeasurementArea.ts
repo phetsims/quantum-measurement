@@ -25,6 +25,7 @@ import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHistogram.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { SourceMode } from '../model/SourceMode.js';
 import SpinExperiment from '../model/SpinExperiment.js';
 import SpinModel from '../model/SpinModel.js';
@@ -73,16 +74,23 @@ export default class SpinMeasurementArea extends VBox {
 
     const createPercentageHistogram = ( sternGerlach: SternGerlach, visibleProperty: TReadOnlyProperty<boolean> ) => {
 
-      // TODO: Translatable! https://github.com/phetsims/quantum-measurement/issues/53
       const spinUpLabelStringProperty = new DerivedStringProperty(
-        [ sternGerlach.isZOrientedProperty ], isZOriented => isZOriented ?
-                                                             'S<sub>z</sub>' + QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER :
-                                                             'S<sub>x</sub>' + QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER
+        [
+          sternGerlach.isZOrientedProperty,
+          QuantumMeasurementStrings.SGSubZStringProperty,
+          QuantumMeasurementStrings.SGSubXStringProperty
+        ], ( isZOriented, SGSubZ, SGSubX ) => isZOriented ?
+                                                             SGSubZ + QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER :
+                                                             SGSubX + QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER
       );
       const spinDownLabelStringProperty = new DerivedStringProperty(
-        [ sternGerlach.isZOrientedProperty ], isZOriented => isZOriented ?
-                                                             'S<sub>z</sub>' + QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER :
-                                                             'S<sub>x</sub>' + QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER
+        [
+          sternGerlach.isZOrientedProperty,
+          QuantumMeasurementStrings.SGSubZStringProperty,
+          QuantumMeasurementStrings.SGSubXStringProperty
+        ], ( isZOriented, SGSubZ, SGSubX ) => isZOriented ?
+                                                             SGSubZ + QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER :
+                                                             SGSubX + QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER
       );
 
       return new QuantumMeasurementHistogram( sternGerlach.upProbabilityProperty, sternGerlach.downProbabilityProperty, new BooleanProperty( true ),
@@ -181,8 +189,7 @@ export default class SpinMeasurementArea extends VBox {
       children: [
         experimentComboBox,
 
-        // TODO: Translatable! https://github.com/phetsims/quantum-measurement/issues/53
-        new Text( 'Stern-Gerlach (SG) Measurements', { font: new PhetFont( { size: 20, weight: 'bolder' } ) } ),
+        new Text( QuantumMeasurementStrings.SternGerlachMeasurementsStringProperty, { font: new PhetFont( { size: 20, weight: 'bolder' } ) } ),
 
         experimentAreaNode
 

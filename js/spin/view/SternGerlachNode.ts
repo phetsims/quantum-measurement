@@ -14,6 +14,7 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { LinearGradient, Node, Path, RichText } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import SternGerlach from '../model/SternGerlach.js';
 
 export default class SternGerlachNode extends Node {
@@ -80,10 +81,13 @@ export default class SternGerlachNode extends Node {
         topParticleExit,
         bottomParticleExit,
 
-        // TODO: Translatable! https://github.com/phetsims/quantum-measurement/issues/53
         new RichText( new DerivedProperty(
-            [ experimentModel.isZOrientedProperty ],
-            ( isZOriented: boolean ) => isZOriented ? 'SG<sub>Z' : 'SG<sub>X' ),
+            [
+              experimentModel.isZOrientedProperty,
+              QuantumMeasurementStrings.SGSubZStringProperty,
+              QuantumMeasurementStrings.SGSubXStringProperty
+            ],
+            ( isZOriented, SGSubZ, SGSubX ) => isZOriented ? SGSubZ : SGSubX ),
           { font: new PhetFont( 20 ), fill: 'white', center: new Vector2( -STERN_GERLACH_WIDTH / 2 + 25, -STERN_GERLACH_HEIGHT / 2 + 80 ) } )
       ]
     } );
