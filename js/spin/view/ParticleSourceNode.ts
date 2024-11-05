@@ -22,7 +22,7 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import ParticleSourceModel from '../model/ParticleSourceModel.js';
 import { SourceMode } from '../model/SourceMode.js';
-import HBarFractionNode from './HBarFractionNode.js';
+import HBarOverTwoNode from './HBarOverTwoNode.js';
 
 const SPACING = 10;
 
@@ -112,7 +112,7 @@ export default class ParticleSourceNode extends Node {
           left: particleSourceApparatus.left,
           spacing: SPACING,
           children: [
-            new HBarFractionNode( 20 ),
+            new HBarOverTwoNode( 20 ),
             new RichText( QuantumMeasurementStrings.spinSourceStringProperty, { font: new PhetFont( 20 ) } )
           ]
         } ),

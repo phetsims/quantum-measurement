@@ -1,7 +1,7 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * HBarFractionNode is a simple node displaying ℏ/2 in fraction form
+ * HBarOverTwoNode is a simple node displaying ℏ/2 in fraction form
  *
  * @author Agustín Vallejo
  */
@@ -12,7 +12,7 @@ import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstant
 import FractionNode from '../../common/view/FractionNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
-export default class HBarFractionNode extends FractionNode {
+export default class HBarOverTwoNode extends FractionNode {
 
   public constructor( fontSize = 17 ) {
     const textNodesOptions = {
@@ -27,4 +27,4 @@ export default class HBarFractionNode extends FractionNode {
   }
 }
 
-quantumMeasurement.register( 'HBarFractionNode', HBarFractionNode );
+quantumMeasurement.register( 'HBarOverTwoNode', HBarOverTwoNode );
