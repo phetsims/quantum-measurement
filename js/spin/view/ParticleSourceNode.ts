@@ -24,9 +24,9 @@ import ParticleSourceModel from '../model/ParticleSourceModel.js';
 import { SourceMode } from '../model/SourceMode.js';
 import HBarFractionNode from './HBarFractionNode.js';
 
-// TODO: Let's not have this be a VBox, rather, position things around it! https://github.com/phetsims/quantum-measurement/issues/53
+const SPACING = 10;
 
-export default class ParticleSourceNode extends VBox {
+export default class ParticleSourceNode extends Node {
 
   public constructor(
     particleSourceModel: ParticleSourceModel,
@@ -93,45 +93,52 @@ export default class ParticleSourceNode extends VBox {
     particleAmmountSlider.addMajorTick( sliderRange.min + ( sliderRange.max - sliderRange.min ) / 3 );
     particleAmmountSlider.addMajorTick( sliderRange.min + 2 * ( sliderRange.max - sliderRange.min ) / 3 );
 
+    const particleSourceApparatus = new Node( {
+        children: [
+          particleSourceBarrel,
+          particleSourceRectangle,
+          shootParticleButton,
+          particleAmmountSlider
+        ]
+      } );
+
+    particleSourceApparatus.center = modelViewTransform.modelToViewPosition( particleSourceModel.positionProperty.value );
+
     super( {
       tandem: tandem.createTandem( 'particleSourceNode' ),
-      spacing: 20,
       children: [
         new HBox( {
-          spacing: 10,
+          bottom: particleSourceApparatus.top - SPACING,
+          left: particleSourceApparatus.left,
+          spacing: SPACING,
           children: [
             new HBarFractionNode( 20 ),
             new RichText( QuantumMeasurementStrings.SpinSourceStringProperty, { font: new PhetFont( 20 ) } )
           ]
         } ),
-        new Node( {
+        particleSourceApparatus,
+        new VBox( {
+          top: particleSourceApparatus.bottom + SPACING,
+          left: particleSourceApparatus.left,
+          spacing: SPACING,
           children: [
-            particleSourceBarrel,
-            particleSourceRectangle,
-            shootParticleButton,
-            particleAmmountSlider
+            new RichText( QuantumMeasurementStrings.SourceModeStringProperty, { font: new PhetFont( { size: 20, weight: 'bold' } ) } ),
+            new AquaRadioButtonGroup( particleSourceModel.sourceModeProperty, SourceMode.enumeration.values.map( sourceMode => {
+              return {
+                value: sourceMode,
+                createNode: () => new Text( sourceMode.sourceName, { font: new PhetFont( 15 ) } ),
+                options: {
+                  accessibleName: sourceMode.sourceName
+                },
+                tandemName: `${sourceMode.tandemName}RadioButton`
+              };
+            } ), {
+              tandem: tandem.createTandem( 'sourceModeRadioButtonGroup' ),
+              spacing: SPACING
+            } )
           ]
-        } ),
-        new RichText( QuantumMeasurementStrings.SourceModeStringProperty, { font: new PhetFont( { size: 20, weight: 'bold' } ) } ),
-        new AquaRadioButtonGroup( particleSourceModel.sourceModeProperty, SourceMode.enumeration.values.map( sourceMode => {
-          return {
-            value: sourceMode,
-            createNode: () => new Text( sourceMode.sourceName, { font: new PhetFont( 15 ) } ),
-            options: {
-              accessibleName: sourceMode.sourceName
-            },
-            tandemName: `${sourceMode.tandemName}RadioButton`
-          };
-        } ), {
-          tandem: tandem.createTandem( 'sourceModeRadioButtonGroup' ),
-          spacing: 10
         } )
       ]
-    } );
-
-    particleSourceModel.positionProperty.link( position => {
-      const referencePoint = particleSourceBarrel.localToParentPoint( particleSourceBarrel.center );
-      this.center = modelViewTransform.modelToViewPosition( position ).plusXY( -referencePoint.x / 2, referencePoint.y / 2 );
     } );
   }
 }

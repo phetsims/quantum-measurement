@@ -54,8 +54,8 @@ export default class SpinMeasurementArea extends VBox {
 
     const modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       Vector2.ZERO,
-      new Vector2( 100, 100 ),
-      200 // empirically determined
+      new Vector2( 0, 0 ),
+      180 // empirically determined
     );
 
     const particleSourceNode = new ParticleSourceNode( model.particleSourceModel, modelViewTransform, tandem.createTandem( 'particleSourceNode' ) );
@@ -162,9 +162,9 @@ export default class SpinMeasurementArea extends VBox {
       ],
       spacing: 5
     } ), {
-      // TODO: Make checkbox smaller https://github.com/phetsims/quantum-measurement/issues/53
-      left: particleSourceNode.right,
-      top: particleSourceNode.bottom,
+      scale: 0.9,
+      left: particleSourceNode.left,
+      top: particleSourceNode.bottom + 30,
       visibleProperty: new DerivedProperty(
         [ model.particleSourceModel.sourceModeProperty ],
         sourceMode => sourceMode === SourceMode.CONTINUOUS
@@ -188,13 +188,11 @@ export default class SpinMeasurementArea extends VBox {
     super( {
       children: [
         experimentComboBox,
-
         new Text( QuantumMeasurementStrings.SternGerlachMeasurementsStringProperty, { font: new PhetFont( { size: 20, weight: 'bolder' } ) } ),
-
         experimentAreaNode
-
       ],
-      spacing: 20,
+      align: 'left',
+      spacing: 10,
       xMargin: 30,
       yMargin: 10
     } );

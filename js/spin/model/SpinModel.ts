@@ -78,7 +78,7 @@ export default class SpinModel implements TModel {
 
     this.currentExperimentProperty = new Property<SpinExperiment>( SpinExperiment.EXPERIMENT_1 );
 
-    this.particleSourceModel = new ParticleSourceModel( new Vector2( 0, 0 ), providedOptions.tandem.createTandem( 'particleSourceModel' ) );
+    this.particleSourceModel = new ParticleSourceModel( new Vector2( -0.5, 0 ), providedOptions.tandem.createTandem( 'particleSourceModel' ) );
 
     const vectorSpinStateProperty = new DerivedProperty(
       [ this.particleSourceModel.spinStateProperty ], spinState => SpinDirection.spinToVector( spinState )
