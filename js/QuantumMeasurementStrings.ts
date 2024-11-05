@@ -67,8 +67,8 @@ type StringsType = {
   'SGSubZStringProperty': LocalizedStringProperty;
   'SGSubXStringProperty': LocalizedStringProperty;
   'SternGerlachMeasurementsStringProperty': LocalizedStringProperty;
-  'SourceModeStringProperty': LocalizedStringProperty;
-  'SpinSourceStringProperty': LocalizedStringProperty;
+  'sourceModeStringProperty': LocalizedStringProperty;
+  'spinSourceStringProperty': LocalizedStringProperty;
 };
 
 const QuantumMeasurementStrings = getStringModule( 'QUANTUM_MEASUREMENT' ) as StringsType;

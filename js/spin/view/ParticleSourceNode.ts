@@ -113,7 +113,7 @@ export default class ParticleSourceNode extends Node {
           spacing: SPACING,
           children: [
             new HBarFractionNode( 20 ),
-            new RichText( QuantumMeasurementStrings.SpinSourceStringProperty, { font: new PhetFont( 20 ) } )
+            new RichText( QuantumMeasurementStrings.spinSourceStringProperty, { font: new PhetFont( 20 ) } )
           ]
         } ),
         particleSourceApparatus,
@@ -122,7 +122,7 @@ export default class ParticleSourceNode extends Node {
           left: particleSourceApparatus.left,
           spacing: SPACING,
           children: [
-            new RichText( QuantumMeasurementStrings.SourceModeStringProperty, { font: new PhetFont( { size: 20, weight: 'bold' } ) } ),
+            new RichText( QuantumMeasurementStrings.sourceModeStringProperty, { font: new PhetFont( { size: 20, weight: 'bold' } ) } ),
             new AquaRadioButtonGroup( particleSourceModel.sourceModeProperty, SourceMode.enumeration.values.map( sourceMode => {
               return {
                 value: sourceMode,
