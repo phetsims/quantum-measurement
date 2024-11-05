@@ -6,6 +6,7 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
+import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Color, Line, Node, Text } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
@@ -58,6 +59,15 @@ export default class NormalizedOutcomeVectorGraph extends Node {
       centerY: bottomTickMark.centerY
     } );
 
+    // Create the normalized outcome vector.  The initial position is arbitrary, it will be set by the link below.
+    const normalizedOutcomeVector = new ArrowNode( 0, 0, 0, HEIGHT / 3, {
+      stroke: null,
+      fill: Color.BLACK,
+      headWidth: 15,
+      headHeight: 12,
+      tailWidth: 4
+    } );
+
     super( {
       children: [
         topTickMark,
@@ -66,7 +76,8 @@ export default class NormalizedOutcomeVectorGraph extends Node {
         middleTickMarkLabel,
         bottomTickMark,
         bottomTickMarkLabel,
-        verticalAxis
+        verticalAxis,
+        normalizedOutcomeVector
       ]
     } );
 
