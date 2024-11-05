@@ -19,7 +19,7 @@ import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstant
 import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHistogram.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import PhotonsExperimentSceneModel from '../model/PhotonsExperimentSceneModel.js';
-import NormalizedMeasurementProportionsGraph from './NormalizedMeasurementProportionsGraph.js';
+import NormalizedOutcomeVectorGraph from './NormalizedOutcomeVectorGraph.js';
 import ObliquePolarizationAngleIndicator from './ObliquePolarizationAngleIndicator.js';
 import PhotonDetectionProbabilityPanel from './PhotonDetectionProbabilityPanel.js';
 import PhotonPolarizationAngleControl from './PhotonPolarizationAngleControl.js';
@@ -94,7 +94,7 @@ export default class PhotonsExperimentSceneView extends Node {
     const equationsBox = new PhotonsEquationNode( leftProperty, rightProperty );
 
     // Create the graph that indicates the relative proportions of vertical and horizontal detections.
-    const normalizedMeasurementProportionsGraph = new NormalizedMeasurementProportionsGraph();
+    const normalizedMeasurementProportionsGraph = new NormalizedOutcomeVectorGraph();
 
     // Create the histogram that shows the detection counts for the vertical and horizontal detectors.
     const countHistogram = new QuantumMeasurementHistogram(

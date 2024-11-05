@@ -16,7 +16,7 @@ const TICK_MARK_LINE_WIDTH = 1.5;
 const LABEL_FONT = new PhetFont( { size: 14, weight: 'bold' } );
 const LABEL_SPACING = 5;
 
-export default class NormalizedMeasurementProportionsGraph extends Node {
+export default class NormalizedOutcomeVectorGraph extends Node {
 
   public constructor() {
 
@@ -73,4 +73,4 @@ export default class NormalizedMeasurementProportionsGraph extends Node {
   }
 }
 
-quantumMeasurement.register( 'NormalizedMeasurementProportionsGraph', NormalizedMeasurementProportionsGraph );
+quantumMeasurement.register( 'NormalizedOutcomeVectorGraph', NormalizedOutcomeVectorGraph );
