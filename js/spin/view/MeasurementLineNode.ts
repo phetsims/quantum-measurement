@@ -25,7 +25,9 @@ export default class MeasurementLineNode extends VBox {
 
     const simpleBlochSphere = new BlochSphereNode( measurementLine.simpleBlochSphere, {
       tandem: providedOptions.tandem.createTandem( 'simpleBlochSphere' ),
-      drawKets: false
+      drawKets: false,
+      drawTitle: false,
+      scale: 0.5
     } );
 
     const cameraPath = new Path( cameraSolidShape, {
@@ -45,7 +47,7 @@ export default class MeasurementLineNode extends VBox {
         simpleBlochSphere,
         cameraPath
       ],
-      spacing: 10,
+      spacing: 25,
       visibleProperty: measurementLine.isActiveProperty
     }, providedOptions );
 

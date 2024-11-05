@@ -19,22 +19,24 @@ import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ShadedSphereNode from '../../../../scenery-phet/js/ShadedSphereNode.js';
-import { Node, NodeOptions, Path, Text } from '../../../../scenery/js/imports.js';
+import { Node, NodeOptions, Path, Text, VBox } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import AbstractBlochSphere from '../model/AbstractBlochSphere.js';
 import QuantumMeasurementConstants from '../QuantumMeasurementConstants.js';
 
 type SelfOptions = {
   drawKets?: boolean;
+  drawTitle?: boolean;
 };
 export type BlochSphereNodeOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
 
 // Constants
 const AXES_STROKE = 'gray';
-const AXES_LINE_WIDTH = 0.1;
-const AXES_LINE_DASH = [ 1, 1 ];
+const AXES_LINE_WIDTH = 0.4;
+const AXES_LINE_DASH = [ 2, 2 ];
 const LABELS_OFFSET = 5;
-const LABELS_FONT = new PhetFont( { size: 10, weight: 'bold' } );
+const LABELS_FONT = new PhetFont( { size: 15, weight: 'bold' } );
 
 const AXES_OPTIONS = {
   stroke: AXES_STROKE,
@@ -52,7 +54,7 @@ export default class BlochSphereNode extends Node {
     blochSphere: AbstractBlochSphere,
     providedOptions: BlochSphereNodeOptions ) {
 
-    const sphereRadius = 50;
+    const sphereRadius = 100;
 
     const sphereNode = new ShadedSphereNode( 2 * sphereRadius, {
       tandem: providedOptions.tandem.createTandem( 'sphereNode' ),
@@ -99,7 +101,7 @@ export default class BlochSphereNode extends Node {
       font: LABELS_FONT
     } );
     const zAxisLabel = new Text( 'Z', {
-      centerX: -LABELS_OFFSET,
+      centerX: -2 * LABELS_OFFSET,
       centerY: -sphereRadius + LABELS_OFFSET,
       fill: 'black',
       font: LABELS_FONT
@@ -140,10 +142,10 @@ export default class BlochSphereNode extends Node {
     const UP = QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
     const DOWN = QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER;
     const KET = QuantumMeasurementConstants.KET;
-    const STATES_FONT = new PhetFont( { size: 10, weight: 'bold' } );
+    const STATES_FONT = new PhetFont( { size: 18, weight: 'bold' } );
     const upStateLabel = new Text( `|${UP}${KET}`, {
       centerX: 0,
-      centerY: -sphereRadius - 2 * LABELS_OFFSET,
+      centerY: -sphereRadius - 3 * LABELS_OFFSET,
       fill: 'black',
       font: STATES_FONT,
       visible: providedOptions.drawKets
@@ -151,10 +153,21 @@ export default class BlochSphereNode extends Node {
 
     const downStateLabel = new Text( `|${DOWN}${KET}`, {
       centerX: 0,
-      centerY: sphereRadius + 2 * LABELS_OFFSET,
+      centerY: sphereRadius + 3 * LABELS_OFFSET,
       fill: 'black',
       font: STATES_FONT,
       visible: providedOptions.drawKets
+    } );
+
+    const title = new Text( QuantumMeasurementStrings.blochSphereStringProperty, { font: new PhetFont( { size: 16, weight: 'bolder' } ) } );
+    const subtitle = new Text( QuantumMeasurementStrings.representationStringProperty, { font: new PhetFont( 14 ) } );
+
+    const titleSubtitleBox = new VBox( {
+      spacing: 0,
+      visible: providedOptions.drawTitle,
+      children: [ title, subtitle ],
+      bottom: upStateLabel.top - 10,
+      centerX: upStateLabel.centerX
     } );
 
     const stateVectorVisibleProperty = new BooleanProperty( true );
@@ -199,6 +212,9 @@ export default class BlochSphereNode extends Node {
 
     const options = optionize<BlochSphereNodeOptions, SelfOptions, NodeOptions>()( {
       children: [
+        titleSubtitleBox,
+        upStateLabel,
+        downStateLabel,
         sphereNode,
         equatorLine,
         xAxis,
@@ -207,18 +223,19 @@ export default class BlochSphereNode extends Node {
         xAxisLabel,
         yAxisLabel,
         zAxisLabel,
-        upStateLabel,
-        downStateLabel,
         // polarAngleIndicator,
         // azimutalAngleIndicator,
         stateVector
       ],
       // Increasing bounds horizontally so the labels have space to move
-      localBounds: new Bounds2( -1.5 * sphereRadius, -sphereRadius, 1.5 * sphereRadius, sphereRadius ),
-      drawKets: true
+      // localBounds: new Bounds2( -1.5 * sphereRadius, -sphereRadius, 1.5 * sphereRadius, sphereRadius ),
+      drawKets: true,
+      drawTitle: true
     }, providedOptions );
 
     super( options );
+
+    this.setLocalBounds( new Bounds2( -1.5 * sphereRadius, this.bounds.minY, 1.5 * sphereRadius, this.bounds.maxY ) );
 
     this.xAxisOffsetAngleProperty = xAxisOffsetAngleProperty;
     this.stateVectorVisibleProperty = stateVectorVisibleProperty;

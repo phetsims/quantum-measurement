@@ -37,8 +37,10 @@ export default class ManyParticlesCanvasNode extends CanvasNode {
       context.fillRect( 0, 0, this.bounds.maxX, this.bounds.maxY );
     }
 
+    const activeParticles = this.particles.filter( particle => particle.activeProperty.value );
+
     context.fillStyle = 'magenta';
-    for ( let i = 0; i < this.particles.length; i++ ) {
+    for ( let i = 0; i < activeParticles.length; i++ ) {
       const position = this.modelViewTransform.modelToViewPosition( this.particles[ i ].positionProperty.value );
       context.fillRect( position.x, position.y, 2, 2 );
     }

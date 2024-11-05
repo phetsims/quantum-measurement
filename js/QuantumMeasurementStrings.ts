@@ -69,6 +69,8 @@ type StringsType = {
   'SternGerlachMeasurementsStringProperty': LocalizedStringProperty;
   'sourceModeStringProperty': LocalizedStringProperty;
   'spinSourceStringProperty': LocalizedStringProperty;
+  'blochSphereStringProperty': LocalizedStringProperty;
+  'representationStringProperty': LocalizedStringProperty;
 };
 
 const QuantumMeasurementStrings = getStringModule( 'QUANTUM_MEASUREMENT' ) as StringsType;

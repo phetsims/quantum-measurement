@@ -9,13 +9,11 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Property from '../../../../axon/js/Property.js';
-import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
-import Slider from '../../../../sun/js/Slider.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
@@ -43,13 +41,13 @@ export default class SpinStatePreparationArea extends VBox {
       };
     };
 
-    const numberOfCoinsRadioButtonGroup = new RectangularRadioButtonGroup(
+    const spinStateRadioButtonGroup = new RectangularRadioButtonGroup(
       spinStateProperty,
       SpinDirection.enumeration.values.map( quantity => createRadioButtonGroupItem( quantity ) ),
       {
         spacing: 10,
         center: new Vector2( 100, 100 ),
-        tandem: tandem.createTandem( 'numberOfCoinsRadioButtonGroup' ),
+        tandem: tandem.createTandem( 'spinStateRadioButtonGroup' ),
         radioButtonOptions: {
           baseColor: QuantumMeasurementColors.controlPanelFillColorProperty
         }
@@ -58,14 +56,13 @@ export default class SpinStatePreparationArea extends VBox {
 
     const spinStatePanel = new VBox( {
       children: [
-        numberOfCoinsRadioButtonGroup
+        spinStateRadioButtonGroup
       ]
     } );
 
     const blochSphereNode = new BlochSphereNode(
       blochSphere, {
-        tandem: tandem.createTandem( 'blochSphereNode' ),
-        scale: 2
+        tandem: tandem.createTandem( 'blochSphereNode' )
       } );
 
     const title = new RichText( QuantumMeasurementStrings.stateToPrepareStringProperty, { font: new PhetFont( { size: 20, weight: 'bolder' } ) } );
@@ -95,9 +92,9 @@ export default class SpinStatePreparationArea extends VBox {
           children: [ title, subtitle ]
         } ),
         blochSphereNode,
-        new Slider( blochSphereNode.xAxisOffsetAngleProperty, new Range( 0, 2 * Math.PI ), {
-          tandem: Tandem.OPT_OUT
-        } ),
+        // new Slider( blochSphereNode.xAxisOffsetAngleProperty, new Range( 0, 2 * Math.PI ), {
+        //   tandem: Tandem.OPT_OUT
+        // } ),
         stateReadout,
         spinStatePanel
       ],
