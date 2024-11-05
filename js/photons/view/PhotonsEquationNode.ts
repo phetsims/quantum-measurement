@@ -112,7 +112,7 @@ export default class PhotonsEquationNode extends HBox {
     const numericalResult = new RichText( numericalResultProperty, numericalTextOptions );
 
     super( {
-      spacing: 5,
+      spacing: 15,
       align: 'center',
       children: [
         infoButton,

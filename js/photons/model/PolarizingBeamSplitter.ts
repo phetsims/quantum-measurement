@@ -9,6 +9,7 @@
 
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
+import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Line } from '../../../../kite/js/imports.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
@@ -59,7 +60,7 @@ export default class PolarizingBeamSplitter implements TPhotonInteraction {
     if ( photonIntersectionPoint !== null ) {
 
       // Calculate the probability of reflection based on the custom angle according to Malus's Law
-      const angleInRadians = photon.polarizationAngleProperty.value * Math.PI / 180;
+      const angleInRadians = Utils.toRadians( photon.polarizationAngleProperty.value );
       const probabilityOfReflection = 1 - Math.pow( Math.cos( angleInRadians ), 2 );
 
       if ( dotRandom.nextDouble() <= probabilityOfReflection ) {

@@ -74,7 +74,8 @@ export default class PhotonsExperimentSceneView extends Node {
       {
         fill: QuantumMeasurementColors.controlPanelFillColorProperty,
         stroke: null,
-        cornerRadius: 4,
+        minWidth: 325,
+        cornerRadius: 5,
         xMargin: 20,
         yMargin: 10,
         align: 'center'
@@ -113,8 +114,9 @@ export default class PhotonsExperimentSceneView extends Node {
         equationsBox,
         countHistogram
       ],
+      align: 'left',
       spacing: 20,
-      right: QuantumMeasurementConstants.LAYOUT_BOUNDS.right - 140,
+      right: QuantumMeasurementConstants.LAYOUT_BOUNDS.right - 40,
       top: 0
     } );
 

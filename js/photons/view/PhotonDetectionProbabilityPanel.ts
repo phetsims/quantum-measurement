@@ -39,7 +39,7 @@ export default class PhotonDetectionProbabilityPanel extends Panel {
     // Calculate the probability of a photon being detected as horizontally polarized.
     const probabilityOfHorizontalProperty = new DerivedProperty(
       [ polarizationAngleProperty ],
-      polarizationAngle => Math.cos( polarizationAngle * Math.PI / 180 ) ** 2
+      polarizationAngle => Math.cos( Utils.toRadians( polarizationAngle ) ) ** 2
     );
 
     // Calculate the probability of a photon being detected as vertically polarized.
