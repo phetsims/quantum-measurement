@@ -12,11 +12,12 @@ import Multilink from '../../../../axon/js/Multilink.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
-import { combineOptions } from '../../../../phet-core/js/optionize.js';
+import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
 import MathSymbolFont from '../../../../scenery-phet/js/MathSymbolFont.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { HBox, Node, RichText, RichTextOptions, Text } from '../../../../scenery/js/imports.js';
+import { HBox, HBoxOptions, Node, RichText, RichTextOptions, Text } from '../../../../scenery/js/imports.js';
 import Dialog from '../../../../sun/js/Dialog.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
@@ -24,12 +25,16 @@ import FractionNode from '../../common/view/FractionNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 
+type SelfOptions = EmptySelfOptions;
+type PhotonsEquationNodeOptions = SelfOptions & WithRequired<HBoxOptions, 'tandem'>;
+
 export default class PhotonsEquationNode extends HBox {
 
-  public constructor(
-    verticalValueProperty: TReadOnlyProperty<number>,
-    horizontalValueProperty: TReadOnlyProperty<number>
-  ) {
+  public constructor( verticalValueProperty: TReadOnlyProperty<number>,
+                      horizontalValueProperty: TReadOnlyProperty<number>,
+                      providedOptions: PhotonsEquationNodeOptions ) {
+
+    const options = optionize<PhotonsEquationNodeOptions, SelfOptions, HBoxOptions>()( {}, providedOptions );
 
     const totalNumberProperty = new DerivedProperty(
       [
@@ -39,18 +44,17 @@ export default class PhotonsEquationNode extends HBox {
       ( VValue, HValue ) => VValue + HValue
     );
 
-    const equationsInfoDialog = new Dialog( new Node( {
-        children: [
-          new Text( 'FILL THIS IN PLEASE', { font: new PhetFont( 18 ) } )
-        ]
-      } )
+    const equationsInfoDialog = new Dialog(
+      new Node( { children: [ new Text( 'FILL THIS IN PLEASE', { font: new PhetFont( 18 ) } ) ] } ),
+      { tandem: options.tandem.createTandem( 'equationsInfoDialog' ) }
     );
 
     // Create and add the info button.
     const infoButton = new InfoButton( {
       listener: () => equationsInfoDialog.show(),
       iconFill: 'rgb( 41, 106, 163 )',
-      scale: 0.5
+      scale: 0.5,
+      tandem: options.tandem.createTandem( 'infoButton' )
     } );
 
     const symbolicEquationStringProperty = new DerivedProperty(

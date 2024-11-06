@@ -91,7 +91,9 @@ export default class PhotonsExperimentSceneView extends Node {
                           model.horizontalPolarizationDetector.detectionCountProperty :
                           model.horizontalPolarizationDetector.detectionRateProperty;
 
-    const equationsBox = new PhotonsEquationNode( leftProperty, rightProperty );
+    const equationsBox = new PhotonsEquationNode( leftProperty, rightProperty, {
+      tandem: providedOptions.tandem.createTandem( 'equationsBox' )
+    } );
 
     // Create the graph that indicates the relative proportions of vertical and horizontal detections.
     const normalizedMeasurementProportionsGraph = new NormalizedOutcomeVectorGraph( model.normalizedOutcomeValueProperty );

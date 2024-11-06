@@ -152,23 +152,27 @@ export default class SpinMeasurementArea extends VBox {
       { tandem: tandem.createTandem( 'manyParticlesCanvasNode' ) }
     );
 
-    const expectedPercentageCheckbox = new Checkbox( model.expectedPercentageVisibleProperty, new HBox( {
-      children: [
-        new Text( 'Expected percentage', { font: new PhetFont( 16 ) } ),
-        new Path( new Shape().moveTo( 0, 0 ).lineTo( 20, 0 ), {
-          stroke: '#0f0',
-          lineWidth: 4
-        } )
-      ],
-      spacing: 5
-    } ), {
+    const expectedPercentageCheckbox = new Checkbox(
+      model.expectedPercentageVisibleProperty,
+      new HBox( {
+        children: [
+          new Text( 'Expected percentage', { font: new PhetFont( 16 ) } ),
+          new Path( new Shape().moveTo( 0, 0 ).lineTo( 20, 0 ), {
+            stroke: '#0f0',
+            lineWidth: 4
+          } )
+        ],
+        spacing: 5
+      } ),
+      {
       scale: 0.9,
       left: particleSourceNode.left,
       top: particleSourceNode.bottom + 30,
       visibleProperty: new DerivedProperty(
         [ model.particleSourceModel.sourceModeProperty ],
         sourceMode => sourceMode === SourceMode.CONTINUOUS
-      )
+      ),
+      tandem: tandem.createTandem( 'expectedPercentageCheckbox' )
     } );
 
     const experimentAreaNode = new Node( {
