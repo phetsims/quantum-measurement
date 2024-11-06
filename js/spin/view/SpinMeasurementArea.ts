@@ -12,6 +12,7 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
+import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
@@ -199,13 +200,14 @@ export default class SpinMeasurementArea extends VBox {
       tandem: tandem.createTandem( 'expectedPercentageCheckbox' )
     } );
 
-    const exitBlocker = new Path( new Shape().moveTo( 0, 0 ).lineTo( 0, 30 ), {
+    const exitBlocker = new Path( new Shape().moveTo( 0, 0 ).lineTo( 0, 35 ), {
       stroke: 'black',
-      lineWidth: 4,
-      visibleProperty: model.particleSourceModel.isContinuousModeProperty
+      lineWidth: 5,
+      visibleProperty: model.isBlockingProperty
     } );
 
     model.exitBlockerPositionProperty.link( position => {
+      exitBlocker.rotation = model.blockUpperExitProperty.value ? Utils.toRadians( -10 ) : Utils.toRadians( 10 );
       exitBlocker.center = modelViewTransform.modelToViewPosition( position );
     } );
 

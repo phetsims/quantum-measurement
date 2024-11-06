@@ -13,19 +13,22 @@
  * 6 - SG1 to SG2
  * 7 - SG2 to infinity (top)
  * 8 - SG2 to infinity (bottom)
+ * 9 - SG0 to blocking (top)
+ * 10 - SG0 to blocking (bottom)
  *
  * @author Agustín Vallejo
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import ParticleSourceModel from './ParticleSourceModel.js';
 import { ParticleWithSpin } from './ParticleWithSpin.js';
+import { BLOCKER_OFFSET } from './SpinModel.js';
 import SternGerlach from './SternGerlach.js';
 
 type SternGerlachConnection = {
   source?: SternGerlach;
   exit?: 'top' | 'bottom'; // By which hole of the Stern Gerlach the particle is going to exit
-  afterDestination: 'infinity' | 'covered'; // If the ray is going to be covered or if it'll travel to infinity
   destination: SternGerlach;
 };
 
@@ -40,9 +43,34 @@ export default class ParticleRays {
 
   public isShortExperiment = true;
 
-  public constructor( firstPair: Vector2[], allConnections: SternGerlachConnection[] ) {
+  public constructor( particleSourceModel: ParticleSourceModel, sternGerlachs: SternGerlach[] ) {
 
-    this.allPossiblePaths = [ firstPair ];
+    const allConnections: SternGerlachConnection[] = [
+      {
+        destination: sternGerlachs[ 0 ]
+      },
+      {
+        source: sternGerlachs[ 0 ],
+        exit: 'top',
+        destination: sternGerlachs[ 1 ]
+      },
+      {
+        source: sternGerlachs[ 0 ],
+        exit: 'bottom',
+        destination: sternGerlachs[ 2 ]
+      }
+    ];
+
+    this.allPossiblePaths = [ [
+      particleSourceModel.exitPositionProperty.value,
+      sternGerlachs[ 0 ].entrancePositionProperty.value
+    ] ];
+
+    const extendExits = ( sternGerlach: SternGerlach, extension: Vector2 ) => {
+      // Creates a pair of vectors from the exit to extension and adds them to allPossiblePaths
+      this.allPossiblePaths.push( [ sternGerlach.topExitPositionProperty.value, sternGerlach.topExitPositionProperty.value.plus( extension ) ] );
+      this.allPossiblePaths.push( [ sternGerlach.bottomExitPositionProperty.value, sternGerlach.bottomExitPositionProperty.value.plus( extension ) ] );
+    };
 
     allConnections.forEach( ( connection, index ) => {
       const source = connection.source;
@@ -55,12 +83,11 @@ export default class ParticleRays {
         this.allPossiblePaths.push( [ initialPoint, destination.entrancePositionProperty.value ] );
       }
 
-      // Set the destination apparatus exit allPossiblePaths to go either to infinity or to the blocking
-      const afterDestinationVector = connection.afterDestination === 'infinity' ? new Vector2( 10, 0 ) : new Vector2( 0.1, 0 );
-      this.allPossiblePaths.push( [ destination.topExitPositionProperty.value, destination.topExitPositionProperty.value.plus( afterDestinationVector ) ] );
-      this.allPossiblePaths.push( [ destination.bottomExitPositionProperty.value, destination.bottomExitPositionProperty.value.plus( afterDestinationVector ) ] );
+      extendExits( destination, new Vector2( 10, 0 ) );
     } );
 
+    // Add the two paths that go into blocking
+    extendExits( sternGerlachs[ 0 ], BLOCKER_OFFSET );
   }
 
   public updateExperiment(): void {
@@ -79,8 +106,8 @@ export default class ParticleRays {
     else {
       particle.path = [
         ...this.allPossiblePaths[ 0 ], // Source to SG0
-        ...this.allPossiblePaths[ particle.isSpinUp[ 1 ] ? 3 : 6 ], // SG0 to SG1
-        ...this.allPossiblePaths[ 4 + ( particle.isSpinUp[ 1 ] ? 0 : 3 ) + ( particle.isSpinUp[ 2 ] ? 0 : 1 ) ]
+        ...this.allPossiblePaths[ particle.isSpinUp[ 1 ] ? 3 : 6 ], // SG0 to SG1 or SG2
+        ...this.allPossiblePaths[ 4 + ( particle.isSpinUp[ 1 ] ? 0 : 3 ) + ( particle.isSpinUp[ 2 ] ? 0 : 1 ) ] // SG1 or SG2 to infinity
       ];
     }
 

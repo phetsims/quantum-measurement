@@ -44,9 +44,14 @@ export default class ParticleSourceModel {
 
   public constructor( position: Vector2, tandem: Tandem ) {
 
-    this.sourceModeProperty = new Property<SourceMode>( SourceMode.SINGLE );
+    this.sourceModeProperty = new Property<SourceMode>( SourceMode.CONTINUOUS );
 
     this.isContinuousModeProperty = new DerivedProperty( [ this.sourceModeProperty ], sourceMode => sourceMode === SourceMode.CONTINUOUS );
+
+    this.particleAmmountProperty = new NumberProperty( 1, {
+      tandem: tandem.createTandem( 'particleAmmountProperty' ),
+      range: new Range( 0, 1 )
+    } );
 
     this.positionProperty = new Vector2Property( position, {
       tandem: tandem.createTandem( 'positionProperty' )
@@ -65,11 +70,6 @@ export default class ParticleSourceModel {
     this.currentlyShootingParticlesProperty = new Property<boolean>( false, {
       tandem: tandem.createTandem( 'currentlyShootingParticlesProperty' ),
       phetioValueType: BooleanIO
-    } );
-
-    this.particleAmmountProperty = new NumberProperty( 0, {
-      tandem: tandem.createTandem( 'particleAmmountProperty' ),
-      range: new Range( 0, 1 )
     } );
 
   }
