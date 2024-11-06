@@ -1,7 +1,8 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- *
+ * NormalizedOutcomeVectorGraph is a view element that displays a graph of the normalized outcome value.  The graph
+ * consists of a vertical axis with tick marks and labels, and a vector that represents the normalized outcome value.
  *
  * @author John Blanco, PhET Interactive Simulations
  */

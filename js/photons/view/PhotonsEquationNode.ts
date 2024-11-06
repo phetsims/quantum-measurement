@@ -24,6 +24,7 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 
 export default class PhotonsEquationNode extends HBox {
+
   public constructor(
     verticalValueProperty: TReadOnlyProperty<number>,
     horizontalValueProperty: TReadOnlyProperty<number>
