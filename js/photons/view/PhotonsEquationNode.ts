@@ -14,6 +14,7 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
+import MathSymbolFont from '../../../../scenery-phet/js/MathSymbolFont.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { HBox, Node, RichText, RichTextOptions, Text } from '../../../../scenery/js/imports.js';
 import Dialog from '../../../../sun/js/Dialog.js';
@@ -67,11 +68,11 @@ export default class PhotonsEquationNode extends HBox {
       }
     );
 
-    const richTextOptions = {
-      font: new PhetFont( { size: 17, style: 'italic', family: 'serif' } )
+    const equationTextOptions = {
+      font: new MathSymbolFont( 17 )
     };
-    const symbolicEquationNumerator = new RichText( symbolicEquationStringProperty, richTextOptions );
-    const symbolicEquationDenominator = new RichText( 'N(Total)', richTextOptions );
+    const symbolicEquationNumerator = new RichText( symbolicEquationStringProperty, equationTextOptions );
+    const symbolicEquationDenominator = new RichText( 'N(Total)', equationTextOptions );
     const symbolicEquationFraction = new FractionNode( symbolicEquationNumerator, symbolicEquationDenominator, {
       fractionLineMargin: 1
     } );
@@ -99,7 +100,7 @@ export default class PhotonsEquationNode extends HBox {
       }
     );
 
-    const numericalTextOptions = combineOptions<RichTextOptions>( {}, richTextOptions, {
+    const numericalTextOptions = combineOptions<RichTextOptions>( {}, equationTextOptions, {
       visibleProperty: new DerivedProperty( [ totalNumberProperty ], totalNumber => totalNumber > 0 )
     } );
 
