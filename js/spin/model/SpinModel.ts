@@ -13,6 +13,7 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
@@ -49,6 +50,10 @@ export default class SpinModel implements TModel {
 
   // Bloch Sphere that represents the current spin state
   public readonly blochSphere: SimpleBlochSphere;
+
+  // The probability of the 'up' state. The 'down' probability will be 1 - this.
+  public readonly upProbabilityProperty: NumberProperty;
+  public readonly downProbabilityProperty: NumberProperty;
 
   // Single particles shot by the user
   public readonly singleParticles: ParticleWithSpin[];
@@ -93,6 +98,30 @@ export default class SpinModel implements TModel {
     this.blochSphere = new SimpleBlochSphere(
       vectorSpinStateProperty, { tandem: providedOptions.tandem.createTandem( 'blochSphere' ) }
     );
+
+    this.upProbabilityProperty = new NumberProperty( 0.5, {
+      tandem: providedOptions.tandem.createTandem( 'upProbabilityProperty' )
+    } );
+
+    // Create a Property with the inverse probability as the provided one and hook the two Properties up to one another.
+    // This is needed for the number sliders to work properly.
+    this.downProbabilityProperty = new NumberProperty( 1 - this.upProbabilityProperty.value );
+    let changeHandlingInProgress = false;
+
+    this.upProbabilityProperty.link( upProbability => {
+      if ( !changeHandlingInProgress ) {
+        changeHandlingInProgress = true;
+        this.downProbabilityProperty.value = 1 - upProbability;
+        changeHandlingInProgress = false;
+      }
+    } );
+    this.downProbabilityProperty.link( downProbability => {
+      if ( !changeHandlingInProgress ) {
+        changeHandlingInProgress = true;
+        this.upProbabilityProperty.value = 1 - downProbability;
+        changeHandlingInProgress = false;
+      }
+    } );
 
     const sternGerlachsTandem = providedOptions.tandem.createTandem( 'SternGerlachs' );
     this.sternGerlachs = [

@@ -131,6 +131,7 @@ export default class SpinMeasurementArea extends VBox {
           leftFillColorProperty: QuantumMeasurementColors.tailsColorProperty,
           visibleProperty: visibleProperty,
           tandem: Tandem.OPT_OUT,
+          expectedValueVisibleProperty: model.expectedPercentageVisibleProperty,
           numberDisplayOptions: {
             textOptions: {
               font: new PhetFont( 17 )
@@ -142,8 +143,8 @@ export default class SpinMeasurementArea extends VBox {
     const histograms = [
       createPercentageHistogram(
         model.sternGerlachs[ 0 ],
-        new DerivedProperty( [ model.particleSourceModel.sourceModeProperty ],
-          sourceMode => sourceMode === SourceMode.CONTINUOUS ) ),
+        model.particleSourceModel.isContinuousModeProperty
+      ),
 
       createPercentageHistogram(
         model.sternGerlachs[ 1 ],

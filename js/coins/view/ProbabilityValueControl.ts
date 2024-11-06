@@ -30,7 +30,7 @@ const BUTTON_CHANGE_AMOUNT = 0.1;
 
 export default class ProbabilityValueControl extends VBox {
 
-  public constructor( titleStringProperty: TReadOnlyProperty<string>,
+  public constructor( titleStringProperty: TReadOnlyProperty<string> | string,
                       probabilityProperty: NumberProperty,
                       tandem: Tandem ) {
 
