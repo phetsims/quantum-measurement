@@ -92,7 +92,7 @@ export default class BlochSphereNode extends Node {
     const yAxis = new Path( null, AXES_OPTIONS );
     const zAxis = new Path( null, AXES_OPTIONS );
 
-    const xAxisLabel = new Text( 'X', {
+    const xAxisLabel = new Text( '+X', {
       fill: 'black',
       font: LABELS_FONT
     } );
@@ -132,7 +132,7 @@ export default class BlochSphereNode extends Node {
       yAxis.shape = new Shape().moveTo( plusY.x, plusY.y ).lineTo( minusY.x, minusY.y );
       zAxis.shape = new Shape().moveTo( 0, -sphereRadius ).lineTo( 0, sphereRadius );
 
-      xAxisLabel.centerX = plusX.x + LABELS_OFFSET;
+      xAxisLabel.centerX = plusX.x - 2 * LABELS_OFFSET;
       xAxisLabel.centerY = plusX.y;
       yAxisLabel.centerX = plusY.x;
       yAxisLabel.centerY = plusY.y - LABELS_OFFSET;

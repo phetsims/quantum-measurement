@@ -49,8 +49,8 @@ export default class SpinExperiment extends EnumerationValue {
   ] );
   public static readonly CUSTOM = new SpinExperiment( 'Custom', [
     { isZOriented: false, active: false },
-    { isZOriented: false, active: false },
-    { isZOriented: false, active: false }
+    { isZOriented: true, active: false },
+    { isZOriented: true, active: false }
   ] );
 
   public static readonly enumeration = new Enumeration( SpinExperiment );

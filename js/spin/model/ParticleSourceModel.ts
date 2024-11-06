@@ -64,7 +64,7 @@ export default class ParticleSourceModel {
       phetioValueType: BooleanIO
     } );
 
-    this.particleAmmountProperty = new NumberProperty( 1, {
+    this.particleAmmountProperty = new NumberProperty( 0, {
       tandem: tandem.createTandem( 'particleAmmountProperty' ),
       range: new Range( 0, 1 )
     } );

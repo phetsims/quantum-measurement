@@ -24,6 +24,11 @@ const QuantumMeasurementConstants = {
   KET: '\u27e9',
   HBAR: '\u210F',
 
+  expectedPercentagePathOptions: {
+    stroke: '#0a0',
+    lineWidth: 5
+  },
+
   CREATE_COLOR_SPAN: ( text: string, color: Color, bold = false ): string => {
     const weight = bold ? 'bold' : 'normal';
     return `<span style="font-weight: ${weight}; color: ${color.toCSS()};">${text}</span>`;

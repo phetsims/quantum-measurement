@@ -6,21 +6,25 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import { Shape } from '../../../../kite/js/imports.js';
 import optionize, { combineOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import NumberDisplay, { NumberDisplayOptions } from '../../../../scenery-phet/js/NumberDisplay.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { AlignBox, AlignGroup, Color, HBox, Line, Node, NodeOptions, Rectangle, RichText } from '../../../../scenery/js/imports.js';
+import { AlignBox, AlignGroup, Color, HBox, Line, Node, NodeOptions, Path, PathOptions, Rectangle, RichText } from '../../../../scenery/js/imports.js';
 import { MAX_COINS } from '../../coins/model/CoinsExperimentSceneModel.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import QuantumMeasurementColors from '../QuantumMeasurementColors.js';
+import QuantumMeasurementConstants from '../QuantumMeasurementConstants.js';
 import FractionNode from './FractionNode.js';
 
 type SelfOptions = {
@@ -31,6 +35,7 @@ type SelfOptions = {
   rightFillColorProperty?: TReadOnlyProperty<Color>;
   numberDisplayOptions?: NumberDisplayOptions;
   barWidth?: number;
+  expectedValueVisibleProperty?: BooleanProperty;
 };
 export type QuantumMeasurementHistogramOptions = SelfOptions & WithRequired<NodeOptions, 'tandem' | 'visibleProperty'>;
 
@@ -61,6 +66,7 @@ export default class QuantumMeasurementHistogram extends Node {
       leftFillColorProperty: QuantumMeasurementColors.headsColorProperty,
       rightFillColorProperty: QuantumMeasurementColors.tailsColorProperty,
       children: [],
+      expectedValueVisibleProperty: new BooleanProperty( false ),
       numberDisplayOptions: {
         align: 'center',
         xMargin: 0,
@@ -174,6 +180,12 @@ export default class QuantumMeasurementHistogram extends Node {
     const leftHistogramBar = new Rectangle( 0, 0, options.barWidth, maxBarHeight, { fill: leftFillColorProperty } );
     const rightHistogramBar = new Rectangle( 0, 0, options.barWidth, maxBarHeight, { fill: rightFillColorProperty } );
 
+    const expectedValueOptions = combineOptions<PathOptions>( {
+      visibleProperty: options.expectedValueVisibleProperty
+    }, QuantumMeasurementConstants.expectedPercentagePathOptions );
+    const leftExpectedValueLine = new Path( new Shape().moveTo( 0, 0 ).lineTo( HISTOGRAM_BAR_WIDTH * 2, 0 ), expectedValueOptions );
+    const rightExpectedValueLine = new Path( new Shape().moveTo( 0, 0 ).lineTo( HISTOGRAM_BAR_WIDTH * 2, 0 ), expectedValueOptions );
+
     const leftAlignGroup = new AlignGroup( { matchVertical: false } );
     const rightAlignGroup = new AlignGroup( { matchVertical: false } );
 
@@ -230,6 +242,12 @@ export default class QuantumMeasurementHistogram extends Node {
         const rightProportion = totalNumberProperty.value ? rightNumber / totalNumberProperty.value : 0;
         rightHistogramBar.setRect( 0, 0, options.barWidth, rightProportion * maxBarHeight );
         numberBars.bottom = xAxis.centerY;
+
+        // TODO: Check this, https://github.com/phetsims/quantum-measurement/issues/53
+        // Position the expected value lines, empirically determined since the AlignGroups mess everything up
+        const xPosition = 1.65 * options.barWidth;
+        leftExpectedValueLine.center = new Vector2( -xPosition, -leftHistogramBar.height );
+        rightExpectedValueLine.center = new Vector2( xPosition, -rightHistogramBar.height );
       }
     );
 
@@ -241,7 +259,9 @@ export default class QuantumMeasurementHistogram extends Node {
           yAxis,
           xAxis,
           xAxisLabels,
-          numberDisplays
+          numberDisplays,
+          leftExpectedValueLine,
+          rightExpectedValueLine
         ]
       } )
     ];
