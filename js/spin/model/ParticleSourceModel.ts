@@ -25,6 +25,7 @@ export default class ParticleSourceModel {
   public readonly spinStateProperty: Property<SpinDirection>;
 
   public readonly sourceModeProperty: Property<SourceMode>;
+  public readonly isContinuousModeProperty: TReadOnlyProperty<boolean>;
 
   // Position of the particle source, the tip will be at (0,0)
   public readonly positionProperty: Vector2Property;
@@ -44,6 +45,8 @@ export default class ParticleSourceModel {
   public constructor( position: Vector2, tandem: Tandem ) {
 
     this.sourceModeProperty = new Property<SourceMode>( SourceMode.SINGLE );
+
+    this.isContinuousModeProperty = new DerivedProperty( [ this.sourceModeProperty ], sourceMode => sourceMode === SourceMode.CONTINUOUS );
 
     this.positionProperty = new Vector2Property( position, {
       tandem: tandem.createTandem( 'positionProperty' )

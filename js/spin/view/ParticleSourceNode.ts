@@ -70,7 +70,7 @@ export default class ParticleSourceNode extends Node {
       particleSourceModel.currentlyShootingParticlesProperty, false, true, {
         scale: 0.7,
         baseColor: QuantumMeasurementColors.downColorProperty,
-        visibleProperty: new DerivedProperty( [ particleSourceModel.sourceModeProperty ], sourceMode => sourceMode === SourceMode.SINGLE ),
+        visibleProperty: DerivedProperty.not( particleSourceModel.isContinuousModeProperty ),
         center: particleSourceRectangle.center,
         tandem: tandem.createTandem( 'shootParticleButton' )
       } );
@@ -79,7 +79,7 @@ export default class ParticleSourceNode extends Node {
     const sliderRange = particleSourceModel.particleAmmountProperty.range;
     const particleAmmountSlider = new HSlider( particleSourceModel.particleAmmountProperty, sliderRange, {
       thumbFill: QuantumMeasurementColors.downColorProperty,
-      visibleProperty: new DerivedProperty( [ particleSourceModel.sourceModeProperty ], sourceMode => sourceMode === SourceMode.CONTINUOUS ),
+      visibleProperty: particleSourceModel.isContinuousModeProperty,
       center: particleSourceRectangle.center,
       trackSize: new Dimension2( PARTICLE_SOURCE_WIDTH * 0.7, 1 ),
       tandem: tandem.createTandem( 'particleAmmountSlider' ),

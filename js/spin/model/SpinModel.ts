@@ -14,6 +14,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import Property from '../../../../axon/js/Property.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import TModel from '../../../../joist/js/TModel.js';
@@ -73,6 +74,10 @@ export default class SpinModel implements TModel {
 
   // Expected percentage of particles that should be visible in the histogram
   public readonly expectedPercentageVisibleProperty: BooleanProperty;
+
+  // Boolean to control what exit to block in continuous mode
+  public readonly blockUpperExitProperty: BooleanProperty;
+  public readonly exitBlockerPositionProperty: TReadOnlyProperty<Vector2>;
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
@@ -196,6 +201,23 @@ export default class SpinModel implements TModel {
     this.expectedPercentageVisibleProperty = new BooleanProperty( false, {
       tandem: providedOptions.tandem.createTandem( 'expectedPercentageVisibleProperty' )
     } );
+
+    this.blockUpperExitProperty = new BooleanProperty( false, {
+      tandem: providedOptions.tandem.createTandem( 'blockUpperExitProperty' )
+    } );
+
+    this.exitBlockerPositionProperty = new DerivedProperty(
+      [
+        this.blockUpperExitProperty,
+        this.sternGerlachs[ 0 ].topExitPositionProperty,
+        this.sternGerlachs[ 0 ].bottomExitPositionProperty
+      ],
+      ( blockUpperExit, topExit, bottomExit ) => {
+        const offset = new Vector2( 0.1, 0 );
+        const position = blockUpperExit ? topExit : bottomExit;
+        return position.plus( offset );
+      }
+    );
   }
 
   private activateParticle( particle: ParticleWithSpin ): void {

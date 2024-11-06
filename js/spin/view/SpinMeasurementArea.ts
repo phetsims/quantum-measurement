@@ -18,6 +18,7 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ShadedSphereNode from '../../../../scenery-phet/js/ShadedSphereNode.js';
 import { HBox, Node, Path, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
+import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import ComboBox, { ComboBoxItem } from '../../../../sun/js/ComboBox.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -61,10 +62,34 @@ export default class SpinMeasurementArea extends VBox {
     const particleSourceNode = new ParticleSourceNode( model.particleSourceModel, modelViewTransform, tandem.createTandem( 'particleSourceNode' ) );
 
     const sternGerlachNodes = [
-      new SternGerlachNode( model.sternGerlachs[ 0 ], modelViewTransform, tandem.createTandem( 'firstSternGerlachNode' ) ),
-      new SternGerlachNode( model.sternGerlachs[ 1 ], modelViewTransform, tandem.createTandem( 'secondSternGerlachNode' ) ),
-      new SternGerlachNode( model.sternGerlachs[ 2 ], modelViewTransform, tandem.createTandem( 'thirdSternGerlachNode' ) )
+      new SternGerlachNode(
+        model.sternGerlachs[ 0 ],
+        model.currentExperimentProperty,
+        modelViewTransform,
+        { tandem: tandem.createTandem( 'firstSternGerlachNode' ), isBlockable: true } ),
+      new SternGerlachNode(
+        model.sternGerlachs[ 1 ],
+        model.currentExperimentProperty,
+        modelViewTransform,
+        { tandem: tandem.createTandem( 'secondSternGerlachNode' ) } ),
+      new SternGerlachNode(
+        model.sternGerlachs[ 2 ],
+        model.currentExperimentProperty,
+        modelViewTransform,
+        { tandem: tandem.createTandem( 'thirdSternGerlachNode' ) } )
     ];
+
+    const blockingRadioButtons = new AquaRadioButtonGroup( model.blockUpperExitProperty, [ true, false ].map( blockingUpperExit => {
+      return {
+        value: blockingUpperExit,
+        createNode: () => new Text( blockingUpperExit ? 'Block Up' : 'Block Down', { font: new PhetFont( 15 ) } )
+      };
+    } ), {
+      spacing: 10,
+      left: sternGerlachNodes[ 0 ].left,
+      top: sternGerlachNodes[ 0 ].bottom + 10,
+      visibleProperty: model.particleSourceModel.isContinuousModeProperty
+    } );
 
     const measurementLines = [
       new MeasurementLineNode( model.measurementLines[ 0 ], modelViewTransform, { tandem: tandem.createTandem( 'firstMeasurementLine' ) } ),
@@ -174,15 +199,27 @@ export default class SpinMeasurementArea extends VBox {
       tandem: tandem.createTandem( 'expectedPercentageCheckbox' )
     } );
 
+    const exitBlocker = new Path( new Shape().moveTo( 0, 0 ).lineTo( 0, 30 ), {
+      stroke: 'black',
+      lineWidth: 4,
+      visibleProperty: model.particleSourceModel.isContinuousModeProperty
+    } );
+
+    model.exitBlockerPositionProperty.link( position => {
+      exitBlocker.center = modelViewTransform.modelToViewPosition( position );
+    } );
+
     const experimentAreaNode = new Node( {
       children: [
         manyParticlesCanvasNode,
         ...singleParticleNodes,
         particleSourceNode,
         ...sternGerlachNodes,
+        blockingRadioButtons,
         ...measurementLines,
         ...histograms,
-        expectedPercentageCheckbox
+        expectedPercentageCheckbox,
+        exitBlocker
       ]
     } );
 
