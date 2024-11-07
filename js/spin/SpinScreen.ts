@@ -26,7 +26,12 @@ export default class SpinScreen extends Screen<SpinModel, SpinScreenView> {
 
     const options = optionize<QuantumMeasurementScreenOptions, SelfOptions, ScreenOptions>()( {
       name: QuantumMeasurementStrings.screen.spinStringProperty,
-      backgroundColorProperty: QuantumMeasurementColors.screenBackgroundColorProperty
+      backgroundColorProperty: QuantumMeasurementColors.screenBackgroundColorProperty,
+
+      // Limit the max time step to 2x the expected nominal value.  This helps prevent odd particle movement on long dt
+      // values.
+      maxDT: 1 / 30
+
     }, providedOptions );
 
     super(

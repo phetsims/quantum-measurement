@@ -76,29 +76,29 @@ export default class ParticleSourceNode extends Node {
       } );
 
     // Slider for 'continuous' mode
-    const sliderRange = particleSourceModel.particleAmmountProperty.range;
-    const particleAmmountSlider = new HSlider( particleSourceModel.particleAmmountProperty, sliderRange, {
+    const sliderRange = particleSourceModel.particleAmountProperty.range;
+    const particleAmountSlider = new HSlider( particleSourceModel.particleAmountProperty, sliderRange, {
       thumbFill: QuantumMeasurementColors.downColorProperty,
       visibleProperty: particleSourceModel.isContinuousModeProperty,
       center: particleSourceRectangle.center,
       trackSize: new Dimension2( PARTICLE_SOURCE_WIDTH * 0.7, 1 ),
-      tandem: tandem.createTandem( 'particleAmmountSlider' ),
+      tandem: tandem.createTandem( 'particleAmountSlider' ),
       majorTickLength: 15
     } );
 
     // major ticks at 0%, 33%, 66%, 100%
     const tickLabelOptions = { font: new PhetFont( 12 ) };
-    particleAmmountSlider.addMajorTick( sliderRange.min, new Text( 'None', tickLabelOptions ) );
-    particleAmmountSlider.addMajorTick( sliderRange.max, new Text( 'Lots', tickLabelOptions ) );
-    particleAmmountSlider.addMajorTick( sliderRange.min + ( sliderRange.max - sliderRange.min ) / 3 );
-    particleAmmountSlider.addMajorTick( sliderRange.min + 2 * ( sliderRange.max - sliderRange.min ) / 3 );
+    particleAmountSlider.addMajorTick( sliderRange.min, new Text( 'None', tickLabelOptions ) );
+    particleAmountSlider.addMajorTick( sliderRange.max, new Text( 'Lots', tickLabelOptions ) );
+    particleAmountSlider.addMajorTick( sliderRange.min + ( sliderRange.max - sliderRange.min ) / 3 );
+    particleAmountSlider.addMajorTick( sliderRange.min + 2 * ( sliderRange.max - sliderRange.min ) / 3 );
 
     const particleSourceApparatus = new Node( {
         children: [
           particleSourceBarrel,
           particleSourceRectangle,
           shootParticleButton,
-          particleAmmountSlider
+          particleAmountSlider
         ]
       } );
 

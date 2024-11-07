@@ -43,7 +43,7 @@ type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOpt
 const MAX_NUMBER_OF_SINGLE_PARTICLES = 50;
 const MAX_NUMBER_OF_MULTIPLE_PARTICLES = 5000;
 const PARTICLE_RAY_WIDTH = 0.02;
-const PARTICLE_CREATION_BATCH_SIZE = 5; // Number of particles created per step at max source mode
+const MAX_PARTICLE_CREATION_RATE = 5; // max rate of particles created per second
 export const BLOCKER_OFFSET = new Vector2( 0.1, 0 );
 
 export default class SpinModel implements TModel {
@@ -86,6 +86,9 @@ export default class SpinModel implements TModel {
   public readonly isBlockingProperty: TReadOnlyProperty<boolean>;
   public readonly blockUpperExitProperty: BooleanProperty;
   public readonly exitBlockerPositionProperty: TReadOnlyProperty<Vector2>;
+
+  // The fractional accumulator for the emission rate, which is used to determine how many particles to create each step.
+  private fractionalEmissionAccumulator = 0;
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
@@ -330,6 +333,7 @@ export default class SpinModel implements TModel {
     this.currentExperimentProperty.reset();
     this.particleSourceModel.spinStateProperty.reset();
     this.particleSourceModel.reset();
+    this.fractionalEmissionAccumulator = 0;
   }
 
   /**
@@ -356,10 +360,22 @@ export default class SpinModel implements TModel {
 
     if ( this.particleSourceModel.sourceModeProperty.value === SourceMode.CONTINUOUS ) {
 
-      const batchSize = Math.ceil( this.particleSourceModel.particleAmmountProperty.value * PARTICLE_CREATION_BATCH_SIZE );
+      // Calculate the number of particles to produce in this time step based on the particle amount property, the max
+      // creation rate, and the time step.  This could include a fractional amount.
+      const particlesToActivate = this.particleSourceModel.particleAmountProperty.value * MAX_PARTICLE_CREATION_RATE;
 
-      for ( let i = 0; i < batchSize; i++ ) {
+      // Calculate the whole number to actually activate, and use the fractional accumlator in the process.
+      let wholeParticlesToActivate = Math.floor( particlesToActivate );
+      this.fractionalEmissionAccumulator += particlesToActivate - wholeParticlesToActivate;
+      if ( this.fractionalEmissionAccumulator >= 1 ) {
+        wholeParticlesToActivate++;
+        this.fractionalEmissionAccumulator -= 1;
+      }
+
+      // Activate the particles.
+      for ( let i = 0; i < wholeParticlesToActivate; i++ ) {
         const particleToActivate = this.multipleParticles.find( particle => !particle.activeProperty.value );
+        assert && assert( particleToActivate, 'no inactive particles available, increase the initial creation amount' );
         if ( particleToActivate ) {
           this.activateParticle( particleToActivate );
         }

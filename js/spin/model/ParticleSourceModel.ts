@@ -36,7 +36,7 @@ export default class ParticleSourceModel {
   public readonly currentlyShootingParticlesProperty: Property<boolean>;
 
   // Mapped from [0, 1] to control the Continuous mode, 0 is 'None' and 1 is 'Lots'
-  public readonly particleAmmountProperty: NumberProperty;
+  public readonly particleAmountProperty: NumberProperty;
 
   // Constants
   public static readonly PARTICLE_SOURCE_WIDTH = 120 / 200;
@@ -49,8 +49,8 @@ export default class ParticleSourceModel {
 
     this.isContinuousModeProperty = new DerivedProperty( [ this.sourceModeProperty ], sourceMode => sourceMode === SourceMode.CONTINUOUS );
 
-    this.particleAmmountProperty = new NumberProperty( 1, {
-      tandem: tandem.createTandem( 'particleAmmountProperty' ),
+    this.particleAmountProperty = new NumberProperty( 1, {
+      tandem: tandem.createTandem( 'particleAmountProperty' ),
       range: new Range( 0, 1 )
     } );
 
@@ -82,7 +82,7 @@ export default class ParticleSourceModel {
     this.sourceModeProperty.reset();
     this.positionProperty.reset();
     this.currentlyShootingParticlesProperty.reset();
-    this.particleAmmountProperty.reset();
+    this.particleAmountProperty.reset();
   }
 }
 
