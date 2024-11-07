@@ -48,6 +48,9 @@ export default class BlochSphereNode extends Node {
 
   public readonly xAxisOffsetAngleProperty: NumberProperty;
 
+  public readonly sphereRadius: number;
+  public pointOnTheEquator = ( azimuth: number ): Vector2 => Vector2.ZERO;
+
   public readonly stateVectorVisibleProperty: BooleanProperty;
 
   public constructor(
@@ -72,13 +75,6 @@ export default class BlochSphereNode extends Node {
     );
 
     const xAxisOffsetAngleProperty = new NumberProperty( Utils.toRadians( 20 ) );
-
-    let pointOnTheEquator = ( azimuth: number ) => {
-      return new Vector2(
-        equatorSemiMajorAxis * Math.sin( azimuth + xAxisOffsetAngleProperty.value ),
-        equatorSemiMajorAxis * Math.cos( azimuth + xAxisOffsetAngleProperty.value ) * Math.sin( equatorInclinationAngle )
-      );
-    };
 
     let pointOnTheSphere = ( azimuth: number, polar: number ) => {
       return new Vector2(
@@ -105,38 +101,6 @@ export default class BlochSphereNode extends Node {
       centerY: -sphereRadius + LABELS_OFFSET,
       fill: 'black',
       font: LABELS_FONT
-    } );
-
-    xAxisOffsetAngleProperty.link( xAxisOffsetAngle => {
-      pointOnTheEquator = ( azimuth: number ) => {
-        return new Vector2(
-          equatorSemiMajorAxis * Math.sin( azimuth + xAxisOffsetAngle ),
-          equatorSemiMajorAxis * Math.cos( azimuth + xAxisOffsetAngle ) * Math.sin( equatorInclinationAngle )
-        );
-      };
-
-      pointOnTheSphere = ( azimuth: number, polar: number ) => {
-        return new Vector2(
-          equatorSemiMajorAxis * Math.sin( azimuth + xAxisOffsetAngle ) * Math.cos( polar ),
-          equatorSemiMajorAxis *
-          ( -Math.sin( polar ) + Math.cos( azimuth + xAxisOffsetAngle ) * Math.sin( equatorInclinationAngle ) * Math.cos( polar ) )
-        );
-      };
-
-      const plusX = pointOnTheEquator( 0 );
-      const minusX = pointOnTheEquator( Math.PI );
-      xAxis.shape = new Shape().moveTo( plusX.x, plusX.y ).lineTo( minusX.x, minusX.y );
-
-      const plusY = pointOnTheEquator( Math.PI / 2 );
-      const minusY = pointOnTheEquator( -Math.PI / 2 );
-      yAxis.shape = new Shape().moveTo( plusY.x, plusY.y ).lineTo( minusY.x, minusY.y );
-      zAxis.shape = new Shape().moveTo( 0, -sphereRadius ).lineTo( 0, sphereRadius );
-
-      xAxisLabel.centerX = plusX.x + 3 * LABELS_OFFSET;
-      xAxisLabel.centerY = plusX.y + 2 * LABELS_OFFSET;
-      yAxisLabel.centerX = plusY.x;
-      yAxisLabel.centerY = plusY.y - LABELS_OFFSET;
-
     } );
 
     const UP = QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
@@ -180,6 +144,8 @@ export default class BlochSphereNode extends Node {
       visibleProperty: stateVectorVisibleProperty
     } );
 
+    // TODO: Add angle indicators, see https://github.com/phetsims/quantum-measurement/issues/53
+
     // const ANGLE_INDICATOR_PATH_OPTIONS = {
     //   stroke: 'gray',
     //   lineWidth: 1,
@@ -197,6 +163,8 @@ export default class BlochSphereNode extends Node {
         const tip = pointOnTheSphere( azimutalAngle, polarAngle );
         stateVector.setTip( tip.x, tip.y );
         stateVector.opacity = Math.cos( polarAngle ) < 1e-5 || Math.cos( azimutalAngle + xAxisOffsetAngle ) > 0 ? 1 : 0.4;
+
+        // TODO: Add angle indicators, see https://github.com/phetsims/quantum-measurement/issues/53
 
         //   const shiftedPolar = polarAngle - equatorInclinationAngle;
         //   polarAngleIndicator.shape = new Shape().ellipticalArc(
@@ -235,8 +203,41 @@ export default class BlochSphereNode extends Node {
 
     super( options );
 
+    xAxisOffsetAngleProperty.link( xAxisOffsetAngle => {
+      this.pointOnTheEquator = ( azimuth: number ) => {
+        return new Vector2(
+          equatorSemiMajorAxis * Math.sin( azimuth + xAxisOffsetAngle ),
+          equatorSemiMajorAxis * Math.cos( azimuth + xAxisOffsetAngle ) * Math.sin( equatorInclinationAngle )
+        );
+      };
+
+      pointOnTheSphere = ( azimuth: number, polar: number ) => {
+        return new Vector2(
+          equatorSemiMajorAxis * Math.sin( azimuth + xAxisOffsetAngle ) * Math.cos( polar ),
+          equatorSemiMajorAxis *
+          ( -Math.sin( polar ) + Math.cos( azimuth + xAxisOffsetAngle ) * Math.sin( equatorInclinationAngle ) * Math.cos( polar ) )
+        );
+      };
+
+      const plusX = this.pointOnTheEquator( 0 );
+      const minusX = this.pointOnTheEquator( Math.PI );
+      xAxis.shape = new Shape().moveTo( plusX.x, plusX.y ).lineTo( minusX.x, minusX.y );
+
+      const plusY = this.pointOnTheEquator( Math.PI / 2 );
+      const minusY = this.pointOnTheEquator( -Math.PI / 2 );
+      yAxis.shape = new Shape().moveTo( plusY.x, plusY.y ).lineTo( minusY.x, minusY.y );
+      zAxis.shape = new Shape().moveTo( 0, -sphereRadius ).lineTo( 0, sphereRadius );
+
+      xAxisLabel.centerX = plusX.x + 3 * LABELS_OFFSET;
+      xAxisLabel.centerY = plusX.y + 2 * LABELS_OFFSET;
+      yAxisLabel.centerX = plusY.x;
+      yAxisLabel.centerY = plusY.y - LABELS_OFFSET;
+
+    } );
+
     this.setLocalBounds( new Bounds2( -1.5 * sphereRadius, this.bounds.minY, 1.5 * sphereRadius, this.bounds.maxY ) );
 
+    this.sphereRadius = sphereRadius;
     this.xAxisOffsetAngleProperty = xAxisOffsetAngleProperty;
     this.stateVectorVisibleProperty = stateVectorVisibleProperty;
   }

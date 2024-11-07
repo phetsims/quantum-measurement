@@ -109,13 +109,11 @@ export default class SternGerlach {
    * spin measurement of particles with a given state (Z+, Z-, X+, X-) passing
    * through the apparatus.
    */
-  public prepare( incomingState: SpinDirection | null ): number {
+  public prepare( incomingStateVector: Vector2 ): number {
 
     // Using a XZ vector to calculate the projected probability.
     // The experiment has a measurement vector and the incoming state has a spin vector
     // Based on the dot product we'll obtain the probability
-
-    const incomingStateVector = SpinDirection.spinToVector( incomingState );
 
     const experimentMeasurementVector = this.isZOrientedProperty.value ? new Vector2( 0, 1 ) : new Vector2( 1, 0 );
 

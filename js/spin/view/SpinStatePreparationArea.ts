@@ -17,12 +17,12 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import ProbabilityValueControl from '../../coins/view/ProbabilityValueControl.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import BlochSphereNode from '../../common/view/BlochSphereNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { SpinDirection } from '../model/SpinDirection.js';
 import SpinExperiment from '../model/SpinExperiment.js';
 import SpinModel from '../model/SpinModel.js';
+import BlochSphereWithProjectionNode from './BlochSphereWithProjectionNode.js';
 import HBarOverTwoNode from './HBarOverTwoNode.js';
 
 const ALPHA = QuantumMeasurementConstants.ALPHA;
@@ -81,8 +81,10 @@ export default class SpinStatePreparationArea extends VBox {
       ]
     } );
 
-    const blochSphereNode = new BlochSphereNode(
-      model.blochSphere, {
+    const blochSphereNode = new BlochSphereWithProjectionNode(
+      model.blochSphere,
+      model.particleSourceModel.customSpinStateProperty,
+      {
         tandem: tandem.createTandem( 'blochSphereNode' )
       } );
 

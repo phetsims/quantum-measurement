@@ -89,7 +89,7 @@ export default class SpinModel implements TModel {
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
-    this.currentExperimentProperty = new Property<SpinExperiment>( SpinExperiment.EXPERIMENT_5 );
+    this.currentExperimentProperty = new Property<SpinExperiment>( SpinExperiment.CUSTOM );
     this.isCustomExperimentProperty = new DerivedProperty(
       [ this.currentExperimentProperty ],
       ( experiment: SpinExperiment ) => experiment === SpinExperiment.CUSTOM
@@ -108,26 +108,6 @@ export default class SpinModel implements TModel {
     // Create a Property with the inverse probability as the provided one and hook the two Properties up to one another.
     // This is needed for the number sliders to work properly.
     this.downProbabilityProperty = new NumberProperty( 1 - this.upProbabilityProperty.value );
-    let changeHandlingInProgress = false;
-
-    this.upProbabilityProperty.link( upProbability => {
-      if ( !changeHandlingInProgress ) {
-        changeHandlingInProgress = true;
-        this.downProbabilityProperty.value = 1 - upProbability;
-        changeHandlingInProgress = false;
-      }
-
-      // Set the spin direction
-      const polarAngle = Math.PI * ( 1 - upProbability );
-      this.particleSourceModel.customSpinStateProperty.value = new Vector2( Math.sin( polarAngle ), Math.cos( polarAngle ) );
-    } );
-    this.downProbabilityProperty.link( downProbability => {
-      if ( !changeHandlingInProgress ) {
-        changeHandlingInProgress = true;
-        this.upProbabilityProperty.value = 1 - downProbability;
-        changeHandlingInProgress = false;
-      }
-    } );
 
     const sternGerlachsTandem = providedOptions.tandem.createTandem( 'SternGerlachs' );
     this.sternGerlachs = [
@@ -205,6 +185,29 @@ export default class SpinModel implements TModel {
       }
     );
 
+    let changeHandlingInProgress = false;
+
+    this.upProbabilityProperty.link( upProbability => {
+      if ( !changeHandlingInProgress ) {
+        changeHandlingInProgress = true;
+        this.downProbabilityProperty.value = 1 - upProbability;
+        changeHandlingInProgress = false;
+      }
+
+      // Set the spin direction
+      const polarAngle = Math.PI * ( 1 - upProbability );
+      this.particleSourceModel.customSpinStateProperty.value = new Vector2( Math.sin( polarAngle ), Math.cos( polarAngle ) );
+
+      this.prepare();
+    } );
+    this.downProbabilityProperty.link( downProbability => {
+      if ( !changeHandlingInProgress ) {
+        changeHandlingInProgress = true;
+        this.upProbabilityProperty.value = 1 - downProbability;
+        changeHandlingInProgress = false;
+      }
+    } );
+
     // Multilink for changes in the experiment either via source mode or experiment selection
     Multilink.multilink(
       [
@@ -261,7 +264,7 @@ export default class SpinModel implements TModel {
     // Set the first spin vector to the state of the generated particles
     particle.spinVectors[ 0 ] = SpinDirection.spinToVector( this.particleSourceModel.spinStateProperty.value );
 
-    const measure = ( sternGerlach: SternGerlach, experimentStageIndex: number, incomingState: SpinDirection | null ) => {
+    const measure = ( sternGerlach: SternGerlach, experimentStageIndex: number, incomingState: Vector2 ) => {
       const upProbability = sternGerlach.prepare( incomingState );
       const isResultUp = dotRandom.nextDouble() < upProbability;
       particle.isSpinUp[ experimentStageIndex ] = isResultUp;
@@ -274,17 +277,17 @@ export default class SpinModel implements TModel {
     };
 
     // First measurement: SG0 where the particle decides to go up or down
-    const isResultUp = measure( this.sternGerlachs[ 0 ], 1, this.particleSourceModel.spinStateProperty.value );
+    const isResultUp = measure( this.sternGerlachs[ 0 ], 1, this.particleSourceModel.customSpinStateProperty.value );
 
     // If current experiment is short, the particle only goes through SG0
     if ( !this.currentExperimentProperty.value.isShortExperiment ) {
       if ( isResultUp ) {
         // If it went up, go through SG1
-        measure( this.sternGerlachs[ 1 ], 2, this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS );
+        measure( this.sternGerlachs[ 1 ], 2, SpinDirection.spinToVector( this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS ) );
       }
       else {
         // If it went down, go through SG2
-        measure( this.sternGerlachs[ 2 ], 2, this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_MINUS : null );
+        measure( this.sternGerlachs[ 2 ], 2, SpinDirection.spinToVector( this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_MINUS : null ) );
       }
     }
 
@@ -298,18 +301,18 @@ export default class SpinModel implements TModel {
     const experimentSetting = this.currentExperimentProperty.value.experimentSetting;
 
     // Measure on the first SG, this will change its upProbabilityProperty
-    this.sternGerlachs[ 0 ].prepare( this.particleSourceModel.spinStateProperty.value );
+    this.sternGerlachs[ 0 ].prepare( this.particleSourceModel.customSpinStateProperty.value );
 
     if ( experimentSetting.length > 1 ) {
       // Measure on the second SG according to the orientation of the first one
       this.sternGerlachs[ 1 ].prepare(
         // SG0 passes the up-spin particles to SG1
-        this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS
+        SpinDirection.spinToVector( this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS )
       );
 
       this.sternGerlachs[ 2 ].prepare(
         // SG0 passes the down-spin particles to SG2, and because X- is not in the initial spin values, we pass null
-        this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_MINUS : null
+        SpinDirection.spinToVector( this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_MINUS : null )
       );
 
     }
