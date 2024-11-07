@@ -132,7 +132,7 @@ export default class BlochSphereNode extends Node {
       yAxis.shape = new Shape().moveTo( plusY.x, plusY.y ).lineTo( minusY.x, minusY.y );
       zAxis.shape = new Shape().moveTo( 0, -sphereRadius ).lineTo( 0, sphereRadius );
 
-      xAxisLabel.centerX = plusX.x - 2 * LABELS_OFFSET;
+      xAxisLabel.centerX = plusX.x + 3 * LABELS_OFFSET;
       xAxisLabel.centerY = plusX.y + 2 * LABELS_OFFSET;
       yAxisLabel.centerX = plusY.x;
       yAxisLabel.centerY = plusY.y - LABELS_OFFSET;
@@ -173,9 +173,9 @@ export default class BlochSphereNode extends Node {
     const stateVectorVisibleProperty = new BooleanProperty( true );
     const stateVector = new ArrowNode( 0, 0, 0, -sphereRadius, {
       tandem: providedOptions.tandem.createTandem( 'stateVector' ),
-      headWidth: 6,
-      headHeight: 6,
-      tailWidth: 1,
+      headWidth: 10,
+      headHeight: 10,
+      tailWidth: 3,
       fill: 'black',
       visibleProperty: stateVectorVisibleProperty
     } );
