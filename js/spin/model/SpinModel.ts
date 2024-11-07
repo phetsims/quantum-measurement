@@ -220,6 +220,7 @@ export default class SpinModel implements TModel {
         this.particleRays.reset();
         this.particleRays.isShortExperiment = experiment.isShortExperiment;
         this.particleRays.updateExperiment();
+        this.sternGerlachs.forEach( sternGerlach => sternGerlach.reset() );
 
         if ( experiment !== SpinExperiment.CUSTOM ) {
           this.particleSourceModel.customSpinStateProperty.value = SpinDirection.spinToVector( spinState );
@@ -381,8 +382,17 @@ export default class SpinModel implements TModel {
     // Slightly adjusted position to avoid clipping
     const exitBlockerPositionX = this.exitBlockerPositionProperty.value.x - 0.03;
     activeMultipleParticles.forEach( particle => {
-      if ( particlesInPathToBlocking.includes( particle ) && ( particle.positionProperty.value.x >= exitBlockerPositionX ) ) {
-        particle.activeProperty.value = false;
+
+      // When a particle crosses the blocker (also detector) zone
+      if ( particle.positionProperty.value.x >= exitBlockerPositionX ) {
+
+        // If it were to be blocked, we deactivate it
+        if ( particlesInPathToBlocking.includes( particle ) ) {
+          particle.activeProperty.value = false;
+        }
+
+        // TODO: Is this the best way of counting particles?? https://github.com/phetsims/quantum-measurement/issues/53
+        // this.sternGerlachs[ 0 ].count( particle.isSpinUp[ 1 ] );
       }
       particle.step( dt );
     } );

@@ -35,6 +35,10 @@ export default class SternGerlach {
   public readonly upProbabilityProperty: NumberProperty;
   public readonly downProbabilityProperty: TReadOnlyProperty<number>;
 
+  // Counts how many particles have been measured in the up and down states
+  public readonly upCounterProperty: NumberProperty;
+  public readonly downCounterProperty: NumberProperty;
+
   // Expected spin after the measurement
   public readonly expectedSpinProperty: Property<SpinDirection>;
 
@@ -101,6 +105,14 @@ export default class SternGerlach {
 
     this.downProbabilityProperty = new DerivedProperty( [ this.upProbabilityProperty ], upProbability => 1 - upProbability );
 
+    this.upCounterProperty = new NumberProperty( 0, {
+      tandem: tandem.createTandem( 'upCounterProperty' )
+    } );
+
+    this.downCounterProperty = new NumberProperty( 0, {
+      tandem: tandem.createTandem( 'downCounterProperty' )
+    } );
+
   }
 
 
@@ -128,10 +140,25 @@ export default class SternGerlach {
     return this.upProbabilityProperty.value;
   }
 
+  // Provided a boolean value, increments the counter of the up or down particles
+  public count( isSpinUp: boolean ): void {
+    if ( isSpinUp ) {
+      this.upCounterProperty.value++;
+    }
+    else {
+      this.downCounterProperty.value++;
+    }
+  }
+
+  public resetCounts(): void {
+    this.upCounterProperty.reset();
+    this.downCounterProperty.reset();
+  }
 
   public reset(): void {
     this.upProbabilityProperty.reset();
     this.expectedSpinProperty.reset();
+    this.resetCounts();
   }
 
 }
