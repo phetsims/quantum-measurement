@@ -162,7 +162,7 @@ export default class SpinMeasurementArea extends VBox {
 
     const singleParticleNodes = model.singleParticles.map( particle => {
       const particleNode = new ShadedSphereNode( 15, {
-        mainColor: 'magenta',
+        mainColor: QuantumMeasurementColors.particleColor,
         highlightColor: 'white',
         visibleProperty: particle.activeProperty
       } );

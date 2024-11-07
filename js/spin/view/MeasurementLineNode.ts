@@ -12,6 +12,7 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import { Path, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
 import cameraSolidShape from '../../../../sherpa/js/fontawesome-5/cameraSolidShape.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import MeasurementLine, { MeasurementState } from '../model/MeasurementLine.js';
@@ -39,7 +40,9 @@ export default class MeasurementLineNode extends VBox {
 
     measurementLine.measurementStateProperty.link( measurementState => {
       simpleBlochSphere.stateVectorVisibleProperty.value = measurementState !== MeasurementState.NOT_MEASURED;
-      cameraPath.fill = measurementState === MeasurementState.MEASURING ? 'magenta' : 'black';
+      cameraPath.fill = measurementState === MeasurementState.MEASURING ?
+                        QuantumMeasurementColors.particleColor :
+                        'black';
     } );
 
     const options = optionize<MeasurementLineNodeOptions, SelfOptions, VBoxOptions>()( {

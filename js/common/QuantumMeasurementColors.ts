@@ -138,6 +138,11 @@ const QuantumMeasurementColors = {
   // Colors for elements on the "Photons" screen
   photonDetectorBodyColor: new ProfileColorProperty( quantumMeasurement, 'photonDetectorBody', {
     default: '#D1E2FA'
+  } ),
+
+  // Color for particles on the "Spin" screen particles.
+  particleColor: new ProfileColorProperty( quantumMeasurement, 'particleColor', {
+    default: '#F0F'
   } )
 };
 
