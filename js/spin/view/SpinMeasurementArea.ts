@@ -80,16 +80,18 @@ export default class SpinMeasurementArea extends VBox {
         { tandem: tandem.createTandem( 'thirdSternGerlachNode' ) } )
     ];
 
-    const blockingRadioButtons = new AquaRadioButtonGroup( model.blockUpperExitProperty, [ true, false ].map( blockingUpperExit => {
+    const blockingRadioButtonGroup = new AquaRadioButtonGroup( model.blockUpperExitProperty, [ true, false ].map( blockingUpperExit => {
       return {
         value: blockingUpperExit,
-        createNode: () => new Text( blockingUpperExit ? 'Block Up' : 'Block Down', { font: new PhetFont( 15 ) } )
+        createNode: () => new Text( blockingUpperExit ? 'Block Up' : 'Block Down', { font: new PhetFont( 15 ) } ),
+        tandemName: blockingUpperExit ? 'blockUpRadioButton' : 'blockDownRadioButton'
       };
     } ), {
       spacing: 10,
       left: sternGerlachNodes[ 0 ].left,
       top: sternGerlachNodes[ 0 ].bottom + 10,
-      visibleProperty: model.particleSourceModel.isContinuousModeProperty
+      visibleProperty: model.particleSourceModel.isContinuousModeProperty,
+      tandem: tandem.createTandem( 'blockingRadioButtonGroup' )
     } );
 
     const measurementLines = [
@@ -218,7 +220,7 @@ export default class SpinMeasurementArea extends VBox {
         ...singleParticleNodes,
         particleSourceNode,
         ...sternGerlachNodes,
-        blockingRadioButtons,
+        blockingRadioButtonGroup,
         ...measurementLines,
         ...histograms,
         expectedPercentageCheckbox,
