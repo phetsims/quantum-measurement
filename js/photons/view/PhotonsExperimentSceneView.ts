@@ -18,6 +18,7 @@ import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHistogram.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import PhotonsExperimentSceneModel from '../model/PhotonsExperimentSceneModel.js';
 import NormalizedOutcomeVectorGraph from './NormalizedOutcomeVectorGraph.js';
 import ObliquePolarizationAngleIndicator from './ObliquePolarizationAngleIndicator.js';
@@ -70,8 +71,11 @@ export default class PhotonsExperimentSceneView extends Node {
     );
 
     // Create a sort of "title panel" for the area on the right that shows information about the detection statistics.
-    const averagePolarizationRateTitlePanel = new Panel(
-      new Text( 'Average Polarization Rate', { font: new PhetFont( 18 ) } ),
+    const titleTextProperty = model.laser.emissionMode === 'singlePhoton' ?
+                              QuantumMeasurementStrings.averagePolarizationStringProperty :
+                              QuantumMeasurementStrings.averagePolarizationRateStringProperty;
+    const averagePolarizationTitlePanel = new Panel(
+      new Text( titleTextProperty, { font: new PhetFont( 18 ) } ),
       {
         fill: QuantumMeasurementColors.controlPanelFillColorProperty,
         stroke: null,
@@ -139,7 +143,7 @@ export default class PhotonsExperimentSceneView extends Node {
     // Working name
     const dataDashboardBox = new VBox( {
       children: [
-        averagePolarizationRateTitlePanel,
+        averagePolarizationTitlePanel,
         equationsBox,
         dynamicDataDisplayBox
       ],

@@ -14,6 +14,9 @@
   "screen.blochSphere": {
     "value": "Bloch Sphere"
   },
+  "averagePolarization": {
+    "value": "Average Polarization"
+  },
   "averagePolarizationRate": {
     "value": "Average Polarization Rate"
   },
