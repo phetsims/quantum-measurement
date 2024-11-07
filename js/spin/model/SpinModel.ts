@@ -63,6 +63,7 @@ export default class SpinModel implements TModel {
 
   // Current experiment selected by the user
   public readonly currentExperimentProperty: Property<SpinExperiment>;
+  public readonly isCustomExperimentProperty: TReadOnlyProperty<boolean>;
 
   // MODEL ELEMENTS OF UI COMPONENTS ------------------------------------------------
 
@@ -89,17 +90,18 @@ export default class SpinModel implements TModel {
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
     this.currentExperimentProperty = new Property<SpinExperiment>( SpinExperiment.EXPERIMENT_5 );
+    this.isCustomExperimentProperty = new DerivedProperty(
+      [ this.currentExperimentProperty ],
+      ( experiment: SpinExperiment ) => experiment === SpinExperiment.CUSTOM
+    );
 
     this.particleSourceModel = new ParticleSourceModel( new Vector2( -0.5, 0 ), providedOptions.tandem.createTandem( 'particleSourceModel' ) );
 
-    const vectorSpinStateProperty = new DerivedProperty(
-      [ this.particleSourceModel.spinStateProperty ], spinState => SpinDirection.spinToVector( spinState )
-    );
     this.blochSphere = new SimpleBlochSphere(
-      vectorSpinStateProperty, { tandem: providedOptions.tandem.createTandem( 'blochSphere' ) }
+      this.particleSourceModel.customSpinStateProperty, { tandem: providedOptions.tandem.createTandem( 'blochSphere' ) }
     );
 
-    this.upProbabilityProperty = new NumberProperty( 0.5, {
+    this.upProbabilityProperty = new NumberProperty( 1, {
       tandem: providedOptions.tandem.createTandem( 'upProbabilityProperty' )
     } );
 
@@ -114,6 +116,10 @@ export default class SpinModel implements TModel {
         this.downProbabilityProperty.value = 1 - upProbability;
         changeHandlingInProgress = false;
       }
+
+      // Set the spin direction
+      const polarAngle = Math.PI * ( 1 - upProbability );
+      this.particleSourceModel.customSpinStateProperty.value = new Vector2( Math.sin( polarAngle ), Math.cos( polarAngle ) );
     } );
     this.downProbabilityProperty.link( downProbability => {
       if ( !changeHandlingInProgress ) {
@@ -212,6 +218,11 @@ export default class SpinModel implements TModel {
         this.particleRays.isShortExperiment = experiment.isShortExperiment;
         this.particleRays.updateExperiment();
 
+        if ( experiment !== SpinExperiment.CUSTOM ) {
+          this.particleSourceModel.customSpinStateProperty.value = SpinDirection.spinToVector( spinState );
+          this.upProbabilityProperty.value = ( spinState === SpinDirection.Z_PLUS || spinState === SpinDirection.X_PLUS ) ? 1 : 0;
+        }
+
         const isSingle = sourceMode === SourceMode.SINGLE;
         this.measurementLines[ 0 ].isActiveProperty.value = isSingle;
         this.measurementLines[ 1 ].isActiveProperty.value = isSingle;
@@ -224,10 +235,11 @@ export default class SpinModel implements TModel {
 
         this.sternGerlachs.forEach( ( SternGerlach, index ) => {
           if ( experiment.experimentSetting.length > index ) {
-            SternGerlach.isVisibleProperty.value = index === 1 ?
-                                                   experiment.experimentSetting[ index ].active && !blockUpperExit :
-                                                   index === 2 ? experiment.experimentSetting[ index ].active && blockUpperExit :
-                                                    experiment.experimentSetting[ index ].active;
+            // If isBlocking, check which entrance is blocked and set the visibility of the SternGerlach accordingly
+            const isBlocked = this.isBlockingProperty.value ?
+                              index === 1 ? blockUpperExit :
+                              index === 2 ? !blockUpperExit : false : false;
+            SternGerlach.isVisibleProperty.value = experiment.experimentSetting[ index ].active && !isBlocked;
             SternGerlach.isZOrientedProperty.value = experiment.experimentSetting[ index ].isZOriented;
           }
           else {

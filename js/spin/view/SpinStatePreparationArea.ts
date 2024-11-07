@@ -91,15 +91,14 @@ export default class SpinStatePreparationArea extends VBox {
 
     const stateReadoutStringProperty = new DerivedProperty(
       [
-        model.particleSourceModel.spinStateProperty
+        model.particleSourceModel.customSpinStateProperty
       ],
       spinState => {
 
-        const upProbability = spinState === SpinDirection.Z_PLUS ? 1 :
-                              spinState === SpinDirection.X_PLUS ? 0.5 : 0;
-        // const upProbability = spinState === SpinDirection.Z_MINUS ? 0 : 1;
-        const alphaValue = Utils.toFixed( upProbability, 3 );
-        const betaValue = Utils.toFixed( 1 - upProbability, 3 );
+        const upProbability = ( spinState.dot( new Vector2( 0, 1 ) ) + 1 ) / 2;
+        const downProbability = 1 - upProbability;
+        const alphaValue = Utils.toFixed( Math.sqrt( upProbability ), 3 );
+        const betaValue = Utils.toFixed( Math.sqrt( downProbability ), 3 );
         return `${alphaValue}|${UP}${KET} + ${betaValue}|${DOWN}${KET}`;
       } );
 

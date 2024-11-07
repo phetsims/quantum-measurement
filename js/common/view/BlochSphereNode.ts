@@ -133,7 +133,7 @@ export default class BlochSphereNode extends Node {
       zAxis.shape = new Shape().moveTo( 0, -sphereRadius ).lineTo( 0, sphereRadius );
 
       xAxisLabel.centerX = plusX.x - 2 * LABELS_OFFSET;
-      xAxisLabel.centerY = plusX.y;
+      xAxisLabel.centerY = plusX.y + 2 * LABELS_OFFSET;
       yAxisLabel.centerX = plusY.x;
       yAxisLabel.centerY = plusY.y - LABELS_OFFSET;
 

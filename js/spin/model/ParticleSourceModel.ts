@@ -23,6 +23,7 @@ import { SpinDirection } from './SpinDirection.js';
 export default class ParticleSourceModel {
 
   public readonly spinStateProperty: Property<SpinDirection>;
+  public readonly customSpinStateProperty: Vector2Property;
 
   public readonly sourceModeProperty: Property<SourceMode>;
   public readonly isContinuousModeProperty: TReadOnlyProperty<boolean>;
@@ -63,9 +64,12 @@ export default class ParticleSourceModel {
       return position.plus( this.exitLocalPosition );
     } );
 
-    this.spinStateProperty = new Property<SpinDirection>( SpinDirection.Z_PLUS, {
+    const initialSpinState = SpinDirection.Z_PLUS;
+    this.spinStateProperty = new Property<SpinDirection>( initialSpinState, {
       validValues: SpinDirection.enumeration.values
     } );
+
+    this.customSpinStateProperty = new Vector2Property( SpinDirection.spinToVector( initialSpinState ) );
 
     this.currentlyShootingParticlesProperty = new Property<boolean>( false, {
       tandem: tandem.createTandem( 'currentlyShootingParticlesProperty' ),
