@@ -119,6 +119,11 @@ export default class SpinModel implements TModel {
       new SternGerlach( new Vector2( 2, -0.3 ), false, sternGerlachsTandem.createTandem( 'thirdSternGerlach' ) )
     ];
 
+    // SG1 and SG2 should have matching Z orientations
+    this.sternGerlachs[ 2 ].isZOrientedProperty.link( isZOriented => {
+      this.sternGerlachs[ 1 ].isZOrientedProperty.value = isZOriented;
+    } );
+
     const measurementLinesTandem = providedOptions.tandem.createTandem( 'measurementLines' );
     this.measurementLines = [
       new MeasurementLine(
@@ -249,7 +254,9 @@ export default class SpinModel implements TModel {
                               index === 1 ? blockUpperExit :
                               index === 2 ? !blockUpperExit : false : false;
             SternGerlach.isVisibleProperty.value = experiment.experimentSetting[ index ].active && !isBlocked;
-            SternGerlach.isZOrientedProperty.value = experiment.experimentSetting[ index ].isZOriented;
+            if ( experiment !== SpinExperiment.CUSTOM ) {
+              SternGerlach.isZOrientedProperty.value = experiment.experimentSetting[ index ].isZOriented;
+            }
           }
           else {
             SternGerlach.isVisibleProperty.value = false;

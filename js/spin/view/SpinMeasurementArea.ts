@@ -18,8 +18,9 @@ import { Shape } from '../../../../kite/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ShadedSphereNode from '../../../../scenery-phet/js/ShadedSphereNode.js';
-import { HBox, Node, Path, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
+import { HBox, Node, Path, RichText, RichTextOptions, Text, VBox } from '../../../../scenery/js/imports.js';
 import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
+import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import ComboBox, { ComboBoxItem } from '../../../../sun/js/ComboBox.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -65,20 +66,35 @@ export default class SpinMeasurementArea extends VBox {
     const sternGerlachNodes = [
       new SternGerlachNode(
         model.sternGerlachs[ 0 ],
-        model.currentExperimentProperty,
         modelViewTransform,
         { tandem: tandem.createTandem( 'firstSternGerlachNode' ), isBlockable: true } ),
       new SternGerlachNode(
         model.sternGerlachs[ 1 ],
-        model.currentExperimentProperty,
         modelViewTransform,
         { tandem: tandem.createTandem( 'secondSternGerlachNode' ) } ),
       new SternGerlachNode(
         model.sternGerlachs[ 2 ],
-        model.currentExperimentProperty,
         modelViewTransform,
         { tandem: tandem.createTandem( 'thirdSternGerlachNode' ) } )
     ];
+
+    const createOrientationRadioButtonGroup = ( sternGerlach: SternGerlach, tandem: Tandem ) => {
+      const radioButtonTextOptions: RichTextOptions = {
+        font: new PhetFont( 18 ),
+        fill: 'black'
+      };
+      // Create and add the radio buttons that select the chart type view in the nuclideChartAccordionBox.
+      return new RectangularRadioButtonGroup<boolean>(
+        sternGerlach.isZOrientedProperty, [
+          { value: true, createNode: () => new RichText( 'S<sub>Z', radioButtonTextOptions ), tandemName: 'isZOrientedRadioButton' },
+          { value: false, createNode: () => new RichText( 'S<sub>X', radioButtonTextOptions ), tandemName: 'isXOrientedRadioButton' }
+        ], {
+          orientation: 'horizontal',
+          tandem: tandem.createTandem( 'orientationRadioButtonGroup' ),
+          radioButtonOptions: { baseColor: QuantumMeasurementColors.controlPanelFillColorProperty },
+          visibleProperty: DerivedProperty.and( [ model.isCustomExperimentProperty, model.particleSourceModel.isContinuousModeProperty ] )
+        } );
+    };
 
     const blockingRadioButtonGroup = new AquaRadioButtonGroup( model.blockUpperExitProperty, [ true, false ].map( blockingUpperExit => {
       return {
@@ -88,10 +104,28 @@ export default class SpinMeasurementArea extends VBox {
       };
     } ), {
       spacing: 10,
-      left: sternGerlachNodes[ 0 ].left,
-      top: sternGerlachNodes[ 0 ].bottom + 10,
       visibleProperty: model.particleSourceModel.isContinuousModeProperty,
       tandem: tandem.createTandem( 'blockingRadioButtonGroup' )
+    } );
+
+    const firstSternGerlachControlsTandem = tandem.createTandem( 'firstSternGerlachControls' );
+    const firstSternGerlachControls = new VBox( {
+      left: sternGerlachNodes[ 0 ].left,
+      top: sternGerlachNodes[ 0 ].bottom + 10,
+      align: 'left',
+      spacing: 10,
+      tandem: firstSternGerlachControlsTandem,
+      children: [
+        createOrientationRadioButtonGroup( model.sternGerlachs[ 0 ], firstSternGerlachControlsTandem ),
+        blockingRadioButtonGroup
+      ]
+    } );
+
+    const secondAndThirdSternGerlachControl = createOrientationRadioButtonGroup( model.sternGerlachs[ 2 ], tandem.createTandem( 'secondAndThirdSternGerlachControl' ) );
+    model.blockUpperExitProperty.link( blockUpperExit => {
+      const referenceIndex = blockUpperExit ? 2 : 1;
+      secondAndThirdSternGerlachControl.left = sternGerlachNodes[ referenceIndex ].left;
+      secondAndThirdSternGerlachControl.top = sternGerlachNodes[ referenceIndex ].bottom + 10;
     } );
 
     const measurementLines = [
@@ -224,7 +258,8 @@ export default class SpinMeasurementArea extends VBox {
         ...singleParticleNodes,
         particleSourceNode,
         ...sternGerlachNodes,
-        blockingRadioButtonGroup,
+        firstSternGerlachControls,
+        secondAndThirdSternGerlachControl,
         ...measurementLines,
         ...histograms,
         expectedPercentageCheckbox,

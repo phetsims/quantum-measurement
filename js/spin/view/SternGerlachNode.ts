@@ -7,7 +7,6 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
@@ -16,7 +15,6 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { LinearGradient, Node, NodeOptions, Path, RichText } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
-import SpinExperiment from '../model/SpinExperiment.js';
 import SternGerlach from '../model/SternGerlach.js';
 
 type SelfOptions = {
@@ -29,15 +27,9 @@ export default class SternGerlachNode extends Node {
 
   public constructor(
     sternGerlach: SternGerlach,
-    experimentProperty: TReadOnlyProperty<SpinExperiment>,
     modelViewTransform: ModelViewTransform2,
     providedOptions: SternGerlachNodeOptions
     ) {
-
-    // const isCustomExperimentProperty = new DerivedProperty(
-    //   [ experimentProperty ],
-    //   ( experiment: SpinExperiment ) => experiment === SpinExperiment.CUSTOM
-    // );
 
     // Transformed constants
     const STERN_GERLACH_WIDTH = modelViewTransform.modelToViewDeltaX( sternGerlach.STERN_GERLACH_WIDTH );
