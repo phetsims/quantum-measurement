@@ -39,7 +39,7 @@ export class ParticleWithSpin {
 
   public constructor( private readonly offset: Vector2 ) {
     this.activeProperty = new BooleanProperty( false );
-    this.positionProperty = new Vector2Property( new Vector2( 0, 0 ) );
+    this.positionProperty = new Vector2Property( Vector2.ZERO );
   }
 
   /**

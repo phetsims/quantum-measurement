@@ -139,10 +139,10 @@ export default class SpinModel implements TModel {
 
     // Create all particles that will be used in the experiment.  It works better for phet-io if these are created at
     // construction time and activated and deactivated as needed, rather than creating and destroying them.
-    this.singleParticles = _.times( MAX_NUMBER_OF_SINGLE_PARTICLES, index => {
+    this.singleParticles = _.times( MAX_NUMBER_OF_SINGLE_PARTICLES, () => {
       return new ParticleWithSpin( Vector2.ZERO );
     } );
-    this.multipleParticles = _.times( MAX_NUMBER_OF_MULTIPLE_PARTICLES, index => {
+    this.multipleParticles = _.times( MAX_NUMBER_OF_MULTIPLE_PARTICLES, () => {
       return new ParticleWithSpin( new Vector2( PARTICLE_RAY_WIDTH * ( dotRandom.nextDouble() * 2 - 1 ), PARTICLE_RAY_WIDTH * ( dotRandom.nextDouble() * 2 - 1 ) ) );
     } );
 
@@ -380,38 +380,42 @@ export default class SpinModel implements TModel {
           this.activateParticle( particleToActivate );
         }
       }
+
+      // Make a list of all particles that are on a path that could potentially be blocked by the exit blocker.
+      const activeMultipleParticles = this.multipleParticles.filter( particle => particle.activeProperty.value );
+      const particlesInPathToBlocking = activeMultipleParticles.filter( particle => {
+        if ( this.isBlockingProperty.value ) {
+          if ( this.blockUpperExitProperty.value ) {
+            return particle.isSpinUp[ 1 ];
+          }
+          else {
+            return !particle.isSpinUp[ 1 ];
+          }
+        }
+        return false;
+      } );
+
+      // Determine the position to use for the exit blocker.  Adjust it slightly for best visual appearance.
+      const exitBlockerPositionX = this.exitBlockerPositionProperty.value.x - 0.03;
+
+      // Step all active particles, and deactivate them if they cross the exit blocker position, and step them
+      // normally if not.
+      activeMultipleParticles.forEach( particle => {
+
+        // When a particle crosses the blocker (also detector) zone
+        if ( particle.positionProperty.value.x >= exitBlockerPositionX ) {
+
+          // TODO: Is this the best way of counting particles?? https://github.com/phetsims/quantum-measurement/issues/53
+          // this.sternGerlachs[ 0 ].count( particle.isSpinUp[ 1 ] );
+
+          // If it were to be blocked, we deactivate it
+          if ( particlesInPathToBlocking.includes( particle ) ) {
+            particle.reset();
+          }
+        }
+        particle.step( dt );
+      } );
     }
-
-    const activeMultipleParticles = this.multipleParticles.filter( particle => particle.activeProperty.value );
-    const particlesInPathToBlocking = activeMultipleParticles.filter( particle => {
-      if ( this.isBlockingProperty.value ) {
-        if ( this.blockUpperExitProperty.value ) {
-          return particle.isSpinUp[ 1 ];
-        }
-        else {
-          return !particle.isSpinUp[ 1 ];
-        }
-      }
-      return false;
-    } );
-
-    // Slightly adjusted position to avoid clipping
-    const exitBlockerPositionX = this.exitBlockerPositionProperty.value.x - 0.03;
-    activeMultipleParticles.forEach( particle => {
-
-      // When a particle crosses the blocker (also detector) zone
-      if ( particle.positionProperty.value.x >= exitBlockerPositionX ) {
-
-        // If it were to be blocked, we deactivate it
-        if ( particlesInPathToBlocking.includes( particle ) ) {
-          particle.activeProperty.value = false;
-        }
-
-        // TODO: Is this the best way of counting particles?? https://github.com/phetsims/quantum-measurement/issues/53
-        // this.sternGerlachs[ 0 ].count( particle.isSpinUp[ 1 ] );
-      }
-      particle.step( dt );
-    } );
   }
 }
 
