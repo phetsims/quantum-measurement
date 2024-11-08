@@ -31,6 +31,9 @@ export class ParticleWithSpin {
   // Same but simplified to spinUp booleans
   public isSpinUp = [ false, false, false ];
 
+  // If the particle spin was already counted for the histograms. First spin is never counted, should always be false
+  public wasCounted = [ false, false, false ];
+
   // Emitter to trigger a measurement by the model
   public readyToBeMeasuredEmitter = new Emitter();
 
@@ -109,6 +112,7 @@ export class ParticleWithSpin {
     this.activeProperty.value = false;
     this.spinVectors.forEach( vector => vector.setXY( 0, 0 ) );
     this.positionProperty.reset();
+    this.wasCounted = [ false, false, false ];
   }
 }
 

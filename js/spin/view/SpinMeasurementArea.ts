@@ -25,13 +25,13 @@ import ComboBox, { ComboBoxItem } from '../../../../sun/js/ComboBox.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHistogram.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { SourceMode } from '../model/SourceMode.js';
 import SpinExperiment from '../model/SpinExperiment.js';
 import SpinModel from '../model/SpinModel.js';
 import SternGerlach from '../model/SternGerlach.js';
+import HistogramWithExpectedValue from './HistogramWithExpectedValue.js';
 import ManyParticlesCanvasNode from './ManyParticlesCanvasNode.js';
 import MeasurementLineNode from './MeasurementLineNode.js';
 import ParticleSourceNode from './ParticleSourceNode.js';
@@ -121,7 +121,12 @@ export default class SpinMeasurementArea extends VBox {
                                                              SGSubX + QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER
       );
 
-      return new QuantumMeasurementHistogram( sternGerlach.upProbabilityProperty, sternGerlach.downProbabilityProperty, new BooleanProperty( true ),
+      return new HistogramWithExpectedValue(
+        sternGerlach.upCounterProperty,
+        sternGerlach.downCounterProperty,
+        sternGerlach.upProbabilityProperty,
+        model.expectedPercentageVisibleProperty,
+        new BooleanProperty( true ),
         [
           new RichText( spinUpLabelStringProperty, { font: new PhetFont( { size: 17, weight: 'bold' } ) } ),
           new RichText( spinDownLabelStringProperty, { font: new PhetFont( { size: 17, weight: 'bold' } ) } )
@@ -133,7 +138,6 @@ export default class SpinMeasurementArea extends VBox {
           leftFillColorProperty: QuantumMeasurementColors.tailsColorProperty,
           visibleProperty: visibleProperty,
           tandem: Tandem.OPT_OUT,
-          expectedValueVisibleProperty: model.expectedPercentageVisibleProperty,
           numberDisplayOptions: {
             textOptions: {
               font: new PhetFont( 17 )

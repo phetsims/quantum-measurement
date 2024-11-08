@@ -49,7 +49,7 @@ export default class ParticleSourceModel {
 
     this.isContinuousModeProperty = new DerivedProperty( [ this.sourceModeProperty ], sourceMode => sourceMode === SourceMode.CONTINUOUS );
 
-    this.particleAmountProperty = new NumberProperty( 1, {
+    this.particleAmountProperty = new NumberProperty( 0.1, {
       tandem: tandem.createTandem( 'particleAmountProperty' ),
       range: new Range( 0, 1 )
     } );

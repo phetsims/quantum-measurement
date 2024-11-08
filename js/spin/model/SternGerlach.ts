@@ -122,7 +122,6 @@ export default class SternGerlach {
    * through the apparatus.
    */
   public prepare( incomingStateVector: Vector2 ): number {
-
     // Using a XZ vector to calculate the projected probability.
     // The experiment has a measurement vector and the incoming state has a spin vector
     // Based on the dot product we'll obtain the probability

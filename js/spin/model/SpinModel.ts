@@ -131,7 +131,7 @@ export default class SpinModel implements TModel {
       ),
       new MeasurementLine(
         new Vector2( ( this.sternGerlachs[ 1 ].topExitPositionProperty.value.x + this.sternGerlachs[ 1 ].topExitPositionProperty.value.plusXY( 1, 0 ).x ) / 2, 1 ),
-        { tandem: measurementLinesTandem.createTandem( 'thirdMeasurementLine' ), isInitiallyActive: false }
+        { tandem: measurementLinesTandem.createTandem( 'thirdMeasurementLine' ) }
       )
     ];
 
@@ -197,9 +197,11 @@ export default class SpinModel implements TModel {
         changeHandlingInProgress = false;
       }
 
-      // Set the spin direction
-      const polarAngle = Math.PI * ( 1 - upProbability );
-      this.particleSourceModel.customSpinStateProperty.value = new Vector2( Math.sin( polarAngle ), Math.cos( polarAngle ) );
+      if ( this.isCustomExperimentProperty.value ) {
+        // Set the spin direction
+        const polarAngle = Math.PI * ( 1 - upProbability );
+        this.particleSourceModel.customSpinStateProperty.value = new Vector2( Math.sin( polarAngle ), Math.cos( polarAngle ) );
+      }
 
       this.prepare();
     } );
@@ -323,20 +325,6 @@ export default class SpinModel implements TModel {
   }
 
   /**
-   * Resets the model.
-   */
-  public reset(): void {
-    this.sternGerlachs.forEach( sternGerlach => sternGerlach.reset() );
-    this.singleParticles.forEach( particle => particle.reset() );
-    this.multipleParticles.forEach( particle => particle.reset() );
-    this.measurementLines.forEach( line => line.reset() );
-    this.currentExperimentProperty.reset();
-    this.particleSourceModel.spinStateProperty.reset();
-    this.particleSourceModel.reset();
-    this.fractionalEmissionAccumulator = 0;
-  }
-
-  /**
    * Steps the model.
    * @param dt - time step, in seconds
    */
@@ -402,21 +390,40 @@ export default class SpinModel implements TModel {
       // normally if not.
       activeMultipleParticles.forEach( particle => {
 
+        particle.step( dt );
+
         // When a particle crosses the blocker (also detector) zone
         if ( particle.positionProperty.value.x >= exitBlockerPositionX ) {
 
           // TODO: Is this the best way of counting particles?? https://github.com/phetsims/quantum-measurement/issues/53
-          // this.sternGerlachs[ 0 ].count( particle.isSpinUp[ 1 ] );
+          if ( !particle.wasCounted[ 1 ] ) {
+            this.sternGerlachs[ 0 ].count( particle.isSpinUp[ 1 ] );
+            particle.wasCounted[ 1 ] = true;
+          }
 
           // If it were to be blocked, we deactivate it
           if ( particlesInPathToBlocking.includes( particle ) ) {
             particle.reset();
           }
         }
-        particle.step( dt );
       } );
     }
   }
+
+  /**
+   * Resets the model.
+   */
+  public reset(): void {
+    this.sternGerlachs.forEach( sternGerlach => sternGerlach.reset() );
+    this.singleParticles.forEach( particle => particle.reset() );
+    this.multipleParticles.forEach( particle => particle.reset() );
+    this.measurementLines.forEach( line => line.reset() );
+    this.currentExperimentProperty.reset();
+    this.particleSourceModel.spinStateProperty.reset();
+    this.particleSourceModel.reset();
+    this.fractionalEmissionAccumulator = 0;
+  }
+
 }
 
 quantumMeasurement.register( 'SpinModel', SpinModel );
