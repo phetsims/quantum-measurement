@@ -74,6 +74,7 @@ type StringsType = {
   'spinSourceStringProperty': LocalizedStringProperty;
   'blochSphereStringProperty': LocalizedStringProperty;
   'representationStringProperty': LocalizedStringProperty;
+  'unpolarizedStringProperty': LocalizedStringProperty;
   'zProjectionStringProperty': LocalizedStringProperty;
   'xProjectionStringProperty': LocalizedStringProperty;
 };

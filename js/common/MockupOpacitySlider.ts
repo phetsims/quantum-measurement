@@ -15,17 +15,17 @@ import Range from '../../../dot/js/Range.js';
 import ScreenView from '../../../joist/js/ScreenView.js';
 import { Image } from '../../../scenery/js/imports.js';
 import HSlider from '../../../sun/js/HSlider.js';
+import Tandem from '../../../tandem/js/Tandem.js';
 import quantumMeasurement from '../quantumMeasurement.js';
 import QuantumMeasurementConstants from './QuantumMeasurementConstants.js';
-import Tandem from '../../../tandem/js/Tandem.js';
 
 export default class MockupOpacitySlider extends HSlider {
 
   public constructor( opacityProperty: NumberProperty, mockupImage: Image ) {
 
     super( opacityProperty, new Range( 0, 1 ), {
-      left: QuantumMeasurementConstants.SCREEN_VIEW_X_MARGIN,
-      bottom: ScreenView.DEFAULT_LAYOUT_BOUNDS.height - QuantumMeasurementConstants.SCREEN_VIEW_Y_MARGIN,
+      right: QuantumMeasurementConstants.LAYOUT_BOUNDS.width - 65,
+      bottom: ScreenView.DEFAULT_LAYOUT_BOUNDS.height,
       thumbSize: new Dimension2( 10, 20 ),
       trackSize: new Dimension2( 50, 3 ),
       tandem: Tandem.OPT_OUT

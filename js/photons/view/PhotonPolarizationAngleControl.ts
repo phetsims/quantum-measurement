@@ -78,6 +78,14 @@ export default class PhotonPolarizationAngleControl extends Panel {
         tandemName: 'fortyFiveDegreesRadioButton'
       },
       {
+        value: 'unpolarized',
+        createNode: () => new Text( QuantumMeasurementStrings.unpolarizedStringProperty, {
+          font: DEFAULT_LABEL_FONT
+        } ),
+        tandemName: 'unpolarizedRadioButton'
+      },
+
+      {
         value: 'custom',
         createNode: () => new Text( QuantumMeasurementStrings.customStringProperty, {
           font: DEFAULT_LABEL_FONT

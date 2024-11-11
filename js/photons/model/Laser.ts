@@ -27,8 +27,8 @@ type SelfOptions = {
 };
 type LaserOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
-const PresetPolarizationValues = [ 'vertical', 'horizontal', 'fortyFiveDegrees', 'custom' ] as const;
-export type PresetPolarizationDirections = ( typeof PresetPolarizationValues )[number];
+const PolarizationPresetValues = [ 'vertical', 'horizontal', 'fortyFiveDegrees', 'unpolarized', 'custom' ] as const;
+export type PolarizationPresets = ( typeof PolarizationPresetValues )[number];
 
 // constants
 
@@ -36,7 +36,7 @@ export type PresetPolarizationDirections = ( typeof PresetPolarizationValues )[n
 export const PHOTON_BEAM_WIDTH = 0.04;
 
 const MAX_PHOTON_EMISSION_RATE = 200; // photons per second
-const MAP_OF_PRESET_POLARIZATION_ANGLES = new Map(
+const MAP_OF_PRESET_POLARIZATION_ANGLES = new Map<PolarizationPresets, number>(
   [
     [ 'horizontal', 0 ],
     [ 'vertical', 90 ],
@@ -61,7 +61,7 @@ export default class Laser {
   public readonly emissionRateProperty: NumberProperty;
 
   // The preset values of polarization direction that are available for the photons that are emitted.
-  public readonly presetPolarizationDirectionProperty: Property<PresetPolarizationDirections>;
+  public readonly presetPolarizationDirectionProperty: Property<PolarizationPresets>;
 
   // The custom polarization angle for the emitted photons.  This is only used when the preset direction is "custom".
   public readonly customPolarizationAngleProperty: NumberProperty;
@@ -88,10 +88,10 @@ export default class Laser {
       tandem: providedOptions.tandem.createTandem( 'emissionRateProperty' )
     } );
 
-    this.presetPolarizationDirectionProperty = new Property<PresetPolarizationDirections>( 'fortyFiveDegrees', {
+    this.presetPolarizationDirectionProperty = new Property<PolarizationPresets>( 'fortyFiveDegrees', {
       tandem: providedOptions.tandem.createTandem( 'presetPolarizationDirectionProperty' ),
-      phetioValueType: StringUnionIO( PresetPolarizationValues ),
-      validValues: PresetPolarizationValues
+      phetioValueType: StringUnionIO( PolarizationPresetValues ),
+      validValues: PolarizationPresetValues
     } );
     this.customPolarizationAngleProperty = new NumberProperty( 45, {
       tandem: providedOptions.tandem.createTandem( 'customPolarizationAngleProperty' )
@@ -131,9 +131,18 @@ export default class Laser {
       const xOffset = dt * dotRandom.nextDouble() * PHOTON_SPEED;
 
       // Determine the polarization angle for the emitted photon.
-      const polarizationAngle = this.presetPolarizationDirectionProperty.value === 'custom' ?
-                                this.customPolarizationAngleProperty.value :
-                                MAP_OF_PRESET_POLARIZATION_ANGLES.get( this.presetPolarizationDirectionProperty.value )!;
+      let polarizationAngle;
+      if ( this.presetPolarizationDirectionProperty.value === 'custom' ) {
+        polarizationAngle = this.customPolarizationAngleProperty.value;
+      }
+      else if ( this.presetPolarizationDirectionProperty.value === 'unpolarized' ) {
+        polarizationAngle = dotRandom.nextDouble() * 360;
+      }
+      else {
+        assert && assert( MAP_OF_PRESET_POLARIZATION_ANGLES.has( this.presetPolarizationDirectionProperty.value ) );
+        polarizationAngle = MAP_OF_PRESET_POLARIZATION_ANGLES.get( this.presetPolarizationDirectionProperty.value )!;
+      }
+      photonToActivate.polarizationAngleProperty.value = polarizationAngle;
 
       // Activate the photon and set its position, direction, and polarization angle.
       photonToActivate.activeProperty.set( true );

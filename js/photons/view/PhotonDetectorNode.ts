@@ -31,7 +31,7 @@ type PhotonDetectorNodeOptions = SelfOptions & PickRequired<NodeOptions, 'tandem
 
 // The size of the detector body.  The width is for the dimension perpendicular to the detection direction, and the
 // height (which is really more like the depth) is for the dimension parallel to the detection direction.
-const DETECTOR_BODY_SIZE = new Dimension2( 85, 100 );
+const DETECTOR_BODY_SIZE = new Dimension2( 85, 75 );
 
 const DISPLAY_FONT = new PhetFont( { size: 20, weight: 'bold' } );
 
