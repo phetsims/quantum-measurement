@@ -7,6 +7,7 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
@@ -53,6 +54,9 @@ export default class PhotonsExperimentSceneModel {
 
   // The photons that will be emitted and reflected in the experiment.
   public readonly photons: Photon[] = [];
+
+  // Whether the simulation is currently playing, which in this case means whether the photons are moving.
+  public readonly isPlayingProperty: BooleanProperty;
 
   public constructor( providedOptions: PhotonsExperimentSceneModelOptions ) {
 
@@ -121,6 +125,11 @@ export default class PhotonsExperimentSceneModel {
       const photon = new Photon( providedOptions.tandem.createTandem( `photon${index}` ) );
       this.photons.push( photon );
     } );
+
+    // Create the Property that will be used to control whether the simulation is playing.
+    this.isPlayingProperty = new BooleanProperty( true, {
+      tandem: providedOptions.tandem.createTandem( 'isPlayingProperty' )
+    } );
   }
 
   /**
@@ -131,69 +140,73 @@ export default class PhotonsExperimentSceneModel {
     this.photons.forEach( photon => photon.reset() );
     this.verticalPolarizationDetector.reset();
     this.horizontalPolarizationDetector.reset();
+    this.isPlayingProperty.reset();
   }
 
   public step( dt: number ): void {
 
-    // Step the photon emitter, which could potentially add new photons.
-    this.laser.step( dt );
+    if ( this.isPlayingProperty.value ) {
 
-    // Make a list of active photons.
-    const activePhotons = this.photons.filter( photon => photon.activeProperty.value );
+      // Step the laser, which could potentially emit new photons.
+      this.laser.step( dt );
 
-    // Gather the things that can potentially interact with the photons
-    const potentialInteractors: TPhotonInteraction[] = [
-      this.polarizingBeamSplitter,
-      this.mirror,
-      this.horizontalPolarizationDetector,
-      this.verticalPolarizationDetector
-    ];
+      // Make a list of active photons.
+      const activePhotons = this.photons.filter( photon => photon.activeProperty.value );
 
-    // Update each active photon's position based on its direction and speed and whether it interacts with any other
-    // model elements.
-    activePhotons.forEach( photon => {
+      // Gather the things that can potentially interact with the photons
+      const potentialInteractors: TPhotonInteraction[] = [
+        this.polarizingBeamSplitter,
+        this.mirror,
+        this.horizontalPolarizationDetector,
+        this.verticalPolarizationDetector
+      ];
 
-      // Test for interactions with the potential interactors.
-      let interaction: PhotonInteractionTestResult = { interactionType: 'none' };
-      for ( const potentiallyInteractingElement of potentialInteractors ) {
-        interaction = potentiallyInteractingElement.testForPhotonInteraction( photon, dt );
-        if ( interaction.interactionType !== 'none' ) {
-          break;
+      // Update each active photon's position based on its direction and speed and whether it interacts with any other
+      // model elements.
+      activePhotons.forEach( photon => {
+
+        // Test for interactions with the potential interactors.
+        let interaction: PhotonInteractionTestResult = { interactionType: 'none' };
+        for ( const potentiallyInteractingElement of potentialInteractors ) {
+          interaction = potentiallyInteractingElement.testForPhotonInteraction( photon, dt );
+          if ( interaction.interactionType !== 'none' ) {
+            break;
+          }
         }
-      }
 
-      if ( interaction.interactionType === 'reflected' ) {
+        if ( interaction.interactionType === 'reflected' ) {
 
-        assert && assert( interaction.reflectionPoint, 'reflection point should be defined' );
-        assert && assert( interaction.reflectionDirection, 'reflection direction should be defined' );
+          assert && assert( interaction.reflectionPoint, 'reflection point should be defined' );
+          assert && assert( interaction.reflectionDirection, 'reflection direction should be defined' );
 
-        // This photon was reflected.  First step it to the reflection point.
-        const dtToReflection = photon.positionProperty.value.distance( interaction.reflectionPoint! ) / PHOTON_SPEED;
-        assert && assert( dtToReflection <= dt );
-        photon.step( dtToReflection );
+          // This photon was reflected.  First step it to the reflection point.
+          const dtToReflection = photon.positionProperty.value.distance( interaction.reflectionPoint! ) / PHOTON_SPEED;
+          assert && assert( dtToReflection <= dt );
+          photon.step( dtToReflection );
 
-        // Change the direction of the photon to the reflection direction.
-        photon.directionProperty.set( interaction.reflectionDirection! );
+          // Change the direction of the photon to the reflection direction.
+          photon.directionProperty.set( interaction.reflectionDirection! );
 
-        // Step the photon the remaining time.
-        photon.step( dt - dtToReflection );
-      }
-      else if ( interaction.interactionType === 'absorbed' ) {
+          // Step the photon the remaining time.
+          photon.step( dt - dtToReflection );
+        }
+        else if ( interaction.interactionType === 'absorbed' ) {
 
-        // The photon was absorbed, so deactivate it.
-        photon.activeProperty.set( false );
-        photon.positionProperty.set( Vector2.ZERO );
-      }
-      else {
+          // The photon was absorbed, so deactivate it.
+          photon.activeProperty.set( false );
+          photon.positionProperty.set( Vector2.ZERO );
+        }
+        else {
 
-        // Just step the photon normally, which will move it forward in its current travel direction.
-        photon.step( dt );
-      }
-    } );
+          // Just step the photon normally, which will move it forward in its current travel direction.
+          photon.step( dt );
+        }
+      } );
 
-    // Step the photon detectors.
-    this.horizontalPolarizationDetector.step( dt );
-    this.verticalPolarizationDetector.step( dt );
+      // Step the photon detectors.
+      this.horizontalPolarizationDetector.step( dt );
+      this.verticalPolarizationDetector.step( dt );
+    }
   }
 }
 
