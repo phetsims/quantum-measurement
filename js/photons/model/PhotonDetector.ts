@@ -7,13 +7,15 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import Utils from '../../../../dot/js/Utils.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Line } from '../../../../kite/js/imports.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
+import AveragingCounterNumberProperty from '../../common/model/AveragingCounterNumberProperty.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { PHOTON_BEAM_WIDTH } from './Laser.js';
 import Photon from './Photon.js';
@@ -31,15 +33,6 @@ export type DetectionDirection = ( [ 'up', 'down' ] )[number];
 // Define a type for the display mode of the detector, which can be either a count of photons detected or a rate of
 // detection.
 export type DisplayMode = ( [ 'count', 'rate' ] )[number];
-
-type DetectionCountSample = {
-  duration: number; // in seconds
-  count: number;
-};
-
-// constants used in the rate calculation
-const TOTAL_AVERAGING_PERIOD = 2; // in seconds
-const COUNT_SAMPLE_PERIOD = 0.5; // in seconds
 
 export default class PhotonDetector implements TPhotonInteraction {
 
@@ -60,12 +53,10 @@ export default class PhotonDetector implements TPhotonInteraction {
   public readonly detectionCountProperty: NumberProperty;
 
   // The rate at which photons are detected, in arrival events per second.
-  public readonly detectionRateProperty: NumberProperty;
+  public readonly detectionRateProperty: TReadOnlyProperty<number>;
 
-  // variables used in the detection rate calculation
-  private currentDetectionCount = 0;
-  private detectionSampleHistory: DetectionCountSample[] = [];
-  private timeSinceLastCountSample = 0;
+  // Custom counter for the number of photons detected since the last sample.
+  private currentDetectionCountProperty: AveragingCounterNumberProperty;
 
   // The display mode defines the information that should be displayed by this detector in the view.
   public readonly displayMode: DisplayMode;
@@ -84,9 +75,13 @@ export default class PhotonDetector implements TPhotonInteraction {
       position.plus( new Vector2( this.apertureDiameter / 2, 0 ) )
     );
 
-    this.detectionRateProperty = new NumberProperty( 0, {
-      tandem: options.tandem.createTandem( 'detectionRateProperty' )
+    this.currentDetectionCountProperty = new AveragingCounterNumberProperty( {
+      tandem: options.tandem.createTandem( 'currentDetectionCountProperty' )
     } );
+
+    this.detectionRateProperty = new DerivedProperty(
+      [ this.currentDetectionCountProperty.detectionRateProperty ],
+      ( detectionRate: number ) => detectionRate );
 
     this.detectionCountProperty = new NumberProperty( 0, {
       tandem: options.tandem.createTandem( 'detectionCountProperty' )
@@ -110,64 +105,22 @@ export default class PhotonDetector implements TPhotonInteraction {
 
     if ( detectionResult.interactionType === 'absorbed' ) {
       this.detectionCountProperty.value++;
-      this.currentDetectionCount++;
+      this.currentDetectionCountProperty.value++;
     }
 
     return detectionResult;
   }
 
   public step( dt: number ): void {
-
-    // See if it's time to record a sample of the detection count.
-    this.timeSinceLastCountSample += dt;
-    if ( this.timeSinceLastCountSample >= COUNT_SAMPLE_PERIOD ) {
-
-      // Record this sample.
-      this.detectionSampleHistory.push( {
-        duration: this.timeSinceLastCountSample,
-        count: this.currentDetectionCount
-      } );
-
-      // Count the number of samples needed to reach the averaging period and total the counts that they contain.  Since
-      // the new samples are added to the end of the array, we need to start at the end and work backwards.
-      let accumulatedSampleTime = 0;
-      let accumulatedEventCount = 0;
-      let sampleCount = 0;
-      for ( let i = this.detectionSampleHistory.length - 1; i >= 0; i-- ) {
-        accumulatedSampleTime += this.detectionSampleHistory[ i ].duration;
-        accumulatedEventCount += this.detectionSampleHistory[ i ].count;
-        sampleCount++;
-        if ( accumulatedSampleTime >= TOTAL_AVERAGING_PERIOD ) {
-          break;
-        }
-      }
-
-      // Update the detection rate.
-      if ( accumulatedSampleTime > 0 ) {
-        this.detectionRateProperty.value = Utils.roundSymmetric( accumulatedEventCount / accumulatedSampleTime );
-      }
-      else {
-        this.detectionRateProperty.value = 0;
-      }
-
-      // Remove samples that have aged out.
-      _.times( this.detectionSampleHistory.length - sampleCount, () => this.detectionSampleHistory.shift() );
-
-      // Reset the counts.
-      this.currentDetectionCount = 0;
-      this.timeSinceLastCountSample = 0;
-    }
+    this.currentDetectionCountProperty.step( dt );
   }
 
   /**
    * Resets the model.
    */
   public reset(): void {
-    this.detectionRateProperty.reset();
     this.detectionCountProperty.reset();
-    this.currentDetectionCount = 0;
-    this.detectionSampleHistory.length = 0;
-    this.timeSinceLastCountSample = 0;
+    this.currentDetectionCountProperty.reset();
   }
 
   /**

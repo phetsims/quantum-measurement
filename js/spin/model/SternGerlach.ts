@@ -17,6 +17,7 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import AveragingCounterNumberProperty from '../../common/model/AveragingCounterNumberProperty.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { SpinDirection } from './SpinDirection.js';
 
@@ -36,8 +37,8 @@ export default class SternGerlach {
   public readonly downProbabilityProperty: TReadOnlyProperty<number>;
 
   // Counts how many particles have been measured in the up and down states
-  public readonly upCounterProperty: NumberProperty;
-  public readonly downCounterProperty: NumberProperty;
+  public readonly upCounterProperty: AveragingCounterNumberProperty;
+  public readonly downCounterProperty: AveragingCounterNumberProperty;
 
   // Expected spin after the measurement
   public readonly expectedSpinProperty: Property<SpinDirection>;
@@ -105,14 +106,26 @@ export default class SternGerlach {
 
     this.downProbabilityProperty = new DerivedProperty( [ this.upProbabilityProperty ], upProbability => 1 - upProbability );
 
-    this.upCounterProperty = new NumberProperty( 0, {
-      tandem: tandem.createTandem( 'upCounterProperty' )
+    const totalAveragingPeriod = 0.5;
+    const countSamplePeriod = 0.05;
+    this.upCounterProperty = new AveragingCounterNumberProperty( {
+      tandem: tandem.createTandem( 'upCounterProperty' ),
+      totalAveragingPeriod: totalAveragingPeriod,
+      countSamplePeriod: countSamplePeriod
     } );
 
-    this.downCounterProperty = new NumberProperty( 0, {
-      tandem: tandem.createTandem( 'downCounterProperty' )
+    this.downCounterProperty = new AveragingCounterNumberProperty( {
+      tandem: tandem.createTandem( 'downCounterProperty' ),
+      totalAveragingPeriod: totalAveragingPeriod,
+      countSamplePeriod: countSamplePeriod
     } );
 
+  }
+
+  // Updates the counters so they average properly
+  public step( dt: number ): void {
+    this.upCounterProperty.step( dt );
+    this.downCounterProperty.step( dt );
   }
 
 

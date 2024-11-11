@@ -337,6 +337,8 @@ export default class SpinModel implements TModel {
    */
   public step( dt: number ): void {
 
+    this.sternGerlachs.forEach( sternGerlach => sternGerlach.step( dt ) );
+
     // Moves single particles and triggers measurements when they pass through Measuring Lines
     const activeSingleParticles = this.singleParticles.filter( particle => particle.activeProperty.value );
     activeSingleParticles.forEach( particle => {
@@ -402,7 +404,6 @@ export default class SpinModel implements TModel {
         // When a particle crosses the blocker (also detector) zone
         if ( particle.positionProperty.value.x >= exitBlockerPositionX ) {
 
-          // TODO: Is this the best way of counting particles?? https://github.com/phetsims/quantum-measurement/issues/53
           if ( !particle.wasCounted[ 1 ] ) {
             this.sternGerlachs[ 0 ].count( particle.isSpinUp[ 1 ] );
             particle.wasCounted[ 1 ] = true;
