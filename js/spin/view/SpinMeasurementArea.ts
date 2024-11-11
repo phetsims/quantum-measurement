@@ -156,8 +156,8 @@ export default class SpinMeasurementArea extends VBox {
       );
 
       return new HistogramWithExpectedValue(
-        sternGerlach.upCounterProperty.detectionRateProperty,
-        sternGerlach.downCounterProperty.detectionRateProperty,
+        sternGerlach.upCounterProperty,
+        sternGerlach.downCounterProperty,
         sternGerlach.upProbabilityProperty,
         model.expectedPercentageVisibleProperty,
         new BooleanProperty( true ),

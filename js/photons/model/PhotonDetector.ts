@@ -7,9 +7,7 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Line } from '../../../../kite/js/imports.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
@@ -53,10 +51,7 @@ export default class PhotonDetector implements TPhotonInteraction {
   public readonly detectionCountProperty: NumberProperty;
 
   // The rate at which photons are detected, in arrival events per second.
-  public readonly detectionRateProperty: TReadOnlyProperty<number>;
-
-  // Custom counter for the number of photons detected since the last sample.
-  private currentDetectionCountProperty: AveragingCounterNumberProperty;
+  public readonly detectionRateProperty: AveragingCounterNumberProperty;
 
   // The display mode defines the information that should be displayed by this detector in the view.
   public readonly displayMode: DisplayMode;
@@ -75,13 +70,9 @@ export default class PhotonDetector implements TPhotonInteraction {
       position.plus( new Vector2( this.apertureDiameter / 2, 0 ) )
     );
 
-    this.currentDetectionCountProperty = new AveragingCounterNumberProperty( {
-      tandem: options.tandem.createTandem( 'currentDetectionCountProperty' )
+    this.detectionRateProperty = new AveragingCounterNumberProperty( {
+      tandem: options.tandem.createTandem( 'detectionRateProperty' )
     } );
-
-    this.detectionRateProperty = new DerivedProperty(
-      [ this.currentDetectionCountProperty.detectionRateProperty ],
-      ( detectionRate: number ) => detectionRate );
 
     this.detectionCountProperty = new NumberProperty( 0, {
       tandem: options.tandem.createTandem( 'detectionCountProperty' )
@@ -105,14 +96,14 @@ export default class PhotonDetector implements TPhotonInteraction {
 
     if ( detectionResult.interactionType === 'absorbed' ) {
       this.detectionCountProperty.value++;
-      this.currentDetectionCountProperty.value++;
+      this.detectionRateProperty.currentDetectionCount++;
     }
 
     return detectionResult;
   }
 
   public step( dt: number ): void {
-    this.currentDetectionCountProperty.step( dt );
+    this.detectionRateProperty.step( dt );
   }
 
   /**
@@ -120,7 +111,7 @@ export default class PhotonDetector implements TPhotonInteraction {
    */
   public reset(): void {
     this.detectionCountProperty.reset();
-    this.currentDetectionCountProperty.reset();
+    this.detectionRateProperty.reset();
   }
 
   /**

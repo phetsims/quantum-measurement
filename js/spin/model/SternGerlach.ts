@@ -155,10 +155,10 @@ export default class SternGerlach {
   // Provided a boolean value, increments the counter of the up or down particles
   public count( isSpinUp: boolean ): void {
     if ( isSpinUp ) {
-      this.upCounterProperty.value++;
+      this.upCounterProperty.currentDetectionCount++;
     }
     else {
-      this.downCounterProperty.value++;
+      this.downCounterProperty.currentDetectionCount++;
     }
   }
 

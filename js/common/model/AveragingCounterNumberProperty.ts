@@ -30,12 +30,9 @@ export default class AveragingCounterNumberProperty extends NumberProperty {
   private readonly countSamplePeriod: number;
 
   // variables used in the detection rate calculation
-  private currentDetectionCount = 0;
+  public currentDetectionCount = 0;
   private detectionSampleHistory: DetectionCountSample[] = [];
   private timeSinceLastCountSample = 0;
-
-  // The rate at which photons are detected, in arrival events per second.
-  public readonly detectionRateProperty: NumberProperty;
 
   public constructor( providedOptions: AveragingCounterNumberPropertyOptions ) {
 
@@ -55,10 +52,6 @@ export default class AveragingCounterNumberProperty extends NumberProperty {
 
     this.totalAveragingPeriod = options.totalAveragingPeriod;
     this.countSamplePeriod = options.countSamplePeriod;
-
-    this.detectionRateProperty = new NumberProperty( 0, {
-      tandem: options.tandem.createTandem( 'detectionRateProperty' )
-    } );
   }
 
   public step( dt: number ): void {
@@ -70,7 +63,7 @@ export default class AveragingCounterNumberProperty extends NumberProperty {
       // Record this sample.
       this.detectionSampleHistory.push( {
         duration: this.timeSinceLastCountSample,
-        count: this.value
+        count: this.currentDetectionCount
       } );
 
       // Count the number of samples needed to reach the averaging period and total the counts that they contain.  Since
@@ -89,17 +82,17 @@ export default class AveragingCounterNumberProperty extends NumberProperty {
 
       // Update the detection rate.
       if ( accumulatedSampleTime > 0 ) {
-        this.detectionRateProperty.value = Utils.roundSymmetric( accumulatedEventCount / accumulatedSampleTime );
+        this.value = Utils.roundSymmetric( accumulatedEventCount / accumulatedSampleTime );
       }
       else {
-        this.detectionRateProperty.value = 0;
+        this.value = 0;
       }
 
       // Remove samples that have aged out.
       _.times( this.detectionSampleHistory.length - sampleCount, () => this.detectionSampleHistory.shift() );
 
       // Reset the counts.
-      this.value = 0;
+      this.currentDetectionCount = 0;
       this.timeSinceLastCountSample = 0;
     }
   }
@@ -109,7 +102,7 @@ export default class AveragingCounterNumberProperty extends NumberProperty {
    */
   public override reset(): void {
     super.reset();
-    this.value = 0;
+    this.currentDetectionCount = 0;
     this.detectionSampleHistory.length = 0;
     this.timeSinceLastCountSample = 0;
   }
