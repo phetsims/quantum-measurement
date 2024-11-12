@@ -13,10 +13,12 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { HBox, Node, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
+import Checkbox from '../../../../sun/js/Checkbox.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ProbabilityValueControl from '../../coins/view/ProbabilityValueControl.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
+import DashedArrowNode from '../../common/view/DashedArrowNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { SpinDirection } from '../model/SpinDirection.js';
@@ -85,11 +87,11 @@ export default class SpinStatePreparationArea extends VBox {
       model.blochSphere,
       model.particleSourceModel.customSpinStateProperty,
       {
-        tandem: tandem.createTandem( 'blochSphereNode' )
+        tandem: tandem.createTandem( 'blochSphereNode' ),
+        scale: 0.9
       } );
 
     const title = new RichText( QuantumMeasurementStrings.stateToPrepareStringProperty, { font: new PhetFont( { size: 20, weight: 'bolder' } ) } );
-    const subtitle = new RichText( `( ${ALPHA}|${UP}${KET} + ${BETA}|${DOWN}${KET} )`, { font: new PhetFont( 18 ) } );
 
     const stateReadoutStringProperty = new DerivedProperty(
       [
@@ -101,7 +103,7 @@ export default class SpinStatePreparationArea extends VBox {
         const downProbability = 1 - upProbability;
         const alphaValue = Utils.toFixed( Math.sqrt( upProbability ), 3 );
         const betaValue = Utils.toFixed( Math.sqrt( downProbability ), 3 );
-        return `${alphaValue}|${UP}${KET} + ${betaValue}|${DOWN}${KET}`;
+        return `${ALPHA}|${UP}${KET} + ${BETA}|${DOWN}${KET} = ${alphaValue}|${UP}${KET} + ${betaValue}|${DOWN}${KET}`;
       } );
 
     const stateReadout = new RichText( stateReadoutStringProperty, { font: new PhetFont( 18 ) } );
@@ -122,12 +124,33 @@ export default class SpinStatePreparationArea extends VBox {
       ]
     } );
 
+
+    const zProjectionCheckbox = new Checkbox(
+      model.blochSphere.showZProjectionProperty,
+      new HBox( {
+        spacing: 5,
+        children: [
+          new Text( QuantumMeasurementStrings.zProjectionStringProperty, { font: new PhetFont( 15 ) } ),
+          new DashedArrowNode( 0, 0, 0, -20, { stroke: 'blue', fill: 'blue', scale: 1 } )
+        ]
+      } )
+    );
+
+    const xProjectionCheckbox = new Checkbox(
+      model.blochSphere.showXProjectionProperty,
+      new HBox( {
+        spacing: 5,
+        children: [
+          new Text( QuantumMeasurementStrings.xProjectionStringProperty, { font: new PhetFont( 15 ) } ),
+          new DashedArrowNode( 0, 0, 20, 0, { stroke: 'red', fill: 'red', scale: 1 } )
+        ]
+      } )
+    );
+
+
     super( {
       children: [
-        new VBox( {
-          spacing: 3,
-          children: [ title, subtitle ]
-        } ),
+        title,
         blochSphereNode,
         // TODO: REMOVE! Direction slider for the bloch sphere, https://github.com/phetsims/quantum-measurement/issues/53
         // new Slider( blochSphereNode.xAxisOffsetAngleProperty, new Range( 0, 2 * Math.PI ), {
@@ -135,7 +158,9 @@ export default class SpinStatePreparationArea extends VBox {
         // } ),
         stateReadout,
         spinStatePanel,
-        probabilityControlBox
+        probabilityControlBox,
+        zProjectionCheckbox,
+        xProjectionCheckbox
       ],
       spacing: 20
     } );

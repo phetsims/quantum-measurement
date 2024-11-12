@@ -19,7 +19,7 @@ import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ShadedSphereNode from '../../../../scenery-phet/js/ShadedSphereNode.js';
-import { Node, NodeOptions, Path, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Node, NodeOptions, Path, Text } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import AbstractBlochSphere from '../model/AbstractBlochSphere.js';
@@ -123,16 +123,23 @@ export default class BlochSphereNode extends Node {
       visible: providedOptions.drawKets
     } );
 
-    const title = new Text( QuantumMeasurementStrings.blochSphereStringProperty, { font: new PhetFont( { size: 16, weight: 'bolder' } ) } );
-    const subtitle = new Text( QuantumMeasurementStrings.representationStringProperty, { font: new PhetFont( 14 ) } );
-
-    const titleSubtitleBox = new VBox( {
-      spacing: 0,
+    const title = new Text( QuantumMeasurementStrings.blochSphereStringProperty, {
+      font: new PhetFont( { size: 16, weight: 'bolder' } ),
       visible: providedOptions.drawTitle,
-      children: [ title, subtitle ],
       bottom: upStateLabel.top - 10,
       centerX: upStateLabel.centerX
     } );
+
+    // TODO: Remove? https://github.com/phetsims/quantum-measurement/issues/53
+    // const subtitle = new Text( QuantumMeasurementStrings.representationStringProperty, { font: new PhetFont( 14 ) } );
+    //
+    // const titleSubtitleBox = new VBox( {
+    //   spacing: 0,
+    //   visible: providedOptions.drawTitle,
+    //   children: [ title, subtitle ],
+    //   bottom: upStateLabel.top - 10,
+    //   centerX: upStateLabel.centerX
+    // } );
 
     const stateVectorVisibleProperty = new BooleanProperty( true );
     const stateVector = new ArrowNode( 0, 0, 0, -sphereRadius, {
@@ -145,7 +152,6 @@ export default class BlochSphereNode extends Node {
     } );
 
     // TODO: Add angle indicators, see https://github.com/phetsims/quantum-measurement/issues/53
-
     // const ANGLE_INDICATOR_PATH_OPTIONS = {
     //   stroke: 'gray',
     //   lineWidth: 1,
@@ -180,7 +186,7 @@ export default class BlochSphereNode extends Node {
 
     const options = optionize<BlochSphereNodeOptions, SelfOptions, NodeOptions>()( {
       children: [
-        titleSubtitleBox,
+        title,
         upStateLabel,
         downStateLabel,
         sphereNode,

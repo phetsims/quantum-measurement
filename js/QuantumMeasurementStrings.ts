@@ -1,10 +1,12 @@
 // Copyright 2024, University of Colorado Boulder
 
+/* eslint-disable */
+/* @formatter:off */
+
 /**
  * Auto-generated from modulify, DO NOT manually modify.
  */
-/* eslint-disable */
-/* @formatter:off */
+
 import getStringModule from '../../chipper/js/getStringModule.js';
 import type LocalizedStringProperty from '../../chipper/js/LocalizedStringProperty.js';
 import quantumMeasurement from './quantumMeasurement.js';
@@ -72,6 +74,8 @@ type StringsType = {
   'spinSourceStringProperty': LocalizedStringProperty;
   'blochSphereStringProperty': LocalizedStringProperty;
   'representationStringProperty': LocalizedStringProperty;
+  'zProjectionStringProperty': LocalizedStringProperty;
+  'xProjectionStringProperty': LocalizedStringProperty;
 };
 
 const QuantumMeasurementStrings = getStringModule( 'QUANTUM_MEASUREMENT' ) as StringsType;
