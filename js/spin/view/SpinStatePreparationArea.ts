@@ -86,6 +86,7 @@ export default class SpinStatePreparationArea extends VBox {
     const blochSphereNode = new BlochSphereWithProjectionNode(
       model.blochSphere,
       model.particleSourceModel.customSpinStateProperty,
+      model.isCustomExperimentProperty,
       {
         tandem: tandem.createTandem( 'blochSphereNode' ),
         scale: 0.9
@@ -133,7 +134,10 @@ export default class SpinStatePreparationArea extends VBox {
           new Text( QuantumMeasurementStrings.zProjectionStringProperty, { font: new PhetFont( 15 ) } ),
           new DashedArrowNode( 0, 0, 0, -20, { stroke: 'blue', fill: 'blue', scale: 1 } )
         ]
-      } )
+      } ),
+      {
+        visibleProperty: model.isCustomExperimentProperty
+      }
     );
 
     const xProjectionCheckbox = new Checkbox(
@@ -144,7 +148,10 @@ export default class SpinStatePreparationArea extends VBox {
           new Text( QuantumMeasurementStrings.xProjectionStringProperty, { font: new PhetFont( 15 ) } ),
           new DashedArrowNode( 0, 0, 20, 0, { stroke: 'red', fill: 'red', scale: 1 } )
         ]
-      } )
+      } ),
+      {
+        visibleProperty: model.isCustomExperimentProperty
+      }
     );
 
 
@@ -159,8 +166,14 @@ export default class SpinStatePreparationArea extends VBox {
         stateReadout,
         spinStatePanel,
         probabilityControlBox,
-        zProjectionCheckbox,
-        xProjectionCheckbox
+        new VBox( {
+          spacing: 20,
+          children: [
+            zProjectionCheckbox,
+            xProjectionCheckbox
+          ],
+          align: 'left'
+        } )
       ],
       spacing: 20
     } );

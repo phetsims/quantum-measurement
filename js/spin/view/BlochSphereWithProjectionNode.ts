@@ -6,6 +6,8 @@
  * @author Agustín Vallejo
  */
 
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import BlochSphereNode, { BlochSphereNodeOptions } from '../../common/view/BlochSphereNode.js';
@@ -18,6 +20,7 @@ export default class BlochSphereWithProjectionNode extends BlochSphereNode {
   public constructor(
     blochSphere: SimpleBlochSphere,
     customSpinVectorProperty: Vector2Property,
+    isCustomExperiment: TReadOnlyProperty<boolean>,
     providedOptions: BlochSphereNodeOptions
   ) {
     super( blochSphere, providedOptions );
@@ -28,12 +31,12 @@ export default class BlochSphereWithProjectionNode extends BlochSphereNode {
 
     const xProjectionColor = 'red';
     const xProjectionArrowNode = new DashedArrowNode( 0.9 * axisLength, 0, axisLength, 0,
-      { stroke: xProjectionColor, fill: xProjectionColor, visibleProperty: blochSphere.showXProjectionProperty }
+      { stroke: xProjectionColor, fill: xProjectionColor, visibleProperty: DerivedProperty.and( [ blochSphere.showXProjectionProperty, isCustomExperiment ] ) }
     );
 
     const zProjectionColor = 'blue';
     const zProjectionArrowNode = new DashedArrowNode( 0, 0, 0, -0.9 * axisLength,
-      { stroke: zProjectionColor, fill: zProjectionColor, visibleProperty: blochSphere.showZProjectionProperty }
+      { stroke: zProjectionColor, fill: zProjectionColor, visibleProperty: DerivedProperty.and( [ blochSphere.showZProjectionProperty, isCustomExperiment ] ) }
     );
 
     this.addChild( xProjectionArrowNode );
