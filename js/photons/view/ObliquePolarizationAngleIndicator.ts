@@ -134,8 +134,8 @@ export default class ObliquePolarizationAngleIndicator extends Node {
 
     // Create the polarization vectors, which are arrows.
     const polarizationVectorOptions: ArrowNodeOptions = {
-      headWidth: 8,
-      headHeight: 8,
+      headWidth: 6,
+      headHeight: 6,
       tailWidth: 2,
       stroke: '#090',
       lineWidth: 0.5,
