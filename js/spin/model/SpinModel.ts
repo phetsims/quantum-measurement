@@ -271,36 +271,44 @@ export default class SpinModel implements TModel {
     );
   }
 
+  /**
+   * Given the incoming state of a particle, calculate the result of a SG measurement on a particle and set its spin
+   */
+  private measureParticle(
+    particle: ParticleWithSpin,
+    sternGerlach: SternGerlach,
+    experimentStageIndex: number,
+    incomingState: Vector2 ): boolean {
+
+    const upProbability = sternGerlach.prepare( incomingState );
+    const isResultUp = dotRandom.nextDouble() < upProbability;
+    particle.isSpinUp[ experimentStageIndex ] = isResultUp;
+    particle.spinVectors[ experimentStageIndex ] = SpinDirection.spinToVector(
+      isResultUp ?
+      sternGerlach.isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS :
+      sternGerlach.isZOrientedProperty.value ? SpinDirection.Z_MINUS : null
+    );
+    return isResultUp;
+  }
+
   private activateParticle( particle: ParticleWithSpin ): void {
     particle.reset();
 
     // Set the first spin vector to the state of the generated particles
     particle.spinVectors[ 0 ] = SpinDirection.spinToVector( this.particleSourceModel.spinStateProperty.value );
 
-    const measure = ( sternGerlach: SternGerlach, experimentStageIndex: number, incomingState: Vector2 ) => {
-      const upProbability = sternGerlach.prepare( incomingState );
-      const isResultUp = dotRandom.nextDouble() < upProbability;
-      particle.isSpinUp[ experimentStageIndex ] = isResultUp;
-      particle.spinVectors[ experimentStageIndex ] = SpinDirection.spinToVector(
-        isResultUp ?
-        sternGerlach.isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS :
-        sternGerlach.isZOrientedProperty.value ? SpinDirection.Z_MINUS : null
-      );
-      return isResultUp;
-    };
-
     // First measurement: SG0 where the particle decides to go up or down
-    const isResultUp = measure( this.sternGerlachs[ 0 ], 1, this.particleSourceModel.customSpinStateProperty.value );
+    const isResultUp = this.measureParticle( particle, this.sternGerlachs[ 0 ], 1, this.particleSourceModel.customSpinStateProperty.value );
 
     // If current experiment is short, the particle only goes through SG0
     if ( !this.currentExperimentProperty.value.isShortExperiment ) {
       if ( isResultUp ) {
         // If it went up, go through SG1
-        measure( this.sternGerlachs[ 1 ], 2, SpinDirection.spinToVector( this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS ) );
+        this.measureParticle( particle, this.sternGerlachs[ 1 ], 2, SpinDirection.spinToVector( this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS ) );
       }
       else {
         // If it went down, go through SG2
-        measure( this.sternGerlachs[ 2 ], 2, SpinDirection.spinToVector( this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_MINUS : null ) );
+        this.measureParticle( particle, this.sternGerlachs[ 2 ], 2, SpinDirection.spinToVector( this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_MINUS : null ) );
       }
     }
 
@@ -393,7 +401,8 @@ export default class SpinModel implements TModel {
       } );
 
       // Determine the position to use for the exit blocker.  Adjust it slightly for best visual appearance.
-      const exitBlockerPositionX = this.exitBlockerPositionProperty.value.x - 0.03;
+      const firstDetectorPosition = this.exitBlockerPositionProperty.value.x - 0.03;
+      const secondDetectorPosition = this.sternGerlachs[ 1 ].positionProperty.value.plus( BLOCKER_OFFSET ).x;
 
       // Step all active particles, and deactivate them if they cross the exit blocker position, and step them
       // normally if not.
@@ -402,7 +411,7 @@ export default class SpinModel implements TModel {
         particle.step( dt );
 
         // When a particle crosses the blocker (also detector) zone
-        if ( particle.positionProperty.value.x >= exitBlockerPositionX ) {
+        if ( particle.positionProperty.value.x >= firstDetectorPosition ) {
 
           if ( !particle.wasCounted[ 1 ] ) {
             this.sternGerlachs[ 0 ].count( particle.isSpinUp[ 1 ] );
@@ -415,7 +424,6 @@ export default class SpinModel implements TModel {
           }
         }
 
-        const secondDetectorPosition = this.sternGerlachs[ 1 ].positionProperty.value.plus( BLOCKER_OFFSET ).x;
         if ( particle.positionProperty.value.x >= secondDetectorPosition ) {
           if ( !particle.wasCounted[ 2 ] ) {
             // Regardless which SG is active, we count the particles in the SG1
