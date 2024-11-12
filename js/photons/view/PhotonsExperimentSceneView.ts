@@ -53,7 +53,7 @@ export default class PhotonsExperimentSceneView extends Node {
     const photonTestingArea = new PhotonTestingArea( model, {
 
       // center position empirically determined to match design doc
-      center: new Vector2( 420, 200 ),
+      center: new Vector2( 420, 225 ),
 
       tandem: providedOptions.tandem.createTandem( 'photonTestingArea' )
     } );
@@ -164,7 +164,7 @@ export default class PhotonsExperimentSceneView extends Node {
     const dataDashboardBox = new VBox( {
       children: dataDashboardChildren,
       align: 'left',
-      spacing: 20,
+      spacing: 22,
       right: QuantumMeasurementConstants.LAYOUT_BOUNDS.right - 40,
       top: 0
     } );

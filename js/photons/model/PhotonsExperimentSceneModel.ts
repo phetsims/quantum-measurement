@@ -81,7 +81,7 @@ export default class PhotonsExperimentSceneModel {
       displayMode: this.laser.emissionMode === 'singlePhoton' ? 'count' : 'rate',
       tandem: providedOptions.tandem.createTandem( 'verticalPolarizationDetector' )
     } );
-    this.horizontalPolarizationDetector = new PhotonDetector( new Vector2( 0.125, -0.075 ), 'down', {
+    this.horizontalPolarizationDetector = new PhotonDetector( new Vector2( 0.125, -0.125 ), 'down', {
       displayMode: this.laser.emissionMode === 'singlePhoton' ? 'count' : 'rate',
       tandem: providedOptions.tandem.createTandem( 'horizontalPolarizationDetector' )
     } );
