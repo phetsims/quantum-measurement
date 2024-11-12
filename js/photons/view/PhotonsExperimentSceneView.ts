@@ -7,12 +7,15 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import PlayPauseButton from '../../../../scenery-phet/js/buttons/PlayPauseButton.js';
-import { HBox, Node, NodeOptions, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
+import MathSymbolFont from '../../../../scenery-phet/js/MathSymbolFont.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import { HBox, Line, Node, NodeOptions, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
+import Checkbox from '../../../../sun/js/Checkbox.js';
 import Panel from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
@@ -101,7 +104,11 @@ export default class PhotonsExperimentSceneView extends Node {
     } );
 
     // Create the graph that indicates the relative proportions of vertical and horizontal detections.
-    const normalizedMeasurementProportionsGraph = new NormalizedOutcomeVectorGraph( model.normalizedOutcomeValueProperty );
+    const normalizedOutcomeVectorGraph = new NormalizedOutcomeVectorGraph(
+      model.normalizedOutcomeValueProperty,
+      model.normalizedExpectationValueProperty,
+      providedOptions.tandem.createTandem( 'normalizedOutcomeVectorGraph' )
+    );
 
     // Create the histogram that shows the detection counts for the vertical and horizontal detectors.
     const countHistogram = new QuantumMeasurementHistogram(
@@ -136,18 +143,66 @@ export default class PhotonsExperimentSceneView extends Node {
 
     // Put the two dynamic data display nodes together in a horizontal box.
     const dynamicDataDisplayBox = new HBox( {
-      children: [ normalizedMeasurementProportionsGraph, countHistogram ],
+      children: [ normalizedOutcomeVectorGraph, countHistogram ],
       spacing: 20,
       align: 'center'
     } );
 
+    const dataDashboardChildren: Node[] = [
+      averagePolarizationTitlePanel,
+      equationsBox,
+      dynamicDataDisplayBox
+    ];
+
+    // In the many-photon mode, add a control to allow the user to show the expectation value.
+    if ( model.laser.emissionMode === 'manyPhotons' ) {
+
+      const expectationValueCheckbox = new Checkbox(
+        normalizedOutcomeVectorGraph.expectationValueLineVisibleProperty,
+        new Text( QuantumMeasurementStrings.expectationValueStringProperty, { font: new PhetFont( 18 ) } ),
+        { tandem: providedOptions.tandem.createTandem( 'expectationValueCheckbox' ) }
+      );
+      const expectationValueLineIcon = new Line( 0, 0, 30, 0, {
+        stroke: QuantumMeasurementColors.photonBaseColorProperty,
+        lineWidth: 3
+      } );
+      const expectationValueControl = new HBox( {
+        children: [ expectationValueCheckbox, expectationValueLineIcon ],
+        spacing: 15
+      } );
+
+      const expectationValueEquationStringProperty = new DerivedStringProperty(
+        [
+          QuantumMeasurementStrings.polarizationStringProperty,
+          QuantumMeasurementStrings.PStringProperty,
+          QuantumMeasurementStrings.VStringProperty,
+          QuantumMeasurementStrings.HStringProperty
+        ],
+        ( polarizationString, PString, VString, HString ) => {
+          const colorizedVString = QuantumMeasurementConstants.CREATE_COLOR_SPAN(
+            VString,
+            QuantumMeasurementColors.verticalPolarizationColorProperty.value
+          );
+          const colorizedHString = QuantumMeasurementConstants.CREATE_COLOR_SPAN(
+            HString,
+            QuantumMeasurementColors.horizontalPolarizationColorProperty.value
+          );
+          return `<${polarizationString}> = ${PString}(${colorizedVString}) + ${PString}(${colorizedHString})`;
+        }
+      );
+      const expectationValueEquationNode = new RichText( expectationValueEquationStringProperty, {
+        font: new MathSymbolFont( 18 )
+      } );
+      const expectationValueVBox = new VBox( {
+        children: [ expectationValueControl, expectationValueEquationNode ],
+        spacing: 10
+      } );
+      dataDashboardChildren.push( expectationValueVBox );
+    }
+
     // Create the box that contains the graphs that display the measurement data from the photon experiments.
     const dataDashboardBox = new VBox( {
-      children: [
-        averagePolarizationTitlePanel,
-        equationsBox,
-        dynamicDataDisplayBox
-      ],
+      children: dataDashboardChildren,
       align: 'left',
       spacing: 20,
       right: QuantumMeasurementConstants.LAYOUT_BOUNDS.right - 40,

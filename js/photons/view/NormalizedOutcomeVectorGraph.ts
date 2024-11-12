@@ -7,21 +7,29 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Color, Line, Node, Text } from '../../../../scenery/js/imports.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
 const HEIGHT = 200;
 const TICK_MARK_LENGTH = 20;
 const TICK_MARK_LINE_WIDTH = 1.5;
+const EXPECTATION_VALUE_LINE_LENGTH = TICK_MARK_LENGTH * 1.5;
 const LABEL_FONT = new PhetFont( { size: 16, weight: 'bold' } );
-const LABEL_SPACING = 5;
+const LABEL_SPACING = 7;
 
 export default class NormalizedOutcomeVectorGraph extends Node {
 
-  public constructor( normalizedOutcomeValueProperty: TReadOnlyProperty<number> ) {
+  public readonly expectationValueLineVisibleProperty: BooleanProperty;
+
+  public constructor( normalizedOutcomeValueProperty: TReadOnlyProperty<number>,
+                      normalizedExpectationValueProperty: TReadOnlyProperty<number>,
+                      tandem: Tandem ) {
 
     const verticalAxis = new Line( 0, -HEIGHT / 2, 0, HEIGHT / 2, {
       stroke: Color.BLACK,
@@ -81,19 +89,40 @@ export default class NormalizedOutcomeVectorGraph extends Node {
       }
     } );
 
+    const expectationValueLineVisibleProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'expectationValueLineVisibleProperty' ),
+      phetioReadOnly: true
+    } );
+
+    // Create the little line that will depict the expectation value.
+    const expectationValueLine = new Line( -EXPECTATION_VALUE_LINE_LENGTH / 2, 0, EXPECTATION_VALUE_LINE_LENGTH / 2, 0, {
+      centerY: verticalAxis.centerY,
+      stroke: QuantumMeasurementColors.photonBaseColorProperty,
+      lineWidth: TICK_MARK_LINE_WIDTH * 3,
+      visibleProperty: expectationValueLineVisibleProperty
+    } );
+
+    // Update the position of the expectation value line as the expectation value changes.
+    normalizedExpectationValueProperty.link( normalizedExpectationValue => {
+      expectationValueLine.setTranslation( 0, -normalizedExpectationValue * HEIGHT / 2 );
+    } );
+
     super( {
       children: [
+        verticalAxis,
+        expectationValueLine,
         topTickMark,
         topTickMarkLabel,
         middleTickMark,
         middleTickMarkLabel,
         bottomTickMark,
         bottomTickMarkLabel,
-        verticalAxis,
         normalizedOutcomeVector
-      ]
+      ],
+      tandem: tandem
     } );
 
+    this.expectationValueLineVisibleProperty = expectationValueLineVisibleProperty;
   }
 }
 

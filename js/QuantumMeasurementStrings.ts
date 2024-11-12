@@ -28,6 +28,7 @@ type StringsType = {
   'customStringProperty': LocalizedStringProperty;
   'downStringProperty': LocalizedStringProperty;
   'eventsPerSecondPatternStringProperty': LocalizedStringProperty;
+  'expectationValueStringProperty': LocalizedStringProperty;
   'flipStringProperty': LocalizedStringProperty;
   'flipAndRevealStringProperty': LocalizedStringProperty;
   'fortyFiveDegreesStringProperty': LocalizedStringProperty;
@@ -45,6 +46,7 @@ type StringsType = {
   'newCoinStringProperty': LocalizedStringProperty;
   'observeStringProperty': LocalizedStringProperty;
   'photonPolarizationAngleStringProperty': LocalizedStringProperty;
+  'polarizationStringProperty': LocalizedStringProperty;
   'polarizationDetectorLabelPatternStringProperty': LocalizedStringProperty;
   'polarizingBeamSplitterStringProperty': LocalizedStringProperty;
   'propagationStringProperty': LocalizedStringProperty;

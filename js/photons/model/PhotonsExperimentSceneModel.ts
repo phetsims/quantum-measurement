@@ -49,7 +49,12 @@ export default class PhotonsExperimentSceneModel {
   public readonly verticalPolarizationDetector: PhotonDetector;
   public readonly horizontalPolarizationDetector: PhotonDetector;
 
-  // The normalized outcome value for the experiment.
+  // The normalized expectation value for the experiment.  This is essentially an average of all the possible outcomes
+  // of the experiment weighted by their likelihoods, normalized to a range of -1 to 1.
+  public readonly normalizedExpectationValueProperty: TReadOnlyProperty<number>;
+
+  // The normalized outcome value for the experiment.  This is the difference between the two measurements divided by
+  // the sum of the two measurements.  Its values range from -1 to 1.
   public readonly normalizedOutcomeValueProperty: TReadOnlyProperty<number>;
 
   // The photons that will be emitted and reflected in the experiment.
@@ -80,6 +85,34 @@ export default class PhotonsExperimentSceneModel {
       displayMode: this.laser.emissionMode === 'singlePhoton' ? 'count' : 'rate',
       tandem: providedOptions.tandem.createTandem( 'horizontalPolarizationDetector' )
     } );
+
+    // Create a derived Property for the normalized expectation value.
+    this.normalizedExpectationValueProperty = new DerivedProperty(
+      [ this.laser.presetPolarizationDirectionProperty, this.laser.customPolarizationAngleProperty ],
+      ( presetPolarizationDirection, customPolarizationAngle ) => {
+        let normalizedExpectationValue;
+        if ( presetPolarizationDirection === 'vertical' ) {
+          normalizedExpectationValue = 1;
+        }
+        else if ( presetPolarizationDirection === 'horizontal' ) {
+          normalizedExpectationValue = -1;
+        }
+        else if ( presetPolarizationDirection === 'fortyFiveDegrees' || presetPolarizationDirection === 'unpolarized' ) {
+          normalizedExpectationValue = 0;
+        }
+        else {
+          assert && assert( presetPolarizationDirection === 'custom', 'unrecognized polarization direction' );
+          const angleInRadians = customPolarizationAngle * Math.PI / 180;
+          normalizedExpectationValue = 1 - 2 * Math.pow( Math.cos( angleInRadians ), 2 );
+        }
+        return normalizedExpectationValue;
+      },
+      {
+        tandem: providedOptions.tandem.createTandem( 'normalizedExpectationValueProperty' ),
+        phetioReadOnly: true,
+        phetioValueType: NumberIO
+      }
+    );
 
     // Create a derived Property for the normalized outcome value.  This is a little different depending on the
     // experiment mode, but the general idea is that it's the difference between the two measurements divided by the sum

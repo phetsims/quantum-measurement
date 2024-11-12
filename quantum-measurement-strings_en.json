@@ -35,6 +35,9 @@
   "eventsPerSecondPattern": {
     "value": "{{value}}/s"
   },
+  "expectationValue": {
+    "value": "Expectation Value"
+  },
   "flip": {
     "value": "Flip"
   },
@@ -85,6 +88,9 @@
   },
   "photonPolarizationAngle": {
     "value": "Photon Polarization Angle"
+  },
+  "polarization": {
+    "value": "Polarization"
   },
   "polarizationDetectorLabelPattern": {
     "value": "{{orientation}} Polarization<br>Detector"
