@@ -141,7 +141,7 @@ export default class PhotonsExperimentSceneView extends Node {
       align: 'center'
     } );
 
-    // Create the box that contains the various graphs that display the experiment results.
+    // Create the box that contains the graphs that display the measurement data from the photon experiments.
     const dataDashboardBox = new VBox( {
       children: [
         averagePolarizationTitlePanel,
