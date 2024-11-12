@@ -28,8 +28,8 @@ export default class PolarizingBeamSplitter implements TPhotonInteraction {
   // The position of the center of the beam splitter in two-dimensional space.  Units are in meters.
   public readonly centerPosition: Vector2;
 
-  // the size of the beam splitter, in meters
-  public readonly size = new Dimension2( 0.10, 0.10 );
+  // The size of the beam splitter, in meters.  This is empirically determined to match the design doc.
+  public readonly size = new Dimension2( 0.07, 0.07 );
 
   // A line in model space that represents the position of the polarizing beam splitter.
   public readonly polarizingSurfaceLine: Line;

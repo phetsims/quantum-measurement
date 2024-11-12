@@ -21,7 +21,7 @@ type SelfOptions = EmptySelfOptions;
 type MirrorOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
 // constants
-const MIRROR_LENGTH = 0.125; // meters
+const MIRROR_LENGTH = 0.095; // meters
 
 export default class Mirror implements TPhotonInteraction {
 
