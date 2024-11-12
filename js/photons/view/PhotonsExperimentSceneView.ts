@@ -7,15 +7,12 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PlayPauseButton from '../../../../scenery-phet/js/buttons/PlayPauseButton.js';
-import MathSymbolFont from '../../../../scenery-phet/js/MathSymbolFont.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { HBox, Line, Node, NodeOptions, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
-import Checkbox from '../../../../sun/js/Checkbox.js';
+import { HBox, Node, NodeOptions, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import Panel from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
@@ -24,6 +21,7 @@ import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHis
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import PhotonsExperimentSceneModel from '../model/PhotonsExperimentSceneModel.js';
+import ExpectationValueControl from './ExpectationValueControl.js';
 import NormalizedOutcomeVectorGraph from './NormalizedOutcomeVectorGraph.js';
 import ObliquePolarizationAngleIndicator from './ObliquePolarizationAngleIndicator.js';
 import PhotonDetectionProbabilityPanel from './PhotonDetectionProbabilityPanel.js';
@@ -156,48 +154,10 @@ export default class PhotonsExperimentSceneView extends Node {
 
     // In the many-photon mode, add a control to allow the user to show the expectation value.
     if ( model.laser.emissionMode === 'manyPhotons' ) {
-
-      const expectationValueCheckbox = new Checkbox(
+      dataDashboardChildren.push( new ExpectationValueControl(
         normalizedOutcomeVectorGraph.expectationValueLineVisibleProperty,
-        new Text( QuantumMeasurementStrings.expectationValueStringProperty, { font: new PhetFont( 18 ) } ),
-        { tandem: providedOptions.tandem.createTandem( 'expectationValueCheckbox' ) }
-      );
-      const expectationValueLineIcon = new Line( 0, 0, 30, 0, {
-        stroke: QuantumMeasurementColors.photonBaseColorProperty,
-        lineWidth: 3
-      } );
-      const expectationValueControl = new HBox( {
-        children: [ expectationValueCheckbox, expectationValueLineIcon ],
-        spacing: 15
-      } );
-
-      const expectationValueEquationStringProperty = new DerivedStringProperty(
-        [
-          QuantumMeasurementStrings.polarizationStringProperty,
-          QuantumMeasurementStrings.PStringProperty,
-          QuantumMeasurementStrings.VStringProperty,
-          QuantumMeasurementStrings.HStringProperty
-        ],
-        ( polarizationString, PString, VString, HString ) => {
-          const colorizedVString = QuantumMeasurementConstants.CREATE_COLOR_SPAN(
-            VString,
-            QuantumMeasurementColors.verticalPolarizationColorProperty.value
-          );
-          const colorizedHString = QuantumMeasurementConstants.CREATE_COLOR_SPAN(
-            HString,
-            QuantumMeasurementColors.horizontalPolarizationColorProperty.value
-          );
-          return `<${polarizationString}> = ${PString}(${colorizedVString}) + ${PString}(${colorizedHString})`;
-        }
-      );
-      const expectationValueEquationNode = new RichText( expectationValueEquationStringProperty, {
-        font: new MathSymbolFont( 18 )
-      } );
-      const expectationValueVBox = new VBox( {
-        children: [ expectationValueControl, expectationValueEquationNode ],
-        spacing: 10
-      } );
-      dataDashboardChildren.push( expectationValueVBox );
+        { tandem: providedOptions.tandem.createTandem( 'expectationValueControl' ) }
+      ) );
     }
 
     // Create the box that contains the graphs that display the measurement data from the photon experiments.
