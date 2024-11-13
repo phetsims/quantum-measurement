@@ -96,7 +96,7 @@ export default class PhotonDetector implements TPhotonInteraction {
 
     if ( detectionResult.interactionType === 'absorbed' ) {
       this.detectionCountProperty.value++;
-      this.detectionRateProperty.currentDetectionCount++;
+      this.detectionRateProperty.countEvent();
     }
 
     return detectionResult;

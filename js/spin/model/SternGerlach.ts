@@ -106,8 +106,8 @@ export default class SternGerlach {
 
     this.downProbabilityProperty = new DerivedProperty( [ this.upProbabilityProperty ], upProbability => 1 - upProbability );
 
-    const totalAveragingPeriod = 0.5;
-    const countSamplePeriod = 0.05;
+    const totalAveragingPeriod = 3;
+    const countSamplePeriod = 0.5;
     this.upCounterProperty = new AveragingCounterNumberProperty( {
       tandem: tandem.createTandem( 'upCounterProperty' ),
       totalAveragingPeriod: totalAveragingPeriod,
@@ -127,7 +127,6 @@ export default class SternGerlach {
     this.upCounterProperty.step( dt );
     this.downCounterProperty.step( dt );
   }
-
 
   /**
    * Prepares and returns the probability distribution of a Stern-Gerlach
@@ -155,10 +154,10 @@ export default class SternGerlach {
   // Provided a boolean value, increments the counter of the up or down particles
   public count( isSpinUp: boolean ): void {
     if ( isSpinUp ) {
-      this.upCounterProperty.currentDetectionCount++;
+      this.upCounterProperty.countEvent();
     }
     else {
-      this.downCounterProperty.currentDetectionCount++;
+      this.downCounterProperty.countEvent();
     }
   }
 

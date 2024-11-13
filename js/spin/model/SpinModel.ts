@@ -426,6 +426,7 @@ export default class SpinModel implements TModel {
 
         if ( particle.positionProperty.value.x >= secondDetectorPosition ) {
           if ( !particle.wasCounted[ 2 ] ) {
+
             // Regardless which SG is active, we count the particles in the SG1
             this.sternGerlachs[ 1 ].count( particle.isSpinUp[ 2 ] );
             particle.wasCounted[ 2 ] = true;

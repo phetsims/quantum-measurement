@@ -9,7 +9,6 @@
  */
 
 import NumberProperty, { NumberPropertyOptions } from '../../../../axon/js/NumberProperty.js';
-import Utils from '../../../../dot/js/Utils.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
@@ -30,15 +29,15 @@ export default class AveragingCounterNumberProperty extends NumberProperty {
   private readonly countSamplePeriod: number;
 
   // variables used in the detection rate calculation
-  public currentDetectionCount = 0;
+  private currentDetectionCount = 0;
   private detectionSampleHistory: DetectionCountSample[] = [];
   private timeSinceLastCountSample = 0;
 
   public constructor( providedOptions: AveragingCounterNumberPropertyOptions ) {
 
     const options = optionize<AveragingCounterNumberPropertyOptions, SelfOptions, NumberPropertyOptions>()( {
-      totalAveragingPeriod: 2,
-      countSamplePeriod: 0.5
+      totalAveragingPeriod: 2, // in seconds
+      countSamplePeriod: 0.5 // in seconds
     }, providedOptions );
 
     assert && assert( options.totalAveragingPeriod > 0, 'totalAveragingPeriod must be greater than zero' );
@@ -52,6 +51,13 @@ export default class AveragingCounterNumberProperty extends NumberProperty {
 
     this.totalAveragingPeriod = options.totalAveragingPeriod;
     this.countSamplePeriod = options.countSamplePeriod;
+  }
+
+  /**
+   * Increments the detection count.
+   */
+  public countEvent(): void {
+    this.currentDetectionCount++;
   }
 
   public step( dt: number ): void {
@@ -82,7 +88,7 @@ export default class AveragingCounterNumberProperty extends NumberProperty {
 
       // Update the detection rate.
       if ( accumulatedSampleTime > 0 ) {
-        this.value = Utils.roundSymmetric( accumulatedEventCount / accumulatedSampleTime );
+        this.value = accumulatedEventCount / accumulatedSampleTime;
       }
       else {
         this.value = 0;
