@@ -53,6 +53,7 @@ type StringsType = {
   'propagationIntoPageStringProperty': LocalizedStringProperty;
   'classicalCoinStringProperty': LocalizedStringProperty;
   'PStringProperty': LocalizedStringProperty;
+  'photonSourceStringProperty': LocalizedStringProperty;
   'preparedStateStringProperty': LocalizedStringProperty;
   'probabilityStringProperty': LocalizedStringProperty;
   'probabilityOfValuePatternStringProperty': LocalizedStringProperty;

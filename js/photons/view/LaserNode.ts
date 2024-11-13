@@ -58,8 +58,13 @@ export default class LaserNode extends Node {
       centerY: modelViewTransform.modelToViewY( model.position.y ),
       tandem: providedOptions.tandem.createTandem( 'laserPointerNode' )
     } );
+    const caption = new Text( QuantumMeasurementStrings.photonSourceStringProperty, {
+      font: new PhetFont( 12 ),
+      centerX: laserPointerNode.centerX,
+      top: laserPointerNode.bottom + 5
+    } );
 
-    const nodeChildren: Node[] = [ laserPointerNode ];
+    const nodeChildren: Node[] = [ laserPointerNode, caption ];
 
     // If the laser is in many-photon mode, we need a slider to control the rate of photon emission.  And a label for
     // the rate.

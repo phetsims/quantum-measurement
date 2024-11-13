@@ -110,6 +110,9 @@
   "P": {
     "value": "P"
   },
+  "photonSource": {
+    "value": "Photon Source"
+  },
   "preparedState": {
     "value": "Prepared State"
   },
