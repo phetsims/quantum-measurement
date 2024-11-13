@@ -8,6 +8,7 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -25,10 +26,11 @@ const LABEL_SPACING = 7;
 
 export default class NormalizedOutcomeVectorGraph extends Node {
 
-  public readonly expectationValueLineVisibleProperty: BooleanProperty;
+  // Property that controls whether the expectation value line is visible when there is a valid expectation value.
+  public readonly showExpectationLineProperty: BooleanProperty;
 
   public constructor( normalizedOutcomeValueProperty: TReadOnlyProperty<number>,
-                      normalizedExpectationValueProperty: TReadOnlyProperty<number>,
+                      normalizedExpectationValueProperty: TReadOnlyProperty<number | null>,
                       tandem: Tandem ) {
 
     const verticalAxis = new Line( 0, -HEIGHT / 2, 0, HEIGHT / 2, {
@@ -89,10 +91,18 @@ export default class NormalizedOutcomeVectorGraph extends Node {
       }
     } );
 
-    const expectationValueLineVisibleProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'expectationValueLineVisibleProperty' ),
+    // Property that controls whether the expectation value line is visible when there is a valid expectation value.
+    const showExpectationLineProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'showExpectationLineProperty' ),
       phetioReadOnly: true
     } );
+
+    // The expectation value line can only be shown when there is a valid expectation value, so we need a derived
+    // property that takes the value and the user setting into account.
+    const expectationValueLineVisibleProperty = new DerivedProperty(
+      [ normalizedExpectationValueProperty, showExpectationLineProperty ],
+      ( normalizedExpectationValue, showExpectationLine ) => normalizedExpectationValue !== null && showExpectationLine
+    );
 
     // Create the little line that will depict the expectation value.
     const expectationValueLine = new Line( -EXPECTATION_VALUE_LINE_LENGTH / 2, 0, EXPECTATION_VALUE_LINE_LENGTH / 2, 0, {
@@ -104,7 +114,10 @@ export default class NormalizedOutcomeVectorGraph extends Node {
 
     // Update the position of the expectation value line as the expectation value changes.
     normalizedExpectationValueProperty.link( normalizedExpectationValue => {
-      expectationValueLine.setTranslation( 0, -normalizedExpectationValue * HEIGHT / 2 );
+      expectationValueLine.setTranslation(
+        0,
+        normalizedExpectationValue === null ? 0 : -normalizedExpectationValue * HEIGHT / 2
+      );
     } );
 
     super( {
@@ -122,7 +135,7 @@ export default class NormalizedOutcomeVectorGraph extends Node {
       tandem: tandem
     } );
 
-    this.expectationValueLineVisibleProperty = expectationValueLineVisibleProperty;
+    this.showExpectationLineProperty = showExpectationLineProperty;
   }
 }
 

@@ -14,6 +14,7 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
+import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import Laser, { PhotonEmissionMode } from './Laser.js';
@@ -50,8 +51,9 @@ export default class PhotonsExperimentSceneModel {
   public readonly horizontalPolarizationDetector: PhotonDetector;
 
   // The normalized expectation value for the experiment.  This is essentially an average of all the possible outcomes
-  // of the experiment weighted by their likelihoods, normalized to a range of -1 to 1.
-  public readonly normalizedExpectationValueProperty: TReadOnlyProperty<number>;
+  // of the experiment weighted by their likelihoods, normalized to a range of -1 to 1.  The value can also be null,
+  // which means the expectation value is not defined, which occurs when the photons are unpolarized.
+  public readonly normalizedExpectationValueProperty: TReadOnlyProperty<number | null>;
 
   // The normalized outcome value for the experiment.  This is the difference between the two measurements divided by
   // the sum of the two measurements.  Its values range from -1 to 1.
@@ -90,15 +92,18 @@ export default class PhotonsExperimentSceneModel {
     this.normalizedExpectationValueProperty = new DerivedProperty(
       [ this.laser.presetPolarizationDirectionProperty, this.laser.customPolarizationAngleProperty ],
       ( presetPolarizationDirection, customPolarizationAngle ) => {
-        let normalizedExpectationValue;
+        let normalizedExpectationValue: number | null;
         if ( presetPolarizationDirection === 'vertical' ) {
           normalizedExpectationValue = 1;
         }
         else if ( presetPolarizationDirection === 'horizontal' ) {
           normalizedExpectationValue = -1;
         }
-        else if ( presetPolarizationDirection === 'fortyFiveDegrees' || presetPolarizationDirection === 'unpolarized' ) {
+        else if ( presetPolarizationDirection === 'fortyFiveDegrees' ) {
           normalizedExpectationValue = 0;
+        }
+        else if ( presetPolarizationDirection === 'unpolarized' ) {
+          normalizedExpectationValue = null;
         }
         else {
           assert && assert( presetPolarizationDirection === 'custom', 'unrecognized polarization direction' );
@@ -110,7 +115,7 @@ export default class PhotonsExperimentSceneModel {
       {
         tandem: providedOptions.tandem.createTandem( 'normalizedExpectationValueProperty' ),
         phetioReadOnly: true,
-        phetioValueType: NumberIO
+        phetioValueType: NullableIO( NumberIO )
       }
     );
 

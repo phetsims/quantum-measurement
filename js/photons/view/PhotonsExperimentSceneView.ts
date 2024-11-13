@@ -171,13 +171,18 @@ export default class PhotonsExperimentSceneView extends Node {
       dynamicDataDisplayBox
     ];
 
-    // In the many-photon mode, add a control to allow the user to show the expectation value.
-    if ( model.laser.emissionMode === 'manyPhotons' ) {
-      dataDashboardChildren.push( new ExpectationValueControl(
-        normalizedOutcomeVectorGraph.expectationValueLineVisibleProperty,
-        { tandem: providedOptions.tandem.createTandem( 'expectationValueControl' ) }
-      ) );
-    }
+    // Add the control that allows the user to show/hide the expectation value line.
+    dataDashboardChildren.push( new ExpectationValueControl( normalizedOutcomeVectorGraph.showExpectationLineProperty, {
+
+        // Don't show this control when there isn't a valid expectation value to display.
+        visibleProperty: new DerivedProperty(
+          [ model.normalizedExpectationValueProperty ],
+          expectationValue => expectationValue !== null
+        ),
+
+        tandem: providedOptions.tandem.createTandem( 'expectationValueControl' )
+      }
+    ) );
 
     // Create the box that contains the graphs that display the measurement data from the photon experiments.
     const dataDashboardBox = new VBox( {
