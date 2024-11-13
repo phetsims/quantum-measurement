@@ -7,6 +7,7 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Utils from '../../../../dot/js/Utils.js';
@@ -44,7 +45,7 @@ const UNIT_LENGTH = AXIS_LENGTH * 0.75;
 
 export default class FlatPolarizationAngleIndicator extends Node {
 
-  public constructor( polarizationAngleProperty: TReadOnlyProperty<number>,
+  public constructor( polarizationAngleProperty: TReadOnlyProperty<number | null>,
                       providedOptions?: PolarizationPlaneRepresentationOptions ) {
 
     // Create the vertical axis.
@@ -69,9 +70,17 @@ export default class FlatPolarizationAngleIndicator extends Node {
       centerY: horizontalAxis.centerY
     } );
 
+    // Create a Property for the fill used for the unit circle, since it changes when the photons are unpolarized.
+    const unitCircleFillProperty = new DerivedProperty(
+      [ polarizationAngleProperty ],
+      polarizationAngle => polarizationAngle === null ?
+                           QuantumMeasurementColors.photonBaseColorProperty.value :
+                           Color.LIGHT_GRAY
+    );
+
     // Create a unit circle.
     const unitCircle = new Circle( UNIT_LENGTH, {
-      fill: Color.GRAY,
+      fill: unitCircleFillProperty,
       opacity: 0.3
     } );
 
@@ -109,16 +118,22 @@ export default class FlatPolarizationAngleIndicator extends Node {
     // Update the positions of the polarization vectors as the polarization angle changes.
     polarizationAngleProperty.link( polarizationAngle => {
 
-      // Calculate the positions for the two ends of the polarization vector.
-      const polarizationVectorTipPosition = new Vector2(
-        Math.cos( -Utils.toRadians( polarizationAngle ) ),
-        Math.sin( -Utils.toRadians( polarizationAngle ) )
-      ).times( UNIT_LENGTH );
-      const polarizationVectorTailPosition = polarizationVectorTipPosition.times( -1 );
+      // Only show the polarization vector if the angle is not null.
+      polarizationVectorNode.visible = polarizationAngle !== null;
 
-      // Project the vectors and set the tips of the arrows accordingly.
-      polarizationVectorNode.setTip( polarizationVectorTipPosition.x, polarizationVectorTipPosition.y );
-      polarizationVectorNode.setTail( polarizationVectorTailPosition.x, polarizationVectorTailPosition.y );
+      if ( polarizationAngle !== null ) {
+
+        // Calculate the positions for the two ends of the polarization vector.
+        const polarizationVectorTipPosition = new Vector2(
+          Math.cos( -Utils.toRadians( polarizationAngle ) ),
+          Math.sin( -Utils.toRadians( polarizationAngle ) )
+        ).times( UNIT_LENGTH );
+        const polarizationVectorTailPosition = polarizationVectorTipPosition.times( -1 );
+
+        // Project the vectors and set the tips of the arrows accordingly.
+        polarizationVectorNode.setTip( polarizationVectorTipPosition.x, polarizationVectorTipPosition.y );
+        polarizationVectorNode.setTail( polarizationVectorTailPosition.x, polarizationVectorTailPosition.y );
+      }
     } );
   }
 }

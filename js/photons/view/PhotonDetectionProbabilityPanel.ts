@@ -28,7 +28,7 @@ const BOLD_FONT = new PhetFont( { size: FONT_SIZE, weight: 'bold' } );
 
 export default class PhotonDetectionProbabilityPanel extends Panel {
 
-  public constructor( polarizationAngleProperty: TReadOnlyProperty<number>,
+  public constructor( polarizationAngleProperty: TReadOnlyProperty<number | null>,
                       providedOptions: PhotonDetectionProbabilityPanelOptions ) {
 
     const options = optionize<PhotonDetectionProbabilityPanelOptions, SelfOptions, PanelOptions>()( {
@@ -36,16 +36,18 @@ export default class PhotonDetectionProbabilityPanel extends Panel {
       stroke: null
     }, providedOptions );
 
-    // Calculate the probability of a photon being detected as horizontally polarized.
+    // Calculate the probability of a photon being detected as horizontally polarized.  A null value indicates that the
+    // probability is unknown.
     const probabilityOfHorizontalProperty = new DerivedProperty(
       [ polarizationAngleProperty ],
-      polarizationAngle => Math.cos( Utils.toRadians( polarizationAngle ) ) ** 2
+      polarizationAngle => polarizationAngle === null ? null : Math.cos( Utils.toRadians( polarizationAngle ) ) ** 2
     );
 
-    // Calculate the probability of a photon being detected as vertically polarized.
+    // Calculate the probability of a photon being detected as vertically polarized.  A null value indicates that the
+    // probability is unknown.
     const probabilityOfVerticalProperty = new DerivedProperty(
       [ probabilityOfHorizontalProperty ],
-      probabilityOfHorizontal => 1 - probabilityOfHorizontal
+      probabilityOfHorizontal => probabilityOfHorizontal === null ? null : 1 - probabilityOfHorizontal
     );
 
     // Create the string Properties that will be displayed in the panel.
@@ -54,10 +56,15 @@ export default class PhotonDetectionProbabilityPanel extends Panel {
         probabilityOfHorizontalProperty,
         QuantumMeasurementStrings.PStringProperty,
         QuantumMeasurementStrings.HStringProperty,
+        QuantumMeasurementStrings.unknownProbabilitySymbolStringProperty,
         QuantumMeasurementColors.horizontalPolarizationColorProperty
       ],
-      ( probabilityOfHorizontal, pString, hString, horizontalColor ) => {
-        return `${pString}(${getColoredString( hString, horizontalColor )}) = ${Utils.toFixed( probabilityOfHorizontal, 2 )}`;
+      ( probabilityOfHorizontal, pString, hString, unknownProbabilitySymbol, horizontalColor ) => {
+        const leftSide = `${pString}(${getColoredString( hString, horizontalColor )})`;
+        const rightSide = probabilityOfHorizontal === null ?
+                          unknownProbabilitySymbol :
+                          Utils.toFixed( probabilityOfHorizontal, 2 );
+        return `${leftSide} = ${rightSide}`;
       }
     );
     const probabilityOfVerticalStringProperty = new DerivedProperty(
@@ -65,10 +72,15 @@ export default class PhotonDetectionProbabilityPanel extends Panel {
         probabilityOfVerticalProperty,
         QuantumMeasurementStrings.PStringProperty,
         QuantumMeasurementStrings.VStringProperty,
+        QuantumMeasurementStrings.unknownProbabilitySymbolStringProperty,
         QuantumMeasurementColors.verticalPolarizationColorProperty
       ],
-      ( probabilityOfVertical, pString, vString, verticalColor ) => {
-        return `${pString}(${getColoredString( vString, verticalColor )}) = ${Utils.toFixed( probabilityOfVertical, 2 )}`;
+      ( probabilityOfVertical, pString, vString, unknownProbabilitySymbol, verticalColor ) => {
+        const leftSide = `${pString}(${getColoredString( vString, verticalColor )})`;
+        const rightSide = probabilityOfVertical === null ?
+                          unknownProbabilitySymbol :
+                          Utils.toFixed( probabilityOfVertical, 2 );
+        return `${leftSide} = ${rightSide}`;
       }
     );
 

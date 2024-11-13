@@ -77,6 +77,7 @@ type StringsType = {
   'blochSphereStringProperty': LocalizedStringProperty;
   'representationStringProperty': LocalizedStringProperty;
   'unpolarizedStringProperty': LocalizedStringProperty;
+  'unknownProbabilitySymbolStringProperty': LocalizedStringProperty;
   'zProjectionStringProperty': LocalizedStringProperty;
   'xProjectionStringProperty': LocalizedStringProperty;
 };

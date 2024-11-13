@@ -182,6 +182,9 @@
   "unpolarized": {
     "value": "Unpolarized"
   },
+  "unknownProbabilitySymbol": {
+    "value": "?"
+  },
   "zProjection": {
     "value": "Z Projection"
   },

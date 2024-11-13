@@ -20,6 +20,7 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Utils from '../../../../dot/js/Utils.js';
@@ -69,7 +70,7 @@ const project3Dto2D = ( x: number, y: number, z: number ): Vector2 => {
 
 export default class ObliquePolarizationAngleIndicator extends Node {
 
-  public constructor( polarizationAngleProperty: TReadOnlyProperty<number>,
+  public constructor( polarizationAngleProperty: TReadOnlyProperty<number | null>,
                       providedOptions?: PolarizationPlaneRepresentationOptions ) {
 
     // Create the Y axis line with an arrow head.  This is pointing directly to the right.  We have to do this as a
@@ -114,6 +115,14 @@ export default class ObliquePolarizationAngleIndicator extends Node {
       center: xAxisTipPosition.times( 1.4 )
     } );
 
+    // Create a Property for the fill used for the unit circle, since it changes when the photons are unpolarized.
+    const unitCircleFillProperty = new DerivedProperty(
+      [ polarizationAngleProperty ],
+      polarizationAngle => polarizationAngle === null ?
+                           QuantumMeasurementColors.photonBaseColorProperty.value :
+                           Color.LIGHT_GRAY
+    );
+
     // Create a unit circle that is projected into the x-z plane.
     const numberOfPoints = 100;
     const projectedStartingPoint = project3Dto2D( UNIT_LENGTH, 0, 0 );
@@ -128,7 +137,7 @@ export default class ObliquePolarizationAngleIndicator extends Node {
     segmentedEllipseShape.lineToPoint( projectedStartingPoint );
     segmentedEllipseShape.close();
     const projectedXZUnitCircle = new Path( segmentedEllipseShape, {
-      fill: Color.GRAY,
+      fill: unitCircleFillProperty,
       opacity: 0.3
     } );
 
@@ -142,7 +151,7 @@ export default class ObliquePolarizationAngleIndicator extends Node {
       fill: '#0f0',
       doubleHead: true
     };
-    const polarizationVector = new ArrowNode( 0, AXIS_LENGTH, 0, -AXIS_LENGTH, polarizationVectorOptions );
+    const polarizationVectorNode = new ArrowNode( 0, AXIS_LENGTH, 0, -AXIS_LENGTH, polarizationVectorOptions );
 
     const options = optionize<PolarizationPlaneRepresentationOptions, SelfOptions, NodeOptions>()( {
 
@@ -155,7 +164,7 @@ export default class ObliquePolarizationAngleIndicator extends Node {
         zAxis,
         xAxisLabel,
         zAxisLabel,
-        polarizationVector,
+        polarizationVectorNode,
         yAxisArrowHead,
         yAxisLine,
         yAxisLabel
@@ -167,18 +176,24 @@ export default class ObliquePolarizationAngleIndicator extends Node {
     // Update the positions of the polarization vectors as the polarization angle changes.
     polarizationAngleProperty.link( polarizationAngle => {
 
-      // Calculate the position of the polarization unit vector in the x-z plane.
-      const polarizationVectorPlusInXZPlane = new Vector2(
-        Math.cos( -Utils.toRadians( polarizationAngle ) ),
-        Math.sin( -Utils.toRadians( polarizationAngle ) )
-      ).times( UNIT_LENGTH );
-      const polarizationVectorMinusInXZPlane = polarizationVectorPlusInXZPlane.times( -1 );
+      // Only show the polarization vector if the angle is not null.
+      polarizationVectorNode.visible = polarizationAngle !== null;
 
-      // Project the vectors and set the tips of the arrows accordingly.
-      const tip = project3Dto2D( polarizationVectorPlusInXZPlane.x, 0, polarizationVectorPlusInXZPlane.y );
-      polarizationVector.setTip( tip.x, tip.y );
-      const tail = project3Dto2D( polarizationVectorMinusInXZPlane.x, 0, polarizationVectorMinusInXZPlane.y );
-      polarizationVector.setTail( tail.x, tail.y );
+      if ( polarizationAngle !== null ) {
+
+        // Calculate the position of the polarization unit vector in the x-z plane.
+        const polarizationVectorPlusInXZPlane = new Vector2(
+          Math.cos( -Utils.toRadians( polarizationAngle ) ),
+          Math.sin( -Utils.toRadians( polarizationAngle ) )
+        ).times( UNIT_LENGTH );
+        const polarizationVectorMinusInXZPlane = polarizationVectorPlusInXZPlane.times( -1 );
+
+        // Project the vectors and set the tips of the arrows accordingly.
+        const tip = project3Dto2D( polarizationVectorPlusInXZPlane.x, 0, polarizationVectorPlusInXZPlane.y );
+        polarizationVectorNode.setTip( tip.x, tip.y );
+        const tail = project3Dto2D( polarizationVectorMinusInXZPlane.x, 0, polarizationVectorMinusInXZPlane.y );
+        polarizationVectorNode.setTail( tail.x, tail.y );
+      }
     } );
   }
 }

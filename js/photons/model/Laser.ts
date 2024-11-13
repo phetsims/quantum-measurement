@@ -66,9 +66,10 @@ export default class Laser {
   // The custom polarization angle for the emitted photons.  This is only used when the preset direction is "custom".
   public readonly customPolarizationAngleProperty: NumberProperty;
 
-  // The polarization angle that is used for emission.  This is a derived - and thus read-only - property that is
-  // derived from the preset polarization direction and the custom polarization angle.
-  public readonly polarizationAngleProperty: TReadOnlyProperty<number>;
+  // The polarization angle of the emitted photons.  This is a derived - and thus read-only - property that is
+  // derived from the preset polarization direction and the custom polarization angle.  A value of null indicates that
+  // the emitted photons are unpolarized, meaining that their individual polarization angles are random.
+  public readonly polarizationAngleProperty: TReadOnlyProperty<number | null>;
 
   // The set of photons that are used for emission.  This is a reference to the same array that is used in the scene model.
   private readonly photons: Photon[];
@@ -108,6 +109,7 @@ export default class Laser {
         return presetPolarizationDirection === 'vertical' ? 90 :
                presetPolarizationDirection === 'horizontal' ? 0 :
                presetPolarizationDirection === 'fortyFiveDegrees' ? 45 :
+               presetPolarizationDirection === 'unpolarized' ? null :
                customPolarizationAngle;
       }
     );
