@@ -8,6 +8,7 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
+import StringProperty from '../../../../axon/js/StringProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
@@ -31,6 +32,13 @@ type SelfOptions = {
   rightFillColorProperty?: TReadOnlyProperty<Color>;
   numberDisplayOptions?: NumberDisplayOptions;
   barWidth?: number;
+
+  // Whether to display tick marks.  When true, the histogram will display one tick mark halfway along the Y axis and
+  // another at the top of the Y axis.  Both will be labeled.
+  showTickMarks?: boolean;
+
+  // label for the top tick mark, if present
+  topTickMarkTextProperty?: TReadOnlyProperty<string>;
 };
 export type QuantumMeasurementHistogramOptions = SelfOptions & WithRequired<NodeOptions, 'tandem' | 'visibleProperty'>;
 
@@ -38,6 +46,8 @@ const HISTOGRAM_SIZE = new Dimension2( 200, 160 ); // size excluding labels at b
 const AXIS_STROKE = Color.BLACK;
 const AXIS_LINE_WIDTH = 2;
 const LABEL_FONT = new PhetFont( { size: 20, weight: 'bold' } );
+const TICK_MARK_LENGTH = 20;
+const TICK_MARK_FONT = new PhetFont( 14 );
 const NUMBER_DISPLAY_RANGE = new Range( 0, MAX_COINS );
 const NUMBER_DISPLAY_MAX_WIDTH = HISTOGRAM_SIZE.width / 2 * 0.85;
 export const HISTOGRAM_BAR_WIDTH = HISTOGRAM_SIZE.width / 6;
@@ -65,6 +75,8 @@ export default class QuantumMeasurementHistogram extends Node {
       barWidth: HISTOGRAM_BAR_WIDTH,
       leftFillColorProperty: QuantumMeasurementColors.headsColorProperty,
       rightFillColorProperty: QuantumMeasurementColors.tailsColorProperty,
+      showTickMarks: true,
+      topTickMarkTextProperty: new StringProperty( '' ),
       children: [],
       numberDisplayOptions: {
         align: 'center',
@@ -158,7 +170,7 @@ export default class QuantumMeasurementHistogram extends Node {
           textOptions: { fill: options.matchLabelColors ? options.rightFillColorProperty : 'black' }
         } ) );
     }
-  else {
+    else {
       leftNumberDisplay = new NumberDisplay( leftNumberProperty, NUMBER_DISPLAY_RANGE, combineOptions<NumberDisplayOptions>(
         {}, options.numberDisplayOptions, {
           rotation: options.orientation === 'vertical' ? 0 : -Math.PI / 2,
@@ -173,7 +185,7 @@ export default class QuantumMeasurementHistogram extends Node {
 
 
     // Create the histogram bars for the right and left sides.
-    const maxBarHeight = yAxis.height - leftNumberDisplay.height;
+    const maxBarHeight = yAxis.height;
     const leftFillColorProperty = options.leftFillColorProperty;
     const rightFillColorProperty = options.rightFillColorProperty;
     const leftHistogramBar = new Rectangle( 0, 0, options.barWidth, maxBarHeight, { fill: leftFillColorProperty } );
@@ -191,7 +203,7 @@ export default class QuantumMeasurementHistogram extends Node {
       ],
       centerX: 0,
       spacing: SPACING,
-      top: yAxis.top - 10,
+      bottom: yAxis.top,
       visibleProperty: displayValuesProperty
     } );
 
@@ -238,12 +250,37 @@ export default class QuantumMeasurementHistogram extends Node {
       }
     );
 
+    // If tick marks are to be displayed, create them.
+    const tickMarkRelatedChildren = [];
+    if ( options.showTickMarks ) {
+      const halfHeightTickMark = new Line( 0, 0, TICK_MARK_LENGTH, 0, {
+        stroke: AXIS_STROKE,
+        centerX: yAxis.centerX,
+        centerY: -maxBarHeight / 2
+      } );
+      tickMarkRelatedChildren.push( halfHeightTickMark );
+      const topTickMark = new Line( 0, 0, TICK_MARK_LENGTH, 0, {
+        stroke: AXIS_STROKE,
+        centerX: yAxis.centerX,
+        centerY: -maxBarHeight
+      } );
+      tickMarkRelatedChildren.push( topTickMark );
+      const topTickMarkLabel = new RichText( options.topTickMarkTextProperty, {
+        font: TICK_MARK_FONT,
+        left: topTickMark.right + 3,
+        centerY: topTickMark.centerY,
+        rotation: options.orientation === 'vertical' ? 0 : -Math.PI / 2
+      } );
+      tickMarkRelatedChildren.push( topTickMarkLabel );
+    }
+
     // TODO: Why do alignboxes treat us so poorly? https://github.com/phetsims/quantum-measurement/issues/22
     options.children = [
       new Node( {
         children: [
           numberBars,
           yAxis,
+          ...tickMarkRelatedChildren,
           xAxis,
           xAxisLabels,
           numberDisplays

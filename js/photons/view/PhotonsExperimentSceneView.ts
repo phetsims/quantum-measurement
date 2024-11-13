@@ -7,9 +7,13 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import StringProperty from '../../../../axon/js/StringProperty.js';
+import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
+import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import PlayPauseButton from '../../../../scenery-phet/js/buttons/PlayPauseButton.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { HBox, Node, NodeOptions, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
@@ -90,14 +94,14 @@ export default class PhotonsExperimentSceneView extends Node {
     );
 
     // Create the equation representation that shows the detection counts for the vertical and horizontal detectors.
-    const leftProperty = model.laser.emissionMode === 'singlePhoton' ?
-                         model.verticalPolarizationDetector.detectionCountProperty :
-                         model.verticalPolarizationDetector.detectionRateProperty;
-    const rightProperty = model.laser.emissionMode === 'singlePhoton' ?
-                          model.horizontalPolarizationDetector.detectionCountProperty :
-                          model.horizontalPolarizationDetector.detectionRateProperty;
+    const verticalValueProperty = model.laser.emissionMode === 'singlePhoton' ?
+                                  model.verticalPolarizationDetector.detectionCountProperty :
+                                  model.verticalPolarizationDetector.detectionRateProperty;
+    const horizontalValueProperty = model.laser.emissionMode === 'singlePhoton' ?
+                                    model.horizontalPolarizationDetector.detectionCountProperty :
+                                    model.horizontalPolarizationDetector.detectionRateProperty;
 
-    const equationsBox = new PhotonsEquationNode( leftProperty, rightProperty, {
+    const equationsBox = new PhotonsEquationNode( verticalValueProperty, horizontalValueProperty, {
       tandem: providedOptions.tandem.createTandem( 'equationsBox' )
     } );
 
@@ -108,10 +112,24 @@ export default class PhotonsExperimentSceneView extends Node {
       providedOptions.tandem.createTandem( 'normalizedOutcomeVectorGraph' )
     );
 
+    const histogramTickMarkLabelProperty = model.laser.emissionMode === 'singlePhoton' ?
+                                           new StringProperty( '1.0' ) :
+                                           new DerivedProperty(
+                                             [
+                                               QuantumMeasurementStrings.eventsPerSecondPatternStringProperty,
+                                               verticalValueProperty,
+                                               horizontalValueProperty
+                                             ],
+                                             ( eventsPerSecondPatternString, verticalValue, horizontalValue ) => {
+                                               const displayValue = Utils.roundSymmetric( verticalValue + horizontalValue );
+                                               return StringUtils.fillIn( eventsPerSecondPatternString, { value: displayValue } );
+                                             }
+                                           );
+
     // Create the histogram that shows the detection counts for the vertical and horizontal detectors.
     const countHistogram = new QuantumMeasurementHistogram(
-      leftProperty,
-      rightProperty,
+      verticalValueProperty,
+      horizontalValueProperty,
       new BooleanProperty( true ),
       [
         new RichText(
@@ -135,6 +153,7 @@ export default class PhotonsExperimentSceneView extends Node {
         leftFillColorProperty: QuantumMeasurementColors.verticalPolarizationColorProperty,
         rightFillColorProperty: QuantumMeasurementColors.horizontalPolarizationColorProperty,
         visibleProperty: new BooleanProperty( true ),
+        topTickMarkTextProperty: histogramTickMarkLabelProperty,
         tandem: Tandem.OPT_OUT
       }
     );

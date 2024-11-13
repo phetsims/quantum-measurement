@@ -142,8 +142,8 @@ export default class SpinMeasurementArea extends VBox {
           QuantumMeasurementStrings.SGSubZStringProperty,
           QuantumMeasurementStrings.SGSubXStringProperty
         ], ( isZOriented, SGSubZ, SGSubX ) => isZOriented ?
-                                                             SGSubZ + QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER :
-                                                             SGSubX + QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER
+                                              SGSubZ + QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER :
+                                              SGSubX + QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER
       );
       const spinDownLabelStringProperty = new DerivedStringProperty(
         [
@@ -151,8 +151,8 @@ export default class SpinMeasurementArea extends VBox {
           QuantumMeasurementStrings.SGSubZStringProperty,
           QuantumMeasurementStrings.SGSubXStringProperty
         ], ( isZOriented, SGSubZ, SGSubX ) => isZOriented ?
-                                                             SGSubZ + QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER :
-                                                             SGSubX + QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER
+                                              SGSubZ + QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER :
+                                              SGSubX + QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER
       );
 
       return new HistogramWithExpectedValue(
@@ -166,7 +166,7 @@ export default class SpinMeasurementArea extends VBox {
           new RichText( spinDownLabelStringProperty, { font: new PhetFont( { size: 17, weight: 'bold' } ) } )
         ],
         {
-          center: modelViewTransform.modelToViewPosition( new Vector2( sternGerlach.positionProperty.value.x, 1 ) ),
+          center: modelViewTransform.modelToViewPosition( new Vector2( sternGerlach.positionProperty.value.x, 1.1 ) ),
           displayMode: 'percent',
           scale: 0.8,
           leftFillColorProperty: QuantumMeasurementColors.tailsColorProperty,
@@ -222,24 +222,24 @@ export default class SpinMeasurementArea extends VBox {
     const expectedPercentageCheckbox = new Checkbox(
       model.expectedPercentageVisibleProperty,
       new HBox( {
-      children: [
-        new Text( 'Expected percentage', { font: new PhetFont( 16 ) } ),
-        new Path( new Shape().moveTo( 0, 0 ).lineTo( 20, 0 ),
-          QuantumMeasurementConstants.expectedPercentagePathOptions
-        )
-      ],
-      spacing: 5
-    } ),
+        children: [
+          new Text( 'Expected percentage', { font: new PhetFont( 16 ) } ),
+          new Path( new Shape().moveTo( 0, 0 ).lineTo( 20, 0 ),
+            QuantumMeasurementConstants.expectedPercentagePathOptions
+          )
+        ],
+        spacing: 5
+      } ),
       {
-      scale: 0.9,
-      left: particleSourceNode.left,
-      top: particleSourceNode.bottom + 30,
-      visibleProperty: new DerivedProperty(
-        [ model.particleSourceModel.sourceModeProperty ],
-        sourceMode => sourceMode === SourceMode.CONTINUOUS
-      ),
-      tandem: tandem.createTandem( 'expectedPercentageCheckbox' )
-    } );
+        scale: 0.9,
+        left: particleSourceNode.left,
+        top: particleSourceNode.bottom + 30,
+        visibleProperty: new DerivedProperty(
+          [ model.particleSourceModel.sourceModeProperty ],
+          sourceMode => sourceMode === SourceMode.CONTINUOUS
+        ),
+        tandem: tandem.createTandem( 'expectedPercentageCheckbox' )
+      } );
 
     const exitBlocker = new Path( new Shape().moveTo( 0, 0 ).lineTo( 0, 35 ), {
       stroke: 'black',
