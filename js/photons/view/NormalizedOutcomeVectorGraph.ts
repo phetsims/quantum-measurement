@@ -104,6 +104,8 @@ export default class NormalizedOutcomeVectorGraph extends Node {
       ( normalizedExpectationValue, showExpectationLine ) => normalizedExpectationValue !== null && showExpectationLine
     );
 
+    // TODO: See https://github.com/phetsims/quantum-measurement/issues/60.  Should it be possible to show the
+    //       expectation value in single-photon mode?  For now it is.
     // Create the little line that will depict the expectation value.
     const expectationValueLine = new Line( -EXPECTATION_VALUE_LINE_LENGTH / 2, 0, EXPECTATION_VALUE_LINE_LENGTH / 2, 0, {
       centerY: verticalAxis.centerY,
