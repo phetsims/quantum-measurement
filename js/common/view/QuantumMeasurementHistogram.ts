@@ -90,6 +90,7 @@ export default class QuantumMeasurementHistogram extends Node {
     }, providedOptions );
 
     options.rotation = options.orientation === 'vertical' ? 0 : Math.PI / 2;
+    const textRotation = options.orientation === 'vertical' ? 0 : -Math.PI / 2;
 
     const totalNumberProperty = new DerivedProperty(
       [ leftNumberProperty, rightNumberProperty ],
@@ -135,11 +136,11 @@ export default class QuantumMeasurementHistogram extends Node {
 
       leftNumberDisplay = new FractionNode( leftNumberDisplay, totalNumberDisplay, {
         fractionLineMargin: 0,
-        rotation: options.orientation === 'vertical' ? 0 : -Math.PI / 2
+        rotation: textRotation
       } );
       rightNumberDisplay = new FractionNode( rightNumberDisplay, totalNumberDisplay, {
         fractionLineMargin: 0,
-        rotation: options.orientation === 'vertical' ? 0 : -Math.PI / 2
+        rotation: textRotation
       } );
     }
     else if ( options.displayMode === 'percent' ) {
@@ -159,7 +160,7 @@ export default class QuantumMeasurementHistogram extends Node {
     else if ( options.displayMode === 'rate' ) {
       const rateDisplayOptions: NumberDisplayOptions = {
         valuePattern: QuantumMeasurementStrings.eventsPerSecondPatternStringProperty,
-        rotation: options.orientation === 'vertical' ? 0 : -Math.PI / 2
+        rotation: textRotation
       };
       leftNumberDisplay = new NumberDisplay( leftNumberProperty, NUMBER_DISPLAY_RANGE, combineOptions<NumberDisplayOptions>(
         rateDisplayOptions, options.numberDisplayOptions, {
@@ -173,12 +174,12 @@ export default class QuantumMeasurementHistogram extends Node {
     else {
       leftNumberDisplay = new NumberDisplay( leftNumberProperty, NUMBER_DISPLAY_RANGE, combineOptions<NumberDisplayOptions>(
         {}, options.numberDisplayOptions, {
-          rotation: options.orientation === 'vertical' ? 0 : -Math.PI / 2,
+          rotation: textRotation,
           textOptions: { fill: options.matchLabelColors ? options.leftFillColorProperty : 'black' }
         } ) );
       rightNumberDisplay = new NumberDisplay( rightNumberProperty, NUMBER_DISPLAY_RANGE, combineOptions<NumberDisplayOptions>(
         {}, options.numberDisplayOptions, {
-          rotation: options.orientation === 'vertical' ? 0 : -Math.PI / 2,
+          rotation: textRotation,
           textOptions: { fill: options.matchLabelColors ? options.rightFillColorProperty : 'black' }
         } ) );
     }
@@ -211,8 +212,8 @@ export default class QuantumMeasurementHistogram extends Node {
     const xAxisLeftLabel = providedXAxisLabels[ 0 ];
     const xAxisRightLabel = providedXAxisLabels[ 1 ];
 
-    xAxisLeftLabel.rotation = options.orientation === 'vertical' ? 0 : -Math.PI / 2;
-    xAxisRightLabel.rotation = options.orientation === 'vertical' ? 0 : -Math.PI / 2;
+    xAxisLeftLabel.rotation = textRotation;
+    xAxisRightLabel.rotation = textRotation;
 
     const xAxisLabels = new HBox( {
       children: [
@@ -269,7 +270,7 @@ export default class QuantumMeasurementHistogram extends Node {
         font: TICK_MARK_FONT,
         left: topTickMark.right + 3,
         centerY: topTickMark.centerY,
-        rotation: options.orientation === 'vertical' ? 0 : -Math.PI / 2
+        rotation: textRotation
       } );
       tickMarkRelatedChildren.push( topTickMarkLabel );
     }
