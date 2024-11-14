@@ -8,6 +8,8 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -37,6 +39,7 @@ export default class SpinStatePreparationArea extends VBox {
 
   public constructor(
     model: SpinModel,
+    layoutBounds: Bounds2,
     tandem: Tandem ) {
 
     const createRadioButtonGroupItem = ( spinDirection: SpinDirection ) => {
@@ -92,7 +95,15 @@ export default class SpinStatePreparationArea extends VBox {
         scale: 0.9
       } );
 
-    const title = new RichText( QuantumMeasurementStrings.stateToPrepareStringProperty, { font: new PhetFont( { size: 20, weight: 'bolder' } ) } );
+    const stateToPrepareStringProperty = new DerivedStringProperty(
+      [
+        QuantumMeasurementStrings.stateToPrepareStringProperty,
+        QuantumMeasurementColors.tailsColorProperty,
+        QuantumMeasurementColors.downColorProperty
+      ],
+      stateToPrepareString => `<b>${stateToPrepareString}</b> ( ${ALPHA}|${UP}${KET} + ${BETA}|${DOWN}${KET} )`
+    );
+    const stateToPrepareText = new RichText( stateToPrepareStringProperty, { font: new PhetFont( { size: 18, weight: 'bolder' } ) } );
 
     const stateReadoutStringProperty = new DerivedProperty(
       [
@@ -104,7 +115,7 @@ export default class SpinStatePreparationArea extends VBox {
         const downProbability = 1 - upProbability;
         const alphaValue = Utils.toFixed( Math.sqrt( upProbability ), 3 );
         const betaValue = Utils.toFixed( Math.sqrt( downProbability ), 3 );
-        return `${ALPHA}|${UP}${KET} + ${BETA}|${DOWN}${KET} = ${alphaValue}|${UP}${KET} + ${betaValue}|${DOWN}${KET}`;
+        return `${alphaValue}|${UP}${KET} + ${betaValue}|${DOWN}${KET}`;
       } );
 
     const stateReadout = new RichText( stateReadoutStringProperty, { font: new PhetFont( 18 ) } );
@@ -159,12 +170,8 @@ export default class SpinStatePreparationArea extends VBox {
 
     super( {
       children: [
-        title,
         blochSphereNode,
-        // TODO: REMOVE! Direction slider for the bloch sphere, https://github.com/phetsims/quantum-measurement/issues/53
-        // new Slider( blochSphereNode.xAxisOffsetAngleProperty, new Range( 0, 2 * Math.PI ), {
-        //   tandem: Tandem.OPT_OUT
-        // } ),
+        stateToPrepareText,
         stateReadout,
         spinStatePanel,
         probabilityControlBox,
@@ -177,7 +184,8 @@ export default class SpinStatePreparationArea extends VBox {
           align: 'left'
         } )
       ],
-      spacing: 20
+      spacing: 20,
+      centerY: layoutBounds.centerY
     } );
   }
 }

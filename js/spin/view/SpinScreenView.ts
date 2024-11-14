@@ -32,6 +32,7 @@ export default class SpinScreenView extends QuantumMeasurementScreenView {
 
     const spinStatePreparationArea = new SpinStatePreparationArea(
       model,
+      this.layoutBounds,
       tandem.createTandem( 'spinStatePreparationArea' )
     );
     this.addChild( spinStatePreparationArea );
