@@ -32,7 +32,9 @@ const QuantumMeasurementConstants = {
   CREATE_COLOR_SPAN: ( text: string, color: Color, bold = false ): string => {
     const weight = bold ? 'bold' : 'normal';
     return `<span style="font-weight: ${weight}; color: ${color.toCSS()};">${text}</span>`;
-  }
+  },
+
+  CAMERA_SOLID_SHAPE_SVG: 'M512 144v288c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48h88l12.3-32.9c7-18.7 24.9-31.1 44.9-31.1h125.5c20 0 37.9 12.4 44.9 31.1L376 96h88c26.5 0 48 21.5 48 48z'
 };
 
 quantumMeasurement.register( 'QuantumMeasurementConstants', QuantumMeasurementConstants );

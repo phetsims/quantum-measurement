@@ -15,6 +15,7 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import { Node, Path, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import quantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import MeasurementLine, { MeasurementState } from '../model/MeasurementLine.js';
@@ -35,7 +36,7 @@ export default class MeasurementLineNode extends VBox {
 
 
     const cameraPath = new Path( new Shape(
-      'M512 144v288c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48h88l12.3-32.9c7-18.7 24.9-31.1 44.9-31.1h125.5c20 0 37.9 12.4 44.9 31.1L376 96h88c26.5 0 48 21.5 48 48z'
+      quantumMeasurementConstants.CAMERA_SOLID_SHAPE_SVG
     ).makeImmutable(), {
       fill: 'black',
       scale: 0.1,
@@ -59,7 +60,8 @@ export default class MeasurementLineNode extends VBox {
       scale: 0.6
     } );
     const cameraNode = new Node( {
-      children: [ cameraPath, measurementArcPath, measurementArrowPath ]
+      children: [ cameraPath, measurementArcPath, measurementArrowPath ],
+      scale: 0.7
     } );
 
     simpleBlochSphere.stateVectorVisibleProperty.value = false;
