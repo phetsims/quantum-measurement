@@ -19,6 +19,7 @@ import LaserPointerNode from '../../../../scenery-phet/js/LaserPointerNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { AlignBox, Color, Node, NodeOptions, Text } from '../../../../scenery/js/imports.js';
 import HSlider from '../../../../sun/js/HSlider.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import Laser from '../model/Laser.js';
@@ -74,7 +75,7 @@ export default class LaserNode extends Node {
         trackStroke: Color.DARK_GRAY,
         trackFillEnabled: Color.BLACK,
         thumbSize: new Dimension2( laserBodySize.height * 0.25, laserBodySize.height * 0.5 ),
-        thumbFill: 'rgb( 0, 255, 0)',
+        thumbFill: QuantumMeasurementColors.photonBaseColorProperty,
         thumbFillHighlighted: 'rgb( 0, 200, 0)',
         center: laserPointerNode.bounds.center.plusXY( -nozzleSize.width / 2, 0 ),
         constrainValue: value => Utils.roundSymmetric( value ),
@@ -88,7 +89,7 @@ export default class LaserNode extends Node {
         } ),
         {
           font: new PhetFont( 16 ),
-          fill: Color.GREEN
+          fill: QuantumMeasurementColors.photonBaseColorProperty
         }
       );
       const labelAlignBox = new AlignBox( label, {

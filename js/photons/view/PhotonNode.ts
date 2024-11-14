@@ -10,7 +10,8 @@
 import Matrix3 from '../../../../dot/js/Matrix3.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import { Circle, Color, Node, Path } from '../../../../scenery/js/imports.js';
+import { Circle, Node, Path } from '../../../../scenery/js/imports.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import Photon from '../model/Photon.js';
 
@@ -33,18 +34,22 @@ _.times( NUMBER_OF_STAR_POINTS, i => {
 starShape.close();
 const STAR_SHAPE = starShape.transformed( Matrix3.rotationAround( Math.PI / 5, 0, 0 ) );
 
+const STAR_COLOR = QuantumMeasurementColors.photonBaseColorProperty.value.colorUtilsBrighter( 0.3 );
+const HALO_COLOR = QuantumMeasurementColors.photonBaseColorProperty.value.colorUtilsDarker( 0.15 );
+
 export default class PhotonNode extends Node {
 
   public constructor( photonModel: Photon,
                       modelViewTransform: ModelViewTransform2 ) {
 
     const starNode = new Path( STAR_SHAPE, {
-      fill: new Color( '#ccffcc' ),
+      fill: STAR_COLOR,
+      stroke: STAR_COLOR,
       opacity: 0.75
     } );
 
     const haloNode = new Circle( PHOTON_RADIUS, {
-      fill: new Color( '#00cc00' ),
+      fill: HALO_COLOR,
       opacity: 0.75
     } );
 

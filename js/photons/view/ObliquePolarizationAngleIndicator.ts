@@ -146,9 +146,9 @@ export default class ObliquePolarizationAngleIndicator extends Node {
       headWidth: 6,
       headHeight: 6,
       tailWidth: 2,
-      stroke: '#090',
+      stroke: QuantumMeasurementColors.photonBaseColorProperty.value.colorUtilsDarker( 0.5 ),
       lineWidth: 0.5,
-      fill: '#0f0',
+      fill: QuantumMeasurementColors.photonBaseColorProperty,
       doubleHead: true
     };
     const polarizationVectorNode = new ArrowNode( 0, AXIS_LENGTH, 0, -AXIS_LENGTH, polarizationVectorOptions );

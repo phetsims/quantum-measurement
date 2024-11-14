@@ -216,7 +216,7 @@ class PhotonCountDisplay extends HBox {
     -PhotonCountDisplay.INDICATOR_RADIUS * 0.2,
     -PhotonCountDisplay.INDICATOR_RADIUS * 0.2,
     PhotonCountDisplay.INDICATOR_RADIUS
-  ).addColorStop( 0, new Color( '#aaffaa' ) ).addColorStop( 0.7, Color.GREEN );
+  ).addColorStop( 0, new Color( '#aaffaa' ) ).addColorStop( 0.7, QuantumMeasurementColors.photonBaseColorProperty.value );
 }
 
 /**
