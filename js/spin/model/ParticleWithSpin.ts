@@ -17,8 +17,6 @@ export class ParticleWithSpin {
   public lifetime = 0;
   public activeProperty: BooleanProperty;
 
-  public path: Vector2[] = [];
-
   // Spin values of the particle in the XZ plane along its lifetime
   public spinVectors = [ new Vector2( 0, 0 ), new Vector2( 0, 0 ), new Vector2( 0, 0 ) ];
 
@@ -26,29 +24,31 @@ export class ParticleWithSpin {
   public isSpinUp = [ false, false, false ];
 
   // If the particle spin was already counted for the histograms or detectors
-  public wasCounted = [ false, false, false ];
+  public stageCompleted = [ false, false, false ];
 
   // Start and end position properties for defining the particle paths
-  public startPositionProperty: Vector2Property;
-  public endPositionProperty: Vector2Property;
+  public startPosition: Vector2;
+  public endPosition: Vector2;
 
   public positionProperty: Vector2Property;
   public velocityProperty: Vector2Property;
   public speed = 1;
-
+  
   public constructor( private readonly offset: Vector2 ) {
     this.activeProperty = new BooleanProperty( false );
     this.positionProperty = new Vector2Property( Vector2.ZERO );
     this.velocityProperty = new Vector2Property( Vector2.ZERO );
 
-    this.startPositionProperty = new Vector2Property( Vector2.ZERO );
-    this.endPositionProperty = new Vector2Property( new Vector2( 1, 0 ) );
+    this.startPosition = Vector2.ZERO;
+    this.endPosition = new Vector2( 1, 0 );
+  }
 
-    this.endPositionProperty.link( endPosition => {
-      this.positionProperty.value = this.startPositionProperty.value.plus( this.offset );
-      this.velocityProperty.value = endPosition.minus( this.startPositionProperty.value ).withMagnitude( this.speed );
-      }
-    );
+  public updatePath( start: Vector2, end: Vector2, extraTime = 0 ): void {
+    this.startPosition = start;
+    this.endPosition = end;
+    this.positionProperty.value = this.startPosition.plus( this.offset );
+    this.velocityProperty.value = this.endPosition.minus( this.startPosition ).withMagnitude( this.speed );
+    this.step( extraTime );
   }
 
   public step( dt: number ): void {
@@ -68,7 +68,7 @@ export class ParticleWithSpin {
     this.activeProperty.value = false;
     this.spinVectors.forEach( vector => vector.setXY( 0, 0 ) );
     this.positionProperty.reset();
-    this.wasCounted = [ false, false, false ];
+    this.stageCompleted = [ false, false, false ];
   }
 }
 

@@ -82,9 +82,7 @@ export default class SpinModel implements TModel {
 
     this.particleSourceModel = new ParticleSourceModel( new Vector2( -0.5, 0 ), providedOptions.tandem.createTandem( 'particleSourceModel' ) );
 
-    this.particleSystem = new ParticleSystem(
-      this
-    );
+    this.particleSystem = new ParticleSystem( this );
 
     this.blochSphere = new SimpleBlochSphere(
       this.particleSourceModel.customSpinStateProperty, { tandem: providedOptions.tandem.createTandem( 'blochSphere' ) }

@@ -24,6 +24,7 @@ export default class ParticleSourceModel {
 
   public readonly spinStateProperty: Property<SpinDirection>;
   public readonly customSpinStateProperty: Vector2Property;
+  // TODO: Create a derivedSpinStateProperty that maps the customSpinStateProperty, see https://github.com/phetsims/quantum-measurement/issues/53
 
   public readonly sourceModeProperty: Property<SourceMode>;
   public readonly isContinuousModeProperty: TReadOnlyProperty<boolean>;

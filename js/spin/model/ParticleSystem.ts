@@ -21,6 +21,8 @@ const MAX_NUMBER_OF_MULTIPLE_PARTICLES = 5000;
 const PARTICLE_RAY_WIDTH = 0.02;
 const MAX_PARTICLE_CREATION_RATE = 5; // max rate of particles created per second
 
+const HORIZONTAL_ENDPOINT = new Vector2( 10, 0 );
+
 export class ParticleSystem {
 
   // Single particles shot by the user
@@ -46,7 +48,7 @@ export class ParticleSystem {
       return new ParticleWithSpin( Vector2.ZERO );
     } );
     this.multipleParticles = _.times( MAX_NUMBER_OF_MULTIPLE_PARTICLES, () => {
-      return new ParticleWithSpin( new Vector2( PARTICLE_RAY_WIDTH * ( dotRandom.nextDouble() * 2 - 1 ), PARTICLE_RAY_WIDTH * ( dotRandom.nextDouble() * 2 - 1 ) ) );
+      return new ParticleWithSpin( new Vector2( 0, PARTICLE_RAY_WIDTH * ( dotRandom.nextDouble() * 2 - 1 ) ) );
     } );
 
   }
@@ -64,13 +66,13 @@ export class ParticleSystem {
     particle.activeProperty.value = true;
 
     // Set the first spin vector to the state of the generated particles
-    particle.spinVectors[ 0 ] = SpinDirection.spinToVector( this.model.particleSourceModel.spinStateProperty.value );
+    particle.spinVectors[ 0 ] = this.model.particleSourceModel.customSpinStateProperty.value;
 
-    particle.startPositionProperty.value = this.model.particleSourceModel.exitPositionProperty.value;
-
-    // Put the end position at the back wall of the first SG
-    particle.endPositionProperty.value = this.model.sternGerlachs[ 0 ].entrancePositionProperty.value.plusXY(
-      SternGerlach.STERN_GERLACH_WIDTH, 0
+    particle.updatePath(
+      this.model.particleSourceModel.exitPositionProperty.value,
+      this.model.sternGerlachs[ 0 ].entrancePositionProperty.value.plusXY(
+        SternGerlach.STERN_GERLACH_WIDTH, 0
+      )
     );
   }
 
@@ -121,7 +123,7 @@ export class ParticleSystem {
           if ( behindMeasurementLine[ index ] && !line.isParticleBehind( particle.positionProperty.value ) ) {
             line.measurementStateProperty.value = MeasurementState.MEASURING;
             line.spinStateProperty.value = particle.spinVectors[ index ];
-            // particle.wasCounted[ index ] = true;
+            // particle.stageCompleted[ index ] = true;
           }
         } );
       } );
@@ -167,52 +169,63 @@ export class ParticleSystem {
   }
 
   private decideParticleDestiny( particle: ParticleWithSpin ): void {
-    const dx = 0.03; // Threshold to trigger a change in the particle's path
-
     const wasParticleBlocked = this.checkParticleBlocking( particle );
     if ( wasParticleBlocked ) {
       return;
     }
 
     // If the particle were to reach its end position, measure it and decide on a new path
-    if ( particle.positionProperty.value.x > particle.endPositionProperty.value.x - dx ) {
-      if ( !particle.wasCounted[ 0 ] ) {
+    if ( particle.positionProperty.value.x > particle.endPosition.x ) {
+      const extraDistance = particle.positionProperty.value.x - particle.endPosition.x;
+      const extraTime = extraDistance / particle.speed;
+
+      const isShortExperiment = this.model.currentExperimentProperty.value.isShortExperiment;
+
+      if ( !particle.stageCompleted[ 0 ] ) {
         const isResultUp = this.measureParticle( particle, this.model.sternGerlachs[ 0 ], 1, this.model.particleSourceModel.customSpinStateProperty.value );
         this.model.sternGerlachs[ 0 ].count( isResultUp );
-        particle.wasCounted[ 0 ] = true;
 
-        particle.startPositionProperty.value = isResultUp ?
-                                               this.model.sternGerlachs[ 0 ].topExitPositionProperty.value :
-                                               this.model.sternGerlachs[ 0 ].bottomExitPositionProperty.value;
-        if ( this.model.currentExperimentProperty.value.isShortExperiment ) {
-          particle.endPositionProperty.value = isResultUp ?
-                                               this.model.sternGerlachs[ 0 ].topExitPositionProperty.value.plusXY( 10, 0 ) : // To infinity
-                                               this.model.sternGerlachs[ 0 ].bottomExitPositionProperty.value.plusXY( 10, 0 ); // To infinity
+        const startPosition = isResultUp ?
+                              this.model.sternGerlachs[ 0 ].topExitPositionProperty.value :
+                              this.model.sternGerlachs[ 0 ].bottomExitPositionProperty.value;
+        if ( isShortExperiment ) {
+          const endPosition = isResultUp ?
+                              this.model.sternGerlachs[ 0 ].topExitPositionProperty.value.plus( HORIZONTAL_ENDPOINT ) : // To infinity
+                              this.model.sternGerlachs[ 0 ].bottomExitPositionProperty.value.plus( HORIZONTAL_ENDPOINT ); // To infinity
+          particle.updatePath( startPosition, endPosition, extraTime );
         }
         else {
-          particle.endPositionProperty.value = isResultUp ?
-                                               this.model.sternGerlachs[ 1 ].entrancePositionProperty.value :
-                                               this.model.sternGerlachs[ 2 ].entrancePositionProperty.value;
+          const endPosition = isResultUp ?
+                              this.model.sternGerlachs[ 1 ].entrancePositionProperty.value :
+                              this.model.sternGerlachs[ 2 ].entrancePositionProperty.value;
+          particle.updatePath( startPosition, endPosition, extraTime );
         }
+
+        particle.stageCompleted[ 0 ] = true;
+
       }
-      else if ( !particle.wasCounted[ 1 ] && !this.model.currentExperimentProperty.value.isShortExperiment ) {
-        particle.wasCounted[ 1 ] = true;
-        particle.startPositionProperty.value = particle.endPositionProperty.value;
-        particle.endPositionProperty.value = particle.endPositionProperty.value.plusXY(
+      else if ( !isShortExperiment && !particle.stageCompleted[ 1 ] ) {
+        const startPosition = particle.endPosition;
+        const endPosition = particle.endPosition.plusXY(
           SternGerlach.STERN_GERLACH_WIDTH, 0
         );
+        particle.updatePath( startPosition, endPosition, extraTime );
+
+        particle.stageCompleted[ 1 ] = true;
       }
-      else if ( !particle.wasCounted[ 2 ] && !this.model.currentExperimentProperty.value.isShortExperiment ) {
+      else if ( !isShortExperiment && !particle.stageCompleted[ 2 ] ) {
         const sternGerlach = particle.isSpinUp[ 1 ] ? this.model.sternGerlachs[ 1 ] : this.model.sternGerlachs[ 2 ];
         const isResultUp = this.measureParticle(
           particle, sternGerlach, 2, particle.spinVectors[ 1 ] );
         sternGerlach.count( isResultUp );
-        particle.wasCounted[ 2 ] = true;
 
-        particle.startPositionProperty.value = isResultUp ?
-                                               sternGerlach.topExitPositionProperty.value :
-                                               sternGerlach.bottomExitPositionProperty.value;
-        particle.endPositionProperty.value = particle.startPositionProperty.value.plusXY( 10, 0 );
+        const startPosition = isResultUp ?
+                              sternGerlach.topExitPositionProperty.value :
+                              sternGerlach.bottomExitPositionProperty.value;
+        const endPosition = particle.startPosition.plus( HORIZONTAL_ENDPOINT ); // To infinity
+        particle.updatePath( startPosition, endPosition, extraTime );
+
+        particle.stageCompleted[ 2 ] = true;
       }
     }
   }
