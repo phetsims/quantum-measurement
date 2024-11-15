@@ -88,8 +88,7 @@ export default class LaserNode extends Node {
           value: model.emissionRateProperty
         } ),
         {
-          font: new PhetFont( 16 ),
-          fill: QuantumMeasurementColors.photonBaseColorProperty
+          font: new PhetFont( 16 )
         }
       );
       const labelAlignBox = new AlignBox( label, {
