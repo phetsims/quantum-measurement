@@ -4,13 +4,10 @@
  * ParticleWithSpin is the model for a particle with a predetermined spin. It has a lifetime, which will
  * determine its position in the Ray Path, and a spin value, which will be modified as it passes through the SG apparatuses.
  *
- * This time is not measured in seconds, but rather, scaled to the different moments in the life of the particle.
- *
  * @author Agustín Vallejo
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import Emitter from '../../../../axon/js/Emitter.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
@@ -31,18 +28,30 @@ export class ParticleWithSpin {
   // Same but simplified to spinUp booleans
   public isSpinUp = [ false, false, false ];
 
-  // If the particle spin was already counted for the histograms. First spin is never counted, should always be false
+  // If the particle spin was already counted for the histograms or detectors
   public wasCounted = [ false, false, false ];
 
-  // Emitter to trigger a measurement by the model
-  public readyToBeMeasuredEmitter = new Emitter();
+  // Start and end position properties for defining the particle paths
+  public startPositionProperty: Vector2Property;
+  public endPositionProperty: Vector2Property;
 
   public positionProperty: Vector2Property;
+  public velocityProperty: Vector2Property;
   public speed = 1;
 
   public constructor( private readonly offset: Vector2 ) {
     this.activeProperty = new BooleanProperty( false );
     this.positionProperty = new Vector2Property( Vector2.ZERO );
+    this.velocityProperty = new Vector2Property( Vector2.ZERO );
+
+    this.startPositionProperty = new Vector2Property( Vector2.ZERO );
+    this.endPositionProperty = new Vector2Property( new Vector2( 1, 0 ) );
+
+    this.endPositionProperty.link( endPosition => {
+      this.positionProperty.value = this.startPositionProperty.value.plus( this.offset );
+      this.velocityProperty.value = endPosition.minus( this.startPositionProperty.value ).withMagnitude( this.speed );
+      }
+    );
   }
 
   /**
@@ -57,54 +66,12 @@ export class ParticleWithSpin {
     if ( this.activeProperty.value ) {
       this.lifetime += dt;
 
-      this.calculatePosition();
+      this.positionProperty.value = this.positionProperty.value.plus( this.velocityProperty.value.times( dt ) );
 
       if ( this.lifetime > 5 ) {
         this.reset();
       }
     }
-  }
-
-  public calculatePosition(): void {
-
-    // Travel until the final point, then stop
-    const travel = ( a: Vector2, b: Vector2, t: number ): Vector2 => {
-      const direction = b.minus( a ).normalized();
-      const distance = this.speed * t;
-      return a.plus( direction.times( distance ) );
-    };
-
-    // Similar to travel but if it reached the end, move to the next pair of vectors until the end
-    const pathTravel = ( path: Vector2[], t: number ): Vector2 => {
-      let traveledTime = t;
-      let traveledDistance = this.speed * t;
-      let currentPosition = path[ 0 ];
-      let start = path[ 0 ];
-      let end = path[ 1 ];
-      let segmentDistance = start.distance( end );
-
-      for ( let i = 0; i < path.length - 1; i++ ) {
-        start = path[ i ];
-        end = path[ i + 1 ];
-        segmentDistance = start.distance( end );
-
-        if ( traveledDistance < segmentDistance ) {
-          return travel( start, end, traveledTime );
-        }
-        else {
-          traveledTime -= segmentDistance / this.speed;
-          traveledDistance -= segmentDistance;
-          currentPosition = end;
-        }
-      }
-      traveledTime += segmentDistance / this.speed;
-
-      return travel( path[ path.length - 2 ], currentPosition, traveledTime );
-    };
-
-    // Travel along the path
-    this.positionProperty.value = pathTravel( this.path, this.lifetime ).plus( this.offset );
-
   }
 
   public reset(): void {

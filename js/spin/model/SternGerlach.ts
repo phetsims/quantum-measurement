@@ -55,10 +55,10 @@ export default class SternGerlach {
 
 
   // Constants
-  public readonly STERN_GERLACH_WIDTH = 150 / 200;
-  public readonly STERN_GERLACH_HEIGHT = 100 / 200;
-  public readonly PARTICLE_HOLE_WIDTH = 5 / 200;
-  public readonly PARTICLE_HOLE_HEIGHT = 20 / 200;
+  public static readonly STERN_GERLACH_WIDTH = 150 / 200;
+  public static readonly STERN_GERLACH_HEIGHT = 100 / 200;
+  public static readonly PARTICLE_HOLE_WIDTH = 5 / 200;
+  public static readonly PARTICLE_HOLE_HEIGHT = 20 / 200;
 
   public constructor( position: Vector2, isZOriented: boolean, tandem: Tandem ) {
 
@@ -67,13 +67,13 @@ export default class SternGerlach {
     } );
 
     this.entranceLocalPosition = new Vector2(
-      -this.STERN_GERLACH_WIDTH / 2 - this.PARTICLE_HOLE_WIDTH / 2, 0 );
+      -SternGerlach.STERN_GERLACH_WIDTH / 2 - SternGerlach.PARTICLE_HOLE_WIDTH / 2, 0 );
 
     this.topExitLocalPosition = new Vector2(
-      this.STERN_GERLACH_WIDTH / 2 + this.PARTICLE_HOLE_WIDTH / 2, this.STERN_GERLACH_HEIGHT / 4 );
+      SternGerlach.STERN_GERLACH_WIDTH / 2 + SternGerlach.PARTICLE_HOLE_WIDTH / 2, SternGerlach.STERN_GERLACH_HEIGHT / 4 );
 
     this.bottomExitLocalPosition = new Vector2(
-      this.STERN_GERLACH_WIDTH / 2 + this.PARTICLE_HOLE_WIDTH / 2, -this.STERN_GERLACH_HEIGHT / 4 );
+      SternGerlach.STERN_GERLACH_WIDTH / 2 + SternGerlach.PARTICLE_HOLE_WIDTH / 2, -SternGerlach.STERN_GERLACH_HEIGHT / 4 );
 
     this.entrancePositionProperty = new DerivedProperty( [ this.positionProperty ], ( position: Vector2 ) => {
       return position.plus( this.entranceLocalPosition );

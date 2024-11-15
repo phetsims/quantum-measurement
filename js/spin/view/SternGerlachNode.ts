@@ -32,10 +32,10 @@ export default class SternGerlachNode extends Node {
     ) {
 
     // Transformed constants
-    const STERN_GERLACH_WIDTH = modelViewTransform.modelToViewDeltaX( sternGerlach.STERN_GERLACH_WIDTH );
-    const STERN_GERLACH_HEIGHT = modelViewTransform.modelToViewDeltaY( -sternGerlach.STERN_GERLACH_HEIGHT ); // Minus because of inverted Y
-    const PARTICLE_HOLE_WIDTH = modelViewTransform.modelToViewDeltaX( sternGerlach.PARTICLE_HOLE_WIDTH );
-    const PARTICLE_HOLE_HEIGHT = modelViewTransform.modelToViewDeltaY( -sternGerlach.PARTICLE_HOLE_HEIGHT ); // Minus because of inverted Y
+    const STERN_GERLACH_WIDTH = modelViewTransform.modelToViewDeltaX( SternGerlach.STERN_GERLACH_WIDTH );
+    const STERN_GERLACH_HEIGHT = modelViewTransform.modelToViewDeltaY( -SternGerlach.STERN_GERLACH_HEIGHT ); // Minus because of inverted Y
+    const PARTICLE_HOLE_WIDTH = modelViewTransform.modelToViewDeltaX( SternGerlach.PARTICLE_HOLE_WIDTH );
+    const PARTICLE_HOLE_HEIGHT = modelViewTransform.modelToViewDeltaY( -SternGerlach.PARTICLE_HOLE_HEIGHT ); // Minus because of inverted Y
 
     // Component for the entry and exit points of the SG sternGerlach
     const createParticleHole = ( center: Vector2 ) => {
@@ -81,6 +81,7 @@ export default class SternGerlachNode extends Node {
     super( {
       tandem: providedOptions.tandem,
       visibleProperty: sternGerlach.isVisibleProperty,
+      opacity: 0.1,
       children: [
 
         // Main body of the SG sternGerlach
