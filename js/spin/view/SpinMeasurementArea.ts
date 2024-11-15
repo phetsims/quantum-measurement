@@ -198,7 +198,7 @@ export default class SpinMeasurementArea extends VBox {
           } ) )
     ];
 
-    const singleParticleNodes = model.singleParticles.map( particle => {
+    const singleParticleNodes = model.particleSystem.singleParticles.map( particle => {
       const particleNode = new ShadedSphereNode( 15, {
         mainColor: QuantumMeasurementColors.particleColor,
         highlightColor: 'white',
@@ -213,7 +213,7 @@ export default class SpinMeasurementArea extends VBox {
     } );
 
     const manyParticlesCanvasNode = new ManyParticlesCanvasNode(
-      model.multipleParticles,
+      model.particleSystem.multipleParticles,
       modelViewTransform,
       layoutBounds,
       { tandem: tandem.createTandem( 'manyParticlesCanvasNode' ) }

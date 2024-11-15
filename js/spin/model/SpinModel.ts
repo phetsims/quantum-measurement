@@ -16,16 +16,14 @@ import Multilink from '../../../../axon/js/Multilink.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import dotRandom from '../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import TModel from '../../../../joist/js/TModel.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import MeasurementLine, { MeasurementState } from './MeasurementLine.js';
-import ParticleRays from './ParticleRays.js';
+import MeasurementLine from './MeasurementLine.js';
 import ParticleSourceModel from './ParticleSourceModel.js';
-import { ParticleWithSpin } from './ParticleWithSpin.js';
+import { ParticleSystem } from './ParticleSystem.js';
 import SimpleBlochSphere from './SimpleBlochSphere.js';
 import { SourceMode } from './SourceMode.js';
 import { SpinDirection } from './SpinDirection.js';
@@ -39,11 +37,6 @@ type SelfOptions = {
 type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
 // Constants
-
-const MAX_NUMBER_OF_SINGLE_PARTICLES = 50;
-const MAX_NUMBER_OF_MULTIPLE_PARTICLES = 5000;
-const PARTICLE_RAY_WIDTH = 0.02;
-const MAX_PARTICLE_CREATION_RATE = 5; // max rate of particles created per second
 export const BLOCKER_OFFSET = new Vector2( 0.1, 0 );
 
 export default class SpinModel implements TModel {
@@ -55,20 +48,12 @@ export default class SpinModel implements TModel {
   public readonly upProbabilityProperty: NumberProperty;
   public readonly downProbabilityProperty: NumberProperty;
 
-  // Single particles shot by the user
-  public readonly singleParticles: ParticleWithSpin[];
-
-  // Particle beam for the continuous source mode
-  public readonly multipleParticles: ParticleWithSpin[];
 
   // Current experiment selected by the user
   public readonly currentExperimentProperty: Property<SpinExperiment>;
   public readonly isCustomExperimentProperty: TReadOnlyProperty<boolean>;
 
-  // MODEL ELEMENTS OF UI COMPONENTS ------------------------------------------------
-
-  // Information of the particle paths
-  public readonly particleRays: ParticleRays;
+  public readonly particleSystem: ParticleSystem;
 
   // Model for the particle shooting apparatus
   public readonly particleSourceModel: ParticleSourceModel;
@@ -87,9 +72,6 @@ export default class SpinModel implements TModel {
   public readonly blockUpperExitProperty: BooleanProperty;
   public readonly exitBlockerPositionProperty: TReadOnlyProperty<Vector2>;
 
-  // The fractional accumulator for the emission rate, which is used to determine how many particles to create each step.
-  private fractionalEmissionAccumulator = 0;
-
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
     this.currentExperimentProperty = new Property<SpinExperiment>( SpinExperiment.CUSTOM );
@@ -99,6 +81,10 @@ export default class SpinModel implements TModel {
     );
 
     this.particleSourceModel = new ParticleSourceModel( new Vector2( -0.5, 0 ), providedOptions.tandem.createTandem( 'particleSourceModel' ) );
+
+    this.particleSystem = new ParticleSystem(
+      this
+    );
 
     this.blochSphere = new SimpleBlochSphere(
       this.particleSourceModel.customSpinStateProperty, { tandem: providedOptions.tandem.createTandem( 'blochSphere' ) }
@@ -140,25 +126,10 @@ export default class SpinModel implements TModel {
       )
     ];
 
-    this.particleRays = new ParticleRays( this.particleSourceModel, this.sternGerlachs );
-
-    // Create all particles that will be used in the experiment.  It works better for phet-io if these are created at
-    // construction time and activated and deactivated as needed, rather than creating and destroying them.
-    this.singleParticles = _.times( MAX_NUMBER_OF_SINGLE_PARTICLES, () => {
-      return new ParticleWithSpin( Vector2.ZERO );
-    } );
-    this.multipleParticles = _.times( MAX_NUMBER_OF_MULTIPLE_PARTICLES, () => {
-      return new ParticleWithSpin( new Vector2( PARTICLE_RAY_WIDTH * ( dotRandom.nextDouble() * 2 - 1 ), PARTICLE_RAY_WIDTH * ( dotRandom.nextDouble() * 2 - 1 ) ) );
-    } );
-
     // Find the first inactive single particle and activate it
     this.particleSourceModel.currentlyShootingParticlesProperty.link( shooting => {
       if ( shooting ) {
-        const particleToActivate = this.singleParticles.find( particle => !particle.activeProperty.value );
-
-        if ( particleToActivate ) {
-          this.activateParticle( particleToActivate );
-        }
+        this.particleSystem.shootSingleParticle();
       }
     } );
 
@@ -227,9 +198,6 @@ export default class SpinModel implements TModel {
         this.blockUpperExitProperty
       ],
       ( experiment, sourceMode, spinState, blockUpperExit ) => {
-        this.particleRays.reset();
-        this.particleRays.isShortExperiment = experiment.isShortExperiment;
-        this.particleRays.updateExperiment();
         this.sternGerlachs.forEach( sternGerlach => sternGerlach.reset() );
 
         if ( experiment !== SpinExperiment.CUSTOM ) {
@@ -244,8 +212,7 @@ export default class SpinModel implements TModel {
 
         this.measurementLines.forEach( line => line.measurementStateProperty.reset() );
 
-        this.singleParticles.forEach( particle => particle.reset() );
-        this.multipleParticles.forEach( particle => particle.reset() );
+        this.particleSystem.reset();
 
         this.sternGerlachs.forEach( ( SternGerlach, index ) => {
           if ( experiment.experimentSetting.length > index ) {
@@ -271,59 +238,6 @@ export default class SpinModel implements TModel {
     );
   }
 
-  /**
-   * Given the incoming state of a particle, calculate the result of a SG measurement on a particle and set its spin
-   */
-  private measureParticle(
-    particle: ParticleWithSpin,
-    sternGerlach: SternGerlach,
-    experimentStageIndex: number,
-    incomingState: Vector2 ): boolean {
-
-    const upProbability = sternGerlach.prepare( incomingState );
-    const isResultUp = dotRandom.nextDouble() < upProbability;
-    particle.isSpinUp[ experimentStageIndex ] = isResultUp;
-    particle.spinVectors[ experimentStageIndex ] = SpinDirection.spinToVector(
-      isResultUp ?
-      sternGerlach.isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS :
-      sternGerlach.isZOrientedProperty.value ? SpinDirection.Z_MINUS : null
-    );
-    return isResultUp;
-  }
-
-  private activateParticle( particle: ParticleWithSpin ): void {
-    particle.reset();
-    particle.activeProperty.value = true;
-
-    // Set the first spin vector to the state of the generated particles
-    particle.spinVectors[ 0 ] = SpinDirection.spinToVector( this.particleSourceModel.spinStateProperty.value );
-
-    particle.startPositionProperty.value = this.particleSourceModel.exitPositionProperty.value;
-
-    // Put the end position at the back wall of the first SG
-    particle.endPositionProperty.value = this.sternGerlachs[ 0 ].entrancePositionProperty.value.plusXY(
-      SternGerlach.STERN_GERLACH_WIDTH, 0
-    );
-
-    // // First measurement: SG0 where the particle decides to go up or down
-    // const isResultUp = this.measureParticle( particle, this.sternGerlachs[ 0 ], 1, this.particleSourceModel.customSpinStateProperty.value );
-    //
-    // // If current experiment is short, the particle only goes through SG0
-    // if ( !this.currentExperimentProperty.value.isShortExperiment ) {
-    //   if ( isResultUp ) {
-    //     // If it went up, go through SG1
-    //     this.measureParticle( particle, this.sternGerlachs[ 1 ], 2, SpinDirection.spinToVector( this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS ) );
-    //   }
-    //   else {
-    //     // If it went down, go through SG2
-    //     this.measureParticle( particle, this.sternGerlachs[ 2 ], 2, SpinDirection.spinToVector( this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_MINUS : null ) );
-    //   }
-    // }
-    //
-    // // Once the particle knows the directions it took, we assign the path to it
-    // this.particleRays.assignRayToParticle( particle );
-  }
-
   public prepare(): void {
     const experimentSetting = this.currentExperimentProperty.value.experimentSetting;
 
@@ -345,146 +259,11 @@ export default class SpinModel implements TModel {
     }
   }
 
-  /**
-   * Steps the model.
-   * @param dt - time step, in seconds
-   */
   public step( dt: number ): void {
-
     // Stepping the Stern Gerlachs so their counters average over time
     this.sternGerlachs.forEach( sternGerlach => sternGerlach.step( dt ) );
 
-    if ( !this.particleSourceModel.isContinuousModeProperty.value ) {
-      // Filter out the active single particles
-      const activeSingleParticles = this.singleParticles.filter( particle => particle.activeProperty.value );
-
-      // Moves single particles and triggers measurements when they pass through Measuring Lines
-      activeSingleParticles.forEach( particle => {
-        particle.step( dt );
-
-        // If the particle crosses a measurement line, we update the line
-        this.measurementLines.forEach( ( line, index ) => {
-          if ( !particle.wasCounted[ index ] && !line.isParticleBehind( particle.positionProperty.value ) ) {
-            line.measurementStateProperty.value = MeasurementState.MEASURING;
-            line.spinStateProperty.value = particle.spinVectors[ index ];
-            particle.wasCounted[ index ] = true;
-          }
-        } );
-      } );
-    }
-    else {
-      // Generates the stream of particles. They are activated, not created, as they are already created at construction.
-      this.activateMultipleParticles();
-
-      // Make a list of all particles that are on a path that could potentially be blocked by the exit blocker.
-      const activeMultipleParticles = this.multipleParticles.filter( particle => particle.activeProperty.value );
-
-      // Step all active particles, and deactivate them if they cross the exit blocker position, and step them
-      // normally if not.
-      activeMultipleParticles.forEach( particle => {
-        particle.step( dt );
-        this.decideParticleDestiny( particle );
-      } );
-    }
-  }
-
-  private activateMultipleParticles(): void {
-    // Calculate the number of particles to produce in this time step based on the particle amount property, the max
-    // creation rate, and the time step.  This could include a fractional amount.
-    const particlesToActivate = this.particleSourceModel.particleAmountProperty.value * MAX_PARTICLE_CREATION_RATE;
-
-    // Calculate the whole number to actually activate, and use the fractional accumlator in the process.
-    let wholeParticlesToActivate = Math.floor( particlesToActivate );
-
-    this.fractionalEmissionAccumulator += particlesToActivate - wholeParticlesToActivate;
-
-    if ( this.fractionalEmissionAccumulator >= 1 ) {
-      wholeParticlesToActivate++;
-      this.fractionalEmissionAccumulator -= 1;
-    }
-
-    // Activate the particles.
-    for ( let i = 0; i < wholeParticlesToActivate; i++ ) {
-      const particleToActivate = this.multipleParticles.find( particle => !particle.activeProperty.value );
-      assert && assert( particleToActivate, 'no inactive particles available, increase the initial creation amount' );
-      if ( particleToActivate ) {
-        this.activateParticle( particleToActivate );
-      }
-    }
-  }
-
-  /**
-   * Check if the particle would be blocked by the exit blocker, and if so, reset it and return true.
-   */
-  private checkParticleBlocking( particle: ParticleWithSpin ): boolean {
-    if ( this.isBlockingProperty.value ) {
-      if (
-        this.blockUpperExitProperty.value &&
-        particle.isSpinUp[ 1 ] &&
-        ( particle.positionProperty.value.x > this.exitBlockerPositionProperty.value.x ) ) {
-        particle.reset();
-        return true;
-      }
-      else if (
-        !this.blockUpperExitProperty.value &&
-        !particle.isSpinUp[ 1 ] &&
-        ( particle.positionProperty.value.x > this.exitBlockerPositionProperty.value.x ) ) {
-        particle.reset();
-        return true;
-      }
-    }
-    return false;
-  }
-
-  private decideParticleDestiny( particle: ParticleWithSpin ): void {
-    const dx = 0.03; // Threshold to trigger a change in the particle's path
-
-    const wasParticleBlocked = this.checkParticleBlocking( particle );
-    if ( wasParticleBlocked ) {
-      return;
-    }
-
-    // If the particle were to reach its end position, measure it and decide on a new path
-    if ( particle.positionProperty.value.x > particle.endPositionProperty.value.x - dx ) {
-      if ( !particle.wasCounted[ 0 ] ) {
-        const isResultUp = this.measureParticle( particle, this.sternGerlachs[ 0 ], 1, this.particleSourceModel.customSpinStateProperty.value );
-        this.sternGerlachs[ 0 ].count( isResultUp );
-        particle.wasCounted[ 0 ] = true;
-
-        particle.startPositionProperty.value = isResultUp ?
-                                               this.sternGerlachs[ 0 ].topExitPositionProperty.value :
-                                               this.sternGerlachs[ 0 ].bottomExitPositionProperty.value;
-        if ( this.currentExperimentProperty.value.isShortExperiment ) {
-          particle.endPositionProperty.value = isResultUp ?
-                                               this.sternGerlachs[ 0 ].topExitPositionProperty.value.plusXY( 10, 0 ) : // To infinity
-                                               this.sternGerlachs[ 0 ].bottomExitPositionProperty.value.plusXY( 10, 0 ); // To infinity
-        }
-        else {
-          particle.endPositionProperty.value = isResultUp ?
-                                                this.sternGerlachs[ 1 ].entrancePositionProperty.value :
-                                                this.sternGerlachs[ 2 ].entrancePositionProperty.value;
-        }
-      }
-      else if ( !particle.wasCounted[ 1 ] && !this.currentExperimentProperty.value.isShortExperiment ) {
-        particle.wasCounted[ 1 ] = true;
-        particle.startPositionProperty.value = particle.endPositionProperty.value;
-        particle.endPositionProperty.value = particle.endPositionProperty.value.plusXY(
-          SternGerlach.STERN_GERLACH_WIDTH, 0
-        );
-      }
-      else if ( !particle.wasCounted[ 2 ] && !this.currentExperimentProperty.value.isShortExperiment ) {
-        const sternGerlach = particle.isSpinUp[ 1 ] ? this.sternGerlachs[ 1 ] : this.sternGerlachs[ 2 ];
-        const isResultUp = this.measureParticle(
-          particle, sternGerlach, 2, particle.spinVectors[ 1 ] );
-        sternGerlach.count( isResultUp );
-        particle.wasCounted[ 2 ] = true;
-
-        particle.startPositionProperty.value = isResultUp ?
-                                               sternGerlach.topExitPositionProperty.value :
-                                                sternGerlach.bottomExitPositionProperty.value;
-        particle.endPositionProperty.value = particle.startPositionProperty.value.plusXY( 10, 0 );
-      }
-    }
+    this.particleSystem.step( dt );
   }
 
   /**
@@ -492,13 +271,11 @@ export default class SpinModel implements TModel {
    */
   public reset(): void {
     this.sternGerlachs.forEach( sternGerlach => sternGerlach.reset() );
-    this.singleParticles.forEach( particle => particle.reset() );
-    this.multipleParticles.forEach( particle => particle.reset() );
+    this.particleSystem.reset();
     this.measurementLines.forEach( line => line.reset() );
     this.currentExperimentProperty.reset();
     this.particleSourceModel.spinStateProperty.reset();
     this.particleSourceModel.reset();
-    this.fractionalEmissionAccumulator = 0;
   }
 
 }

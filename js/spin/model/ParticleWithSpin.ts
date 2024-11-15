@@ -12,9 +12,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
-// constants
-const SPEED_MULTIPLIER = 1.5;
-
 export class ParticleWithSpin {
 
   public lifetime = 0;
@@ -52,14 +49,6 @@ export class ParticleWithSpin {
       this.velocityProperty.value = endPosition.minus( this.startPositionProperty.value ).withMagnitude( this.speed );
       }
     );
-  }
-
-  /**
-   * Updates the speed of the particle based on the distance between the first two points of the path.
-   * When the multiplier is 1, it takes 1s to transverse from the emitting source to the first SG apparatus.
-   */
-  public updateSpeed(): void {
-    this.speed = SPEED_MULTIPLIER * this.path[ 0 ].distance( this.path[ 1 ] );
   }
 
   public step( dt: number ): void {
