@@ -120,6 +120,10 @@ export default class SternGerlach {
       countSamplePeriod: countSamplePeriod
     } );
 
+    this.isZOrientedProperty.link( () => {
+      this.resetCounts();
+    } );
+
   }
 
   // Updates the counters so they average properly
@@ -167,6 +171,7 @@ export default class SternGerlach {
   }
 
   public reset(): void {
+    this.isZOrientedProperty.reset();
     this.upProbabilityProperty.reset();
     this.expectedSpinProperty.reset();
     this.resetCounts();
