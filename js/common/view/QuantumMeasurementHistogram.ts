@@ -17,7 +17,7 @@ import optionize, { combineOptions } from '../../../../phet-core/js/optionize.js
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import NumberDisplay, { NumberDisplayOptions } from '../../../../scenery-phet/js/NumberDisplay.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { AlignBox, AlignGroup, Color, HBox, Line, Node, NodeOptions, Rectangle, RichText } from '../../../../scenery/js/imports.js';
+import { Color, Line, Node, NodeOptions, Rectangle, RichText } from '../../../../scenery/js/imports.js';
 import { MAX_COINS } from '../../coins/model/CoinsExperimentSceneModel.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
@@ -37,12 +37,17 @@ type SelfOptions = {
   // another at the top of the Y axis.  Both will be labeled.
   showTickMarks?: boolean;
 
+  // Whether the labels should float above the bars (vertical orientation) or beside the bars (horizontal orientation).
+  floatingLabels?: boolean;
+
   // label for the top tick mark, if present
   topTickMarkTextProperty?: TReadOnlyProperty<string>;
 };
 export type QuantumMeasurementHistogramOptions = SelfOptions & WithRequired<NodeOptions, 'tandem' | 'visibleProperty'>;
 
 const HISTOGRAM_SIZE = new Dimension2( 200, 160 ); // size excluding labels at bottom, in screen coordinates
+const RIGHT_HISTOGRAM_BAR_CENTER_X = HISTOGRAM_SIZE.width / 4;
+const LEFT_HISTOGRAM_BAR_CENTER_X = -HISTOGRAM_SIZE.width / 4;
 const AXIS_STROKE = Color.BLACK;
 const AXIS_LINE_WIDTH = 2;
 const LABEL_FONT = new PhetFont( { size: 20, weight: 'bold' } );
@@ -50,6 +55,7 @@ const TICK_MARK_LENGTH = 20;
 const TICK_MARK_FONT = new PhetFont( 14 );
 const NUMBER_DISPLAY_RANGE = new Range( 0, MAX_COINS );
 const NUMBER_DISPLAY_MAX_WIDTH = HISTOGRAM_SIZE.width / 2 * 0.85;
+const FLOATING_LABEL_MARGIN = 5;
 export const HISTOGRAM_BAR_WIDTH = HISTOGRAM_SIZE.width / 6;
 
 export default class QuantumMeasurementHistogram extends Node {
@@ -57,14 +63,10 @@ export default class QuantumMeasurementHistogram extends Node {
   protected readonly xAxis: Line;
   protected readonly yAxis: Line;
 
-  protected readonly leftHistogramBar: Rectangle;
-  protected readonly rightHistogramBar: Rectangle;
-
   protected readonly maxBarHeight: number;
 
   public constructor( leftNumberProperty: TReadOnlyProperty<number>,
                       rightNumberProperty: TReadOnlyProperty<number>,
-                      displayValuesProperty: TReadOnlyProperty<boolean>,
                       providedXAxisLabels: [ RichText, RichText ],
                       providedOptions: QuantumMeasurementHistogramOptions ) {
 
@@ -87,6 +89,7 @@ export default class QuantumMeasurementHistogram extends Node {
       rightFillColorProperty: QuantumMeasurementColors.tailsColorProperty,
       showTickMarks: true,
       topTickMarkTextProperty: new StringProperty( '' ),
+      floatingLabels: false,
       children: [],
       numberDisplayOptions: {
         align: 'center',
@@ -204,52 +207,26 @@ export default class QuantumMeasurementHistogram extends Node {
     const maxBarHeight = yAxis.height;
     const leftFillColorProperty = options.leftFillColorProperty;
     const rightFillColorProperty = options.rightFillColorProperty;
-    const leftHistogramBar = new Rectangle( 0, 0, options.barWidth, maxBarHeight, { fill: leftFillColorProperty } );
-    const rightHistogramBar = new Rectangle( 0, 0, options.barWidth, maxBarHeight, { fill: rightFillColorProperty } );
-
-    const leftAlignGroup = new AlignGroup( { matchVertical: false } );
-    const rightAlignGroup = new AlignGroup( { matchVertical: false } );
-
-    const SPACING = HISTOGRAM_SIZE.width / 4;
-
-    const numberDisplays = new HBox( {
-      children: [
-        new AlignBox( leftNumberDisplay, { group: leftAlignGroup } ),
-        new AlignBox( rightNumberDisplay, { group: rightAlignGroup } )
-      ],
-      centerX: 0,
-      spacing: SPACING,
-      bottom: yAxis.top,
-      visibleProperty: displayValuesProperty
+    const leftHistogramBar = new Rectangle( 0, 0, options.barWidth, maxBarHeight, {
+      fill: leftFillColorProperty,
+      centerX: LEFT_HISTOGRAM_BAR_CENTER_X
+    } );
+    const rightHistogramBar = new Rectangle( 0, 0, options.barWidth, maxBarHeight, {
+      fill: rightFillColorProperty,
+      centerX: RIGHT_HISTOGRAM_BAR_CENTER_X
     } );
 
-    // Create the labels for the X axis.
+    // Create and position the labels for the X axis.
+    const axisLabelMargin = 6;
     const xAxisLeftLabel = providedXAxisLabels[ 0 ];
+    xAxisLeftLabel.centerX = LEFT_HISTOGRAM_BAR_CENTER_X;
+    xAxisLeftLabel.top = xAxis.centerY + axisLabelMargin;
     const xAxisRightLabel = providedXAxisLabels[ 1 ];
+    xAxisRightLabel.centerX = RIGHT_HISTOGRAM_BAR_CENTER_X;
+    xAxisRightLabel.top = xAxis.centerY + axisLabelMargin;
 
     xAxisLeftLabel.rotation = textRotation;
     xAxisRightLabel.rotation = textRotation;
-
-    const xAxisLabels = new HBox( {
-      children: [
-        new AlignBox( xAxisLeftLabel, { group: leftAlignGroup } ),
-        new AlignBox( xAxisRightLabel, { group: rightAlignGroup } )
-      ],
-      centerX: 0,
-      spacing: SPACING,
-      top: xAxis.centerY + 6
-    } );
-    const numberBars = new HBox( {
-      children: [
-        new AlignBox( leftHistogramBar, { group: leftAlignGroup } ),
-        new AlignBox( rightHistogramBar, { group: rightAlignGroup } )
-      ],
-      align: 'bottom',
-      centerX: 0,
-      spacing: SPACING,
-      bottom: xAxis.centerY,
-      stretch: false
-    } );
 
     Multilink.multilink(
       [
@@ -259,10 +236,22 @@ export default class QuantumMeasurementHistogram extends Node {
       ( leftNumber, rightNumber ) => {
         const leftProportion = totalNumberProperty.value ? leftNumber / totalNumberProperty.value : 0;
         leftHistogramBar.setRect( 0, 0, options.barWidth, leftProportion * maxBarHeight );
-        numberBars.bottom = xAxis.centerY;
+        leftHistogramBar.bottom = xAxis.centerY;
         const rightProportion = totalNumberProperty.value ? rightNumber / totalNumberProperty.value : 0;
         rightHistogramBar.setRect( 0, 0, options.barWidth, rightProportion * maxBarHeight );
-        numberBars.bottom = xAxis.centerY;
+        rightHistogramBar.bottom = xAxis.centerY;
+
+        // Update the position of the labels for each of the bars.
+        leftNumberDisplay.centerX = LEFT_HISTOGRAM_BAR_CENTER_X;
+        rightNumberDisplay.centerX = RIGHT_HISTOGRAM_BAR_CENTER_X;
+        if ( options.floatingLabels ) {
+          leftNumberDisplay.bottom = leftHistogramBar.top - FLOATING_LABEL_MARGIN;
+          rightNumberDisplay.bottom = rightHistogramBar.top - FLOATING_LABEL_MARGIN;
+        }
+        else {
+          leftNumberDisplay.bottom = yAxis.top;
+          rightNumberDisplay.bottom = yAxis.top;
+        }
       }
     );
 
@@ -290,16 +279,18 @@ export default class QuantumMeasurementHistogram extends Node {
       tickMarkRelatedChildren.push( topTickMarkLabel );
     }
 
-    // TODO: Why do alignboxes treat us so poorly? https://github.com/phetsims/quantum-measurement/issues/22
     options.children = [
       new Node( {
         children: [
-          numberBars,
+          leftHistogramBar,
+          rightHistogramBar,
           yAxis,
           ...tickMarkRelatedChildren,
           xAxis,
-          xAxisLabels,
-          numberDisplays
+          xAxisLeftLabel,
+          xAxisRightLabel,
+          leftNumberDisplay,
+          rightNumberDisplay
         ]
       } )
     ];
@@ -308,8 +299,6 @@ export default class QuantumMeasurementHistogram extends Node {
 
     this.xAxis = xAxis;
     this.yAxis = yAxis;
-    this.leftHistogramBar = leftHistogramBar;
-    this.rightHistogramBar = rightHistogramBar;
     this.maxBarHeight = maxBarHeight;
   }
 }

@@ -7,7 +7,6 @@
  * @author Agustín Vallejo
  */
 
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
@@ -160,7 +159,6 @@ export default class SpinMeasurementArea extends VBox {
         sternGerlach.downCounterProperty,
         sternGerlach.upProbabilityProperty,
         model.expectedPercentageVisibleProperty,
-        new BooleanProperty( true ),
         [
           new RichText( spinUpLabelStringProperty, { font: new PhetFont( { size: 17, weight: 'bold' } ) } ),
           new RichText( spinDownLabelStringProperty, { font: new PhetFont( { size: 17, weight: 'bold' } ) } )

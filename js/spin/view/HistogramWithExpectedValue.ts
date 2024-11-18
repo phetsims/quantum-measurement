@@ -22,11 +22,10 @@ export default class HistogramWithExpectedValue extends QuantumMeasurementHistog
                       rightNumberProperty: TReadOnlyProperty<number>,
                       leftProbabilityProperty: TReadOnlyProperty<number>,
                       expectedValueVisibleProperty: TReadOnlyProperty<boolean>,
-                      displayValuesProperty: TReadOnlyProperty<boolean>,
                       providedXAxisLabels: [ RichText, RichText ],
                       providedOptions: QuantumMeasurementHistogramOptions ) {
 
-    super( leftNumberProperty, rightNumberProperty, displayValuesProperty, providedXAxisLabels, providedOptions );
+    super( leftNumberProperty, rightNumberProperty, providedXAxisLabels, providedOptions );
 
     const expectedValueOptions = combineOptions<PathOptions>( {
       visibleProperty: expectedValueVisibleProperty

@@ -102,7 +102,7 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
         spacing: 10,
         center: this.layoutBounds.center,
         children: [
-          new QuantumMeasurementHistogram( leftProperty, rightProperty, new BooleanProperty( true ),
+          new QuantumMeasurementHistogram( leftProperty, rightProperty,
             [
               new RichText( 'V', { font: new PhetFont( { size: 17, weight: 'bold' } ) } ),
               new RichText( 'H', { font: new PhetFont( { size: 17, weight: 'bold' } ) } )
@@ -113,7 +113,7 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
               visibleProperty: new BooleanProperty( true ),
               tandem: Tandem.OPT_OUT
             } ),
-          new QuantumMeasurementHistogram( leftProperty, rightProperty, new BooleanProperty( true ),
+          new QuantumMeasurementHistogram( leftProperty, rightProperty,
             [
               new RichText( 'V', { font: new PhetFont( { size: 17, weight: 'bold' } ), fill: QuantumMeasurementColors.verticalPolarizationColorProperty } ),
               new RichText( 'H', { font: new PhetFont( { size: 17, weight: 'bold' } ) } )
@@ -127,7 +127,7 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
               visibleProperty: new BooleanProperty( true ),
               tandem: Tandem.OPT_OUT
             } ),
-          new QuantumMeasurementHistogram( leftProperty, rightProperty, new BooleanProperty( true ),
+          new QuantumMeasurementHistogram( leftProperty, rightProperty,
             [
               new RichText( 'S<sub>z</sub>' + QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER, { font: new PhetFont( { size: 17, weight: 'bold' } ) } ),
               new RichText( 'S<sub>z</sub>' + QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER, { font: new PhetFont( { size: 17, weight: 'bold' } ) } )

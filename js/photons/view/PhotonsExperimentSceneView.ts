@@ -130,7 +130,6 @@ export default class PhotonsExperimentSceneView extends Node {
     const countHistogram = new QuantumMeasurementHistogram(
       verticalValueProperty,
       horizontalValueProperty,
-      new BooleanProperty( true ),
       [
         new RichText(
           'V',
@@ -149,6 +148,7 @@ export default class PhotonsExperimentSceneView extends Node {
       {
         displayMode: model.laser.emissionMode === 'singlePhoton' ? 'fraction' : 'rate',
         orientation: 'horizontal',
+        floatingLabels: true,
         matchLabelColors: true,
         leftFillColorProperty: QuantumMeasurementColors.verticalPolarizationColorProperty,
         rightFillColorProperty: QuantumMeasurementColors.horizontalPolarizationColorProperty,

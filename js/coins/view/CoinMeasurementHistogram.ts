@@ -8,7 +8,6 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
@@ -96,16 +95,9 @@ export default class CoinMeasurementHistogram extends QuantumMeasurementHistogra
 
     coinSet.measuredDataChangedEmitter.addListener( updateNumberProperties );
 
-    // Create a Property that controls whether the values should be displayed.
-    const displayValuesProperty = DerivedProperty.valueEqualsConstant(
-      coinSet.measurementStateProperty,
-      'revealed'
-    );
-
     super(
       leftNumberProperty,
       rightNumberProperty,
-      displayValuesProperty,
       xAxisLabels as [RichText, RichText],
       providedOptions
     );
