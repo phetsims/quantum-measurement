@@ -9,6 +9,7 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Utils from '../../../../dot/js/Utils.js';
@@ -79,6 +80,7 @@ export default class SpinMeasurementArea extends VBox {
         { tandem: tandem.createTandem( 'thirdSternGerlachNode' ) } )
     ];
 
+    // TODO: Move all these into the SG Nodes, https://github.com/phetsims/quantum-measurement/issues/53
     const createOrientationRadioButtonGroup = ( sternGerlach: SternGerlach, tandem: Tandem ) => {
       const radioButtonTextOptions: RichTextOptions = {
         font: new PhetFont( 18 ),
@@ -121,6 +123,15 @@ export default class SpinMeasurementArea extends VBox {
         blockingRadioButtonGroup
       ]
     } );
+
+    // TODO: WORKAROUND Move all these into the SG Nodes, https://github.com/phetsims/quantum-measurement/issues/53
+    Multilink.multilink(
+      [ model.isCustomExperimentProperty, model.particleSourceModel.isContinuousModeProperty ],
+      ( isCustomExperiment, isContinuousMode ) => {
+        firstSternGerlachControls.left = sternGerlachNodes[ 0 ].left;
+        firstSternGerlachControls.top = sternGerlachNodes[ 0 ].bottom + 10;
+      }
+    );
 
     const secondAndThirdSternGerlachControl = createOrientationRadioButtonGroup( model.sternGerlachs[ 2 ], tandem.createTandem( 'secondAndThirdSternGerlachControl' ) );
     model.blockUpperExitProperty.link( blockUpperExit => {
