@@ -7,6 +7,7 @@
  * @author Agustín Vallejo
  */
 
+import stepTimer from '../../../../axon/js/stepTimer.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
@@ -18,17 +19,20 @@ import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import MeasurementLine, { MeasurementState } from '../model/MeasurementLine.js';
+import MeasurementLine from '../model/MeasurementLine.js';
 
 type SelfOptions = EmptySelfOptions;
 
 type MeasurementLineNodeOptions = SelfOptions & PickRequired<VBoxOptions, 'tandem'>;
 
 export default class MeasurementLineNode extends VBox {
+
+  private readonly simpleBlochSphereNode: BlochSphereNode;
+
   public constructor( measurementLine: MeasurementLine, modelViewTransform: ModelViewTransform2, providedOptions: MeasurementLineNodeOptions ) {
 
-    const simpleBlochSphere = new BlochSphereNode( measurementLine.simpleBlochSphere, {
-      tandem: providedOptions.tandem.createTandem( 'simpleBlochSphere' ),
+    const simpleBlochSphereNode = new BlochSphereNode( measurementLine.simpleBlochSphere, {
+      tandem: providedOptions.tandem.createTandem( 'simpleBlochSphereNode' ),
       drawKets: false,
       drawTitle: false,
       scale: 0.5
@@ -64,18 +68,21 @@ export default class MeasurementLineNode extends VBox {
       scale: 0.7
     } );
 
-    simpleBlochSphere.stateVectorVisibleProperty.value = false;
+    simpleBlochSphereNode.stateVectorVisibleProperty.value = false;
 
-    measurementLine.measurementStateProperty.link( measurementState => {
-      simpleBlochSphere.stateVectorVisibleProperty.value = measurementState !== MeasurementState.NOT_MEASURED;
-      cameraPath.fill = measurementState === MeasurementState.MEASURING ?
-                        QuantumMeasurementColors.particleColor :
-                        'black';
+    measurementLine.measurementEmitter.addListener( () => {
+      simpleBlochSphereNode.stateVectorVisibleProperty.value = true;
+      cameraPath.fill = QuantumMeasurementColors.particleColor;
+
+      stepTimer.setTimeout( () => {
+        cameraPath.fill = 'black';
+      }, 500 );
     } );
+
 
     const options = optionize<MeasurementLineNodeOptions, SelfOptions, VBoxOptions>()( {
       children: [
-        simpleBlochSphere,
+        simpleBlochSphereNode,
         cameraNode
       ],
       spacing: 25,
@@ -84,9 +91,15 @@ export default class MeasurementLineNode extends VBox {
 
     super( options );
 
+    this.simpleBlochSphereNode = simpleBlochSphereNode;
+
     measurementLine.positionProperty.link( position => {
       this.center = modelViewTransform.modelToViewPosition( position );
     } );
+  }
+
+  public reset(): void {
+    this.simpleBlochSphereNode.stateVectorVisibleProperty.value = false;
   }
 }
 

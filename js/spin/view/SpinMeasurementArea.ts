@@ -41,6 +41,8 @@ export default class SpinMeasurementArea extends VBox {
 
   private manyParticlesCanvasNode: ManyParticlesCanvasNode;
 
+  private readonly measurementLines: MeasurementLineNode[];
+
   public constructor( model: SpinModel, parentNode: Node, layoutBounds: Bounds2, tandem: Tandem ) {
 
     const items: ComboBoxItem<SpinExperiment>[] = SpinExperiment.enumeration.values.map( experiment => {
@@ -279,11 +281,16 @@ export default class SpinMeasurementArea extends VBox {
       yMargin: 10
     } );
 
+    this.measurementLines = measurementLines;
     this.manyParticlesCanvasNode = manyParticlesCanvasNode;
   }
 
   public step( dt: number ): void {
     this.manyParticlesCanvasNode.step();
+  }
+
+  public reset(): void {
+    this.measurementLines.forEach( line => line.reset() );
   }
 }
 

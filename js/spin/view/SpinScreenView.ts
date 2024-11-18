@@ -62,6 +62,7 @@ export default class SpinScreenView extends QuantumMeasurementScreenView {
   public override reset(): void {
     this.model.reset();
     super.reset();
+    this.spinMeasurementArea.reset();
   }
 
   public override step( dt: number ): void {

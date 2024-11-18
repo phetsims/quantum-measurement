@@ -208,8 +208,6 @@ export default class SpinModel implements TModel {
         this.measurementLines[ 1 ].isActiveProperty.value = isSingle;
         this.measurementLines[ 2 ].isActiveProperty.value = isSingle && !experiment.isShortExperiment;
 
-        this.measurementLines.forEach( line => line.measurementStateProperty.reset() );
-
         this.particleSystem.reset();
 
         this.sternGerlachs.forEach( ( SternGerlach, index ) => {

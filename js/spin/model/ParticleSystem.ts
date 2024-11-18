@@ -10,7 +10,6 @@
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { MeasurementState } from './MeasurementLine.js';
 import { ParticleWithSpin } from './ParticleWithSpin.js';
 import { SpinDirection } from './SpinDirection.js';
 import SpinModel from './SpinModel.js';
@@ -123,7 +122,7 @@ export class ParticleSystem {
         // If the particle crosses a measurement line, we update the line
         this.model.measurementLines.forEach( ( line, index ) => {
           if ( behindMeasurementLine[ index ] && !line.isParticleBehind( particle.positionProperty.value ) ) {
-            line.measurementStateProperty.value = MeasurementState.MEASURING;
+            line.measurementEmitter.emit();
             line.spinStateProperty.value = particle.spinVectors[ index ];
             // particle.stageCompleted[ index ] = true;
           }
