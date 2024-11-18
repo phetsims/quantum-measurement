@@ -81,7 +81,6 @@ export default class SternGerlachNode extends Node {
     super( {
       tandem: providedOptions.tandem,
       visibleProperty: sternGerlach.isVisibleProperty,
-      opacity: 0.1,
       children: [
 
         // Main body of the SG sternGerlach

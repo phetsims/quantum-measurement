@@ -48,7 +48,7 @@ export class ParticleSystem {
       return new ParticleWithSpin( Vector2.ZERO );
     } );
     this.multipleParticles = _.times( MAX_NUMBER_OF_MULTIPLE_PARTICLES, () => {
-      return new ParticleWithSpin( new Vector2( 0, PARTICLE_RAY_WIDTH * ( dotRandom.nextDouble() * 2 - 1 ) ) );
+      return new ParticleWithSpin( new Vector2( PARTICLE_RAY_WIDTH * ( dotRandom.nextDouble() * 2 - 1 ), PARTICLE_RAY_WIDTH * ( dotRandom.nextDouble() * 2 - 1 ) ) );
     } );
 
   }
@@ -65,8 +65,10 @@ export class ParticleSystem {
     particle.reset();
     particle.activeProperty.value = true;
 
+
     // Set the first spin vector to the state of the generated particles
-    particle.spinVectors[ 0 ] = this.model.particleSourceModel.customSpinStateProperty.value;
+    // TODO: Is creating a bunch of copies of this vector bad?? https://github.com/phetsims/quantum-measurement/issues/53
+    particle.spinVectors[ 0 ] = this.model.particleSourceModel.customSpinStateProperty.value.copy();
 
     particle.updatePath(
       this.model.particleSourceModel.exitPositionProperty.value,
@@ -182,7 +184,7 @@ export class ParticleSystem {
       const isShortExperiment = this.model.currentExperimentProperty.value.isShortExperiment;
 
       if ( !particle.stageCompleted[ 0 ] ) {
-        const isResultUp = this.measureParticle( particle, this.model.sternGerlachs[ 0 ], 1, this.model.particleSourceModel.customSpinStateProperty.value );
+        const isResultUp = this.measureParticle( particle, this.model.sternGerlachs[ 0 ], 1, particle.spinVectors[ 0 ] );
         this.model.sternGerlachs[ 0 ].count( isResultUp );
 
         const startPosition = isResultUp ?
@@ -239,7 +241,7 @@ export class ParticleSystem {
     experimentStageIndex: number,
     incomingState: Vector2 ): boolean {
 
-    const upProbability = sternGerlach.prepare( incomingState );
+    const upProbability = sternGerlach.calculateProbability( incomingState );
     const isResultUp = dotRandom.nextDouble() < upProbability;
     particle.isSpinUp[ experimentStageIndex ] = isResultUp;
     particle.spinVectors[ experimentStageIndex ] = SpinDirection.spinToVector(

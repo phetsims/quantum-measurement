@@ -237,19 +237,17 @@ export default class SpinModel implements TModel {
   }
 
   public prepare(): void {
-    const experimentSetting = this.currentExperimentProperty.value.experimentSetting;
-
     // Measure on the first SG, this will change its upProbabilityProperty
-    this.sternGerlachs[ 0 ].prepare( this.particleSourceModel.customSpinStateProperty.value );
+    this.sternGerlachs[ 0 ].updateProbability( this.particleSourceModel.customSpinStateProperty.value );
 
-    if ( experimentSetting.length > 1 ) {
+    if ( !this.currentExperimentProperty.value.isShortExperiment ) {
       // Measure on the second SG according to the orientation of the first one
-      this.sternGerlachs[ 1 ].prepare(
+      this.sternGerlachs[ 1 ].updateProbability(
         // SG0 passes the up-spin particles to SG1
         SpinDirection.spinToVector( this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS )
       );
 
-      this.sternGerlachs[ 2 ].prepare(
+      this.sternGerlachs[ 2 ].updateProbability(
         // SG0 passes the down-spin particles to SG2, and because X- is not in the initial spin values, we pass null
         SpinDirection.spinToVector( this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_MINUS : null )
       );
