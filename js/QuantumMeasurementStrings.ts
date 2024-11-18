@@ -79,8 +79,9 @@ type StringsType = {
   'representationStringProperty': LocalizedStringProperty;
   'unpolarizedStringProperty': LocalizedStringProperty;
   'unknownProbabilitySymbolStringProperty': LocalizedStringProperty;
-  'zProjectionStringProperty': LocalizedStringProperty;
-  'xProjectionStringProperty': LocalizedStringProperty;
+  'projectionStringProperty': LocalizedStringProperty;
+  'XStringProperty': LocalizedStringProperty;
+  'ZStringProperty': LocalizedStringProperty;
 };
 
 const QuantumMeasurementStrings = getStringModule( 'QUANTUM_MEASUREMENT' ) as StringsType;

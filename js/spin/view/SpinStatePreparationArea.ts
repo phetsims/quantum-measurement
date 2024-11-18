@@ -142,7 +142,7 @@ export default class SpinStatePreparationArea extends VBox {
       new HBox( {
         spacing: 5,
         children: [
-          new Text( QuantumMeasurementStrings.zProjectionStringProperty, { font: new PhetFont( 15 ) } ),
+          new Text( QuantumMeasurementStrings.ZStringProperty, { font: new PhetFont( 15 ) } ),
           new DashedArrowNode( 0, 0, 0, -20, { stroke: 'blue', fill: 'blue', scale: 1 } )
         ]
       } ),
@@ -157,7 +157,7 @@ export default class SpinStatePreparationArea extends VBox {
       new HBox( {
         spacing: 5,
         children: [
-          new Text( QuantumMeasurementStrings.xProjectionStringProperty, { font: new PhetFont( 15 ) } ),
+          new Text( QuantumMeasurementStrings.XStringProperty, { font: new PhetFont( 15 ) } ),
           new DashedArrowNode( 0, 0, 20, 0, { stroke: 'red', fill: 'red', scale: 1 } )
         ]
       } ),
@@ -171,18 +171,18 @@ export default class SpinStatePreparationArea extends VBox {
     super( {
       children: [
         blochSphereNode,
+        new HBox( {
+          spacing: 20,
+          children: [
+            new Text( QuantumMeasurementStrings.projectionStringProperty, { font: new PhetFont( 15 ) } ),
+            zProjectionCheckbox,
+            xProjectionCheckbox
+          ]
+        } ),
         stateToPrepareText,
         stateReadout,
         spinStatePanel,
-        probabilityControlBox,
-        new VBox( {
-          spacing: 20,
-          children: [
-            zProjectionCheckbox,
-            xProjectionCheckbox
-          ],
-          align: 'left'
-        } )
+        probabilityControlBox
       ],
       spacing: 20,
       centerY: layoutBounds.centerY
