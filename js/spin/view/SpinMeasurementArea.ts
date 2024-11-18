@@ -202,10 +202,23 @@ export default class SpinMeasurementArea extends VBox {
         new DerivedProperty(
           [
             model.particleSourceModel.sourceModeProperty,
-            model.currentExperimentProperty
+            model.currentExperimentProperty,
+            model.blockUpperExitProperty
           ],
-          ( sourceMode, experiment ) => {
-            return sourceMode === SourceMode.CONTINUOUS && !experiment.isShortExperiment;
+          ( sourceMode, experiment, blockUpperExit ) => {
+            return sourceMode === SourceMode.CONTINUOUS && !experiment.isShortExperiment && !blockUpperExit;
+          } ) ),
+
+      createPercentageHistogram(
+        model.sternGerlachs[ 2 ],
+        new DerivedProperty(
+          [
+            model.particleSourceModel.sourceModeProperty,
+            model.currentExperimentProperty,
+            model.blockUpperExitProperty
+          ],
+          ( sourceMode, experiment, blockUpperExit ) => {
+            return sourceMode === SourceMode.CONTINUOUS && !experiment.isShortExperiment && blockUpperExit;
           } ) )
     ];
 

@@ -229,9 +229,14 @@ export default class SpinModel implements TModel {
         // Set the probabilities of the experiment. In the continuous case, this immediately alters the shown rays
         // In the single case, this prepares the probabilities for the particle that will be shot
         this.prepare();
-
       }
     );
+
+    this.sternGerlachs.forEach( sternGerlach => {
+      sternGerlach.isZOrientedProperty.link( () => {
+        this.prepare();
+      } );
+    } );
   }
 
   public prepare(): void {
