@@ -53,7 +53,7 @@ export default class MeasurementLine {
   // Flag to indicate if the line is active
   public readonly isActiveProperty: Property<boolean>;
 
-  public constructor( position: Vector2, providedOptions: MeasurementLineOptions ) {
+  public constructor( position: Vector2, originallyActive: boolean, providedOptions: MeasurementLineOptions ) {
 
     this.spinStateProperty = new Vector2Property( new Vector2( 0, 1 ), {
       tandem: providedOptions.tandem.createTandem( 'spinStateProperty' )
@@ -63,15 +63,17 @@ export default class MeasurementLine {
 
     this.measurementStateProperty.link( measurementState => {
       if ( measurementState === MeasurementState.MEASURING ) {
+        // TODO: How to interrupt this after a restart? https://github.com/phetsims/quantum-measurement/issues/53
+        const measurementStateListener = () => {
+          this.measurementStateProperty.value = MeasurementState.MEASURED;
+        };
 
         // Count some time and reset the hasMeasured flag
-        stepTimer.setTimeout( () => {
-          this.measurementStateProperty.value = MeasurementState.MEASURED;
-        }, MeasurementState.MEASURING_TIMEOUT_DURATION );
+        stepTimer.setTimeout( measurementStateListener, MeasurementState.MEASURING_TIMEOUT_DURATION );
       }
     } );
 
-    this.isActiveProperty = new Property<boolean>( false, {
+    this.isActiveProperty = new Property<boolean>( originallyActive, {
       tandem: providedOptions.tandem.createTandem( 'isActiveProperty' ),
       phetioValueType: BooleanIO
     } );

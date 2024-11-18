@@ -46,7 +46,7 @@ export default class ParticleSourceModel {
 
   public constructor( position: Vector2, tandem: Tandem ) {
 
-    this.sourceModeProperty = new Property<SourceMode>( SourceMode.CONTINUOUS );
+    this.sourceModeProperty = new Property<SourceMode>( SourceMode.SINGLE );
 
     this.isContinuousModeProperty = new DerivedProperty( [ this.sourceModeProperty ], sourceMode => sourceMode === SourceMode.CONTINUOUS );
 
@@ -84,6 +84,7 @@ export default class ParticleSourceModel {
     this.positionProperty.reset();
     this.currentlyShootingParticlesProperty.reset();
     this.particleAmountProperty.reset();
+    this.spinStateProperty.reset();
   }
 }
 

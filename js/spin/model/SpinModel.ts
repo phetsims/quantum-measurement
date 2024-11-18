@@ -74,7 +74,7 @@ export default class SpinModel implements TModel {
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
-    this.currentExperimentProperty = new Property<SpinExperiment>( SpinExperiment.CUSTOM );
+    this.currentExperimentProperty = new Property<SpinExperiment>( SpinExperiment.EXPERIMENT_1 );
     this.isCustomExperimentProperty = new DerivedProperty(
       [ this.currentExperimentProperty ],
       ( experiment: SpinExperiment ) => experiment === SpinExperiment.CUSTOM
@@ -112,15 +112,15 @@ export default class SpinModel implements TModel {
     this.measurementLines = [
       new MeasurementLine(
         new Vector2( ( this.particleSourceModel.exitPositionProperty.value.x + this.sternGerlachs[ 0 ].entrancePositionProperty.value.x ) / 2, 1 ),
-        { tandem: measurementLinesTandem.createTandem( 'firstMeasurementLine' ) }
+        true, { tandem: measurementLinesTandem.createTandem( 'firstMeasurementLine' ) }
       ),
       new MeasurementLine(
         new Vector2( ( this.sternGerlachs[ 0 ].topExitPositionProperty.value.x + this.sternGerlachs[ 1 ].entrancePositionProperty.value.x ) / 2, 1 ),
-        { tandem: measurementLinesTandem.createTandem( 'secondMeasurementLine' ) }
+        true, { tandem: measurementLinesTandem.createTandem( 'secondMeasurementLine' ) }
       ),
       new MeasurementLine(
         new Vector2( ( this.sternGerlachs[ 1 ].topExitPositionProperty.value.x + this.sternGerlachs[ 1 ].topExitPositionProperty.value.plusXY( 1, 0 ).x ) / 2, 1 ),
-        { tandem: measurementLinesTandem.createTandem( 'thirdMeasurementLine' ) }
+        false, { tandem: measurementLinesTandem.createTandem( 'thirdMeasurementLine' ) }
       )
     ];
 
@@ -266,11 +266,10 @@ export default class SpinModel implements TModel {
    * Resets the model.
    */
   public reset(): void {
+    this.measurementLines.forEach( line => line.reset() );
     this.sternGerlachs.forEach( sternGerlach => sternGerlach.reset() );
     this.particleSystem.reset();
-    this.measurementLines.forEach( line => line.reset() );
     this.currentExperimentProperty.reset();
-    this.particleSourceModel.spinStateProperty.reset();
     this.particleSourceModel.reset();
   }
 
