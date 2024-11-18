@@ -148,7 +148,8 @@ export default class SpinStatePreparationArea extends VBox {
       } ),
       {
         visibleProperty: model.isCustomExperimentProperty,
-        tandem: tandem.createTandem( 'zProjectionCheckbox' )
+        tandem: tandem.createTandem( 'zProjectionCheckbox' ),
+        boxWidth: 18
       }
     );
 
@@ -163,7 +164,8 @@ export default class SpinStatePreparationArea extends VBox {
       } ),
       {
         visibleProperty: model.isCustomExperimentProperty,
-        tandem: tandem.createTandem( 'xProjectionCheckbox' )
+        tandem: tandem.createTandem( 'xProjectionCheckbox' ),
+        boxWidth: 18
       }
     );
 
