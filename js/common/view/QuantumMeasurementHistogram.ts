@@ -68,6 +68,16 @@ export default class QuantumMeasurementHistogram extends Node {
                       providedXAxisLabels: [ RichText, RichText ],
                       providedOptions: QuantumMeasurementHistogramOptions ) {
 
+    // Create a property that represents the total of the left and right values.
+    const totalNumberProperty = new DerivedProperty(
+      [ leftNumberProperty, rightNumberProperty ],
+      ( leftNumber, rightNumber ) => leftNumber + rightNumber
+    );
+
+    // Create a property that indicates whether the number displays should be visible.  They should only be visible
+    // when the total of the left and right values is greater than zero.
+    const numberDisplaysVisibleProperty = new DerivedProperty( [ totalNumberProperty ], totalNumber => totalNumber > 0 );
+
     const options = optionize<QuantumMeasurementHistogramOptions, SelfOptions, NodeOptions>()( {
       orientation: 'vertical',
       displayMode: 'number',
@@ -85,17 +95,13 @@ export default class QuantumMeasurementHistogram extends Node {
         textOptions: {
           maxWidth: NUMBER_DISPLAY_MAX_WIDTH,
           font: LABEL_FONT
-        }
+        },
+        visibleProperty: numberDisplaysVisibleProperty
       }
     }, providedOptions );
 
     options.rotation = options.orientation === 'vertical' ? 0 : Math.PI / 2;
     const textRotation = options.orientation === 'vertical' ? 0 : -Math.PI / 2;
-
-    const totalNumberProperty = new DerivedProperty(
-      [ leftNumberProperty, rightNumberProperty ],
-      ( leftNumber, rightNumber ) => leftNumber + rightNumber
-    );
 
     // Create the X and Y axes.
     const xAxis = new Line( 0, 0, HISTOGRAM_SIZE.width, 0, {
@@ -136,26 +142,36 @@ export default class QuantumMeasurementHistogram extends Node {
 
       leftNumberDisplay = new FractionNode( leftNumberDisplay, totalNumberDisplay, {
         fractionLineMargin: 0,
-        rotation: textRotation
+        rotation: textRotation,
+        visibleProperty: numberDisplaysVisibleProperty
       } );
       rightNumberDisplay = new FractionNode( rightNumberDisplay, totalNumberDisplay, {
         fractionLineMargin: 0,
-        rotation: textRotation
+        rotation: textRotation,
+        visibleProperty: numberDisplaysVisibleProperty
       } );
     }
     else if ( options.displayMode === 'percent' ) {
       const percentDisplayOptions: NumberDisplayOptions = {
         numberFormatter: value => `${Utils.toFixed( value * 100, 1 )}%`
       };
-      leftNumberDisplay = new NumberDisplay( new DerivedProperty(
-        [ leftNumberProperty, totalNumberProperty ],
-        ( leftNumber, totalNumber ) => totalNumber ? leftNumber / totalNumber : 0
-      ), new Range( 0, 1 ), combineOptions<NumberDisplayOptions>( percentDisplayOptions, options.numberDisplayOptions ) );
+      leftNumberDisplay = new NumberDisplay(
+        new DerivedProperty(
+          [ leftNumberProperty, totalNumberProperty ],
+          ( leftNumber, totalNumber ) => totalNumber ? leftNumber / totalNumber : 0
+        ),
+        new Range( 0, 1 ),
+        combineOptions<NumberDisplayOptions>( percentDisplayOptions, options.numberDisplayOptions )
+      );
 
-      rightNumberDisplay = new NumberDisplay( new DerivedProperty(
-        [ rightNumberProperty, totalNumberProperty ],
-        ( rightNumber, totalNumber ) => totalNumber ? rightNumber / totalNumber : 0
-      ), new Range( 0, 1 ), combineOptions<NumberDisplayOptions>( percentDisplayOptions, options.numberDisplayOptions ) );
+      rightNumberDisplay = new NumberDisplay(
+        new DerivedProperty(
+          [ rightNumberProperty, totalNumberProperty ],
+          ( rightNumber, totalNumber ) => totalNumber ? rightNumber / totalNumber : 0
+        ),
+        new Range( 0, 1 ),
+        combineOptions<NumberDisplayOptions>( percentDisplayOptions, options.numberDisplayOptions )
+      );
     }
     else if ( options.displayMode === 'rate' ) {
       const rateDisplayOptions: NumberDisplayOptions = {
@@ -183,7 +199,6 @@ export default class QuantumMeasurementHistogram extends Node {
           textOptions: { fill: options.matchLabelColors ? options.rightFillColorProperty : 'black' }
         } ) );
     }
-
 
     // Create the histogram bars for the right and left sides.
     const maxBarHeight = yAxis.height;
