@@ -243,14 +243,13 @@ export default class QuantumMeasurementHistogram extends Node {
     // Create and position the labels for the X axis.
     const axisLabelMargin = 6;
     const xAxisLeftLabel = providedXAxisLabels[ 0 ];
-    xAxisLeftLabel.centerX = LEFT_HISTOGRAM_BAR_CENTER_X;
-    xAxisLeftLabel.top = xAxis.centerY + axisLabelMargin;
     const xAxisRightLabel = providedXAxisLabels[ 1 ];
-    xAxisRightLabel.centerX = RIGHT_HISTOGRAM_BAR_CENTER_X;
-    xAxisRightLabel.top = xAxis.centerY + axisLabelMargin;
-
     xAxisLeftLabel.rotation = textRotation;
     xAxisRightLabel.rotation = textRotation;
+    xAxisLeftLabel.centerX = LEFT_HISTOGRAM_BAR_CENTER_X;
+    xAxisLeftLabel.top = xAxis.centerY + axisLabelMargin;
+    xAxisRightLabel.centerX = RIGHT_HISTOGRAM_BAR_CENTER_X;
+    xAxisRightLabel.top = xAxis.centerY + axisLabelMargin;
 
     Multilink.multilink(
       [
