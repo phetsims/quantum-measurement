@@ -58,7 +58,7 @@ export default class ExpectationValueControl extends VBox {
           HString,
           QuantumMeasurementColors.horizontalPolarizationColorProperty.value
         );
-        return `<${polarizationString}> = ${PString}(${colorizedVString}) + ${PString}(${colorizedHString})`;
+        return `<${polarizationString}> = ${PString}(${colorizedVString}) - ${PString}(${colorizedHString})`;
       }
     );
     const expectationValueEquationNode = new RichText( expectationValueEquationStringProperty, {
