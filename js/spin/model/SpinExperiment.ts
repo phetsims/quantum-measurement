@@ -63,6 +63,7 @@ export default class SpinExperiment extends EnumerationValue {
   // TODO: Better naming, see https://github.com/phetsims/quantum-measurement/issues/53
   public readonly isShortExperiment: boolean;
 
+  // Wether the blocker is blocking the up or down exit, if applicable
   public readonly blockingModeProperty: Property<BlockingMode>;
 
   public constructor( experimentName: string | TReadOnlyProperty<string>, experimentSetting: SternGerlachExperimentSetting[] ) {

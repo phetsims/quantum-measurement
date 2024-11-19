@@ -71,8 +71,12 @@ export default class MeasurementLineNode extends VBox {
     simpleBlochSphereNode.stateVectorVisibleProperty.value = false;
 
     measurementLine.measurementEmitter.addListener( () => {
-      simpleBlochSphereNode.stateVectorVisibleProperty.value = true;
+      simpleBlochSphereNode.stateVectorVisibleProperty.value = false;
       cameraPath.fill = QuantumMeasurementColors.particleColor;
+
+      stepTimer.setTimeout( () => {
+        simpleBlochSphereNode.stateVectorVisibleProperty.value = true;
+      }, 100 );
 
       stepTimer.setTimeout( () => {
         cameraPath.fill = 'black';

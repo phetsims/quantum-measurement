@@ -248,6 +248,11 @@ export default class SpinModel implements TModel {
         this.sternGerlachs[ 2 ].isVisibleProperty.value = longExperiment &&
                                                           blockingMode !== BlockingMode.BLOCK_DOWN;
 
+        experiment.experimentSetting.forEach( ( setting, index ) => {
+          this.sternGerlachs[ index ].isZOrientedProperty.value = setting.isZOriented;
+        } );
+
+
         // Set the probabilities of the experiment. In the continuous case, this immediately alters the shown rays
         // In the single case, this prepares the probabilities for the particle that will be shot
         this.prepare();
