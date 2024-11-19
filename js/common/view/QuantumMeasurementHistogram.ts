@@ -181,26 +181,38 @@ export default class QuantumMeasurementHistogram extends Node {
         valuePattern: QuantumMeasurementStrings.eventsPerSecondPatternStringProperty,
         rotation: textRotation
       };
-      leftNumberDisplay = new NumberDisplay( leftNumberProperty, NUMBER_DISPLAY_RANGE, combineOptions<NumberDisplayOptions>(
-        rateDisplayOptions, options.numberDisplayOptions, {
+      leftNumberDisplay = new NumberDisplay(
+        leftNumberProperty,
+        NUMBER_DISPLAY_RANGE,
+        combineOptions<NumberDisplayOptions>( rateDisplayOptions, options.numberDisplayOptions, {
           textOptions: { fill: options.matchLabelColors ? options.leftFillColorProperty : 'black' }
-        } ) );
-      rightNumberDisplay = new NumberDisplay( rightNumberProperty, NUMBER_DISPLAY_RANGE, combineOptions<NumberDisplayOptions>(
-        rateDisplayOptions, options.numberDisplayOptions, {
+        } )
+      );
+      rightNumberDisplay = new NumberDisplay(
+        rightNumberProperty,
+        NUMBER_DISPLAY_RANGE,
+        combineOptions<NumberDisplayOptions>( rateDisplayOptions, options.numberDisplayOptions, {
           textOptions: { fill: options.matchLabelColors ? options.rightFillColorProperty : 'black' }
-        } ) );
+        } )
+      );
     }
     else {
-      leftNumberDisplay = new NumberDisplay( leftNumberProperty, NUMBER_DISPLAY_RANGE, combineOptions<NumberDisplayOptions>(
-        {}, options.numberDisplayOptions, {
+      leftNumberDisplay = new NumberDisplay(
+        leftNumberProperty,
+        NUMBER_DISPLAY_RANGE,
+        combineOptions<NumberDisplayOptions>( {}, options.numberDisplayOptions, {
           rotation: textRotation,
           textOptions: { fill: options.matchLabelColors ? options.leftFillColorProperty : 'black' }
-        } ) );
-      rightNumberDisplay = new NumberDisplay( rightNumberProperty, NUMBER_DISPLAY_RANGE, combineOptions<NumberDisplayOptions>(
-        {}, options.numberDisplayOptions, {
+        } )
+      );
+      rightNumberDisplay = new NumberDisplay(
+        rightNumberProperty,
+        NUMBER_DISPLAY_RANGE,
+        combineOptions<NumberDisplayOptions>( {}, options.numberDisplayOptions, {
           rotation: textRotation,
           textOptions: { fill: options.matchLabelColors ? options.rightFillColorProperty : 'black' }
-        } ) );
+        } )
+      );
     }
 
     // Create the histogram bars for the right and left sides.

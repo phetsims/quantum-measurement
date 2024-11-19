@@ -9,11 +9,9 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
-import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
-import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import PlayPauseButton from '../../../../scenery-phet/js/buttons/PlayPauseButton.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { HBox, Node, NodeOptions, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
@@ -114,17 +112,7 @@ export default class PhotonsExperimentSceneView extends Node {
 
     const histogramTickMarkLabelProperty = model.laser.emissionMode === 'singlePhoton' ?
                                            new StringProperty( '1.0' ) :
-                                           new DerivedProperty(
-                                             [
-                                               QuantumMeasurementStrings.eventsPerSecondPatternStringProperty,
-                                               verticalValueProperty,
-                                               horizontalValueProperty
-                                             ],
-                                             ( eventsPerSecondPatternString, verticalValue, horizontalValue ) => {
-                                               const displayValue = Utils.roundSymmetric( verticalValue + horizontalValue );
-                                               return StringUtils.fillIn( eventsPerSecondPatternString, { value: displayValue } );
-                                             }
-                                           );
+                                           new StringProperty( '' );
 
     // Create the histogram that shows the detection counts for the vertical and horizontal detectors.
     const countHistogram = new QuantumMeasurementHistogram(
