@@ -10,6 +10,7 @@
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import { BlockingMode } from './BlockingMode.js';
 import { ParticleWithSpin } from './ParticleWithSpin.js';
 import { SpinDirection } from './SpinDirection.js';
 import SpinModel from './SpinModel.js';
@@ -150,18 +151,22 @@ export class ParticleSystem {
    * Check if the particle would be blocked by the exit blocker, and if so, reset it and return true.
    */
   private checkParticleBlocking( particle: ParticleWithSpin ): boolean {
-    if ( this.model.isBlockingProperty.value ) {
+    // If there is no blocker in place
+    if ( this.model.sternGerlachs[ 0 ].blockingModeProperty.value !== BlockingMode.NO_BLOCKER ) {
+      const exitPositionProperty = this.model.exitBlockerPositionProperty.value;
       if (
-        this.model.blockUpperExitProperty.value &&
-        particle.isSpinUp[ 1 ] &&
-        ( particle.positionProperty.value.x > this.model.exitBlockerPositionProperty.value.x ) ) {
+        // If the blocker is on the 'up' position and the particle is spin up, and blocker position exists (can be null),
+        // and particle position is greater than the blocker position
+        this.model.sternGerlachs[ 0 ].blockingModeProperty.value === BlockingMode.BLOCK_UP &&
+        particle.isSpinUp[ 1 ] && exitPositionProperty &&
+        ( particle.positionProperty.value.x > exitPositionProperty.x ) ) {
         particle.reset();
         return true;
       }
       else if (
-        !this.model.blockUpperExitProperty.value &&
-        !particle.isSpinUp[ 1 ] &&
-        ( particle.positionProperty.value.x > this.model.exitBlockerPositionProperty.value.x ) ) {
+        this.model.sternGerlachs[ 0 ].blockingModeProperty.value === BlockingMode.BLOCK_DOWN &&
+        !particle.isSpinUp[ 1 ] && exitPositionProperty &&
+        ( particle.positionProperty.value.x > exitPositionProperty.x ) ) {
         particle.reset();
         return true;
       }

@@ -7,14 +7,20 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { LinearGradient, Node, NodeOptions, Path, RichText } from '../../../../scenery/js/imports.js';
+import { LinearGradient, Node, NodeOptions, Path, RichText, RichTextOptions, Text, VBox } from '../../../../scenery/js/imports.js';
+import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
+import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
+import { BlockingMode } from '../model/BlockingMode.js';
 import SternGerlach from '../model/SternGerlach.js';
 
 type SelfOptions = {
@@ -29,7 +35,11 @@ export default class SternGerlachNode extends Node {
     sternGerlach: SternGerlach,
     modelViewTransform: ModelViewTransform2,
     providedOptions: SternGerlachNodeOptions
-    ) {
+  ) {
+
+    const options = optionize<SternGerlachNodeOptions, SelfOptions, NodeOptions>()( {
+      isBlockable: false
+    }, providedOptions );
 
     // Transformed constants
     const STERN_GERLACH_WIDTH = modelViewTransform.modelToViewDeltaX( SternGerlach.STERN_GERLACH_WIDTH );
@@ -62,12 +72,15 @@ export default class SternGerlachNode extends Node {
       curveDownShape.lineTo( -STERN_GERLACH_WIDTH / 2 + i * STERN_GERLACH_WIDTH, -curveFunction( i ) * STERN_GERLACH_HEIGHT / 4 );
     }
 
+    const curveUpPath = new Path( curveUpShape, { stroke: '#aff', lineWidth: 4 } );
+    const curveDownPath = new Path( curveDownShape, { stroke: '#aff', lineWidth: 4 } );
+
     const particleEntrance = createParticleHole( sternGerlach.entranceLocalPosition );
     const topParticleExit = createParticleHole( sternGerlach.topExitLocalPosition );
     const bottomParticleExit = createParticleHole( sternGerlach.bottomExitLocalPosition );
 
-    const mainRect = new Path( new Shape().rect( -STERN_GERLACH_WIDTH / 2, -STERN_GERLACH_HEIGHT / 2, STERN_GERLACH_WIDTH, STERN_GERLACH_HEIGHT ),
-        { fill: 'black' } );
+    const mainApparatus = new Path( new Shape().rect( -STERN_GERLACH_WIDTH / 2, -STERN_GERLACH_HEIGHT / 2, STERN_GERLACH_WIDTH, STERN_GERLACH_HEIGHT ),
+      { fill: 'black' } );
 
     const experimentLabel = new RichText( new DerivedProperty(
         [
@@ -78,17 +91,56 @@ export default class SternGerlachNode extends Node {
         ( isZOriented, SGSubZ, SGSubX ) => isZOriented ? SGSubZ : SGSubX ),
       { font: new PhetFont( 18 ), fill: 'white', center: new Vector2( -STERN_GERLACH_WIDTH / 2 + 25, -STERN_GERLACH_HEIGHT / 2 + 70 ) } );
 
-    super( {
-      tandem: providedOptions.tandem,
-      visibleProperty: sternGerlach.isVisibleProperty,
-      children: [
+    const sternGerlachControls = new VBox( {
+      align: 'left',
+      spacing: 10,
+      tandem: options.tandem.createTandem( 'sternGerlachControls' )
+    } );
 
+    const radioButtonTextOptions: RichTextOptions = {
+      font: new PhetFont( 18 ),
+      fill: 'black'
+    };
+    // Create and add the radio buttons that select the chart type view in the nuclideChartAccordionBox.
+    const orientationRadioButtonGroup = new RectangularRadioButtonGroup<boolean>(
+      sternGerlach.isZOrientedProperty, [
+        { value: true, createNode: () => new RichText( 'S<sub>Z', radioButtonTextOptions ), tandemName: 'isZOrientedRadioButton' },
+        { value: false, createNode: () => new RichText( 'S<sub>X', radioButtonTextOptions ), tandemName: 'isXOrientedRadioButton' }
+      ], {
+        orientation: 'horizontal',
+        tandem: options.tandem.createTandem( 'orientationRadioButtonGroup' ),
+        radioButtonOptions: { baseColor: QuantumMeasurementColors.controlPanelFillColorProperty },
+        visibleProperty: sternGerlach.isDirectionControllableProperty
+      } );
+    sternGerlachControls.addChild( orientationRadioButtonGroup );
+
+    if ( options.isBlockable ) {
+      const blockingRadioButtonGroup = new AquaRadioButtonGroup( sternGerlach.blockingModeProperty, [ BlockingMode.BLOCK_UP, BlockingMode.BLOCK_DOWN ].map( blockingMode => {
+        return {
+          value: blockingMode,
+          createNode: () => new Text(
+            blockingMode === BlockingMode.BLOCK_UP ?
+            QuantumMeasurementStrings.blockUpStringProperty :
+            QuantumMeasurementStrings.blockDownStringProperty,
+            { font: new PhetFont( 15 ) } ),
+          tandemName: `${blockingMode.tandemName}RadioButton`
+        };
+      } ), {
+        spacing: 10,
+        visibleProperty: DerivedProperty.valueNotEqualsConstant( sternGerlach.blockingModeProperty, BlockingMode.NO_BLOCKER ),
+        tandem: options.tandem.createTandem( 'blockingRadioButtonGroup' )
+      } );
+      sternGerlachControls.addChild( blockingRadioButtonGroup );
+    }
+
+    const mainApparatusNode = new Node( {
+      children: [
         // Main body of the SG sternGerlach
-        mainRect,
+        mainApparatus,
 
         // Curved paths for the particle to follow
-        new Path( curveUpShape, { stroke: '#aff', lineWidth: 4 } ),
-        new Path( curveDownShape, { stroke: '#aff', lineWidth: 4 } ),
+        curveUpPath,
+        curveDownPath,
 
         // Particle entry point
         particleEntrance,
@@ -102,9 +154,23 @@ export default class SternGerlachNode extends Node {
       ]
     } );
 
-    sternGerlach.positionProperty.link( position => {
-      this.center = modelViewTransform.modelToViewPosition( position );
+    super( {
+      tandem: options.tandem,
+      visibleProperty: sternGerlach.isVisibleProperty,
+      children: [
+        mainApparatusNode,
+        sternGerlachControls
+      ]
     } );
+
+    Multilink.multilink(
+      [ sternGerlach.positionProperty, sternGerlach.isDirectionControllableProperty, sternGerlach.blockingModeProperty ],
+      position => {
+        mainApparatusNode.center = modelViewTransform.modelToViewPosition( position );
+        sternGerlachControls.left = mainApparatusNode.left;
+        sternGerlachControls.top = mainApparatusNode.bottom + 10;
+      }
+    );
   }
 }
 

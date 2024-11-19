@@ -12,12 +12,15 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
 import AveragingCounterNumberProperty from '../../common/model/AveragingCounterNumberProperty.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import { BlockingMode } from './BlockingMode.js';
 
 export default class SternGerlach {
 
@@ -27,8 +30,14 @@ export default class SternGerlach {
   // Wether the SG measures in the Z or X direction
   public readonly isZOrientedProperty: BooleanProperty;
 
+  // Wether the direction of the SG is controllable
+  public readonly isDirectionControllableProperty: BooleanProperty;
+
   // Visibility of the SG apparatus
   public readonly isVisibleProperty: BooleanProperty;
+
+  // Whether the apparatus is blocked and which exit would be blocked
+  public readonly blockingModeProperty: Property<BlockingMode>;
 
   // Probability of a particle to be measured in the up and down states
   public readonly upProbabilityProperty: NumberProperty;
@@ -47,7 +56,6 @@ export default class SternGerlach {
   public entrancePositionProperty: TReadOnlyProperty<Vector2>;
   public topExitPositionProperty: TReadOnlyProperty<Vector2>;
   public bottomExitPositionProperty: TReadOnlyProperty<Vector2>;
-
 
   // Constants
   public static readonly STERN_GERLACH_WIDTH = 150 / 200;
@@ -82,6 +90,16 @@ export default class SternGerlach {
       return position.plus( this.bottomExitLocalPosition );
     } );
 
+    this.blockingModeProperty = new Property<BlockingMode>( BlockingMode.NO_BLOCKER, {
+      tandem: tandem.createTandem( 'blockingModeProperty' ),
+      phetioValueType: EnumerationIO<BlockingMode>( {
+        enumeration: BlockingMode.enumeration
+      } )
+    } );
+
+    this.isDirectionControllableProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'isDirectionControllableProperty' )
+    } );
 
     this.isZOrientedProperty = new BooleanProperty( isZOriented, {
       tandem: tandem.createTandem( 'isZOrientedProperty' )

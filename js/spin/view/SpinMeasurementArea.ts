@@ -9,7 +9,6 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
-import Multilink from '../../../../axon/js/Multilink.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Utils from '../../../../dot/js/Utils.js';
@@ -18,9 +17,7 @@ import { Shape } from '../../../../kite/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ShadedSphereNode from '../../../../scenery-phet/js/ShadedSphereNode.js';
-import { HBox, Node, Path, RichText, RichTextOptions, Text, VBox } from '../../../../scenery/js/imports.js';
-import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
-import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
+import { HBox, Node, Path, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import ComboBox, { ComboBoxItem } from '../../../../sun/js/ComboBox.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -28,6 +25,7 @@ import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
+import { BlockingMode } from '../model/BlockingMode.js';
 import { SourceMode } from '../model/SourceMode.js';
 import SpinExperiment from '../model/SpinExperiment.js';
 import SpinModel from '../model/SpinModel.js';
@@ -79,66 +77,6 @@ export default class SpinMeasurementArea extends VBox {
         modelViewTransform,
         { tandem: tandem.createTandem( 'thirdSternGerlachNode' ) } )
     ];
-
-    // TODO: Move all these into the SG Nodes, https://github.com/phetsims/quantum-measurement/issues/53
-    const createOrientationRadioButtonGroup = ( sternGerlach: SternGerlach, tandem: Tandem ) => {
-      const radioButtonTextOptions: RichTextOptions = {
-        font: new PhetFont( 18 ),
-        fill: 'black'
-      };
-      // Create and add the radio buttons that select the chart type view in the nuclideChartAccordionBox.
-      return new RectangularRadioButtonGroup<boolean>(
-        sternGerlach.isZOrientedProperty, [
-          { value: true, createNode: () => new RichText( 'S<sub>Z', radioButtonTextOptions ), tandemName: 'isZOrientedRadioButton' },
-          { value: false, createNode: () => new RichText( 'S<sub>X', radioButtonTextOptions ), tandemName: 'isXOrientedRadioButton' }
-        ], {
-          orientation: 'horizontal',
-          tandem: tandem.createTandem( 'orientationRadioButtonGroup' ),
-          radioButtonOptions: { baseColor: QuantumMeasurementColors.controlPanelFillColorProperty },
-          visibleProperty: DerivedProperty.and( [ model.isCustomExperimentProperty, model.particleSourceModel.isContinuousModeProperty ] )
-        } );
-    };
-
-    const blockingRadioButtonGroup = new AquaRadioButtonGroup( model.blockUpperExitProperty, [ true, false ].map( blockingUpperExit => {
-      return {
-        value: blockingUpperExit,
-        createNode: () => new Text( blockingUpperExit ? 'Block Up' : 'Block Down', { font: new PhetFont( 15 ) } ),
-        tandemName: blockingUpperExit ? 'blockUpRadioButton' : 'blockDownRadioButton'
-      };
-    } ), {
-      spacing: 10,
-      visibleProperty: model.particleSourceModel.isContinuousModeProperty,
-      tandem: tandem.createTandem( 'blockingRadioButtonGroup' )
-    } );
-
-    const firstSternGerlachControlsTandem = tandem.createTandem( 'firstSternGerlachControls' );
-    const firstSternGerlachControls = new VBox( {
-      left: sternGerlachNodes[ 0 ].left,
-      top: sternGerlachNodes[ 0 ].bottom + 10,
-      align: 'left',
-      spacing: 10,
-      tandem: firstSternGerlachControlsTandem,
-      children: [
-        createOrientationRadioButtonGroup( model.sternGerlachs[ 0 ], firstSternGerlachControlsTandem ),
-        blockingRadioButtonGroup
-      ]
-    } );
-
-    // TODO: WORKAROUND Move all these into the SG Nodes, https://github.com/phetsims/quantum-measurement/issues/53
-    Multilink.multilink(
-      [ model.isCustomExperimentProperty, model.particleSourceModel.isContinuousModeProperty ],
-      ( isCustomExperiment, isContinuousMode ) => {
-        firstSternGerlachControls.left = sternGerlachNodes[ 0 ].left;
-        firstSternGerlachControls.top = sternGerlachNodes[ 0 ].bottom + 10;
-      }
-    );
-
-    const secondAndThirdSternGerlachControl = createOrientationRadioButtonGroup( model.sternGerlachs[ 2 ], tandem.createTandem( 'secondAndThirdSternGerlachControl' ) );
-    model.blockUpperExitProperty.link( blockUpperExit => {
-      const referenceIndex = blockUpperExit ? 2 : 1;
-      secondAndThirdSternGerlachControl.left = sternGerlachNodes[ referenceIndex ].left;
-      secondAndThirdSternGerlachControl.top = sternGerlachNodes[ referenceIndex ].bottom + 10;
-    } );
 
     const measurementLines = [
       new MeasurementLineNode( model.measurementLines[ 0 ], modelViewTransform, { tandem: tandem.createTandem( 'firstMeasurementLine' ) } ),
@@ -203,10 +141,10 @@ export default class SpinMeasurementArea extends VBox {
           [
             model.particleSourceModel.sourceModeProperty,
             model.currentExperimentProperty,
-            model.blockUpperExitProperty
+            model.sternGerlachs[ 0 ].blockingModeProperty
           ],
-          ( sourceMode, experiment, blockUpperExit ) => {
-            return sourceMode === SourceMode.CONTINUOUS && !experiment.isShortExperiment && !blockUpperExit;
+          ( sourceMode, experiment, blockingMode ) => {
+            return sourceMode === SourceMode.CONTINUOUS && !experiment.isShortExperiment && blockingMode === BlockingMode.BLOCK_DOWN;
           } ) ),
 
       createPercentageHistogram(
@@ -215,10 +153,10 @@ export default class SpinMeasurementArea extends VBox {
           [
             model.particleSourceModel.sourceModeProperty,
             model.currentExperimentProperty,
-            model.blockUpperExitProperty
+            model.sternGerlachs[ 0 ].blockingModeProperty
           ],
-          ( sourceMode, experiment, blockUpperExit ) => {
-            return sourceMode === SourceMode.CONTINUOUS && !experiment.isShortExperiment && blockUpperExit;
+          ( sourceMode, experiment, blockingMode ) => {
+            return sourceMode === SourceMode.CONTINUOUS && !experiment.isShortExperiment && blockingMode === BlockingMode.BLOCK_UP;
           } ) )
     ];
 
@@ -265,15 +203,22 @@ export default class SpinMeasurementArea extends VBox {
         tandem: tandem.createTandem( 'expectedPercentageCheckbox' )
       } );
 
-    const exitBlocker = new Path( new Shape().moveTo( 0, 0 ).lineTo( 0, 35 ), {
+    const exitBlockerNode = new Path( new Shape().moveTo( 0, 0 ).lineTo( 0, 35 ), {
       stroke: 'black',
-      lineWidth: 5,
-      visibleProperty: model.isBlockingProperty
+      lineWidth: 5
     } );
 
     model.exitBlockerPositionProperty.link( position => {
-      exitBlocker.rotation = model.blockUpperExitProperty.value ? Utils.toRadians( -10 ) : Utils.toRadians( 10 );
-      exitBlocker.center = modelViewTransform.modelToViewPosition( position );
+      if ( position !== null ) {
+        exitBlockerNode.visible = true;
+        exitBlockerNode.rotation = model.sternGerlachs[ 0 ].blockingModeProperty.value === BlockingMode.BLOCK_UP ?
+                                   Utils.toRadians( -10 ) :
+                                   Utils.toRadians( 10 );
+        exitBlockerNode.center = modelViewTransform.modelToViewPosition( position );
+      }
+      else {
+        exitBlockerNode.visible = false;
+      }
     } );
 
     const experimentAreaNode = new Node( {
@@ -282,12 +227,10 @@ export default class SpinMeasurementArea extends VBox {
         ...singleParticleNodes,
         particleSourceNode,
         ...sternGerlachNodes,
-        firstSternGerlachControls,
-        secondAndThirdSternGerlachControl,
         ...measurementLines,
         ...histograms,
         expectedPercentageCheckbox,
-        exitBlocker
+        exitBlockerNode
       ]
     } );
 

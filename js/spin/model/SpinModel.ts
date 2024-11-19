@@ -21,6 +21,7 @@ import TModel from '../../../../joist/js/TModel.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import { BlockingMode } from './BlockingMode.js';
 import MeasurementLine from './MeasurementLine.js';
 import ParticleSourceModel from './ParticleSourceModel.js';
 import { ParticleSystem } from './ParticleSystem.js';
@@ -69,8 +70,7 @@ export default class SpinModel implements TModel {
 
   // Boolean to control what exit to block in continuous mode
   public readonly isBlockingProperty: TReadOnlyProperty<boolean>;
-  public readonly blockUpperExitProperty: BooleanProperty;
-  public readonly exitBlockerPositionProperty: TReadOnlyProperty<Vector2>;
+  public readonly exitBlockerPositionProperty: TReadOnlyProperty<Vector2 | null>;
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
@@ -145,20 +145,21 @@ export default class SpinModel implements TModel {
       }
     );
 
-    this.blockUpperExitProperty = new BooleanProperty( false, {
-      tandem: providedOptions.tandem.createTandem( 'blockUpperExitProperty' )
-    } );
-
     this.exitBlockerPositionProperty = new DerivedProperty(
       [
-        this.blockUpperExitProperty,
+        this.sternGerlachs[ 0 ].blockingModeProperty,
         this.sternGerlachs[ 0 ].topExitPositionProperty,
         this.sternGerlachs[ 0 ].bottomExitPositionProperty
       ],
-      ( blockUpperExit, topExit, bottomExit ) => {
-        const offset = BLOCKER_OFFSET;
-        const position = blockUpperExit ? topExit : bottomExit;
-        return position.plus( offset );
+      ( blockingMode, topExit, bottomExit ) => {
+        if ( blockingMode !== BlockingMode.NO_BLOCKER ) {
+          const offset = BLOCKER_OFFSET;
+          const position = blockingMode === BlockingMode.BLOCK_UP ? topExit : bottomExit;
+          return position.plus( offset );
+        }
+        else {
+          return null;
+        }
       }
     );
 
@@ -187,44 +188,65 @@ export default class SpinModel implements TModel {
       }
     } );
 
+    let lastBlockingMode = BlockingMode.BLOCK_UP;
+    this.sternGerlachs[ 0 ].blockingModeProperty.link( blockingMode => {
+      if ( blockingMode !== BlockingMode.NO_BLOCKER ) {
+        lastBlockingMode = blockingMode;
+      }
+    } );
+
+    Multilink.multilink(
+      [
+        this.currentExperimentProperty,
+        this.particleSourceModel.sourceModeProperty
+      ],
+      ( experiment, sourceMode ) => {
+        if ( sourceMode === SourceMode.CONTINUOUS && !experiment.isShortExperiment ) {
+          this.sternGerlachs[ 0 ].blockingModeProperty.value = lastBlockingMode;
+        }
+        else {
+          this.sternGerlachs[ 0 ].blockingModeProperty.value = BlockingMode.NO_BLOCKER;
+        }
+      }
+    );
+
     // Multilink for changes in the experiment either via source mode or experiment selection
     Multilink.multilink(
       [
         this.currentExperimentProperty,
         this.particleSourceModel.sourceModeProperty,
         this.particleSourceModel.spinStateProperty,
-        this.blockUpperExitProperty
+        this.sternGerlachs[ 0 ].blockingModeProperty
       ],
-      ( experiment, sourceMode, spinState, blockUpperExit ) => {
-        this.sternGerlachs.forEach( sternGerlach => sternGerlach.reset() );
+      ( experiment, sourceMode, spinState, blockingMode ) => {
 
-        if ( experiment !== SpinExperiment.CUSTOM ) {
+        // Clearing the particle system and Stern-Gerlachs for a new experiment
+        this.sternGerlachs.forEach( sternGerlach => sternGerlach.reset() );
+        this.particleSystem.reset();
+
+        // Conditions that determine visibility and state of the experiment components
+        const customExperiment = experiment === SpinExperiment.CUSTOM;
+        const singleParticle = sourceMode === SourceMode.SINGLE;
+        const longExperiment = !experiment.isShortExperiment;
+
+        if ( !customExperiment ) {
           this.particleSourceModel.customSpinStateProperty.value = SpinDirection.spinToVector( spinState );
           this.upProbabilityProperty.value = ( spinState === SpinDirection.Z_PLUS || spinState === SpinDirection.X_PLUS ) ? 1 : 0;
         }
 
-        const isSingle = sourceMode === SourceMode.SINGLE;
-        this.measurementLines[ 0 ].isActiveProperty.value = isSingle;
-        this.measurementLines[ 1 ].isActiveProperty.value = isSingle;
-        this.measurementLines[ 2 ].isActiveProperty.value = isSingle && !experiment.isShortExperiment;
+        this.measurementLines[ 0 ].isActiveProperty.value = singleParticle;
+        this.measurementLines[ 1 ].isActiveProperty.value = singleParticle;
+        this.measurementLines[ 2 ].isActiveProperty.value = singleParticle && longExperiment;
 
-        this.particleSystem.reset();
+        this.sternGerlachs[ 0 ].isDirectionControllableProperty.value = customExperiment;
+        this.sternGerlachs[ 1 ].isDirectionControllableProperty.value = customExperiment && !singleParticle;
+        this.sternGerlachs[ 2 ].isDirectionControllableProperty.value = customExperiment;
 
-        this.sternGerlachs.forEach( ( SternGerlach, index ) => {
-          if ( experiment.experimentSetting.length > index ) {
-            // If isBlocking, check which entrance is blocked and set the visibility of the SternGerlach accordingly
-            const isBlocked = this.isBlockingProperty.value ?
-                              index === 1 ? blockUpperExit :
-                              index === 2 ? !blockUpperExit : false : false;
-            SternGerlach.isVisibleProperty.value = experiment.experimentSetting[ index ].active && !isBlocked;
-            if ( experiment !== SpinExperiment.CUSTOM ) {
-              SternGerlach.isZOrientedProperty.value = experiment.experimentSetting[ index ].isZOriented;
-            }
-          }
-          else {
-            SternGerlach.isVisibleProperty.value = false;
-          }
-        } );
+        this.sternGerlachs[ 1 ].isVisibleProperty.value = longExperiment &&
+                                                          blockingMode !== BlockingMode.BLOCK_UP;
+
+        this.sternGerlachs[ 2 ].isVisibleProperty.value = longExperiment &&
+                                                          blockingMode !== BlockingMode.BLOCK_DOWN;
 
         // Set the probabilities of the experiment. In the continuous case, this immediately alters the shown rays
         // In the single case, this prepares the probabilities for the particle that will be shot

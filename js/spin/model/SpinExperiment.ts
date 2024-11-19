@@ -21,6 +21,7 @@ type SternGerlachExperimentSetting = {
 
 export default class SpinExperiment extends EnumerationValue {
 
+  // TODO: Remove active, see https://github.com/phetsims/quantum-measurement/issues/53
   public static readonly EXPERIMENT_1 = new SpinExperiment( 'Experiment 1 [SGz]', [
     { isZOriented: true, active: true }
   ] );
@@ -59,6 +60,7 @@ export default class SpinExperiment extends EnumerationValue {
 
   public readonly experimentSetting: SternGerlachExperimentSetting[];
 
+  // TODO: Better naming, see https://github.com/phetsims/quantum-measurement/issues/53
   public readonly isShortExperiment: boolean;
 
   public constructor( experimentName: string | TReadOnlyProperty<string>, experimentSetting: SternGerlachExperimentSetting[] ) {

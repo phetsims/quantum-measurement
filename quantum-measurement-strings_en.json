@@ -196,5 +196,11 @@
   },
   "Z": {
     "value": "Z"
+  },
+  "blockUp": {
+    "value": "Block Up"
+  },
+  "blockDown": {
+    "value": "Block Down"
   }
 }
