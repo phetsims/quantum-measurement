@@ -188,10 +188,10 @@ export default class SpinModel implements TModel {
       }
     } );
 
-    let lastBlockingMode = BlockingMode.BLOCK_UP;
+    // Saving the blocking mode into the experiment
     this.sternGerlachs[ 0 ].blockingModeProperty.link( blockingMode => {
       if ( blockingMode !== BlockingMode.NO_BLOCKER ) {
-        lastBlockingMode = blockingMode;
+        this.currentExperimentProperty.value.blockingModeProperty.value = blockingMode;
       }
     } );
 
@@ -202,7 +202,7 @@ export default class SpinModel implements TModel {
       ],
       ( experiment, sourceMode ) => {
         if ( sourceMode === SourceMode.CONTINUOUS && !experiment.isShortExperiment ) {
-          this.sternGerlachs[ 0 ].blockingModeProperty.value = lastBlockingMode;
+          this.sternGerlachs[ 0 ].blockingModeProperty.value = experiment.blockingModeProperty.value;
         }
         else {
           this.sternGerlachs[ 0 ].blockingModeProperty.value = BlockingMode.NO_BLOCKER;
