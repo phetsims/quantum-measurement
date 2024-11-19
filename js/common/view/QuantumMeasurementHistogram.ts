@@ -129,26 +129,38 @@ export default class QuantumMeasurementHistogram extends Node {
 
       const fractionFont = new PhetFont( { size: 15, weight: 'bold' } );
 
-      leftNumberDisplay = new NumberDisplay( leftNumberProperty, NUMBER_DISPLAY_RANGE, combineOptions<NumberDisplayOptions>(
-        {}, options.numberDisplayOptions, {
+      // Assume no one will every have the patience to shoot more than 1000 photons.
+      const fractionTermsRange = new Range( 0, 999 );
+
+      leftNumberDisplay = new NumberDisplay(
+        leftNumberProperty,
+        fractionTermsRange,
+        combineOptions<NumberDisplayOptions>( {}, options.numberDisplayOptions, {
           textOptions: { fill: options.matchLabelColors ? options.leftFillColorProperty : 'black', font: fractionFont }
-        } ) );
-      rightNumberDisplay = new NumberDisplay( rightNumberProperty, NUMBER_DISPLAY_RANGE, combineOptions<NumberDisplayOptions>(
-        {}, options.numberDisplayOptions, {
+        } )
+      );
+      rightNumberDisplay = new NumberDisplay(
+        rightNumberProperty,
+        fractionTermsRange,
+        combineOptions<NumberDisplayOptions>( {}, options.numberDisplayOptions, {
           textOptions: { fill: options.matchLabelColors ? options.rightFillColorProperty : 'black', font: fractionFont }
-        } ) );
+        } )
+      );
 
-      const totalNumberDisplay = new NumberDisplay( totalNumberProperty, NUMBER_DISPLAY_RANGE, combineOptions<NumberDisplayOptions>(
-        {}, options.numberDisplayOptions, {
+      const denominatorNumberDisplay = new NumberDisplay(
+        totalNumberProperty,
+        fractionTermsRange,
+        combineOptions<NumberDisplayOptions>( {}, options.numberDisplayOptions, {
           textOptions: { font: fractionFont }
-        } ) );
+        } )
+      );
 
-      leftNumberDisplay = new FractionNode( leftNumberDisplay, totalNumberDisplay, {
+      leftNumberDisplay = new FractionNode( leftNumberDisplay, denominatorNumberDisplay, {
         fractionLineMargin: 0,
         rotation: textRotation,
         visibleProperty: numberDisplaysVisibleProperty
       } );
-      rightNumberDisplay = new FractionNode( rightNumberDisplay, totalNumberDisplay, {
+      rightNumberDisplay = new FractionNode( rightNumberDisplay, denominatorNumberDisplay, {
         fractionLineMargin: 0,
         rotation: textRotation,
         visibleProperty: numberDisplaysVisibleProperty

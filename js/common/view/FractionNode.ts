@@ -18,6 +18,7 @@ type SelfOptions = {
 type FractionNodeOptions = SelfOptions & StrictOmit<VBoxOptions, 'children'>;
 
 export default class FractionNode extends Node {
+
   public constructor( numeratorNode: Node, denominatorNode: Node, providedOptions?: FractionNodeOptions ) {
 
     const fractionLine = new Line( 0, 0, 1, 0, { stroke: 'black', lineWidth: 1.5, lineCap: 'round' } );
