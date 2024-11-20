@@ -1,75 +1,75 @@
 {
-  "comment": "# quantum-measurement 1.0.0-dev.7 Mon Nov 18 2024 17:00:30 GMT-0700 (Mountain Standard Time)",
+  "comment": "# quantum-measurement 1.0.0-dev.8 Tue Nov 19 2024 17:23:28 GMT-0700 (Mountain Standard Time)",
   "assert": {
-    "sha": "7f94c13f8e5a364e2501d255b7934fd1c5c32fda",
+    "sha": "386a2323ecc3b36fbe30babf13b660dc1cc522a8",
     "branch": "main"
   },
   "axon": {
-    "sha": "71a534a27aee9e60ef91c238d2ef5135dfc25116",
+    "sha": "7d28ac1450900b485756fd0c6a76f484fe0f05ae",
     "branch": "main"
   },
   "brand": {
-    "sha": "78012848e19070867979396efff079ccd152ed9c",
+    "sha": "b7d7379fccdfd74affae1f7610bf6ebee5de1701",
     "branch": "main"
   },
   "chipper": {
-    "sha": "ccdc020b40a8fa17ce6c3f3646656d1eca0c2bd4",
+    "sha": "688eed722fee2082eef414c8bc2548c3c7110654",
     "branch": "main"
   },
   "dot": {
-    "sha": "7ed04e002f3cc4938c86faf79c6b224340a1e36a",
+    "sha": "97e5775c972d83ab501371a7ff984b13e5d7d606",
     "branch": "main"
   },
   "joist": {
-    "sha": "9f198457981b394f75ee3b778e8eabb1e1d903e5",
+    "sha": "1255f585055b055da1470ea40fd9b3ff477f8ec4",
     "branch": "main"
   },
   "kite": {
-    "sha": "96cea11e9a32c511657a808b8d04e41e2e19b0d4",
+    "sha": "0e133cdb5c4d2baf182178a0c7aeea7d8ec0bb81",
     "branch": "main"
   },
   "perennial-alias": {
-    "sha": "5b6f2bf0a625cde1bf4ff31e24d48765ce3038e2",
+    "sha": "c69bc55577ab46940046c81b15fc4628c0bc15d8",
     "branch": "main"
   },
   "phet-core": {
-    "sha": "41ce6d536e5e28fc90cebf3524bc17b8e9469575",
+    "sha": "81ba75b044852d46ba0596fd73ebd330bea6cf3a",
     "branch": "main"
   },
   "phet-io": {
-    "sha": "a86afe6a74442a510ae6b44a4607899e7ab64dfc",
+    "sha": "87258068d4cc5a5d7b2a69a1d1e791feeef4eac7",
     "branch": "main"
   },
   "phet-io-sim-specific": {
-    "sha": "52f07488c9c7505bd8ccdd94ead16c0531ac3d40",
+    "sha": "c50af574a351aeeff4cfdf398a9d821ca8fea453",
     "branch": "main"
   },
   "phet-io-wrappers": {
-    "sha": "34c8c968f76abc85a4ad09699891d797d3750482",
+    "sha": "1ea253804b1f3b80df2aaa91f67ca4ad19019e6a",
     "branch": "main"
   },
   "phetcommon": {
-    "sha": "d18d936ab1c378af64c96e9b89d73347804697d7",
+    "sha": "168ed36b6c25a4313e10e46371c7fe4eb08c24da",
     "branch": "main"
   },
   "phetmarks": {
-    "sha": "d214408f2ea8d0289cb49bb73539239195ebed1d",
+    "sha": "441a195a7438520afd6b77265f858f5ec5d21ec6",
     "branch": "main"
   },
   "quantum-measurement": {
-    "sha": "3c55c28381fb7018b62e941494d1835e151957cf",
+    "sha": "e4934f9a5a0e8190aef5aeb53d986b0271875586",
     "branch": "main"
   },
   "query-string-machine": {
-    "sha": "e46f9c293d3663175b1b0c40d79ba6b281c83ad9",
+    "sha": "34c361b2121b3415ae2c8aa1dd754e9d4d8e7950",
     "branch": "main"
   },
   "scenery": {
-    "sha": "81bb252cee358f6869c1b42ba26265707d25baad",
+    "sha": "792bacae80b0e7953422f1750fcfb6fbac982b9b",
     "branch": "main"
   },
   "scenery-phet": {
-    "sha": "7de94b6ebedbcfb2708d55e4c4dcbc9fd3c3ffe0",
+    "sha": "ac23a397c796469298b12bb11699743b1994aaf3",
     "branch": "main"
   },
   "sherpa": {
@@ -77,27 +77,27 @@
     "branch": "main"
   },
   "studio": {
-    "sha": "e76523fb08f71b0b4eb6a32d011c4f65f259ee8a",
+    "sha": "26ac89621f246b1cd0f393bf21e3d20383ba82c7",
     "branch": "main"
   },
   "sun": {
-    "sha": "6c4ab289465070b09e2d4a55d75d852d06bcd5f8",
+    "sha": "43334552aa92e41add36746e1283e21d08781152",
     "branch": "main"
   },
   "tambo": {
-    "sha": "79b3f2ec169c5aad90ccdc942f270eae4d1cbb85",
+    "sha": "5649d9e349c9ed2df7083a557a3afbac2d56a909",
     "branch": "main"
   },
   "tandem": {
-    "sha": "67455dd37d4b93b165c49e8e18f83b01a502edfd",
+    "sha": "02f130f6a04d22a43cddc3551295258fa6459c76",
     "branch": "main"
   },
   "twixt": {
-    "sha": "6f8201d95f3005d2d50979026069ac5bde476123",
+    "sha": "e3b08807487c78bc8f59a4bb71e3946d0e182de2",
     "branch": "main"
   },
   "utterance-queue": {
-    "sha": "754193e20ed98cb797ecb1de0830fce41efa36f9",
+    "sha": "cd4792df77725a519e651d3f8a0159dd51d857a0",
     "branch": "main"
   }
 }
