@@ -103,6 +103,15 @@ export default class PhotonsExperimentSceneView extends Node {
       tandem: providedOptions.tandem.createTandem( 'equationsBox' )
     } );
 
+    // Put the title and the equations together in a vertical box.
+    const titleAndEquationsBox = new VBox( {
+      children: [ averagePolarizationTitlePanel, equationsBox ],
+      spacing: 10,
+      align: 'left',
+      right: QuantumMeasurementConstants.LAYOUT_BOUNDS.width - INSET,
+      top: 0
+    } );
+
     // Create the graph that indicates the relative proportions of vertical and horizontal detections.
     const normalizedOutcomeVectorGraph = new NormalizedOutcomeVectorGraph(
       model.normalizedOutcomeValueProperty,
@@ -146,40 +155,30 @@ export default class PhotonsExperimentSceneView extends Node {
       }
     );
 
-    // Put the two dynamic data display nodes together in a horizontal box.
+    // Put the two dynamic data display nodes together in a horizontal box.  The center of this box will be aligned
+    // with the center of the emitted photon beam.
     const dynamicDataDisplayBox = new HBox( {
       children: [ normalizedOutcomeVectorGraph, countHistogram ],
       spacing: 20,
-      align: 'center'
+      align: 'center',
+      left: titleAndEquationsBox.left,
+      centerY: photonTestingArea.y
     } );
 
-    const dataDashboardChildren: Node[] = [
-      averagePolarizationTitlePanel,
-      equationsBox,
-      dynamicDataDisplayBox
-    ];
-
-    // Add the control that allows the user to show/hide the expectation value line.
-    dataDashboardChildren.push( new ExpectationValueControl( normalizedOutcomeVectorGraph.showExpectationLineProperty, {
+    const expectationValueControl = new ExpectationValueControl(
+      normalizedOutcomeVectorGraph.showExpectationLineProperty,
+      {
 
         // Don't show this control when there isn't a valid expectation value to display.
         visibleProperty: new DerivedProperty(
           [ model.normalizedExpectationValueProperty ],
           expectationValue => expectationValue !== null
         ),
-
+        left: titleAndEquationsBox.left,
+        top: dynamicDataDisplayBox.bottom + 30,
         tandem: providedOptions.tandem.createTandem( 'expectationValueControl' )
       }
-    ) );
-
-    // Create the box that contains the graphs that display the measurement data from the photon experiments.
-    const dataDashboardBox = new VBox( {
-      children: dataDashboardChildren,
-      align: 'left',
-      spacing: 22,
-      right: QuantumMeasurementConstants.LAYOUT_BOUNDS.right - 40,
-      top: 0
-    } );
+    );
 
     const options = optionize<PhotonsExperimentSceneViewOptions, SelfOptions, NodeOptions>()( {
       children: [
@@ -187,7 +186,9 @@ export default class PhotonsExperimentSceneView extends Node {
         polarizationIndicator,
         photonPolarizationAngleControl,
         photonTestingArea,
-        dataDashboardBox
+        titleAndEquationsBox,
+        dynamicDataDisplayBox,
+        expectationValueControl
       ]
     }, providedOptions );
 
