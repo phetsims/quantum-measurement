@@ -68,7 +68,7 @@ export class ParticleSystem {
 
     // Set the first spin vector to the state of the generated particles
     // TODO: Is creating a bunch of copies of this vector bad?? https://github.com/phetsims/quantum-measurement/issues/53
-    particle.spinVectors[ 0 ] = this.model.particleSourceModel.customSpinStateProperty.value.copy();
+    particle.spinVectors[ 0 ] = this.model.derivedSpinStateProperty.value.copy();
 
     particle.updatePath(
       this.model.particleSourceModel.exitPositionProperty.value,

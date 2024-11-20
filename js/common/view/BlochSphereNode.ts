@@ -130,17 +130,6 @@ export default class BlochSphereNode extends Node {
       centerX: upStateLabel.centerX
     } );
 
-    // TODO: Remove? https://github.com/phetsims/quantum-measurement/issues/53
-    // const subtitle = new Text( QuantumMeasurementStrings.representationStringProperty, { font: new PhetFont( 14 ) } );
-    //
-    // const titleSubtitleBox = new VBox( {
-    //   spacing: 0,
-    //   visible: providedOptions.drawTitle,
-    //   children: [ title, subtitle ],
-    //   bottom: upStateLabel.top - 10,
-    //   centerX: upStateLabel.centerX
-    // } );
-
     const stateVectorVisibleProperty = new BooleanProperty( true );
     const stateVector = new ArrowNode( 0, 0, 0, -sphereRadius, {
       tandem: providedOptions.tandem.createTandem( 'stateVector' ),

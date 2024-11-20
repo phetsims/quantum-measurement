@@ -88,7 +88,7 @@ export default class SpinStatePreparationArea extends VBox {
 
     const blochSphereNode = new BlochSphereWithProjectionNode(
       model.blochSphere,
-      model.particleSourceModel.customSpinStateProperty,
+      model.derivedSpinStateProperty,
       model.isCustomExperimentProperty,
       {
         tandem: tandem.createTandem( 'blochSphereNode' ),
@@ -107,7 +107,7 @@ export default class SpinStatePreparationArea extends VBox {
 
     const stateReadoutStringProperty = new DerivedProperty(
       [
-        model.particleSourceModel.customSpinStateProperty
+        model.derivedSpinStateProperty
       ],
       spinState => {
 

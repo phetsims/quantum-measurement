@@ -9,7 +9,6 @@
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import BlochSphereNode, { BlochSphereNodeOptions } from '../../common/view/BlochSphereNode.js';
 import DashedArrowNode from '../../common/view/DashedArrowNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
@@ -19,7 +18,7 @@ export default class BlochSphereWithProjectionNode extends BlochSphereNode {
 
   public constructor(
     blochSphere: SimpleBlochSphere,
-    customSpinVectorProperty: Vector2Property,
+    customSpinVectorProperty: TReadOnlyProperty<Vector2>,
     isCustomExperiment: TReadOnlyProperty<boolean>,
     providedOptions: BlochSphereNodeOptions
   ) {
