@@ -45,7 +45,7 @@ type SelfOptions = {
 };
 export type QuantumMeasurementHistogramOptions = SelfOptions & WithRequired<NodeOptions, 'tandem' | 'visibleProperty'>;
 
-const HISTOGRAM_SIZE = new Dimension2( 200, 160 ); // size excluding labels at bottom, in screen coordinates
+export const HISTOGRAM_SIZE = new Dimension2( 200, 160 ); // size excluding labels at bottom, in screen coordinates
 const RIGHT_HISTOGRAM_BAR_CENTER_X = HISTOGRAM_SIZE.width / 4;
 const LEFT_HISTOGRAM_BAR_CENTER_X = -HISTOGRAM_SIZE.width / 4;
 const AXIS_STROKE = Color.BLACK;
@@ -56,7 +56,7 @@ const TICK_MARK_FONT = new PhetFont( 14 );
 const NUMBER_DISPLAY_RANGE = new Range( 0, MAX_COINS );
 const NUMBER_DISPLAY_MAX_WIDTH = HISTOGRAM_SIZE.width / 2 * 0.85;
 const FLOATING_LABEL_MARGIN = 5;
-export const HISTOGRAM_BAR_WIDTH = HISTOGRAM_SIZE.width / 6;
+const HISTOGRAM_BAR_WIDTH = HISTOGRAM_SIZE.width / 6;
 
 export default class QuantumMeasurementHistogram extends Node {
 

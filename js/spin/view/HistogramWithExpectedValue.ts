@@ -13,7 +13,7 @@ import { Shape } from '../../../../kite/js/imports.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import { Path, PathOptions, RichText } from '../../../../scenery/js/imports.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import QuantumMeasurementHistogram, { HISTOGRAM_BAR_WIDTH, QuantumMeasurementHistogramOptions } from '../../common/view/QuantumMeasurementHistogram.js';
+import QuantumMeasurementHistogram, { HISTOGRAM_SIZE, QuantumMeasurementHistogramOptions } from '../../common/view/QuantumMeasurementHistogram.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
 export default class HistogramWithExpectedValue extends QuantumMeasurementHistogram {
@@ -30,16 +30,15 @@ export default class HistogramWithExpectedValue extends QuantumMeasurementHistog
     const expectedValueOptions = combineOptions<PathOptions>( {
       visibleProperty: expectedValueVisibleProperty
     }, QuantumMeasurementConstants.expectedPercentagePathOptions );
-    const leftExpectedValueLine = new Path( new Shape().moveTo( 0, 0 ).lineTo( HISTOGRAM_BAR_WIDTH * 2, 0 ), expectedValueOptions );
-    const rightExpectedValueLine = new Path( new Shape().moveTo( 0, 0 ).lineTo( HISTOGRAM_BAR_WIDTH * 2, 0 ), expectedValueOptions );
+
+    const leftExpectedValueLine = new Path( new Shape().moveTo( 0, 0 ).lineTo( HISTOGRAM_SIZE.width / 3, 0 ), expectedValueOptions );
+    const rightExpectedValueLine = new Path( new Shape().moveTo( 0, 0 ).lineTo( HISTOGRAM_SIZE.width / 3, 0 ), expectedValueOptions );
 
     this.addChild( leftExpectedValueLine );
     this.addChild( rightExpectedValueLine );
 
     leftProbabilityProperty.link( probability => {
-      // TODO: Check this, https://github.com/phetsims/quantum-measurement/issues/53
-      // Position the expected value lines, empirically determined since the AlignGroups mess everything up
-      const xPosition = 1.65 * HISTOGRAM_BAR_WIDTH;
+      const xPosition = HISTOGRAM_SIZE.width / 4;
       leftExpectedValueLine.center = new Vector2( -xPosition, -this.maxBarHeight * probability );
       rightExpectedValueLine.center = new Vector2( xPosition, -this.maxBarHeight * ( 1 - probability ) );
     } );
