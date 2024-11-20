@@ -144,7 +144,7 @@ export default class SpinMeasurementArea extends VBox {
             model.sternGerlachs[ 0 ].blockingModeProperty
           ],
           ( sourceMode, experiment, blockingMode ) => {
-            return sourceMode === SourceMode.CONTINUOUS && !experiment.isShortExperiment && blockingMode === BlockingMode.BLOCK_DOWN;
+            return sourceMode === SourceMode.CONTINUOUS && !experiment.usingSingleApparatus && blockingMode === BlockingMode.BLOCK_DOWN;
           } ) ),
 
       createPercentageHistogram(
@@ -156,7 +156,7 @@ export default class SpinMeasurementArea extends VBox {
             model.sternGerlachs[ 0 ].blockingModeProperty
           ],
           ( sourceMode, experiment, blockingMode ) => {
-            return sourceMode === SourceMode.CONTINUOUS && !experiment.isShortExperiment && blockingMode === BlockingMode.BLOCK_UP;
+            return sourceMode === SourceMode.CONTINUOUS && !experiment.usingSingleApparatus && blockingMode === BlockingMode.BLOCK_UP;
           } ) )
     ];
 

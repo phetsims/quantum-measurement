@@ -3,8 +3,6 @@
 /**
  * SpinExperiment contains the details for all posisble Stern-Gerlach configurations of the Spin Screen.
  *
- * // TODO: Think of a better logic for blocking https://github.com/phetsims/quantum-measurement/issues/53
- *
  * @author Agustín Vallejo
  */
 
@@ -60,8 +58,7 @@ export default class SpinExperiment extends EnumerationValue {
 
   public readonly experimentSetting: SternGerlachExperimentSetting[];
 
-  // TODO: Better naming, see https://github.com/phetsims/quantum-measurement/issues/53
-  public readonly isShortExperiment: boolean;
+  public readonly usingSingleApparatus: boolean;
 
   // Wether the blocker is blocking the up or down exit, if applicable
   public readonly blockingModeProperty: Property<BlockingMode>;
@@ -71,7 +68,7 @@ export default class SpinExperiment extends EnumerationValue {
     this.experimentName = experimentName;
     this.experimentSetting = experimentSetting;
 
-    this.isShortExperiment = this.experimentSetting.length === 1;
+    this.usingSingleApparatus = this.experimentSetting.length === 1;
 
     this.blockingModeProperty = new Property<BlockingMode>( BlockingMode.BLOCK_UP );
   }

@@ -154,7 +154,7 @@ export default class SpinModel implements TModel {
         this.currentExperimentProperty
       ],
       ( sourceMode, currentExperiment ) => {
-        return sourceMode === SourceMode.CONTINUOUS && !currentExperiment.isShortExperiment;
+        return sourceMode === SourceMode.CONTINUOUS && !currentExperiment.usingSingleApparatus;
       }
     );
 
@@ -214,7 +214,7 @@ export default class SpinModel implements TModel {
         this.particleSourceModel.sourceModeProperty
       ],
       ( experiment, sourceMode ) => {
-        if ( sourceMode === SourceMode.CONTINUOUS && !experiment.isShortExperiment ) {
+        if ( sourceMode === SourceMode.CONTINUOUS && !experiment.usingSingleApparatus ) {
           this.sternGerlachs[ 0 ].blockingModeProperty.value = experiment.blockingModeProperty.value;
         }
         else {
@@ -240,7 +240,7 @@ export default class SpinModel implements TModel {
         // Conditions that determine visibility and state of the experiment components
         const customExperiment = experiment === SpinExperiment.CUSTOM;
         const singleParticle = sourceMode === SourceMode.SINGLE;
-        const longExperiment = !experiment.isShortExperiment;
+        const longExperiment = !experiment.usingSingleApparatus;
 
         if ( !customExperiment ) {
           this.upProbabilityProperty.value = ( spinState === SpinDirection.Z_PLUS || spinState === SpinDirection.X_PLUS ) ? 1 : 0;
@@ -282,7 +282,7 @@ export default class SpinModel implements TModel {
     // Measure on the first SG, this will change its upProbabilityProperty
     this.sternGerlachs[ 0 ].updateProbability( this.derivedSpinStateProperty.value );
 
-    if ( !this.currentExperimentProperty.value.isShortExperiment ) {
+    if ( !this.currentExperimentProperty.value.usingSingleApparatus ) {
       // Measure on the second SG according to the orientation of the first one
       this.sternGerlachs[ 1 ].updateProbability(
         // SG0 passes the up-spin particles to SG1

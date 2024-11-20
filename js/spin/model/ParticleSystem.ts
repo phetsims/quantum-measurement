@@ -185,7 +185,7 @@ export class ParticleSystem {
       const extraDistance = particle.positionProperty.value.x - particle.endPosition.x;
       const extraTime = extraDistance / particle.speed;
 
-      const isShortExperiment = this.model.currentExperimentProperty.value.isShortExperiment;
+      const usingSingleApparatus = this.model.currentExperimentProperty.value.usingSingleApparatus;
 
       if ( !particle.stageCompleted[ 0 ] ) {
         const isResultUp = this.measureParticle( particle, this.model.sternGerlachs[ 0 ], 1, particle.spinVectors[ 0 ] );
@@ -194,7 +194,7 @@ export class ParticleSystem {
         const startPosition = isResultUp ?
                               this.model.sternGerlachs[ 0 ].topExitPositionProperty.value :
                               this.model.sternGerlachs[ 0 ].bottomExitPositionProperty.value;
-        if ( isShortExperiment ) {
+        if ( usingSingleApparatus ) {
           const endPosition = isResultUp ?
                               this.model.sternGerlachs[ 0 ].topExitPositionProperty.value.plus( HORIZONTAL_ENDPOINT ) : // To infinity
                               this.model.sternGerlachs[ 0 ].bottomExitPositionProperty.value.plus( HORIZONTAL_ENDPOINT ); // To infinity
@@ -210,7 +210,7 @@ export class ParticleSystem {
         particle.stageCompleted[ 0 ] = true;
 
       }
-      else if ( !isShortExperiment && !particle.stageCompleted[ 1 ] ) {
+      else if ( !usingSingleApparatus && !particle.stageCompleted[ 1 ] ) {
         const startPosition = particle.endPosition;
         const endPosition = particle.endPosition.plusXY(
           SternGerlach.STERN_GERLACH_WIDTH, 0
@@ -219,7 +219,7 @@ export class ParticleSystem {
 
         particle.stageCompleted[ 1 ] = true;
       }
-      else if ( !isShortExperiment && !particle.stageCompleted[ 2 ] ) {
+      else if ( !usingSingleApparatus && !particle.stageCompleted[ 2 ] ) {
         const sternGerlach = particle.isSpinUp[ 1 ] ? this.model.sternGerlachs[ 1 ] : this.model.sternGerlachs[ 2 ];
         const isResultUp = this.measureParticle(
           particle, sternGerlach, 2, particle.spinVectors[ 1 ] );
