@@ -66,7 +66,8 @@ export default class SternGerlach {
   public constructor( position: Vector2, isZOriented: boolean, tandem: Tandem ) {
 
     this.positionProperty = new Vector2Property( position, {
-      tandem: tandem.createTandem( 'positionProperty' )
+      tandem: tandem.createTandem( 'positionProperty' ),
+      phetioReadOnly: true
     } );
 
     this.entranceLocalPosition = new Vector2(
@@ -106,11 +107,13 @@ export default class SternGerlach {
     } );
 
     this.isVisibleProperty = new BooleanProperty( true, {
-      tandem: tandem.createTandem( 'isVisibleProperty' )
+      tandem: tandem.createTandem( 'isVisibleProperty' ),
+      phetioReadOnly: true
     } );
 
     this.upProbabilityProperty = new NumberProperty( 0.5, {
-      tandem: tandem.createTandem( 'upProbabilityProperty' )
+      tandem: tandem.createTandem( 'upProbabilityProperty' ),
+      phetioReadOnly: true
     } );
 
     this.downProbabilityProperty = new DerivedProperty( [ this.upProbabilityProperty ], upProbability => 1 - upProbability );

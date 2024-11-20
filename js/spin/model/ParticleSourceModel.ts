@@ -55,7 +55,8 @@ export default class ParticleSourceModel {
     } );
 
     this.positionProperty = new Vector2Property( position, {
-      tandem: tandem.createTandem( 'positionProperty' )
+      tandem: tandem.createTandem( 'positionProperty' ),
+      phetioReadOnly: true
     } );
 
     this.exitLocalPosition = new Vector2( 0, 0 );
@@ -73,7 +74,8 @@ export default class ParticleSourceModel {
 
     this.currentlyShootingParticlesProperty = new Property<boolean>( false, {
       tandem: tandem.createTandem( 'currentlyShootingParticlesProperty' ),
-      phetioValueType: BooleanIO
+      phetioValueType: BooleanIO,
+      phetioReadOnly: true
     } );
 
   }

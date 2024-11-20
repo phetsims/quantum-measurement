@@ -46,7 +46,8 @@ export default class AveragingCounterNumberProperty extends NumberProperty {
 
     const initialValue = 0;
     super( initialValue, {
-      tandem: options.tandem.createTandem( 'measuredValueProperty' )
+      tandem: options.tandem.createTandem( 'measuredValueProperty' ),
+      phetioReadOnly: true
     } );
 
     this.totalAveragingPeriod = options.totalAveragingPeriod;

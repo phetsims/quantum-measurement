@@ -40,7 +40,8 @@ export default class MeasurementLine {
   public constructor( position: Vector2, originallyActive: boolean, providedOptions: MeasurementLineOptions ) {
 
     this.spinStateProperty = new Vector2Property( new Vector2( 0, 1 ), {
-      tandem: providedOptions.tandem.createTandem( 'spinStateProperty' )
+      tandem: providedOptions.tandem.createTandem( 'spinStateProperty' ),
+      phetioReadOnly: true
     } );
 
     this.measurementEmitter = new Emitter();
@@ -53,7 +54,8 @@ export default class MeasurementLine {
     this.simpleBlochSphere = new SimpleBlochSphere( this.spinStateProperty, providedOptions );
 
     this.positionProperty = new Vector2Property( position, {
-      tandem: providedOptions.tandem.createTandem( 'positionProperty' )
+      tandem: providedOptions.tandem.createTandem( 'positionProperty' ),
+      phetioReadOnly: true
     } );
   }
 

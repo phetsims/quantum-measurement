@@ -39,22 +39,26 @@ export default abstract class AbstractBlochSphere extends PhetioObject {
 
     this.azimutalAngleProperty = new NumberProperty( 0, {
       range: new Range( 0, 2 * Math.PI ),
-      tandem: options.tandem.createTandem( 'azimutalAngleProperty' )
+      tandem: options.tandem.createTandem( 'azimutalAngleProperty' ),
+      phetioReadOnly: true
     } );
 
     this.polarAngleProperty = new NumberProperty( 0, {
       range: new Range( -Math.PI / 2, Math.PI / 2 ),
-      tandem: options.tandem.createTandem( 'polarAngleProperty' )
+      tandem: options.tandem.createTandem( 'polarAngleProperty' ),
+      phetioReadOnly: true
     } );
 
     this.alphaProperty = new NumberProperty( 1, {
       range: new Range( 0, 1 ),
-      tandem: options.tandem.createTandem( 'alphaProperty' )
+      tandem: options.tandem.createTandem( 'alphaProperty' ),
+      phetioReadOnly: true
     } );
 
     this.betaProperty = new NumberProperty( 0, {
       range: new Range( 0, 1 ),
-      tandem: options.tandem.createTandem( 'betaProperty' )
+      tandem: options.tandem.createTandem( 'betaProperty' ),
+      phetioReadOnly: true
     } );
   }
 
