@@ -67,8 +67,7 @@ export class ParticleSystem {
 
 
     // Set the first spin vector to the state of the generated particles
-    // TODO: Is creating a bunch of copies of this vector bad?? https://github.com/phetsims/quantum-measurement/issues/53
-    particle.spinVectors[ 0 ] = this.model.derivedSpinStateProperty.value.copy();
+    particle.spinVectors[ 0 ].set( this.model.derivedSpinStateProperty.value.copy() );
 
     particle.updatePath(
       this.model.particleSourceModel.exitPositionProperty.value,
@@ -248,11 +247,11 @@ export class ParticleSystem {
     const upProbability = sternGerlach.calculateProbability( incomingState );
     const isResultUp = dotRandom.nextDouble() < upProbability;
     particle.isSpinUp[ experimentStageIndex ] = isResultUp;
-    particle.spinVectors[ experimentStageIndex ] = SpinDirection.spinToVector(
+    particle.spinVectors[ experimentStageIndex ].set( SpinDirection.spinToVector(
       isResultUp ?
       sternGerlach.isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS :
       sternGerlach.isZOrientedProperty.value ? SpinDirection.Z_MINUS : null
-    );
+    ) );
     return isResultUp;
   }
 
