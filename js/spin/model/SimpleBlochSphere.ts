@@ -42,7 +42,7 @@ export default class SimpleBlochSphere extends AbstractBlochSphere {
     } );
 
     spinStateProperty.link( spinState => {
-      this.azimutalAngleProperty.value = 0;
+      this.azimutalAngleProperty.value = spinState.x > 0 ? 0 : Math.PI;
       this.polarAngleProperty.value = Math.asin( spinState.y );
     } );
 

@@ -28,6 +28,7 @@ import QuantumMeasurementConstants from '../QuantumMeasurementConstants.js';
 type SelfOptions = {
   drawKets?: boolean;
   drawTitle?: boolean;
+  expandBounds?: boolean;
 };
 export type BlochSphereNodeOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
 
@@ -193,7 +194,8 @@ export default class BlochSphereNode extends Node {
       // Increasing bounds horizontally so the labels have space to move
       // localBounds: new Bounds2( -1.5 * sphereRadius, -sphereRadius, 1.5 * sphereRadius, sphereRadius ),
       drawKets: true,
-      drawTitle: true
+      drawTitle: true,
+      expandBounds: true
     }, providedOptions );
 
     super( options );
@@ -230,7 +232,9 @@ export default class BlochSphereNode extends Node {
 
     } );
 
-    this.setLocalBounds( new Bounds2( -1.5 * sphereRadius, this.bounds.minY, 1.5 * sphereRadius, this.bounds.maxY ) );
+    if ( options.expandBounds ) {
+      this.setLocalBounds( new Bounds2( -1.5 * sphereRadius, this.bounds.minY, 1.5 * sphereRadius, this.bounds.maxY ) );
+    }
 
     this.sphereRadius = sphereRadius;
     this.xAxisOffsetAngleProperty = xAxisOffsetAngleProperty;

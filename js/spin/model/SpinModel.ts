@@ -242,10 +242,6 @@ export default class SpinModel implements TModel {
         const singleParticle = sourceMode === SourceMode.SINGLE;
         const longExperiment = !experiment.usingSingleApparatus;
 
-        if ( !customExperiment ) {
-          this.upProbabilityProperty.value = ( spinState === SpinDirection.Z_PLUS || spinState === SpinDirection.X_PLUS ) ? 1 : 0;
-        }
-
         this.measurementLines[ 0 ].isActiveProperty.value = singleParticle;
         this.measurementLines[ 1 ].isActiveProperty.value = singleParticle;
         this.measurementLines[ 2 ].isActiveProperty.value = singleParticle && longExperiment;
