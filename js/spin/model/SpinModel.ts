@@ -89,7 +89,7 @@ export default class SpinModel implements TModel {
 
     this.particleSourceModel = new ParticleSourceModel( new Vector2( -0.5, 0 ), providedOptions.tandem.createTandem( 'particleSourceModel' ) );
 
-    this.particleSystem = new ParticleSystem( this );
+    this.particleSystem = new ParticleSystem( this, providedOptions.tandem );
 
     this.derivedSpinStateProperty = new DerivedProperty(
       [

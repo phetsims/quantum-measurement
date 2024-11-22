@@ -9,6 +9,7 @@
 
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { BlockingMode } from './BlockingMode.js';
 import { ParticleWithSpin } from './ParticleWithSpin.js';
@@ -37,18 +38,23 @@ export class ParticleSystem {
   private fractionalEmissionAccumulator = 0;
 
   public constructor(
-    model: SpinModel
+    model: SpinModel,
+    tandem: Tandem
   ) {
 
     this.model = model;
 
     // Create all particles that will be used in the experiment.  It works better for phet-io if these are created at
     // construction time and activated and deactivated as needed, rather than creating and destroying them.
-    this.singleParticles = _.times( MAX_NUMBER_OF_SINGLE_PARTICLES, () => {
-      return new ParticleWithSpin( Vector2.ZERO );
+    const singleParticlesTandem = tandem.createTandem( 'singleParticles' );
+    const multipleParticlesTandem = tandem.createTandem( 'multipleParticles' );
+    this.singleParticles = _.times( MAX_NUMBER_OF_SINGLE_PARTICLES, index => {
+      const particleTandem = singleParticlesTandem.createTandem( 'particle' + index );
+      return new ParticleWithSpin( Vector2.ZERO, particleTandem );
     } );
-    this.multipleParticles = _.times( MAX_NUMBER_OF_MULTIPLE_PARTICLES, () => {
-      return new ParticleWithSpin( new Vector2( PARTICLE_RAY_WIDTH * ( dotRandom.nextDouble() * 2 - 1 ), PARTICLE_RAY_WIDTH * ( dotRandom.nextDouble() * 2 - 1 ) ) );
+    this.multipleParticles = _.times( MAX_NUMBER_OF_MULTIPLE_PARTICLES, index => {
+      const particleTandem = multipleParticlesTandem.createTandem( 'particle' + index );
+      return new ParticleWithSpin( new Vector2( PARTICLE_RAY_WIDTH * ( dotRandom.nextDouble() * 2 - 1 ), PARTICLE_RAY_WIDTH * ( dotRandom.nextDouble() * 2 - 1 ) ), particleTandem );
     } );
 
   }

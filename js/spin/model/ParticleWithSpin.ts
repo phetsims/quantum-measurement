@@ -10,6 +10,7 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
 export class ParticleWithSpin {
@@ -34,10 +35,16 @@ export class ParticleWithSpin {
   public velocityProperty: Vector2Property;
   public speed = 1;
   
-  public constructor( private readonly offset: Vector2 ) {
-    this.activeProperty = new BooleanProperty( false );
-    this.positionProperty = new Vector2Property( Vector2.ZERO );
-    this.velocityProperty = new Vector2Property( Vector2.ZERO );
+  public constructor( private readonly offset: Vector2, tandem: Tandem ) {
+    this.activeProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'activeProperty' )
+    } );
+    this.positionProperty = new Vector2Property( Vector2.ZERO, {
+      tandem: tandem.createTandem( 'positionProperty' )
+    } );
+    this.velocityProperty = new Vector2Property( Vector2.ZERO, {
+      tandem: tandem.createTandem( 'velocityProperty' )
+    } );
 
     this.startPosition = Vector2.ZERO;
     this.endPosition = new Vector2( 1, 0 );
