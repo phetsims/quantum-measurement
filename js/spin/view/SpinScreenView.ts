@@ -6,10 +6,8 @@
  * @author Agustín Vallejo
  */
 
-import ScreenView from '../../../../joist/js/ScreenView.js';
-import { Color, Image, Line } from '../../../../scenery/js/imports.js';
+import { Color, Line } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import spinScreenMockup_png from '../../../images/spinScreenMockup_png.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import SpinModel from '../model/SpinModel.js';
@@ -24,9 +22,6 @@ export default class SpinScreenView extends QuantumMeasurementScreenView {
 
     super( {
       initialMockupOpacity: 0,
-      mockupImage: new Image( spinScreenMockup_png, {
-        scale: ScreenView.DEFAULT_LAYOUT_BOUNDS.width / spinScreenMockup_png.width
-      } ),
       tandem: tandem
     } );
 
