@@ -21,6 +21,7 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import NumberDisplay from '../../../../scenery-phet/js/NumberDisplay.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Circle, Color, HBox, LinearGradient, Node, NodeOptions, RadialGradient, Rectangle, RichText } from '../../../../scenery/js/imports.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
@@ -167,12 +168,14 @@ class PhotonCountDisplay extends HBox {
       if ( blinkTimeoutListener ) {
         stepTimer.clearTimeout( blinkTimeoutListener );
       }
-      if ( count > 0 ) {
+      if ( count > 0 && !isSettingPhetioStateProperty.value ) {
         indicator.fill = PhotonCountDisplay.ACTIVE_INDICATOR_FILL;
-        blinkTimeoutListener = stepTimer.setTimeout( () => {
-          indicator.fill = PhotonCountDisplay.INACTIVE_INDICATOR_FILL;
-          blinkTimeoutListener = null;
-        }, 200 );
+        blinkTimeoutListener = stepTimer.setTimeout(
+          () => {
+            indicator.fill = PhotonCountDisplay.INACTIVE_INDICATOR_FILL;
+            blinkTimeoutListener = null;
+          },
+          200 );
       }
       else {
         indicator.fill = PhotonCountDisplay.INACTIVE_INDICATOR_FILL;
