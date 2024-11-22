@@ -9,10 +9,7 @@
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import LocalizedStringProperty from '../../../../chipper/js/LocalizedStringProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import ScreenView from '../../../../joist/js/ScreenView.js';
-import { Image } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import photonsScreenMockup_png from '../../../images/photonsScreenMockup_png.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
 import SceneSelectorRadioButtonGroup from '../../common/view/SceneSelectorRadioButtonGroup.js';
@@ -69,9 +66,6 @@ export default class PhotonsScreenView extends QuantumMeasurementScreenView {
     } );
 
     super( {
-      mockupImage: new Image( photonsScreenMockup_png, {
-        scale: ScreenView.DEFAULT_LAYOUT_BOUNDS.width / photonsScreenMockup_png.width
-      } ),
       children: [ experimentModeRadioButtonGroup, singlePhotonExperimentSceneView, manyPhotonExperimentSceneView ],
       initialMockupOpacity: 0,
       tandem: tandem
