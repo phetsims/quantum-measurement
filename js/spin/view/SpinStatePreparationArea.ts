@@ -137,6 +137,7 @@ export default class SpinStatePreparationArea extends VBox {
     } );
 
 
+    const projectionsCheckboxesTandem = tandem.createTandem( 'projectionsCheckboxes' );
     const zProjectionCheckbox = new Checkbox(
       model.blochSphere.showZProjectionProperty,
       new HBox( {
@@ -148,7 +149,7 @@ export default class SpinStatePreparationArea extends VBox {
       } ),
       {
         visibleProperty: model.isCustomExperimentProperty,
-        tandem: tandem.createTandem( 'zProjectionCheckbox' ),
+        tandem: projectionsCheckboxesTandem.createTandem( 'zProjectionCheckbox' ),
         boxWidth: 18
       }
     );
@@ -164,23 +165,25 @@ export default class SpinStatePreparationArea extends VBox {
       } ),
       {
         visibleProperty: model.isCustomExperimentProperty,
-        tandem: tandem.createTandem( 'xProjectionCheckbox' ),
+        tandem: projectionsCheckboxesTandem.createTandem( 'xProjectionCheckbox' ),
         boxWidth: 18
       }
     );
 
+    const projectionCheckboxes = new HBox( {
+      spacing: 20,
+      tandem: projectionsCheckboxesTandem,
+      children: [
+        new Text( QuantumMeasurementStrings.projectionStringProperty, { font: new PhetFont( 15 ) } ),
+        zProjectionCheckbox,
+        xProjectionCheckbox
+      ]
+    } );
 
     super( {
       children: [
         blochSphereNode,
-        new HBox( {
-          spacing: 20,
-          children: [
-            new Text( QuantumMeasurementStrings.projectionStringProperty, { font: new PhetFont( 15 ) } ),
-            zProjectionCheckbox,
-            xProjectionCheckbox
-          ]
-        } ),
+        projectionCheckboxes,
         stateToPrepareText,
         stateReadout,
         spinStatePanel,

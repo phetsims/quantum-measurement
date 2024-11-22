@@ -131,7 +131,9 @@ export default class BlochSphereNode extends Node {
       centerX: upStateLabel.centerX
     } );
 
-    const stateVectorVisibleProperty = new BooleanProperty( true );
+    const stateVectorVisibleProperty = new BooleanProperty( true, {
+      tandem: providedOptions.tandem.createTandem( 'stateVectorVisibleProperty' )
+    } );
     const stateVector = new ArrowNode( 0, 0, 0, -sphereRadius, {
       tandem: providedOptions.tandem.createTandem( 'stateVector' ),
       headWidth: 10,

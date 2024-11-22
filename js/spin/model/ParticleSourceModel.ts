@@ -16,6 +16,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
+import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { SourceMode } from './SourceMode.js';
 import { SpinDirection } from './SpinDirection.js';
@@ -45,7 +46,11 @@ export default class ParticleSourceModel {
 
   public constructor( position: Vector2, tandem: Tandem ) {
 
-    this.sourceModeProperty = new Property<SourceMode>( SourceMode.SINGLE );
+    this.sourceModeProperty = new Property<SourceMode>( SourceMode.SINGLE, {
+      tandem: tandem.createTandem( 'sourceModeProperty' ),
+      phetioValueType: EnumerationIO( SourceMode ),
+      validValues: SourceMode.enumeration.values
+    } );
 
     this.isContinuousModeProperty = new DerivedProperty( [ this.sourceModeProperty ], sourceMode => sourceMode === SourceMode.CONTINUOUS );
 
@@ -67,6 +72,8 @@ export default class ParticleSourceModel {
 
     const initialSpinState = SpinDirection.Z_PLUS;
     this.spinStateProperty = new Property<SpinDirection>( initialSpinState, {
+      tandem: tandem.createTandem( 'spinStateProperty' ),
+      phetioValueType: EnumerationIO( SpinDirection ),
       validValues: SpinDirection.enumeration.values
     } );
 

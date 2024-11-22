@@ -20,6 +20,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import TModel from '../../../../joist/js/TModel.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
+import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { BlockingMode } from './BlockingMode.js';
 import MeasurementLine from './MeasurementLine.js';
@@ -76,7 +77,11 @@ export default class SpinModel implements TModel {
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
-    this.currentExperimentProperty = new Property<SpinExperiment>( SpinExperiment.EXPERIMENT_1 );
+    this.currentExperimentProperty = new Property<SpinExperiment>( SpinExperiment.EXPERIMENT_1, {
+      tandem: providedOptions.tandem.createTandem( 'currentExperimentProperty' ),
+      phetioValueType: EnumerationIO( SpinExperiment ),
+      validValues: SpinExperiment.enumeration.values
+    } );
     this.isCustomExperimentProperty = new DerivedProperty(
       [ this.currentExperimentProperty ],
       ( experiment: SpinExperiment ) => experiment === SpinExperiment.CUSTOM
