@@ -165,19 +165,29 @@ class PhotonCountDisplay extends HBox {
     // Blink the indicator when a photon is detected.
     let blinkTimeoutListener: TimerListener | null = null;
     photonCountProperty.lazyLink( count => {
+
+      // If there is a timer running from a previous change, clear it.
       if ( blinkTimeoutListener ) {
         stepTimer.clearTimeout( blinkTimeoutListener );
       }
+
       if ( count > 0 && !isSettingPhetioStateProperty.value ) {
+
+        // Turn on the indicator.
         indicator.fill = PhotonCountDisplay.ACTIVE_INDICATOR_FILL;
+
+        // Set a timer to turn the indicator off.
         blinkTimeoutListener = stepTimer.setTimeout(
           () => {
             indicator.fill = PhotonCountDisplay.INACTIVE_INDICATOR_FILL;
             blinkTimeoutListener = null;
           },
-          200 );
+          200
+        );
       }
       else {
+
+        // The count has gone to zero, which happens on a reset, so turn off the indicator.
         indicator.fill = PhotonCountDisplay.INACTIVE_INDICATOR_FILL;
       }
     } );
