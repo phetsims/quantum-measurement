@@ -28,6 +28,8 @@ const EXPERIMENT_MODE_TO_STRING_MAP = new Map<ExperimentModeType, LocalizedStrin
 export default class PhotonsScreenView extends QuantumMeasurementScreenView {
 
   private readonly model: PhotonsModel;
+  private readonly singlePhotonExperimentSceneView: PhotonsExperimentSceneView;
+  private readonly manyPhotonExperimentSceneView: PhotonsExperimentSceneView;
 
   public constructor( model: PhotonsModel, tandem: Tandem ) {
 
@@ -72,11 +74,19 @@ export default class PhotonsScreenView extends QuantumMeasurementScreenView {
     } );
 
     this.model = model;
+    this.singlePhotonExperimentSceneView = singlePhotonExperimentSceneView;
+    this.manyPhotonExperimentSceneView = manyPhotonExperimentSceneView;
   }
 
   public override reset(): void {
     this.model.reset();
     super.reset();
+  }
+
+  public override step( dt: number ): void {
+    super.step( dt );
+    this.singlePhotonExperimentSceneView.update();
+    this.manyPhotonExperimentSceneView.update();
   }
 }
 

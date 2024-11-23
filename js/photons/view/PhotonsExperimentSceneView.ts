@@ -38,6 +38,9 @@ const INSET = 10; // inset for nodes at edges of the view, in screen coordinates
 
 export default class PhotonsExperimentSceneView extends Node {
 
+  // The photon testing area is the part of the scene where photons are produced, reflected, and detected.
+  private readonly photonTestingArea: PhotonTestingArea;
+
   public constructor( model: PhotonsExperimentSceneModel, providedOptions: PhotonsExperimentSceneViewOptions ) {
 
     const photonDetectionProbabilityPanel = new PhotonDetectionProbabilityPanel(
@@ -204,6 +207,12 @@ export default class PhotonsExperimentSceneView extends Node {
       } );
       this.addChild( playPauseButton );
     }
+
+    this.photonTestingArea = photonTestingArea;
+  }
+
+  public update(): void {
+    this.photonTestingArea.update();
   }
 }
 

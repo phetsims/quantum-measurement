@@ -14,16 +14,18 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import { Node, NodeOptions } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import PhotonsExperimentSceneModel from '../model/PhotonsExperimentSceneModel.js';
+import LaserNode from './LaserNode.js';
 import MirrorNode from './MirrorNode.js';
 import PhotonDetectorNode from './PhotonDetectorNode.js';
-import LaserNode from './LaserNode.js';
-import PhotonNode from './PhotonNode.js';
+import PhotonSprites from './PhotonSprites.js';
 import PolarizingBeamSplitterNode from './PolarizingBeamSplitterNode.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhotonTestingAreaOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
 
 export default class PhotonTestingArea extends Node {
+
+  private readonly photonSprites: PhotonSprites;
 
   public constructor( model: PhotonsExperimentSceneModel, providedOptions: PhotonTestingAreaOptions ) {
 
@@ -65,11 +67,8 @@ export default class PhotonTestingArea extends Node {
       tandem: providedOptions.tandem.createTandem( 'mirror' )
     } );
 
-    const photonNodes = model.photons.map( photon => new PhotonNode( photon, photonTestingAreaModelViewTransform ) );
-
     const options = optionize<PhotonTestingAreaOptions, SelfOptions, NodeOptions>()( {
       children: [
-        ...photonNodes,
         laserNode,
         polarizingBeamSplitterNode,
         verticalPolarizationDetector,
@@ -79,6 +78,23 @@ export default class PhotonTestingArea extends Node {
     }, providedOptions );
 
     super( options );
+
+    // Add the sprites for the photons after calling the super constructor so that we can use the bounds to set the
+    // canvas size.
+    this.photonSprites = new PhotonSprites(
+      model.photons,
+      photonTestingAreaModelViewTransform,
+      this.localBounds.copy()
+    );
+    this.addChild( this.photonSprites );
+    this.photonSprites.moveToBack();
+  }
+
+  /**
+   * Updates the view.  For this particular node, this means updating the photon sprites.
+   */
+  public update(): void {
+    this.photonSprites.update();
   }
 }
 
