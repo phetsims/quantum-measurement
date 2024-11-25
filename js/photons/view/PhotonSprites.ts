@@ -17,7 +17,7 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import { Sprite, SpriteImage, SpriteInstance, SpriteInstanceTransformType, Sprites } from '../../../../scenery/js/imports.js';
-import visiblePhoton_png from '../../../images/visiblePhoton_png.js';
+import greenPhoton_png from '../../../images/greenPhoton_png.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import Photon from '../model/Photon.js';
 
@@ -40,8 +40,8 @@ export default class PhotonSprites extends Sprites {
 
     // Create the sprite that will be used to represent the photons.
     const photonSprite = new Sprite( new SpriteImage(
-      visiblePhoton_png,
-      new Vector2( visiblePhoton_png.width / 2, visiblePhoton_png.height / 2 ),
+      greenPhoton_png,
+      new Vector2( greenPhoton_png.width / 2, greenPhoton_png.height / 2 ),
       { pickable: false }
     ) );
 
@@ -57,7 +57,7 @@ export default class PhotonSprites extends Sprites {
     } );
 
     // Calculate the scale that will be used to render the photon images.
-    this.photonScale = TARGET_PHOTON_IMAGE_WIDTH / visiblePhoton_png.width;
+    this.photonScale = TARGET_PHOTON_IMAGE_WIDTH / greenPhoton_png.width;
     assert && assert(
     this.photonScale > 0 && this.photonScale < 100,
       `photon scale factor not reasonable: ${this.photonScale}`
