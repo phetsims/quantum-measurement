@@ -8,6 +8,7 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Line } from '../../../../kite/js/imports.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
@@ -31,6 +32,9 @@ export type DetectionDirection = ( [ 'up', 'down' ] )[number];
 // Define a type for the display mode of the detector, which can be either a count of photons detected or a rate of
 // detection.
 export type DisplayMode = ( [ 'count', 'rate' ] )[number];
+
+export const COUNT_RANGE = new Range( 0, 999 );
+export const RATE_RANGE = new Range( 0, 999 ); // in events per second
 
 export default class PhotonDetector implements TPhotonInteraction {
 
@@ -71,11 +75,15 @@ export default class PhotonDetector implements TPhotonInteraction {
     );
 
     this.detectionRateProperty = new AveragingCounterNumberProperty( {
-      tandem: options.tandem.createTandem( 'detectionRateProperty' )
+      tandem: options.tandem.createTandem( 'detectionRateProperty' ),
+      phetioReadOnly: true,
+      range: RATE_RANGE
     } );
 
     this.detectionCountProperty = new NumberProperty( 0, {
-      tandem: options.tandem.createTandem( 'detectionCountProperty' )
+      tandem: options.tandem.createTandem( 'detectionCountProperty' ),
+      phetioReadOnly: true,
+      range: COUNT_RANGE
     } );
   }
 

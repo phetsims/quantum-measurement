@@ -12,7 +12,6 @@ import stepTimer from '../../../../axon/js/stepTimer.js';
 import { TimerListener } from '../../../../axon/js/Timer.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
-import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
@@ -25,7 +24,7 @@ import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioS
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
-import PhotonDetector, { DetectionDirection } from '../model/PhotonDetector.js';
+import PhotonDetector, { COUNT_RANGE, DetectionDirection, RATE_RANGE } from '../model/PhotonDetector.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhotonDetectorNodeOptions = SelfOptions & PickRequired<NodeOptions, 'tandem'>;
@@ -193,7 +192,7 @@ class PhotonCountDisplay extends HBox {
     } );
 
     // Create a NumberDisplay that will show the count.
-    const numberDisplay = new NumberDisplay( photonCountProperty, new Range( 0, 999 ), {
+    const numberDisplay = new NumberDisplay( photonCountProperty, COUNT_RANGE, {
       align: 'center',
       backgroundFill: QuantumMeasurementColors.photonDetectorBodyColor,
       backgroundStroke: null,
@@ -241,7 +240,7 @@ class PhotonRateDisplay extends NumberDisplay {
                       maxWidth: number,
                       center: Vector2 ) {
 
-    super( photonRateProperty, new Range( 0, 999 ), {
+    super( photonRateProperty, RATE_RANGE, {
       valuePattern: QuantumMeasurementStrings.eventsPerSecondPatternStringProperty,
       align: 'center',
       center: center,
