@@ -8,12 +8,13 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
+import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, GatedVisibleProperty, HBox, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Color, HBox, Text, VBox } from '../../../../scenery/js/imports.js';
 import RectangularRadioButton, { RectangularRadioButtonOptions } from '../../../../sun/js/buttons/RectangularRadioButton.js';
 import Panel from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -58,10 +59,10 @@ export default class InitialCoinStateSelectorNode extends VBox {
     } );
 
     const radioButtonOptions = {
-        xMargin: 4,
-        yMargin: 4,
-        baseColor: Color.WHITE
-      };
+      xMargin: 4,
+      yMargin: 4,
+      baseColor: Color.WHITE
+    };
 
     const radioButtonGroupTandem = tandem.createTandem( 'radioButtonGroup' );
 
