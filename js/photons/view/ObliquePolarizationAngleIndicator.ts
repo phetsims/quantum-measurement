@@ -183,8 +183,8 @@ export default class ObliquePolarizationAngleIndicator extends Node {
 
         // Calculate the position of the polarization unit vector in the x-z plane.
         const polarizationVectorPlusInXZPlane = new Vector2(
-          Math.cos( -Utils.toRadians( polarizationAngle ) ),
-          Math.sin( -Utils.toRadians( polarizationAngle ) )
+          Math.cos( Utils.toRadians( polarizationAngle ) ),
+          Math.sin( Utils.toRadians( polarizationAngle ) )
         ).times( UNIT_LENGTH );
         const polarizationVectorMinusInXZPlane = polarizationVectorPlusInXZPlane.times( -1 );
 
