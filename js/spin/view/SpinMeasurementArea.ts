@@ -18,6 +18,7 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ShadedSphereNode from '../../../../scenery-phet/js/ShadedSphereNode.js';
 import { HBox, Node, Path, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
+import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import ComboBox, { ComboBoxItem } from '../../../../sun/js/ComboBox.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -181,6 +182,7 @@ export default class SpinMeasurementArea extends VBox {
       { tandem: tandem.createTandem( 'manyParticlesCanvasNode' ) }
     );
 
+    const exectedPercentageCheckboxTandem = tandem.createTandem( 'expectedPercentageCheckbox' );
     const expectedPercentageCheckbox = new Checkbox(
       model.expectedPercentageVisibleProperty,
       new HBox( {
@@ -196,11 +198,11 @@ export default class SpinMeasurementArea extends VBox {
         scale: 0.9,
         left: particleSourceNode.left,
         top: particleSourceNode.bottom + 30,
-        visibleProperty: new DerivedProperty(
+        visibleProperty: new GatedVisibleProperty( new DerivedProperty(
           [ model.particleSourceModel.sourceModeProperty ],
           sourceMode => sourceMode === SourceMode.CONTINUOUS
-        ),
-        tandem: tandem.createTandem( 'expectedPercentageCheckbox' )
+        ), exectedPercentageCheckboxTandem ),
+        tandem: exectedPercentageCheckboxTandem
       } );
 
     const exitBlockerNode = new Path( new Shape().moveTo( 0, 0 ).lineTo( 0, 35 ), {

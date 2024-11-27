@@ -126,12 +126,12 @@ export default class SpinStatePreparationArea extends VBox {
         new ProbabilityValueControl(
           `|${QuantumMeasurementConstants.ALPHA}|<sup>2`,
           model.upProbabilityProperty,
-          tandem.createTandem( 'classicalUpProbabilityControl' )
+          tandem.createTandem( 'upProbabilityControl' )
         ),
         new ProbabilityValueControl(
           `|${QuantumMeasurementConstants.BETA}|<sup>2`,
           model.downProbabilityProperty,
-          tandem.createTandem( 'classicalDownProbabilityControl' )
+          tandem.createTandem( 'downProbabilityControl' )
         )
       ]
     } );

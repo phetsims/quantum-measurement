@@ -11,6 +11,7 @@ import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import AbstractBlochSphere, { AbstractBlochSphereOptions } from '../../common/model/AbstractBlochSphere.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
@@ -51,7 +52,9 @@ export default class MeasurementLine {
       phetioValueType: BooleanIO
     } );
 
-    this.simpleBlochSphere = new SimpleBlochSphere( this.spinStateProperty, providedOptions );
+    this.simpleBlochSphere = new SimpleBlochSphere( this.spinStateProperty, {
+      tandem: Tandem.OPT_OUT
+    } );
 
     this.positionProperty = new Vector2Property( position, {
       tandem: providedOptions.tandem.createTandem( 'positionProperty' ),

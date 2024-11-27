@@ -93,9 +93,8 @@ export default class SternGerlach {
 
     this.blockingModeProperty = new Property<BlockingMode>( BlockingMode.NO_BLOCKER, {
       tandem: tandem.createTandem( 'blockingModeProperty' ),
-      phetioValueType: EnumerationIO<BlockingMode>( {
-        enumeration: BlockingMode.enumeration
-      } )
+      phetioValueType: EnumerationIO( BlockingMode ),
+      validValues: BlockingMode.enumeration.values
     } );
 
     this.isDirectionControllableProperty = new BooleanProperty( false, {

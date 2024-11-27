@@ -34,6 +34,7 @@ export default class ParticleSourceModel {
   public readonly exitLocalPosition: Vector2;
   public readonly exitPositionProperty: TReadOnlyProperty<Vector2>;
 
+  // Wether the source is currently shooting particles
   public readonly currentlyShootingParticlesProperty: Property<boolean>;
 
   // Mapped from [0, 1] to control the Continuous mode, 0 is 'None' and 1 is 'Lots'
