@@ -22,6 +22,7 @@ import { Color, Line, Node, NodeOptions } from '../../../../scenery/js/imports.j
 import ButtonNode from '../../../../sun/js/buttons/ButtonNode.js';
 import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushButton.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
@@ -34,7 +35,6 @@ import CoinExperimentPreparationArea from './CoinExperimentPreparationArea.js';
 import CoinNode from './CoinNode.js';
 import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
 import SmallCoinNode from './SmallCoinNode.js';
-import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 
 type SelfOptions = EmptySelfOptions;
 export type CoinsExperimentSceneViewOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;

@@ -8,15 +8,15 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
+import Property from '../../../../axon/js/Property.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { Color, LinearGradient, Node, NodeOptions, Rectangle } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import Property from '../../../../axon/js/Property.js';
 import { ExperimentMeasurementState } from '../model/ExperimentMeasurementState.js';
-import Bounds2 from '../../../../dot/js/Bounds2.js';
 
 type SelfOptions = EmptySelfOptions;
 export type SingleCoinTestBoxOptions = SelfOptions & PickRequired<NodeOptions, 'tandem'>;

@@ -15,6 +15,7 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import { Circle, Node } from '../../../../scenery/js/imports.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
@@ -30,7 +31,6 @@ import CoinNode from './CoinNode.js';
 import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
 import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
 import QuantumCoinNode from './QuantumCoinNode.js';
-import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 
 const SINGLE_COIN_TEST_BOX_SIZE = new Dimension2( 165, 145 );
 const COIN_FLIP_RATE = 3; // full flips per second

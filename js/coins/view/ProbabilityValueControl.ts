@@ -20,8 +20,8 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { HBox, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import ArrowButton, { ArrowButtonOptions } from '../../../../sun/js/buttons/ArrowButton.js';
 import HSlider from '../../../../sun/js/HSlider.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import quantumMeasurement from '../../quantumMeasurement.js';
 
 const TITLE_FONT = new PhetFont( 16 );
 const TICK_MARK_FONT = new PhetFont( 14 );
