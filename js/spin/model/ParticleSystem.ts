@@ -18,7 +18,7 @@ import SpinModel from './SpinModel.js';
 import SternGerlach from './SternGerlach.js';
 
 const MAX_NUMBER_OF_SINGLE_PARTICLES = 50;
-const MAX_NUMBER_OF_MULTIPLE_PARTICLES = 5000;
+const MAX_NUMBER_OF_MULTIPLE_PARTICLES = 1250;
 const PARTICLE_RAY_WIDTH = 0.02;
 const MAX_PARTICLE_CREATION_RATE = 5; // max rate of particles created per second
 
@@ -56,7 +56,6 @@ export class ParticleSystem {
       const particleTandem = multipleParticlesTandem.createTandem( 'particle' + index );
       return new ParticleWithSpin( new Vector2( PARTICLE_RAY_WIDTH * ( dotRandom.nextDouble() * 2 - 1 ), PARTICLE_RAY_WIDTH * ( dotRandom.nextDouble() * 2 - 1 ) ), particleTandem );
     } );
-
   }
 
   public shootSingleParticle(): void {
@@ -70,7 +69,6 @@ export class ParticleSystem {
   private activateParticle( particle: ParticleWithSpin ): void {
     particle.reset();
     particle.activeProperty.value = true;
-
 
     // Set the first spin vector to the state of the generated particles
     particle.spinVectors[ 0 ].set( this.model.derivedSpinStateProperty.value.copy() );

@@ -64,7 +64,7 @@ export class ParticleWithSpin {
 
       this.positionProperty.value = this.positionProperty.value.plus( this.velocityProperty.value.times( dt ) );
 
-      if ( this.lifetime > 5 ) {
+      if ( this.lifetime > 4 ) {
         this.reset();
       }
     }
