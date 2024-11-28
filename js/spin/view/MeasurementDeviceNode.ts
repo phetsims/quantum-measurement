@@ -1,7 +1,7 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * MeasurementLineNode contains the UI elements of the single particle measurement zone. It includes a simple bloch sphere,
+ * MeasurementDeviceNode contains the UI elements of the single particle measurement zone. It includes a simple bloch sphere,
  * and a camera node which lights on trigger.
  *
  * @author Agustín Vallejo
@@ -19,17 +19,17 @@ import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import MeasurementLine from '../model/MeasurementLine.js';
+import MeasurementDevice from '../model/MeasurementDevice.js';
 
 type SelfOptions = EmptySelfOptions;
 
-type MeasurementLineNodeOptions = SelfOptions & PickRequired<VBoxOptions, 'tandem'>;
+type MeasurementDeviceNodeOptions = SelfOptions & PickRequired<VBoxOptions, 'tandem'>;
 
-export default class MeasurementLineNode extends VBox {
+export default class MeasurementDeviceNode extends VBox {
 
   private readonly simpleBlochSphereNode: BlochSphereNode;
 
-  public constructor( measurementLine: MeasurementLine, modelViewTransform: ModelViewTransform2, providedOptions: MeasurementLineNodeOptions ) {
+  public constructor( measurementLine: MeasurementDevice, modelViewTransform: ModelViewTransform2, providedOptions: MeasurementDeviceNodeOptions ) {
 
     const simpleBlochSphereNode = new BlochSphereNode( measurementLine.simpleBlochSphere, {
       tandem: providedOptions.tandem.createTandem( 'simpleBlochSphereNode' ),
@@ -84,7 +84,7 @@ export default class MeasurementLineNode extends VBox {
     } );
 
 
-    const options = optionize<MeasurementLineNodeOptions, SelfOptions, VBoxOptions>()( {
+    const options = optionize<MeasurementDeviceNodeOptions, SelfOptions, VBoxOptions>()( {
       children: [
         simpleBlochSphereNode,
         cameraNode
@@ -107,4 +107,4 @@ export default class MeasurementLineNode extends VBox {
   }
 }
 
-quantumMeasurement.register( 'MeasurementLineNode', MeasurementLineNode );
+quantumMeasurement.register( 'MeasurementDeviceNode', MeasurementDeviceNode );

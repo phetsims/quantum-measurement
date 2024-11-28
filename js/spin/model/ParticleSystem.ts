@@ -118,14 +118,14 @@ export class ParticleSystem {
 
       // Moves single particles and triggers measurements when they pass through Measuring Lines
       activeSingleParticles.forEach( particle => {
-        const behindMeasurementLine: boolean[] = this.model.measurementLines.map( line => line.isParticleBehind( particle.positionProperty.value ) );
+        const behindMeasurementDevice: boolean[] = this.model.measurementLines.map( line => line.isParticleBehind( particle.positionProperty.value ) );
 
         particle.step( dt );
         this.decideParticleDestiny( particle );
 
         // If the particle crosses a measurement line, we update the line
         this.model.measurementLines.forEach( ( line, index ) => {
-          if ( behindMeasurementLine[ index ] && !line.isParticleBehind( particle.positionProperty.value ) ) {
+          if ( behindMeasurementDevice[ index ] && !line.isParticleBehind( particle.positionProperty.value ) ) {
             line.measurementEmitter.emit();
             line.spinStateProperty.value = particle.spinVectors[ index ];
             // particle.stageCompleted[ index ] = true;
@@ -183,8 +183,10 @@ export class ParticleSystem {
       return;
     }
 
+    const threshold = 0.03;
+
     // If the particle were to reach its end position, measure it and decide on a new path
-    if ( particle.positionProperty.value.x > particle.endPosition.x ) {
+    if ( particle.positionProperty.value.x > particle.endPosition.x - threshold ) {
       const extraDistance = particle.positionProperty.value.x - particle.endPosition.x;
       const extraTime = extraDistance / particle.speed;
 

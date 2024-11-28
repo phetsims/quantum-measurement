@@ -33,7 +33,7 @@ import SpinModel from '../model/SpinModel.js';
 import SternGerlach from '../model/SternGerlach.js';
 import HistogramWithExpectedValue from './HistogramWithExpectedValue.js';
 import ManyParticlesCanvasNode from './ManyParticlesCanvasNode.js';
-import MeasurementLineNode from './MeasurementLineNode.js';
+import MeasurementDeviceNode from './MeasurementDeviceNode.js';
 import ParticleSourceNode from './ParticleSourceNode.js';
 import SternGerlachNode from './SternGerlachNode.js';
 
@@ -41,7 +41,7 @@ export default class SpinMeasurementArea extends VBox {
 
   private manyParticlesCanvasNode: ManyParticlesCanvasNode;
 
-  private readonly measurementLines: MeasurementLineNode[];
+  private readonly measurementLines: MeasurementDeviceNode[];
 
   public constructor( model: SpinModel, parentNode: Node, layoutBounds: Bounds2, tandem: Tandem ) {
 
@@ -80,9 +80,9 @@ export default class SpinMeasurementArea extends VBox {
     ];
 
     const measurementLines = [
-      new MeasurementLineNode( model.measurementLines[ 0 ], modelViewTransform, { tandem: tandem.createTandem( 'firstMeasurementLine' ) } ),
-      new MeasurementLineNode( model.measurementLines[ 1 ], modelViewTransform, { tandem: tandem.createTandem( 'secondMeasurementLine' ) } ),
-      new MeasurementLineNode( model.measurementLines[ 2 ], modelViewTransform, { tandem: tandem.createTandem( 'thirdMeasurementLine' ) } )
+      new MeasurementDeviceNode( model.measurementLines[ 0 ], modelViewTransform, { tandem: tandem.createTandem( 'firstMeasurementDevice' ) } ),
+      new MeasurementDeviceNode( model.measurementLines[ 1 ], modelViewTransform, { tandem: tandem.createTandem( 'secondMeasurementDevice' ) } ),
+      new MeasurementDeviceNode( model.measurementLines[ 2 ], modelViewTransform, { tandem: tandem.createTandem( 'thirdMeasurementDevice' ) } )
     ];
 
     const createPercentageHistogram = ( sternGerlach: SternGerlach, visibleProperty: TReadOnlyProperty<boolean> ) => {

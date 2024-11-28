@@ -23,7 +23,7 @@ import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { BlockingMode } from './BlockingMode.js';
-import MeasurementLine from './MeasurementLine.js';
+import MeasurementDevice from './MeasurementDevice.js';
 import ParticleSourceModel from './ParticleSourceModel.js';
 import { ParticleSystem } from './ParticleSystem.js';
 import SimpleBlochSphere from './SimpleBlochSphere.js';
@@ -66,7 +66,7 @@ export default class SpinModel implements TModel {
   public readonly sternGerlachs: SternGerlach[];
 
   // Invisible lines that trigger measurement of the particles when they fly through them
-  public readonly measurementLines: MeasurementLine[];
+  public readonly measurementLines: MeasurementDevice[];
 
   // Expected percentage of particles that should be visible in the histogram
   public readonly expectedPercentageVisibleProperty: BooleanProperty;
@@ -128,17 +128,17 @@ export default class SpinModel implements TModel {
 
     const measurementLinesTandem = providedOptions.tandem.createTandem( 'measurementLines' );
     this.measurementLines = [
-      new MeasurementLine(
+      new MeasurementDevice(
         new Vector2( ( this.particleSourceModel.exitPositionProperty.value.x + this.sternGerlachs[ 0 ].entrancePositionProperty.value.x ) / 2, 1 ),
-        true, { tandem: measurementLinesTandem.createTandem( 'firstMeasurementLine' ) }
+        true, { tandem: measurementLinesTandem.createTandem( 'firstMeasurementDevice' ) }
       ),
-      new MeasurementLine(
+      new MeasurementDevice(
         new Vector2( ( this.sternGerlachs[ 0 ].topExitPositionProperty.value.x + this.sternGerlachs[ 1 ].entrancePositionProperty.value.x ) / 2, 1 ),
-        true, { tandem: measurementLinesTandem.createTandem( 'secondMeasurementLine' ) }
+        true, { tandem: measurementLinesTandem.createTandem( 'secondMeasurementDevice' ) }
       ),
-      new MeasurementLine(
+      new MeasurementDevice(
         new Vector2( ( this.sternGerlachs[ 1 ].topExitPositionProperty.value.x + this.sternGerlachs[ 1 ].topExitPositionProperty.value.plusXY( 1, 0 ).x ) / 2, 1 ),
-        false, { tandem: measurementLinesTandem.createTandem( 'thirdMeasurementLine' ) }
+        false, { tandem: measurementLinesTandem.createTandem( 'thirdMeasurementDevice' ) }
       )
     ];
 

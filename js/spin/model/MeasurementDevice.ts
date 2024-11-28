@@ -1,7 +1,7 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * MeasurementLine is a component that will hold the spin state of particles that cross along its position.
+ * MeasurementDevice is a component that will hold the spin state of particles that cross along its position.
  *
  * @author Agustín Vallejo
  */
@@ -19,9 +19,9 @@ import SimpleBlochSphere from './SimpleBlochSphere.js';
 
 type SelfOptions = EmptySelfOptions;
 
-export type MeasurementLineOptions = SelfOptions & AbstractBlochSphereOptions;
+export type MeasurementDeviceOptions = SelfOptions & AbstractBlochSphereOptions;
 
-export default class MeasurementLine {
+export default class MeasurementDevice {
 
   // The bloch sphere representation of the spin state
   public readonly simpleBlochSphere: AbstractBlochSphere;
@@ -38,7 +38,7 @@ export default class MeasurementLine {
   // Flag to indicate if the line is active
   public readonly isActiveProperty: Property<boolean>;
 
-  public constructor( position: Vector2, originallyActive: boolean, providedOptions: MeasurementLineOptions ) {
+  public constructor( position: Vector2, originallyActive: boolean, providedOptions: MeasurementDeviceOptions ) {
 
     this.spinStateProperty = new Vector2Property( new Vector2( 0, 1 ), {
       tandem: providedOptions.tandem.createTandem( 'spinStateProperty' ),
@@ -72,4 +72,4 @@ export default class MeasurementLine {
   }
 }
 
-quantumMeasurement.register( 'MeasurementLine', MeasurementLine );
+quantumMeasurement.register( 'MeasurementDevice', MeasurementDevice );
