@@ -7,6 +7,7 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
@@ -102,19 +103,25 @@ export default class SternGerlachNode extends Node {
       fill: 'black'
     };
     // Create and add the radio buttons that select the chart type view in the nuclideChartAccordionBox.
+    const orientationRadioButtonGroupTandem = options.tandem.createTandem( 'orientationRadioButtonGroup' );
     const orientationRadioButtonGroup = new RectangularRadioButtonGroup<boolean>(
       sternGerlach.isZOrientedProperty, [
         { value: true, createNode: () => new RichText( 'S<sub>Z', radioButtonTextOptions ), tandemName: 'isZOrientedRadioButton' },
         { value: false, createNode: () => new RichText( 'S<sub>X', radioButtonTextOptions ), tandemName: 'isXOrientedRadioButton' }
       ], {
         orientation: 'horizontal',
-        tandem: options.tandem.createTandem( 'orientationRadioButtonGroup' ),
-        radioButtonOptions: { baseColor: QuantumMeasurementColors.controlPanelFillColorProperty },
-        visibleProperty: sternGerlach.isDirectionControllableProperty
+        tandem: orientationRadioButtonGroupTandem,
+        phetioFeatured: true,
+        radioButtonOptions: {
+          baseColor: QuantumMeasurementColors.controlPanelFillColorProperty,
+          phetioVisiblePropertyInstrumented: false
+        },
+        visibleProperty: new GatedVisibleProperty( sternGerlach.isDirectionControllableProperty, orientationRadioButtonGroupTandem )
       } );
     sternGerlachControls.addChild( orientationRadioButtonGroup );
 
     if ( options.isBlockable ) {
+      const blockingRadioButtonGroupTandem = options.tandem.createTandem( 'blockingRadioButtonGroup' );
       const blockingRadioButtonGroup = new AquaRadioButtonGroup( sternGerlach.blockingModeProperty, [ BlockingMode.BLOCK_UP, BlockingMode.BLOCK_DOWN ].map( blockingMode => {
         return {
           value: blockingMode,
@@ -123,12 +130,17 @@ export default class SternGerlachNode extends Node {
             QuantumMeasurementStrings.blockUpStringProperty :
             QuantumMeasurementStrings.blockDownStringProperty,
             { font: new PhetFont( 15 ) } ),
-          tandemName: `${blockingMode.tandemName}RadioButton`
+          tandemName: `${blockingMode.tandemName}RadioButton`,
+          phetioVisiblePropertyInstrumented: false
         };
       } ), {
         spacing: 10,
-        visibleProperty: DerivedProperty.valueNotEqualsConstant( sternGerlach.blockingModeProperty, BlockingMode.NO_BLOCKER ),
-        tandem: options.tandem.createTandem( 'blockingRadioButtonGroup' )
+        tandem: blockingRadioButtonGroupTandem,
+        phetioFeatured: true,
+        visibleProperty: new GatedVisibleProperty(
+          DerivedProperty.valueNotEqualsConstant( sternGerlach.blockingModeProperty, BlockingMode.NO_BLOCKER ),
+          blockingRadioButtonGroupTandem
+        )
       } );
       sternGerlachControls.addChild( blockingRadioButtonGroup );
     }
@@ -162,6 +174,8 @@ export default class SternGerlachNode extends Node {
         sternGerlachControls
       ]
     } );
+
+    this.addLinkedElement( sternGerlach );
 
     Multilink.multilink(
       [ sternGerlach.positionProperty, sternGerlach.isDirectionControllableProperty, sternGerlach.blockingModeProperty ],

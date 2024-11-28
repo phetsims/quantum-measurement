@@ -148,7 +148,6 @@ export default class SpinStatePreparationArea extends VBox {
         ]
       } ),
       {
-        visibleProperty: model.isCustomExperimentProperty,
         tandem: projectionsCheckboxesTandem.createTandem( 'zProjectionCheckbox' ),
         boxWidth: 18
       }
@@ -164,7 +163,6 @@ export default class SpinStatePreparationArea extends VBox {
         ]
       } ),
       {
-        visibleProperty: model.isCustomExperimentProperty,
         tandem: projectionsCheckboxesTandem.createTandem( 'xProjectionCheckbox' ),
         boxWidth: 18
       }
@@ -173,6 +171,7 @@ export default class SpinStatePreparationArea extends VBox {
     const projectionCheckboxes = new HBox( {
       spacing: 20,
       tandem: projectionsCheckboxesTandem,
+      visibleProperty: model.isCustomExperimentProperty,
       children: [
         new Text( QuantumMeasurementStrings.projectionStringProperty, { font: new PhetFont( 15 ) } ),
         zProjectionCheckbox,

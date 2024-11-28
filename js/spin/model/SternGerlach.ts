@@ -16,13 +16,14 @@ import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
+import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
 import AveragingCounterNumberProperty from '../../common/model/AveragingCounterNumberProperty.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { BlockingMode } from './BlockingMode.js';
 
-export default class SternGerlach {
+export default class SternGerlach extends PhetioObject {
 
   // Position of the Stern Gerlach (SG) apparatus in the model coordinates
   public readonly positionProperty: Vector2Property;
@@ -65,6 +66,8 @@ export default class SternGerlach {
 
   public constructor( position: Vector2, isZOriented: boolean, tandem: Tandem ) {
 
+    super();
+
     this.positionProperty = new Vector2Property( position, {
       tandem: tandem.createTandem( 'positionProperty' ),
       phetioReadOnly: true
@@ -93,6 +96,7 @@ export default class SternGerlach {
 
     this.blockingModeProperty = new Property<BlockingMode>( BlockingMode.NO_BLOCKER, {
       tandem: tandem.createTandem( 'blockingModeProperty' ),
+      phetioReadOnly: true,
       phetioValueType: EnumerationIO( BlockingMode ),
       validValues: BlockingMode.enumeration.values
     } );
