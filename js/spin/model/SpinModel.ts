@@ -80,7 +80,8 @@ export default class SpinModel implements TModel {
     this.currentExperimentProperty = new Property<SpinExperiment>( SpinExperiment.EXPERIMENT_1, {
       tandem: providedOptions.tandem.createTandem( 'currentExperimentProperty' ),
       phetioValueType: EnumerationIO( SpinExperiment ),
-      validValues: SpinExperiment.enumeration.values
+      validValues: SpinExperiment.enumeration.values,
+      phetioFeatured: true
     } );
     this.isCustomExperimentProperty = new DerivedProperty(
       [ this.currentExperimentProperty ],
@@ -114,7 +115,7 @@ export default class SpinModel implements TModel {
     // This is needed for the number sliders to work properly.
     this.downProbabilityProperty = new NumberProperty( 1 - this.upProbabilityProperty.value );
 
-    const sternGerlachsTandem = providedOptions.tandem.createTandem( 'SternGerlachs' );
+    const sternGerlachsTandem = providedOptions.tandem.createTandem( 'sternGerlachs' );
     this.sternGerlachs = [
       new SternGerlach( new Vector2( 0.8, 0 ), true, sternGerlachsTandem.createTandem( 'firstSternGerlach' ) ),
       new SternGerlach( new Vector2( 2, 0.3 ), false, sternGerlachsTandem.createTandem( 'secondSternGerlach' ) ),
@@ -141,13 +142,6 @@ export default class SpinModel implements TModel {
         false, { tandem: measurementLinesTandem.createTandem( 'thirdMeasurementDevice' ) }
       )
     ];
-
-    // Find the first inactive single particle and activate it
-    this.particleSourceModel.currentlyShootingParticlesProperty.link( shooting => {
-      if ( shooting ) {
-        this.particleSystem.shootSingleParticle();
-      }
-    } );
 
     this.expectedPercentageVisibleProperty = new BooleanProperty( false, {
       tandem: providedOptions.tandem.createTandem( 'expectedPercentageVisibleProperty' )

@@ -62,7 +62,12 @@ export default class SpinMeasurementArea extends VBox {
       180 // empirically determined
     );
 
-    const particleSourceNode = new ParticleSourceNode( model.particleSourceModel, modelViewTransform, tandem.createTandem( 'particleSourceNode' ) );
+    const particleSourceNode = new ParticleSourceNode(
+      model.particleSourceModel,
+      model.particleSystem,
+      modelViewTransform,
+      tandem.createTandem( 'particleSourceNode' )
+    );
 
     const sternGerlachNodes = [
       new SternGerlachNode(

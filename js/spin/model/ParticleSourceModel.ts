@@ -50,20 +50,19 @@ export default class ParticleSourceModel {
     this.sourceModeProperty = new Property<SourceMode>( SourceMode.SINGLE, {
       tandem: tandem.createTandem( 'sourceModeProperty' ),
       phetioValueType: EnumerationIO( SourceMode ),
-      validValues: SourceMode.enumeration.values
+      validValues: SourceMode.enumeration.values,
+      phetioFeatured: true
     } );
 
     this.isContinuousModeProperty = new DerivedProperty( [ this.sourceModeProperty ], sourceMode => sourceMode === SourceMode.CONTINUOUS );
 
     this.particleAmountProperty = new NumberProperty( 0.1, {
       tandem: tandem.createTandem( 'particleAmountProperty' ),
-      range: new Range( 0, 1 )
+      range: new Range( 0, 1 ),
+      phetioFeatured: true
     } );
 
-    this.positionProperty = new Vector2Property( position, {
-      tandem: tandem.createTandem( 'positionProperty' ),
-      phetioReadOnly: true
-    } );
+    this.positionProperty = new Vector2Property( position );
 
     this.exitLocalPosition = new Vector2( 0, 0 );
 
@@ -75,7 +74,8 @@ export default class ParticleSourceModel {
     this.spinStateProperty = new Property<SpinDirection>( initialSpinState, {
       tandem: tandem.createTandem( 'spinStateProperty' ),
       phetioValueType: EnumerationIO( SpinDirection ),
-      validValues: SpinDirection.enumeration.values
+      validValues: SpinDirection.enumeration.values,
+      phetioFeatured: true
     } );
 
     this.customSpinStateProperty = new Vector2Property( SpinDirection.spinToVector( initialSpinState ) );

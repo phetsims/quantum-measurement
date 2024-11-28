@@ -7,6 +7,7 @@
  * @author Agustín Vallejo
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import { Shape } from '../../../../kite/js/imports.js';
@@ -21,6 +22,7 @@ import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import ParticleSourceModel from '../model/ParticleSourceModel.js';
+import { ParticleSystem } from '../model/ParticleSystem.js';
 import { SourceMode } from '../model/SourceMode.js';
 import HBarOverTwoNode from './HBarOverTwoNode.js';
 
@@ -30,6 +32,7 @@ export default class ParticleSourceNode extends Node {
 
   public constructor(
     particleSourceModel: ParticleSourceModel,
+    particleSystem: ParticleSystem,
     modelViewTransform: ModelViewTransform2,
     tandem: Tandem ) {
 
@@ -65,15 +68,23 @@ export default class ParticleSourceNode extends Node {
     particleSourceBarrel.rotateAround( particleSourceBarrel.center, Math.PI / 4 );
     particleSourceBarrel.center.y = particleSourceRectangle.center.y;
 
+    const currentlyShootingParticlesProperty = new BooleanProperty( false );
+
     // Button for 'single' mode
     const shootParticleButton = new RoundMomentaryButton<boolean>(
-      particleSourceModel.currentlyShootingParticlesProperty, false, true, {
+      currentlyShootingParticlesProperty, false, true, {
         scale: 0.7,
         baseColor: QuantumMeasurementColors.downColorProperty,
         visibleProperty: DerivedProperty.not( particleSourceModel.isContinuousModeProperty ),
         center: particleSourceRectangle.center,
         tandem: tandem.createTandem( 'shootParticleButton' )
       } );
+
+    currentlyShootingParticlesProperty.link( shooting => {
+      if ( shooting ) {
+        particleSystem.shootSingleParticle();
+      }
+    } );
 
     // Slider for 'continuous' mode
     const sliderRange = particleSourceModel.particleAmountProperty.range;
