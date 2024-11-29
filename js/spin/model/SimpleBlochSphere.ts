@@ -34,11 +34,13 @@ export default class SimpleBlochSphere extends AbstractBlochSphere {
     super( options );
 
     this.showZProjectionProperty = new BooleanProperty( false, {
-      tandem: options.tandem.createTandem( 'showZProjectionProperty' )
+      tandem: options.tandem.createTandem( 'showZProjectionProperty' ),
+      phetioFeatured: true
     } );
 
     this.showXProjectionProperty = new BooleanProperty( false, {
-      tandem: options.tandem.createTandem( 'showXProjectionProperty' )
+      tandem: options.tandem.createTandem( 'showXProjectionProperty' ),
+      phetioFeatured: true
     } );
 
     spinStateProperty.link( spinState => {
