@@ -46,9 +46,10 @@ export default class SpinModel implements TModel {
   // Bloch Sphere that represents the current spin state
   public readonly blochSphere: SimpleBlochSphere;
 
-  // The probability of the 'up' state. The 'down' probability will be 1 - this.
-  public readonly upProbabilityProperty: NumberProperty;
-  public readonly downProbabilityProperty: NumberProperty;
+  // Alpha and Beta squared values of the prepared state.
+  // Alpha^2 translates to the P(up) in a SG_Z
+  public readonly alphaSquaredProperty: NumberProperty;
+  public readonly betaSquaredProperty: NumberProperty;
 
   // Spin property that is controlled by the buttons or sliders
   public readonly derivedSpinStateProperty: TReadOnlyProperty<Vector2>;
@@ -107,13 +108,13 @@ export default class SpinModel implements TModel {
       this.derivedSpinStateProperty, { tandem: providedOptions.tandem.createTandem( 'blochSphere' ) }
     );
 
-    this.upProbabilityProperty = new NumberProperty( 1, {
-      tandem: providedOptions.tandem.createTandem( 'upProbabilityProperty' )
+    this.alphaSquaredProperty = new NumberProperty( 1, {
+      tandem: providedOptions.tandem.createTandem( 'alphaSquaredProperty' )
     } );
 
     // Create a Property with the inverse probability as the provided one and hook the two Properties up to one another.
     // This is needed for the number sliders to work properly.
-    this.downProbabilityProperty = new NumberProperty( 1 - this.upProbabilityProperty.value );
+    this.betaSquaredProperty = new NumberProperty( 1 - this.alphaSquaredProperty.value );
 
     const sternGerlachsTandem = providedOptions.tandem.createTandem( 'sternGerlachs' );
     this.sternGerlachs = [
@@ -177,25 +178,25 @@ export default class SpinModel implements TModel {
 
     let changeHandlingInProgress = false;
 
-    this.upProbabilityProperty.link( upProbability => {
+    this.alphaSquaredProperty.link( alphaSquared => {
       if ( !changeHandlingInProgress ) {
         changeHandlingInProgress = true;
-        this.downProbabilityProperty.value = 1 - upProbability;
+        this.betaSquaredProperty.value = 1 - alphaSquared;
         changeHandlingInProgress = false;
       }
 
       if ( this.isCustomExperimentProperty.value ) {
         // Set the spin direction
-        const polarAngle = Math.PI * ( 1 - upProbability );
+        const polarAngle = Math.PI * ( 1 - alphaSquared );
         this.particleSourceModel.customSpinStateProperty.value = new Vector2( Math.sin( polarAngle ), Math.cos( polarAngle ) );
       }
 
       this.prepare();
     } );
-    this.downProbabilityProperty.link( downProbability => {
+    this.betaSquaredProperty.link( betaSquared => {
       if ( !changeHandlingInProgress ) {
         changeHandlingInProgress = true;
-        this.upProbabilityProperty.value = 1 - downProbability;
+        this.alphaSquaredProperty.value = 1 - betaSquared;
         changeHandlingInProgress = false;
       }
     } );

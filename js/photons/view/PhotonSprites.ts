@@ -77,6 +77,7 @@ export default class PhotonSprites extends Sprites {
 
     let numberOfPhotonsDisplayed = 0;
 
+    // TODO REVIEW: Wouldn't it be better to filter first the active photons and then iterate over them? https://github.com/phetsims/quantum-measurement/issues/52
     for ( let i = 0; i < this.photons.length; i++ ) {
 
       // Convenience constants.
