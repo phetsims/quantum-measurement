@@ -39,10 +39,16 @@ export class PhotonState {
   public readonly probabilityProperty: NumberProperty;
   public readonly polarization: possiblePolarizationResult;
 
-  public constructor( polarization: possiblePolarizationResult ) {
-    this.positionProperty = new Vector2Property( Vector2.ZERO );
-    this.directionProperty = new Vector2Property( RIGHT );
-    this.probabilityProperty = new NumberProperty( polarization === 'vertical' ? 1 : 0 );
+  public constructor( polarization: possiblePolarizationResult, tandem: Tandem ) {
+    this.positionProperty = new Vector2Property( Vector2.ZERO, {
+      tandem: tandem.createTandem( 'positionProperty' )
+    } );
+    this.directionProperty = new Vector2Property( RIGHT, {
+      tandem: tandem.createTandem( 'directionProperty' )
+    } );
+    this.probabilityProperty = new NumberProperty( polarization === 'vertical' ? 1 : 0, {
+      tandem: tandem.createTandem( 'probabilityProperty' )
+    } );
     this.polarization = polarization;
   }
 
@@ -104,8 +110,8 @@ export default class Photon extends PhetioObject {
     } );
 
     this.possibleStates = [
-      new PhotonState( 'vertical' ),
-      new PhotonState( 'horizontal' )
+      new PhotonState( 'vertical', tandem.createTandem( 'verticalState' ) ),
+      new PhotonState( 'horizontal', tandem.createTandem( 'horizontalState' ) )
     ];
 
     // Entangle the possible states
