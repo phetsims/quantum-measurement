@@ -18,7 +18,7 @@ import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import AveragingCounterNumberProperty from '../../common/model/AveragingCounterNumberProperty.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { PHOTON_BEAM_WIDTH } from './Laser.js';
-import Photon, { PhotonState } from './Photon.js';
+import Photon, { QuantumPossibleState } from './Photon.js';
 import { PhotonInteractionTestResult } from './PhotonsModel.js';
 import { TPhotonInteraction } from './TPhotonInteraction.js';
 
@@ -88,7 +88,7 @@ export default class PhotonDetector implements TPhotonInteraction {
     } );
   }
 
-  public testForPhotonInteraction( photonState: PhotonState, photon: Photon, dt: number ): PhotonInteractionTestResult {
+  public testForPhotonInteraction( photonState: QuantumPossibleState, photon: Photon, dt: number ): PhotonInteractionTestResult {
 
     assert && assert( photon.activeProperty.value, 'save CPU cycles - don\'t use this method with inactive photons' );
 

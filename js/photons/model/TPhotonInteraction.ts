@@ -6,9 +6,9 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import Photon, { PhotonState } from './Photon.js';
+import Photon, { QuantumPossibleState } from './Photon.js';
 import { PhotonInteractionTestResult } from './PhotonsModel.js';
 
 export type TPhotonInteraction = {
-  testForPhotonInteraction( state: PhotonState, photon: Photon, dt: number ): PhotonInteractionTestResult;
+  testForPhotonInteraction( state: QuantumPossibleState, photon: Photon, dt: number ): PhotonInteractionTestResult;
 };

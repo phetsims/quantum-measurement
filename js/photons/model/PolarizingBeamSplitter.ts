@@ -16,7 +16,7 @@ import { Line } from '../../../../kite/js/imports.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import Photon, { PhotonState, RIGHT, UP } from './Photon.js';
+import Photon, { QuantumPossibleState, RIGHT, UP } from './Photon.js';
 import { PhotonInteractionTestResult } from './PhotonsModel.js';
 import { TPhotonInteraction } from './TPhotonInteraction.js';
 
@@ -49,7 +49,7 @@ export default class PolarizingBeamSplitter implements TPhotonInteraction {
     this.polarizingSurfaceLine = new Line( endpoint1, endpoint2 );
   }
 
-  public testForPhotonInteraction( photonState: PhotonState, photon: Photon, dt: number ): PhotonInteractionTestResult {
+  public testForPhotonInteraction( photonState: QuantumPossibleState, photon: Photon, dt: number ): PhotonInteractionTestResult {
 
     assert && assert( photon.activeProperty.value, 'save CPU cycles - don\'t use this method with inactive photons' );
 

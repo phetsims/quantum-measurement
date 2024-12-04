@@ -30,10 +30,10 @@ type possiblePolarizationResult = 'vertical' | 'horizontal';
 
 // TODO: This class could live in its own file, once the feature is fully green lit, will move https://github.com/phetsims/quantum-measurement/issues/63
 /**
- * PhotonState is a class that represents a possible state of a photon at a given point in time.
+ * QuantumPossibleState is a class that represents a possible state of a photon at a given point in time.
  * It contains properties for position, direction and the probability of the photon being in that state.
  */
-export class PhotonState {
+export class QuantumPossibleState {
   public readonly positionProperty: Vector2Property;
   public readonly directionProperty: Vector2Property;
   public readonly probabilityProperty: NumberProperty;
@@ -86,7 +86,7 @@ export default class Photon extends PhetioObject {
 
   // Contains all the possible states of the photon, which include position, direction, and probability.
   // Since they contain properties, and based on the design of this simulation, it will always have two states.
-  public possibleStates: [ PhotonState, PhotonState ];
+  public possibleStates: [ QuantumPossibleState, QuantumPossibleState ];
 
   // whether this photon is active, and should thus be moved by the model and shown in the view
   public readonly activeProperty: BooleanProperty;
@@ -110,8 +110,8 @@ export default class Photon extends PhetioObject {
     } );
 
     this.possibleStates = [
-      new PhotonState( 'vertical', tandem.createTandem( 'verticalState' ) ),
-      new PhotonState( 'horizontal', tandem.createTandem( 'horizontalState' ) )
+      new QuantumPossibleState( 'vertical', tandem.createTandem( 'verticalState' ) ),
+      new QuantumPossibleState( 'horizontal', tandem.createTandem( 'horizontalState' ) )
     ];
 
     // Entangle the possible states
