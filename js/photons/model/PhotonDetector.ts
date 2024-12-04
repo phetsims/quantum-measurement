@@ -8,6 +8,7 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Line } from '../../../../kite/js/imports.js';
@@ -17,7 +18,7 @@ import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import AveragingCounterNumberProperty from '../../common/model/AveragingCounterNumberProperty.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { PHOTON_BEAM_WIDTH } from './Laser.js';
-import Photon from './Photon.js';
+import Photon, { PhotonState } from './Photon.js';
 import { PhotonInteractionTestResult } from './PhotonsModel.js';
 import { TPhotonInteraction } from './TPhotonInteraction.js';
 
@@ -87,27 +88,38 @@ export default class PhotonDetector implements TPhotonInteraction {
     } );
   }
 
-  public testForPhotonInteraction( photon: Photon, dt: number ): PhotonInteractionTestResult {
+  public testForPhotonInteraction( photonState: PhotonState, photon: Photon, dt: number ): PhotonInteractionTestResult {
 
     assert && assert( photon.activeProperty.value, 'save CPU cycles - don\'t use this method with inactive photons' );
 
     // Test for whether this photon would cross the detection aperture.
-    const photonIntersectionPoint = photon.getTravelPathIntersectionPoint(
+    const photonIntersectionPoint = photonState.getTravelPathIntersectionPoint(
       this.detectionLine.start,
       this.detectionLine.end,
       dt
     );
 
-    const detectionResult: PhotonInteractionTestResult = photonIntersectionPoint !== null ?
-      { interactionType: 'absorbed' } :
-      { interactionType: 'none' };
+    // Assume no interaction until proven otherwise.
+    let interaction: PhotonInteractionTestResult = { interactionType: 'none' };
 
-    if ( detectionResult.interactionType === 'absorbed' ) {
+    if ( photonIntersectionPoint !== null ) {
+      // Evaluate the detection result based on the probability of the photon actually being here!
+      if ( dotRandom.nextDouble() < photonState.probabilityProperty.value ) {
+        photonState.probabilityProperty.value = 1; // the photon is detected!
+        interaction = { interactionType: 'absorbed' };
+      }
+      else {
+        // If the photon is not detected. This state probability goes to 0%, which will make the other state 100%.
+        photonState.probabilityProperty.value = 0;
+      }
+    }
+
+    if ( interaction.interactionType === 'absorbed' ) {
       this.detectionCountProperty.value = Math.min( this.detectionCountProperty.value + 1, COUNT_RANGE.max );
       this.detectionRateProperty.countEvent();
     }
 
-    return detectionResult;
+    return interaction;
   }
 
   public step( dt: number ): void {

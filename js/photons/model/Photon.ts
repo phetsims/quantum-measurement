@@ -24,54 +24,26 @@ export const DOWN = new Vector2( 0, -1 );
 export const LEFT = new Vector2( -1, 0 );
 export const RIGHT = new Vector2( 1, 0 );
 
-export default class Photon extends PhetioObject {
+// Due to the experiment's nature, when photons are split,
+// the resulting states will either be measured as vertical or horizontal.
+type possiblePolarizationResult = 'vertical' | 'horizontal';
 
-  // position in 2D space
+// TODO: This class could live in its own file, once the feature is fully green lit, will move https://github.com/phetsims/quantum-measurement/issues/63
+/**
+ * PhotonState is a class that represents a possible state of a photon at a given point in time.
+ * It contains properties for position, direction and the probability of the photon being in that state.
+ */
+export class PhotonState {
   public readonly positionProperty: Vector2Property;
-
-  // a unit vector that represents the direction of travel for this photon
   public readonly directionProperty: Vector2Property;
+  public readonly probabilityProperty: NumberProperty;
+  public readonly polarization: possiblePolarizationResult;
 
-  // whether this photon is active, and should thus be moved by the model and shown in the view
-  public readonly activeProperty: BooleanProperty;
-
-  // the angle of polarization for this photon, in degrees
-  public readonly polarizationAngleProperty: NumberProperty;
-
-  public constructor( tandem: Tandem ) {
-
-    super( {
-      tandem: tandem,
-      phetioState: false
-    } );
-
-    this.positionProperty = new Vector2Property( Vector2.ZERO, {
-      tandem: tandem.createTandem( 'positionProperty' )
-    } );
-
-    this.polarizationAngleProperty = new NumberProperty( 0, {
-      tandem: tandem.createTandem( 'polarizationAngleProperty' )
-    } );
-
-    this.directionProperty = new Vector2Property( RIGHT, {
-      tandem: tandem.createTandem( 'directionProperty' )
-    } );
-
-    this.activeProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'activeProperty' )
-    } );
-  }
-
-  public step( dt: number ): void {
-    if ( this.activeProperty.value ) {
-      this.positionProperty.set( this.positionProperty.value.plus( this.directionProperty.value.timesScalar( PHOTON_SPEED * dt ) ) );
-    }
-  }
-
-  public reset(): void {
-    this.positionProperty.reset();
-    this.directionProperty.reset();
-    this.activeProperty.reset();
+  public constructor( polarization: possiblePolarizationResult ) {
+    this.positionProperty = new Vector2Property( Vector2.ZERO );
+    this.directionProperty = new Vector2Property( RIGHT );
+    this.probabilityProperty = new NumberProperty( polarization === 'vertical' ? 1 : 0 );
+    this.polarization = polarization;
   }
 
   /**
@@ -97,6 +69,70 @@ export default class Photon extends PhetioObject {
       lineEnd.x,
       lineEnd.y
     );
+  }
+
+  public step( dt: number ): void {
+    this.positionProperty.set( this.positionProperty.value.plus( this.directionProperty.value.timesScalar( PHOTON_SPEED * dt ) ) );
+  }
+}
+
+export default class Photon extends PhetioObject {
+
+  // Contains all the possible states of the photon, which include position, direction, and probability.
+  // Since they contain properties, and based on the design of this simulation, it will always have two states.
+  public possibleStates: [ PhotonState, PhotonState ];
+
+  // whether this photon is active, and should thus be moved by the model and shown in the view
+  public readonly activeProperty: BooleanProperty;
+
+  // the angle of polarization for this photon, in degrees
+  public readonly polarizationAngleProperty: NumberProperty;
+
+  public constructor( tandem: Tandem ) {
+
+    super( {
+      tandem: tandem,
+      phetioState: false
+    } );
+
+    this.polarizationAngleProperty = new NumberProperty( 0, {
+      tandem: tandem.createTandem( 'polarizationAngleProperty' )
+    } );
+
+    this.activeProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'activeProperty' )
+    } );
+
+    this.possibleStates = [
+      new PhotonState( 'vertical' ),
+      new PhotonState( 'horizontal' )
+    ];
+
+    // Entangle the possible states
+    this.possibleStates[ 0 ].probabilityProperty.lazyLink( probability => {
+      this.possibleStates[ 1 ].probabilityProperty.set( 1 - probability );
+    } );
+    this.possibleStates[ 1 ].probabilityProperty.lazyLink( probability => {
+      this.possibleStates[ 0 ].probabilityProperty.set( 1 - probability );
+    } );
+
+  }
+
+  public step( dt: number ): void {
+    if ( this.activeProperty.value ) {
+      this.possibleStates.forEach( state => {
+        state.step( dt );
+      } );
+    }
+  }
+
+  public reset(): void {
+    this.activeProperty.reset();
+    this.possibleStates.forEach( state => {
+      state.positionProperty.reset();
+      state.directionProperty.reset();
+      state.probabilityProperty.reset();
+    } );
   }
 }
 

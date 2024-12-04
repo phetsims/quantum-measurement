@@ -35,6 +35,8 @@ type PhotonsExperimentSceneModelOptions = SelfOptions & PickRequired<PhetioObjec
 // time, but may have to be adjusted if other aspects of the model are changed.
 const MAX_PHOTONS = 800;
 
+const PATH_LENGTH_UNIT = 0.2;
+
 export default class PhotonsExperimentSceneModel {
 
   // The polarizing beam splitter that the photons will encounter.
@@ -65,10 +67,19 @@ export default class PhotonsExperimentSceneModel {
   // Whether the simulation is currently playing, which in this case means whether the photons are moving.
   public readonly isPlayingProperty: BooleanProperty;
 
+  // The Classical understanding of this experiment implied that photons would choose a path at
+  // the beam splitter. This is controlled by the Classical/Quantum toggle at the view.
+  public readonly collapsePhotonsAtBeamSplitterProperty: BooleanProperty;
+
   public constructor( providedOptions: PhotonsExperimentSceneModelOptions ) {
 
+    this.collapsePhotonsAtBeamSplitterProperty = new BooleanProperty( true, {
+      tandem: providedOptions.tandem.createTandem( 'collapsePhotonsAtBeamSplitterProperty' )
+    } );
+
     this.polarizingBeamSplitter = new PolarizingBeamSplitter( Vector2.ZERO, {
-      tandem: providedOptions.tandem.createTandem( 'polarizingBeamSplitter' )
+      tandem: providedOptions.tandem.createTandem( 'polarizingBeamSplitter' ),
+      collapsePhotonsProperty: this.collapsePhotonsAtBeamSplitterProperty
     } );
 
     // Create the laser that will emit the photons that will be sent toward the polarizing beam splitter.
@@ -79,13 +90,20 @@ export default class PhotonsExperimentSceneModel {
 
     // Create the photon detectors that will measure the rate at which photons are arriving after being either reflected
     // or transmitted by the polarizing beam splitter.
-    this.verticalPolarizationDetector = new PhotonDetector( new Vector2( 0, 0.2 ), 'up', {
+    this.verticalPolarizationDetector = new PhotonDetector( new Vector2( 0, PATH_LENGTH_UNIT ), 'up', {
       displayMode: this.laser.emissionMode === 'singlePhoton' ? 'count' : 'rate',
       tandem: providedOptions.tandem.createTandem( 'verticalPolarizationDetector' )
     } );
-    this.horizontalPolarizationDetector = new PhotonDetector( new Vector2( 0.125, -0.125 ), 'down', {
+
+    const mirrorDistanceProportion = 0.5;
+    const horizontalDetectorXPosition = mirrorDistanceProportion * PATH_LENGTH_UNIT;
+    const horizontalDetectorYPosition = ( 1 - mirrorDistanceProportion ) * PATH_LENGTH_UNIT;
+    this.horizontalPolarizationDetector = new PhotonDetector( new Vector2( horizontalDetectorXPosition, -horizontalDetectorYPosition ), 'down', {
       displayMode: this.laser.emissionMode === 'singlePhoton' ? 'count' : 'rate',
       tandem: providedOptions.tandem.createTandem( 'horizontalPolarizationDetector' )
+    } );
+    this.mirror = new Mirror( new Vector2( horizontalDetectorXPosition, 0 ), {
+      tandem: providedOptions.tandem.createTandem( 'mirror' )
     } );
 
     // Create a derived Property for the normalized expectation value.
@@ -153,10 +171,6 @@ export default class PhotonsExperimentSceneModel {
       );
     }
 
-    this.mirror = new Mirror( new Vector2( 0.125, 0 ), {
-      tandem: providedOptions.tandem.createTandem( 'mirror' )
-    } );
-
     // Create all photons that will be used in the experiment.  It works better for phet-io if these are created at
     // construction time and activated and deactivated as needed, rather than creating and destroying them.
     _.times( MAX_PHOTONS, index => {
@@ -199,46 +213,49 @@ export default class PhotonsExperimentSceneModel {
         this.verticalPolarizationDetector
       ];
 
-      // Update each active photon's position based on its direction and speed and whether it interacts with any other
-      // model elements.
+      // Update each active photon's quantum states based on their interaction with any other model elements.
       activePhotons.forEach( photon => {
+        photon.possibleStates.forEach( photonState => {
+            // Only update active states
+            if ( photonState.probabilityProperty.value > 0 ) {
+              // Test for interactions with the potential interactors.
+              let interaction: PhotonInteractionTestResult = { interactionType: 'none' };
+              for ( const potentiallyInteractingElement of potentialInteractors ) {
+                interaction = potentiallyInteractingElement.testForPhotonInteraction( photonState, photon, dt );
+                if ( interaction.interactionType !== 'none' ) {
+                  break;
+                }
+              }
 
-        // Test for interactions with the potential interactors.
-        let interaction: PhotonInteractionTestResult = { interactionType: 'none' };
-        for ( const potentiallyInteractingElement of potentialInteractors ) {
-          interaction = potentiallyInteractingElement.testForPhotonInteraction( photon, dt );
-          if ( interaction.interactionType !== 'none' ) {
-            break;
+              if ( interaction.interactionType === 'reflected' ) {
+
+                assert && assert( interaction.reflectionPoint, 'reflection point should be defined' );
+                assert && assert( interaction.reflectionDirection, 'reflection direction should be defined' );
+
+                // This photon was reflected.  First step it to the reflection point.
+                const dtToReflection = photonState.positionProperty.value.distance( interaction.reflectionPoint! ) / PHOTON_SPEED;
+                assert && assert( dtToReflection <= dt );
+                photonState.step( dtToReflection );
+
+                // Change the direction of the photon to the reflection direction.
+                // photon.directionProperty.set( interaction.reflectionDirection! );
+                photonState.directionProperty.set( interaction.reflectionDirection! );
+
+                // Step the photon the remaining time.
+                photonState.step( dt - dtToReflection );
+              }
+              else if ( interaction.interactionType === 'absorbed' ) {
+                // The photon was absorbed, so deactivate it.
+                photon.activeProperty.set( false );
+                photon.possibleStates.forEach( state => state.positionProperty.reset() );
+              }
+              else {
+                // Just step the photon normally, which will move it forward in its current travel direction.
+                photonState.step( dt );
+              }
+            }
           }
-        }
-
-        if ( interaction.interactionType === 'reflected' ) {
-
-          assert && assert( interaction.reflectionPoint, 'reflection point should be defined' );
-          assert && assert( interaction.reflectionDirection, 'reflection direction should be defined' );
-
-          // This photon was reflected.  First step it to the reflection point.
-          const dtToReflection = photon.positionProperty.value.distance( interaction.reflectionPoint! ) / PHOTON_SPEED;
-          assert && assert( dtToReflection <= dt );
-          photon.step( dtToReflection );
-
-          // Change the direction of the photon to the reflection direction.
-          photon.directionProperty.set( interaction.reflectionDirection! );
-
-          // Step the photon the remaining time.
-          photon.step( dt - dtToReflection );
-        }
-        else if ( interaction.interactionType === 'absorbed' ) {
-
-          // The photon was absorbed, so deactivate it.
-          photon.activeProperty.set( false );
-          photon.positionProperty.set( Vector2.ZERO );
-        }
-        else {
-
-          // Just step the photon normally, which will move it forward in its current travel direction.
-          photon.step( dt );
-        }
+        );
       } );
 
       // Step the photon detectors.

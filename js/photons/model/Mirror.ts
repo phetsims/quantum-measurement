@@ -13,7 +13,7 @@ import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import Photon, { DOWN } from './Photon.js';
+import Photon, { DOWN, PhotonState } from './Photon.js';
 import { PhotonInteractionTestResult } from './PhotonsModel.js';
 import { TPhotonInteraction } from './TPhotonInteraction.js';
 
@@ -40,12 +40,12 @@ export default class Mirror implements TPhotonInteraction {
     this.mirrorSurfaceLine = new Line( endpoint1, endpoint2 );
   }
 
-  public testForPhotonInteraction( photon: Photon, dt: number ): PhotonInteractionTestResult {
+  public testForPhotonInteraction( photonState: PhotonState, photon: Photon, dt: number ): PhotonInteractionTestResult {
 
     assert && assert( photon.activeProperty.value, 'save CPU cycles - don\'t use this method with inactive photons' );
 
     // Test for whether this photon crosses the surface of the beam splitter.
-    const photonIntersectionPoint = photon.getTravelPathIntersectionPoint(
+    const photonIntersectionPoint = photonState.getTravelPathIntersectionPoint(
       this.mirrorSurfaceLine.start,
       this.mirrorSurfaceLine.end,
       dt

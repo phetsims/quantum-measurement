@@ -11,7 +11,9 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import { Node, NodeOptions } from '../../../../scenery/js/imports.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import { Node, NodeOptions, Text } from '../../../../scenery/js/imports.js';
+import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import PhotonsExperimentSceneModel from '../model/PhotonsExperimentSceneModel.js';
 import LaserNode from './LaserNode.js';
@@ -38,6 +40,26 @@ export default class PhotonTestingArea extends Node {
 
     const laserNode = new LaserNode( model.laser, photonTestingAreaModelViewTransform, {
       tandem: providedOptions.tandem.createTandem( 'laserNode' )
+    } );
+
+    // TODO: This might live here temporarily mainly for a demo. If the feature stays, consider moving elsewhere https://github.com/phetsims/quantum-measurement/issues/63
+    const visualizationModeRadioButtonGroupTandem = providedOptions.tandem.createTandem( 'visualizationModeRadioButtonGroup' );
+    const visualizationModeRadioButtonGroup = new AquaRadioButtonGroup( model.collapsePhotonsAtBeamSplitterProperty, [ true, false ].map( classical => {
+      const name = classical ? 'Classical' : 'Quantum';
+      return {
+        value: classical,
+        createNode: () => new Text(
+          name,
+          { font: new PhetFont( 15 ) } ),
+        tandemName: `${name.toLowerCase()}RadioButton`,
+        phetioVisiblePropertyInstrumented: false
+      };
+    } ), {
+      spacing: 10,
+      left: laserNode.left,
+      bottom: laserNode.top - 20,
+      tandem: visualizationModeRadioButtonGroupTandem,
+      phetioFeatured: true
     } );
 
     const verticalPolarizationDetector = new PhotonDetectorNode(
@@ -69,6 +91,7 @@ export default class PhotonTestingArea extends Node {
 
     const options = optionize<PhotonTestingAreaOptions, SelfOptions, NodeOptions>()( {
       children: [
+        visualizationModeRadioButtonGroup,
         laserNode,
         polarizingBeamSplitterNode,
         verticalPolarizationDetector,

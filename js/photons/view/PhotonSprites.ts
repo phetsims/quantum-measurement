@@ -77,36 +77,41 @@ export default class PhotonSprites extends Sprites {
 
     let numberOfPhotonsDisplayed = 0;
 
-    // TODO REVIEW: Wouldn't it be better to filter first the active photons and then iterate over them? https://github.com/phetsims/quantum-measurement/issues/52
-    for ( let i = 0; i < this.photons.length; i++ ) {
+    const activePhotons = this.photons.filter( photon => photon.activeProperty.value );
 
-      // Convenience constants.
-      const photon = this.photons[ i ];
-      const photonPosition = photon.positionProperty.value;
+    for ( let i = 0; i < activePhotons.length; i++ ) {
 
-      // Only display active photons.
-      if ( photon.activeProperty.value ) {
+      const photon = activePhotons[ i ];
 
-        numberOfPhotonsDisplayed++;
+      // Iterate over the two possible photon states
+      for ( let j = 0; j < 2; j++ ) {
 
-        // Add a new sprite instance to our list if we don't have enough.
-        if ( numberOfPhotonsDisplayed > this.spriteInstances.length ) {
-          const newSpriteInstance = SpriteInstance.pool.fetch();
-          newSpriteInstance.transformType = SpriteInstanceTransformType.AFFINE;
-          this.spriteInstances.push( newSpriteInstance );
+        const photonState = photon.possibleStates[ j ];
+
+        if ( photonState.probabilityProperty.value > 0 ) {
+          numberOfPhotonsDisplayed++;
+          const photonStatePosition = photonState.positionProperty.value;
+
+          // Add a new sprite instance to our list if we don't have enough.
+          if ( numberOfPhotonsDisplayed > this.spriteInstances.length ) {
+            const newSpriteInstance = SpriteInstance.pool.fetch();
+            newSpriteInstance.transformType = SpriteInstanceTransformType.AFFINE;
+            this.spriteInstances.push( newSpriteInstance );
+          }
+
+          // Update the matrix that controls where this photon is rendered.
+          const spriteInstance = this.spriteInstances[ numberOfPhotonsDisplayed - 1 ];
+          spriteInstance.sprite = this.photonSprite;
+          spriteInstance.matrix.setToAffine(
+            this.photonScale,
+            0,
+            this.modelViewTransform.modelToViewX( photonStatePosition.x ),
+            0,
+            this.photonScale,
+            this.modelViewTransform.modelToViewY( photonStatePosition.y )
+          );
+          spriteInstance.alpha = photonState.probabilityProperty.value; // Probability based opacity
         }
-
-        // Update the matrix that controls where this photon is rendered.
-        const spriteInstance = this.spriteInstances[ numberOfPhotonsDisplayed - 1 ];
-        spriteInstance.sprite = this.photonSprite;
-        spriteInstance.matrix.setToAffine(
-          this.photonScale,
-          0,
-          this.modelViewTransform.modelToViewX( photonPosition.x ),
-          0,
-          this.photonScale,
-          this.modelViewTransform.modelToViewY( photonPosition.y )
-        );
       }
     }
 

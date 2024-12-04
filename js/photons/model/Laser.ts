@@ -148,8 +148,16 @@ export default class Laser {
 
       // Activate the photon and set its position, direction, and polarization angle.
       photonToActivate.activeProperty.set( true );
-      photonToActivate.positionProperty.set( this.position.plusXY( xOffset, yOffset ) );
-      photonToActivate.directionProperty.set( this.emissionDirection );
+
+      // For each of the two possible states of the photon, set the same position and direction
+      photonToActivate.possibleStates.forEach( state => {
+        state.positionProperty.set( this.position.plusXY( xOffset, yOffset ) );
+        state.directionProperty.set( this.emissionDirection );
+      } );
+
+      // Initially, the first state is the one with 100% probability
+      // It makes no difference before they reach the splitter.
+      photonToActivate.possibleStates[ 0 ].probabilityProperty.set( 1 );
       photonToActivate.polarizationAngleProperty.set( polarizationAngle );
     }
   }

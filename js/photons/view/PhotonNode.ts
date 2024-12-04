@@ -58,9 +58,9 @@ export default class PhotonNode extends Node {
       visibleProperty: photonModel.activeProperty
     } );
 
-    photonModel.positionProperty.link( position => {
-      this.center = modelViewTransform.modelToViewPosition( position );
-    } );
+    // photonModel.positionProperty.link( position => {
+    //   this.center = modelViewTransform.modelToViewPosition( position );
+    // } );
   }
 }
 
