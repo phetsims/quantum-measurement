@@ -145,7 +145,8 @@ export default class SpinModel implements TModel {
     ];
 
     this.expectedPercentageVisibleProperty = new BooleanProperty( false, {
-      tandem: providedOptions.tandem.createTandem( 'expectedPercentageVisibleProperty' )
+      tandem: providedOptions.tandem.createTandem( 'expectedPercentageVisibleProperty' ),
+      phetioFeatured: true
     } );
 
     this.isBlockingProperty = new DerivedProperty(
