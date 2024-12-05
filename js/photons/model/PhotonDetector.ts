@@ -102,6 +102,7 @@ export default class PhotonDetector implements TPhotonInteraction {
     // Assume no interaction until proven otherwise.
     let interaction: PhotonInteractionTestResult = { interactionType: 'none' };
 
+    // This is where the wave function collapses!
     if ( photonIntersectionPoint !== null ) {
       // Evaluate the detection result based on the probability of the photon actually being here!
       if ( dotRandom.nextDouble() < photonState.probabilityProperty.value ) {

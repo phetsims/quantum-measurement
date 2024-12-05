@@ -86,6 +86,7 @@ export default class Photon extends PhetioObject {
 
   // Contains all the possible states of the photon, which include position, direction, and probability.
   // Since they contain properties, and based on the design of this simulation, it will always have two states.
+  // TODO: Could this be an object instead of an array? https://github.com/phetsims/quantum-measurement/issues/65
   public possibleStates: [ QuantumPossibleState, QuantumPossibleState ];
 
   // whether this photon is active, and should thus be moved by the model and shown in the view
@@ -114,7 +115,7 @@ export default class Photon extends PhetioObject {
       new QuantumPossibleState( 'horizontal', tandem.createTandem( 'horizontalState' ) )
     ];
 
-    // Entangle the possible states
+    // Relate the possibilities of the two states
     this.possibleStates[ 0 ].probabilityProperty.lazyLink( probability => {
       this.possibleStates[ 1 ].probabilityProperty.set( 1 - probability );
     } );

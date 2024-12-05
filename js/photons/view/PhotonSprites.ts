@@ -84,7 +84,7 @@ export default class PhotonSprites extends Sprites {
       const photon = activePhotons[ i ];
 
       // Iterate over the two possible photon states
-      for ( let j = 0; j < 2; j++ ) {
+      for ( let j = 0; j < photon.possibleStates.length; j++ ) {
 
         const photonState = photon.possibleStates[ j ];
 
