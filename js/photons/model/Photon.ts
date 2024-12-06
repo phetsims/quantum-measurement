@@ -7,13 +7,12 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import Vector2Property from '../../../../dot/js/Vector2Property.js';
-import PhetioObject from '../../../../tandem/js/PhetioObject.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
+import Vector2, { Vector2StateObject } from '../../../../dot/js/Vector2.js';
+import IOType from '../../../../tandem/js/types/IOType.js';
+import NumberIO from '../../../../tandem/js/types/NumberIO.js';
+import ReferenceArrayIO from '../../../../tandem/js/types/ReferenceArrayIO.js';
+import StringIO from '../../../../tandem/js/types/StringIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
 export const PHOTON_SPEED = 0.3; // meters per second
@@ -26,30 +25,21 @@ export const RIGHT = new Vector2( 1, 0 );
 
 // Due to the experiment's nature, when photons are split,
 // the resulting states will either be measured as vertical or horizontal.
-type possiblePolarizationResult = 'vertical' | 'horizontal';
+export type possiblePolarizationResult = 'vertical' | 'horizontal';
 
 // TODO: This class could live in its own file, once the feature is fully green lit, will move https://github.com/phetsims/quantum-measurement/issues/63
 /**
  * QuantumPossibleState is a class that represents a possible state of a photon at a given point in time.
- * It contains properties for position, direction and the probability of the photon being in that state.
+ * It contains variables for position, direction and the probability of the photon being in that state.
  */
 export class QuantumPossibleState {
-  public readonly positionProperty: Vector2Property;
-  public readonly directionProperty: Vector2Property;
-  public readonly probabilityProperty: NumberProperty;
-  public readonly polarization: possiblePolarizationResult;
-
-  public constructor( polarization: possiblePolarizationResult, tandem: Tandem ) {
-    this.positionProperty = new Vector2Property( Vector2.ZERO, {
-      tandem: tandem.createTandem( 'positionProperty' )
-    } );
-    this.directionProperty = new Vector2Property( RIGHT, {
-      tandem: tandem.createTandem( 'directionProperty' )
-    } );
-    this.probabilityProperty = new NumberProperty( polarization === 'vertical' ? 1 : 0, {
-      tandem: tandem.createTandem( 'probabilityProperty' )
-    } );
-    this.polarization = polarization;
+  public constructor(
+    public position: Vector2,
+    public direction: Vector2,
+    public probability: number,
+    public readonly polarization: possiblePolarizationResult // TODO this still needed? https://github.com/phetsims/quantum-measurement/issues/65
+  ) {
+    // no-op
   }
 
   /**
@@ -62,12 +52,12 @@ export class QuantumPossibleState {
   public getTravelPathIntersectionPoint( lineStart: Vector2, lineEnd: Vector2, dt: number ): Vector2 | null {
 
     // Create a line that represents the path of the photon.
-    const photonPathEndPoint = this.positionProperty.value.plus( this.directionProperty.value.timesScalar( PHOTON_SPEED * dt ) );
+    const photonPathEndPoint = this.position.plus( this.direction.timesScalar( PHOTON_SPEED * dt ) );
 
     // Return the intersection point if there is one, null if not.
     return Utils.lineSegmentIntersection(
-      this.positionProperty.value.x,
-      this.positionProperty.value.y,
+      this.position.x,
+      this.position.y,
       photonPathEndPoint.x,
       photonPathEndPoint.y,
       lineStart.x,
@@ -78,69 +68,139 @@ export class QuantumPossibleState {
   }
 
   public step( dt: number ): void {
-    this.positionProperty.set( this.positionProperty.value.plus( this.directionProperty.value.timesScalar( PHOTON_SPEED * dt ) ) );
+    this.position = this.position.plus( this.direction.timesScalar( PHOTON_SPEED * dt ) );
+  }
+
+  public static readonly QuantumPossibleStateIO = new IOType<QuantumPossibleState, QuantumPossibleStateStateObject>( 'QuantumPossibleStateIO', {
+    valueType: QuantumPossibleState,
+    stateSchema: {
+      position: Vector2.Vector2IO,
+      direction: Vector2.Vector2IO,
+      probability: NumberIO,
+      polarization: StringIO
+    },
+    fromStateObject: ( stateObject: QuantumPossibleStateStateObject ) => {
+      return new QuantumPossibleState(
+        Vector2.Vector2IO.fromStateObject( stateObject.position ),
+        Vector2.Vector2IO.fromStateObject( stateObject.direction ),
+        stateObject.probability,
+        stateObject.polarization as possiblePolarizationResult
+      );
+    }
+  } );
+
+  public toStateObject(): QuantumPossibleStateStateObject {
+    return {
+      position: Vector2.Vector2IO.toStateObject( this.position ),
+      direction: Vector2.Vector2IO.toStateObject( this.direction ),
+      probability: this.probability,
+      polarization: this.polarization
+    };
   }
 }
 
-export default class Photon extends PhetioObject {
+export default class Photon {
+
+  // the angle of polarization for this photon, in degrees
+  public polarizationAngle: number;
 
   // Contains all the possible states of the photon, which include position, direction, and probability.
   // Since they contain properties, and based on the design of this simulation, it will always have two states.
-  // TODO: Could this be an object instead of an array? https://github.com/phetsims/quantum-measurement/issues/65
-  public possibleStates: [ QuantumPossibleState, QuantumPossibleState ];
+  public possibleStates: TwoStateQuantumPossibleState;
 
-  // whether this photon is active, and should thus be moved by the model and shown in the view
-  public readonly activeProperty: BooleanProperty;
+  public constructor(
+    polarizationAngle: number,
+    possibleStates: TwoStateQuantumPossibleState
+  ) {
+    this.polarizationAngle = polarizationAngle;
+    this.possibleStates = possibleStates;
+  }
 
-  // the angle of polarization for this photon, in degrees
-  public readonly polarizationAngleProperty: NumberProperty;
+  public setVerticalProbability( verticalProbability: number ): void {
+    this.possibleStates.vertical.probability = verticalProbability;
+    this.possibleStates.horizontal.probability = 1 - verticalProbability;
+  }
 
-  public constructor( tandem: Tandem ) {
+  public setHorizontalProbability( horizontalProbability: number ): void {
+    this.possibleStates.vertical.probability = 1 - horizontalProbability;
+    this.possibleStates.horizontal.probability = horizontalProbability;
+  }
 
-    super( {
-      tandem: tandem,
-      phetioState: false
-    } );
+  public setCorrespondingProbability( providedState: QuantumPossibleState, probability: number ): void {
+    const providedStateKey = _.findKey( this.possibleStates, providedState ) as possiblePolarizationResult;
 
-    this.polarizationAngleProperty = new NumberProperty( 0, {
-      tandem: tandem.createTandem( 'polarizationAngleProperty' )
-    } );
+    assert && assert( providedStateKey, 'Photon state not found!' );
 
-    this.activeProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'activeProperty' )
-    } );
+    const correspondingKey = providedStateKey === 'vertical' ? 'horizontal' : 'vertical';
+    const correspondingState = this.possibleStates[ correspondingKey ];
 
-    this.possibleStates = [
-      new QuantumPossibleState( 'vertical', tandem.createTandem( 'verticalState' ) ),
-      new QuantumPossibleState( 'horizontal', tandem.createTandem( 'horizontalState' ) )
-    ];
-
-    // Relate the possibilities of the two states
-    this.possibleStates[ 0 ].probabilityProperty.lazyLink( probability => {
-      this.possibleStates[ 1 ].probabilityProperty.set( 1 - probability );
-    } );
-    this.possibleStates[ 1 ].probabilityProperty.lazyLink( probability => {
-      this.possibleStates[ 0 ].probabilityProperty.set( 1 - probability );
-    } );
-
+    providedState.probability = probability;
+    correspondingState.probability = 1 - probability;
   }
 
   public step( dt: number ): void {
-    if ( this.activeProperty.value ) {
-      this.possibleStates.forEach( state => {
-        state.step( dt );
-      } );
+    for ( const key in this.possibleStates ) {
+      this.possibleStates[ key as possiblePolarizationResult ].step( dt );
     }
   }
 
-  public reset(): void {
-    this.activeProperty.reset();
-    this.possibleStates.forEach( state => {
-      state.positionProperty.reset();
-      state.directionProperty.reset();
-      state.probabilityProperty.reset();
-    } );
+
+  /**
+   * Individual Projectile instances are not PhET-iO Instrumented. Instead, the Field that contains the Projectiles
+   * calls ProjectileIO.toStateObject to serialize the Projectile instances. FieldIO uses reference type serialization
+   * as a composite of the Projectiles, which use data type serialization.
+   *
+   * Please see https://github.com/phetsims/phet-io/blob/main/doc/phet-io-instrumentation-technical-guide.md#serialization
+   * for more information on the different serialization types.
+   */
+  public static readonly PhotonIO = new IOType<Photon, PhotonStateObject>( 'PhotonIO', {
+    valueType: Photon,
+    stateSchema: {
+      polarizationAngle: NumberIO,
+      possibleStates: ReferenceArrayIO( QuantumPossibleState.QuantumPossibleStateIO )
+    },
+    fromStateObject: ( stateObject: PhotonStateObject ) => {
+      return new Photon(
+        stateObject.polarizationAngle,
+        {
+          vertical: QuantumPossibleState.QuantumPossibleStateIO.fromStateObject( stateObject.possibleStates.vertical ),
+          horizontal: QuantumPossibleState.QuantumPossibleStateIO.fromStateObject( stateObject.possibleStates.horizontal )
+        }
+      );
+    }
+  } );
+
+  private toStateObject(): PhotonStateObject {
+    return {
+      polarizationAngle: this.polarizationAngle,
+      possibleStates: {
+        vertical: this.possibleStates.vertical.toStateObject(),
+        horizontal: this.possibleStates.horizontal.toStateObject()
+      }
+    };
   }
 }
+
+type TwoStateQuantumPossibleState = {
+  vertical: QuantumPossibleState;
+  horizontal: QuantumPossibleState;
+};
+
+type TwoStateQuantumPossibleStateStateObject = {
+  vertical: QuantumPossibleStateStateObject;
+  horizontal: QuantumPossibleStateStateObject;
+};
+
+export type PhotonStateObject = {
+  polarizationAngle: number;
+  possibleStates: TwoStateQuantumPossibleStateStateObject;
+};
+
+export type QuantumPossibleStateStateObject = {
+  position: Vector2StateObject;
+  direction: Vector2StateObject;
+  probability: number;
+  polarization: string;
+};
 
 quantumMeasurement.register( 'Photon', Photon );

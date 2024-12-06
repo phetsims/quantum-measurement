@@ -90,8 +90,6 @@ export default class PhotonDetector implements TPhotonInteraction {
 
   public testForPhotonInteraction( photonState: QuantumPossibleState, photon: Photon, dt: number ): PhotonInteractionTestResult {
 
-    assert && assert( photon.activeProperty.value, 'save CPU cycles - don\'t use this method with inactive photons' );
-
     // Test for whether this photon would cross the detection aperture.
     const photonIntersectionPoint = photonState.getTravelPathIntersectionPoint(
       this.detectionLine.start,
@@ -105,13 +103,14 @@ export default class PhotonDetector implements TPhotonInteraction {
     // This is where the wave function collapses!
     if ( photonIntersectionPoint !== null ) {
       // Evaluate the detection result based on the probability of the photon actually being here!
-      if ( dotRandom.nextDouble() < photonState.probabilityProperty.value ) {
-        photonState.probabilityProperty.value = 1; // the photon is detected!
+      if ( dotRandom.nextDouble() < photonState.probability ) {
+        photon.setCorrespondingProbability( photonState, 1 );
+        photonState.probability = 1; // the photon is detected!
         interaction = { interactionType: 'absorbed' };
       }
       else {
         // If the photon is not detected. This state probability goes to 0%, which will make the other state 100%.
-        photonState.probabilityProperty.value = 0;
+        photon.setCorrespondingProbability( photonState, 0 );
       }
     }
 

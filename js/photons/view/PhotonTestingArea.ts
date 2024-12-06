@@ -105,7 +105,7 @@ export default class PhotonTestingArea extends Node {
     // Add the sprites for the photons after calling the super constructor so that we can use the bounds to set the
     // canvas size.
     this.photonSprites = new PhotonSprites(
-      model.photons,
+      model.photonCollection.photons,
       photonTestingAreaModelViewTransform,
       this.localBounds.copy()
     );

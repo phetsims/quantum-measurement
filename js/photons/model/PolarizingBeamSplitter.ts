@@ -51,8 +51,6 @@ export default class PolarizingBeamSplitter implements TPhotonInteraction {
 
   public testForPhotonInteraction( photonState: QuantumPossibleState, photon: Photon, dt: number ): PhotonInteractionTestResult {
 
-    assert && assert( photon.activeProperty.value, 'save CPU cycles - don\'t use this method with inactive photons' );
-
     // Test for whether this photon crosses the surface of the beam splitter.
     const photonIntersectionPoint = photonState.getTravelPathIntersectionPoint(
       this.polarizingSurfaceLine.start,
@@ -65,20 +63,17 @@ export default class PolarizingBeamSplitter implements TPhotonInteraction {
 
     if ( photonIntersectionPoint !== null ) {
 
-      if ( photon.possibleStates[ 1 ].probabilityProperty.value === 0 ) {
-        // Prepare the second state position, for its probability will now be >0 and will become relevant
-        photon.possibleStates[ 1 ].positionProperty.value = photonState.positionProperty.value;
-      }
-
       // Calculate the probability of reflection based on the custom angle according to Malus's Law
-      const angleInRadians = Utils.toRadians( photon.polarizationAngleProperty.value );
+      const angleInRadians = Utils.toRadians( photon.polarizationAngle );
       const probabilityOfReflection = 1 - Math.pow( Math.cos( angleInRadians ), 2 );
 
       if ( this.collapsePhotonsProperty.value ) {
+
+        // This is the classical case, where photons "choose" a path at the beam splitter.
         if ( dotRandom.nextDouble() <= probabilityOfReflection ) {
 
-          // Set the probability of the reflected state, the other one will change due to entanglement
-          photon.possibleStates[ 0 ].probabilityProperty.value = 1;
+          // Set the probability of the reflected state, the other one will change due to wave function collapse.
+          photon.setVerticalProbability( 1 );
 
           // The photon is being reflected by the beam splitter.  The only direction supported currently is up.
           interaction = {
@@ -87,10 +82,15 @@ export default class PolarizingBeamSplitter implements TPhotonInteraction {
             reflectionDirection: UP
           };
         }
+        else {
+          // Set the probability of the non-reflected state, the other one will change due to wave function collapse.
+          photon.setHorizontalProbability( 1 );
+        }
       }
       else {
-        // Set the probability of the reflected state, the other one will change due to entanglement
-        photon.possibleStates[ 0 ].probabilityProperty.value = probabilityOfReflection;
+
+        // Set the probability of the reflected state.
+        photon.setVerticalProbability( probabilityOfReflection );
 
         // The photon is being reflected by the beam splitter.  The only direction supported currently is up.
         interaction = {

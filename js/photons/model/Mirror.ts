@@ -42,8 +42,6 @@ export default class Mirror implements TPhotonInteraction {
 
   public testForPhotonInteraction( photonState: QuantumPossibleState, photon: Photon, dt: number ): PhotonInteractionTestResult {
 
-    assert && assert( photon.activeProperty.value, 'save CPU cycles - don\'t use this method with inactive photons' );
-
     // Test for whether this photon crosses the surface of the beam splitter.
     const photonIntersectionPoint = photonState.getTravelPathIntersectionPoint(
       this.mirrorSurfaceLine.start,

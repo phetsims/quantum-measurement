@@ -18,7 +18,8 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import Photon, { PHOTON_SPEED, RIGHT } from './Photon.js';
+import Photon, { PHOTON_SPEED, QuantumPossibleState, RIGHT } from './Photon.js';
+import { PhotonCollection } from './PhotonCollection.js';
 
 export type PhotonEmissionMode = 'singlePhoton' | 'manyPhotons';
 
@@ -71,17 +72,18 @@ export default class Laser {
   // the emitted photons are unpolarized, meaining that their individual polarization angles are random.
   public readonly polarizationAngleProperty: TReadOnlyProperty<number | null>;
 
-  // The set of photons that are used for emission.  This is a reference to the same array that is used in the scene model.
-  private readonly photons: Photon[];
+  // The collection of photons that are used for emission.
+  // This is a reference to the same collection that is used in the scene model.
+  private readonly photonCollection: PhotonCollection;
 
   // The fractional emission backlog is used to track fractional amounts of photons that build up due to a mismatch
   // between the stepping rate frequency and the emission rate.
   private fractionalEmissionAccumulator = 0;
 
-  public constructor( position: Vector2, photons: Photon[], providedOptions: LaserOptions ) {
+  public constructor( position: Vector2, photonCollection: PhotonCollection, providedOptions: LaserOptions ) {
 
     this.position = position;
-    this.photons = photons;
+    this.photonCollection = photonCollection;
     this.emissionMode = providedOptions.emissionMode;
 
     this.emissionRateProperty = new NumberProperty( 0, {
@@ -121,45 +123,46 @@ export default class Laser {
    *             photon will be emitted at the exact X position of the laser.
    */
   public emitAPhoton( dt = 0 ): void {
-    const photonToActivate = this.photons.find( photon => !photon.activeProperty.value );
-    assert && assert( photonToActivate, 'no inactive photons available, increase the initial creation amount' );
-    if ( photonToActivate ) {
 
-      // Randomize the y position of the emitted photon so that the beam has some thickness.
-      const yOffset = this.emittedBeamWidth / 2 * ( 1 - dotRandom.nextDouble() * 2 );
+    // Randomize the y position of the emitted photon so that the beam has some thickness.
+    const yOffset = this.emittedBeamWidth / 2 * ( 1 - dotRandom.nextDouble() * 2 );
 
-      // Randomize the x position of the emitted photon so that we don't have big clumps of photons when large dt values
-      // occur.
-      const xOffset = dt * dotRandom.nextDouble() * PHOTON_SPEED;
+    // Randomize the x position of the emitted photon so that we don't have big clumps of photons when large dt values
+    // occur.
+    const xOffset = dt * dotRandom.nextDouble() * PHOTON_SPEED;
 
-      // Determine the polarization angle for the emitted photon.
-      let polarizationAngle;
-      if ( this.presetPolarizationDirectionProperty.value === 'custom' ) {
-        polarizationAngle = this.customPolarizationAngleProperty.value;
-      }
-      else if ( this.presetPolarizationDirectionProperty.value === 'unpolarized' ) {
-        polarizationAngle = dotRandom.nextDouble() * 360;
-      }
-      else {
-        assert && assert( MAP_OF_PRESET_POLARIZATION_ANGLES.has( this.presetPolarizationDirectionProperty.value ) );
-        polarizationAngle = MAP_OF_PRESET_POLARIZATION_ANGLES.get( this.presetPolarizationDirectionProperty.value )!;
-      }
-      photonToActivate.polarizationAngleProperty.value = polarizationAngle;
-
-      // Activate the photon and set its position, direction, and polarization angle.
-      photonToActivate.activeProperty.set( true );
-
-      // For each of the two possible states of the photon, set the same position and direction
-      photonToActivate.possibleStates.forEach( state => {
-        state.positionProperty.set( this.position.plusXY( xOffset, yOffset ) );
-        state.directionProperty.set( this.emissionDirection );
-      } );
-
-      // Initially, the first state is the one with 100% probability
-      // It makes no difference before they reach the splitter.
-      photonToActivate.possibleStates[ 0 ].probabilityProperty.set( 1 );
-      photonToActivate.polarizationAngleProperty.set( polarizationAngle );
+    // Determine the polarization angle for the emitted photon.
+    let polarizationAngle;
+    if ( this.presetPolarizationDirectionProperty.value === 'custom' ) {
+      polarizationAngle = this.customPolarizationAngleProperty.value;
     }
+    else if ( this.presetPolarizationDirectionProperty.value === 'unpolarized' ) {
+      polarizationAngle = dotRandom.nextDouble() * 360;
+    }
+    else {
+      assert && assert( MAP_OF_PRESET_POLARIZATION_ANGLES.has( this.presetPolarizationDirectionProperty.value ) );
+      polarizationAngle = MAP_OF_PRESET_POLARIZATION_ANGLES.get( this.presetPolarizationDirectionProperty.value )!;
+    }
+
+    const photon = new Photon(
+      polarizationAngle,
+      {
+        vertical: new QuantumPossibleState(
+          this.position.plusXY( xOffset, yOffset ),
+          this.emissionDirection,
+          1,
+          'vertical'
+        ),
+        horizontal: new QuantumPossibleState(
+          this.position.plusXY( xOffset, yOffset ),
+          this.emissionDirection,
+          0,
+          'horizontal'
+        )
+      }
+    );
+
+    this.photonCollection.addPhoton( photon );
   }
 
   /**
