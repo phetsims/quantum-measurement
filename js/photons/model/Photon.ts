@@ -11,7 +11,6 @@ import Utils from '../../../../dot/js/Utils.js';
 import Vector2, { Vector2StateObject } from '../../../../dot/js/Vector2.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
-import ReferenceArrayIO from '../../../../tandem/js/types/ReferenceArrayIO.js';
 import StringIO from '../../../../tandem/js/types/StringIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
@@ -144,6 +143,19 @@ export default class Photon {
     }
   }
 
+  public static readonly TwoStateQuantumPossibleStateIO = new IOType<TwoStateQuantumPossibleState, TwoStateQuantumPossibleStateStateObject>( 'TwoStateQuantumPossibleStateIO', {
+    valueType: Photon,
+    stateSchema: {
+      vertical: QuantumPossibleState.QuantumPossibleStateIO,
+      horizontal: QuantumPossibleState.QuantumPossibleStateIO
+    },
+    fromStateObject: ( stateObject: TwoStateQuantumPossibleStateStateObject ) => {
+      return {
+        vertical: QuantumPossibleState.QuantumPossibleStateIO.fromStateObject( stateObject.vertical ),
+        horizontal: QuantumPossibleState.QuantumPossibleStateIO.fromStateObject( stateObject.horizontal )
+      };
+    }
+  } );
 
   /**
    * Individual Projectile instances are not PhET-iO Instrumented. Instead, the Field that contains the Projectiles
@@ -157,7 +169,7 @@ export default class Photon {
     valueType: Photon,
     stateSchema: {
       polarizationAngle: NumberIO,
-      possibleStates: ReferenceArrayIO( QuantumPossibleState.QuantumPossibleStateIO )
+      possibleStates: Photon.TwoStateQuantumPossibleStateIO
     },
     fromStateObject: ( stateObject: PhotonStateObject ) => {
       return new Photon(
