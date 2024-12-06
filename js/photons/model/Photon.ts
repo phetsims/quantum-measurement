@@ -87,15 +87,6 @@ export class QuantumPossibleState {
       );
     }
   } );
-
-  public toStateObject(): QuantumPossibleStateStateObject {
-    return {
-      position: Vector2.Vector2IO.toStateObject( this.position ),
-      direction: Vector2.Vector2IO.toStateObject( this.direction ),
-      probability: this.probability,
-      polarization: this.polarization
-    };
-  }
 }
 
 export default class Photon {
@@ -181,16 +172,6 @@ export default class Photon {
       );
     }
   } );
-
-  private toStateObject(): PhotonStateObject {
-    return {
-      polarizationAngle: this.polarizationAngle,
-      possibleStates: {
-        vertical: this.possibleStates.vertical.toStateObject(),
-        horizontal: this.possibleStates.horizontal.toStateObject()
-      }
-    };
-  }
 }
 
 type TwoStateQuantumPossibleState = {
