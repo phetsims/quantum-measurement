@@ -16,7 +16,7 @@ import { Line } from '../../../../kite/js/imports.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import Photon, { QuantumPossibleState, RIGHT, UP } from './Photon.js';
+import Photon, { PossiblePolarizationResult, QuantumPossibleState, RIGHT, UP } from './Photon.js';
 import { PhotonInteractionTestResult } from './PhotonsModel.js';
 import { TPhotonInteraction } from './TPhotonInteraction.js';
 
@@ -49,59 +49,69 @@ export default class PolarizingBeamSplitter implements TPhotonInteraction {
     this.polarizingSurfaceLine = new Line( endpoint1, endpoint2 );
   }
 
-  public testForPhotonInteraction( photonState: QuantumPossibleState, photon: Photon, dt: number ): PhotonInteractionTestResult {
+  public testForPhotonInteraction( photon: Photon, dt: number ): Map<QuantumPossibleState, PhotonInteractionTestResult> {
 
-    // Test for whether this photon crosses the surface of the beam splitter.
-    const photonIntersectionPoint = photonState.getTravelPathIntersectionPoint(
-      this.polarizingSurfaceLine.start,
-      this.polarizingSurfaceLine.end,
-      dt
-    );
+    // TODO: Add an assertion to make sure there is at least one state, see https://github.com/phetsims/quantum-measurement/issues/65.
+    const mapOfStatesToInteractions = new Map<QuantumPossibleState, PhotonInteractionTestResult>();
 
-    // Assume no interaction until proven otherwise.
-    let interaction: PhotonInteractionTestResult = { interactionType: 'none' };
+    // Iterate over the possible states and test for interactions.
+    Object.keys( photon.possibleStates ).forEach( stateKey => {
+      const photonState = photon.possibleStates[ stateKey as PossiblePolarizationResult ];
 
-    if ( photonIntersectionPoint !== null ) {
+      // Test for whether this photon crosses the surface of the beam splitter.
+      const photonIntersectionPoint = photonState.getTravelPathIntersectionPoint(
+        this.polarizingSurfaceLine.start,
+        this.polarizingSurfaceLine.end,
+        dt
+      );
 
-      // Calculate the probability of reflection based on the custom angle according to Malus's Law
-      const angleInRadians = Utils.toRadians( photon.polarizationAngle );
-      const probabilityOfReflection = 1 - Math.pow( Math.cos( angleInRadians ), 2 );
+      // Assume no interaction until proven otherwise.
+      let interaction: PhotonInteractionTestResult = { interactionType: 'none' };
 
-      if ( this.collapsePhotonsProperty.value ) {
+      if ( photonIntersectionPoint !== null ) {
 
-        // This is the classical case, where photons "choose" a path at the beam splitter.
-        if ( dotRandom.nextDouble() <= probabilityOfReflection ) {
+        // Calculate the probability of reflection based on the custom angle according to Malus's Law
+        const angleInRadians = Utils.toRadians( photon.polarizationAngle );
+        const probabilityOfReflection = 1 - Math.pow( Math.cos( angleInRadians ), 2 );
 
-          // Set the probability of the reflected state, the other one will change due to wave function collapse.
-          photon.setVerticalProbability( 1 );
+        if ( this.collapsePhotonsProperty.value ) {
+
+          // This is the classical case, where photons "choose" a path at the beam splitter.
+          if ( dotRandom.nextDouble() <= probabilityOfReflection ) {
+
+            // Set the probability of the reflected state, the other one will change due to wave function collapse.
+            photon.setVerticalProbability( 1 );
+
+            // The photon is being reflected by the beam splitter.  The only direction supported currently is up.
+            interaction = {
+              interactionType: 'reflected',
+              reflectionPoint: photonIntersectionPoint,
+              reflectionDirection: UP
+            };
+          }
+          else {
+            // Set the probability of the non-reflected state, the other one will change due to wave function collapse.
+            photon.setHorizontalProbability( 1 );
+          }
+        }
+        else {
+
+          // Set the probability of the reflected state.
+          photon.setVerticalProbability( probabilityOfReflection );
 
           // The photon is being reflected by the beam splitter.  The only direction supported currently is up.
           interaction = {
             interactionType: 'reflected',
             reflectionPoint: photonIntersectionPoint,
-            reflectionDirection: UP
+            reflectionDirection: photonState.polarization === 'vertical' ? UP : RIGHT
           };
         }
-        else {
-          // Set the probability of the non-reflected state, the other one will change due to wave function collapse.
-          photon.setHorizontalProbability( 1 );
-        }
       }
-      else {
 
-        // Set the probability of the reflected state.
-        photon.setVerticalProbability( probabilityOfReflection );
+      mapOfStatesToInteractions.set( photonState, interaction );
+    } );
 
-        // The photon is being reflected by the beam splitter.  The only direction supported currently is up.
-        interaction = {
-          interactionType: 'reflected',
-          reflectionPoint: photonIntersectionPoint,
-          reflectionDirection: photonState.polarization === 'vertical' ? UP : RIGHT
-        };
-      }
-    }
-
-    return interaction;
+    return mapOfStatesToInteractions;
   }
 }
 

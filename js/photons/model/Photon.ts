@@ -24,7 +24,7 @@ export const RIGHT = new Vector2( 1, 0 );
 
 // Due to the experiment's nature, when photons are split,
 // the resulting states will either be measured as vertical or horizontal.
-export type possiblePolarizationResult = 'vertical' | 'horizontal';
+export type PossiblePolarizationResult = 'vertical' | 'horizontal';
 
 // TODO: This class could live in its own file, once the feature is fully green lit, will move https://github.com/phetsims/quantum-measurement/issues/63
 /**
@@ -36,7 +36,7 @@ export class QuantumPossibleState {
     public position: Vector2,
     public direction: Vector2,
     public probability: number,
-    public readonly polarization: possiblePolarizationResult // TODO this still needed? https://github.com/phetsims/quantum-measurement/issues/65
+    public readonly polarization: PossiblePolarizationResult // TODO this still needed? https://github.com/phetsims/quantum-measurement/issues/65
   ) {
     // no-op
   }
@@ -83,7 +83,7 @@ export class QuantumPossibleState {
         Vector2.Vector2IO.fromStateObject( stateObject.position ),
         Vector2.Vector2IO.fromStateObject( stateObject.direction ),
         stateObject.probability,
-        stateObject.polarization as possiblePolarizationResult
+        stateObject.polarization as PossiblePolarizationResult
       );
     }
   } );
@@ -117,7 +117,7 @@ export default class Photon {
   }
 
   public setCorrespondingProbability( providedState: QuantumPossibleState, probability: number ): void {
-    const providedStateKey = _.findKey( this.possibleStates, providedState ) as possiblePolarizationResult;
+    const providedStateKey = _.findKey( this.possibleStates, providedState ) as PossiblePolarizationResult;
 
     assert && assert( providedStateKey, 'Photon state not found!' );
 
@@ -130,7 +130,7 @@ export default class Photon {
 
   public step( dt: number ): void {
     for ( const key in this.possibleStates ) {
-      this.possibleStates[ key as possiblePolarizationResult ].step( dt );
+      this.possibleStates[ key as PossiblePolarizationResult ].step( dt );
     }
   }
 

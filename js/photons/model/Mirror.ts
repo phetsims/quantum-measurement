@@ -13,7 +13,7 @@ import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import Photon, { DOWN, QuantumPossibleState } from './Photon.js';
+import Photon, { DOWN, PossiblePolarizationResult, QuantumPossibleState } from './Photon.js';
 import { PhotonInteractionTestResult } from './PhotonsModel.js';
 import { TPhotonInteraction } from './TPhotonInteraction.js';
 
@@ -40,28 +40,37 @@ export default class Mirror implements TPhotonInteraction {
     this.mirrorSurfaceLine = new Line( endpoint1, endpoint2 );
   }
 
-  public testForPhotonInteraction( photonState: QuantumPossibleState, photon: Photon, dt: number ): PhotonInteractionTestResult {
+  public testForPhotonInteraction( photon: Photon, dt: number ): Map<QuantumPossibleState, PhotonInteractionTestResult> {
 
-    // Test for whether this photon crosses the surface of the beam splitter.
-    const photonIntersectionPoint = photonState.getTravelPathIntersectionPoint(
-      this.mirrorSurfaceLine.start,
-      this.mirrorSurfaceLine.end,
-      dt
-    );
+    const mapOfStatesToInteractions = new Map<QuantumPossibleState, PhotonInteractionTestResult>();
 
-    if ( photonIntersectionPoint !== null ) {
+    // Iterate over the possible states and test for interactions.
+    Object.keys( photon.possibleStates ).forEach( stateKey => {
 
+      const photonState = photon.possibleStates[ stateKey as PossiblePolarizationResult ];
 
-      // The photon is being reflected by this mirror.  The only direction supported currently is down.
-      return {
-        interactionType: 'reflected',
-        reflectionPoint: photonIntersectionPoint,
-        reflectionDirection: DOWN
-      };
-    }
-    else {
-      return { interactionType: 'none' };
-    }
+      // Test for whether this photon crosses the surface of the beam splitter.
+      const photonIntersectionPoint = photonState.getTravelPathIntersectionPoint(
+        this.mirrorSurfaceLine.start,
+        this.mirrorSurfaceLine.end,
+        dt
+      );
+
+      if ( photonIntersectionPoint !== null ) {
+
+        // The photon is being reflected by this mirror.  The only direction supported currently is down.
+        mapOfStatesToInteractions.set( photonState, {
+          interactionType: 'reflected',
+          reflectionPoint: photonIntersectionPoint,
+          reflectionDirection: DOWN
+        } );
+      }
+      else {
+        mapOfStatesToInteractions.set( photonState, { interactionType: 'none' } );
+      }
+    } );
+
+    return mapOfStatesToInteractions;
   }
 }
 

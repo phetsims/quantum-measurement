@@ -10,5 +10,5 @@ import Photon, { QuantumPossibleState } from './Photon.js';
 import { PhotonInteractionTestResult } from './PhotonsModel.js';
 
 export type TPhotonInteraction = {
-  testForPhotonInteraction( state: QuantumPossibleState, photon: Photon, dt: number ): PhotonInteractionTestResult;
+  testForPhotonInteraction( photon: Photon, dt: number ): Map<QuantumPossibleState, PhotonInteractionTestResult>;
 };

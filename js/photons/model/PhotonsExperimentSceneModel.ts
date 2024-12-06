@@ -20,10 +20,9 @@ import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import Laser, { PhotonEmissionMode } from './Laser.js';
 import Mirror from './Mirror.js';
-import { PHOTON_SPEED, possiblePolarizationResult } from './Photon.js';
+import Photon, { PHOTON_SPEED } from './Photon.js';
 import { PhotonCollection } from './PhotonCollection.js';
 import PhotonDetector from './PhotonDetector.js';
-import { PhotonInteractionTestResult } from './PhotonsModel.js';
 import PolarizingBeamSplitter from './PolarizingBeamSplitter.js';
 import { TPhotonInteraction } from './TPhotonInteraction.js';
 
@@ -209,55 +208,65 @@ export default class PhotonsExperimentSceneModel {
         this.verticalPolarizationDetector
       ];
 
-      // Update each active photon's quantum states based on their interaction with any other model elements.
+      const photonsToRemove: Photon[] = [];
+
+      // Update each photon's quantum states.  This tests for interactions with other elements in the model, like the
+      // beam splitter, mirror, and photon detectors.
       this.photonCollection.photons.forEach( photon => {
-        for ( const key in photon.possibleStates ) {
-          const photonState = photon.possibleStates[ key as possiblePolarizationResult ];
-          // Only update active states
-          if ( photonState.probability > 0 ) {
-            // Test for interactions with the potential interactors.
-            let interaction: PhotonInteractionTestResult = { interactionType: 'none' };
-            for ( const potentiallyInteractingElement of potentialInteractors ) {
-              interaction = potentiallyInteractingElement.testForPhotonInteraction( photonState, photon, dt );
-              if ( interaction.interactionType !== 'none' ) {
-                break;
+
+        let interactionCount = 0;
+
+        for ( const potentiallyInteractingElement of potentialInteractors ) {
+
+          // Test for interactions with the potential interactors.
+          const interactions = potentiallyInteractingElement.testForPhotonInteraction( photon, dt );
+
+          // For each of the interactions, update the photon state.
+          for ( const [ photonState, interaction ] of interactions ) {
+
+            if ( !photonsToRemove.includes( photon ) ) {
+              if ( interaction.interactionType === 'reflected' ) {
+
+                assert && assert( interaction.reflectionPoint, 'reflection point should be defined' );
+                assert && assert( interaction.reflectionDirection, 'reflection direction should be defined' );
+
+                // This photon was reflected.  First step it to the reflection point.
+                const dtToReflection = photonState.position.distance( interaction.reflectionPoint! ) / PHOTON_SPEED;
+                assert && assert( dtToReflection <= dt );
+                photonState.step( dtToReflection );
+
+                // Change the direction of the photon to the reflection direction.
+                // photon.directionProperty.set( interaction.reflectionDirection! );
+                photonState.direction = interaction.reflectionDirection!;
+
+                // Step the photon the remaining time.
+                photonState.step( dt - dtToReflection );
+
+                interactionCount++;
+              }
+              else if ( interaction.interactionType === 'absorbed' ) {
+
+                // This interaction indicates that the photon was absorbed, so it should be removed from the photon
+                // collection.
+                photonsToRemove.push( photon );
+
+                interactionCount++;
               }
             }
-
-            if ( interaction.interactionType === 'reflected' ) {
-
-              assert && assert( interaction.reflectionPoint, 'reflection point should be defined' );
-              assert && assert( interaction.reflectionDirection, 'reflection direction should be defined' );
-
-              // This photon was reflected.  First step it to the reflection point.
-              const dtToReflection = photonState.position.distance( interaction.reflectionPoint! ) / PHOTON_SPEED;
-              assert && assert( dtToReflection <= dt );
-              photonState.step( dtToReflection );
-
-              // Change the direction of the photon to the reflection direction.
-              // photon.directionProperty.set( interaction.reflectionDirection! );
-              photonState.direction = interaction.reflectionDirection!;
-
-              // Step the photon the remaining time.
-              photonState.step( dt - dtToReflection );
-            }
-            else if ( interaction.interactionType === 'absorbed' ) {
-              // Once a photon is absorbed, remove it from the photon collection
-              this.photonCollection.removePhoton( photon );
-              break;
-            }
-            else {
-              // Just step the photon normally, which will move it forward in its current travel direction.
-              photonState.step( dt );
-            }
           }
-          else {
-            photonState.step( dt );
-          }
+        }
+
+        if ( interactionCount === 0 ) {
+          photon.step( dt );
         }
       } );
 
-      // Step the photon detectors.
+      // Remove any photons that were absorbed by something.
+      photonsToRemove.forEach( photon => {
+        this.photonCollection.removePhoton( photon );
+      } );
+
+      // Step the photon detectors.  This is just to update the counts and rates, but doesn't detect the photons.
       this.horizontalPolarizationDetector.step( dt );
       this.verticalPolarizationDetector.step( dt );
     }

@@ -18,7 +18,7 @@ import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import AveragingCounterNumberProperty from '../../common/model/AveragingCounterNumberProperty.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { PHOTON_BEAM_WIDTH } from './Laser.js';
-import Photon, { QuantumPossibleState } from './Photon.js';
+import Photon, { PossiblePolarizationResult, QuantumPossibleState } from './Photon.js';
 import { PhotonInteractionTestResult } from './PhotonsModel.js';
 import { TPhotonInteraction } from './TPhotonInteraction.js';
 
@@ -88,39 +88,52 @@ export default class PhotonDetector implements TPhotonInteraction {
     } );
   }
 
-  public testForPhotonInteraction( photonState: QuantumPossibleState, photon: Photon, dt: number ): PhotonInteractionTestResult {
+  public testForPhotonInteraction( photon: Photon, dt: number ): Map<QuantumPossibleState, PhotonInteractionTestResult> {
 
-    // Test for whether this photon would cross the detection aperture.
-    const photonIntersectionPoint = photonState.getTravelPathIntersectionPoint(
-      this.detectionLine.start,
-      this.detectionLine.end,
-      dt
-    );
+    const mapOfStatesToInteractions = new Map<QuantumPossibleState, PhotonInteractionTestResult>();
 
-    // Assume no interaction until proven otherwise.
-    let interaction: PhotonInteractionTestResult = { interactionType: 'none' };
+    // Iterate over the possible states and test for interactions.
+    Object.keys( photon.possibleStates ).forEach( stateKey => {
 
-    // This is where the wave function collapses!
-    if ( photonIntersectionPoint !== null ) {
-      // Evaluate the detection result based on the probability of the photon actually being here!
-      if ( dotRandom.nextDouble() < photonState.probability ) {
-        photon.setCorrespondingProbability( photonState, 1 );
-        photonState.probability = 1; // the photon is detected!
-        interaction = { interactionType: 'absorbed' };
+      const photonState = photon.possibleStates[ stateKey as PossiblePolarizationResult ];
+
+      // Test for whether this photon would cross the detection aperture.
+      const photonIntersectionPoint = photonState.getTravelPathIntersectionPoint(
+        this.detectionLine.start,
+        this.detectionLine.end,
+        dt
+      );
+
+      // Assume no interaction until proven otherwise.
+      let interaction: PhotonInteractionTestResult = { interactionType: 'none' };
+
+      // This is where the wave function collapses!
+      if ( photonIntersectionPoint !== null ) {
+
+        // Evaluate the detection result based on the probability of the photon actually being here!
+        if ( dotRandom.nextDouble() < photonState.probability ) {
+          photon.setCorrespondingProbability( photonState, 1 );
+          photonState.probability = 1; // the photon is detected!
+          interaction = { interactionType: 'absorbed' };
+        }
+        else {
+
+          // If the photon is not detected. This state probability goes to 0%, which will make the other state 100%.
+          photon.setCorrespondingProbability( photonState, 0 );
+        }
       }
-      else {
-        // If the photon is not detected. This state probability goes to 0%, which will make the other state 100%.
-        photon.setCorrespondingProbability( photonState, 0 );
+
+      if ( interaction.interactionType === 'absorbed' ) {
+        this.detectionCountProperty.value = Math.min( this.detectionCountProperty.value + 1, COUNT_RANGE.max );
+        this.detectionRateProperty.countEvent();
       }
-    }
 
-    if ( interaction.interactionType === 'absorbed' ) {
-      this.detectionCountProperty.value = Math.min( this.detectionCountProperty.value + 1, COUNT_RANGE.max );
-      this.detectionRateProperty.countEvent();
-    }
+      mapOfStatesToInteractions.set( photonState, interaction );
+    } );
 
-    return interaction;
+    return mapOfStatesToInteractions;
   }
+
 
   public step( dt: number ): void {
     this.detectionRateProperty.step( dt );
