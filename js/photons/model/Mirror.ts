@@ -61,8 +61,10 @@ export default class Mirror implements TPhotonInteraction {
         // The photon is being reflected by this mirror.  The only direction supported currently is down.
         mapOfStatesToInteractions.set( photonState, {
           interactionType: 'reflected',
-          reflectionPoint: photonIntersectionPoint,
-          reflectionDirection: DOWN
+          reflectionInfo: {
+            reflectionPoint: photonIntersectionPoint,
+            reflectionDirection: DOWN
+          }
         } );
       }
       else {

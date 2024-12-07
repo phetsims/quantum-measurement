@@ -79,31 +79,35 @@ export default class PolarizingBeamSplitter implements TPhotonInteraction {
           // This is the classical case, where photons "choose" a path at the beam splitter.
           if ( dotRandom.nextDouble() <= probabilityOfReflection ) {
 
-            // Set the probability of the reflected state, the other one will change due to wave function collapse.
-            photon.setVerticalProbability( 1 );
-
             // The photon is being reflected by the beam splitter.  The only direction supported currently is up.
             interaction = {
               interactionType: 'reflected',
-              reflectionPoint: photonIntersectionPoint,
-              reflectionDirection: UP
+              reflectionInfo: {
+                reflectionPoint: photonIntersectionPoint,
+                reflectionDirection: UP
+              }
             };
-          }
-          else {
-            // Set the probability of the non-reflected state, the other one will change due to wave function collapse.
-            photon.setHorizontalProbability( 1 );
           }
         }
         else {
 
-          // Set the probability of the reflected state.
-          photon.setVerticalProbability( probabilityOfReflection );
-
-          // The photon is being reflected by the beam splitter.  The only direction supported currently is up.
+          // This is the quantum case where the photon is split into a superposition of states until observed by one of
+          // the detectors.
           interaction = {
-            interactionType: 'reflected',
-            reflectionPoint: photonIntersectionPoint,
-            reflectionDirection: photonState.polarization === 'vertical' ? UP : RIGHT
+            interactionType: 'split',
+            splitInfo: {
+              splitPoint: photonIntersectionPoint,
+              splitStates: [
+                {
+                  direction: UP,
+                  probability: probabilityOfReflection
+                },
+                {
+                  direction: RIGHT,
+                  probability: 1 - probabilityOfReflection
+                }
+              ]
+            }
           };
         }
       }

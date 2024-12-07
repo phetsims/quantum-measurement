@@ -227,22 +227,46 @@ export default class PhotonsExperimentSceneModel {
             if ( !photonsToRemove.includes( photon ) ) {
               if ( interaction.interactionType === 'reflected' ) {
 
-                assert && assert( interaction.reflectionPoint, 'reflection point should be defined' );
-                assert && assert( interaction.reflectionDirection, 'reflection direction should be defined' );
+                assert && assert( interaction.reflectionInfo, 'reflection info missing' );
 
-                // This photon was reflected.  First step it to the reflection point.
-                const dtToReflection = photonState.position.distance( interaction.reflectionPoint! ) / PHOTON_SPEED;
+                // This photon state was reflected.  First step it to the reflection point.
+                const dtToReflection = photonState.position.distance( interaction.reflectionInfo!.reflectionPoint ) / PHOTON_SPEED;
                 assert && assert( dtToReflection <= dt );
                 photonState.step( dtToReflection );
 
                 // Change the direction of the photon to the reflection direction.
-                // photon.directionProperty.set( interaction.reflectionDirection! );
-                photonState.direction = interaction.reflectionDirection!;
+                photonState.direction = interaction.reflectionInfo!.reflectionDirection;
 
                 // Step the photon the remaining time.
                 photonState.step( dt - dtToReflection );
 
                 interactionCount++;
+              }
+              if ( interaction.interactionType === 'split' ) {
+
+                assert && assert( interaction.splitInfo, 'split info missing' );
+
+                // The resulting interaction was a split of the photon state.  First step the state to the split point.
+                const dtToReflection = photonState.position.distance( interaction.splitInfo!.splitPoint ) / PHOTON_SPEED;
+                assert && assert( dtToReflection <= dt );
+                photonState.step( dtToReflection );
+
+                // Update the state based on the first split info element.
+                photonState.direction = interaction.splitInfo!.splitStates[ 0 ].direction;
+                photonState.probability = interaction.splitInfo!.splitStates[ 0 ].probability;
+
+                // Update the other state based on the second split info element.
+                // TODO: This will get more reasonable when the quantum states are an array.  See https://github.com/phetsims/quantum-measurement/issues/65.
+                if ( photon.possibleStates.vertical === photonState ) {
+                  photon.possibleStates.horizontal.direction = interaction.splitInfo!.splitStates[ 1 ].direction;
+                  photon.possibleStates.horizontal.probability = interaction.splitInfo!.splitStates[ 1 ].probability;
+                  photon.possibleStates.horizontal.position = photonState.position;
+                }
+                else {
+                  photon.possibleStates.vertical.direction = interaction.splitInfo!.splitStates[ 1 ].direction;
+                  photon.possibleStates.vertical.probability = interaction.splitInfo!.splitStates[ 1 ].probability;
+                  photon.possibleStates.vertical.position = photonState.position;
+                }
               }
               else if ( interaction.interactionType === 'absorbed' ) {
 

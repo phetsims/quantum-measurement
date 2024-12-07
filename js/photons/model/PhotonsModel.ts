@@ -25,12 +25,21 @@ import PhotonsExperimentSceneModel from './PhotonsExperimentSceneModel.js';
 type SelfOptions = EmptySelfOptions;
 type PhotonsModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
-export const PhotonInteractionTypeValues = [ 'none', 'absorbed', 'reflected' ] as const;
+export const PhotonInteractionTypeValues = [ 'none', 'absorbed', 'reflected', 'split' ] as const;
 export type PhotonInteractionTypes = ( typeof PhotonInteractionTypeValues )[number];
 export type PhotonInteractionTestResult = {
   interactionType: PhotonInteractionTypes;
-  reflectionPoint?: Vector2;
-  reflectionDirection?: Vector2;
+  reflectionInfo?: {
+    reflectionPoint: Vector2;
+    reflectionDirection: Vector2;
+  };
+  splitInfo?: {
+    splitPoint: Vector2;
+    splitStates: {
+      direction: Vector2;
+      probability: number;
+    }[];
+  };
 };
 
 export const ExperimentModeTypeValues = [ 'singlePhoton', 'manyPhotons' ] as const;

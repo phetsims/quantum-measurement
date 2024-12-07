@@ -2,7 +2,7 @@
 
 /**
  * Photon is a model element that represents a single photon.  It supports the needs of the Quantum Measurement sim,
- * and allows photons to be positioned and moved, and not much else.
+ * and allows photons to be positioned and moved, and exist in multiple possible states.
  *
  * @author John Blanco, PhET Interactive Simulations
  */
@@ -32,12 +32,10 @@ export type PossiblePolarizationResult = 'vertical' | 'horizontal';
  * It contains variables for position, direction and the probability of the photon being in that state.
  */
 export class QuantumPossibleState {
-  public constructor(
-    public position: Vector2,
-    public direction: Vector2,
-    public probability: number,
-    public readonly polarization: PossiblePolarizationResult // TODO this still needed? https://github.com/phetsims/quantum-measurement/issues/65
-  ) {
+  public constructor( public position: Vector2,
+                      public direction: Vector2,
+                      public probability: number,
+                      public readonly polarization: PossiblePolarizationResult /* TODO this still needed? https://github.com/phetsims/quantum-measurement/issues/65 */ ) {
     // no-op
   }
 
@@ -98,22 +96,11 @@ export default class Photon {
   // Since they contain properties, and based on the design of this simulation, it will always have two states.
   public possibleStates: TwoStateQuantumPossibleState;
 
-  public constructor(
-    polarizationAngle: number,
-    possibleStates: TwoStateQuantumPossibleState
-  ) {
+  public constructor( polarizationAngle: number,
+                      possibleStates: TwoStateQuantumPossibleState ) {
+
     this.polarizationAngle = polarizationAngle;
     this.possibleStates = possibleStates;
-  }
-
-  public setVerticalProbability( verticalProbability: number ): void {
-    this.possibleStates.vertical.probability = verticalProbability;
-    this.possibleStates.horizontal.probability = 1 - verticalProbability;
-  }
-
-  public setHorizontalProbability( horizontalProbability: number ): void {
-    this.possibleStates.vertical.probability = 1 - horizontalProbability;
-    this.possibleStates.horizontal.probability = horizontalProbability;
   }
 
   public setCorrespondingProbability( providedState: QuantumPossibleState, probability: number ): void {
