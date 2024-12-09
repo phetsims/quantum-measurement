@@ -230,15 +230,16 @@ export default class PhotonsExperimentSceneModel {
                 assert && assert( interaction.reflectionInfo, 'reflection info missing' );
 
                 // This photon state was reflected.  First step it to the reflection point.
-                const dtToReflection = photonState.position.distance( interaction.reflectionInfo!.reflectionPoint ) / PHOTON_SPEED;
-                assert && assert( dtToReflection <= dt );
-                photonState.step( dtToReflection );
+                const dtToReflectionPoint =
+                  photonState.position.distance( interaction.reflectionInfo!.reflectionPoint ) / PHOTON_SPEED;
+                assert && assert( dtToReflectionPoint <= dt );
+                photonState.step( dtToReflectionPoint );
 
                 // Change the direction of the photon to the reflection direction.
                 photonState.direction = interaction.reflectionInfo!.reflectionDirection;
 
                 // Step the photon the remaining time.
-                photonState.step( dt - dtToReflection );
+                photonState.step( dt - dtToReflectionPoint );
 
                 interactionCount++;
               }
@@ -247,9 +248,9 @@ export default class PhotonsExperimentSceneModel {
                 assert && assert( interaction.splitInfo, 'split info missing' );
 
                 // The resulting interaction was a split of the photon state.  First step the state to the split point.
-                const dtToReflection = photonState.position.distance( interaction.splitInfo!.splitPoint ) / PHOTON_SPEED;
-                assert && assert( dtToReflection <= dt );
-                photonState.step( dtToReflection );
+                const dtToSplitPoint = photonState.position.distance( interaction.splitInfo!.splitPoint ) / PHOTON_SPEED;
+                assert && assert( dtToSplitPoint <= dt );
+                photonState.step( dtToSplitPoint );
 
                 // Update the state based on the first split info element.
                 photonState.direction = interaction.splitInfo!.splitStates[ 0 ].direction;
