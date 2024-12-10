@@ -103,7 +103,7 @@ export default class PhotonsExperimentSceneModel {
 
     const mirrorDistanceProportion = 0.5;
     const horizontalDetectorXPosition = mirrorDistanceProportion * PATH_LENGTH_UNIT;
-    const horizontalDetectorYPosition = ( 1 - mirrorDistanceProportion ) * PATH_LENGTH_UNIT;
+    const horizontalDetectorYPosition = ( 1 - mirrorDistanceProportion ) * PATH_LENGTH_UNIT * 1.5;
     this.horizontalPolarizationDetector = new PhotonDetector( new Vector2( horizontalDetectorXPosition, -horizontalDetectorYPosition ), 'down', {
       displayMode: this.laser.emissionMode === 'singlePhoton' ? 'count' : 'rate',
       tandem: providedOptions.tandem.createTandem( 'horizontalPolarizationDetector' )
