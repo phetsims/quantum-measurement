@@ -114,9 +114,9 @@ export default class Photon {
   }
 
   /**
-   * Individual Projectile instances are not PhET-iO Instrumented. Instead, the Field that contains the Projectiles
-   * calls ProjectileIO.toStateObject to serialize the Projectile instances. FieldIO uses reference type serialization
-   * as a composite of the Projectiles, which use data type serialization.
+   * Individual Photon instances are not PhET-iO Instrumented. Instead, the PhotonCollection that contains the
+   * Photon instances calls PhotonIO.toStateObject to serialize them. PhotonCollectionIO uses reference-type
+   * serialization as a composite of the Photon instances, which use data type serialization.
    *
    * Please see https://github.com/phetsims/phet-io/blob/main/doc/phet-io-instrumentation-technical-guide.md#serialization
    * for more information on the different serialization types.
