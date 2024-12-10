@@ -2,8 +2,11 @@
 
 /**
  * PhotonSprites is a class that can be used to perform high-performance rendering of a set of photons.  It uses
- * scenery's Sprites feature, which uses renderer:'webgl', with a fallback of 'canvas'.
- *
+ * scenery's Sprites feature, which uses renderer:'webgl', with a fallback of 'canvas'.  The photons support multiple
+ * position states to allow for rendering the probability of a photon being in different positions.  To support this,
+ * the photons are rendered with a solid exterior and an interior that varies in opacity based on the probability of the
+ * photon being in that position.
+ *  *
  * Understanding this implementation requires an understanding of the scenery Sprites API. In a nutshell: Sprites has an
  * array of Sprite and an array of SpriteInstance. The array of Sprite is the complete unique set of images used to
  * render all SpriteInstances. Each SpriteInstance has a reference to a Sprite (which determines what it looks like) and
@@ -16,14 +19,14 @@
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import { Sprite, SpriteImage, SpriteInstance, SpriteInstanceTransformType, Sprites } from '../../../../scenery/js/imports.js';
+import { Circle, Sprite, SpriteImage, SpriteInstance, SpriteInstanceTransformType, Sprites } from '../../../../scenery/js/imports.js';
 import greenPhoton_png from '../../../images/greenPhoton_png.js';
-import greenPhotonOutline_png from '../../../images/greenPhotonOutline_png.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import Photon from '../model/Photon.js';
 
 // constants
-const TARGET_PHOTON_IMAGE_WIDTH = 10; // in screen coords, empirically determined to match the design
+const TARGET_PHOTON_VIEW_WIDTH = 10; // in screen coords, empirically determined to match the design
 
 export default class PhotonSprites extends Sprites {
 
@@ -31,58 +34,73 @@ export default class PhotonSprites extends Sprites {
   private readonly photons: Photon[];
   private readonly modelViewTransform: ModelViewTransform2;
 
-  // The scale value used to render the photons.
-  private readonly photonScale: number;
+  // The scale value used to render the photon interior.
+  private readonly photonInteriorScale: number;
 
   // The sprites used to render the photons.
-  private readonly photonSprite: Sprite;
-  private readonly photonOutlineSprite: Sprite;
+  private readonly photonInteriorSprite: Sprite | null = null;
+  private photonOutlineSprite: Sprite | null = null;
 
   public constructor( photons: Photon[], modelViewTransform: ModelViewTransform2, canvasBounds: Bounds2 ) {
-
-    // Create the sprites that will be used to represent the photons.
-    const photonSprite = new Sprite( new SpriteImage(
-      greenPhoton_png,
-      new Vector2( greenPhoton_png.width / 2, greenPhoton_png.height / 2 ),
-      { pickable: false }
-    ) );
-
-    const photonOutlineSprite = new Sprite( new SpriteImage(
-      greenPhotonOutline_png,
-      new Vector2( greenPhotonOutline_png.width / 2, greenPhotonOutline_png.height / 2 ),
-      { pickable: false }
-    ) );
 
     // array of sprite instances, there will be two for each photon that is rendered
     const spriteInstances: SpriteInstance[] = [];
 
+    // Invoke the superclass constructor with no sprites because creating some of the sprites is an asynchronous
+    // process.  The sprites are added below.
     super( {
-      sprites: [ photonSprite, photonOutlineSprite ],
+      sprites: [],
       spriteInstances: spriteInstances,
       renderer: 'webgl',
       pickable: false,
       canvasBounds: canvasBounds
     } );
 
-    // Calculate the scale that will be used to render the photon images.
-    this.photonScale = TARGET_PHOTON_IMAGE_WIDTH / greenPhoton_png.width;
+    // Create the sprite for the interior of the photons.
+    this.photonInteriorSprite = new Sprite( new SpriteImage(
+      greenPhoton_png,
+      new Vector2( greenPhoton_png.width / 2, greenPhoton_png.height / 2 ),
+      { pickable: false }
+    ) );
+
+    // Calculate the scale that will be used to render the photon interior.
+    this.photonInteriorScale = TARGET_PHOTON_VIEW_WIDTH / greenPhoton_png.width;
     assert && assert(
-    this.photonScale > 0 && this.photonScale < 100,
-      `photon scale factor not reasonable: ${this.photonScale}`
+    this.photonInteriorScale > 0 && this.photonInteriorScale < 100,
+      `photon scale factor not reasonable: ${this.photonInteriorScale}`
     );
+
+    // Create the sprite for the outline of the photons.  This is done be creating a circle and rendering it to a
+    // canvas.  That is an asynchronous process, so we need to wait for it to complete before adding the sprites.
+    const outlineCircle = new Circle( TARGET_PHOTON_VIEW_WIDTH / 2, {
+      stroke: QuantumMeasurementColors.photonBaseColorProperty.value,
+      lineWidth: 0.5
+    } );
+    outlineCircle.toCanvas( canvas => {
+      this.photonOutlineSprite = new Sprite( new SpriteImage(
+        canvas,
+        new Vector2( canvas.width / 2, canvas.height / 2 ),
+        { pickable: false }
+      ) );
+      this.mutate( { sprites: [ this.photonInteriorSprite!, this.photonOutlineSprite ] } );
+    } );
 
     // local variables needed for the methods
     this.spriteInstances = spriteInstances;
     this.photons = photons;
     this.modelViewTransform = modelViewTransform;
-    this.photonSprite = photonSprite;
-    this.photonOutlineSprite = photonOutlineSprite;
   }
 
   /**
    * Update the information needed to render the photons as sprites and then trigger a re-rendering.
    */
   public update(): void {
+
+    // Skip rendering and issue a warning if the photon sprites have not been created yet.
+    if ( !this.photonOutlineSprite ) {
+      console.warn( 'PhotonSprites.update() called before photon sprites have been created.' );
+      return;
+    }
 
     let numberOfPhotonsDisplayed = 0;
 
@@ -97,7 +115,8 @@ export default class PhotonSprites extends Sprites {
           numberOfPhotonsDisplayed++;
           const photonStatePosition = photonMotionState.position;
 
-          // Add new sprite instances to our list if we don't have enough.
+          // Add new sprite instances to our list if we don't have enough.  There are two sprite instances per photon
+          // state, one for the interior and one for the outline.
           if ( numberOfPhotonsDisplayed * 2 > this.spriteInstances.length ) {
 
             const newInteriorSpriteInstance = SpriteInstance.pool.fetch();
@@ -109,31 +128,20 @@ export default class PhotonSprites extends Sprites {
             this.spriteInstances.push( newOutlineSpriteInstance );
           }
 
-          // Update the matrix that controls where this photon is rendered.
-          const interiorSpriteInstance = this.spriteInstances[ ( numberOfPhotonsDisplayed - 1 ) * 2 ];
-          interiorSpriteInstance.sprite = this.photonSprite;
-          interiorSpriteInstance.matrix.setToAffine(
-            this.photonScale,
-            0,
-            this.modelViewTransform.modelToViewX( photonStatePosition.x ),
-            0,
-            this.photonScale,
-            this.modelViewTransform.modelToViewY( photonStatePosition.y )
-          );
-          interiorSpriteInstance.alpha = photonMotionState.probability; // Probability based opacity
-          // interiorSpriteInstance.alpha = Math.pow( photonMotionState.probability, 1.25 ); // Probability based opacity
+          const xPos = this.modelViewTransform.modelToViewX( photonStatePosition.x );
+          const yPos = this.modelViewTransform.modelToViewY( photonStatePosition.y );
+          const scale = this.photonInteriorScale;
 
+          // Update the matrix and opacity for the photon interior.
+          const interiorSpriteInstance = this.spriteInstances[ ( numberOfPhotonsDisplayed - 1 ) * 2 ];
+          interiorSpriteInstance.sprite = this.photonInteriorSprite;
+          interiorSpriteInstance.matrix.setToAffine( scale, 0, xPos, 0, scale, yPos );
+          interiorSpriteInstance.alpha = photonMotionState.probability; // Probability based opacity
+
+          // Update the matrix for the photon outline.  The outline is always fully opaque.
           const outlineSpriteInstance = this.spriteInstances[ ( numberOfPhotonsDisplayed - 1 ) * 2 + 1 ];
           outlineSpriteInstance.sprite = this.photonOutlineSprite;
-          outlineSpriteInstance.matrix.setToAffine(
-            this.photonScale,
-            0,
-            this.modelViewTransform.modelToViewX( photonStatePosition.x ),
-            0,
-            this.photonScale,
-            this.modelViewTransform.modelToViewY( photonStatePosition.y )
-          );
-          outlineSpriteInstance.alpha = 1;
+          outlineSpriteInstance.matrix.setToAffine( 1, 0, xPos, 0, 1, yPos );
         }
       }
     }
