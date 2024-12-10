@@ -13,7 +13,8 @@ import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import Photon, { DOWN, PossiblePolarizationResult, QuantumPossibleState } from './Photon.js';
+import Photon, { DOWN } from './Photon.js';
+import { PhotonMotionState } from './PhotonMotionState.js';
 import { PhotonInteractionTestResult } from './PhotonsModel.js';
 import { TPhotonInteraction } from './TPhotonInteraction.js';
 
@@ -40,16 +41,14 @@ export default class Mirror implements TPhotonInteraction {
     this.mirrorSurfaceLine = new Line( endpoint1, endpoint2 );
   }
 
-  public testForPhotonInteraction( photon: Photon, dt: number ): Map<QuantumPossibleState, PhotonInteractionTestResult> {
+  public testForPhotonInteraction( photon: Photon, dt: number ): Map<PhotonMotionState, PhotonInteractionTestResult> {
 
-    const mapOfStatesToInteractions = new Map<QuantumPossibleState, PhotonInteractionTestResult>();
+    const mapOfStatesToInteractions = new Map<PhotonMotionState, PhotonInteractionTestResult>();
 
     // Iterate over the possible states and test for interactions.
-    Object.keys( photon.possibleStates ).forEach( stateKey => {
+    photon.possibleMotionStates.forEach( photonState => {
 
-      const photonState = photon.possibleStates[ stateKey as PossiblePolarizationResult ];
-
-      // Test for whether this photon crosses the surface of the beam splitter.
+      // Test whether this photon state would reach the surface of the mirror in the provided time.
       const photonIntersectionPoint = photonState.getTravelPathIntersectionPoint(
         this.mirrorSurfaceLine.start,
         this.mirrorSurfaceLine.end,

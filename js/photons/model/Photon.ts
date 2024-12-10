@@ -7,12 +7,12 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import Utils from '../../../../dot/js/Utils.js';
-import Vector2, { Vector2StateObject } from '../../../../dot/js/Vector2.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import ArrayIO from '../../../../tandem/js/types/ArrayIO.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
-import StringIO from '../../../../tandem/js/types/StringIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import { PhotonMotionState } from './PhotonMotionState.js';
 
 export const PHOTON_SPEED = 0.3; // meters per second
 
@@ -26,114 +26,92 @@ export const RIGHT = new Vector2( 1, 0 );
 // the resulting states will either be measured as vertical or horizontal.
 export type PossiblePolarizationResult = 'vertical' | 'horizontal';
 
-// TODO: This class could live in its own file, once the feature is fully green lit, will move https://github.com/phetsims/quantum-measurement/issues/63
-/**
- * QuantumPossibleState is a class that represents a possible state of a photon at a given point in time.
- * It contains variables for position, direction and the probability of the photon being in that state.
- */
-export class QuantumPossibleState {
-  public constructor( public position: Vector2,
-                      public direction: Vector2,
-                      public probability: number,
-                      public readonly polarization: PossiblePolarizationResult /* TODO this still needed? https://github.com/phetsims/quantum-measurement/issues/65 */ ) {
-    // no-op
-  }
-
-  /**
-   * Get the point where this photon would intersect the provided line segment if it were to move for the specified
-   * amount of time.  Returns null if the photon would not intersect the line segment.
-   * @param lineStart
-   * @param lineEnd
-   * @param dt - time step, in seconds
-   */
-  public getTravelPathIntersectionPoint( lineStart: Vector2, lineEnd: Vector2, dt: number ): Vector2 | null {
-
-    // Create a line that represents the path of the photon.
-    const photonPathEndPoint = this.position.plus( this.direction.timesScalar( PHOTON_SPEED * dt ) );
-
-    // Return the intersection point if there is one, null if not.
-    return Utils.lineSegmentIntersection(
-      this.position.x,
-      this.position.y,
-      photonPathEndPoint.x,
-      photonPathEndPoint.y,
-      lineStart.x,
-      lineStart.y,
-      lineEnd.x,
-      lineEnd.y
-    );
-  }
-
-  public step( dt: number ): void {
-    this.position = this.position.plus( this.direction.timesScalar( PHOTON_SPEED * dt ) );
-  }
-
-  public static readonly QuantumPossibleStateIO = new IOType<QuantumPossibleState, QuantumPossibleStateStateObject>( 'QuantumPossibleStateIO', {
-    valueType: QuantumPossibleState,
-    stateSchema: {
-      position: Vector2.Vector2IO,
-      direction: Vector2.Vector2IO,
-      probability: NumberIO,
-      polarization: StringIO
-    },
-    fromStateObject: ( stateObject: QuantumPossibleStateStateObject ) => {
-      return new QuantumPossibleState(
-        Vector2.Vector2IO.fromStateObject( stateObject.position ),
-        Vector2.Vector2IO.fromStateObject( stateObject.direction ),
-        stateObject.probability,
-        stateObject.polarization as PossiblePolarizationResult
-      );
-    }
-  } );
-}
-
 export default class Photon {
 
   // the angle of polarization for this photon, in degrees
   public polarizationAngle: number;
 
-  // Contains all the possible states of the photon, which include position, direction, and probability.
-  // Since they contain properties, and based on the design of this simulation, it will always have two states.
-  public possibleStates: TwoStateQuantumPossibleState;
+  // Contains all the possible motion states of the photon.  The photon should always have at least one of these, but
+  // can have more than one if it is in a superposition of states.  The probabilities of these states should always add
+  // up to 1.  This array can be monitored outside of this class, but should only be modified through the methods.
+  public readonly possibleMotionStates: PhotonMotionState[];
 
   public constructor( polarizationAngle: number,
-                      possibleStates: TwoStateQuantumPossibleState ) {
+                      initialPosition: Vector2,
+                      initialDirection: Vector2 ) {
 
     this.polarizationAngle = polarizationAngle;
-    this.possibleStates = possibleStates;
+
+    // Start off with a single possible motion state for the photon.
+    this.possibleMotionStates = [ new PhotonMotionState( initialPosition, initialDirection, 1 ) ];
   }
 
-  public setCorrespondingProbability( providedState: QuantumPossibleState, probability: number ): void {
-    const providedStateKey = _.findKey( this.possibleStates, providedState ) as PossiblePolarizationResult;
+  /**
+   * Add a new motion state to the photon.  The probability of the new state should be provided, and the probability of
+   * the existing state will be adjusted accordingly.  The probabilities of all states should always add up to 1.
+   */
+  public addMotionState( position: Vector2, direction: Vector2, probability: number ): void {
 
-    assert && assert( providedStateKey, 'Photon state not found!' );
+    // As of this writing, only two possible motion states are allowed.
+    assert && assert( this.possibleMotionStates.length < 2, 'Only two possible motion states are allowed.' );
 
-    const correspondingKey = providedStateKey === 'vertical' ? 'horizontal' : 'vertical';
-    const correspondingState = this.possibleStates[ correspondingKey ];
+    // Make sure the probabilities add up to 1.
+    if ( this.possibleMotionStates.length === 1 ) {
+      const existingMotionState = this.possibleMotionStates[ 0 ];
+      existingMotionState.probability = 1 - probability;
+    }
+    else {
 
-    providedState.probability = probability;
-    correspondingState.probability = 1 - probability;
+      // If this is the only state, make sure the probability is 1.
+      assert && assert( probability === 1, 'The probability should be 1 for the first state.' );
+    }
+
+    // Add the new motion state.
+    this.possibleMotionStates.push( new PhotonMotionState( position, direction, probability ) );
+  }
+
+  /**
+   * Remove a motion state from the photon.  The probability of the remaining state will be adjusted accordingly.  The
+   * probabilities of all states should always add up to 1.
+   */
+  public removeMotionState( motionState: PhotonMotionState ): void {
+    const index = this.possibleMotionStates.indexOf( motionState );
+    assert && assert( index !== -1, 'Motion state not found.' );
+
+    // Remove the motion state.
+    this.possibleMotionStates.splice( index, 1 );
+
+    // Make sure there is at least one state left.
+    assert && assert( this.possibleMotionStates.length > 0, 'At least one motion state is needed for the photon.' );
+
+    // Adjust the probability of the remaining state.  As of this writing, only two states are allowed.
+    this.possibleMotionStates[ 0 ].probability = 1;
+  }
+
+  /**
+   * Set the probability of a motion state.  The probability of the other state, if present, will be adjusted
+   * accordingly.
+   */
+  public setMotionStateProbability( motionState: PhotonMotionState, probability: number ): void {
+
+    // parameter and state checking
+    assert && assert( probability >= 0 && probability <= 1, 'Probability must be between 0 and 1.' );
+    assert && assert( this.possibleMotionStates.length <= 2, 'A max of 2 motion states are currently supported.' );
+
+    const index = this.possibleMotionStates.indexOf( motionState );
+    assert && assert( index !== -1, 'Motion state not found.' );
+    this.possibleMotionStates[ index ].probability = probability;
+
+    // If there are two states, adjust the probability of the other state.
+    if ( this.possibleMotionStates.length === 2 ) {
+      const otherMotionState = this.possibleMotionStates[ 1 - index ];
+      otherMotionState.probability = 1 - probability;
+    }
   }
 
   public step( dt: number ): void {
-    for ( const key in this.possibleStates ) {
-      this.possibleStates[ key as PossiblePolarizationResult ].step( dt );
-    }
+    this.possibleMotionStates.forEach( state => state.step( dt ) );
   }
-
-  public static readonly TwoStateQuantumPossibleStateIO = new IOType<TwoStateQuantumPossibleState, TwoStateQuantumPossibleStateStateObject>( 'TwoStateQuantumPossibleStateIO', {
-    valueType: Photon,
-    stateSchema: {
-      vertical: QuantumPossibleState.QuantumPossibleStateIO,
-      horizontal: QuantumPossibleState.QuantumPossibleStateIO
-    },
-    fromStateObject: ( stateObject: TwoStateQuantumPossibleStateStateObject ) => {
-      return {
-        vertical: QuantumPossibleState.QuantumPossibleStateIO.fromStateObject( stateObject.vertical ),
-        horizontal: QuantumPossibleState.QuantumPossibleStateIO.fromStateObject( stateObject.horizontal )
-      };
-    }
-  } );
 
   /**
    * Individual Projectile instances are not PhET-iO Instrumented. Instead, the Field that contains the Projectiles
@@ -147,40 +125,36 @@ export default class Photon {
     valueType: Photon,
     stateSchema: {
       polarizationAngle: NumberIO,
-      possibleStates: Photon.TwoStateQuantumPossibleStateIO
+      possibleMotionStates: ArrayIO( PhotonMotionState.PhotonMotionStateIO )
     },
     fromStateObject: ( stateObject: PhotonStateObject ) => {
-      return new Photon(
+
+      assert && assert( stateObject.possibleMotionStates.length > 0, 'There must be at least one motion state.' );
+
+      const photon = new Photon(
         stateObject.polarizationAngle,
-        {
-          vertical: QuantumPossibleState.QuantumPossibleStateIO.fromStateObject( stateObject.possibleStates.vertical ),
-          horizontal: QuantumPossibleState.QuantumPossibleStateIO.fromStateObject( stateObject.possibleStates.horizontal )
-        }
+        Vector2.fromStateObject( stateObject.possibleMotionStates[ 0 ].position ),
+        Vector2.fromStateObject( stateObject.possibleMotionStates[ 0 ].direction )
       );
+
+      // Add the remaining motion states, if any.
+      for ( let i = 1; i < stateObject.possibleMotionStates.length; i++ ) {
+        const motionStateStateObject = stateObject.possibleMotionStates[ i ];
+        photon.addMotionState(
+          Vector2.fromStateObject( motionStateStateObject.position ),
+          Vector2.fromStateObject( motionStateStateObject.direction ),
+          motionStateStateObject.probability
+        );
+      }
+
+      return photon;
     }
   } );
 }
 
-type TwoStateQuantumPossibleState = {
-  vertical: QuantumPossibleState;
-  horizontal: QuantumPossibleState;
-};
-
-type TwoStateQuantumPossibleStateStateObject = {
-  vertical: QuantumPossibleStateStateObject;
-  horizontal: QuantumPossibleStateStateObject;
-};
-
 export type PhotonStateObject = {
   polarizationAngle: number;
-  possibleStates: TwoStateQuantumPossibleStateStateObject;
-};
-
-export type QuantumPossibleStateStateObject = {
-  position: Vector2StateObject;
-  direction: Vector2StateObject;
-  probability: number;
-  polarization: string;
+  possibleMotionStates: PhotonMotionState[];
 };
 
 quantumMeasurement.register( 'Photon', Photon );

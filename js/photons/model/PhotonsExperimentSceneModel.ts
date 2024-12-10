@@ -246,28 +246,23 @@ export default class PhotonsExperimentSceneModel {
               if ( interaction.interactionType === 'split' ) {
 
                 assert && assert( interaction.splitInfo, 'split info missing' );
+                assert && assert( photon.possibleMotionStates.length === 1, 'there should be 1 motion state' );
 
-                // The resulting interaction was a split of the photon state.  First step the state to the split point.
+                // The resulting interaction was a split of the photon state.  First, step the state to the split point.
                 const dtToSplitPoint = photonState.position.distance( interaction.splitInfo!.splitPoint ) / PHOTON_SPEED;
                 assert && assert( dtToSplitPoint <= dt );
                 photonState.step( dtToSplitPoint );
 
-                // Update the state based on the first split info element.
+                // Update the existing motion state based on the first split info element.
                 photonState.direction = interaction.splitInfo!.splitStates[ 0 ].direction;
                 photonState.probability = interaction.splitInfo!.splitStates[ 0 ].probability;
 
-                // Update the other state based on the second split info element.
-                // TODO: This will get more reasonable when the quantum states are an array.  See https://github.com/phetsims/quantum-measurement/issues/65.
-                if ( photon.possibleStates.vertical === photonState ) {
-                  photon.possibleStates.horizontal.direction = interaction.splitInfo!.splitStates[ 1 ].direction;
-                  photon.possibleStates.horizontal.probability = interaction.splitInfo!.splitStates[ 1 ].probability;
-                  photon.possibleStates.horizontal.position = photonState.position;
-                }
-                else {
-                  photon.possibleStates.vertical.direction = interaction.splitInfo!.splitStates[ 1 ].direction;
-                  photon.possibleStates.vertical.probability = interaction.splitInfo!.splitStates[ 1 ].probability;
-                  photon.possibleStates.vertical.position = photonState.position;
-                }
+                // Add a new state to the photon for the second split info element.
+                photon.addMotionState(
+                  photonState.position,
+                  interaction.splitInfo!.splitStates[ 1 ].direction,
+                  interaction.splitInfo!.splitStates[ 1 ].probability
+                );
               }
               else if ( interaction.interactionType === 'absorbed' ) {
 

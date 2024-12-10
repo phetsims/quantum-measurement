@@ -18,7 +18,7 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import Photon, { PHOTON_SPEED, QuantumPossibleState, RIGHT } from './Photon.js';
+import Photon, { PHOTON_SPEED, RIGHT } from './Photon.js';
 import { PhotonCollection } from './PhotonCollection.js';
 
 export type PhotonEmissionMode = 'singlePhoton' | 'manyPhotons';
@@ -146,20 +146,8 @@ export default class Laser {
 
     const photon = new Photon(
       polarizationAngle,
-      {
-        vertical: new QuantumPossibleState(
-          this.position.plusXY( xOffset, yOffset ),
-          this.emissionDirection,
-          1,
-          'vertical'
-        ),
-        horizontal: new QuantumPossibleState(
-          this.position.plusXY( xOffset, yOffset ),
-          this.emissionDirection,
-          0,
-          'horizontal'
-        )
-      }
+      this.position.plusXY( xOffset, yOffset ),
+      this.emissionDirection
     );
 
     this.photonCollection.addPhoton( photon );

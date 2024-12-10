@@ -82,11 +82,11 @@ export default class PhotonSprites extends Sprites {
       const photon = this.photons[ i ];
 
       // Iterate over the two possible photon states
-      for ( const photonState of Object.values( photon.possibleStates ) ) {
+      for ( const photonMotionState of photon.possibleMotionStates ) {
 
-        if ( photonState.probability > 0 ) {
+        if ( photonMotionState.probability > 0 ) {
           numberOfPhotonsDisplayed++;
-          const photonStatePosition = photonState.position;
+          const photonStatePosition = photonMotionState.position;
 
           // Add a new sprite instance to our list if we don't have enough.
           if ( numberOfPhotonsDisplayed > this.spriteInstances.length ) {
@@ -106,7 +106,7 @@ export default class PhotonSprites extends Sprites {
             this.photonScale,
             this.modelViewTransform.modelToViewY( photonStatePosition.y )
           );
-          spriteInstance.alpha = photonState.probability; // Probability based opacity
+          spriteInstance.alpha = photonMotionState.probability; // Probability based opacity
         }
       }
     }

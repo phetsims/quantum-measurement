@@ -18,7 +18,8 @@ import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import AveragingCounterNumberProperty from '../../common/model/AveragingCounterNumberProperty.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { PHOTON_BEAM_WIDTH } from './Laser.js';
-import Photon, { PossiblePolarizationResult, QuantumPossibleState } from './Photon.js';
+import Photon from './Photon.js';
+import { PhotonMotionState } from './PhotonMotionState.js';
 import { PhotonInteractionTestResult } from './PhotonsModel.js';
 import { TPhotonInteraction } from './TPhotonInteraction.js';
 
@@ -88,16 +89,14 @@ export default class PhotonDetector implements TPhotonInteraction {
     } );
   }
 
-  public testForPhotonInteraction( photon: Photon, dt: number ): Map<QuantumPossibleState, PhotonInteractionTestResult> {
+  public testForPhotonInteraction( photon: Photon, dt: number ): Map<PhotonMotionState, PhotonInteractionTestResult> {
 
-    const mapOfStatesToInteractions = new Map<QuantumPossibleState, PhotonInteractionTestResult>();
+    const mapOfStatesToInteractions = new Map<PhotonMotionState, PhotonInteractionTestResult>();
 
     // Iterate over the possible states and test for interactions.
-    Object.keys( photon.possibleStates ).forEach( stateKey => {
+    photon.possibleMotionStates.forEach( photonState => {
 
-      const photonState = photon.possibleStates[ stateKey as PossiblePolarizationResult ];
-
-      // Test for whether this photon would cross the detection aperture.
+      // Test whether this photon state would reach or cross the detection aperture in the provided time.
       const photonIntersectionPoint = photonState.getTravelPathIntersectionPoint(
         this.detectionLine.start,
         this.detectionLine.end,
@@ -110,16 +109,16 @@ export default class PhotonDetector implements TPhotonInteraction {
       // This is where the wave function collapses!
       if ( photonIntersectionPoint !== null ) {
 
-        // Evaluate the detection result based on the probability of the photon actually being here!
+        // Evaluate the detection result based on the probability of the photon actually being here.
         if ( dotRandom.nextDouble() < photonState.probability ) {
-          photon.setCorrespondingProbability( photonState, 1 );
+          photon.setMotionStateProbability( photonState, 1 );
           photonState.probability = 1; // the photon is detected!
           interaction = { interactionType: 'absorbed' };
         }
         else {
 
           // If the photon is not detected. This state probability goes to 0%, which will make the other state 100%.
-          photon.setCorrespondingProbability( photonState, 0 );
+          photon.setMotionStateProbability( photonState, 0 );
         }
       }
 
@@ -133,7 +132,6 @@ export default class PhotonDetector implements TPhotonInteraction {
 
     return mapOfStatesToInteractions;
   }
-
 
   public step( dt: number ): void {
     this.detectionRateProperty.step( dt );

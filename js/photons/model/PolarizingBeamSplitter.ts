@@ -16,7 +16,8 @@ import { Line } from '../../../../kite/js/imports.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import Photon, { PossiblePolarizationResult, QuantumPossibleState, RIGHT, UP } from './Photon.js';
+import Photon, { RIGHT, UP } from './Photon.js';
+import { PhotonMotionState } from './PhotonMotionState.js';
 import { PhotonInteractionTestResult } from './PhotonsModel.js';
 import { TPhotonInteraction } from './TPhotonInteraction.js';
 
@@ -49,23 +50,20 @@ export default class PolarizingBeamSplitter implements TPhotonInteraction {
     this.polarizingSurfaceLine = new Line( endpoint1, endpoint2 );
   }
 
-  public testForPhotonInteraction( photon: Photon, dt: number ): Map<QuantumPossibleState, PhotonInteractionTestResult> {
+  public testForPhotonInteraction( photon: Photon, dt: number ): Map<PhotonMotionState, PhotonInteractionTestResult> {
 
-    // TODO: Add an assertion to make sure there is at least one state, see https://github.com/phetsims/quantum-measurement/issues/65.
-    const mapOfStatesToInteractions = new Map<QuantumPossibleState, PhotonInteractionTestResult>();
+    const mapOfStatesToInteractions = new Map<PhotonMotionState, PhotonInteractionTestResult>();
 
     // Iterate over the possible states and test for interactions.
-    Object.keys( photon.possibleStates ).forEach( stateKey => {
-      const photonState = photon.possibleStates[ stateKey as PossiblePolarizationResult ];
+    photon.possibleMotionStates.forEach( photonState => {
 
-      // Test for whether this photon crosses the surface of the beam splitter.
+      // Test whether this photon state reaches or crosses the surface of the beam splitter.
       const photonIntersectionPoint = photonState.getTravelPathIntersectionPoint(
         this.polarizingSurfaceLine.start,
         this.polarizingSurfaceLine.end,
         dt
       );
 
-      // Assume no interaction until proven otherwise.
       let interaction: PhotonInteractionTestResult = { interactionType: 'none' };
 
       if ( photonIntersectionPoint !== null ) {
