@@ -45,7 +45,7 @@ const MAP_OF_PRESET_POLARIZATION_ANGLES = new Map<PolarizationPresets, number>(
   ]
 );
 
-export default class Laser {
+class Laser {
 
   // The position of the detector in two-dimensional space.  Units are in meters.
   public readonly position: Vector2;
@@ -184,3 +184,4 @@ export default class Laser {
 }
 
 quantumMeasurement.register( 'Laser', Laser );
+export default Laser;
