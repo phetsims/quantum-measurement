@@ -41,6 +41,9 @@ export default class Mirror implements TPhotonInteraction {
     this.mirrorSurfaceLine = new Line( endpoint1, endpoint2 );
   }
 
+  /**
+   * Test for interaction between the provided photon and this mirror.
+   */
   public testForPhotonInteraction( photon: Photon, dt: number ): Map<PhotonMotionState, PhotonInteractionTestResult> {
 
     const mapOfStatesToInteractions = new Map<PhotonMotionState, PhotonInteractionTestResult>();
@@ -65,9 +68,6 @@ export default class Mirror implements TPhotonInteraction {
             reflectionDirection: DOWN
           }
         } );
-      }
-      else {
-        mapOfStatesToInteractions.set( photonState, { interactionType: 'none' } );
       }
     } );
 

@@ -89,6 +89,9 @@ export default class PhotonDetector implements TPhotonInteraction {
     } );
   }
 
+  /**
+   * Test for interaction between the provided photon and this detector.
+   */
   public testForPhotonInteraction( photon: Photon, dt: number ): Map<PhotonMotionState, PhotonInteractionTestResult> {
 
     const mapOfStatesToInteractions = new Map<PhotonMotionState, PhotonInteractionTestResult>();
@@ -103,31 +106,27 @@ export default class PhotonDetector implements TPhotonInteraction {
         dt
       );
 
-      // Assume no interaction until proven otherwise.
-      let interaction: PhotonInteractionTestResult = { interactionType: 'none' };
-
       // This is where the wave function collapses!
       if ( photonIntersectionPoint !== null ) {
 
         // Evaluate the detection result based on the probability of the photon actually being here.
         if ( dotRandom.nextDouble() < photonState.probability ) {
+
+          // The photon is being absorbed by the detector.
           photon.setMotionStateProbability( photonState, 1 );
-          photonState.probability = 1; // the photon is detected!
-          interaction = { interactionType: 'absorbed' };
+          this.detectionCountProperty.value = Math.min( this.detectionCountProperty.value + 1, COUNT_RANGE.max );
+          this.detectionRateProperty.countEvent();
+
+          // Indicate that the photon was absorbed.
+          mapOfStatesToInteractions.set( photonState, { interactionType: 'absorbed' } );
         }
         else {
 
-          // If the photon is not detected. This state probability goes to 0%, which will make the other state 100%.
+          // If this photon state does not trigger the detector the associated probability goes to 0%, which will make
+          // the other state's probability 100%.
           photon.setMotionStateProbability( photonState, 0 );
         }
       }
-
-      if ( interaction.interactionType === 'absorbed' ) {
-        this.detectionCountProperty.value = Math.min( this.detectionCountProperty.value + 1, COUNT_RANGE.max );
-        this.detectionRateProperty.countEvent();
-      }
-
-      mapOfStatesToInteractions.set( photonState, interaction );
     } );
 
     return mapOfStatesToInteractions;

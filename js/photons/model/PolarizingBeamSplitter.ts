@@ -50,6 +50,9 @@ export default class PolarizingBeamSplitter implements TPhotonInteraction {
     this.polarizingSurfaceLine = new Line( endpoint1, endpoint2 );
   }
 
+  /**
+   * Test for photon interactions with the beam splitter.
+   */
   public testForPhotonInteraction( photon: Photon, dt: number ): Map<PhotonMotionState, PhotonInteractionTestResult> {
 
     const mapOfStatesToInteractions = new Map<PhotonMotionState, PhotonInteractionTestResult>();
@@ -64,8 +67,6 @@ export default class PolarizingBeamSplitter implements TPhotonInteraction {
         dt
       );
 
-      let interaction: PhotonInteractionTestResult = { interactionType: 'none' };
-
       if ( photonIntersectionPoint !== null ) {
 
         // Calculate the probability of reflection based on the custom angle according to Malus's Law
@@ -78,20 +79,20 @@ export default class PolarizingBeamSplitter implements TPhotonInteraction {
           if ( dotRandom.nextDouble() <= probabilityOfReflection ) {
 
             // The photon is being reflected by the beam splitter.  The only direction supported currently is up.
-            interaction = {
+            mapOfStatesToInteractions.set( photonState, {
               interactionType: 'reflected',
               reflectionInfo: {
                 reflectionPoint: photonIntersectionPoint,
                 reflectionDirection: UP
               }
-            };
+            } );
           }
         }
         else {
 
           // This is the quantum case where the photon is split into a superposition of states until observed by one of
           // the detectors.
-          interaction = {
+          mapOfStatesToInteractions.set( photonState, {
             interactionType: 'split',
             splitInfo: {
               splitPoint: photonIntersectionPoint,
@@ -106,11 +107,9 @@ export default class PolarizingBeamSplitter implements TPhotonInteraction {
                 }
               ]
             }
-          };
+          } );
         }
       }
-
-      mapOfStatesToInteractions.set( photonState, interaction );
     } );
 
     return mapOfStatesToInteractions;
