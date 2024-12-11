@@ -36,12 +36,15 @@ import ManyParticlesCanvasNode from './ManyParticlesCanvasNode.js';
 import MeasurementDeviceNode from './MeasurementDeviceNode.js';
 import ParticleSourceNode from './ParticleSourceNode.js';
 import SternGerlachNode from './SternGerlachNode.js';
+import ParticleSprites from './ParticleSprites.js';
 
 export default class SpinMeasurementArea extends VBox {
 
   private manyParticlesCanvasNode: ManyParticlesCanvasNode;
 
   private readonly measurementLines: MeasurementDeviceNode[];
+
+  private readonly particleSprites: ParticleSprites;
 
   public constructor( model: SpinModel, parentNode: Node, layoutBounds: Bounds2, tandem: Tandem ) {
 
@@ -64,7 +67,7 @@ export default class SpinMeasurementArea extends VBox {
 
     const particleSourceNode = new ParticleSourceNode(
       model.particleSourceModel,
-      model.particleSystem,
+      model.singleParticlesCollection,
       modelViewTransform,
       tandem.createTandem( 'particleSourceNode' )
     );
@@ -166,25 +169,15 @@ export default class SpinMeasurementArea extends VBox {
           } ) )
     ];
 
-    const singleParticleNodes = model.particleSystem.singleParticles.map( particle => {
-      const particleNode = new ShadedSphereNode( 15, {
-        mainColor: QuantumMeasurementColors.particleColor,
-        highlightColor: 'white',
-        visibleProperty: particle.activeProperty
-      } );
-
-      particle.positionProperty.link( position => {
-        particleNode.translation = modelViewTransform.modelToViewPosition( position );
-      } );
-
-      return particleNode;
-    } );
+    const singleParticleNodes: ShadedSphereNode[] = [];
 
     const manyParticlesCanvasNode = new ManyParticlesCanvasNode(
-      model.particleSystem.multipleParticles,
+      model.multipleParticlesCollection.particles,
       modelViewTransform,
       layoutBounds,
-      { tandem: tandem.createTandem( 'manyParticlesCanvasNode' ) }
+      {
+        visibleProperty: model.particleSourceModel.isContinuousModeProperty
+      }
     );
 
     const exectedPercentageCheckboxTandem = tandem.createTandem( 'expectedPercentageCheckbox' );
@@ -255,12 +248,26 @@ export default class SpinMeasurementArea extends VBox {
       yMargin: 10
     } );
 
+    // Add the sprites for the photons after calling the super constructor so that we can use the bounds to set the
+    // canvas size.
+    this.particleSprites = new ParticleSprites(
+      model.singleParticlesCollection.particles,
+      modelViewTransform,
+      experimentAreaNode.localBounds.copy()
+    );
+    this.particleSprites.visibleProperty = DerivedProperty.not( model.particleSourceModel.isContinuousModeProperty );
+    experimentAreaNode.addChild( this.particleSprites );
+    this.particleSprites.moveToBack();
+
     this.measurementLines = measurementLines;
     this.manyParticlesCanvasNode = manyParticlesCanvasNode;
+
+
   }
 
   public step( dt: number ): void {
     this.manyParticlesCanvasNode.step();
+    this.particleSprites.update();
   }
 
   public reset(): void {

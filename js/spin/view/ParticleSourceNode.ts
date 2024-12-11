@@ -22,7 +22,7 @@ import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import ParticleSourceModel from '../model/ParticleSourceModel.js';
-import { ParticleSystem } from '../model/ParticleSystem.js';
+import { SingleParticleCollection } from '../model/SingleParticleCollection.js';
 import { SourceMode } from '../model/SourceMode.js';
 import HBarOverTwoNode from './HBarOverTwoNode.js';
 
@@ -32,7 +32,7 @@ export default class ParticleSourceNode extends Node {
 
   public constructor(
     particleSourceModel: ParticleSourceModel,
-    particleSystem: ParticleSystem,
+    singleParticlesCollection: SingleParticleCollection,
     modelViewTransform: ModelViewTransform2,
     tandem: Tandem ) {
 
@@ -82,7 +82,7 @@ export default class ParticleSourceNode extends Node {
 
     currentlyShootingParticlesProperty.link( shooting => {
       if ( shooting ) {
-        particleSystem.shootSingleParticle();
+        singleParticlesCollection.shootSingleParticle();
       }
     } );
 

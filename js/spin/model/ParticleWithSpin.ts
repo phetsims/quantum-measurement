@@ -7,16 +7,26 @@
  * @author Agustín Vallejo
  */
 
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import Vector2Property from '../../../../dot/js/Vector2Property.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
+import ArrayIO from '../../../../tandem/js/types/ArrayIO.js';
+import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
+import IOType from '../../../../tandem/js/types/IOType.js';
+import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
 export class ParticleWithSpin {
 
+  // Lifetime, will determine when the particle dies off
   public lifetime = 0;
-  public activeProperty: BooleanProperty;
+
+  // Randomized offset to give a more natural look
+  private readonly offset: Vector2;
+
+  // Position of the particle
+  public position: Vector2;
+
+  // Velocity of the particle
+  public velocity: Vector2;
 
   // Spin values of the particle in the XZ plane along its lifetime
   public spinVectors = [ new Vector2( 0, 0 ), new Vector2( 0, 0 ), new Vector2( 0, 0 ) ];
@@ -31,53 +41,92 @@ export class ParticleWithSpin {
   public startPosition: Vector2;
   public endPosition: Vector2;
 
-  public positionProperty: Vector2Property;
-  public velocityProperty: Vector2Property;
   public speed = 1;
-  
-  public constructor( private readonly offset: Vector2, tandem: Tandem ) {
-    this.activeProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'activeProperty' )
-    } );
-    this.positionProperty = new Vector2Property( Vector2.ZERO, {
-      tandem: tandem.createTandem( 'positionProperty' )
-    } );
-    this.velocityProperty = new Vector2Property( Vector2.ZERO, {
-      tandem: tandem.createTandem( 'velocityProperty' )
-    } );
 
-    this.startPosition = Vector2.ZERO;
-    this.endPosition = new Vector2( 1, 0 );
+  public constructor(
+    lifetime: number,
+    position: Vector2,
+    velocity: Vector2,
+    spinVectors: Vector2[],
+    isSpinUp: boolean[],
+    stageCompleted: boolean[],
+    startPosition: Vector2,
+    endPosition: Vector2,
+    offset: Vector2
+    ) {
+    this.lifetime = lifetime;
+    this.velocity = velocity;
+    this.spinVectors = spinVectors;
+    this.isSpinUp = isSpinUp;
+    this.stageCompleted = stageCompleted;
+    this.startPosition = startPosition;
+    this.endPosition = endPosition;
+    this.offset = offset;
+
+    this.updatePath( startPosition, endPosition );
+    this.position = position;
   }
 
   public updatePath( start: Vector2, end: Vector2, extraTime = 0 ): void {
     this.startPosition = start;
     this.endPosition = end;
-    this.positionProperty.value = this.startPosition.plus( this.offset );
-    this.velocityProperty.value = this.endPosition.minus( this.startPosition ).withMagnitude( this.speed );
+    this.position = this.startPosition.plus( this.offset );
+    this.velocity = this.endPosition.minus( this.startPosition ).withMagnitude( this.speed );
     this.step( extraTime );
   }
 
   public step( dt: number ): void {
-    if ( this.activeProperty.value ) {
-      this.lifetime += dt;
+    this.lifetime += dt;
+    this.position = this.position.plus( this.velocity.times( dt ) );
+  }
 
-      this.positionProperty.value = this.positionProperty.value.plus( this.velocityProperty.value.times( dt ) );
-
-      if ( this.lifetime > 4 ) {
-        this.reset();
-      }
+  /**
+   * Individual Particle instances are not PhET-iO Instrumented. Instead, the ParticleCollection that contains the Particles
+   * calls ParticleWithSpinIO.toStateObject to serialize the Particle instances. ParticleCollectionIO uses reference type serialization
+   * as a composite of the Particles, which use data type serialization.
+   *
+   * Please see https://github.com/phetsims/phet-io/blob/main/doc/phet-io-instrumentation-technical-guide.md#serialization
+   * for more information on the different serialization types.
+   */
+  public static readonly ParticleWithSpinIO = new IOType<ParticleWithSpin, ParticleWithSpinStateObject>( 'ParticleWithSpinIO', {
+    valueType: ParticleWithSpin,
+    stateSchema: {
+      lifetime: NumberIO,
+      position: Vector2.Vector2IO,
+      velocity: Vector2.Vector2IO,
+      spinVectors: ArrayIO( Vector2.Vector2IO ),
+      isSpinUp: ArrayIO( BooleanIO ),
+      stageCompleted: ArrayIO( BooleanIO ),
+      startPosition: Vector2.Vector2IO,
+      endPosition: Vector2.Vector2IO,
+      offset: Vector2.Vector2IO
+    },
+    fromStateObject: ( stateObject: ParticleWithSpinStateObject ) => {
+      return new ParticleWithSpin(
+        stateObject.lifetime,
+        Vector2.Vector2IO.fromStateObject( stateObject.position ),
+        Vector2.Vector2IO.fromStateObject( stateObject.velocity ),
+        ArrayIO( Vector2.Vector2IO ).fromStateObject( stateObject.spinVectors ),
+        ArrayIO( BooleanIO ).fromStateObject( stateObject.isSpinUp ),
+        ArrayIO( BooleanIO ).fromStateObject( stateObject.stageCompleted ),
+        Vector2.Vector2IO.fromStateObject( stateObject.startPosition ),
+        Vector2.Vector2IO.fromStateObject( stateObject.endPosition ),
+        Vector2.Vector2IO.fromStateObject( stateObject.offset )
+      );
     }
-  }
-
-  public reset(): void {
-    this.lifetime = 0;
-    this.activeProperty.value = false;
-    this.spinVectors.forEach( vector => vector.setXY( 0, 0 ) );
-    this.positionProperty.reset();
-    this.stageCompleted = [ false, false, false ];
-  }
+  } );
 }
 
+type ParticleWithSpinStateObject = {
+  lifetime: number;
+  position: Vector2;
+  velocity: Vector2;
+  spinVectors: Vector2[];
+  isSpinUp: boolean[];
+  stageCompleted: boolean[];
+  startPosition: Vector2;
+  endPosition: Vector2;
+  offset: Vector2;
+};
 
 quantumMeasurement.register( 'ParticleWithSpin', ParticleWithSpin );

@@ -67,7 +67,7 @@ export default class ParticleSourceModel {
     this.exitLocalPosition = new Vector2( 0, 0 );
 
     this.exitPositionProperty = new DerivedProperty( [ this.positionProperty ], ( position: Vector2 ) => {
-      return position.plus( this.exitLocalPosition );
+      return position.plus( this.exitLocalPosition ).plusXY( ParticleSourceModel.PARTICLE_SOURCE_WIDTH / 2, 0 );
     } );
 
     const initialSpinState = SpinDirection.Z_PLUS;

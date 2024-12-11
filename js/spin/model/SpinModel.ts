@@ -19,14 +19,16 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import TModel from '../../../../joist/js/TModel.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { BlockingMode } from './BlockingMode.js';
 import MeasurementDevice from './MeasurementDevice.js';
+import { MultipleParticleCollection } from './MultipleParticleCollection.js';
 import ParticleSourceModel from './ParticleSourceModel.js';
-import { ParticleSystem } from './ParticleSystem.js';
 import SimpleBlochSphere from './SimpleBlochSphere.js';
+import { SingleParticleCollection } from './SingleParticleCollection.js';
 import { SourceMode } from './SourceMode.js';
 import { SpinDirection } from './SpinDirection.js';
 import SpinExperiment from './SpinExperiment.js';
@@ -40,6 +42,8 @@ type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOpt
 
 // Constants
 export const BLOCKER_OFFSET = new Vector2( 0.1, 0 );
+const MAX_NUMBER_OF_SINGLE_PARTICLES = 50;
+const MAX_NUMBER_OF_MULTIPLE_PARTICLES = 1250;
 
 export default class SpinModel implements TModel {
 
@@ -58,7 +62,8 @@ export default class SpinModel implements TModel {
   public readonly currentExperimentProperty: Property<SpinExperiment>;
   public readonly isCustomExperimentProperty: TReadOnlyProperty<boolean>;
 
-  public readonly particleSystem: ParticleSystem;
+  public readonly singleParticlesCollection: SingleParticleCollection;
+  public readonly multipleParticlesCollection: MultipleParticleCollection;
 
   // Model for the particle shooting apparatus
   public readonly particleSourceModel: ParticleSourceModel;
@@ -91,7 +96,10 @@ export default class SpinModel implements TModel {
 
     this.particleSourceModel = new ParticleSourceModel( new Vector2( -0.5, 0 ), providedOptions.tandem.createTandem( 'particleSourceModel' ) );
 
-    this.particleSystem = new ParticleSystem( this, providedOptions.tandem );
+    this.singleParticlesCollection = new SingleParticleCollection(
+      this, MAX_NUMBER_OF_SINGLE_PARTICLES, providedOptions.tandem.createTandem( 'singleParticlesCollection' ) );
+    this.multipleParticlesCollection = new MultipleParticleCollection(
+      this, MAX_NUMBER_OF_MULTIPLE_PARTICLES, providedOptions.tandem.createTandem( 'multipleParticlesCollection' ) );
 
     this.derivedSpinStateProperty = new DerivedProperty(
       [
@@ -236,7 +244,11 @@ export default class SpinModel implements TModel {
 
         // Clearing the particle system and Stern-Gerlachs for a new experiment
         this.sternGerlachs.forEach( sternGerlach => sternGerlach.reset() );
-        this.particleSystem.reset();
+
+        if ( !isSettingPhetioStateProperty.value ) {
+          this.singleParticlesCollection.clear();
+          this.multipleParticlesCollection.clear();
+        }
 
         // Conditions that determine visibility and state of the experiment components
         const customExperiment = experiment === SpinExperiment.CUSTOM;
@@ -298,7 +310,8 @@ export default class SpinModel implements TModel {
     // Stepping the Stern Gerlachs so their counters average over time
     this.sternGerlachs.forEach( sternGerlach => sternGerlach.step( dt ) );
 
-    this.particleSystem.step( dt );
+    this.singleParticlesCollection.step( dt );
+    this.multipleParticlesCollection.step( dt );
   }
 
   /**
@@ -307,7 +320,8 @@ export default class SpinModel implements TModel {
   public reset(): void {
     this.measurementLines.forEach( line => line.reset() );
     this.sternGerlachs.forEach( sternGerlach => sternGerlach.reset() );
-    this.particleSystem.reset();
+    this.singleParticlesCollection.clear();
+    this.multipleParticlesCollection.clear();
     this.currentExperimentProperty.reset();
     this.particleSourceModel.reset();
   }
