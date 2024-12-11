@@ -70,7 +70,7 @@ export default class Laser {
 
   // The polarization angle of the emitted photons.  This is a derived - and thus read-only - property that is
   // derived from the preset polarization direction and the custom polarization angle.  A value of null indicates that
-  // the emitted photons are unpolarized, meaining that their individual polarization angles are random.
+  // the emitted photons are unpolarized, meaning that their individual polarization angles are random.
   public readonly polarizationAngleProperty: TReadOnlyProperty<number | null>;
 
   // The collection of photons that are used for emission.
