@@ -51,12 +51,13 @@ export default class Laser {
   public readonly position: Vector2;
 
   // The direction in which the photons should be emitted, as a unit vector.
-  public readonly emissionDirection = RIGHT;
+  private readonly emissionDirection = RIGHT;
 
   // A flag that indicates whether photons should be emitted one at a time or in a continuous stream.
   public readonly emissionMode: PhotonEmissionMode;
 
-  public readonly emittedBeamWidth = PHOTON_BEAM_WIDTH;
+  // The width of the emitted photon beam, in meters.
+  private readonly emittedBeamWidth = PHOTON_BEAM_WIDTH;
 
   // The rate at which photons are emitted, in photons per second.
   public readonly emissionRateProperty: NumberProperty;
