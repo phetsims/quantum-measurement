@@ -71,24 +71,6 @@ export default class Photon {
   }
 
   /**
-   * Remove a motion state from the photon.  The probability of the remaining state will be adjusted accordingly.  The
-   * probabilities of all states should always add up to 1.
-   */
-  public removeMotionState( motionState: PhotonMotionState ): void {
-    const index = this.possibleMotionStates.indexOf( motionState );
-    assert && assert( index !== -1, 'Motion state not found.' );
-
-    // Remove the motion state.
-    this.possibleMotionStates.splice( index, 1 );
-
-    // Make sure there is at least one state left.
-    assert && assert( this.possibleMotionStates.length > 0, 'At least one motion state is needed for the photon.' );
-
-    // Adjust the probability of the remaining state.  As of this writing, only two states are allowed.
-    this.possibleMotionStates[ 0 ].probability = 1;
-  }
-
-  /**
    * Set the probability of a motion state.  The probability of the other state, if present, will be adjusted
    * accordingly.
    */
