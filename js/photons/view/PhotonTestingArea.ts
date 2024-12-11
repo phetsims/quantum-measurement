@@ -31,11 +31,13 @@ export default class PhotonTestingArea extends Node {
 
   public constructor( model: PhotonsExperimentSceneModel, providedOptions: PhotonTestingAreaOptions ) {
 
+    // Create the model-view transform that will be used for this node.  This maps the point (0,0) in the model to the
+    // center of this node.  It also inverts the y-axis so that the positive y-axis points up.  The scale factor is
+    // empirically determined.
     const photonTestingAreaModelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
-      // TODO: Revise and document this when all element have been added, see https://github.com/phetsims/quantum-measurement/issues/52
       Vector2.ZERO,
       Vector2.ZERO,
-      640 // empirically determined
+      640 // scale - empirically determined
     );
 
     const laserNode = new LaserNode( model.laser, photonTestingAreaModelViewTransform, {
