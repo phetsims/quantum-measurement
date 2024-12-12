@@ -20,15 +20,19 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import PhotonDetector from './PhotonDetector.js';
 import PhotonsExperimentSceneModel from './PhotonsExperimentSceneModel.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhotonsModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
-export const PhotonInteractionTypeValues = [ 'absorbed', 'reflected', 'split' ] as const;
+export const PhotonInteractionTypeValues = [ 'split', 'reflected', 'detected', 'absorbed', 'detectedAndAbsorbed' ] as const;
 export type PhotonInteractionTypes = ( typeof PhotonInteractionTypeValues )[number];
 export type PhotonInteractionTestResult = {
   interactionType: PhotonInteractionTypes;
+  detectionInfo?: {
+    detector: PhotonDetector;
+  };
   reflectionInfo?: {
     reflectionPoint: Vector2;
     reflectionDirection: Vector2;

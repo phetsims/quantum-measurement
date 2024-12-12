@@ -11,6 +11,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
@@ -22,7 +23,7 @@ import Laser, { PhotonEmissionMode } from './Laser.js';
 import Mirror from './Mirror.js';
 import Photon, { PHOTON_SPEED } from './Photon.js';
 import { PhotonCollection } from './PhotonCollection.js';
-import PhotonDetector from './PhotonDetector.js';
+import PhotonDetector, { COUNT_RANGE } from './PhotonDetector.js';
 import PolarizingBeamSplitter from './PolarizingBeamSplitter.js';
 import { TPhotonInteraction } from './TPhotonInteraction.js';
 
@@ -225,6 +226,7 @@ export default class PhotonsExperimentSceneModel {
           for ( const [ photonState, interaction ] of interactions ) {
 
             if ( !photonsToRemove.includes( photon ) ) {
+
               if ( interaction.interactionType === 'reflected' ) {
 
                 assert && assert( interaction.reflectionInfo, 'reflection info missing' );
@@ -243,6 +245,7 @@ export default class PhotonsExperimentSceneModel {
 
                 interactionCount++;
               }
+
               if ( interaction.interactionType === 'split' ) {
 
                 assert && assert( interaction.splitInfo, 'split info missing' );
@@ -264,7 +267,29 @@ export default class PhotonsExperimentSceneModel {
                   interaction.splitInfo!.splitStates[ 1 ].probability
                 );
               }
-              else if ( interaction.interactionType === 'absorbed' ) {
+
+              if ( interaction.interactionType === 'detected' || interaction.interactionType === 'detectedAndAbsorbed' ) {
+
+                const detector = interaction.detectionInfo!.detector;
+
+                // Evaluate the detection result based on the probability of the photon actually being here.
+                if ( dotRandom.nextDouble() < photonState.probability ) {
+
+                  // The photon is being absorbed by the detector.
+                  photon.setMotionStateProbability( photonState, 1 );
+                  detector.detectionCountProperty.value = Math.min( detector.detectionCountProperty.value + 1, COUNT_RANGE.max );
+                  detector.detectionRateProperty.countEvent();
+
+                }
+                else {
+
+                  // If this photon state does not trigger the detector the associated probability goes to 0%, which will make
+                  // the other state's probability 100%.
+                  photon.setMotionStateProbability( photonState, 0 );
+                }
+              }
+
+              if ( interaction.interactionType === 'absorbed' || interaction.interactionType === 'detectedAndAbsorbed' ) {
 
                 // This interaction indicates that the photon was absorbed, so it should be removed from the photon
                 // collection.

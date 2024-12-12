@@ -43,12 +43,16 @@ export default class PhotonDetectorNode extends Node {
 
     // Create the detection aperture.  This is essentially the anchor point for reset of the layout, meaning that the
     // other nodes are positioned relative to this.
+    const apertureHeightInView = modelViewTransform.modelToViewDeltaY(
+      -Math.abs( model.detectionLine.start.y - model.absorptionLine.end.y )
+    );
     const apertureDiameterInView = -modelViewTransform.modelToViewDeltaY( model.apertureDiameter );
-    const aperture = new Rectangle( 0, 0, apertureDiameterInView, 8, {
+    const aperture = new Rectangle( 0, 0, apertureDiameterInView, apertureHeightInView, {
       fill: new LinearGradient( 0, 0, apertureDiameterInView, 0 )
         .addColorStop( 0, new Color( '#FFDDEE' ) )
         .addColorStop( 1, Color.DARK_GRAY ),
-      center: modelViewTransform.modelToViewPosition( model.position )
+      center: modelViewTransform.modelToViewPosition( model.position ),
+      opacity: 0.3
     } );
 
     // detector body
@@ -139,6 +143,8 @@ export default class PhotonDetectorNode extends Node {
     );
 
     super( options );
+
+    this.centerY += model.detectionDirection === 'up' ? -apertureHeightInView / 2 : apertureHeightInView / 2;
   }
 }
 

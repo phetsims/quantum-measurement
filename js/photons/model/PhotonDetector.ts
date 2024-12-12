@@ -8,7 +8,6 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Line } from '../../../../kite/js/imports.js';
@@ -50,8 +49,12 @@ export default class PhotonDetector implements TPhotonInteraction {
   public readonly apertureDiameter = PHOTON_BEAM_WIDTH * 1.75;
 
   // A line in model space that represents the position of the detection aperture.  If a photon crosses this line, it
-  // will be absorbed and detected.
+  // will be detected but not absorbed.
   public readonly detectionLine: Line;
+
+  // The line in model space that represents the absorption line of the detector.  This is the line that the photon
+  // must cross to be destroyed.
+  public readonly absorptionLine: Line;
 
   // The number of photons detected by this detector since the last reset.
   public readonly detectionCountProperty: NumberProperty;
@@ -71,9 +74,14 @@ export default class PhotonDetector implements TPhotonInteraction {
     this.position = position;
     this.detectionDirection = detectionDirection;
     this.displayMode = options.displayMode!;
+    const apertureHeight = 0.02;
     this.detectionLine = new Line(
       position.plus( new Vector2( -this.apertureDiameter / 2, 0 ) ),
       position.plus( new Vector2( this.apertureDiameter / 2, 0 ) )
+    );
+    this.absorptionLine = new Line(
+      position.plus( new Vector2( -this.apertureDiameter / 2, this.detectionDirection === 'up' ? apertureHeight : -apertureHeight ) ),
+      position.plus( new Vector2( this.apertureDiameter / 2, this.detectionDirection === 'up' ? apertureHeight : -apertureHeight ) )
     );
 
     this.detectionRateProperty = new AveragingCounterNumberProperty( {
@@ -100,32 +108,31 @@ export default class PhotonDetector implements TPhotonInteraction {
     photon.possibleMotionStates.forEach( photonState => {
 
       // Test whether this photon state would reach or cross the detection aperture in the provided time.
-      const photonIntersectionPoint = photonState.getTravelPathIntersectionPoint(
+      const detectionIntersectionPoint = photonState.getTravelPathIntersectionPoint(
         this.detectionLine.start,
         this.detectionLine.end,
         dt
       );
 
-      // This is where the wave function collapses!
-      if ( photonIntersectionPoint !== null ) {
+      // Test whether this photon state would reach or cross the absorption line in the provided time.
+      const absorptionIntersectionPoint = photonState.getTravelPathIntersectionPoint(
+        this.absorptionLine.start,
+        this.absorptionLine.end,
+        dt
+      );
 
-        // Evaluate the detection result based on the probability of the photon actually being here.
-        if ( dotRandom.nextDouble() < photonState.probability ) {
-
-          // The photon is being absorbed by the detector.
-          photon.setMotionStateProbability( photonState, 1 );
-          this.detectionCountProperty.value = Math.min( this.detectionCountProperty.value + 1, COUNT_RANGE.max );
-          this.detectionRateProperty.countEvent();
-
-          // Indicate that the photon was absorbed.
-          mapOfStatesToInteractions.set( photonState, { interactionType: 'absorbed' } );
-        }
-        else {
-
-          // If this photon state does not trigger the detector the associated probability goes to 0%, which will make
-          // the other state's probability 100%.
-          photon.setMotionStateProbability( photonState, 0 );
-        }
+      // If, by any chance, the photon would cross BOTH the detection and absorption lines, we'll consider it to be
+      // detected and absorbed.
+      if ( detectionIntersectionPoint !== null && absorptionIntersectionPoint !== null ) {
+        mapOfStatesToInteractions.set( photonState, { interactionType: 'detectedAndAbsorbed', detectionInfo: { detector: this } } );
+      }
+      // If the photon would cross the detection line, but not the absorption line, we'll consider it to be detected.
+      else if ( detectionIntersectionPoint !== null ) {
+        mapOfStatesToInteractions.set( photonState, { interactionType: 'detected', detectionInfo: { detector: this } } );
+      }
+      // If the photon would cross the absorption line, but not the detection line, we'll consider it to be absorbed.
+      else if ( absorptionIntersectionPoint !== null ) {
+        mapOfStatesToInteractions.set( photonState, { interactionType: 'absorbed' } );
       }
     } );
 
