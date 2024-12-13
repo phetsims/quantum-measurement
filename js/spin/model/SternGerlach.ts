@@ -97,21 +97,25 @@ export default class SternGerlach extends PhetioObject {
     this.blockingModeProperty = new Property<BlockingMode>( BlockingMode.NO_BLOCKER, {
       tandem: tandem.createTandem( 'blockingModeProperty' ),
       phetioReadOnly: true,
+      phetioFeatured: true,
       phetioValueType: EnumerationIO( BlockingMode ),
       validValues: BlockingMode.enumeration.values
     } );
 
     this.isDirectionControllableProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'isDirectionControllableProperty' )
+      tandem: tandem.createTandem( 'isDirectionControllableProperty' ),
+      phetioFeatured: true
     } );
 
     this.isZOrientedProperty = new BooleanProperty( isZOriented, {
-      tandem: tandem.createTandem( 'isZOrientedProperty' )
+      tandem: tandem.createTandem( 'isZOrientedProperty' ),
+      phetioFeatured: true
     } );
 
     this.isVisibleProperty = new BooleanProperty( true, {
       tandem: tandem.createTandem( 'isVisibleProperty' ),
-      phetioReadOnly: true
+      phetioReadOnly: true,
+      phetioFeatured: true
     } );
 
     this.upProbabilityProperty = new NumberProperty( 0.5, {
