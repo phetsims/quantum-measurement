@@ -94,7 +94,6 @@ export default class NormalizedOutcomeVectorGraph extends Node {
     // Property that controls whether the expectation value line is visible when there is a valid expectation value.
     const showExpectationLineProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'showExpectationLineProperty' ),
-      phetioReadOnly: true,
       phetioFeatured: true
     } );
 

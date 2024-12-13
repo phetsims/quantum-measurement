@@ -18,6 +18,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
@@ -81,7 +82,8 @@ export default class PhotonsExperimentSceneModel {
     this.particleBehaviorModeProperty = new Property( 'classical', {
       tandem: providedOptions.tandem.createTandem( 'particleBehaviorModeProperty' ),
       phetioValueType: StringUnionIO( SystemTypeValues ),
-      validValues: SystemTypeValues
+      validValues: SystemTypeValues,
+      phetioFeatured: true
     } );
 
     this.particleBehaviorModeProperty.link( () => {
@@ -186,7 +188,12 @@ export default class PhotonsExperimentSceneModel {
 
     // Create the Property that will be used to control whether the simulation is playing.
     this.isPlayingProperty = new BooleanProperty( true, {
-      tandem: providedOptions.tandem.createTandem( 'isPlayingProperty' )
+
+      // Only give this a phet-io ID if it's a many-photon experiment.  Otherwise, the model can't be paused.
+      tandem: providedOptions.photonEmissionMode === 'manyPhotons' ?
+              providedOptions.tandem.createTandem( 'isPlayingProperty' ) :
+              Tandem.OPT_OUT,
+      phetioFeatured: providedOptions.photonEmissionMode === 'manyPhotons'
     } );
   }
 

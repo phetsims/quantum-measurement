@@ -63,7 +63,8 @@ export default class PhotonsModel implements TModel {
     this.experimentModeProperty = new Property<ExperimentModeType>( 'singlePhoton', {
       tandem: providedOptions.tandem.createTandem( 'experimentModeProperty' ),
       phetioValueType: StringUnionIO( ExperimentModeTypeValues ),
-      validValues: ExperimentModeTypeValues
+      validValues: ExperimentModeTypeValues,
+      phetioFeatured: true
     } );
     this.singlePhotonSceneModel = new PhotonsExperimentSceneModel( {
       photonEmissionMode: 'singlePhoton',

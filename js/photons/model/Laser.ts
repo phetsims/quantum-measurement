@@ -90,19 +90,24 @@ class Laser {
 
     this.emissionRateProperty = new NumberProperty( 0, {
       range: new Range( 0, MAX_PHOTON_EMISSION_RATE ),
+
+      // Only instrument this in the manyPhotons mode, since it's not relevant in the singlePhoton mode.
       tandem: providedOptions.emissionMode === 'manyPhotons' ?
               providedOptions.tandem.createTandem( 'emissionRateProperty' ) :
-              Tandem.OPT_OUT
+              Tandem.OPT_OUT,
+      phetioFeatured: providedOptions.emissionMode === 'manyPhotons'
     } );
 
     this.presetPolarizationDirectionProperty = new Property<PolarizationPresets>( 'fortyFiveDegrees', {
       tandem: providedOptions.tandem.createTandem( 'presetPolarizationDirectionProperty' ),
       phetioValueType: StringUnionIO( PolarizationPresetValues ),
-      validValues: PolarizationPresetValues
+      validValues: PolarizationPresetValues,
+      phetioFeatured: true
     } );
     this.customPolarizationAngleProperty = new NumberProperty( 45, {
       range: new Range( 0, 90 ),
-      tandem: providedOptions.tandem.createTandem( 'customPolarizationAngleProperty' )
+      tandem: providedOptions.tandem.createTandem( 'customPolarizationAngleProperty' ),
+      phetioFeatured: true
     } );
 
 

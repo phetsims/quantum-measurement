@@ -71,7 +71,8 @@ export default class PhotonsExperimentSceneView extends Node {
     const photonPolarizationAngleControl = new PhotonPolarizationAngleControl( model.laser, {
         left: INSET,
         top: polarizationIndicator.bottom + 10,
-        tandem: providedOptions.tandem.createTandem( 'photonPolarizationAngleControl' )
+        tandem: providedOptions.tandem.createTandem( 'photonPolarizationAngleControl' ),
+        phetioFeatured: true
       }
     );
 
@@ -102,7 +103,8 @@ export default class PhotonsExperimentSceneView extends Node {
                                     model.horizontalPolarizationDetector.detectionRateProperty;
 
     const equationsBox = new PhotonsEquationNode( verticalValueProperty, horizontalValueProperty, {
-      tandem: providedOptions.tandem.createTandem( 'equationsBox' )
+      tandem: providedOptions.tandem.createTandem( 'equationsBox' ),
+      phetioFeatured: true
     } );
 
     // Put the title and the equations together in a vertical box.
