@@ -48,6 +48,9 @@ export default class PhotonDetector implements TPhotonInteraction {
   // detection aperture width, in meters
   public readonly apertureDiameter = PHOTON_BEAM_WIDTH * 1.75;
 
+  // detection aperture height, in meters
+  public readonly apertureHeight = 0.05;
+
   // A line in model space that represents the position of the detection aperture.  If a photon crosses this line, it
   // will be detected but not absorbed.
   public readonly detectionLine: Line;
@@ -74,14 +77,13 @@ export default class PhotonDetector implements TPhotonInteraction {
     this.position = position;
     this.detectionDirection = detectionDirection;
     this.displayMode = options.displayMode!;
-    const apertureHeight = 0.02;
     this.detectionLine = new Line(
       position.plus( new Vector2( -this.apertureDiameter / 2, 0 ) ),
       position.plus( new Vector2( this.apertureDiameter / 2, 0 ) )
     );
     this.absorptionLine = new Line(
-      position.plus( new Vector2( -this.apertureDiameter / 2, this.detectionDirection === 'up' ? apertureHeight : -apertureHeight ) ),
-      position.plus( new Vector2( this.apertureDiameter / 2, this.detectionDirection === 'up' ? apertureHeight : -apertureHeight ) )
+      position.plus( new Vector2( -this.apertureDiameter / 2, this.detectionDirection === 'up' ? this.apertureHeight : -this.apertureHeight ) ),
+      position.plus( new Vector2( this.apertureDiameter / 2, this.detectionDirection === 'up' ? this.apertureHeight : -this.apertureHeight ) )
     );
 
     this.detectionRateProperty = new AveragingCounterNumberProperty( {
