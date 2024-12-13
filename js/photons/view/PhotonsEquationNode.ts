@@ -1,7 +1,7 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * PhotonsEquationNode displays the equation that is used to calculate the expected value of polarization
+ * PhotonsEquationNode displays the equation that is used to calculate the expected value of polarization.
  *
  * @author Agustín Vallejo (PhET Interactive Simulations)
  * @author John Blanco (PhET Interactive Simulations)
@@ -34,8 +34,6 @@ export default class PhotonsEquationNode extends HBox {
                       horizontalValueProperty: TReadOnlyProperty<number>,
                       providedOptions: PhotonsEquationNodeOptions ) {
 
-    const options = optionize<PhotonsEquationNodeOptions, SelfOptions, HBoxOptions>()( {}, providedOptions );
-
     const totalNumberProperty = new DerivedProperty(
       [
         verticalValueProperty,
@@ -46,7 +44,7 @@ export default class PhotonsEquationNode extends HBox {
 
     const equationsInfoDialog = new Dialog(
       new Node( { children: [ new Text( 'FILL THIS IN PLEASE', { font: new PhetFont( 18 ) } ) ] } ),
-      { tandem: options.tandem.createTandem( 'equationsInfoDialog' ) }
+      { tandem: providedOptions.tandem.createTandem( 'equationsInfoDialog' ) }
     );
 
     // Create and add the info button.
@@ -54,7 +52,7 @@ export default class PhotonsEquationNode extends HBox {
       listener: () => equationsInfoDialog.show(),
       iconFill: 'rgb( 41, 106, 163 )',
       scale: 0.5,
-      tandem: options.tandem.createTandem( 'infoButton' )
+      tandem: providedOptions.tandem.createTandem( 'infoButton' )
     } );
 
     const symbolicEquationStringProperty = new DerivedProperty(
@@ -117,7 +115,7 @@ export default class PhotonsEquationNode extends HBox {
 
     const numericalResult = new RichText( numericalResultProperty, numericalTextOptions );
 
-    super( {
+    const options = optionize<PhotonsEquationNodeOptions, SelfOptions, HBoxOptions>()( {
       spacing: 15,
       align: 'center',
       children: [
@@ -128,7 +126,9 @@ export default class PhotonsEquationNode extends HBox {
         new RichText( ' = ', numericalTextOptions ),
         numericalResult
       ]
-    } );
+    }, providedOptions );
+
+    super( options );
   }
 }
 

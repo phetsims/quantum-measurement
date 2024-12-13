@@ -9,6 +9,7 @@
  */
 
 import NumberProperty, { NumberPropertyOptions } from '../../../../axon/js/NumberProperty.js';
+import Utils from '../../../../dot/js/Utils.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
@@ -23,7 +24,7 @@ type DetectionCountSample = {
   count: number;
 };
 
-export default class AveragingCounterNumberProperty extends NumberProperty {
+class AveragingCounterNumberProperty extends NumberProperty {
 
   private readonly totalAveragingPeriod: number;
   private readonly countSamplePeriod: number;
@@ -89,7 +90,9 @@ export default class AveragingCounterNumberProperty extends NumberProperty {
 
       // Update the detection rate.
       if ( accumulatedSampleTime > 0 ) {
-        this.value = accumulatedEventCount / accumulatedSampleTime;
+
+        // Calculate the average value.  This is rounded to 12 decimal places to avoid floating point errors.
+        this.value = Utils.toFixedNumber( accumulatedEventCount / accumulatedSampleTime, 12 );
       }
       else {
         this.value = 0;
@@ -116,3 +119,5 @@ export default class AveragingCounterNumberProperty extends NumberProperty {
 }
 
 quantumMeasurement.register( 'AveragingCounterNumberProperty', AveragingCounterNumberProperty );
+
+export default AveragingCounterNumberProperty;

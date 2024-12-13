@@ -25,11 +25,11 @@ const EXPERIMENT_MODE_TO_STRING_MAP = new Map<ExperimentModeType, LocalizedStrin
   ]
 );
 
-export default class PhotonsScreenView extends QuantumMeasurementScreenView {
+class PhotonsScreenView extends QuantumMeasurementScreenView {
 
   private readonly model: PhotonsModel;
   private readonly singlePhotonExperimentSceneView: PhotonsExperimentSceneView;
-  private readonly manyPhotonExperimentSceneView: PhotonsExperimentSceneView;
+  private readonly manyPhotonsExperimentSceneView: PhotonsExperimentSceneView;
 
   public constructor( model: PhotonsModel, tandem: Tandem ) {
 
@@ -58,24 +58,24 @@ export default class PhotonsScreenView extends QuantumMeasurementScreenView {
       translation: sceneTranslation,
       tandem: tandem.createTandem( 'singlePhotonExperimentSceneView' )
     } );
-    const manyPhotonExperimentSceneView = new PhotonsExperimentSceneView( model.manyPhotonsExperimentSceneModel, {
+    const manyPhotonsExperimentSceneView = new PhotonsExperimentSceneView( model.manyPhotonsExperimentSceneModel, {
       visibleProperty: new DerivedProperty(
         [ model.experimentModeProperty ],
         experimentMode => experimentMode === 'manyPhotons'
       ),
       translation: sceneTranslation,
-      tandem: tandem.createTandem( 'manyPhotonExperimentSceneView' )
+      tandem: tandem.createTandem( 'manyPhotonsExperimentSceneView' )
     } );
 
     super( {
-      children: [ experimentModeRadioButtonGroup, singlePhotonExperimentSceneView, manyPhotonExperimentSceneView ],
+      children: [ experimentModeRadioButtonGroup, singlePhotonExperimentSceneView, manyPhotonsExperimentSceneView ],
       initialMockupOpacity: 0,
       tandem: tandem
     } );
 
     this.model = model;
     this.singlePhotonExperimentSceneView = singlePhotonExperimentSceneView;
-    this.manyPhotonExperimentSceneView = manyPhotonExperimentSceneView;
+    this.manyPhotonsExperimentSceneView = manyPhotonsExperimentSceneView;
   }
 
   public override reset(): void {
@@ -86,8 +86,10 @@ export default class PhotonsScreenView extends QuantumMeasurementScreenView {
   public override step( dt: number ): void {
     super.step( dt );
     this.singlePhotonExperimentSceneView.update();
-    this.manyPhotonExperimentSceneView.update();
+    this.manyPhotonsExperimentSceneView.update();
   }
 }
 
 quantumMeasurement.register( 'PhotonsScreenView', PhotonsScreenView );
+
+export default PhotonsScreenView;

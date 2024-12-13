@@ -1,8 +1,8 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * PhotonDetector is the model element for the instrument that detects the rate at which photons are arriving in an
- * input window.  It keeps track of the rate at which photons arrive at this window.
+ * PhotonDetector is the model element for the instrument that, based on how it is configured, either detects the number
+ * of photons that reach it or the rate at which photons arrive.
  *
  * @author John Blanco, PhET Interactive Simulations
  */
@@ -14,6 +14,7 @@ import { Line } from '../../../../kite/js/imports.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import AveragingCounterNumberProperty from '../../common/model/AveragingCounterNumberProperty.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { PHOTON_BEAM_WIDTH } from './Laser.js';
@@ -37,7 +38,7 @@ export type DisplayMode = ( [ 'count', 'rate' ] )[number];
 export const COUNT_RANGE = new Range( 0, 999 );
 export const RATE_RANGE = new Range( 0, 999 ); // in events per second
 
-export default class PhotonDetector implements TPhotonInteraction {
+class PhotonDetector implements TPhotonInteraction {
 
   // The position of the detector in two-dimensional space.  Units are in meters.
   public readonly position: Vector2;
@@ -56,7 +57,7 @@ export default class PhotonDetector implements TPhotonInteraction {
   public readonly detectionLine: Line;
 
   // The line in model space that represents the absorption line of the detector.  This is the line that the photon
-  // must cross to be destroyed.
+  // must cross to be absorbed, at which point it disappears from the sim.
   public readonly absorptionLine: Line;
 
   // The number of photons detected by this detector since the last reset.
@@ -87,15 +88,19 @@ export default class PhotonDetector implements TPhotonInteraction {
     );
 
     this.detectionRateProperty = new AveragingCounterNumberProperty( {
-      tandem: options.tandem.createTandem( 'detectionRateProperty' ),
-      phetioReadOnly: true,
-      range: RATE_RANGE
+      range: RATE_RANGE,
+      tandem: options.displayMode === 'rate' ?
+              options.tandem.createTandem( 'detectionRateProperty' ) :
+              Tandem.OPT_OUT,
+      phetioReadOnly: true
     } );
 
     this.detectionCountProperty = new NumberProperty( 0, {
-      tandem: options.tandem.createTandem( 'detectionCountProperty' ),
-      phetioReadOnly: true,
-      range: COUNT_RANGE
+      range: COUNT_RANGE,
+      tandem: options.displayMode === 'count' ?
+              options.tandem.createTandem( 'detectionCountProperty' ) :
+              Tandem.OPT_OUT,
+      phetioReadOnly: true
     } );
   }
 
@@ -162,3 +167,5 @@ export default class PhotonDetector implements TPhotonInteraction {
 }
 
 quantumMeasurement.register( 'PhotonDetector', PhotonDetector );
+
+export default PhotonDetector;

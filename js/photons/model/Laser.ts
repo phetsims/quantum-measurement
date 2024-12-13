@@ -16,6 +16,7 @@ import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import Photon, { PHOTON_SPEED, RIGHT } from './Photon.js';
@@ -89,7 +90,9 @@ class Laser {
 
     this.emissionRateProperty = new NumberProperty( 0, {
       range: new Range( 0, MAX_PHOTON_EMISSION_RATE ),
-      tandem: providedOptions.tandem.createTandem( 'emissionRateProperty' )
+      tandem: providedOptions.emissionMode === 'manyPhotons' ?
+              providedOptions.tandem.createTandem( 'emissionRateProperty' ) :
+              Tandem.OPT_OUT
     } );
 
     this.presetPolarizationDirectionProperty = new Property<PolarizationPresets>( 'fortyFiveDegrees', {
@@ -98,6 +101,7 @@ class Laser {
       validValues: PolarizationPresetValues
     } );
     this.customPolarizationAngleProperty = new NumberProperty( 45, {
+      range: new Range( 0, 90 ),
       tandem: providedOptions.tandem.createTandem( 'customPolarizationAngleProperty' )
     } );
 

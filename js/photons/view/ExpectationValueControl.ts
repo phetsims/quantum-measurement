@@ -28,7 +28,10 @@ export default class ExpectationValueControl extends HBox {
     const expectationValueCheckbox = new Checkbox(
       expectationValueLineVisibleProperty,
       new Text( QuantumMeasurementStrings.expectationValueStringProperty, { font: new PhetFont( 18 ) } ),
-      { tandem: providedOptions.tandem.createTandem( 'expectationValueCheckbox' ) }
+      {
+        tandem: providedOptions.tandem.createTandem( 'expectationValueCheckbox' ),
+        phetioVisiblePropertyInstrumented: false // Remove the whole control if checkbox isn't desired.
+      }
     );
     const expectationValueLineIcon = new Line( 0, 0, 30, 0, {
       stroke: QuantumMeasurementColors.photonBaseColorProperty,

@@ -67,7 +67,7 @@ class SceneSelectorRadioButtonGroup<T extends string> extends RectangularRadioBu
           );
         },
         value: value,
-        tandemName: `${value.toLowerCase()}RadioButton`,
+        tandemName: `${value}RadioButton`,
         options: { minWidth: 80 }
       } );
     } );

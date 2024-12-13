@@ -49,10 +49,6 @@ export default class PhotonPolarizationAngleControl extends Panel {
       font: DEFAULT_LABEL_FONT
     } );
 
-    const presetPolarizationDirectionRadioButtonGroupTandem = providedOptions.tandem.createTandem(
-      'presetPolarizationDirectionRadioButtonGroup'
-    );
-
     const radioButtonGroupItems = [
       {
         value: 'vertical',
@@ -101,8 +97,7 @@ export default class PhotonPolarizationAngleControl extends Panel {
         spacing: 8,
         touchAreaXDilation: 10,
         mouseAreaXDilation: 10,
-        tandem: presetPolarizationDirectionRadioButtonGroupTandem,
-        phetioVisiblePropertyInstrumented: false // hide the entire panel if you don't want radio buttons
+        tandem: providedOptions.tandem.createTandem( 'presetPolarizationDirectionRadioButtonGroup' )
       }
     );
 
@@ -136,27 +131,28 @@ export default class PhotonPolarizationAngleControl extends Panel {
     } );
 
     // Create the polarization indicator and its caption.
-    const polarizationIndicator = new FlatPolarizationAngleIndicator( photonSource.polarizationAngleProperty, {
-      scale: 1.2,
-      tandem: providedOptions.tandem.createTandem( 'polarizationIndicator' )
+    const polarizationIndicatorGraphic = new FlatPolarizationAngleIndicator( photonSource.polarizationAngleProperty, {
+      scale: 1.2
     } );
     const polarizationIndicatorCaption = new HBox( {
       children: [
         new VectorTailNode( 6 ),
         new Text( QuantumMeasurementStrings.propagationIntoPageStringProperty, { font: new PhetFont( 14 ) } )
       ],
-      spacing: 5
+      spacing: 5,
+      tandem: providedOptions.tandem.createTandem( 'polarizationIndicatorCaption' )
     } );
 
     // Put the polarization indicator and its caption into a VBox.
-    const captionsPolarizationIndicator = new VBox( {
-      children: [ polarizationIndicator, polarizationIndicatorCaption ],
-      spacing: 5
+    const polarizationIndicator = new VBox( {
+      children: [ polarizationIndicatorGraphic, polarizationIndicatorCaption ],
+      spacing: 5,
+      tandem: providedOptions.tandem.createTandem( 'polarizationIndicator' )
     } );
 
     // Put the left portion of the panel into and HBox with the polarization indicator.
     const content = new HBox( {
-      children: [ leftPortionOfPanel, captionsPolarizationIndicator ]
+      children: [ leftPortionOfPanel, polarizationIndicator ]
     } );
 
     super( content, options );

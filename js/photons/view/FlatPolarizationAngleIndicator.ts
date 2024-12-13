@@ -13,7 +13,6 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ArrowNode, { ArrowNodeOptions } from '../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Circle, Color, Node, NodeOptions, Text } from '../../../../scenery/js/imports.js';
@@ -23,7 +22,7 @@ import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import VectorTailNode from './VectorTailNode.js';
 
 type SelfOptions = EmptySelfOptions;
-export type PolarizationPlaneRepresentationOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
+export type PolarizationPlaneRepresentationOptions = SelfOptions & NodeOptions;
 
 // constants
 const AXIS_COLOR = Color.BLACK;
