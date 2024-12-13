@@ -15,6 +15,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import { Line } from '../../../../kite/js/imports.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
+import { SystemType } from '../../common/model/SystemType.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import Photon, { RIGHT, UP } from './Photon.js';
 import { PhotonMotionState } from './PhotonMotionState.js';
@@ -22,11 +23,11 @@ import { PhotonInteractionTestResult } from './PhotonsModel.js';
 import { TPhotonInteraction } from './TPhotonInteraction.js';
 
 type SelfOptions = {
-  collapsePhotonsProperty: TReadOnlyProperty<boolean>;
+  particleBehaviorModeProperty: TReadOnlyProperty<SystemType>;
 };
 type PolarizingBeamSplitterOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
-export default class PolarizingBeamSplitter implements TPhotonInteraction {
+class PolarizingBeamSplitter implements TPhotonInteraction {
 
   // The position of the center of the beam splitter in two-dimensional space.  Units are in meters.
   public readonly centerPosition: Vector2;
@@ -38,11 +39,11 @@ export default class PolarizingBeamSplitter implements TPhotonInteraction {
   public readonly polarizingSurfaceLine: Line;
 
   // A flag that indicates whether to collapse the interacting photons, which represents the classical case.
-  public readonly collapsePhotonsProperty: TReadOnlyProperty<boolean>;
+  public readonly particleBehaviorModeProperty: TReadOnlyProperty<SystemType>;
 
   public constructor( centerPosition: Vector2, providedOptions: PolarizingBeamSplitterOptions ) {
     this.centerPosition = centerPosition;
-    this.collapsePhotonsProperty = providedOptions.collapsePhotonsProperty;
+    this.particleBehaviorModeProperty = providedOptions.particleBehaviorModeProperty;
 
     // Initialize the line that represents the position of the beam splitter in the model.
     const endpoint1 = new Vector2( centerPosition.x - this.size.width / 2, centerPosition.y - this.size.height / 2 );
@@ -73,7 +74,7 @@ export default class PolarizingBeamSplitter implements TPhotonInteraction {
         const angleInRadians = Utils.toRadians( photon.polarizationAngle );
         const probabilityOfReflection = 1 - Math.pow( Math.cos( angleInRadians ), 2 );
 
-        if ( this.collapsePhotonsProperty.value ) {
+        if ( this.particleBehaviorModeProperty.value === 'classical' ) {
 
           // This is the classical case, where photons "choose" a path at the beam splitter.
           if ( dotRandom.nextDouble() <= probabilityOfReflection ) {
@@ -117,3 +118,4 @@ export default class PolarizingBeamSplitter implements TPhotonInteraction {
 }
 
 quantumMeasurement.register( 'PolarizingBeamSplitter', PolarizingBeamSplitter );
+export default PolarizingBeamSplitter;

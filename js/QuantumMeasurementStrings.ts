@@ -51,6 +51,7 @@ type StringsType = {
   'polarizingBeamSplitterStringProperty': LocalizedStringProperty;
   'propagationStringProperty': LocalizedStringProperty;
   'propagationIntoPageStringProperty': LocalizedStringProperty;
+  'classicalStringProperty': LocalizedStringProperty;
   'classicalCoinStringProperty': LocalizedStringProperty;
   'PStringProperty': LocalizedStringProperty;
   'photonSourceStringProperty': LocalizedStringProperty;
@@ -58,6 +59,7 @@ type StringsType = {
   'probabilityStringProperty': LocalizedStringProperty;
   'probabilityOfValuePatternStringProperty': LocalizedStringProperty;
   'numberOfCoinsPatternStringProperty': LocalizedStringProperty;
+  'quantumStringProperty': LocalizedStringProperty;
   'quantumCoinQuotedStringProperty': LocalizedStringProperty;
   'reprepareStringProperty': LocalizedStringProperty;
   'reprepareAndRevealStringProperty': LocalizedStringProperty;

@@ -10,6 +10,8 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
+import Property from '../../../../axon/js/Property.js';
+import TProperty from '../../../../axon/js/TProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -18,6 +20,8 @@ import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioS
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
+import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
+import { SystemType, SystemTypeValues } from '../../common/model/SystemType.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import Laser, { PhotonEmissionMode } from './Laser.js';
 import Mirror from './Mirror.js';
@@ -64,9 +68,9 @@ export default class PhotonsExperimentSceneModel {
   // Whether the simulation is currently playing, which in this case means whether the photons are moving.
   public readonly isPlayingProperty: BooleanProperty;
 
-  // The Classical understanding of this experiment implied that photons would choose a path at
-  // the beam splitter. This is controlled by the Classical/Quantum toggle at the view.
-  public readonly collapsePhotonsAtBeamSplitterProperty: BooleanProperty;
+  // Whether the photons behave as classical or quantum particles.  When they are classical, they will choose a path
+  // at the beam splitter.  When they are quantum, they will be in a superposition of states.
+  public readonly particleBehaviorModeProperty: TProperty<SystemType>;
 
   public constructor( providedOptions: PhotonsExperimentSceneModelOptions ) {
 
@@ -74,11 +78,13 @@ export default class PhotonsExperimentSceneModel {
     // construction time and activated and deactivated as needed, rather than creating and destroying them.
     this.photonCollection = new PhotonCollection( providedOptions.tandem.createTandem( 'photonCollection' ) );
 
-    this.collapsePhotonsAtBeamSplitterProperty = new BooleanProperty( true, {
-      tandem: providedOptions.tandem.createTandem( 'collapsePhotonsAtBeamSplitterProperty' )
+    this.particleBehaviorModeProperty = new Property( 'classical', {
+      tandem: providedOptions.tandem.createTandem( 'particleBehaviorModeProperty' ),
+      phetioValueType: StringUnionIO( SystemTypeValues ),
+      validValues: SystemTypeValues
     } );
 
-    this.collapsePhotonsAtBeamSplitterProperty.link( () => {
+    this.particleBehaviorModeProperty.link( () => {
       if ( !isSettingPhetioStateProperty.value ) {
         this.photonCollection.clear();
       }
@@ -86,7 +92,7 @@ export default class PhotonsExperimentSceneModel {
 
     this.polarizingBeamSplitter = new PolarizingBeamSplitter( Vector2.ZERO, {
       tandem: providedOptions.tandem.createTandem( 'polarizingBeamSplitter' ),
-      collapsePhotonsProperty: this.collapsePhotonsAtBeamSplitterProperty
+      particleBehaviorModeProperty: this.particleBehaviorModeProperty
     } );
 
     // Create the laser that will emit the photons that will be sent toward the polarizing beam splitter.

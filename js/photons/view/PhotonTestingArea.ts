@@ -7,6 +7,7 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
+import PhetioProperty from '../../../../axon/js/PhetioProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
@@ -14,7 +15,9 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Node, NodeOptions, Text } from '../../../../scenery/js/imports.js';
 import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
+import { SystemType, SystemTypeValues } from '../../common/model/SystemType.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import PhotonsExperimentSceneModel from '../model/PhotonsExperimentSceneModel.js';
 import LaserNode from './LaserNode.js';
 import MirrorNode from './MirrorNode.js';
@@ -25,7 +28,7 @@ import PolarizingBeamSplitterNode from './PolarizingBeamSplitterNode.js';
 type SelfOptions = EmptySelfOptions;
 type PhotonTestingAreaOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
 
-export default class PhotonTestingArea extends Node {
+class PhotonTestingArea extends Node {
 
   private readonly photonSprites: PhotonSprites;
 
@@ -45,24 +48,37 @@ export default class PhotonTestingArea extends Node {
     } );
 
     // TODO: This might live here temporarily mainly for a demo. If the feature stays, consider moving elsewhere https://github.com/phetsims/quantum-measurement/issues/63
-    const visualizationModeRadioButtonGroupTandem = providedOptions.tandem.createTandem( 'visualizationModeRadioButtonGroup' );
-    const visualizationModeRadioButtonGroup = new AquaRadioButtonGroup( model.collapsePhotonsAtBeamSplitterProperty, [ true, false ].map( classical => {
-      const name = classical ? 'Classical' : 'Quantum';
-      return {
-        value: classical,
-        createNode: () => new Text(
-          name,
-          { font: new PhetFont( 15 ) } ),
-        tandemName: `${name.toLowerCase()}RadioButton`,
-        phetioVisiblePropertyInstrumented: false
-      };
-    } ), {
-      spacing: 10,
-      left: laserNode.left,
-      bottom: laserNode.top - 20,
-      tandem: visualizationModeRadioButtonGroupTandem,
-      phetioFeatured: true
-    } );
+    const particleBehaviorModeRadioButtonGroupTandem = providedOptions.tandem.createTandem( 'particleBehaviorModeRadioButtonGroup' );
+    const particleBehaviorModeRadioButtonGroup = new AquaRadioButtonGroup<SystemType>(
+      model.particleBehaviorModeProperty as PhetioProperty<SystemType>,
+      SystemTypeValues.map( behaviorMode => {
+
+          const nameProperty = behaviorMode === 'classical' ?
+                               QuantumMeasurementStrings.classicalStringProperty :
+                               QuantumMeasurementStrings.quantumStringProperty;
+
+          const tandemRootName = behaviorMode === 'classical' ? 'classical' : 'quantum';
+          const tandemName = `${tandemRootName}RadioButton`;
+
+          return {
+            value: behaviorMode,
+            createNode: () => new Text(
+              nameProperty,
+              { font: new PhetFont( 15 ) }
+            ),
+            tandemName: tandemName,
+            phetioVisiblePropertyInstrumented: false
+          };
+        }
+      ),
+      {
+        spacing: 10,
+        left: laserNode.left,
+        bottom: laserNode.top - 20,
+        tandem: particleBehaviorModeRadioButtonGroupTandem,
+        phetioFeatured: true
+      }
+    );
 
     const verticalPolarizationDetector = new PhotonDetectorNode(
       model.verticalPolarizationDetector,
@@ -93,7 +109,7 @@ export default class PhotonTestingArea extends Node {
 
     const options = optionize<PhotonTestingAreaOptions, SelfOptions, NodeOptions>()( {
       children: [
-        visualizationModeRadioButtonGroup,
+        particleBehaviorModeRadioButtonGroup,
         laserNode,
         polarizingBeamSplitterNode,
         verticalPolarizationDetector,
@@ -124,3 +140,4 @@ export default class PhotonTestingArea extends Node {
 }
 
 quantumMeasurement.register( 'PhotonTestingArea', PhotonTestingArea );
+export default PhotonTestingArea;
