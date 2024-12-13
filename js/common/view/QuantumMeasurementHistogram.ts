@@ -43,7 +43,7 @@ type SelfOptions = {
   // label for the top tick mark, if present
   topTickMarkTextProperty?: TReadOnlyProperty<string>;
 };
-export type QuantumMeasurementHistogramOptions = SelfOptions & WithRequired<NodeOptions, 'tandem' | 'visibleProperty'>;
+export type QuantumMeasurementHistogramOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
 
 export const HISTOGRAM_SIZE = new Dimension2( 200, 160 ); // size excluding labels at bottom, in screen coordinates
 const RIGHT_HISTOGRAM_BAR_CENTER_X = HISTOGRAM_SIZE.width / 4;
@@ -58,7 +58,7 @@ const NUMBER_DISPLAY_MAX_WIDTH = HISTOGRAM_SIZE.width / 2 * 0.85;
 const FLOATING_LABEL_MARGIN = 5;
 const HISTOGRAM_BAR_WIDTH = HISTOGRAM_SIZE.width / 6;
 
-export default class QuantumMeasurementHistogram extends Node {
+class QuantumMeasurementHistogram extends Node {
 
   protected readonly xAxis: Line;
   protected readonly yAxis: Line;
@@ -327,3 +327,5 @@ export default class QuantumMeasurementHistogram extends Node {
 }
 
 quantumMeasurement.register( 'QuantumMeasurementHistogram', QuantumMeasurementHistogram );
+
+export default QuantumMeasurementHistogram;

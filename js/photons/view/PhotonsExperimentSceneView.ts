@@ -6,7 +6,6 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -16,7 +15,6 @@ import PlayPauseButton from '../../../../scenery-phet/js/buttons/PlayPauseButton
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { HBox, Node, NodeOptions, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import Panel from '../../../../sun/js/Panel.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHistogram.js';
@@ -128,7 +126,7 @@ export default class PhotonsExperimentSceneView extends Node {
                                            new StringProperty( '' );
 
     // Create the histogram that shows the detection counts for the vertical and horizontal detectors.
-    const countHistogram = new QuantumMeasurementHistogram(
+    const histogram = new QuantumMeasurementHistogram(
       verticalValueProperty,
       horizontalValueProperty,
       [
@@ -153,16 +151,15 @@ export default class PhotonsExperimentSceneView extends Node {
         matchLabelColors: true,
         leftFillColorProperty: QuantumMeasurementColors.verticalPolarizationColorProperty,
         rightFillColorProperty: QuantumMeasurementColors.horizontalPolarizationColorProperty,
-        visibleProperty: new BooleanProperty( true ),
         topTickMarkTextProperty: histogramTickMarkLabelProperty,
-        tandem: Tandem.OPT_OUT
+        tandem: providedOptions.tandem.createTandem( 'histogram' )
       }
     );
 
     // Put the two dynamic data display nodes together in a horizontal box.  The center of this box will be aligned
     // with the center of the emitted photon beam.
     const dynamicDataDisplayBox = new HBox( {
-      children: [ normalizedOutcomeVectorGraph, countHistogram ],
+      children: [ normalizedOutcomeVectorGraph, histogram ],
       spacing: 20,
       align: 'center',
       left: titleAndEquationsBox.left,
@@ -172,17 +169,23 @@ export default class PhotonsExperimentSceneView extends Node {
     const expectationValueControl = new ExpectationValueControl(
       normalizedOutcomeVectorGraph.showExpectationLineProperty,
       {
-
-        // Don't show this control when there isn't a valid expectation value to display.
-        visibleProperty: new DerivedProperty(
-          [ model.normalizedExpectationValueProperty ],
-          expectationValue => expectationValue !== null
-        ),
         left: titleAndEquationsBox.left,
         top: dynamicDataDisplayBox.bottom + 30,
         tandem: providedOptions.tandem.createTandem( 'expectationValueControl' )
       }
     );
+
+    // Wrap the expectation value control in a separate parent node so that it can be hidden when the expectation value
+    // is not available.
+    const expectationValueControlParent = new Node( {
+      children: [ expectationValueControl ],
+
+      // Don't show this control when there isn't a valid expectation value to display.
+      visibleProperty: new DerivedProperty(
+        [ model.normalizedExpectationValueProperty ],
+        expectationValue => expectationValue !== null
+      )
+    } );
 
     const options = optionize<PhotonsExperimentSceneViewOptions, SelfOptions, NodeOptions>()( {
       children: [
@@ -192,7 +195,7 @@ export default class PhotonsExperimentSceneView extends Node {
         photonTestingArea,
         titleAndEquationsBox,
         dynamicDataDisplayBox,
-        expectationValueControl
+        expectationValueControlParent
       ]
     }, providedOptions );
 
