@@ -41,7 +41,9 @@ export default class CoinsModel implements TModel {
 
     this.experimentTypeProperty = new Property<SystemType>( 'classical', {
       tandem: providedOptions.tandem.createTandem( 'experimentTypeProperty' ),
-      phetioValueType: StringUnionIO( SystemTypeValues )
+      phetioValueType: StringUnionIO( SystemTypeValues ),
+      validValues: SystemTypeValues,
+      phetioFeatured: true
     } );
 
     // Update the active scene model based on the experiment type.

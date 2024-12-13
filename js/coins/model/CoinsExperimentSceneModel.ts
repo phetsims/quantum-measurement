@@ -65,7 +65,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
   // The initial state of the coin(s) before any flipping or other experiment preparation occurs.
   public readonly initialCoinStateProperty: Property<ClassicalCoinStates> | Property<QuantumUncollapsedCoinStates>;
 
-  // The probability of the 'up' state. The 'down' probability will be 1 - this.
+  // The probability of the 'up' state. The 'down' probability will be (1 - thisValue).
   public readonly upProbabilityProperty: NumberProperty;
 
   public constructor( providedOptions: CoinExperimentSceneModelOptions ) {
@@ -82,7 +82,8 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
     this.systemType = options.systemType;
 
     this.activeProperty = new BooleanProperty( options.initiallyActive, {
-      tandem: options.tandem.createTandem( 'activeProperty' )
+      tandem: options.tandem.createTandem( 'activeProperty' ),
+      phetioReadOnly: true
     } );
     this.preparingExperimentProperty = new BooleanProperty( true, {
       tandem: options.tandem.createTandem( 'preparingExperimentProperty' )
@@ -90,7 +91,8 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
     this.upProbabilityProperty = new NumberProperty( options.initialBias, {
       range: new Range( 0, 1 ),
       tandem: options.tandem.createTandem( 'upProbabilityProperty' ),
-      phetioFeatured: true
+      phetioFeatured: true,
+      phetioDocumentation: 'The probability of the "up" state for the coin(s) in this scene.'
     } );
     const singleCoinTandem = options.tandem.createTandem( 'singleCoin' );
     const coinSetTandem = options.tandem.createTandem( 'coinSet' );

@@ -35,7 +35,8 @@ export default class TwoStateSystem<T extends string> extends TwoStateSystemSet<
       tandem: options.tandem.createTandem( 'measuredValueProperty' ),
       phetioValueType: StringUnionIO( stateValues ),
       validValues: [ ...stateValues ],
-      phetioFeatured: true
+      phetioFeatured: true,
+      phetioReadOnly: true
     } );
 
     // Hook up to the data-changed emitter to update the data Property.
