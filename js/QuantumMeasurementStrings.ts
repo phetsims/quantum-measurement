@@ -86,6 +86,9 @@ type StringsType = {
   'ZStringProperty': LocalizedStringProperty;
   'blockUpStringProperty': LocalizedStringProperty;
   'blockDownStringProperty': LocalizedStringProperty;
+  'expectedPercentageStringProperty': LocalizedStringProperty;
+  'noneStringProperty': LocalizedStringProperty;
+  'lotsStringProperty': LocalizedStringProperty;
 };
 
 const QuantumMeasurementStrings = getStringModule( 'QUANTUM_MEASUREMENT' ) as StringsType;

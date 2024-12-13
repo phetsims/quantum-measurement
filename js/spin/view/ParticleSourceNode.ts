@@ -99,8 +99,8 @@ export default class ParticleSourceNode extends Node {
 
     // major ticks at 0%, 33%, 66%, 100%
     const tickLabelOptions = { font: new PhetFont( 12 ) };
-    particleAmountSlider.addMajorTick( sliderRange.min, new Text( 'None', tickLabelOptions ) );
-    particleAmountSlider.addMajorTick( sliderRange.max, new Text( 'Lots', tickLabelOptions ) );
+    particleAmountSlider.addMajorTick( sliderRange.min, new Text( QuantumMeasurementStrings.noneStringProperty, tickLabelOptions ) );
+    particleAmountSlider.addMajorTick( sliderRange.max, new Text( QuantumMeasurementStrings.lotsStringProperty, tickLabelOptions ) );
     particleAmountSlider.addMajorTick( sliderRange.min + ( sliderRange.max - sliderRange.min ) / 3 );
     particleAmountSlider.addMajorTick( sliderRange.min + 2 * ( sliderRange.max - sliderRange.min ) / 3 );
 

@@ -185,7 +185,7 @@ export default class SpinMeasurementArea extends VBox {
       model.expectedPercentageVisibleProperty,
       new HBox( {
         children: [
-          new Text( 'Expected percentage', { font: new PhetFont( 16 ) } ),
+          new Text( QuantumMeasurementStrings.expectedPercentageStringProperty, { font: new PhetFont( 16 ) } ),
           new Path( new Shape().moveTo( 0, 0 ).lineTo( 20, 0 ),
             QuantumMeasurementConstants.expectedPercentagePathOptions
           )

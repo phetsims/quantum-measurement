@@ -106,8 +106,16 @@ export default class SternGerlachNode extends Node {
     const orientationRadioButtonGroupTandem = options.tandem.createTandem( 'orientationRadioButtonGroup' );
     const orientationRadioButtonGroup = new RectangularRadioButtonGroup<boolean>(
       sternGerlach.isZOrientedProperty, [
-        { value: true, createNode: () => new RichText( 'S<sub>Z', radioButtonTextOptions ), tandemName: 'isZOrientedRadioButton' },
-        { value: false, createNode: () => new RichText( 'S<sub>X', radioButtonTextOptions ), tandemName: 'isXOrientedRadioButton' }
+        {
+          value: true, createNode: () => new RichText(
+            QuantumMeasurementStrings.SGSubZStringProperty, radioButtonTextOptions
+          ), tandemName: 'isZOrientedRadioButton'
+        },
+        {
+          value: false, createNode: () => new RichText(
+            QuantumMeasurementStrings.SGSubZStringProperty, radioButtonTextOptions
+          ), tandemName: 'isXOrientedRadioButton'
+        }
       ], {
         orientation: 'horizontal',
         tandem: orientationRadioButtonGroupTandem,
