@@ -89,7 +89,8 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
     } );
     this.upProbabilityProperty = new NumberProperty( options.initialBias, {
       range: new Range( 0, 1 ),
-      tandem: options.tandem.createTandem( 'upProbabilityProperty' )
+      tandem: options.tandem.createTandem( 'upProbabilityProperty' ),
+      phetioFeatured: true
     } );
     const singleCoinTandem = options.tandem.createTandem( 'singleCoin' );
     const coinSetTandem = options.tandem.createTandem( 'coinSet' );
@@ -97,7 +98,8 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
       this.initialCoinStateProperty = new Property<ClassicalCoinStates>( 'heads', {
         tandem: options.tandem.createTandem( 'initialCoinStateProperty' ),
         phetioValueType: StringUnionIO( ClassicalCoinStateValues ),
-        validValues: ClassicalCoinStateValues
+        validValues: ClassicalCoinStateValues,
+        phetioFeatured: true
       } );
       this.singleCoin = new TwoStateSystem<ClassicalCoinStates>(
         ClassicalCoinStateValues,
@@ -119,7 +121,8 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
       this.initialCoinStateProperty = new Property<QuantumUncollapsedCoinStates>( 'up', {
         tandem: options.tandem.createTandem( 'initialCoinStateProperty' ),
         phetioValueType: StringUnionIO( QuantumUncollapsedCoinStateValues ),
-        validValues: QuantumUncollapsedCoinStateValues
+        validValues: QuantumUncollapsedCoinStateValues,
+        phetioFeatured: true
       } );
       this.singleCoin = new TwoStateSystem<QuantumCoinStates>(
         QuantumCoinStateValues,

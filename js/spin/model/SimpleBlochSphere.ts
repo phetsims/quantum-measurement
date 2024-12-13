@@ -35,11 +35,13 @@ export default class SimpleBlochSphere extends AbstractBlochSphere {
 
     this.showZProjectionProperty = new BooleanProperty( false, {
       tandem: options.tandem.createTandem( 'showZProjectionProperty' ),
+      phetioDocumentation: 'Projections only visible in Custom experiment mode',
       phetioFeatured: true
     } );
 
     this.showXProjectionProperty = new BooleanProperty( false, {
       tandem: options.tandem.createTandem( 'showXProjectionProperty' ),
+      phetioDocumentation: 'Projections only visible in Custom experiment mode',
       phetioFeatured: true
     } );
 

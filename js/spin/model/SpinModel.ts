@@ -154,7 +154,8 @@ export default class SpinModel implements TModel {
 
     this.expectedPercentageVisibleProperty = new BooleanProperty( false, {
       tandem: providedOptions.tandem.createTandem( 'expectedPercentageVisibleProperty' ),
-      phetioFeatured: true
+      phetioFeatured: true,
+      phetioDocumentation: 'Expected percentage of particles that would be counted in the histogram. Only for continuous mode.'
     } );
 
     this.isBlockingProperty = new DerivedProperty(

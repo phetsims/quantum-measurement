@@ -97,8 +97,9 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
     this.systemType = options.systemType;
 
     this.numberOfActiveSystemsProperty = new NumberProperty( initialNumberOfActiveSystems, {
-      range: new Range( 1, maxNumberOfActiveSystems ),
-      tandem: options.tandem.createTandem( 'numberOfActiveSystemsProperty' )
+      tandem: options.tandem.createTandem( 'numberOfActiveSystemsProperty' ),
+      phetioFeatured: true,
+      validValues: maxNumberOfActiveSystems === 1 ? [ 1 ] : [ 10, 100, 10000 ]
     } );
 
     // The initial system state differs for classical versus quantum systems.
@@ -115,7 +116,8 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
     // Create the seed Property.  It's initial value is controlled by the specified initial value for measurements.
     this.seedProperty = new NumberProperty( stateValues.indexOf( initialState ), {
       range: new Range( 0, 1 ),
-      tandem: options.tandem.createTandem( 'seedProperty' )
+      tandem: options.tandem.createTandem( 'seedProperty' ),
+      phetioFeatured: true
     } );
 
     // Monitor the seed that is used to create the measurement values.
