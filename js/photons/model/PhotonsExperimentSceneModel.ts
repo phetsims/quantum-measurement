@@ -202,6 +202,7 @@ export default class PhotonsExperimentSceneModel {
    */
   public reset(): void {
     this.laser.reset();
+    this.photonCollection.clear();
     this.verticalPolarizationDetector.reset();
     this.horizontalPolarizationDetector.reset();
     this.isPlayingProperty.reset();
