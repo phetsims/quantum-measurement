@@ -57,7 +57,7 @@ export default class PhotonsExperimentSceneView extends Node {
 
       // center position empirically determined to match design doc
       center: new Vector2( 420, 225 ),
-
+      phetioVisiblePropertyInstrumented: false,
       tandem: providedOptions.tandem.createTandem( 'photonTestingArea' )
     } );
 

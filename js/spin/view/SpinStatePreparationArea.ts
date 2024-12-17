@@ -9,6 +9,7 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
+import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -65,14 +66,15 @@ export default class SpinStatePreparationArea extends VBox {
       };
     };
 
+    const spinStateRadioButtonGroupTandem = tandem.createTandem( 'spinStateRadioButtonGroup' );
     const spinStateRadioButtonGroup = new RectangularRadioButtonGroup(
       model.particleSourceModel.spinStateProperty,
       SpinDirection.enumeration.values.map( quantity => createRadioButtonGroupItem( quantity ) ),
       {
         spacing: 10,
         center: new Vector2( 100, 100 ),
-        tandem: tandem.createTandem( 'spinStateRadioButtonGroup' ),
-        visibleProperty: new DerivedProperty( [ model.currentExperimentProperty ], currentExperiment => currentExperiment !== SpinExperiment.CUSTOM ),
+        tandem: spinStateRadioButtonGroupTandem,
+        visibleProperty: new GatedVisibleProperty( new DerivedProperty( [ model.currentExperimentProperty ], currentExperiment => currentExperiment !== SpinExperiment.CUSTOM ), spinStateRadioButtonGroupTandem ),
         radioButtonOptions: {
           minWidth: 200,
           baseColor: QuantumMeasurementColors.controlPanelFillColorProperty
