@@ -61,7 +61,6 @@ export default class BlochSphereNode extends Node {
     const sphereRadius = 100;
 
     const sphereNode = new ShadedSphereNode( 2 * sphereRadius, {
-      tandem: providedOptions.tandem.createTandem( 'sphereNode' ),
       mainColor: 'cyan',
       highlightColor: 'white',
       highlightDiameterRatio: 0.9

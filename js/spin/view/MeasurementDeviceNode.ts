@@ -7,6 +7,7 @@
  * @author Agustín Vallejo
  */
 
+import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
 import stepTimer from '../../../../axon/js/stepTimer.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
@@ -15,6 +16,7 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import { Node, Path, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
@@ -32,7 +34,7 @@ export default class MeasurementDeviceNode extends VBox {
   public constructor( measurementLine: MeasurementDevice, modelViewTransform: ModelViewTransform2, providedOptions: MeasurementDeviceNodeOptions ) {
 
     const simpleBlochSphereNode = new BlochSphereNode( measurementLine.simpleBlochSphere, {
-      tandem: providedOptions.tandem.createTandem( 'simpleBlochSphereNode' ),
+      tandem: Tandem.OPT_OUT,
       drawKets: false,
       drawTitle: false,
       scale: 0.5
@@ -90,7 +92,7 @@ export default class MeasurementDeviceNode extends VBox {
         cameraNode
       ],
       spacing: 25,
-      visibleProperty: measurementLine.isActiveProperty
+      visibleProperty: new GatedVisibleProperty( measurementLine.isActiveProperty, providedOptions.tandem )
     }, providedOptions );
 
     super( options );
