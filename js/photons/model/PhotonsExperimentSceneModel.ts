@@ -18,7 +18,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
@@ -188,11 +187,7 @@ export default class PhotonsExperimentSceneModel {
 
     // Create the Property that will be used to control whether the simulation is playing.
     this.isPlayingProperty = new BooleanProperty( true, {
-
-      // Only give this a phet-io ID if it's a many-photon experiment.  Otherwise, the model can't be paused.
-      tandem: providedOptions.photonEmissionMode === 'manyPhotons' ?
-              providedOptions.tandem.createTandem( 'isPlayingProperty' ) :
-              Tandem.OPT_OUT,
+      tandem: providedOptions.tandem.createTandem( 'isPlayingProperty' ),
       phetioFeatured: providedOptions.photonEmissionMode === 'manyPhotons'
     } );
   }
@@ -208,126 +203,129 @@ export default class PhotonsExperimentSceneModel {
     this.isPlayingProperty.reset();
   }
 
-  public step( dt: number ): void {
+  public stepForwardInTime( dt: number ): void {
 
-    if ( this.isPlayingProperty.value ) {
+    // Step the laser, which could potentially emit new photons.
+    this.laser.step( dt );
 
-      // Step the laser, which could potentially emit new photons.
-      this.laser.step( dt );
+    // Gather the things that can potentially interact with the photons
+    const potentialInteractors: TPhotonInteraction[] = [
+      this.polarizingBeamSplitter,
+      this.mirror,
+      this.horizontalPolarizationDetector,
+      this.verticalPolarizationDetector
+    ];
 
-      // Gather the things that can potentially interact with the photons
-      const potentialInteractors: TPhotonInteraction[] = [
-        this.polarizingBeamSplitter,
-        this.mirror,
-        this.horizontalPolarizationDetector,
-        this.verticalPolarizationDetector
-      ];
+    const photonsToRemove: Photon[] = [];
 
-      const photonsToRemove: Photon[] = [];
+    // Update each photon's quantum states.  This tests for interactions with other elements in the model, like the
+    // beam splitter, mirror, and photon detectors.
+    this.photonCollection.photons.forEach( photon => {
 
-      // Update each photon's quantum states.  This tests for interactions with other elements in the model, like the
-      // beam splitter, mirror, and photon detectors.
-      this.photonCollection.photons.forEach( photon => {
+      let interactionCount = 0;
 
-        let interactionCount = 0;
+      for ( const potentiallyInteractingElement of potentialInteractors ) {
 
-        for ( const potentiallyInteractingElement of potentialInteractors ) {
+        // Test for interactions with the potential interactors.
+        const interactions = potentiallyInteractingElement.testForPhotonInteraction( photon, dt );
 
-          // Test for interactions with the potential interactors.
-          const interactions = potentiallyInteractingElement.testForPhotonInteraction( photon, dt );
+        // For each of the interactions, update the photon state.
+        for ( const [ photonState, interaction ] of interactions ) {
 
-          // For each of the interactions, update the photon state.
-          for ( const [ photonState, interaction ] of interactions ) {
+          if ( !photonsToRemove.includes( photon ) ) {
 
-            if ( !photonsToRemove.includes( photon ) ) {
+            if ( interaction.interactionType === 'reflected' ) {
 
-              if ( interaction.interactionType === 'reflected' ) {
+              assert && assert( interaction.reflectionInfo, 'reflection info missing' );
 
-                assert && assert( interaction.reflectionInfo, 'reflection info missing' );
+              // This photon state was reflected.  First step it to the reflection point.
+              const dtToReflectionPoint =
+                photonState.position.distance( interaction.reflectionInfo!.reflectionPoint ) / PHOTON_SPEED;
+              assert && assert( dtToReflectionPoint <= dt );
+              photonState.step( dtToReflectionPoint );
 
-                // This photon state was reflected.  First step it to the reflection point.
-                const dtToReflectionPoint =
-                  photonState.position.distance( interaction.reflectionInfo!.reflectionPoint ) / PHOTON_SPEED;
-                assert && assert( dtToReflectionPoint <= dt );
-                photonState.step( dtToReflectionPoint );
+              // Change the direction of the photon to the reflection direction.
+              photonState.direction = interaction.reflectionInfo!.reflectionDirection;
 
-                // Change the direction of the photon to the reflection direction.
-                photonState.direction = interaction.reflectionInfo!.reflectionDirection;
+              // Step the photon the remaining time.
+              photonState.step( dt - dtToReflectionPoint );
 
-                // Step the photon the remaining time.
-                photonState.step( dt - dtToReflectionPoint );
+              interactionCount++;
+            }
 
-                interactionCount++;
+            if ( interaction.interactionType === 'split' ) {
+
+              assert && assert( interaction.splitInfo, 'split info missing' );
+              assert && assert( photon.possibleMotionStates.length === 1, 'there should be 1 motion state' );
+
+              // The resulting interaction was a split of the photon state.  First, step the state to the split point.
+              const dtToSplitPoint = photonState.position.distance( interaction.splitInfo!.splitPoint ) / PHOTON_SPEED;
+              assert && assert( dtToSplitPoint <= dt );
+              photonState.step( dtToSplitPoint );
+
+              // Update the existing motion state based on the first split info element.
+              photonState.direction = interaction.splitInfo!.splitStates[ 0 ].direction;
+              photonState.probability = interaction.splitInfo!.splitStates[ 0 ].probability;
+
+              // Add a new state to the photon for the second split info element.
+              photon.addMotionState(
+                photonState.position,
+                interaction.splitInfo!.splitStates[ 1 ].direction,
+                interaction.splitInfo!.splitStates[ 1 ].probability
+              );
+            }
+
+            if ( interaction.interactionType === 'detected' || interaction.interactionType === 'detectedAndAbsorbed' ) {
+
+              const detector = interaction.detectionInfo!.detector;
+
+              // Evaluate the detection result based on the probability of the photon actually being here.
+              if ( dotRandom.nextDouble() < photonState.probability ) {
+
+                // The photon is being absorbed by the detector.
+                photon.setMotionStateProbability( photonState, 1 );
+                detector.detectionCountProperty.value = Math.min( detector.detectionCountProperty.value + 1, COUNT_RANGE.max );
+                detector.detectionRateProperty.countEvent();
+
               }
+              else {
 
-              if ( interaction.interactionType === 'split' ) {
-
-                assert && assert( interaction.splitInfo, 'split info missing' );
-                assert && assert( photon.possibleMotionStates.length === 1, 'there should be 1 motion state' );
-
-                // The resulting interaction was a split of the photon state.  First, step the state to the split point.
-                const dtToSplitPoint = photonState.position.distance( interaction.splitInfo!.splitPoint ) / PHOTON_SPEED;
-                assert && assert( dtToSplitPoint <= dt );
-                photonState.step( dtToSplitPoint );
-
-                // Update the existing motion state based on the first split info element.
-                photonState.direction = interaction.splitInfo!.splitStates[ 0 ].direction;
-                photonState.probability = interaction.splitInfo!.splitStates[ 0 ].probability;
-
-                // Add a new state to the photon for the second split info element.
-                photon.addMotionState(
-                  photonState.position,
-                  interaction.splitInfo!.splitStates[ 1 ].direction,
-                  interaction.splitInfo!.splitStates[ 1 ].probability
-                );
+                // If this photon state does not trigger the detector the associated probability goes to 0%, which will make
+                // the other state's probability 100%.
+                photon.setMotionStateProbability( photonState, 0 );
               }
+            }
 
-              if ( interaction.interactionType === 'detected' || interaction.interactionType === 'detectedAndAbsorbed' ) {
+            if ( interaction.interactionType === 'absorbed' || interaction.interactionType === 'detectedAndAbsorbed' ) {
 
-                const detector = interaction.detectionInfo!.detector;
+              // This interaction indicates that the photon was absorbed, so it should be removed from the photon
+              // collection.
+              photonsToRemove.push( photon );
 
-                // Evaluate the detection result based on the probability of the photon actually being here.
-                if ( dotRandom.nextDouble() < photonState.probability ) {
-
-                  // The photon is being absorbed by the detector.
-                  photon.setMotionStateProbability( photonState, 1 );
-                  detector.detectionCountProperty.value = Math.min( detector.detectionCountProperty.value + 1, COUNT_RANGE.max );
-                  detector.detectionRateProperty.countEvent();
-
-                }
-                else {
-
-                  // If this photon state does not trigger the detector the associated probability goes to 0%, which will make
-                  // the other state's probability 100%.
-                  photon.setMotionStateProbability( photonState, 0 );
-                }
-              }
-
-              if ( interaction.interactionType === 'absorbed' || interaction.interactionType === 'detectedAndAbsorbed' ) {
-
-                // This interaction indicates that the photon was absorbed, so it should be removed from the photon
-                // collection.
-                photonsToRemove.push( photon );
-
-                interactionCount++;
-              }
+              interactionCount++;
             }
           }
         }
+      }
 
-        if ( interactionCount === 0 ) {
-          photon.step( dt );
-        }
-      } );
+      if ( interactionCount === 0 ) {
+        photon.step( dt );
+      }
+    } );
 
-      // Remove any photons that were absorbed by something.
-      photonsToRemove.forEach( photon => {
-        this.photonCollection.removePhoton( photon );
-      } );
+    // Remove any photons that were absorbed by something.
+    photonsToRemove.forEach( photon => {
+      this.photonCollection.removePhoton( photon );
+    } );
 
-      // Step the photon detectors.  This is just to update the counts and rates, but doesn't detect the photons.
-      this.horizontalPolarizationDetector.step( dt );
-      this.verticalPolarizationDetector.step( dt );
+    // Step the photon detectors.  This is just to update the counts and rates, but doesn't detect the photons.
+    this.horizontalPolarizationDetector.step( dt );
+    this.verticalPolarizationDetector.step( dt );
+  }
+
+  public step( dt: number ): void {
+    if ( this.isPlayingProperty.value ) {
+      this.stepForwardInTime( dt );
     }
   }
 }

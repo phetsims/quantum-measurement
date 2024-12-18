@@ -11,7 +11,7 @@ import StringProperty from '../../../../axon/js/StringProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
-import PlayPauseButton from '../../../../scenery-phet/js/buttons/PlayPauseButton.js';
+import PlayPauseStepButtonGroup from '../../../../scenery-phet/js/buttons/PlayPauseStepButtonGroup.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { HBox, Node, NodeOptions, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import Panel from '../../../../sun/js/Panel.js';
@@ -33,8 +33,9 @@ type SelfOptions = EmptySelfOptions;
 type PhotonsExperimentSceneViewOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
 
 const INSET = 10; // inset for nodes at edges of the view, in screen coordinates
+const STEP_FORWARD_TIME = 2 / 60; // empirically determined, in seconds, adjust as desired
 
-export default class PhotonsExperimentSceneView extends Node {
+class PhotonsExperimentSceneView extends Node {
 
   // The photon testing area is the part of the scene where photons are produced, reflected, and detected.
   private readonly photonTestingArea: PhotonTestingArea;
@@ -189,6 +190,19 @@ export default class PhotonsExperimentSceneView extends Node {
       )
     } );
 
+    // Create a play/pause/step time control.
+    const playPauseStepButtonGroup = new PlayPauseStepButtonGroup( model.isPlayingProperty, {
+      stepForwardButtonOptions: {
+        listener: () => { model.stepForwardInTime( STEP_FORWARD_TIME ); }
+      },
+      playPauseButtonOptions: {
+        radius: 25
+      },
+      centerX: photonTestingArea.x + 20, // centered beneath the beam splitter
+      bottom: photonPolarizationAngleControl.bottom - 6, // vertically aligned with reset all button
+      tandem: providedOptions.tandem.createTandem( 'playPauseStepButtonGroup' )
+    } );
+
     const options = optionize<PhotonsExperimentSceneViewOptions, SelfOptions, NodeOptions>()( {
       children: [
         photonDetectionProbabilityPanel,
@@ -197,22 +211,12 @@ export default class PhotonsExperimentSceneView extends Node {
         photonTestingArea,
         titleAndEquationsBox,
         dynamicDataDisplayBox,
-        expectationValueControlParent
+        expectationValueControlParent,
+        playPauseStepButtonGroup
       ]
     }, providedOptions );
 
     super( options );
-
-    // Add a play/pause button to the view IF the model is in many-photon mode.
-    if ( model.laser.emissionMode === 'manyPhotons' ) {
-      const playPauseButton = new PlayPauseButton( model.isPlayingProperty, {
-        radius: 25,
-        centerX: photonTestingArea.x,
-        bottom: photonPolarizationAngleControl.bottom,
-        tandem: providedOptions.tandem.createTandem( 'playPauseButton' )
-      } );
-      this.addChild( playPauseButton );
-    }
 
     this.photonTestingArea = photonTestingArea;
   }
@@ -223,3 +227,5 @@ export default class PhotonsExperimentSceneView extends Node {
 }
 
 quantumMeasurement.register( 'PhotonsExperimentSceneView', PhotonsExperimentSceneView );
+
+export default PhotonsExperimentSceneView;
