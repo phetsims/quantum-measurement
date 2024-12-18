@@ -36,7 +36,10 @@ type SelfOptions = {
 };
 type PhotonsExperimentSceneModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
-const PATH_LENGTH_UNIT = 0.2;
+// distances used to position the elements in the scene, in meters
+const LASER_TO_BEAM_SPLITTER_DISTANCE = 0.15;
+const BEAM_SPLITTER_TO_MIRROR_DISTANCE = 0.11;
+const TOTAL_PHOTON_PATH_LENGTH = LASER_TO_BEAM_SPLITTER_DISTANCE + BEAM_SPLITTER_TO_MIRROR_DISTANCE + 0.09;
 
 export default class PhotonsExperimentSceneModel {
 
@@ -91,34 +94,45 @@ export default class PhotonsExperimentSceneModel {
       }
     } );
 
+    // The polarizing beam splitter that the photons will encounter.  This is in the middle of the model, everything
+    // else is positioned around it.
     this.polarizingBeamSplitter = new PolarizingBeamSplitter( Vector2.ZERO, {
       tandem: providedOptions.tandem.createTandem( 'polarizingBeamSplitter' ),
       particleBehaviorModeProperty: this.particleBehaviorModeProperty
     } );
 
     // Create the laser that will emit the photons that will be sent toward the polarizing beam splitter.
-    this.laser = new Laser( new Vector2( -0.15, 0 ), this.photonCollection, {
+    this.laser = new Laser( new Vector2( -LASER_TO_BEAM_SPLITTER_DISTANCE, 0 ), this.photonCollection, {
       emissionMode: providedOptions.photonEmissionMode,
       tandem: providedOptions.tandem.createTandem( 'laser' )
     } );
 
-    // Create the photon detectors that will measure the rate at which photons are arriving after being either reflected
-    // or transmitted by the polarizing beam splitter.
-    this.verticalPolarizationDetector = new PhotonDetector( new Vector2( 0, PATH_LENGTH_UNIT ), 'up', {
-      displayMode: this.laser.emissionMode === 'singlePhoton' ? 'count' : 'rate',
-      tandem: providedOptions.tandem.createTandem( 'verticalPolarizationDetector' )
-    } );
-
-    const mirrorDistanceProportion = 0.5;
-    const horizontalDetectorXPosition = mirrorDistanceProportion * PATH_LENGTH_UNIT;
-    const horizontalDetectorYPosition = ( 1 - mirrorDistanceProportion ) * PATH_LENGTH_UNIT;
-    this.horizontalPolarizationDetector = new PhotonDetector( new Vector2( horizontalDetectorXPosition, -horizontalDetectorYPosition ), 'down', {
-      displayMode: this.laser.emissionMode === 'singlePhoton' ? 'count' : 'rate',
-      tandem: providedOptions.tandem.createTandem( 'horizontalPolarizationDetector' )
-    } );
-    this.mirror = new Mirror( new Vector2( horizontalDetectorXPosition, 0 ), {
+    // The mirror that reflects the photons that pass through the beam splitter downward to the detector.
+    this.mirror = new Mirror( new Vector2( BEAM_SPLITTER_TO_MIRROR_DISTANCE, 0 ), {
       tandem: providedOptions.tandem.createTandem( 'mirror' )
     } );
+
+    // Create the photon detectors that will measure the rate at which photons are arriving after being either reflected
+    // or transmitted by the polarizing beam splitter.
+    this.verticalPolarizationDetector = new PhotonDetector(
+      new Vector2( 0, TOTAL_PHOTON_PATH_LENGTH - LASER_TO_BEAM_SPLITTER_DISTANCE ),
+      'up',
+      {
+        displayMode: this.laser.emissionMode === 'singlePhoton' ? 'count' : 'rate',
+        tandem: providedOptions.tandem.createTandem( 'verticalPolarizationDetector' )
+      }
+    );
+    this.horizontalPolarizationDetector = new PhotonDetector(
+      new Vector2(
+        BEAM_SPLITTER_TO_MIRROR_DISTANCE,
+        -( TOTAL_PHOTON_PATH_LENGTH - LASER_TO_BEAM_SPLITTER_DISTANCE - BEAM_SPLITTER_TO_MIRROR_DISTANCE )
+      ),
+      'down',
+      {
+        displayMode: this.laser.emissionMode === 'singlePhoton' ? 'count' : 'rate',
+        tandem: providedOptions.tandem.createTandem( 'horizontalPolarizationDetector' )
+      }
+    );
 
     // Create a derived Property for the normalized expectation value.
     this.normalizedExpectationValueProperty = new DerivedProperty(
