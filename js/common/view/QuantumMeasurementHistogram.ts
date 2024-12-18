@@ -8,6 +8,7 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
@@ -251,6 +252,19 @@ class QuantumMeasurementHistogram extends Node {
     xAxisRightLabel.centerX = RIGHT_HISTOGRAM_BAR_CENTER_X;
     xAxisRightLabel.top = xAxis.centerY + axisLabelMargin;
 
+    const leftPercentageProperty = new NumberProperty( 0, {
+      tandem: options.tandem.createTandem( 'leftPercentageProperty' ),
+      range: new Range( 0, 100 ),
+      units: '%',
+      phetioReadOnly: true
+    } );
+    const rightPercentageProperty = new NumberProperty( 0, {
+      tandem: options.tandem.createTandem( 'rightPercentageProperty' ),
+      range: new Range( 0, 100 ),
+      units: '%',
+      phetioReadOnly: true
+    } );
+
     Multilink.multilink(
       [
         leftNumberProperty,
@@ -258,9 +272,11 @@ class QuantumMeasurementHistogram extends Node {
       ],
       ( leftNumber, rightNumber ) => {
         const leftProportion = totalNumberProperty.value ? leftNumber / totalNumberProperty.value : 0;
+        leftPercentageProperty.value = leftProportion * 100;
         leftHistogramBar.setRect( 0, 0, options.barWidth, leftProportion * maxBarHeight );
         leftHistogramBar.bottom = xAxis.centerY;
         const rightProportion = totalNumberProperty.value ? rightNumber / totalNumberProperty.value : 0;
+        rightPercentageProperty.value = rightProportion * 100;
         rightHistogramBar.setRect( 0, 0, options.barWidth, rightProportion * maxBarHeight );
         rightHistogramBar.bottom = xAxis.centerY;
 

@@ -93,6 +93,7 @@ export default class SpinMeasurementArea extends VBox {
       new MeasurementDeviceNode( model.measurementLines[ 2 ], modelViewTransform, { tandem: tandem.createTandem( 'thirdMeasurementDevice' ) } )
     ];
 
+    let histogramCounter = 1;
     const createPercentageHistogram = ( sternGerlach: SternGerlach, visibleProperty: TReadOnlyProperty<boolean> ) => {
 
       const spinUpLabelStringProperty = new DerivedStringProperty(
@@ -114,6 +115,8 @@ export default class SpinMeasurementArea extends VBox {
                                               SGSubX + QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER
       );
 
+      const tandemName = `histogram${histogramCounter++}`;
+
       return new HistogramWithExpectedValue(
         sternGerlach.upCounterProperty,
         sternGerlach.downCounterProperty,
@@ -129,7 +132,7 @@ export default class SpinMeasurementArea extends VBox {
           scale: 0.8,
           leftFillColorProperty: QuantumMeasurementColors.tailsColorProperty,
           visibleProperty: visibleProperty,
-          tandem: Tandem.OPT_OUT,
+          tandem: tandem.createTandem( tandemName ),
           numberDisplayOptions: {
             textOptions: {
               font: new PhetFont( 17 )
