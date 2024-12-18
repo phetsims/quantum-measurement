@@ -10,6 +10,7 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -128,19 +129,23 @@ export default class CoinExperimentMeasurementArea extends VBox {
         tandemName: `${valueText}CoinsRadioButton`
       };
     };
+
+    const numberOfCoinsRadioButtonGroupTandem = tandem.createTandem( 'numberOfCoinsRadioButtonGroup' );
     const numberOfCoinsRadioButtonGroup = new VerticalAquaRadioButtonGroup(
       sceneModel.coinSet.numberOfActiveSystemsProperty,
       MULTI_COIN_EXPERIMENT_QUANTITIES.map( quantity => createRadioButtonGroupItem( quantity ) ),
       {
         spacing: 10,
-        tandem: tandem.createTandem( 'numberOfCoinsRadioButtonGroup' )
+        tandem: numberOfCoinsRadioButtonGroupTandem.createTandem( 'radioButtonGroup' ),
+        phetioVisiblePropertyInstrumented: false
       }
     );
 
     const numberOfCoinsSelector = new VBox( {
       children: [ numberOfCoinsSelectorTitle, numberOfCoinsRadioButtonGroup ],
       spacing: 12,
-      visibleProperty: sceneModel.preparingExperimentProperty
+      visibleProperty: new GatedVisibleProperty( sceneModel.preparingExperimentProperty, numberOfCoinsRadioButtonGroupTandem ),
+      tandem: numberOfCoinsRadioButtonGroupTandem
     } );
 
     const measuredCoinsPixelRepresentation = new CoinSetPixelRepresentation(
