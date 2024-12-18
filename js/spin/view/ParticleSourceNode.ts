@@ -9,6 +9,7 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
@@ -55,8 +56,8 @@ export default class ParticleSourceNode extends Node {
 
     const particleSourceBarrelWidth = PARTICLE_SOURCE_WIDTH / 5;
     const particleSourceBarrel = new Path( new Shape()
-      .roundRect( PARTICLE_SOURCE_WIDTH - particleSourceBarrelWidth / 2,
-        PARTICLE_SOURCE_HEIGHT / 2 - particleSourceBarrelWidth / 2, particleSourceBarrelWidth, particleSourceBarrelWidth, 4, 4 ),
+        .roundRect( PARTICLE_SOURCE_WIDTH - particleSourceBarrelWidth / 2,
+          PARTICLE_SOURCE_HEIGHT / 2 - particleSourceBarrelWidth / 2, particleSourceBarrelWidth, particleSourceBarrelWidth, 4, 4 ),
       {
         stroke: 'black',
         lineWidth: 0.5,
@@ -71,13 +72,14 @@ export default class ParticleSourceNode extends Node {
     const currentlyShootingParticlesProperty = new BooleanProperty( false );
 
     // Button for 'single' mode
+    const shootParticleButtonTandem = tandem.createTandem( 'shootParticleButton' );
     const shootParticleButton = new RoundMomentaryButton<boolean>(
       currentlyShootingParticlesProperty, false, true, {
         scale: 0.7,
         baseColor: QuantumMeasurementColors.downColorProperty,
-        visibleProperty: DerivedProperty.not( particleSourceModel.isContinuousModeProperty ),
+        visibleProperty: new GatedVisibleProperty( DerivedProperty.not( particleSourceModel.isContinuousModeProperty ), shootParticleButtonTandem ),
         center: particleSourceRectangle.center,
-        tandem: tandem.createTandem( 'shootParticleButton' )
+        tandem: shootParticleButtonTandem
       } );
 
     currentlyShootingParticlesProperty.link( shooting => {
@@ -88,12 +90,13 @@ export default class ParticleSourceNode extends Node {
 
     // Slider for 'continuous' mode
     const sliderRange = particleSourceModel.particleAmountProperty.range;
+    const particleAmountSliderTandem = tandem.createTandem( 'particleAmountSlider' );
     const particleAmountSlider = new HSlider( particleSourceModel.particleAmountProperty, sliderRange, {
       thumbFill: QuantumMeasurementColors.downColorProperty,
-      visibleProperty: particleSourceModel.isContinuousModeProperty,
+      visibleProperty: new GatedVisibleProperty( particleSourceModel.isContinuousModeProperty, particleAmountSliderTandem ),
       center: particleSourceRectangle.center,
       trackSize: new Dimension2( PARTICLE_SOURCE_WIDTH * 0.7, 1 ),
-      tandem: tandem.createTandem( 'particleAmountSlider' ),
+      tandem: particleAmountSliderTandem,
       majorTickLength: 15
     } );
 
@@ -105,18 +108,47 @@ export default class ParticleSourceNode extends Node {
     particleAmountSlider.addMajorTick( sliderRange.min + 2 * ( sliderRange.max - sliderRange.min ) / 3 );
 
     const particleSourceApparatus = new Node( {
-        children: [
-          particleSourceBarrel,
-          particleSourceRectangle,
-          shootParticleButton,
-          particleAmountSlider
-        ]
-      } );
+      children: [
+        particleSourceBarrel,
+        particleSourceRectangle,
+        shootParticleButton,
+        particleAmountSlider
+      ]
+    } );
 
     particleSourceApparatus.center = modelViewTransform.modelToViewPosition( particleSourceModel.positionProperty.value );
 
+    const sourceModeRadioButtonGroup = new AquaRadioButtonGroup( particleSourceModel.sourceModeProperty, SourceMode.enumeration.values.map( sourceMode => {
+      return {
+        value: sourceMode,
+        createNode: () => new Text( sourceMode.sourceName, { font: new PhetFont( 15 ) } ),
+        options: {
+          accessibleName: sourceMode.sourceName
+        },
+        tandemName: `${sourceMode.tandemName}RadioButton`
+      };
+    } ), {
+      tandem: tandem.createTandem( 'sourceModeRadioButtonGroup' ),
+      spacing: SPACING
+    } );
+    const sourceModeTitle = new RichText( QuantumMeasurementStrings.sourceModeStringProperty, {
+      font: new PhetFont( { size: 20, weight: 'bold' } ),
+      visibleProperty: sourceModeRadioButtonGroup.visibleProperty
+    } );
+
+    const sourceModeBox = new VBox( {
+      top: particleSourceApparatus.bottom + SPACING,
+      left: particleSourceApparatus.left,
+      spacing: SPACING,
+      children: [
+        sourceModeTitle,
+        sourceModeRadioButtonGroup
+      ]
+    } );
+
     super( {
-      tandem: tandem.createTandem( 'particleSourceNode' ),
+      tandem: tandem,
+      phetioVisiblePropertyInstrumented: false,
       children: [
         new HBox( {
           bottom: particleSourceApparatus.top - SPACING,
@@ -128,27 +160,7 @@ export default class ParticleSourceNode extends Node {
           ]
         } ),
         particleSourceApparatus,
-        new VBox( {
-          top: particleSourceApparatus.bottom + SPACING,
-          left: particleSourceApparatus.left,
-          spacing: SPACING,
-          children: [
-            new RichText( QuantumMeasurementStrings.sourceModeStringProperty, { font: new PhetFont( { size: 20, weight: 'bold' } ) } ),
-            new AquaRadioButtonGroup( particleSourceModel.sourceModeProperty, SourceMode.enumeration.values.map( sourceMode => {
-              return {
-                value: sourceMode,
-                createNode: () => new Text( sourceMode.sourceName, { font: new PhetFont( 15 ) } ),
-                options: {
-                  accessibleName: sourceMode.sourceName
-                },
-                tandemName: `${sourceMode.tandemName}RadioButton`
-              };
-            } ), {
-              tandem: tandem.createTandem( 'sourceModeRadioButtonGroup' ),
-              spacing: SPACING
-            } )
-          ]
-        } )
+        sourceModeBox
       ]
     } );
   }
