@@ -11,7 +11,6 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import Property from '../../../../axon/js/Property.js';
-import TProperty from '../../../../axon/js/TProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -42,7 +41,7 @@ const LASER_TO_BEAM_SPLITTER_DISTANCE = 0.15;
 const BEAM_SPLITTER_TO_MIRROR_DISTANCE = 0.11;
 const TOTAL_PHOTON_PATH_LENGTH = LASER_TO_BEAM_SPLITTER_DISTANCE + BEAM_SPLITTER_TO_MIRROR_DISTANCE + 0.09;
 
-export default class PhotonsExperimentSceneModel {
+class PhotonsExperimentSceneModel {
 
   // The polarizing beam splitter that the photons will encounter.
   public readonly polarizingBeamSplitter: PolarizingBeamSplitter;
@@ -74,7 +73,7 @@ export default class PhotonsExperimentSceneModel {
 
   // Whether the photons behave as classical or quantum particles.  When they are classical, they will choose a path
   // at the beam splitter.  When they are quantum, they will be in a superposition of states.
-  public readonly particleBehaviorModeProperty: TProperty<SystemType>;
+  public readonly particleBehaviorModeProperty: Property<SystemType>;
 
   public constructor( providedOptions: PhotonsExperimentSceneModelOptions ) {
 
@@ -216,6 +215,7 @@ export default class PhotonsExperimentSceneModel {
     this.verticalPolarizationDetector.reset();
     this.horizontalPolarizationDetector.reset();
     this.isPlayingProperty.reset();
+    this.particleBehaviorModeProperty.reset();
   }
 
   public stepForwardInTime( dt: number ): void {
@@ -352,3 +352,5 @@ export default class PhotonsExperimentSceneModel {
 }
 
 quantumMeasurement.register( 'PhotonsExperimentSceneModel', PhotonsExperimentSceneModel );
+
+export default PhotonsExperimentSceneModel;
