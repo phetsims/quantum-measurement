@@ -82,9 +82,10 @@ class PhotonDetector implements TPhotonInteraction {
       position.plus( new Vector2( -this.apertureDiameter / 2, 0 ) ),
       position.plus( new Vector2( this.apertureDiameter / 2, 0 ) )
     );
+    const apertureLineYOffset = this.detectionDirection === 'up' ? this.apertureHeight : -this.apertureHeight;
     this.absorptionLine = new Line(
-      position.plus( new Vector2( -this.apertureDiameter / 2, this.detectionDirection === 'up' ? this.apertureHeight : -this.apertureHeight ) ),
-      position.plus( new Vector2( this.apertureDiameter / 2, this.detectionDirection === 'up' ? this.apertureHeight : -this.apertureHeight ) )
+      position.plus( new Vector2( -this.apertureDiameter / 2, apertureLineYOffset ) ),
+      position.plus( new Vector2( this.apertureDiameter / 2, apertureLineYOffset ) )
     );
 
     this.detectionRateProperty = new AveragingCounterNumberProperty( {
@@ -130,15 +131,15 @@ class PhotonDetector implements TPhotonInteraction {
 
       // If, by any chance, the photon would cross BOTH the detection and absorption lines, we'll consider it to be
       // detected and absorbed.
-      if ( detectionIntersectionPoint !== null && absorptionIntersectionPoint !== null ) {
+      if ( detectionIntersectionPoint && absorptionIntersectionPoint ) {
         mapOfStatesToInteractions.set( photonState, { interactionType: 'detectedAndAbsorbed', detectionInfo: { detector: this } } );
       }
       // If the photon would cross the detection line, but not the absorption line, we'll consider it to be detected.
-      else if ( detectionIntersectionPoint !== null ) {
+      else if ( detectionIntersectionPoint ) {
         mapOfStatesToInteractions.set( photonState, { interactionType: 'detected', detectionInfo: { detector: this } } );
       }
       // If the photon would cross the absorption line, but not the detection line, we'll consider it to be absorbed.
-      else if ( absorptionIntersectionPoint !== null ) {
+      else if ( absorptionIntersectionPoint ) {
         mapOfStatesToInteractions.set( photonState, { interactionType: 'absorbed' } );
       }
     } );

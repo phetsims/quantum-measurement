@@ -26,7 +26,7 @@ export const RIGHT = new Vector2( 1, 0 );
 // the resulting states will either be measured as vertical or horizontal.
 export type PossiblePolarizationResult = 'vertical' | 'horizontal';
 
-export default class Photon {
+class Photon {
 
   // the angle of polarization for this photon, in degrees
   public polarizationAngle: number;
@@ -140,3 +140,5 @@ export type PhotonStateObject = {
 };
 
 quantumMeasurement.register( 'Photon', Photon );
+
+export default Photon;

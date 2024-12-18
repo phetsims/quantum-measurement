@@ -28,6 +28,7 @@ import Mirror from './Mirror.js';
 import Photon, { PHOTON_SPEED } from './Photon.js';
 import { PhotonCollection } from './PhotonCollection.js';
 import PhotonDetector, { COUNT_RANGE } from './PhotonDetector.js';
+import { PhotonMotionState } from './PhotonMotionState.js';
 import PolarizingBeamSplitter from './PolarizingBeamSplitter.js';
 import { TPhotonInteraction } from './TPhotonInteraction.js';
 
@@ -236,12 +237,16 @@ export default class PhotonsExperimentSceneModel {
     // beam splitter, mirror, and photon detectors.
     this.photonCollection.photons.forEach( photon => {
 
-      let interactionCount = 0;
+      const hadInteractionMap: Map<PhotonMotionState, boolean> = new Map<PhotonMotionState, boolean>();
 
       for ( const potentiallyInteractingElement of potentialInteractors ) {
 
         // Test for interactions with the potential interactors.
         const interactions = potentiallyInteractingElement.testForPhotonInteraction( photon, dt );
+
+        interactions.forEach( ( interaction, photonState ) => {
+          hadInteractionMap.set( photonState, true );
+        } );
 
         // For each of the interactions, update the photon state.
         for ( const [ photonState, interaction ] of interactions ) {
@@ -263,11 +268,8 @@ export default class PhotonsExperimentSceneModel {
 
               // Step the photon the remaining time.
               photonState.step( dt - dtToReflectionPoint );
-
-              interactionCount++;
             }
-
-            if ( interaction.interactionType === 'split' ) {
+            else if ( interaction.interactionType === 'split' ) {
 
               assert && assert( interaction.splitInfo, 'split info missing' );
               assert && assert( photon.possibleMotionStates.length === 1, 'there should be 1 motion state' );
@@ -287,9 +289,13 @@ export default class PhotonsExperimentSceneModel {
                 interaction.splitInfo!.splitStates[ 1 ].direction,
                 interaction.splitInfo!.splitStates[ 1 ].probability
               );
-            }
 
-            if ( interaction.interactionType === 'detected' || interaction.interactionType === 'detectedAndAbsorbed' ) {
+              hadInteractionMap.set( photon.possibleMotionStates[ 1 ], true );
+
+              // Step the motion states the remaining time.
+              photon.possibleMotionStates.forEach( state => state.step( dt - dtToSplitPoint ) );
+            }
+            else if ( interaction.interactionType === 'detected' || interaction.interactionType === 'detectedAndAbsorbed' ) {
 
               const detector = interaction.detectionInfo!.detector;
 
@@ -300,31 +306,32 @@ export default class PhotonsExperimentSceneModel {
                 photon.setMotionStateProbability( photonState, 1 );
                 detector.detectionCountProperty.value = Math.min( detector.detectionCountProperty.value + 1, COUNT_RANGE.max );
                 detector.detectionRateProperty.countEvent();
-
               }
               else {
 
-                // If this photon state does not trigger the detector the associated probability goes to 0%, which will make
-                // the other state's probability 100%.
+                // If this photon state does not trigger the detector the associated probability goes to 0, which will
+                // make the other state's probability 1.
                 photon.setMotionStateProbability( photonState, 0 );
               }
-            }
 
-            if ( interaction.interactionType === 'absorbed' || interaction.interactionType === 'detectedAndAbsorbed' ) {
+              photonState.step( dt );
+            }
+            else if ( interaction.interactionType === 'absorbed' || interaction.interactionType === 'detectedAndAbsorbed' ) {
 
               // This interaction indicates that the photon was absorbed, so it should be removed from the photon
               // collection.
               photonsToRemove.push( photon );
-
-              interactionCount++;
             }
           }
         }
       }
 
-      if ( interactionCount === 0 ) {
-        photon.step( dt );
-      }
+      // If there were no interactions, step the photon forward in time.
+      photon.possibleMotionStates.forEach( state => {
+        if ( !hadInteractionMap.get( state ) ) {
+          state.step( dt );
+        }
+      } );
     } );
 
     // Remove any photons that were absorbed by something.
