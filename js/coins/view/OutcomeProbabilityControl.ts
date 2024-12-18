@@ -146,20 +146,29 @@ export default class OutcomeProbabilityControl extends VBox {
       }
     );
 
+    let upProbabilityValueControl: Node;
+    let downProbabilityValueControl: Node;
+    let quantumReadout: RichText;
+
     let children: Node[];
     if ( systemType === 'classical' ) {
+
+      upProbabilityValueControl = new ProbabilityValueControl(
+        classicalUpTitleProperty,
+        outcomeProbabilityProperty,
+        providedOptions.tandem.createTandem( 'classicalUpProbabilityControl' )
+      );
+
+      downProbabilityValueControl = new ProbabilityValueControl(
+        classicalDownTitleProperty,
+        inverseOutcomeProbabilityProperty,
+        providedOptions.tandem.createTandem( 'classicalDownProbabilityControl' )
+      );
+
       children = [
         title,
-        new ProbabilityValueControl(
-          classicalUpTitleProperty,
-          outcomeProbabilityProperty,
-          providedOptions.tandem.createTandem( 'classicalUpProbabilityControl' )
-        ),
-        new ProbabilityValueControl(
-          classicalDownTitleProperty,
-          inverseOutcomeProbabilityProperty,
-          providedOptions.tandem.createTandem( 'classicalDownProbabilityControl' )
-        )
+        upProbabilityValueControl,
+        downProbabilityValueControl
       ];
     }
     else {
@@ -179,23 +188,36 @@ export default class OutcomeProbabilityControl extends VBox {
         }
       );
 
-      const quantumReadout = new RichText( quantumStateReadoutStringProperty, { font: TITLE_AND_LABEL_FONT } );
+      quantumReadout = new RichText( quantumStateReadoutStringProperty, { font: TITLE_AND_LABEL_FONT } );
+
+      upProbabilityValueControl = new ProbabilityValueControl(
+        quantumUpTitleProperty,
+        outcomeProbabilityProperty,
+        providedOptions.tandem.createTandem( 'quantumUpProbabilityControl' )
+      );
+      downProbabilityValueControl = new ProbabilityValueControl(
+        quantumDownTitleProperty,
+        inverseOutcomeProbabilityProperty,
+        providedOptions.tandem.createTandem( 'quantumDownProbabilityControl' )
+      );
 
       children = [
         title,
         quantumReadout,
-        new ProbabilityValueControl(
-          quantumUpTitleProperty,
-          outcomeProbabilityProperty,
-          providedOptions.tandem.createTandem( 'quantumUpProbabilityControl' )
-        ),
-        new ProbabilityValueControl(
-          quantumDownTitleProperty,
-          inverseOutcomeProbabilityProperty,
-          providedOptions.tandem.createTandem( 'quantumDownProbabilityControl' )
-        )
+        upProbabilityValueControl,
+        downProbabilityValueControl
       ];
     }
+
+    Multilink.multilink(
+      [
+        upProbabilityValueControl.visibleProperty,
+        downProbabilityValueControl.visibleProperty
+      ], ( upVisible, downVisible ) => {
+        title.visible = upVisible || downVisible;
+        quantumReadout && quantumReadout.setVisible( upVisible || downVisible );
+      }
+    );
 
     const options = optionize<OutcomeProbabilityControlOptions, SelfOptions, VBoxOptions>()( {
       children: children,
