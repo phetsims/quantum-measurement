@@ -82,30 +82,19 @@ class PhotonTestingArea extends Node {
 
     const verticalPolarizationDetector = new PhotonDetectorNode(
       model.verticalPolarizationDetector,
-      photonTestingAreaModelViewTransform,
-      {
-        tandem: providedOptions.tandem.createTandem( 'verticalPolarizationDetector' )
-      }
+      photonTestingAreaModelViewTransform
     );
     const horizontalPolarizationDetector = new PhotonDetectorNode(
       model.horizontalPolarizationDetector,
-      photonTestingAreaModelViewTransform,
-      {
-        tandem: providedOptions.tandem.createTandem( 'horizontalPolarizationDetector' )
-      }
+      photonTestingAreaModelViewTransform
     );
 
     const polarizingBeamSplitterNode = new PolarizingBeamSplitterNode(
       model.polarizingBeamSplitter,
-      photonTestingAreaModelViewTransform,
-      {
-        tandem: providedOptions.tandem.createTandem( 'polarizingBeamSplitterNode' )
-      }
+      photonTestingAreaModelViewTransform
     );
 
-    const mirror = new MirrorNode( model.mirror, photonTestingAreaModelViewTransform, {
-      tandem: providedOptions.tandem.createTandem( 'mirror' )
-    } );
+    const mirror = new MirrorNode( model.mirror, photonTestingAreaModelViewTransform );
 
     const options = optionize<PhotonTestingAreaOptions, SelfOptions, NodeOptions>()( {
       children: [

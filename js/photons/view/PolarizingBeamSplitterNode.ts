@@ -24,7 +24,7 @@ export default class PolarizingBeamSplitterNode extends Node {
 
   public constructor( model: PolarizingBeamSplitter,
                       modelViewTransform: ModelViewTransform2,
-                      providedOptions: PolarizingBeamSplitterNodeOptions ) {
+                      providedOptions?: PolarizingBeamSplitterNodeOptions ) {
 
     const nodeSize = new Dimension2(
       modelViewTransform.modelToViewDeltaX( model.size.width ),

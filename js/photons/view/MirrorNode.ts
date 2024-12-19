@@ -24,7 +24,7 @@ export default class MirrorNode extends Node {
 
   public constructor( model: Mirror,
                       modelViewTransform: ModelViewTransform2,
-                      providedOptions: MirrorNodeOptions ) {
+                      providedOptions?: MirrorNodeOptions ) {
 
     // Define an offset for positioning the mirror.  This is needed because the photons reflect based on their center
     // positions, and if the mirror isn't offset a bit, the photons can appear to go partially through the mirror.

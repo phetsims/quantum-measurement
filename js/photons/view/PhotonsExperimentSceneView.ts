@@ -90,8 +90,7 @@ class PhotonsExperimentSceneView extends Node {
         cornerRadius: 5,
         xMargin: 20,
         yMargin: 10,
-        align: 'center',
-        tandem: providedOptions.tandem.createTandem( 'averagePolarizationTitlePanel' )
+        align: 'center'
       }
     );
 

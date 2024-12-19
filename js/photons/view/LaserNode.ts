@@ -57,7 +57,8 @@ export default class LaserNode extends Node {
       },
       right: modelViewTransform.modelToViewX( model.position.x ),
       centerY: modelViewTransform.modelToViewY( model.position.y ),
-      tandem: providedOptions.tandem.createTandem( 'laserPointerNode' )
+      tandem: providedOptions.tandem.createTandem( 'laserPointerNode' ),
+      phetioVisiblePropertyInstrumented: false
     } );
     const caption = new Text( QuantumMeasurementStrings.photonSourceStringProperty, {
       font: new PhetFont( 12 ),
@@ -103,7 +104,8 @@ export default class LaserNode extends Node {
       nodeChildren.push( labelAlignBox );
     }
     const options = optionize<LaserNodeOptions, SelfOptions, NodeOptions>()( {
-      children: nodeChildren
+      children: nodeChildren,
+      phetioVisiblePropertyInstrumented: false
     }, providedOptions );
 
     super( options );
