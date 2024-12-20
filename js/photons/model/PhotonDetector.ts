@@ -132,14 +132,16 @@ class PhotonDetector extends PhetioObject implements TPhotonInteraction {
         dt
       );
 
-      // If, by any chance, the photon would cross BOTH the detection and absorption lines, we'll consider it to be
-      // detected and absorbed.
-      if ( detectionIntersectionPoint && absorptionIntersectionPoint ) {
-        mapOfStatesToInteractions.set( photonState, { interactionType: 'detectedAndAbsorbed', detectionInfo: { detector: this } } );
-      }
+      // Make sure the photon didn't cross both the detection and the absorption lines.  If this starts happening, the
+      // model may need to be extended to handle this case.
+      assert && assert(
+        !( detectionIntersectionPoint && absorptionIntersectionPoint ),
+        'detection and absorption lines both crossed'
+      );
+
       // If the photon would cross the detection line, but not the absorption line, we'll consider it to be detected.
-      else if ( detectionIntersectionPoint ) {
-        mapOfStatesToInteractions.set( photonState, { interactionType: 'detected', detectionInfo: { detector: this } } );
+      if ( detectionIntersectionPoint ) {
+        mapOfStatesToInteractions.set( photonState, { interactionType: 'detectorReached', detectionInfo: { detector: this } } );
       }
       // If the photon would cross the absorption line, but not the detection line, we'll consider it to be absorbed.
       else if ( absorptionIntersectionPoint ) {

@@ -28,6 +28,7 @@ import Photon, { PHOTON_SPEED } from './Photon.js';
 import { PhotonCollection } from './PhotonCollection.js';
 import PhotonDetector, { COUNT_RANGE } from './PhotonDetector.js';
 import { PhotonMotionState } from './PhotonMotionState.js';
+import { PhotonInteractionTestResult } from './PhotonsModel.js';
 import PolarizingBeamSplitter from './PolarizingBeamSplitter.js';
 import { TPhotonInteraction } from './TPhotonInteraction.js';
 
@@ -237,21 +238,33 @@ class PhotonsExperimentSceneModel {
     // beam splitter, mirror, and photon detectors.
     this.photonCollection.photons.forEach( photon => {
 
-      const hadInteractionMap: Map<PhotonMotionState, boolean> = new Map<PhotonMotionState, boolean>();
-
+      // Check for interactions between the current photon and the various elements in the scene.
+      const photonStateToInteractionMap: Map<PhotonMotionState, PhotonInteractionTestResult> =
+        new Map<PhotonMotionState, PhotonInteractionTestResult>();
       for ( const potentiallyInteractingElement of potentialInteractors ) {
-
-        // Test for interactions with the potential interactors.
         const interactions = potentiallyInteractingElement.testForPhotonInteraction( photon, dt );
-
         interactions.forEach( ( interaction, photonState ) => {
-          hadInteractionMap.set( photonState, true );
+
+          // The model is designed such that there should really be at most one interaction per photon state.  Make sure
+          // that's the case.
+          assert && assert(
+            !photonStateToInteractionMap.has( photonState ),
+            'there should only be one interaction per photon state at one time'
+          );
+
+          if ( !photonStateToInteractionMap.has( photonState ) ) {
+            photonStateToInteractionMap.set( photonState, interaction );
+          }
         } );
+      }
 
-        // For each of the interactions, update the photon state.
-        for ( const [ photonState, interaction ] of interactions ) {
+      // Handle interactions - or lack thereof - between the photon's possible states and the various elements in the
+      // scene.
+      photon.possibleMotionStates.forEach( photonMotionState => {
 
+        if ( photonStateToInteractionMap.has( photonMotionState ) ) {
           if ( !photonsToRemove.includes( photon ) ) {
+            const interaction = photonStateToInteractionMap.get( photonMotionState )!;
 
             if ( interaction.interactionType === 'reflected' ) {
 
@@ -259,15 +272,15 @@ class PhotonsExperimentSceneModel {
 
               // This photon state was reflected.  First step it to the reflection point.
               const dtToReflectionPoint =
-                photonState.position.distance( interaction.reflectionInfo!.reflectionPoint ) / PHOTON_SPEED;
+                photonMotionState.position.distance( interaction.reflectionInfo!.reflectionPoint ) / PHOTON_SPEED;
               assert && assert( dtToReflectionPoint <= dt );
-              photonState.step( dtToReflectionPoint );
+              photonMotionState.step( dtToReflectionPoint );
 
               // Change the direction of the photon to the reflection direction.
-              photonState.direction = interaction.reflectionInfo!.reflectionDirection;
+              photonMotionState.direction = interaction.reflectionInfo!.reflectionDirection;
 
               // Step the photon the remaining time.
-              photonState.step( dt - dtToReflectionPoint );
+              photonMotionState.step( dt - dtToReflectionPoint );
             }
             else if ( interaction.interactionType === 'split' ) {
 
@@ -275,48 +288,46 @@ class PhotonsExperimentSceneModel {
               assert && assert( photon.possibleMotionStates.length === 1, 'there should be 1 motion state' );
 
               // The resulting interaction was a split of the photon state.  First, step the state to the split point.
-              const dtToSplitPoint = photonState.position.distance( interaction.splitInfo!.splitPoint ) / PHOTON_SPEED;
+              const dtToSplitPoint = photonMotionState.position.distance( interaction.splitInfo!.splitPoint ) / PHOTON_SPEED;
               assert && assert( dtToSplitPoint <= dt );
-              photonState.step( dtToSplitPoint );
+              photonMotionState.step( dtToSplitPoint );
 
               // Update the existing motion state based on the first split info element.
-              photonState.direction = interaction.splitInfo!.splitStates[ 0 ].direction;
-              photonState.probability = interaction.splitInfo!.splitStates[ 0 ].probability;
+              photonMotionState.direction = interaction.splitInfo!.splitStates[ 0 ].direction;
+              photonMotionState.probability = interaction.splitInfo!.splitStates[ 0 ].probability;
 
               // Add a new state to the photon for the second split info element.
               photon.addMotionState(
-                photonState.position,
+                photonMotionState.position,
                 interaction.splitInfo!.splitStates[ 1 ].direction,
                 interaction.splitInfo!.splitStates[ 1 ].probability
               );
 
-              hadInteractionMap.set( photon.possibleMotionStates[ 1 ], true );
-
               // Step the motion states the remaining time.
               photon.possibleMotionStates.forEach( state => state.step( dt - dtToSplitPoint ) );
             }
-            else if ( interaction.interactionType === 'detected' || interaction.interactionType === 'detectedAndAbsorbed' ) {
+            else if ( interaction.interactionType === 'detectorReached' ) {
 
               const detector = interaction.detectionInfo!.detector;
 
-              // Evaluate the detection result based on the probability of the photon actually being here.
-              if ( dotRandom.nextDouble() < photonState.probability ) {
+              // Evaluate the detection result based on the probability of the photon being at this position.
+              if ( dotRandom.nextDouble() < photonMotionState.probability ) {
 
-                // The photon is being absorbed by the detector.
-                photon.setMotionStateProbability( photonState, 1 );
+                // The photon is being detected by this detector.
+                photon.setMotionStateProbability( photonMotionState, 1 );
                 detector.detectionCountProperty.value = Math.min( detector.detectionCountProperty.value + 1, COUNT_RANGE.max );
                 detector.detectionRateProperty.countEvent();
               }
               else {
 
-                // If this photon state does not trigger the detector the associated probability goes to 0, which will
-                // make the other state's probability 1.
-                photon.setMotionStateProbability( photonState, 0 );
+                // The photon reached the detector but was not detected.  This means that its state should collapse such
+                // that there is a 100% probability of it being detected by the other detector.
+                photon.setMotionStateProbability( photonMotionState, 0 );
               }
 
-              photonState.step( dt );
+              photonMotionState.step( dt );
             }
-            else if ( interaction.interactionType === 'absorbed' || interaction.interactionType === 'detectedAndAbsorbed' ) {
+            else if ( interaction.interactionType === 'absorbed' ) {
 
               // This interaction indicates that the photon was absorbed, so it should be removed from the photon
               // collection.
@@ -324,17 +335,15 @@ class PhotonsExperimentSceneModel {
             }
           }
         }
-      }
+        else {
 
-      // If there were no interactions, step the photon forward in time.
-      photon.possibleMotionStates.forEach( state => {
-        if ( !hadInteractionMap.get( state ) ) {
-          state.step( dt );
+          // There was no interaction for this photon state, so just step it forward in time.
+          photonMotionState.step( dt );
         }
       } );
     } );
 
-    // Remove any photons that were absorbed by something.
+    // Remove any photons that were absorbed during the interaction testing.
     photonsToRemove.forEach( photon => {
       this.photonCollection.removePhoton( photon );
     } );

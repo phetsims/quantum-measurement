@@ -26,7 +26,21 @@ import PhotonsExperimentSceneModel from './PhotonsExperimentSceneModel.js';
 type SelfOptions = EmptySelfOptions;
 type PhotonsModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
-export const PhotonInteractionTypeValues = [ 'split', 'reflected', 'detected', 'absorbed', 'detectedAndAbsorbed' ] as const;
+export const PhotonInteractionTypeValues = [
+
+  // The photon was reflected by something, such as a mirror.
+  'reflected',
+
+  // The photon was split into two possible state.
+  'split',
+
+  // The photon reached a detector.  If the photon is in a superposed state, it may or may not be detected, and the
+  // client code will need to decide what to do.
+  'detectorReached',
+
+  // The photon was absorbed by something, such as a detector.
+  'absorbed'
+] as const;
 export type PhotonInteractionTypes = ( typeof PhotonInteractionTypeValues )[number];
 export type PhotonInteractionTestResult = {
   interactionType: PhotonInteractionTypes;
