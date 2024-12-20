@@ -9,7 +9,6 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
@@ -97,10 +96,6 @@ export default class FlatPolarizationAngleIndicator extends Node {
     } );
 
     const options = optionize<PolarizationPlaneRepresentationOptions, SelfOptions, NodeOptions>()( {
-
-      // Increasing bounds horizontally so the labels have space to move
-      localBounds: new Bounds2( -1.5 * AXIS_LENGTH, -AXIS_LENGTH, 1.5 * AXIS_LENGTH, AXIS_LENGTH ),
-
       children: [
         unitCircle,
         horizontalAxis,
