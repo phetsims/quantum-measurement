@@ -47,7 +47,7 @@ export default class PhotonPolarizationAngleControl extends Panel {
     }, providedOptions );
 
     const titleProperty = new Text( QuantumMeasurementStrings.photonPolarizationAngleStringProperty, {
-      font: DEFAULT_LABEL_FONT
+      font: new PhetFont( { size: DEFAULT_LABEL_FONT_SIZE, weight: 'bold' } )
     } );
 
     const radioButtonGroupItems = [
