@@ -50,7 +50,6 @@ export default class PhotonsEquationNode extends HBox {
     // Create and add the info button.
     const infoButton = new InfoButton( {
       listener: () => equationsInfoDialog.show(),
-      iconFill: 'rgb( 41, 106, 163 )',
       scale: 0.5,
       tandem: providedOptions.tandem.createTandem( 'infoButton' )
     } );
