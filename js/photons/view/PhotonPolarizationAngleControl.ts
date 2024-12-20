@@ -28,8 +28,7 @@ import VectorTailNode from './VectorTailNode.js';
 type SelfOptions = EmptySelfOptions;
 type PhotonPolarizationAngleControlOptions = SelfOptions & WithRequired<PanelOptions, 'tandem'>;
 
-const DEFAULT_LABEL_FONT_SIZE = 16;
-const DEFAULT_LABEL_FONT = new PhetFont( DEFAULT_LABEL_FONT_SIZE );
+const RADIO_BUTTON_TEXT_FONT = new PhetFont( 14 );
 const TICK_MARK_TEXT_OPTIONS: TextOptions = {
   font: new PhetFont( 12 ),
   maxWidth: 50
@@ -47,14 +46,14 @@ export default class PhotonPolarizationAngleControl extends Panel {
     }, providedOptions );
 
     const titleProperty = new Text( QuantumMeasurementStrings.photonPolarizationAngleStringProperty, {
-      font: new PhetFont( { size: DEFAULT_LABEL_FONT_SIZE, weight: 'bold' } )
+      font: new PhetFont( { size: 16, weight: 'bold' } )
     } );
 
     const radioButtonGroupItems = [
       {
         value: 'vertical',
         createNode: () => new Text( QuantumMeasurementStrings.verticalStringProperty, {
-          font: new PhetFont( DEFAULT_LABEL_FONT_SIZE ),
+          font: RADIO_BUTTON_TEXT_FONT,
           fill: QuantumMeasurementColors.verticalPolarizationColorProperty
         } ),
         tandemName: 'verticalRadioButton'
@@ -62,7 +61,7 @@ export default class PhotonPolarizationAngleControl extends Panel {
       {
         value: 'horizontal',
         createNode: () => new Text( QuantumMeasurementStrings.horizontalStringProperty, {
-          font: new PhetFont( DEFAULT_LABEL_FONT_SIZE ),
+          font: RADIO_BUTTON_TEXT_FONT,
           fill: QuantumMeasurementColors.horizontalPolarizationColorProperty
         } ),
         tandemName: 'horizontalRadioButton'
@@ -70,14 +69,14 @@ export default class PhotonPolarizationAngleControl extends Panel {
       {
         value: 'fortyFiveDegrees',
         createNode: () => new Text( QuantumMeasurementStrings.fortyFiveDegreesStringProperty, {
-          font: DEFAULT_LABEL_FONT
+          font: RADIO_BUTTON_TEXT_FONT
         } ),
         tandemName: 'fortyFiveDegreesRadioButton'
       },
       {
         value: 'unpolarized',
         createNode: () => new Text( QuantumMeasurementStrings.unpolarizedStringProperty, {
-          font: DEFAULT_LABEL_FONT
+          font: RADIO_BUTTON_TEXT_FONT
         } ),
         tandemName: 'unpolarizedRadioButton'
       },
@@ -85,7 +84,7 @@ export default class PhotonPolarizationAngleControl extends Panel {
       {
         value: 'custom',
         createNode: () => new Text( QuantumMeasurementStrings.customStringProperty, {
-          font: DEFAULT_LABEL_FONT
+          font: RADIO_BUTTON_TEXT_FONT
         } ),
         tandemName: 'customRadioButton'
       }

@@ -71,7 +71,7 @@ class PhotonsExperimentSceneView extends Node {
 
     const photonPolarizationAngleControl = new PhotonPolarizationAngleControl( model.laser, {
         left: INSET,
-        top: polarizationIndicator.bottom + 10,
+        top: polarizationIndicator.bottom + 5,
         tandem: providedOptions.tandem.createTandem( 'photonPolarizationAngleControl' ),
         phetioFeatured: true
       }
