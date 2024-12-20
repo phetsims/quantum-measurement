@@ -109,6 +109,8 @@ export default class LaserNode extends Node {
     }, providedOptions );
 
     super( options );
+
+    this.addLinkedElement( model );
   }
 }
 

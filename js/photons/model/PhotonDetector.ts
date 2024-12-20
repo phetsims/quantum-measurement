@@ -11,9 +11,9 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Line } from '../../../../kite/js/imports.js';
-import { combineOptions } from '../../../../phet-core/js/optionize.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
+import optionize from '../../../../phet-core/js/optionize.js';
+import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
+import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import AveragingCounterNumberProperty from '../../common/model/AveragingCounterNumberProperty.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
@@ -26,7 +26,7 @@ import { TPhotonInteraction } from './TPhotonInteraction.js';
 type SelfOptions = {
   displayMode?: DisplayMode;
 };
-type PhotonDetectorOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
+type PhotonDetectorOptions = SelfOptions & WithRequired<PhetioObjectOptions, 'tandem'>;
 
 // Define a type for the direction in which the detector is looking for photons.
 export type DetectionDirection = ( [ 'up', 'down' ] )[number];
@@ -38,7 +38,7 @@ export type DisplayMode = ( [ 'count', 'rate' ] )[number];
 export const COUNT_RANGE = new Range( 0, 999 );
 export const RATE_RANGE = new Range( 0, 999 ); // in events per second
 
-class PhotonDetector implements TPhotonInteraction {
+class PhotonDetector extends PhetioObject implements TPhotonInteraction {
 
   // The position of the detector in two-dimensional space.  Units are in meters.
   public readonly position: Vector2;
@@ -71,9 +71,12 @@ class PhotonDetector implements TPhotonInteraction {
 
   public constructor( position: Vector2, detectionDirection: DetectionDirection, providedOptions: PhotonDetectorOptions ) {
 
-    const options = combineOptions<PhotonDetectorOptions>( {
-      displayMode: 'count'
+    const options = optionize<PhotonDetectorOptions, SelfOptions, PhetioObjectOptions>()( {
+      displayMode: 'count',
+      phetioState: false
     }, providedOptions );
+
+    super( options );
 
     this.position = position;
     this.detectionDirection = detectionDirection;

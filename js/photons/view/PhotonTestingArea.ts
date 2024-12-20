@@ -82,11 +82,15 @@ class PhotonTestingArea extends Node {
 
     const verticalPolarizationDetector = new PhotonDetectorNode(
       model.verticalPolarizationDetector,
-      photonTestingAreaModelViewTransform
+      photonTestingAreaModelViewTransform, {
+        tandem: providedOptions.tandem.createTandem( 'verticalPolarizationDetector' )
+      }
     );
     const horizontalPolarizationDetector = new PhotonDetectorNode(
       model.horizontalPolarizationDetector,
-      photonTestingAreaModelViewTransform
+      photonTestingAreaModelViewTransform, {
+        tandem: providedOptions.tandem.createTandem( 'horizontalPolarizationDetector' )
+      }
     );
 
     const polarizingBeamSplitterNode = new PolarizingBeamSplitterNode(

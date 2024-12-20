@@ -14,8 +14,9 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
+import optionize from '../../../../phet-core/js/optionize.js';
+import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
+import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
@@ -27,7 +28,7 @@ export type PhotonEmissionMode = 'singlePhoton' | 'manyPhotons';
 type SelfOptions = {
   emissionMode: PhotonEmissionMode;
 };
-type LaserOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
+type LaserOptions = SelfOptions & WithRequired<PhetioObjectOptions, 'tandem'>;
 
 const PolarizationPresetValues = [ 'vertical', 'horizontal', 'fortyFiveDegrees', 'unpolarized', 'custom' ] as const;
 export type PolarizationPresets = ( typeof PolarizationPresetValues )[number];
@@ -46,7 +47,7 @@ const MAP_OF_PRESET_POLARIZATION_ANGLES = new Map<PolarizationPresets, number>(
   ]
 );
 
-class Laser {
+class Laser extends PhetioObject {
 
   // The position of the detector in two-dimensional space.  Units are in meters.
   public readonly position: Vector2;
@@ -83,6 +84,12 @@ class Laser {
   private fractionalEmissionAccumulator = 0;
 
   public constructor( position: Vector2, photonCollection: PhotonCollection, providedOptions: LaserOptions ) {
+
+    const options = optionize<LaserOptions, SelfOptions, PhetioObjectOptions>()( {
+      phetioState: false
+    }, providedOptions );
+
+    super( options );
 
     this.position = position;
     this.photonCollection = photonCollection;

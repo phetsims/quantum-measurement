@@ -39,7 +39,7 @@ export default class PhotonDetectorNode extends Node {
 
   public constructor( model: PhotonDetector,
                       modelViewTransform: ModelViewTransform2,
-                      providedOptions?: PhotonDetectorNodeOptions ) {
+                      providedOptions: PhotonDetectorNodeOptions ) {
 
     // Create the detection aperture.  This is essentially the anchor point for reset of the layout, meaning that the
     // other nodes are positioned relative to this.
@@ -148,6 +148,8 @@ export default class PhotonDetectorNode extends Node {
     );
 
     super( options );
+
+    this.addLinkedElement( model );
   }
 }
 
