@@ -7,6 +7,8 @@
  * @author Agustín Vallejo
  */
 
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Range from '../../../../dot/js/Range.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import AbstractBlochSphere, { AbstractBlochSphereOptions } from '../../common/model/AbstractBlochSphere.js';
@@ -18,6 +20,8 @@ export type ComplexBlochSphereOptions = SelfOptions & AbstractBlochSphereOptions
 
 export default class ComplexBlochSphere extends AbstractBlochSphere {
 
+  public readonly rotatingSpeedProperty: NumberProperty;
+
   public constructor( providedOptions?: ComplexBlochSphereOptions ) {
 
     const options = optionize<ComplexBlochSphereOptions, SelfOptions, PhetioObjectOptions>()( {
@@ -26,14 +30,20 @@ export default class ComplexBlochSphere extends AbstractBlochSphere {
 
     super( options );
 
+    this.rotatingSpeedProperty = new NumberProperty( 1, {
+      range: new Range( -1, 1 ),
+      tandem: options.tandem.createTandem( 'rotatingSpeedProperty' ),
+      phetioReadOnly: true
+    } );
+
   }
 
 
   /**
    * Abstract method that should run calculations to update the Bloch Sphere representation.
    */
-  protected override updateBlochSphere(): void {
-    // no-op
+  public override step( dt: number ): void {
+    this.azimutalAngleProperty.value = ( this.azimutalAngleProperty.value + this.rotatingSpeedProperty.value * dt ) % ( 2 * Math.PI );
   }
 
   public override reset(): void {

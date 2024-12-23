@@ -56,7 +56,7 @@ export default class SimpleBlochSphere extends AbstractBlochSphere {
   /**
    * Abstract method that should run calculations to update the Bloch Sphere representation.
    */
-  protected override updateBlochSphere(): void {
+  public override step( dt: number ): void {
     // no-op
   }
 

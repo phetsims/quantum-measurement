@@ -1,33 +1,39 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * TODO Describe this class and its responsibilities. See https://github.com/phetsims/quantum-measurement/issues/1
+ * Main model for the Bloch Sphere screen that contains the Bloch Sphere representation and the logic for
+ * measurements, equations and rotation under magnetic field.
  *
- * @author John Blanco, PhET Interactive Simulations
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import TModel from '../../../../joist/js/TModel.js';
+import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import ComplexBlochSphere from './ComplexBlochSphere.js';
 
-type SelfOptions = {
-  // TODO add options that are specific to QuantumMeasurementModel here, see see https://github.com/phetsims/quantum-measurement/issues/1.
-};
+type SelfOptions = EmptySelfOptions;
 
 type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
 export default class BlochSphereModel implements TModel {
 
+  public readonly blochSphere: ComplexBlochSphere;
+
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
-    //TODO, see https://github.com/phetsims/quantum-measurement/issues/1
+
+    this.blochSphere = new ComplexBlochSphere( {
+      tandem: providedOptions.tandem.createTandem( 'blochSphere' )
+    } );
   }
 
   /**
    * Resets the model.
    */
   public reset(): void {
-    // TODO, see https://github.com/phetsims/quantum-measurement/issues/1
+    // no-op
   }
 
   /**
@@ -35,7 +41,7 @@ export default class BlochSphereModel implements TModel {
    * @param dt - time step, in seconds
    */
   public step( dt: number ): void {
-    // TODO, see https://github.com/phetsims/quantum-measurement/issues/1
+    this.blochSphere.step( dt );
   }
 }
 

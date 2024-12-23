@@ -66,7 +66,7 @@ export default abstract class AbstractBlochSphere extends PhetioObject {
   /**
    * Abstract method that should run calculations to update the Bloch Sphere representation.
    */
-  protected abstract updateBlochSphere(): void;
+  public abstract step( dt: number ): void;
 
   protected reset(): void {
     this.azimutalAngleProperty.reset();
