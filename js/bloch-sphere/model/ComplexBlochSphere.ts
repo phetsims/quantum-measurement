@@ -30,7 +30,7 @@ export default class ComplexBlochSphere extends AbstractBlochSphere {
 
     super( options );
 
-    this.rotatingSpeedProperty = new NumberProperty( 1, {
+    this.rotatingSpeedProperty = new NumberProperty( 0, {
       range: new Range( -1, 1 ),
       tandem: options.tandem.createTandem( 'rotatingSpeedProperty' ),
       phetioReadOnly: true

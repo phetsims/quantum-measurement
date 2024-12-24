@@ -34,7 +34,7 @@ export default class BlochSphereNumericalEquationNode extends HBox {
     const equationNode = new RichText( new DerivedStringProperty(
       [
         model.blochSphere.polarAngleProperty,
-      model.blochSphere.azimutalAngleProperty
+        model.blochSphere.azimutalAngleProperty
       ],
       ( polarAngle: number, azimutalAngle: number ) => {
         const upCoefficient = Utils.toFixed( Math.cos( polarAngle / 2 ), 2 );

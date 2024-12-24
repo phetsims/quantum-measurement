@@ -44,7 +44,7 @@ export default abstract class AbstractBlochSphere extends PhetioObject {
     } );
 
     this.polarAngleProperty = new NumberProperty( 0, {
-      range: new Range( -Math.PI / 2, Math.PI / 2 ),
+      range: new Range( 0, Math.PI ),
       tandem: options.tandem.createTandem( 'polarAngleProperty' ),
       phetioReadOnly: true
     } );
