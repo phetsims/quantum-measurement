@@ -20,6 +20,7 @@ import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import BlochSphereEquationNode from './BlochSphereEquationNode.js';
 
 export default class BlochSphereScreenView extends QuantumMeasurementScreenView {
 
@@ -72,7 +73,7 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
       align: 'center',
       children: [
         new Text( 'State to Prepare', { font: new PhetFont( { size: 20, weight: 'bolder' } ) } ),
-        new RichText( 'Equation 1', { font: new MathSymbolFont( { size: 20 } ) } ),
+        new BlochSphereEquationNode(),
         new Panel(
           new RichText( 'Equation 2', { font: new MathSymbolFont( { size: 20 } ) } ), {
             fill: '#aff',
