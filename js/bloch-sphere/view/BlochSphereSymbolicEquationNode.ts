@@ -1,7 +1,7 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * BlochSphereEquationNode displays the equation that is used to calculate the expected value of polarization.
+ * BlochSphereSymbolicEquationNode displays the equation that is used to calculate the expected value of polarization.
  *
  * @author Agustín Vallejo (PhET Interactive Simulations)
  * @author John Blanco (PhET Interactive Simulations)
@@ -17,7 +17,7 @@ import FractionNode from '../../common/view/FractionNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
 type SelfOptions = EmptySelfOptions;
-type BlochSphereEquationNodeOptions = SelfOptions & WithRequired<HBoxOptions, 'tandem'>;
+type BlochSphereSymbolicEquationNodeOptions = SelfOptions & WithRequired<HBoxOptions, 'tandem'>;
 
 const EQUATION_FONT = new MathSymbolFont( 17 );
 const THETA = QuantumMeasurementConstants.THETA;
@@ -27,9 +27,9 @@ const UP = QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
 const DOWN = QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER;
 const KET = QuantumMeasurementConstants.KET;
 
-export default class BlochSphereEquationNode extends HBox {
+export default class BlochSphereSymbolicEquationNode extends HBox {
 
-  public constructor( providedOptions?: BlochSphereEquationNodeOptions ) {
+  public constructor( providedOptions?: BlochSphereSymbolicEquationNodeOptions ) {
 
     const richTextEquationOptions = { font: EQUATION_FONT };
     const newRichText = ( text: string ) => new RichText( text, richTextEquationOptions );
@@ -42,7 +42,7 @@ export default class BlochSphereEquationNode extends HBox {
       scale: new Vector2( 1, 2 )
     };
 
-    const options = optionize<BlochSphereEquationNodeOptions, SelfOptions, HBoxOptions>()( {
+    const options = optionize<BlochSphereSymbolicEquationNodeOptions, SelfOptions, HBoxOptions>()( {
       spacing: 3,
       align: 'center',
       children: [
@@ -62,4 +62,4 @@ export default class BlochSphereEquationNode extends HBox {
   }
 }
 
-quantumMeasurement.register( 'BlochSphereEquationNode', BlochSphereEquationNode );
+quantumMeasurement.register( 'BlochSphereSymbolicEquationNode', BlochSphereSymbolicEquationNode );

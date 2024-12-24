@@ -9,9 +9,8 @@
 import BlochSphereModel from 'model/BlochSphereModel.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
-import MathSymbolFont from '../../../../scenery-phet/js/MathSymbolFont.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, Image, Line, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Color, Image, Line, Text, VBox } from '../../../../scenery/js/imports.js';
 import Panel from '../../../../sun/js/Panel.js';
 import Slider from '../../../../sun/js/Slider.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -20,7 +19,8 @@ import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import BlochSphereEquationNode from './BlochSphereEquationNode.js';
+import BlochSphereNumericalEquationNode from './BlochSphereNumericalEquationNode.js';
+import BlochSphereSymbolicEquationNode from './BlochSphereSymbolicEquationNode.js';
 
 export default class BlochSphereScreenView extends QuantumMeasurementScreenView {
 
@@ -73,9 +73,9 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
       align: 'center',
       children: [
         new Text( 'State to Prepare', { font: new PhetFont( { size: 20, weight: 'bolder' } ) } ),
-        new BlochSphereEquationNode(),
+        new BlochSphereSymbolicEquationNode(),
         new Panel(
-          new RichText( 'Equation 2', { font: new MathSymbolFont( { size: 20 } ) } ), {
+          new BlochSphereNumericalEquationNode( model ), {
             fill: '#aff',
             cornerRadius: 5,
             stroke: null,

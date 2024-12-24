@@ -19,6 +19,7 @@ const QuantumMeasurementConstants = {
   BETA: '\u03b2',
   THETA: '\u03b8',
   PHI: '\u03c6',
+  PI: '\u03c0',
   PSI: '\u03c8',
   SPIN_UP_ARROW_CHARACTER: '\u2b61',
   SPIN_DOWN_ARROW_CHARACTER: '\u2b63',
