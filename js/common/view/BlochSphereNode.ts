@@ -28,6 +28,7 @@ import QuantumMeasurementConstants from '../QuantumMeasurementConstants.js';
 type SelfOptions = {
   drawKets?: boolean;
   drawTitle?: boolean;
+  drawAngleIndicators?: boolean;
   expandBounds?: boolean;
 };
 export type BlochSphereNodeOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
@@ -57,6 +58,13 @@ export default class BlochSphereNode extends Node {
   public constructor(
     blochSphere: AbstractBlochSphere,
     providedOptions: BlochSphereNodeOptions ) {
+
+    const options = optionize<BlochSphereNodeOptions, SelfOptions, NodeOptions>()( {
+      drawKets: true,
+      drawTitle: true,
+      drawAngleIndicators: true,
+      expandBounds: true
+    }, providedOptions );
 
     const sphereRadius = 100;
 
@@ -119,7 +127,7 @@ export default class BlochSphereNode extends Node {
       centerY: -sphereRadius - 3 * LABELS_OFFSET,
       fill: 'black',
       font: STATES_FONT,
-      visible: providedOptions.drawKets
+      visible: options.drawKets
     } );
 
     const downStateLabel = new Text( `|${DOWN}${KET}`, {
@@ -127,21 +135,21 @@ export default class BlochSphereNode extends Node {
       centerY: sphereRadius + 3 * LABELS_OFFSET,
       fill: 'black',
       font: STATES_FONT,
-      visible: providedOptions.drawKets
+      visible: options.drawKets
     } );
 
     const title = new Text( QuantumMeasurementStrings.blochSphereStringProperty, {
       font: new PhetFont( { size: 16, weight: 'bolder' } ),
-      visible: providedOptions.drawTitle,
+      visible: options.drawTitle,
       bottom: upStateLabel.top - 10,
       centerX: upStateLabel.centerX
     } );
 
     const stateVectorVisibleProperty = new BooleanProperty( true, {
-      tandem: providedOptions.tandem.createTandem( 'stateVectorVisibleProperty' )
+      tandem: options.tandem.createTandem( 'stateVectorVisibleProperty' )
     } );
     const stateVector = new ArrowNode( 0, 0, 0, -sphereRadius, {
-      tandem: providedOptions.tandem.createTandem( 'stateVector' ),
+      tandem: options.tandem.createTandem( 'stateVector' ),
       headWidth: 10,
       headHeight: 10,
       tailWidth: 3,
@@ -149,14 +157,14 @@ export default class BlochSphereNode extends Node {
       visibleProperty: stateVectorVisibleProperty
     } );
 
-    // TODO: Add angle indicators, see https://github.com/phetsims/quantum-measurement/issues/53
-    // const ANGLE_INDICATOR_PATH_OPTIONS = {
-    //   stroke: 'gray',
-    //   lineWidth: 1,
-    //   lineDash: [ 1, 1 ]
-    // };
-    // const polarAngleIndicator = new Path( null, ANGLE_INDICATOR_PATH_OPTIONS );
-    // const azimutalAngleIndicator = new Path( null, ANGLE_INDICATOR_PATH_OPTIONS );
+    const ANGLE_INDICATOR_PATH_OPTIONS = {
+      stroke: 'gray',
+      lineWidth: 1,
+      lineDash: [ 2, 2 ],
+      visible: options.drawAngleIndicators
+    };
+    const polarAngleIndicator = new Path( null, ANGLE_INDICATOR_PATH_OPTIONS );
+    const azimutalAngleIndicator = new Path( null, ANGLE_INDICATOR_PATH_OPTIONS );
 
     Multilink.multilink(
       [
@@ -168,43 +176,50 @@ export default class BlochSphereNode extends Node {
         stateVector.setTip( tip.x, tip.y );
         stateVector.opacity = Math.sin( polarAngle ) < 1e-5 || Math.cos( azimutalAngle + xAxisOffsetAngle ) > 0 ? 1 : 0.4;
 
-        // TODO: Add angle indicators, see https://github.com/phetsims/quantum-measurement/issues/53
+        polarAngleIndicator.shape = new Shape().ellipticalArc(
+          // Center of the ellipse
+          0,
+          0,
+          // Ellipse dimensions
+          tip.x / 2, // Ellipse width goes to half the state vector
+          equatorSemiMajorAxis / 2,
+          0,
+          // Begins at -PI/2; Ends at the polar angle with an adjustement due to the sphere perspective
+          -Math.PI / 2,
+          polarAngle - Math.PI / 2 + equatorInclinationAngle * Math.sin( polarAngle ) * Math.cos( azimutalAngle + xAxisOffsetAngle ),
+          false
+        );
 
-        //   const shiftedPolar = polarAngle - equatorInclinationAngle;
-        //   polarAngleIndicator.shape = new Shape().ellipticalArc(
-        //     0, 0, Math.max( tip.x, equatorSemiMinorAxis ) / 2, equatorSemiMajorAxis / 2, 0, equatorInclinationAngle, -shiftedPolar, shiftedPolar > 0
-        //   );
-        //
-        //   const shiftedazimuth = Math.atan( tip.x / tip.y );
-        //   azimutalAngleIndicator.shape = new Shape().ellipticalArc(
-        //     0, 0, equatorSemiMajorAxis / 2, equatorSemiMinorAxis / 2, 0, xAxisOffsetAngleProperty.value, shiftedazimuth, false );
-        // }
+        azimutalAngleIndicator.shape = new Shape().ellipticalArc(
+          0,
+          0,
+          equatorSemiMajorAxis / 2,
+          equatorSemiMinorAxis / 2,
+          0,
+          // Begins with offset; Ends at the azimutal angle with an adjustement due to the sphere perspective
+          -xAxisOffsetAngle + Math.PI / 2,
+          -( azimutalAngle + xAxisOffsetAngle - Math.PI / 2 ) % ( 2 * Math.PI ),
+          true
+        );
       }
     );
 
-    const options = optionize<BlochSphereNodeOptions, SelfOptions, NodeOptions>()( {
-      children: [
-        title,
-        upStateLabel,
-        downStateLabel,
-        sphereNode,
-        equatorLine,
-        xAxis,
-        yAxis,
-        zAxis,
-        xAxisLabel,
-        yAxisLabel,
-        zAxisLabel,
-        // polarAngleIndicator,
-        // azimutalAngleIndicator,
-        stateVector
-      ],
-      // Increasing bounds horizontally so the labels have space to move
-      // localBounds: new Bounds2( -1.5 * sphereRadius, -sphereRadius, 1.5 * sphereRadius, sphereRadius ),
-      drawKets: true,
-      drawTitle: true,
-      expandBounds: true
-    }, providedOptions );
+    options.children = [
+      title,
+      upStateLabel,
+      downStateLabel,
+      sphereNode,
+      equatorLine,
+      xAxis,
+      yAxis,
+      zAxis,
+      xAxisLabel,
+      yAxisLabel,
+      zAxisLabel,
+      polarAngleIndicator,
+      azimutalAngleIndicator,
+      stateVector
+    ];
 
     super( options );
 
