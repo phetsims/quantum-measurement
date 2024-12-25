@@ -7,6 +7,7 @@
  * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
+import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import TModel from '../../../../joist/js/TModel.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
@@ -22,10 +23,39 @@ export default class BlochSphereModel implements TModel {
 
   public readonly blochSphere: ComplexBlochSphere;
 
+  // Coefficients of the state equation |psi> = upCoefficient |up> + downCoefficient * exp( i *  |down>
+  public readonly upCoefficientProperty: NumberProperty;
+  public readonly downCoefficientProperty: NumberProperty;
+  public readonly phaseFactorProperty: NumberProperty;
+
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
     this.blochSphere = new ComplexBlochSphere( {
       tandem: providedOptions.tandem.createTandem( 'blochSphere' )
+    } );
+
+    this.upCoefficientProperty = new NumberProperty( 1, {
+      tandem: providedOptions.tandem.createTandem( 'upCoefficientProperty' ),
+      phetioReadOnly: true
+    } );
+
+    this.downCoefficientProperty = new NumberProperty( 0, {
+      tandem: providedOptions.tandem.createTandem( 'downCoefficientProperty' ),
+      phetioReadOnly: true
+    } );
+
+    this.phaseFactorProperty = new NumberProperty( 0, {
+      tandem: providedOptions.tandem.createTandem( 'phaseFactorProperty' ),
+      phetioReadOnly: true
+    } );
+
+    this.blochSphere.polarAngleProperty.link( theta => {
+      this.upCoefficientProperty.value = Math.cos( theta / 2 );
+      this.downCoefficientProperty.value = Math.sin( theta / 2 );
+    } );
+
+    this.blochSphere.azimutalAngleProperty.link( phi => {
+      this.phaseFactorProperty.value = phi / Math.PI;
     } );
   }
 

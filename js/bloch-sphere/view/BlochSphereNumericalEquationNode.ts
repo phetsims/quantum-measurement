@@ -33,16 +33,16 @@ export default class BlochSphereNumericalEquationNode extends HBox {
 
     const equationNode = new RichText( new DerivedStringProperty(
       [
-        model.blochSphere.polarAngleProperty,
-        model.blochSphere.azimutalAngleProperty
+        model.upCoefficientProperty,
+        model.downCoefficientProperty,
+        model.phaseFactorProperty
       ],
-      ( polarAngle: number, azimutalAngle: number ) => {
-        const upCoefficient = Utils.toFixed( Math.cos( polarAngle / 2 ), 2 );
-        const downCoefficient = Utils.toFixed( Math.abs( Math.sin( polarAngle / 2 ) ), 2 );
-        const downCoefficientSign = Math.sin( polarAngle / 2 ) < 0 ? '\u2212' : '+';
-        const azimutalCoefficient = Utils.toFixed( azimutalAngle / Math.PI, 2 );
+      ( upCoefficient: number, downCoefficient: number, phaseFactor: number ) => {
+        const upCoefficientString = Utils.toFixed( upCoefficient, 2 );
+        const downCoefficientString = Utils.toFixed( downCoefficient, 2 );
+        const azimutalCoefficientString = Utils.toFixed( phaseFactor, 2 );
 
-        return `|${PSI}⟩ = ${upCoefficient}|${UP}${KET} ${downCoefficientSign} ${downCoefficient}e<sup>i${azimutalCoefficient}${PI}</sup>|${DOWN}${KET}`;
+        return `|${PSI}⟩ = ${upCoefficientString}|${UP}${KET} + ${downCoefficientString}e<sup>i${azimutalCoefficientString}${PI}</sup>|${DOWN}${KET}`;
       }
     ), { font: EQUATION_FONT } );
 
