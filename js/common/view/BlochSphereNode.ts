@@ -2,8 +2,6 @@
 /**
  * Visual representation of the Bloch Sphere, meaning an orb with axis and the state vector.
  *
- * // TODO: Show the angle indicators and clean code, see https://github.com/phetsims/quantum-measurement/issues/44
- *
  * @author Agustín Vallejo
  */
 
@@ -64,7 +62,8 @@ export default class BlochSphereNode extends Node {
       drawKets: true,
       drawTitle: true,
       drawAngleIndicators: true,
-      expandBounds: true
+      expandBounds: true,
+      excludeInvisibleChildrenFromBounds: true
     }, providedOptions );
 
     const sphereRadius = 100;
@@ -174,6 +173,51 @@ export default class BlochSphereNode extends Node {
     }, angleIndicatorPathOptions ) );
     const zProjectionLine = new Path( null, angleIndicatorPathOptions );
 
+    options.children = [
+      title,
+      upStateLabel,
+      downStateLabel,
+      sphereNode,
+      equatorLine,
+      xAxis,
+      yAxis,
+      zAxis,
+      xAxisLabel,
+      yAxisLabel,
+      zAxisLabel,
+      polarAngleIndicator,
+      azimuthalAngleIndicator,
+      xyProjectionVector,
+      zProjectionLine,
+      stateVector
+    ];
+
+    super( options );
+
+    this.pointOnTheEquator = pointOnTheEquator;
+
+    const plusX = this.pointOnTheEquator( 0, xAxisOffsetAngleProperty.value );
+    const minusX = this.pointOnTheEquator( Math.PI, xAxisOffsetAngleProperty.value );
+    xAxis.shape = new Shape().moveTo( plusX.x, plusX.y ).lineTo( minusX.x, minusX.y );
+
+    const plusY = this.pointOnTheEquator( Math.PI / 2, xAxisOffsetAngleProperty.value );
+    const minusY = this.pointOnTheEquator( -Math.PI / 2, xAxisOffsetAngleProperty.value );
+    yAxis.shape = new Shape().moveTo( plusY.x, plusY.y ).lineTo( minusY.x, minusY.y );
+    zAxis.shape = new Shape().moveTo( 0, -sphereRadius ).lineTo( 0, sphereRadius );
+
+    xAxisLabel.centerX = plusX.x + 3 * LABELS_OFFSET;
+    xAxisLabel.centerY = plusX.y + 2 * LABELS_OFFSET;
+    yAxisLabel.centerX = plusY.x;
+    yAxisLabel.centerY = plusY.y - LABELS_OFFSET;
+
+    if ( options.expandBounds ) {
+      this.setLocalBounds( new Bounds2( -1.5 * sphereRadius, this.bounds.minY, 1.5 * sphereRadius, this.bounds.maxY ) );
+    }
+
+    this.sphereRadius = sphereRadius;
+    this.xAxisOffsetAngleProperty = xAxisOffsetAngleProperty;
+    this.stateVectorVisibleProperty = stateVectorVisibleProperty;
+
     Multilink.multilink(
       [
         blochSphere.azimuthalAngleProperty,
@@ -232,51 +276,6 @@ export default class BlochSphereNode extends Node {
         );
       }
     );
-
-    options.children = [
-      title,
-      upStateLabel,
-      downStateLabel,
-      sphereNode,
-      equatorLine,
-      xAxis,
-      yAxis,
-      zAxis,
-      xAxisLabel,
-      yAxisLabel,
-      zAxisLabel,
-      polarAngleIndicator,
-      azimuthalAngleIndicator,
-      xyProjectionVector,
-      zProjectionLine,
-      stateVector
-    ];
-
-    super( options );
-
-    this.pointOnTheEquator = pointOnTheEquator;
-
-    const plusX = this.pointOnTheEquator( 0, xAxisOffsetAngleProperty.value );
-    const minusX = this.pointOnTheEquator( Math.PI, xAxisOffsetAngleProperty.value );
-    xAxis.shape = new Shape().moveTo( plusX.x, plusX.y ).lineTo( minusX.x, minusX.y );
-
-    const plusY = this.pointOnTheEquator( Math.PI / 2, xAxisOffsetAngleProperty.value );
-    const minusY = this.pointOnTheEquator( -Math.PI / 2, xAxisOffsetAngleProperty.value );
-    yAxis.shape = new Shape().moveTo( plusY.x, plusY.y ).lineTo( minusY.x, minusY.y );
-    zAxis.shape = new Shape().moveTo( 0, -sphereRadius ).lineTo( 0, sphereRadius );
-
-    xAxisLabel.centerX = plusX.x + 3 * LABELS_OFFSET;
-    xAxisLabel.centerY = plusX.y + 2 * LABELS_OFFSET;
-    yAxisLabel.centerX = plusY.x;
-    yAxisLabel.centerY = plusY.y - LABELS_OFFSET;
-
-    if ( options.expandBounds ) {
-      this.setLocalBounds( new Bounds2( -1.5 * sphereRadius, this.bounds.minY, 1.5 * sphereRadius, this.bounds.maxY ) );
-    }
-
-    this.sphereRadius = sphereRadius;
-    this.xAxisOffsetAngleProperty = xAxisOffsetAngleProperty;
-    this.stateVectorVisibleProperty = stateVectorVisibleProperty;
   }
 }
 

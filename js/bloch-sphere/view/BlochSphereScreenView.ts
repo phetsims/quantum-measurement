@@ -7,6 +7,7 @@
  */
 
 import BlochSphereModel from 'model/BlochSphereModel.js';
+import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -34,16 +35,26 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
       tandem: tandem
     } );
 
-    const azimuthSlider = new Slider( model.blochSphere.azimuthalAngleProperty, model.blochSphere.azimuthalAngleProperty.range, {
-      center: new Vector2( 100, 100 ),
-      tandem: tandem.createTandem( 'azimuthSlider' ),
-      thumbFill: '#444'
-    } );
     const polarSlider = new Slider( model.blochSphere.polarAngleProperty, model.blochSphere.polarAngleProperty.range, {
       center: new Vector2( 100, 200 ),
       tandem: tandem.createTandem( 'polarSlider' ),
-      thumbFill: '#444'
+      thumbFill: '#444',
+      trackSize: new Dimension2( 150, 0.5 ),
+      majorTickLength: 10
     } );
+    const azimuthSlider = new Slider( model.blochSphere.azimuthalAngleProperty, model.blochSphere.azimuthalAngleProperty.range, {
+      center: new Vector2( 100, 100 ),
+      tandem: tandem.createTandem( 'azimuthSlider' ),
+      thumbFill: '#444',
+      trackSize: new Dimension2( 150, 0.5 ),
+      majorTickLength: 10
+    } );
+
+    polarSlider.addMajorTick( 0, new Text( '0', { font: new PhetFont( 15 ) } ) );
+    polarSlider.addMajorTick( Math.PI, new Text( 'π', { font: new PhetFont( 15 ) } ) );
+
+    azimuthSlider.addMajorTick( 0, new Text( '0', { font: new PhetFont( 15 ) } ) );
+    azimuthSlider.addMajorTick( 2 * Math.PI, new Text( '2π', { font: new PhetFont( 15 ) } ) );
 
     const slidersPanel = new Panel( new VBox( {
       spacing: 10,
@@ -62,7 +73,6 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
     const blochSphereNode = new BlochSphereNode(
       model.blochSphere, {
         tandem: tandem.createTandem( 'blochSphereNode' ),
-        center: this.layoutBounds.center,
         expandBounds: false,
         drawTitle: false
       } );
@@ -79,8 +89,7 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
             fill: '#aff',
             cornerRadius: 5,
             stroke: null,
-            xMargin: 10,
-            yMargin: 10
+            xMargin: 10
           }
         ),
         blochSphereNode,
