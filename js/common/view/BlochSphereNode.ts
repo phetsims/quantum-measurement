@@ -14,7 +14,7 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
-import optionize from '../../../../phet-core/js/optionize.js';
+import optionize, { combineOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -24,6 +24,7 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import AbstractBlochSphere from '../model/AbstractBlochSphere.js';
 import QuantumMeasurementConstants from '../QuantumMeasurementConstants.js';
+import DashedArrowNode, { DashedArrowNodeOptions } from './DashedArrowNode.js';
 
 type SelfOptions = {
   drawKets?: boolean;
@@ -157,14 +158,21 @@ export default class BlochSphereNode extends Node {
       visibleProperty: stateVectorVisibleProperty
     } );
 
-    const ANGLE_INDICATOR_PATH_OPTIONS = {
+    const angleIndicatorPathOptions = {
       stroke: 'gray',
       lineWidth: 1,
       lineDash: [ 2, 2 ],
       visible: options.drawAngleIndicators
     };
-    const polarAngleIndicator = new Path( null, ANGLE_INDICATOR_PATH_OPTIONS );
-    const azimutalAngleIndicator = new Path( null, ANGLE_INDICATOR_PATH_OPTIONS );
+    const polarAngleIndicator = new Path( null, angleIndicatorPathOptions );
+    const azimutalAngleIndicator = new Path( null, angleIndicatorPathOptions );
+    const xyProjectionVector = new DashedArrowNode( 0, 0, 0, -sphereRadius, combineOptions<DashedArrowNodeOptions>( {
+      headWidth: 4,
+      headHeight: 4,
+      tailWidth: 1,
+      fill: 'gray'
+    }, angleIndicatorPathOptions ) );
+    const zProjectionLine = new Path( null, angleIndicatorPathOptions );
 
     Multilink.multilink(
       [
@@ -172,21 +180,42 @@ export default class BlochSphereNode extends Node {
         blochSphere.polarAngleProperty,
         xAxisOffsetAngleProperty
       ], ( azimutalAngle, polarAngle, xAxisOffsetAngle ) => {
+
         const tip = pointOnTheSphere( azimutalAngle, polarAngle, xAxisOffsetAngleProperty.value );
         stateVector.setTip( tip.x, tip.y );
+
+        // Full opacity when pointing towards camera or at the poles
         stateVector.opacity = Math.sin( polarAngle ) < 1e-5 || Math.cos( azimutalAngle + xAxisOffsetAngle ) > 0 ? 1 : 0.4;
+
+        // If polar angle allows it, show the projection vector on the xy plane and the z projection line
+        if ( Math.sin( polarAngle ) < 1e-5 ) {
+          xyProjectionVector.visible = false;
+          zProjectionLine.visible = false;
+        }
+        else {
+          const xyProjectionTip = pointOnTheEquator( azimutalAngle, xAxisOffsetAngle ).times( Math.sin( polarAngle ) );
+
+          xyProjectionVector.visible = true;
+          xyProjectionVector.setTip( xyProjectionTip.x, xyProjectionTip.y );
+
+          zProjectionLine.visible = true;
+          zProjectionLine.shape = new Shape().moveTo( tip.x, tip.y ).lineTo( tip.x, xyProjectionTip.y );
+        }
+
+        // Polar angle indicator will rotate with azimuth
+        const rotationFactor = Math.sin( azimutalAngle + xAxisOffsetAngle );
 
         polarAngleIndicator.shape = new Shape().ellipticalArc(
           // Center of the ellipse
           0,
           0,
           // Ellipse dimensions
-          tip.x / 2, // Ellipse width goes to half the state vector
+          equatorSemiMajorAxis / 2 * rotationFactor, // Ellipse width goes to half the state vector
           equatorSemiMajorAxis / 2,
           0,
           // Begins at -PI/2; Ends at the polar angle with an adjustement due to the sphere perspective
           -Math.PI / 2,
-          polarAngle - Math.PI / 2 + equatorInclinationAngle * Math.sin( polarAngle ) * Math.cos( azimutalAngle + xAxisOffsetAngle ),
+          rotationFactor !== 0 ? Math.atan2( tip.y, tip.x / rotationFactor ) : -Math.PI / 2,
           false
         );
 
@@ -218,6 +247,8 @@ export default class BlochSphereNode extends Node {
       zAxisLabel,
       polarAngleIndicator,
       azimutalAngleIndicator,
+      xyProjectionVector,
+      zProjectionLine,
       stateVector
     ];
 

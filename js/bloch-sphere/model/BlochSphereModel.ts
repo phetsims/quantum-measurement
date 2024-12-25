@@ -23,7 +23,8 @@ export default class BlochSphereModel implements TModel {
 
   public readonly blochSphere: ComplexBlochSphere;
 
-  // Coefficients of the state equation |psi> = upCoefficient |up> + downCoefficient * exp( i *  |down>
+  // Coefficients of the state equation
+  // |psi> = upCoefficient |up> + downCoefficient * exp( i * phase * PI ) |down>
   public readonly upCoefficientProperty: NumberProperty;
   public readonly downCoefficientProperty: NumberProperty;
   public readonly phaseFactorProperty: NumberProperty;

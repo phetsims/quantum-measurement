@@ -13,7 +13,7 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 
 type SelfOptions = EmptySelfOptions;
 
-type DashedArrowNodeOptions = SelfOptions & ArrowNodeOptions;
+export type DashedArrowNodeOptions = SelfOptions & ArrowNodeOptions;
 
 export default class DashedArrowNode extends Node {
 
@@ -55,6 +55,10 @@ export default class DashedArrowNode extends Node {
 
     this.arrowHead.setTailAndTip( tail.x, tail.y, tipX, tipY );
     this.arrowLine.setLine( tailX, tailY, tipX, tipY );
+  }
+
+  public setTip( tipX: number, tipY: number ): void {
+    this.setTailAndTip( this.arrowLine.x1, this.arrowLine.y1, tipX, tipY );
   }
 }
 
