@@ -45,12 +45,6 @@ export default class SpinScreenView extends QuantumMeasurementScreenView {
     this.spinMeasurementArea.left = dividingLineX;
     this.addChild( this.spinMeasurementArea );
 
-    // TODO: This is a temporary workaround to make the mockup opacity work. We need to refactor this to use the mockup https://github.com/phetsims/quantum-measurement/issues/53
-    this.mockupOpacityProperty && this.mockupOpacityProperty.link( opacity => {
-      spinStatePreparationArea.opacity = 1 - opacity;
-      this.spinMeasurementArea.opacity = 1 - opacity;
-    } );
-
     model.currentExperimentProperty.notifyListenersStatic();
   }
 
