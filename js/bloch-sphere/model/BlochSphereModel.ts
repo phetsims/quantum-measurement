@@ -55,7 +55,7 @@ export default class BlochSphereModel implements TModel {
       this.downCoefficientProperty.value = Math.sin( theta / 2 );
     } );
 
-    this.blochSphere.azimutalAngleProperty.link( phi => {
+    this.blochSphere.azimuthalAngleProperty.link( phi => {
       this.phaseFactorProperty.value = phi / Math.PI;
     } );
   }

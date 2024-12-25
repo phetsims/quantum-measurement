@@ -165,7 +165,7 @@ export default class BlochSphereNode extends Node {
       visible: options.drawAngleIndicators
     };
     const polarAngleIndicator = new Path( null, angleIndicatorPathOptions );
-    const azimutalAngleIndicator = new Path( null, angleIndicatorPathOptions );
+    const azimuthalAngleIndicator = new Path( null, angleIndicatorPathOptions );
     const xyProjectionVector = new DashedArrowNode( 0, 0, 0, -sphereRadius, combineOptions<DashedArrowNodeOptions>( {
       headWidth: 4,
       headHeight: 4,
@@ -176,16 +176,16 @@ export default class BlochSphereNode extends Node {
 
     Multilink.multilink(
       [
-        blochSphere.azimutalAngleProperty,
+        blochSphere.azimuthalAngleProperty,
         blochSphere.polarAngleProperty,
         xAxisOffsetAngleProperty
-      ], ( azimutalAngle, polarAngle, xAxisOffsetAngle ) => {
+      ], ( azimuthalAngle, polarAngle, xAxisOffsetAngle ) => {
 
-        const tip = pointOnTheSphere( azimutalAngle, polarAngle, xAxisOffsetAngleProperty.value );
+        const tip = pointOnTheSphere( azimuthalAngle, polarAngle, xAxisOffsetAngleProperty.value );
         stateVector.setTip( tip.x, tip.y );
 
         // Full opacity when pointing towards camera or at the poles
-        stateVector.opacity = Math.sin( polarAngle ) < 1e-5 || Math.cos( azimutalAngle + xAxisOffsetAngle ) > 0 ? 1 : 0.4;
+        stateVector.opacity = Math.sin( polarAngle ) < 1e-5 || Math.cos( azimuthalAngle + xAxisOffsetAngle ) > 0 ? 1 : 0.4;
 
         // If polar angle allows it, show the projection vector on the xy plane and the z projection line
         if ( Math.sin( polarAngle ) < 1e-5 ) {
@@ -193,7 +193,7 @@ export default class BlochSphereNode extends Node {
           zProjectionLine.visible = false;
         }
         else {
-          const xyProjectionTip = pointOnTheEquator( azimutalAngle, xAxisOffsetAngle ).times( Math.sin( polarAngle ) );
+          const xyProjectionTip = pointOnTheEquator( azimuthalAngle, xAxisOffsetAngle ).times( Math.sin( polarAngle ) );
 
           xyProjectionVector.visible = true;
           xyProjectionVector.setTip( xyProjectionTip.x, xyProjectionTip.y );
@@ -203,7 +203,7 @@ export default class BlochSphereNode extends Node {
         }
 
         // Polar angle indicator will rotate with azimuth
-        const rotationFactor = Math.sin( azimutalAngle + xAxisOffsetAngle );
+        const rotationFactor = Math.sin( azimuthalAngle + xAxisOffsetAngle );
 
         polarAngleIndicator.shape = new Shape().ellipticalArc(
           // Center of the ellipse
@@ -219,15 +219,15 @@ export default class BlochSphereNode extends Node {
           false
         );
 
-        azimutalAngleIndicator.shape = new Shape().ellipticalArc(
+        azimuthalAngleIndicator.shape = new Shape().ellipticalArc(
           0,
           0,
           equatorSemiMajorAxis / 2,
           equatorSemiMinorAxis / 2,
           0,
-          // Begins with offset; Ends at the azimutal angle with an adjustement due to the sphere perspective
+          // Begins with offset; Ends at the azimuthal angle with an adjustement due to the sphere perspective
           -xAxisOffsetAngle + Math.PI / 2,
-          -( azimutalAngle + xAxisOffsetAngle - Math.PI / 2 ) % ( 2 * Math.PI ),
+          -( azimuthalAngle + xAxisOffsetAngle - Math.PI / 2 ) % ( 2 * Math.PI ),
           true
         );
       }
@@ -246,7 +246,7 @@ export default class BlochSphereNode extends Node {
       yAxisLabel,
       zAxisLabel,
       polarAngleIndicator,
-      azimutalAngleIndicator,
+      azimuthalAngleIndicator,
       xyProjectionVector,
       zProjectionLine,
       stateVector

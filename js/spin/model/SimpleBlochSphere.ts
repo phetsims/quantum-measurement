@@ -46,7 +46,7 @@ export default class SimpleBlochSphere extends AbstractBlochSphere {
     } );
 
     spinStateProperty.link( spinState => {
-      this.azimutalAngleProperty.value = spinState.x > 0 ? 0 : Math.PI;
+      this.azimuthalAngleProperty.value = spinState.x > 0 ? 0 : Math.PI;
       this.polarAngleProperty.value = Math.acos( spinState.y );
     } );
 

@@ -40,9 +40,9 @@ export default class BlochSphereNumericalEquationNode extends HBox {
       ( upCoefficient: number, downCoefficient: number, phaseFactor: number ) => {
         const upCoefficientString = Utils.toFixed( upCoefficient, 2 );
         const downCoefficientString = Utils.toFixed( downCoefficient, 2 );
-        const azimutalCoefficientString = Utils.toFixed( phaseFactor, 2 );
+        const azimuthalCoefficientString = Utils.toFixed( phaseFactor, 2 );
 
-        return `|${PSI}⟩ = ${upCoefficientString}|${UP}${KET} + ${downCoefficientString}e<sup>i${azimutalCoefficientString}${PI}</sup>|${DOWN}${KET}`;
+        return `|${PSI}⟩ = ${upCoefficientString}|${UP}${KET} + ${downCoefficientString}e<sup>i${azimuthalCoefficientString}${PI}</sup>|${DOWN}${KET}`;
       }
     ), { font: EQUATION_FONT } );
 

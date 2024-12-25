@@ -34,7 +34,7 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
       tandem: tandem
     } );
 
-    const azimuthSlider = new Slider( model.blochSphere.azimutalAngleProperty, model.blochSphere.azimutalAngleProperty.range, {
+    const azimuthSlider = new Slider( model.blochSphere.azimuthalAngleProperty, model.blochSphere.azimuthalAngleProperty.range, {
       center: new Vector2( 100, 100 ),
       tandem: tandem.createTandem( 'azimuthSlider' ),
       thumbFill: '#444'

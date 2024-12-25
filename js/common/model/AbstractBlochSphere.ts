@@ -20,8 +20,8 @@ export type AbstractBlochSphereOptions = SelfOptions & PickRequired<PhetioObject
 export default abstract class AbstractBlochSphere extends PhetioObject {
 
   // Angles that determine the direction the vector representation is pointing at
-  // azimutal angle, measured along the XY plane from the +X axis, goes from 0 to 2*PI in radians
-  public readonly azimutalAngleProperty: NumberProperty;
+  // azimuthal angle, measured along the XY plane from the +X axis, goes from 0 to 2*PI in radians
+  public readonly azimuthalAngleProperty: NumberProperty;
   // Polar angle, measured from the +Z axis, goes from 0 to PI in radians
   public readonly polarAngleProperty: NumberProperty;
 
@@ -37,9 +37,9 @@ export default abstract class AbstractBlochSphere extends PhetioObject {
 
     super( options );
 
-    this.azimutalAngleProperty = new NumberProperty( 0, {
+    this.azimuthalAngleProperty = new NumberProperty( 0, {
       range: new Range( 0, 2 * Math.PI ),
-      tandem: options.tandem.createTandem( 'azimutalAngleProperty' ),
+      tandem: options.tandem.createTandem( 'azimuthalAngleProperty' ),
       phetioReadOnly: true
     } );
 
@@ -69,7 +69,7 @@ export default abstract class AbstractBlochSphere extends PhetioObject {
   public abstract step( dt: number ): void;
 
   protected reset(): void {
-    this.azimutalAngleProperty.reset();
+    this.azimuthalAngleProperty.reset();
     this.polarAngleProperty.reset();
     this.alphaProperty.reset();
     this.betaProperty.reset();
