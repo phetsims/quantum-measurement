@@ -8,12 +8,15 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import TModel from '../../../../joist/js/TModel.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
+import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import ComplexBlochSphere from './ComplexBlochSphere.js';
+import { StateDirection } from './StateDirection.js';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -28,6 +31,9 @@ export default class BlochSphereModel implements TModel {
   public readonly upCoefficientProperty: NumberProperty;
   public readonly downCoefficientProperty: NumberProperty;
   public readonly phaseFactorProperty: NumberProperty;
+
+  // Selected State Direction
+  public selectedStateDirectionProperty: Property<StateDirection>;
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
@@ -50,13 +56,36 @@ export default class BlochSphereModel implements TModel {
       phetioReadOnly: true
     } );
 
+    this.selectedStateDirectionProperty = new Property( StateDirection.Z_PLUS, {
+      tandem: providedOptions.tandem.createTandem( 'selectedStateDirectionProperty' ),
+      phetioValueType: EnumerationIO( StateDirection )
+    } );
+
+    let selectingStateDirection = false;
+    this.selectedStateDirectionProperty.link( stateDirection => {
+      if ( stateDirection !== StateDirection.CUSTOM ) {
+        selectingStateDirection = true;
+        this.blochSphere.polarAngleProperty.value = stateDirection.polarAngle;
+        this.blochSphere.azimuthalAngleProperty.value = stateDirection.azimuthalAngle;
+        selectingStateDirection = false;
+      }
+    } );
+
     this.blochSphere.polarAngleProperty.link( theta => {
       this.upCoefficientProperty.value = Math.cos( theta / 2 );
       this.downCoefficientProperty.value = Math.sin( theta / 2 );
+
+      if ( !selectingStateDirection ) {
+        this.selectedStateDirectionProperty.value = StateDirection.CUSTOM;
+      }
     } );
 
     this.blochSphere.azimuthalAngleProperty.link( phi => {
       this.phaseFactorProperty.value = phi / Math.PI;
+
+      if ( !selectingStateDirection ) {
+        this.selectedStateDirectionProperty.value = StateDirection.CUSTOM;
+      }
     } );
   }
 

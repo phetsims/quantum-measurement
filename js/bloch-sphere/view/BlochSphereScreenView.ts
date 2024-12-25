@@ -12,6 +12,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Color, Image, Line, Text, VBox } from '../../../../scenery/js/imports.js';
+import ComboBox, { ComboBoxItem } from '../../../../sun/js/ComboBox.js';
 import Panel from '../../../../sun/js/Panel.js';
 import Slider from '../../../../sun/js/Slider.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -20,6 +21,7 @@ import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import { StateDirection } from '../model/StateDirection.js';
 import BlochSphereNumericalEquationNode from './BlochSphereNumericalEquationNode.js';
 import BlochSphereSymbolicEquationNode from './BlochSphereSymbolicEquationNode.js';
 
@@ -56,9 +58,21 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
     azimuthSlider.addMajorTick( 0, new Text( '0', { font: new PhetFont( 15 ) } ) );
     azimuthSlider.addMajorTick( 2 * Math.PI, new Text( '2π', { font: new PhetFont( 15 ) } ) );
 
+    const comboBoxItems: ComboBoxItem<StateDirection>[] = StateDirection.enumeration.values.map( direction => {
+      return {
+        value: direction,
+        createNode: () => new Text( direction.description, { font: new PhetFont( 16 ) } )
+      };
+    } );
+
+    const directionComboBox = new ComboBox( model.selectedStateDirectionProperty, comboBoxItems, this, {
+      tandem: tandem.createTandem( 'directionComboBox' )
+    } );
+
     const slidersPanel = new Panel( new VBox( {
       spacing: 10,
       children: [
+        directionComboBox,
         new Text( 'Polar Angle (θ): ', { font: new PhetFont( 15 ) } ), // Theta symbol: θ
         polarSlider,
         new Text( 'Azimuthal Angle (φ)', { font: new PhetFont( 15 ) } ), // Phi symbol: φ
@@ -79,7 +93,7 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
 
     const blochSpherePreparationArea = new VBox( {
       left: this.layoutBounds.left + 20,
-      spacing: 20,
+      spacing: 10,
       align: 'center',
       children: [
         new Text( 'State to Prepare', { font: new PhetFont( { size: 20, weight: 'bolder' } ) } ),
