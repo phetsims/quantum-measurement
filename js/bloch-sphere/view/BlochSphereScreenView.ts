@@ -3,27 +3,17 @@
 /**
  * Main screen view class for the "Bloch Sphere" screen.
  *
- * @author John Blanco, PhET Interactive Simulations
+ * @author Agustín Vallejo
  */
 
 import BlochSphereModel from 'model/BlochSphereModel.js';
-import Dimension2 from '../../../../dot/js/Dimension2.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, Image, Line, Text, VBox } from '../../../../scenery/js/imports.js';
-import ComboBox, { ComboBoxItem } from '../../../../sun/js/ComboBox.js';
-import Panel from '../../../../sun/js/Panel.js';
-import Slider from '../../../../sun/js/Slider.js';
+import { Color, Image, Line } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import blochSphereScreenMockup_png from '../../../images/blochSphereScreenMockup_png.js';
-import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
-import BlochSphereNode from '../../common/view/BlochSphereNode.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { StateDirection } from '../model/StateDirection.js';
-import BlochSphereNumericalEquationNode from './BlochSphereNumericalEquationNode.js';
-import BlochSphereSymbolicEquationNode from './BlochSphereSymbolicEquationNode.js';
+import BlochSpherePreparationArea from './BlochSpherePreparationArea.js';
 
 export default class BlochSphereScreenView extends QuantumMeasurementScreenView {
 
@@ -37,78 +27,9 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
       tandem: tandem
     } );
 
-    const polarSlider = new Slider( model.blochSphere.polarAngleProperty, model.blochSphere.polarAngleProperty.range, {
-      center: new Vector2( 100, 200 ),
-      tandem: tandem.createTandem( 'polarSlider' ),
-      thumbFill: '#444',
-      trackSize: new Dimension2( 150, 0.5 ),
-      majorTickLength: 10
-    } );
-    const azimuthSlider = new Slider( model.blochSphere.azimuthalAngleProperty, model.blochSphere.azimuthalAngleProperty.range, {
-      center: new Vector2( 100, 100 ),
-      tandem: tandem.createTandem( 'azimuthSlider' ),
-      thumbFill: '#444',
-      trackSize: new Dimension2( 150, 0.5 ),
-      majorTickLength: 10
-    } );
-
-    polarSlider.addMajorTick( 0, new Text( '0', { font: new PhetFont( 15 ) } ) );
-    polarSlider.addMajorTick( Math.PI, new Text( 'π', { font: new PhetFont( 15 ) } ) );
-
-    azimuthSlider.addMajorTick( 0, new Text( '0', { font: new PhetFont( 15 ) } ) );
-    azimuthSlider.addMajorTick( 2 * Math.PI, new Text( '2π', { font: new PhetFont( 15 ) } ) );
-
-    const comboBoxItems: ComboBoxItem<StateDirection>[] = StateDirection.enumeration.values.map( direction => {
-      return {
-        value: direction,
-        createNode: () => new Text( direction.description, { font: new PhetFont( 16 ) } )
-      };
-    } );
-
-    const directionComboBox = new ComboBox( model.selectedStateDirectionProperty, comboBoxItems, this, {
-      tandem: tandem.createTandem( 'directionComboBox' )
-    } );
-
-    const slidersPanel = new Panel( new VBox( {
-      spacing: 10,
-      children: [
-        directionComboBox,
-        new Text( 'Polar Angle (θ): ', { font: new PhetFont( 15 ) } ), // Theta symbol: θ
-        polarSlider,
-        new Text( 'Azimuthal Angle (φ)', { font: new PhetFont( 15 ) } ), // Phi symbol: φ
-        azimuthSlider
-      ]
-    } ), {
-      fill: QuantumMeasurementColors.controlPanelFillColorProperty,
-      stroke: QuantumMeasurementColors.controlPanelStrokeColorProperty,
-      minWidth: 270
-    } );
-
-    const blochSphereNode = new BlochSphereNode(
-      model.blochSphere, {
-        tandem: tandem.createTandem( 'blochSphereNode' ),
-        expandBounds: false,
-        drawTitle: false
-      } );
-
-    const blochSpherePreparationArea = new VBox( {
+    const preparationArea = new BlochSpherePreparationArea( model, this, {
       left: this.layoutBounds.left + 20,
-      spacing: 10,
-      align: 'center',
-      children: [
-        new Text( 'State to Prepare', { font: new PhetFont( { size: 20, weight: 'bolder' } ) } ),
-        new BlochSphereSymbolicEquationNode(),
-        new Panel(
-          new BlochSphereNumericalEquationNode( model ), {
-            fill: '#aff',
-            cornerRadius: 5,
-            stroke: null,
-            xMargin: 10
-          }
-        ),
-        blochSphereNode,
-        slidersPanel
-      ]
+      tandem: tandem.createTandem( 'preparationArea' )
     } );
 
     // Add the vertical line that will sit between the preparation and measurement areas.
@@ -120,11 +41,7 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
     } );
     this.addChild( dividingLine );
 
-    this.addChild( blochSpherePreparationArea );
-
-    this.mockupOpacityProperty && this.mockupOpacityProperty.link( opacity => {
-      blochSpherePreparationArea.opacity = 1 - opacity;
-    } );
+    this.addChild( preparationArea );
   }
 
   public override reset(): void {
