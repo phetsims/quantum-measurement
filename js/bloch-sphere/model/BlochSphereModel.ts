@@ -58,7 +58,8 @@ export default class BlochSphereModel implements TModel {
 
     this.selectedStateDirectionProperty = new Property( StateDirection.Z_PLUS, {
       tandem: providedOptions.tandem.createTandem( 'selectedStateDirectionProperty' ),
-      phetioValueType: EnumerationIO( StateDirection )
+      phetioValueType: EnumerationIO( StateDirection ),
+      phetioFeatured: true
     } );
 
     let selectingStateDirection = false;
