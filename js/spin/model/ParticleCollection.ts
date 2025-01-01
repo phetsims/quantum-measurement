@@ -2,7 +2,8 @@
 
 /**
  * ParticleCollection is the model for particles with a predetermined spin. It has a lifetime, which will
- * determine its position in the Ray Path, and a spin value, which will be modified as it passes through the SG apparatuses.
+ * determine its position in the Ray Path, and a spin value, which will be modified as it passes through the SG
+ * apparatuses.
  *
  * @author Agustín Vallejo
  */
@@ -215,19 +216,20 @@ export class ParticleCollection extends PhetioObject {
   }
 
   /**
-   * For serialization, the ParticleCollectionIO uses reference type serialization. That is, each ParticleCollection exists for the life of the
-   * simulation, and when we save the state of the simulation, we save the current state of the ParticleCollection.
+   * For serialization, the ParticleCollectionIO uses reference type serialization. That is, each ParticleCollection
+   * exists for the life of the simulation, and when we save the state of the simulation, we save the current state of
+   * the ParticleCollection.
    *
-   * The ParticleCollection serves as a composite container of ParticleIO instances. The Particles are serialized using data-type serialization.
-   * For deserialization, the Particles are deserialized (again, using data-type serialization) and applied to the
-   * ParticleCollection in its applyState method.
+   * The ParticleCollection serves as a composite container of ParticleIO instances. The Particles are serialized using
+   * data-type serialization. For deserialization, the Particles are deserialized (again, using data-type serialization)
+   * and applied to the ParticleCollection in its applyState method.
    *
    * Please see https://github.com/phetsims/phet-io/blob/main/doc/phet-io-instrumentation-technical-guide.md#serialization
    * for more information on the different serialization types.
    */
   public static readonly ParticleCollectionIO = new IOType<ParticleCollection>( 'ParticleCollectionIO', {
     valueType: ParticleCollection,
-    documentation: 'The ParticleCollection is a model element that represents a collection of photons.',
+    documentation: 'The ParticleCollection is a model element that represents a collection of particles.',
     stateSchema: {
       particles: ReferenceArrayIO( ParticleWithSpin.ParticleWithSpinIO )
     }

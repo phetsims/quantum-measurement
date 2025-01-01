@@ -81,9 +81,9 @@ export class ParticleWithSpin {
   }
 
   /**
-   * Individual Particle instances are not PhET-iO Instrumented. Instead, the ParticleCollection that contains the Particles
-   * calls ParticleWithSpinIO.toStateObject to serialize the Particle instances. ParticleCollectionIO uses reference type serialization
-   * as a composite of the Particles, which use data type serialization.
+   * Individual Particle instances are not PhET-iO Instrumented. Instead, the ParticleCollection that contains the
+   * Particles calls ParticleWithSpinIO.toStateObject to serialize the Particle instances. ParticleCollectionIO uses
+   * reference type serialization as a composite of the Particles, which use data type serialization.
    *
    * Please see https://github.com/phetsims/phet-io/blob/main/doc/phet-io-instrumentation-technical-guide.md#serialization
    * for more information on the different serialization types.
