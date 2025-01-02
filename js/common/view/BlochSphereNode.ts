@@ -56,12 +56,12 @@ export default class BlochSphereNode extends Node {
 
   public constructor(
     blochSphere: AbstractBlochSphere,
-    providedOptions: BlochSphereNodeOptions ) {
+    providedOptions?: BlochSphereNodeOptions ) {
 
     const options = optionize<BlochSphereNodeOptions, SelfOptions, NodeOptions>()( {
       drawKets: true,
       drawTitle: true,
-      drawAngleIndicators: true,
+      drawAngleIndicators: false,
       expandBounds: true,
       excludeInvisibleChildrenFromBounds: true
     }, providedOptions );
@@ -232,7 +232,7 @@ export default class BlochSphereNode extends Node {
         stateVector.opacity = Math.sin( polarAngle ) < 1e-5 || Math.cos( azimuthalAngle + xAxisOffsetAngle ) > 0 ? 1 : 0.4;
 
         // If polar angle allows it, show the projection vector on the xy plane and the z projection line
-        if ( Math.sin( polarAngle ) < 1e-5 ) {
+        if ( Math.abs( Math.sin( polarAngle * 2 ) ) < 1e-5 ) {
           xyProjectionVector.visible = false;
           zProjectionLine.visible = false;
         }

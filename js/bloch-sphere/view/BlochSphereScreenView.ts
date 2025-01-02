@@ -16,6 +16,7 @@ import blochSphereScreenMockup_png from '../../../images/blochSphereScreenMockup
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { BlochSphereScene } from '../model/BlochSphereScene.js';
+import BlochSphereMeasurementArea from './BlochSphereMeasurementArea.js';
 import BlochSpherePreparationArea from './BlochSpherePreparationArea.js';
 
 export default class BlochSphereScreenView extends QuantumMeasurementScreenView {
@@ -67,8 +68,14 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
       top: this.layoutBounds.top + 20
     } );
 
-
     this.addChild( measurementAreaTitleAndComboBox );
+
+    const measurementArea = new BlochSphereMeasurementArea( model, {
+      tandem: tandem.createTandem( 'measurementArea' ),
+      left: dividingLineX + 20,
+      top: measurementAreaTitleAndComboBox.bottom + 20
+    } );
+    this.addChild( measurementArea );
 
   }
 

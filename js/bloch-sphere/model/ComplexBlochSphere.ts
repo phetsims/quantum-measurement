@@ -9,12 +9,15 @@
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import Utils from '../../../../dot/js/Utils.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import AbstractBlochSphere, { AbstractBlochSphereOptions } from '../../common/model/AbstractBlochSphere.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
-type SelfOptions = EmptySelfOptions;
+type SelfOptions = {
+  initialRotationSpeed?: number;
+};
 
 export type ComplexBlochSphereOptions = SelfOptions & AbstractBlochSphereOptions;
 
@@ -25,12 +28,12 @@ export default class ComplexBlochSphere extends AbstractBlochSphere {
   public constructor( providedOptions?: ComplexBlochSphereOptions ) {
 
     const options = optionize<ComplexBlochSphereOptions, SelfOptions, PhetioObjectOptions>()( {
-
+      initialRotationSpeed: 0
     }, providedOptions );
 
     super( options );
 
-    this.rotatingSpeedProperty = new NumberProperty( 0, {
+    this.rotatingSpeedProperty = new NumberProperty( options.initialRotationSpeed, {
       range: new Range( -1, 1 ),
       tandem: options.tandem.createTandem( 'rotatingSpeedProperty' ),
       phetioReadOnly: true
@@ -43,7 +46,7 @@ export default class ComplexBlochSphere extends AbstractBlochSphere {
    * Abstract method that should run calculations to update the Bloch Sphere representation.
    */
   public override step( dt: number ): void {
-    this.azimuthalAngleProperty.value = ( this.azimuthalAngleProperty.value + this.rotatingSpeedProperty.value * dt ) % ( 2 * Math.PI );
+    this.azimuthalAngleProperty.value = Utils.moduloBetweenDown( this.azimuthalAngleProperty.value + this.rotatingSpeedProperty.value * dt, 0, 2 * Math.PI );
   }
 
   public override reset(): void {

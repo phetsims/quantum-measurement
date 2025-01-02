@@ -133,14 +133,14 @@ class PhotonsExperimentSceneView extends Node {
       horizontalValueProperty,
       [
         new RichText(
-          'V',
+          QuantumMeasurementStrings.VStringProperty,
           {
             font: new PhetFont( { size: 17, weight: 'bold' } ),
             fill: QuantumMeasurementColors.verticalPolarizationColorProperty
           }
         ),
         new RichText(
-          'H',
+          QuantumMeasurementStrings.HStringProperty,
           {
             font: new PhetFont( { size: 17, weight: 'bold' } ),
             fill: QuantumMeasurementColors.horizontalPolarizationColorProperty

@@ -72,8 +72,11 @@ type StringsType = {
   'VStringProperty': LocalizedStringProperty;
   'NStringProperty': LocalizedStringProperty;
   'verticalStringProperty': LocalizedStringProperty;
-  'SGSubZStringProperty': LocalizedStringProperty;
   'SGSubXStringProperty': LocalizedStringProperty;
+  'SGSubZStringProperty': LocalizedStringProperty;
+  'SSubXStringProperty': LocalizedStringProperty;
+  'SSubYStringProperty': LocalizedStringProperty;
+  'SSubZStringProperty': LocalizedStringProperty;
   'SternGerlachMeasurementsStringProperty': LocalizedStringProperty;
   'sourceModeStringProperty': LocalizedStringProperty;
   'spinSourceStringProperty': LocalizedStringProperty;

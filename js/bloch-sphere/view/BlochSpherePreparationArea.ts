@@ -84,6 +84,7 @@ export default class BlochSpherePreparationArea extends VBox {
         tandem: providedOptions.tandem.createTandem( 'blochSphereNode' ),
         expandBounds: false,
         drawTitle: false,
+        drawAngleIndicators: true,
         scale: 0.9
       } );
 

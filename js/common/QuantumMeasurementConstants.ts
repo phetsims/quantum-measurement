@@ -9,6 +9,7 @@
 import ScreenView from '../../../joist/js/ScreenView.js';
 import { Color } from '../../../scenery/js/imports.js';
 import quantumMeasurement from '../quantumMeasurement.js';
+import QuantumMeasurementColors from './QuantumMeasurementColors.js';
 
 const QuantumMeasurementConstants = {
   LAYOUT_BOUNDS: ScreenView.DEFAULT_LAYOUT_BOUNDS,
@@ -31,6 +32,13 @@ const QuantumMeasurementConstants = {
   expectedPercentagePathOptions: {
     stroke: '#0a0',
     lineWidth: 5
+  },
+
+  panelOptions: {
+    fill: QuantumMeasurementColors.controlPanelFillColorProperty,
+    stroke: QuantumMeasurementColors.controlPanelStrokeColorProperty,
+    yMargin: 10,
+    xMargin: 10
   },
 
   CREATE_COLOR_SPAN: ( text: string, color: Color, bold = false ): string => {
