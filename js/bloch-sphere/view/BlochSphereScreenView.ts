@@ -8,11 +8,14 @@
 
 import BlochSphereModel from 'model/BlochSphereModel.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
-import { Color, Image, Line } from '../../../../scenery/js/imports.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import { Color, Image, Line, Text, VBox } from '../../../../scenery/js/imports.js';
+import ComboBox, { ComboBoxItem } from '../../../../sun/js/ComboBox.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import blochSphereScreenMockup_png from '../../../images/blochSphereScreenMockup_png.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import { BlochSphereScene } from '../model/BlochSphereScene.js';
 import BlochSpherePreparationArea from './BlochSpherePreparationArea.js';
 
 export default class BlochSphereScreenView extends QuantumMeasurementScreenView {
@@ -29,8 +32,10 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
 
     const preparationArea = new BlochSpherePreparationArea( model, this, {
       left: this.layoutBounds.left + 20,
+      top: this.layoutBounds.top + 20,
       tandem: tandem.createTandem( 'preparationArea' )
     } );
+    this.addChild( preparationArea );
 
     // Add the vertical line that will sit between the preparation and measurement areas.
     const dividingLineX = 350; // empirically determined
@@ -41,7 +46,30 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
     } );
     this.addChild( dividingLine );
 
-    this.addChild( preparationArea );
+    const comboBoxItems: ComboBoxItem<BlochSphereScene>[] = BlochSphereScene.enumeration.values.map( scene => {
+      return {
+        value: scene,
+        createNode: () => new Text( scene.description, { font: new PhetFont( 16 ) } )
+      };
+    } );
+
+    const sceneSelectionComboBox = new ComboBox( model.selectedSceneProperty, comboBoxItems, this, {
+      tandem: tandem.createTandem( 'sceneSelectionComboBox' )
+    } );
+
+    const measurementAreaTitleAndComboBox = new VBox( {
+      children: [
+        new Text( 'Spin Measurement', { font: new PhetFont( { size: 20, weight: 'bolder' } ) } ),
+        sceneSelectionComboBox
+      ],
+      spacing: 10,
+      centerX: this.layoutBounds.centerX + 150,
+      top: this.layoutBounds.top + 20
+    } );
+
+
+    this.addChild( measurementAreaTitleAndComboBox );
+
   }
 
   public override reset(): void {

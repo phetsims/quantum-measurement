@@ -83,7 +83,8 @@ export default class BlochSpherePreparationArea extends VBox {
       model.blochSphere, {
         tandem: providedOptions.tandem.createTandem( 'blochSphereNode' ),
         expandBounds: false,
-        drawTitle: false
+        drawTitle: false,
+        scale: 0.9
       } );
 
     const options = optionize<BlochSpherePreparationAreaOptions, SelfOptions, VBoxOptions>()( {

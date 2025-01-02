@@ -15,6 +15,7 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import { BlochSphereScene } from './BlochSphereScene.js';
 import ComplexBlochSphere from './ComplexBlochSphere.js';
 import { StateDirection } from './StateDirection.js';
 
@@ -23,6 +24,8 @@ type SelfOptions = EmptySelfOptions;
 type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
 export default class BlochSphereModel implements TModel {
+
+  public readonly selectedSceneProperty: Property<BlochSphereScene>;
 
   public readonly blochSphere: ComplexBlochSphere;
 
@@ -36,6 +39,12 @@ export default class BlochSphereModel implements TModel {
   public selectedStateDirectionProperty: Property<StateDirection>;
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
+
+    this.selectedSceneProperty = new Property( BlochSphereScene.MEASUREMENT, {
+      tandem: providedOptions.tandem.createTandem( 'selectedSceneProperty' ),
+      phetioReadOnly: true,
+      phetioValueType: EnumerationIO( BlochSphereScene )
+    } );
 
     this.blochSphere = new ComplexBlochSphere( {
       tandem: providedOptions.tandem.createTandem( 'blochSphere' )
