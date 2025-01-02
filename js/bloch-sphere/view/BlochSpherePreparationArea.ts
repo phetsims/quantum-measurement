@@ -32,14 +32,14 @@ export default class BlochSpherePreparationArea extends VBox {
 
   public constructor( model: BlochSphereModel, parentNode: Node, providedOptions: BlochSpherePreparationAreaOptions ) {
 
-    const polarSlider = new Slider( model.blochSphere.polarAngleProperty, model.blochSphere.polarAngleProperty.range, {
+    const polarSlider = new Slider( model.preparationBlochSphere.polarAngleProperty, model.preparationBlochSphere.polarAngleProperty.range, {
       center: new Vector2( 100, 200 ),
       tandem: providedOptions.tandem.createTandem( 'polarSlider' ),
       thumbFill: '#444',
       trackSize: new Dimension2( 150, 0.5 ),
       majorTickLength: 10
     } );
-    const azimuthSlider = new Slider( model.blochSphere.azimuthalAngleProperty, model.blochSphere.azimuthalAngleProperty.range, {
+    const azimuthSlider = new Slider( model.preparationBlochSphere.azimuthalAngleProperty, model.preparationBlochSphere.azimuthalAngleProperty.range, {
       center: new Vector2( 100, 100 ),
       tandem: providedOptions.tandem.createTandem( 'azimuthSlider' ),
       thumbFill: '#444',
@@ -80,7 +80,7 @@ export default class BlochSpherePreparationArea extends VBox {
     } );
 
     const blochSphereNode = new BlochSphereNode(
-      model.blochSphere, {
+      model.preparationBlochSphere, {
         tandem: providedOptions.tandem.createTandem( 'blochSphereNode' ),
         expandBounds: false,
         drawTitle: false,

@@ -7,6 +7,7 @@
  * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
+import Multilink from '../../../../axon/js/Multilink.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import TModel from '../../../../joist/js/TModel.js';
@@ -27,9 +28,9 @@ export default class BlochSphereModel implements TModel {
 
   public readonly selectedSceneProperty: Property<BlochSphereScene>;
 
-  public readonly blochSphere: ComplexBlochSphere;
+  public readonly preparationBlochSphere: ComplexBlochSphere;
 
-  // Coefficients of the state equation
+  // Coefficients of the state equation. They are derived from the Bloch Sphere representation on the multilink below.
   // |psi> = upCoefficient |up> + downCoefficient * exp( i * phase * PI ) |down>
   public readonly upCoefficientProperty: NumberProperty;
   public readonly downCoefficientProperty: NumberProperty;
@@ -46,8 +47,8 @@ export default class BlochSphereModel implements TModel {
       phetioValueType: EnumerationIO( BlochSphereScene )
     } );
 
-    this.blochSphere = new ComplexBlochSphere( {
-      tandem: providedOptions.tandem.createTandem( 'blochSphere' )
+    this.preparationBlochSphere = new ComplexBlochSphere( {
+      tandem: providedOptions.tandem.createTandem( 'preparationBlochSphere' )
     } );
 
     this.upCoefficientProperty = new NumberProperty( 1, {
@@ -75,28 +76,27 @@ export default class BlochSphereModel implements TModel {
     this.selectedStateDirectionProperty.link( stateDirection => {
       if ( stateDirection !== StateDirection.CUSTOM ) {
         selectingStateDirection = true;
-        this.blochSphere.polarAngleProperty.value = stateDirection.polarAngle;
-        this.blochSphere.azimuthalAngleProperty.value = stateDirection.azimuthalAngle;
+        this.preparationBlochSphere.polarAngleProperty.value = stateDirection.polarAngle;
+        this.preparationBlochSphere.azimuthalAngleProperty.value = stateDirection.azimuthalAngle;
         selectingStateDirection = false;
       }
     } );
 
-    this.blochSphere.polarAngleProperty.link( theta => {
-      this.upCoefficientProperty.value = Math.cos( theta / 2 );
-      this.downCoefficientProperty.value = Math.sin( theta / 2 );
+    Multilink.multilink(
+      [
+        this.preparationBlochSphere.polarAngleProperty,
+        this.preparationBlochSphere.azimuthalAngleProperty
+      ],
+      ( polarAngle, azimuthalAngle ) => {
+        this.upCoefficientProperty.value = Math.cos( polarAngle / 2 );
+        this.downCoefficientProperty.value = Math.sin( polarAngle / 2 );
+        this.phaseFactorProperty.value = azimuthalAngle / Math.PI;
 
-      if ( !selectingStateDirection ) {
-        this.selectedStateDirectionProperty.value = StateDirection.CUSTOM;
+        if ( !selectingStateDirection ) {
+          this.selectedStateDirectionProperty.value = StateDirection.CUSTOM;
+        }
       }
-    } );
-
-    this.blochSphere.azimuthalAngleProperty.link( phi => {
-      this.phaseFactorProperty.value = phi / Math.PI;
-
-      if ( !selectingStateDirection ) {
-        this.selectedStateDirectionProperty.value = StateDirection.CUSTOM;
-      }
-    } );
+    );
   }
 
   /**
@@ -111,7 +111,7 @@ export default class BlochSphereModel implements TModel {
    * @param dt - time step, in seconds
    */
   public step( dt: number ): void {
-    this.blochSphere.step( dt );
+    this.preparationBlochSphere.step( dt );
   }
 }
 
