@@ -146,6 +146,11 @@ const QuantumMeasurementColors = {
   // Color for particles on the "Spin" screen particles.
   particleColor: new ProfileColorProperty( quantumMeasurement, 'particleColor', {
     default: '#F0F'
+  } ),
+
+  // Magnetic field color
+  magneticFieldColor: new ProfileColorProperty( quantumMeasurement, 'magneticFieldColor', {
+    default: '#FF0'
   } )
 };
 

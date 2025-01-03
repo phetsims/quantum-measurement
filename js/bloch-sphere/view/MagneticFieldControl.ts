@@ -76,7 +76,7 @@ export default class MagneticFieldControl extends Panel {
       tandem: providedOptions.tandem.createTandem( 'magneticFieldStrengthSlider' ),
       thumbSize: new Dimension2( 28, 14 ),
       thumbFill: '#ee0',
-      thumbFillHighlighted: '#ff0',
+      thumbFillHighlighted: QuantumMeasurementColors.magneticFieldColor,
       thumbCenterLineStroke: Color.BLACK,
       trackSize: SLIDER_TRACK_SIZE,
       trackFillEnabled: Color.BLACK,
