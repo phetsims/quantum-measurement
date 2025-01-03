@@ -47,7 +47,7 @@ export default class MagneticFieldControl extends Panel {
           lineWidth: 1,
           lineDash: [ 2, 2 ]
         } ),
-        new MagneticFieldArrowNode( magneticFieldStrengthProperty )
+        new MagneticFieldArrowNode( magneticFieldStrengthProperty, SLIDER_TRACK_SIZE.height / 2 )
       ],
       tandem: providedOptions.tandem.createTandem( 'magneticFieldIndicator' )
     } );

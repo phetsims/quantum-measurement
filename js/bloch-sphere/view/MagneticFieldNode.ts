@@ -16,19 +16,22 @@ export default class MagneticFieldNode extends Node {
 
     super( providedOptions );
 
-    const columns = 5;
-    const rows = 5;
-    const separation = 60;
+    const columns = 8;
+    const rows = 7;
+    const separationX = 300 / columns;
+    const separationY = 300 / rows;
 
     for ( let i = 0; i < columns; i++ ) {
       for ( let j = 0; j < rows; j++ ) {
-        const magneticFieldArrowNode = new MagneticFieldArrowNode( magneticFieldStrength );
-        magneticFieldArrowNode.centerX = i * separation;
-        magneticFieldArrowNode.centerY = j * separation;
+        const magneticFieldArrowNode = new MagneticFieldArrowNode( magneticFieldStrength, 30 );
+        magneticFieldStrength.link( strength => {
+          magneticFieldArrowNode.centerX = i * separationX;
+          magneticFieldArrowNode.centerY = j * separationY;
+        } );
+
         this.addChild( magneticFieldArrowNode );
       }
     }
-
   }
 }
 
