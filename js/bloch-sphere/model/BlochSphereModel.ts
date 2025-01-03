@@ -165,7 +165,12 @@ export default class BlochSphereModel implements TModel {
    * Resets the model.
    */
   public reset(): void {
-    // no-op
+    this.preparationBlochSphere.reset();
+    this.selectedSceneProperty.reset();
+    this.readyToObserveProperty.reset();
+    this.magneticFieldStrengthProperty.reset();
+    this.measurementBasisProperty.reset();
+    this.isSingleMeasurementModeProperty.reset();
   }
 
   /**

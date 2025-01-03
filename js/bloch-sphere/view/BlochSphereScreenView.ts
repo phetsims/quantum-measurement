@@ -19,9 +19,13 @@ import BlochSpherePreparationArea from './BlochSpherePreparationArea.js';
 
 export default class BlochSphereScreenView extends QuantumMeasurementScreenView {
 
+  private readonly model: BlochSphereModel;
+
   public constructor( model: BlochSphereModel, tandem: Tandem ) {
 
     super( { tandem: tandem } );
+
+    this.model = model;
 
     const preparationArea = new BlochSpherePreparationArea( model, this, {
       left: this.layoutBounds.left + 20,
@@ -68,10 +72,10 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
       top: measurementAreaTitleAndComboBox.bottom + 20
     } );
     this.addChild( measurementArea );
-
   }
 
   public override reset(): void {
+    this.model.reset();
     super.reset();
   }
 }
