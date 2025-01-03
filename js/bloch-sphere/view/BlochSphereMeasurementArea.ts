@@ -24,6 +24,7 @@ import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstant
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
 import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHistogram.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import BlochSphereModel from '../model/BlochSphereModel.js';
 import { BlochSphereScene } from '../model/BlochSphereScene.js';
 import { MeasurementBasis } from '../model/MeasurementBasis.js';
@@ -134,8 +135,12 @@ export default class BlochSphereMeasurementArea extends Node {
     } ), QuantumMeasurementConstants.panelOptions );
 
     const prepareObserveButtonTextProperty = new DerivedStringProperty(
-      [ model.readyToObserveProperty ],
-      readyToObserve => readyToObserve ? 'Observe' : 'Prepare'
+      [
+        model.readyToObserveProperty,
+        QuantumMeasurementStrings.observeStringProperty,
+        QuantumMeasurementStrings.reprepareStringProperty
+      ],
+      ( readyToObserve, observeString, reprepareString ) => readyToObserve ? observeString : reprepareString
     );
 
     const prepareObserveButton = new TextPushButton(
