@@ -15,7 +15,7 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import Orientation from '../../../../phet-core/js/Orientation.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, HBox, Node, Path, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Color, HBox, Line, Node, Path, Text, VBox } from '../../../../scenery/js/imports.js';
 import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
 import Slider from '../../../../sun/js/Slider.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
@@ -45,11 +45,31 @@ export default class MagneticFieldControl extends Panel {
         new Path( new Shape().moveTo( 0, -SLIDER_TRACK_SIZE.height / 2 ).lineTo( 0, SLIDER_TRACK_SIZE.height / 2 ), {
           stroke: 'grey',
           lineWidth: 1,
-          lineDash: [ 5, 5 ]
+          lineDash: [ 2, 2 ]
         } ),
         new MagneticFieldArrowNode( magneticFieldStrengthProperty )
       ],
       tandem: providedOptions.tandem.createTandem( 'magneticFieldIndicator' )
+    } );
+
+    // Add horizontal lines to the magnetic field indicator.
+    const numberOfIndicatorLines = 5;
+    _.times( numberOfIndicatorLines, num => {
+      const indicatorLine = new Line( -5, 0, 5, 0, {
+        stroke: 'gray',
+        centerY: -SLIDER_TRACK_SIZE.height / 2 + num * SLIDER_TRACK_SIZE.height / ( numberOfIndicatorLines - 1 )
+      } );
+      magneticFieldIndicator.addChild( indicatorLine );
+      indicatorLine.moveToBack();
+    } );
+
+    const labeledMagneticFieldIndicator = new HBox( {
+      children: [
+        new Text( '0', { font: new PhetFont( 12 ) } ),
+        magneticFieldIndicator
+      ],
+      spacing: 5,
+      resize: false
     } );
 
     const magneticFieldStrengthSlider = new Slider( magneticFieldStrengthProperty, magneticFieldStrengthProperty.range, {
@@ -68,7 +88,7 @@ export default class MagneticFieldControl extends Panel {
     magneticFieldStrengthSlider.addMajorTick( 1 );
 
     const indicatorAndSlider = new HBox( {
-      children: [ magneticFieldIndicator, magneticFieldStrengthSlider ],
+      children: [ labeledMagneticFieldIndicator, magneticFieldStrengthSlider ],
       spacing: 20,
       resize: false
     } );
