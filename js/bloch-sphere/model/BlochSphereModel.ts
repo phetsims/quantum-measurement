@@ -60,7 +60,7 @@ export default class BlochSphereModel implements TModel {
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
-    this.selectedSceneProperty = new Property( BlochSphereScene.PRECESSION, {
+    this.selectedSceneProperty = new Property( BlochSphereScene.MEASUREMENT, {
       tandem: providedOptions.tandem.createTandem( 'selectedSceneProperty' ),
       phetioReadOnly: true,
       phetioValueType: EnumerationIO( BlochSphereScene )
