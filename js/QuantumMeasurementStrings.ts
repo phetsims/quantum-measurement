@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /* eslint-disable */
 /* @formatter:off */
@@ -40,6 +40,7 @@ type StringsType = {
   'basisStateStringProperty': LocalizedStringProperty;
   'HStringProperty': LocalizedStringProperty;
   'itemToPreparePatternStringProperty': LocalizedStringProperty;
+  'magneticFieldStringProperty': LocalizedStringProperty;
   'manyPhotonsStringProperty': LocalizedStringProperty;
   'mirrorStringProperty': LocalizedStringProperty;
   'multipleCoinMeasurementsStringProperty': LocalizedStringProperty;

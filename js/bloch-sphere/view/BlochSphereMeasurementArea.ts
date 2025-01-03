@@ -10,16 +10,13 @@
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import { Shape } from '../../../../kite/js/imports.js';
-import { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import Orientation from '../../../../phet-core/js/Orientation.js';
+import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Node, NodeOptions, Path, RichText, RichTextOptions, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Node, NodeOptions, RichText, RichTextOptions, Text, VBox } from '../../../../scenery/js/imports.js';
 import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
-import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
-import Slider from '../../../../sun/js/Slider.js';
+import Panel from '../../../../sun/js/Panel.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
@@ -29,7 +26,7 @@ import BlochSphereModel from '../model/BlochSphereModel.js';
 import { BlochSphereScene } from '../model/BlochSphereScene.js';
 import { MeasurementBasis } from '../model/MeasurementBasis.js';
 import BlochSphereNumericalEquationNode from './BlochSphereNumericalEquationNode.js';
-import MagneticFieldArrowNode from './MagneticFieldArrowNode.js';
+import MagneticFieldControl from './MagneticFieldControl.js';
 import MagneticFieldNode from './MagneticFieldNode.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -92,7 +89,6 @@ export default class BlochSphereMeasurementArea extends Node {
       } );
     const singleOrMultipleRadioButtonGroup = new AquaRadioButtonGroup( model.isSingleMeasurementModeProperty, radioButtonItems, { orientation: 'vertical' } );
 
-
     const basisRadioButtonTextOptions: RichTextOptions = {
       font: new PhetFont( 18 ),
       fill: 'black'
@@ -143,38 +139,14 @@ export default class BlochSphereMeasurementArea extends Node {
     } );
     this.addChild( measurementControls );
 
-
-    const magneticFieldPanel = new Panel( new Node( {
-      children: [
-        new Node( {
-          centerX: 0,
-          centerY: 0,
-          children: [
-            new Path( new Shape().moveTo( 0, -50 ).lineTo( 0, 50 ), {
-              stroke: 'grey',
-              lineWidth: 1,
-              lineDash: [ 5, 5 ]
-            } ),
-            new MagneticFieldArrowNode( model.magneticFieldStrengthProperty )
-          ]
-        } ),
-        new Slider( model.magneticFieldStrengthProperty, model.magneticFieldStrengthProperty.range, {
-          tandem: providedOptions.tandem.createTandem( 'magneticFieldStrengthSlider' ),
-          thumbFill: '#ff0',
-          orientation: Orientation.VERTICAL,
-          centerX: 50,
-          centerY: 0
-        } )
-      ]
-    } ), combineOptions<PanelOptions>( {
-      top: singleMeasurementBlochSphereNode.bottom,
+    this.addChild( new MagneticFieldControl( model.magneticFieldStrengthProperty, {
       centerX: singleMeasurementBlochSphereNode.centerX,
-      visibleProperty: DerivedProperty.valueEqualsConstant( model.selectedSceneProperty, BlochSphereScene.PRECESSION )
-    }, QuantumMeasurementConstants.panelOptions ) );
-    this.addChild( magneticFieldPanel );
+      top: magneticFieldNode.bottom + 10,
+      visibleProperty: DerivedProperty.valueEqualsConstant( model.selectedSceneProperty, BlochSphereScene.PRECESSION ),
+      tandem: providedOptions.tandem.createTandem( 'magneticFieldControl' )
+    } ) );
 
     this.mutate( providedOptions );
-
   }
 }
 
