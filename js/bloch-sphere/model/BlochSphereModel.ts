@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * Main model for the Bloch Sphere screen that contains the Bloch Sphere representation and the logic for

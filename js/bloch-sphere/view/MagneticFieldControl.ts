@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2025, University of Colorado Boulder
 
 /**
  * MagneticFieldControl is the node that contains the UI elements for controlling the magnetic field in the Bloch Sphere

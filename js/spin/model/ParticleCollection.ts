@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * ParticleCollection is the model for particles with a predetermined spin. It has a lifetime, which will

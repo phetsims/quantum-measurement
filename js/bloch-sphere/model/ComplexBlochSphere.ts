@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * ComplexBlochSphere is a Quantum State representation that supports more sophisticated angles and equation coefficients,
