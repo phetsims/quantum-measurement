@@ -37,10 +37,7 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
 
   public constructor( model: CoinsModel, tandem: Tandem ) {
 
-    super( {
-      initialMockupOpacity: 0,
-      tandem: tandem
-    } );
+    super( { tandem: tandem } );
 
     this.model = model;
 
@@ -67,11 +64,6 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
     } );
     this.addChild( this.quantumCoinsExperimentSceneView );
 
-    // Move the mockup image to the front of the Z-order for easier comparisons with added UI elements.
-    if ( this.mockupImage ) {
-      this.mockupImage.moveToFront();
-    }
-
     // Changing the background color based on the experiment type
     Multilink.multilink(
       [
@@ -80,8 +72,8 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
         QuantumMeasurementColors.quantumBackgroundColorProperty
       ],
       ( experimentType, classicalBackgroundColor, quantumBackgroundColor ) => {
-      QuantumMeasurementColors.screenBackgroundColorProperty.value = experimentType === 'classical' ? classicalBackgroundColor : quantumBackgroundColor;
-    } );
+        QuantumMeasurementColors.screenBackgroundColorProperty.value = experimentType === 'classical' ? classicalBackgroundColor : quantumBackgroundColor;
+      } );
   }
 
   public override reset(): void {

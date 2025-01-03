@@ -20,10 +20,7 @@ export default class SpinScreenView extends QuantumMeasurementScreenView {
 
   public constructor( public readonly model: SpinModel, tandem: Tandem ) {
 
-    super( {
-      initialMockupOpacity: 0,
-      tandem: tandem
-    } );
+    super( { tandem: tandem } );
 
     const spinStatePreparationArea = new SpinStatePreparationArea(
       model,

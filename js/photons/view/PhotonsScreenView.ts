@@ -69,7 +69,6 @@ class PhotonsScreenView extends QuantumMeasurementScreenView {
 
     super( {
       children: [ experimentModeRadioButtonGroup, singlePhotonExperimentSceneView, manyPhotonsExperimentSceneView ],
-      initialMockupOpacity: 0,
       tandem: tandem
     } );
 

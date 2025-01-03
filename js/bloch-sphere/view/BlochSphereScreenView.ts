@@ -7,12 +7,10 @@
  */
 
 import BlochSphereModel from 'model/BlochSphereModel.js';
-import ScreenView from '../../../../joist/js/ScreenView.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, Image, Line, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Color, Line, Text, VBox } from '../../../../scenery/js/imports.js';
 import ComboBox, { ComboBoxItem } from '../../../../sun/js/ComboBox.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import blochSphereScreenMockup_png from '../../../images/blochSphereScreenMockup_png.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { BlochSphereScene } from '../model/BlochSphereScene.js';
@@ -23,13 +21,7 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
 
   public constructor( model: BlochSphereModel, tandem: Tandem ) {
 
-    super( {
-      initialMockupOpacity: 0,
-      mockupImage: new Image( blochSphereScreenMockup_png, {
-        scale: ScreenView.DEFAULT_LAYOUT_BOUNDS.width / blochSphereScreenMockup_png.width
-      } ),
-      tandem: tandem
-    } );
+    super( { tandem: tandem } );
 
     const preparationArea = new BlochSpherePreparationArea( model, this, {
       left: this.layoutBounds.left + 20,
