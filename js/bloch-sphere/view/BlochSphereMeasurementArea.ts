@@ -5,6 +5,7 @@
  * UI elements for controlling magnetic field and basis of measurements...
  *
  * @author Agustín Vallejo
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
@@ -16,6 +17,7 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Node, NodeOptions, RichText, RichTextOptions, Text, VBox } from '../../../../scenery/js/imports.js';
 import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
+import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import Panel from '../../../../sun/js/Panel.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
@@ -107,7 +109,9 @@ export default class BlochSphereMeasurementArea extends Node {
     } );
 
     const basisRadioButtonGroup = new RectangularRadioButtonGroup<MeasurementBasis>(
-      model.measurementBasisProperty, basisRadioGroupItems, {
+      model.measurementBasisProperty,
+      basisRadioGroupItems,
+      {
         orientation: 'horizontal',
         tandem: basisRadioButtonGroupTandem,
         phetioFeatured: true,
@@ -115,7 +119,8 @@ export default class BlochSphereMeasurementArea extends Node {
           baseColor: QuantumMeasurementColors.controlPanelFillColorProperty,
           phetioVisiblePropertyInstrumented: false
         }
-      } );
+      }
+    );
 
     const measurementControlPanel = new Panel( new VBox( {
       spacing: 10,
@@ -128,13 +133,34 @@ export default class BlochSphereMeasurementArea extends Node {
       ]
     } ), QuantumMeasurementConstants.panelOptions );
 
+    const prepareObserveButtonTextProperty = new DerivedStringProperty(
+      [ model.readyToObserveProperty ],
+      readyToObserve => readyToObserve ? 'Observe' : 'Prepare'
+    );
+
+    const prepareObserveButton = new TextPushButton(
+      prepareObserveButtonTextProperty,
+      {
+        listener: () => {
+          model.readyToObserveProperty.value = !model.readyToObserveProperty.value;
+        },
+        baseColor: QuantumMeasurementColors.experimentButtonColorProperty,
+        font: new PhetFont( 18 ),
+        xMargin: 20,
+        yMargin: 6,
+        maxWidth: measurementControlPanel.width,
+        tandem: providedOptions.tandem.createTandem( 'prepareObserveButton' )
+      }
+    );
+
     const measurementControls = new VBox( {
       left: singleMeasurementBlochSphereNode.right + 20,
-      centerY: singleMeasurementBlochSphereNode.centerY,
+      top: 0,
       spacing: 10,
       children: [
         measurementResultHistogram,
-        measurementControlPanel
+        measurementControlPanel,
+        prepareObserveButton
       ]
     } );
     this.addChild( measurementControls );

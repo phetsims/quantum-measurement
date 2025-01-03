@@ -55,6 +55,9 @@ export default class BlochSphereModel implements TModel {
   // If is single or multiple measurement mode
   public isSingleMeasurementModeProperty: BooleanProperty;
 
+  // If the model is ready to observe or needs the state to be prepared.
+  public readonly readyToObserveProperty: BooleanProperty;
+
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
     this.selectedSceneProperty = new Property( BlochSphereScene.PRECESSION, {
@@ -122,6 +125,11 @@ export default class BlochSphereModel implements TModel {
         this.preparationBlochSphere.azimuthalAngleProperty.value = stateDirection.azimuthalAngle;
         selectingStateDirection = false;
       }
+    } );
+
+    this.readyToObserveProperty = new BooleanProperty( true, {
+      phetioReadOnly: true,
+      tandem: providedOptions.tandem.createTandem( 'readyToObserveProperty' )
     } );
 
     Multilink.multilink(
