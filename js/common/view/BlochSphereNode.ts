@@ -3,6 +3,7 @@
  * Visual representation of the Bloch Sphere, meaning an orb with axis and the state vector.
  *
  * @author Agustín Vallejo
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
@@ -238,13 +239,13 @@ export default class BlochSphereNode extends Node {
           Math.cos( polarAngle )
         );
         const distanceFromMiddleBack = tipPositionCartesian.distanceXYZ( -1, 0, 0 );
-        const stateVectorTipOpacity = distanceFromMiddleBack / 2;
+        const stateVectorTipOpacity = Math.pow( distanceFromMiddleBack / 2, 2 );
         const stateVectorGradient = new LinearGradient(
           stateVector.tailX,
           stateVector.tailY,
           stateVector.tipX,
           stateVector.tipY
-        ).addColorStop( 0, 'rgba(0,0,0,0.5)' ).addColorStop( 1, `rgba(0,0,0,${stateVectorTipOpacity})` );
+        ).addColorStop( 0, 'rgba(0,0,0,0.4)' ).addColorStop( 1, `rgba(0,0,0,${stateVectorTipOpacity})` );
         stateVector.fill = stateVectorGradient;
         stateVector.stroke = stateVectorGradient;
 
