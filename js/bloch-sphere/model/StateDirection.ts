@@ -6,9 +6,11 @@
  * @author Agustín Vallejo
  */
 
+import Vector3 from '../../../../dot/js/Vector3.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import { MeasurementBasis } from './MeasurementBasis.js';
 
 export class StateDirection extends EnumerationValue {
   public static readonly Z_PLUS = new StateDirection( '+Z', 0, 0, 'ZPlus' );
@@ -26,6 +28,18 @@ export class StateDirection extends EnumerationValue {
                       public readonly azimuthalAngle: number,
                       public readonly tandemName: string ) {
     super();
+  }
+
+  public static directionToVector( direction: StateDirection | MeasurementBasis ): Vector3 {
+    return new Vector3( Math.sin( direction.polarAngle ) * Math.cos( direction.azimuthalAngle ),
+      Math.sin( direction.polarAngle ) * Math.sin( direction.azimuthalAngle ),
+      Math.cos( direction.polarAngle ) );
+  }
+
+  public static anglesToVector( polarAngle: number, azimuthalAngle: number ): Vector3 {
+    return new Vector3( Math.sin( polarAngle ) * Math.cos( azimuthalAngle ),
+      Math.sin( polarAngle ) * Math.sin( azimuthalAngle ),
+      Math.cos( polarAngle ) );
   }
 }
 

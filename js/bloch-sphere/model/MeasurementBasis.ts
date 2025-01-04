@@ -11,17 +11,25 @@ import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
+import { StateDirection } from './StateDirection.js';
 
 export class MeasurementBasis extends EnumerationValue {
-  public static readonly S_SUB_X = new MeasurementBasis( QuantumMeasurementStrings.SSubXStringProperty, Math.PI / 2, 0, 'SSubX' );
-  public static readonly S_SUB_Y = new MeasurementBasis( QuantumMeasurementStrings.SSubYStringProperty, Math.PI / 2, Math.PI / 2, 'SSubY' );
-  public static readonly S_SUB_Z = new MeasurementBasis( QuantumMeasurementStrings.SSubZStringProperty, 0, 0, 'SSubZ' );
+  public static readonly S_SUB_X = new MeasurementBasis(
+    QuantumMeasurementStrings.SSubXStringProperty, Math.PI / 2, 0, StateDirection.X_MINUS, 'SSubX'
+  );
+  public static readonly S_SUB_Y = new MeasurementBasis(
+    QuantumMeasurementStrings.SSubYStringProperty, Math.PI / 2, Math.PI / 2, StateDirection.Y_MINUS, 'SSubY'
+  );
+  public static readonly S_SUB_Z = new MeasurementBasis(
+    QuantumMeasurementStrings.SSubZStringProperty, 0, 0, StateDirection.Z_MINUS, 'SSubZ'
+  );
 
   public static readonly enumeration = new Enumeration( MeasurementBasis );
 
   public constructor( public readonly label: TReadOnlyProperty<string>,
                       public readonly polarAngle: number,
                       public readonly azimuthalAngle: number,
+                      public readonly oppositeDirection: StateDirection,
                       public readonly tandemName: string ) {
     super();
   }

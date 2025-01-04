@@ -180,6 +180,10 @@ export default class BlochSphereModel implements TModel {
     this.preparationBlochSphere.azimuthalAngleProperty.link( azimuthalAngle => {
       this.singleMeasurementBlochSphere.azimuthalAngleProperty.value = azimuthalAngle;
     } );
+
+    this.measurementBasisProperty.link( () => {
+      this.resetCounts();
+    } );
   }
 
   /**
@@ -188,13 +192,29 @@ export default class BlochSphereModel implements TModel {
   public observe(): void {
     if ( this.readyToObserveProperty.value ) {
 
-      // TODO: This code is a placeholder for the actual measurement logic.  See https://github.com/phetsims/quantum-measurement/issues/54.
-      const isUp = dotRandom.nextDouble() < 0.5;
+      const measurementVector = StateDirection.directionToVector( this.measurementBasisProperty.value );
+      const stateVector = StateDirection.anglesToVector(
+        this.singleMeasurementBlochSphere.polarAngleProperty.value,
+        this.singleMeasurementBlochSphere.azimuthalAngleProperty.value
+      );
+
+      const dotProduct = measurementVector.dot( stateVector );
+
+      const isUp = ( dotRandom.nextDouble() * 2 - 1 ) < dotProduct;
       if ( isUp ) {
         this.upMeasurementCountProperty.value++;
+        this.singleMeasurementBlochSphere.setDirection(
+          this.measurementBasisProperty.value.polarAngle,
+          this.measurementBasisProperty.value.azimuthalAngle
+        );
       }
       else {
         this.downMeasurementCountProperty.value++;
+        const oppositeDirection = this.measurementBasisProperty.value.oppositeDirection;
+        this.singleMeasurementBlochSphere.setDirection(
+          oppositeDirection.polarAngle,
+          oppositeDirection.azimuthalAngle
+        );
       }
 
       // Update the measurement state.
@@ -207,6 +227,12 @@ export default class BlochSphereModel implements TModel {
    */
   public reprepare(): void {
     this.readyToObserveProperty.value = true;
+
+    // Copy the settings from the preparation bloch sphere
+    this.singleMeasurementBlochSphere.setDirection(
+      this.preparationBlochSphere.polarAngleProperty.value,
+      this.preparationBlochSphere.azimuthalAngleProperty.value
+    );
   }
 
   /**
@@ -235,7 +261,6 @@ export default class BlochSphereModel implements TModel {
    * @param dt - time step, in seconds
    */
   public step( dt: number ): void {
-    this.preparationBlochSphere.step( dt );
     this.singleMeasurementBlochSphere.step( dt );
   }
 }

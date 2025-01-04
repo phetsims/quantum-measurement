@@ -51,6 +51,11 @@ export default class ComplexBlochSphere extends AbstractBlochSphere {
     );
   }
 
+  public setDirection( polarAngle: number, azimuthalAngle: number ): void {
+    this.polarAngleProperty.value = polarAngle;
+    this.azimuthalAngleProperty.value = azimuthalAngle;
+  }
+
   public override reset(): void {
     super.reset();
   }

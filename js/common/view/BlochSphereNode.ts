@@ -239,7 +239,7 @@ export default class BlochSphereNode extends Node {
           Math.cos( polarAngle )
         );
         const distanceFromMiddleBack = tipPositionCartesian.distanceXYZ( -1, 0, 0 );
-        const stateVectorTipOpacity = Math.pow( distanceFromMiddleBack / 2, 2 );
+        const stateVectorTipOpacity = Utils.toFixedNumber( Math.pow( distanceFromMiddleBack / 2, 2 ), 3 );
         const stateVectorGradient = new LinearGradient(
           stateVector.tailX,
           stateVector.tailY,
