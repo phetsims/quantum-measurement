@@ -71,7 +71,6 @@ export default class BlochSphereModel implements TModel {
     } );
 
     this.singleMeasurementBlochSphere = new ComplexBlochSphere( {
-      initialRotationSpeed: 0.5,
       tandem: providedOptions.tandem.createTandem( 'singleMeasurementBlochSphere' )
     } );
     this.singleMeasurementBlochSphere.polarAngleProperty.value = Math.PI / 2;
