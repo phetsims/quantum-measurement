@@ -10,7 +10,6 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -73,8 +72,8 @@ export default class BlochSphereMeasurementArea extends Node {
     );
 
     const measurementResultHistogram = new QuantumMeasurementHistogram(
-      new NumberProperty( 1 ),
-      new NumberProperty( 1 ),
+      model.upMeasurementCountProperty,
+      model.downMeasurementCountProperty,
       [
         new RichText( spinUpLabelStringProperty ),
         new RichText( spinDownLabelStringProperty ) ],
@@ -147,7 +146,12 @@ export default class BlochSphereMeasurementArea extends Node {
       prepareObserveButtonTextProperty,
       {
         listener: () => {
-          model.readyToObserveProperty.value = !model.readyToObserveProperty.value;
+          if ( model.readyToObserveProperty.value ) {
+            model.observe();
+          }
+          else {
+            model.reprepare();
+          }
         },
         baseColor: QuantumMeasurementColors.experimentButtonColorProperty,
         font: new PhetFont( 18 ),

@@ -11,6 +11,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import TModel from '../../../../joist/js/TModel.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
@@ -55,8 +56,13 @@ export default class BlochSphereModel implements TModel {
   // If is single or multiple measurement mode
   public isSingleMeasurementModeProperty: BooleanProperty;
 
-  // If the model is ready to observe or needs the state to be prepared.
+  // A flag that indicates whether the model is ready to observe or needs the state to be prepared.  This should not be
+  // modified directly by client code, but rather by the model's observe() and reprepare() methods.
   public readonly readyToObserveProperty: BooleanProperty;
+
+  // Properties for the spin measurements made.
+  public readonly upMeasurementCountProperty: NumberProperty;
+  public readonly downMeasurementCountProperty: NumberProperty;
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
@@ -116,6 +122,16 @@ export default class BlochSphereModel implements TModel {
       phetioReadOnly: true
     } );
 
+    this.upMeasurementCountProperty = new NumberProperty( 0, {
+      tandem: providedOptions.tandem.createTandem( 'upMeasurementCountProperty' ),
+      phetioReadOnly: true
+    } );
+
+    this.downMeasurementCountProperty = new NumberProperty( 0, {
+      tandem: providedOptions.tandem.createTandem( 'downMeasurementCountProperty' ),
+      phetioReadOnly: true
+    } );
+
     let selectingStateDirection = false;
     this.selectedStateDirectionProperty.link( stateDirection => {
       if ( stateDirection !== StateDirection.CUSTOM ) {
@@ -147,6 +163,7 @@ export default class BlochSphereModel implements TModel {
       }
     );
 
+    // Set the precession rate of the Bloch sphere based on the magnetic field strength and the selected scene.
     Multilink.multilink(
       [ this.magneticFieldStrengthProperty, this.selectedSceneProperty ],
       ( magneticFieldStrength, selectedScene ) => {
@@ -166,9 +183,45 @@ export default class BlochSphereModel implements TModel {
   }
 
   /**
+   * Make whatever observation ths mode is currently set up to make.
+   */
+  public observe(): void {
+    if ( this.readyToObserveProperty.value ) {
+
+      // TODO: This code is a placeholder for the actual measurement logic.  See https://github.com/phetsims/quantum-measurement/issues/54.
+      const isUp = dotRandom.nextDouble() < 0.5;
+      if ( isUp ) {
+        this.upMeasurementCountProperty.value++;
+      }
+      else {
+        this.downMeasurementCountProperty.value++;
+      }
+
+      // Update the measurement state.
+      this.readyToObserveProperty.value = false;
+    }
+  }
+
+  /**
+   * Reprepare the model for a new observation.
+   */
+  public reprepare(): void {
+    this.readyToObserveProperty.value = true;
+  }
+
+  /**
+   * Resets the measurement counts.
+   */
+  private resetCounts(): void {
+    this.upMeasurementCountProperty.reset();
+    this.downMeasurementCountProperty.reset();
+  }
+
+  /**
    * Resets the model.
    */
   public reset(): void {
+    this.resetCounts();
     this.preparationBlochSphere.reset();
     this.selectedSceneProperty.reset();
     this.readyToObserveProperty.reset();
