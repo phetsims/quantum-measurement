@@ -46,7 +46,9 @@ export default class ComplexBlochSphere extends AbstractBlochSphere {
    * Abstract method that should run calculations to update the Bloch Sphere representation.
    */
   public override step( dt: number ): void {
-    this.azimuthalAngleProperty.value = Utils.moduloBetweenDown( this.azimuthalAngleProperty.value + this.rotatingSpeedProperty.value * dt, 0, 2 * Math.PI );
+    this.azimuthalAngleProperty.value = Utils.moduloBetweenDown(
+      this.azimuthalAngleProperty.value + this.rotatingSpeedProperty.value * dt, 0, 2 * Math.PI
+    );
   }
 
   public override reset(): void {

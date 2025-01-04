@@ -148,9 +148,14 @@ export default class BlochSphereModel implements TModel {
       }
     );
 
-    this.magneticFieldStrengthProperty.link( magneticFieldStrength => {
-      this.singleMeasurementBlochSphere.rotatingSpeedProperty.value = magneticFieldStrength;
-    } );
+    Multilink.multilink(
+      [ this.magneticFieldStrengthProperty, this.selectedSceneProperty ],
+      ( magneticFieldStrength, selectedScene ) => {
+        this.singleMeasurementBlochSphere.rotatingSpeedProperty.value = selectedScene === BlochSphereScene.PRECESSION ?
+                                                                        magneticFieldStrength :
+                                                                        0;
+      }
+    );
 
     this.preparationBlochSphere.polarAngleProperty.link( polarAngle => {
       this.singleMeasurementBlochSphere.polarAngleProperty.value = polarAngle;
