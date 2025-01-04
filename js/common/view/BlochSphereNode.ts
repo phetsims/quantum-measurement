@@ -11,13 +11,14 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import Vector3 from '../../../../dot/js/Vector3.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import optionize, { combineOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ShadedSphereNode from '../../../../scenery-phet/js/ShadedSphereNode.js';
-import { Node, NodeOptions, Path, Text } from '../../../../scenery/js/imports.js';
+import { LinearGradient, Node, NodeOptions, Path, Text } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import AbstractBlochSphere from '../model/AbstractBlochSphere.js';
@@ -228,8 +229,24 @@ export default class BlochSphereNode extends Node {
         const tip = pointOnTheSphere( azimuthalAngle, polarAngle, xAxisOffsetAngleProperty.value );
         stateVector.setTip( tip.x, tip.y );
 
-        // Full opacity when pointing towards camera or at the poles
-        stateVector.opacity = Math.sin( polarAngle ) < 1e-5 || Math.cos( azimuthalAngle + xAxisOffsetAngle ) > 0 ? 1 : 0.4;
+        // To give the state vector a bit of a 3D effect, we will make it more transparent when it is further away from
+        // the camera. This is done by calculating the distance from the back of the sphere to the tip of the state
+        // vector. The further away, the more transparent it will be.
+        const tipPositionCartesian = new Vector3(
+          Math.sin( polarAngle ) * Math.cos( azimuthalAngle ),
+          Math.sin( polarAngle ) * Math.sin( azimuthalAngle ),
+          Math.cos( polarAngle )
+        );
+        const distanceFromMiddleBack = tipPositionCartesian.distanceXYZ( -1, 0, 0 );
+        const stateVectorTipOpacity = distanceFromMiddleBack / 2;
+        const stateVectorGradient = new LinearGradient(
+          stateVector.tailX,
+          stateVector.tailY,
+          stateVector.tipX,
+          stateVector.tipY
+        ).addColorStop( 0, 'rgba(0,0,0,0.5)' ).addColorStop( 1, `rgba(0,0,0,${stateVectorTipOpacity})` );
+        stateVector.fill = stateVectorGradient;
+        stateVector.stroke = stateVectorGradient;
 
         // If polar angle allows it, show the projection vector on the xy plane and the z projection line
         if ( Math.abs( Math.sin( polarAngle * 2 ) ) < 1e-5 ) {
