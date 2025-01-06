@@ -203,7 +203,7 @@ class PhotonsExperimentSceneModel {
     // Create the Property that will be used to control whether the simulation is playing.
     this.isPlayingProperty = new BooleanProperty( true, {
       tandem: providedOptions.tandem.createTandem( 'isPlayingProperty' ),
-      phetioFeatured: providedOptions.photonEmissionMode === 'manyPhotons'
+      phetioFeatured: true
     } );
   }
 

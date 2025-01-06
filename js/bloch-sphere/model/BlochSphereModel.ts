@@ -69,7 +69,8 @@ export default class BlochSphereModel implements TModel {
     this.selectedSceneProperty = new Property( BlochSphereScene.MEASUREMENT, {
       tandem: providedOptions.tandem.createTandem( 'selectedSceneProperty' ),
       phetioReadOnly: true,
-      phetioValueType: EnumerationIO( BlochSphereScene )
+      phetioValueType: EnumerationIO( BlochSphereScene ),
+      phetioFeatured: true
     } );
 
     this.preparationBlochSphere = new ComplexBlochSphere( {
