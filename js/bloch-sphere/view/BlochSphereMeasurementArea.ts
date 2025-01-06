@@ -202,6 +202,11 @@ export default class BlochSphereMeasurementArea extends Node {
     } ) );
 
     this.mutate( providedOptions );
+
+    this.pdomOrder = [
+      measurementControlPanel,
+      prepareObserveButton
+    ];
   }
 }
 

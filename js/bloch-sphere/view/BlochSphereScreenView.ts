@@ -72,6 +72,11 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
       top: measurementAreaTitleAndComboBox.bottom + 20
     } );
     this.addChild( measurementArea );
+
+    measurementArea.pdomOrder = [
+      ...measurementArea.pdomOrder!,
+      this.resetAllButton
+    ];
   }
 
   public override reset(): void {
