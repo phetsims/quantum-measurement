@@ -57,10 +57,30 @@ export default class BlochSphereMeasurementArea extends Node {
       drawTitle: false,
       drawKets: false,
       drawAngleIndicators: true,
-      centerX: magneticFieldNode.centerX,
-      centerY: magneticFieldNode.centerY
+      center: magneticFieldNode.center,
+      visibleProperty: model.isSingleMeasurementModeProperty
     } );
     this.addChild( singleMeasurementBlochSphereNode );
+
+    const multipleMeasurementBlochSpheresTandem = providedOptions.tandem.createTandem( 'multipleMeasurementBlochSpheres' );
+    const multipleMeasurementBlochSpheresNode = new Node( {
+      visibleProperty: DerivedProperty.not( model.isSingleMeasurementModeProperty )
+    } );
+    const blochSpheresSpacing = 70;
+    model.multiMeasurementBlochSpheres.forEach( ( blochSphere, index ) => {
+      const blochSphereNode = new BlochSphereNode( blochSphere, {
+        tandem: multipleMeasurementBlochSpheresTandem.createTandem( `blochSphere${index}` ),
+        scale: 0.3,
+        drawTitle: false,
+        drawKets: false,
+        drawAngleIndicators: true,
+        centerX: index !== 9 ? ( ( index + 1 ) % 3 ) * blochSpheresSpacing : blochSpheresSpacing,
+        centerY: Math.floor( index / 3 ) * blochSpheresSpacing
+      } );
+      multipleMeasurementBlochSpheresNode.addChild( blochSphereNode );
+    } );
+    multipleMeasurementBlochSpheresNode.center = magneticFieldNode.center.plusXY( 0, 30 );
+    this.addChild( multipleMeasurementBlochSpheresNode );
 
     const spinUpLabelStringProperty = new DerivedStringProperty(
       [ model.measurementBasisProperty ],
