@@ -13,6 +13,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
 import SceneSelectorRadioButtonGroup from '../../common/view/SceneSelectorRadioButtonGroup.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
@@ -37,32 +38,44 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
 
   public constructor( model: CoinsModel, tandem: Tandem ) {
 
-    super( { tandem: tandem } );
-
-    this.model = model;
-
     // Add the radio buttons at the top of the screen that will allow users to pick between classical and quantum coins.
     const experimentTypeRadioButtonGroup = new SceneSelectorRadioButtonGroup<SystemType>(
       model.experimentTypeProperty,
       SYSTEM_TYPE_TO_STRING_MAP,
       {
-        centerX: this.layoutBounds.centerX,
+        centerX: QuantumMeasurementConstants.LAYOUT_BOUNDS.centerX,
         tandem: tandem.createTandem( 'experimentTypeRadioButtonGroup' )
       }
     );
-    this.addChild( experimentTypeRadioButtonGroup );
 
     // Add the views for the two scenes that can be shown on this screen.
-    this.classicalCoinsExperimentSceneView = new CoinsExperimentSceneView( model.classicalCoinExperimentSceneModel, {
+    const classicalCoinsExperimentSceneView = new CoinsExperimentSceneView( model.classicalCoinExperimentSceneModel, {
       translation: SCENE_POSITION,
       tandem: tandem.createTandem( 'classicalCoinsExperimentSceneView' )
     } );
-    this.addChild( this.classicalCoinsExperimentSceneView );
-    this.quantumCoinsExperimentSceneView = new CoinsExperimentSceneView( model.quantumCoinExperimentSceneModel, {
+    const quantumCoinsExperimentSceneView = new CoinsExperimentSceneView( model.quantumCoinExperimentSceneModel, {
       translation: SCENE_POSITION,
       tandem: tandem.createTandem( 'quantumCoinsExperimentSceneView' )
     } );
-    this.addChild( this.quantumCoinsExperimentSceneView );
+
+    super( {
+      tandem: tandem,
+      children: [
+        experimentTypeRadioButtonGroup,
+        classicalCoinsExperimentSceneView,
+        quantumCoinsExperimentSceneView
+      ]
+    } );
+
+    this.classicalCoinsExperimentSceneView = classicalCoinsExperimentSceneView;
+    this.quantumCoinsExperimentSceneView = quantumCoinsExperimentSceneView;
+    this.model = model;
+
+    this.pdomPlayAreaNode.pdomOrder = [
+      experimentTypeRadioButtonGroup,
+      classicalCoinsExperimentSceneView,
+      quantumCoinsExperimentSceneView
+    ];
 
     // Changing the background color based on the experiment type
     Multilink.multilink(

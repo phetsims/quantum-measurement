@@ -86,13 +86,11 @@ export default class CoinsExperimentSceneView extends Node {
       sceneModel,
       options.tandem.createTandem( 'preparationArea' )
     );
-    this.addChild( this.preparationArea );
 
     this.measurementArea = new CoinExperimentMeasurementArea(
       sceneModel,
       options.tandem.createTandem( 'measurementArea' )
     );
-    this.addChild( this.measurementArea );
 
     // Add the vertical line that will sit between the preparation and measurement areas.
     const dividingLine = new Line( 0, 0, 0, DIVIDER_HEIGHT, {
@@ -100,7 +98,6 @@ export default class CoinsExperimentSceneView extends Node {
       lineWidth: 2,
       lineDash: [ 6, 5 ]
     } );
-    this.addChild( dividingLine );
 
     // Add the button for switching from preparation mode to measurement mode.
     const startMeasurementButton = new RectangularPushButton( {
@@ -114,7 +111,6 @@ export default class CoinsExperimentSceneView extends Node {
       centerY: 245, // empirically determined
       tandem: options.tandem.createTandem( 'startMeasurementButton' )
     } );
-    this.addChild( startMeasurementButton );
 
     // Position the dividing line and the two areas of activity.
     this.dividerXPositionProperty.link( dividerPositionX => {
@@ -172,7 +168,6 @@ export default class CoinsExperimentSceneView extends Node {
       },
       tandem: options.tandem.createTandem( 'newCoinButton' )
     } );
-    this.addChild( this.newCoinButton );
 
     // Position the "New Coin" button below the preparation area.
     this.preparationArea.boundsProperty.link( prepAreaBounds => {
@@ -181,6 +176,21 @@ export default class CoinsExperimentSceneView extends Node {
         this.newCoinButton.top = prepAreaBounds.bottom + 10;
       }
     } );
+
+    this.children = [
+      this.preparationArea,
+      this.measurementArea,
+      dividingLine,
+      startMeasurementButton,
+      this.newCoinButton
+    ];
+
+    this.pdomOrder = [
+      this.preparationArea,
+      startMeasurementButton,
+      this.newCoinButton,
+      this.measurementArea
+    ];
   }
 
   /**

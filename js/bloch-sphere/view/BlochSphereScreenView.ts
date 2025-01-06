@@ -32,7 +32,6 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
       top: this.layoutBounds.top + 20,
       tandem: tandem.createTandem( 'preparationArea' )
     } );
-    this.addChild( preparationArea );
 
     // Add the vertical line that will sit between the preparation and measurement areas.
     const dividingLineX = 350; // empirically determined
@@ -41,7 +40,6 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
       lineWidth: 2,
       lineDash: [ 6, 5 ]
     } );
-    this.addChild( dividingLine );
 
     const comboBoxItems: ComboBoxItem<BlochSphereScene>[] = BlochSphereScene.enumeration.values.map( scene => {
       return {
@@ -64,17 +62,27 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
       top: this.layoutBounds.top + 20
     } );
 
-    this.addChild( measurementAreaTitleAndComboBox );
 
     const measurementArea = new BlochSphereMeasurementArea( model, {
       tandem: tandem.createTandem( 'measurementArea' ),
       left: dividingLineX + 20,
       top: measurementAreaTitleAndComboBox.bottom + 20
     } );
-    this.addChild( measurementArea );
 
-    measurementArea.pdomOrder = [
-      ...measurementArea.pdomOrder!,
+    this.children = [
+      preparationArea,
+      dividingLine,
+      measurementAreaTitleAndComboBox,
+      measurementArea
+    ];
+
+    this.pdomPlayAreaNode.pdomOrder = [
+      preparationArea,
+      measurementAreaTitleAndComboBox,
+      measurementArea
+    ];
+
+    this.pdomControlAreaNode.pdomOrder = [
       this.resetAllButton
     ];
   }

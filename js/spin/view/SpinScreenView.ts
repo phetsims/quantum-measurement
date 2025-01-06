@@ -8,6 +8,7 @@
 
 import { Color, Line } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import SpinModel from '../model/SpinModel.js';
@@ -24,10 +25,9 @@ export default class SpinScreenView extends QuantumMeasurementScreenView {
 
     const spinStatePreparationArea = new SpinStatePreparationArea(
       model,
-      this.layoutBounds,
+      QuantumMeasurementConstants.LAYOUT_BOUNDS,
       tandem.createTandem( 'spinStatePreparationArea' )
     );
-    this.addChild( spinStatePreparationArea );
 
     // Add the vertical line that will sit between the preparation and measurement areas.
     const dividingLineX = 300; // empirically determined
@@ -36,14 +36,22 @@ export default class SpinScreenView extends QuantumMeasurementScreenView {
       lineWidth: 2,
       lineDash: [ 6, 5 ]
     } );
-    this.addChild( dividingLine );
 
-    this.spinMeasurementArea = new SpinMeasurementArea( model, this, this.layoutBounds, tandem.createTandem( 'spinMeasurementArea' ) );
+    this.spinMeasurementArea = new SpinMeasurementArea( model, this, QuantumMeasurementConstants.LAYOUT_BOUNDS, tandem.createTandem( 'spinMeasurementArea' ) );
     this.spinMeasurementArea.left = dividingLineX;
-    this.addChild( this.spinMeasurementArea );
 
-    this.spinMeasurementArea.pdomOrder = [
-      ...this.spinMeasurementArea.pdomOrder!,
+    this.children = [
+      spinStatePreparationArea,
+      dividingLine,
+      this.spinMeasurementArea
+    ];
+
+    this.pdomPlayAreaNode.pdomOrder = [
+      spinStatePreparationArea,
+      this.spinMeasurementArea
+    ];
+
+    this.pdomControlAreaNode.pdomOrder = [
       this.resetAllButton
     ];
 
