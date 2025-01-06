@@ -18,11 +18,13 @@ type QuantumMeasurementScreenViewOptions = SelfOptions & WithRequired<ScreenView
 
 export default class QuantumMeasurementScreenView extends ScreenView {
 
+  protected readonly resetAllButton: ResetAllButton;
+
   public constructor( providedOptions: QuantumMeasurementScreenViewOptions ) {
 
     super( providedOptions );
 
-    const resetAllButton = new ResetAllButton( {
+    this.resetAllButton = new ResetAllButton( {
       listener: () => {
         this.interruptSubtreeInput(); // cancel interactions that may be in progress
         this.reset();
@@ -31,7 +33,7 @@ export default class QuantumMeasurementScreenView extends ScreenView {
       bottom: this.layoutBounds.maxY - QuantumMeasurementConstants.SCREEN_VIEW_Y_MARGIN,
       tandem: providedOptions.tandem.createTandem( 'resetAllButton' )
     } );
-    this.addChild( resetAllButton );
+    this.addChild( this.resetAllButton );
   }
 
   /**

@@ -265,7 +265,10 @@ export default class SpinMeasurementArea extends VBox {
     this.measurementLines = measurementLines;
     this.manyParticlesCanvasNode = manyParticlesCanvasNode;
 
-
+    this.pdomOrder = [
+      experimentComboBox,
+      experimentAreaNode
+    ];
   }
 
   public step( dt: number ): void {

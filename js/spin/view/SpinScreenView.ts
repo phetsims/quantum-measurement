@@ -42,6 +42,11 @@ export default class SpinScreenView extends QuantumMeasurementScreenView {
     this.spinMeasurementArea.left = dividingLineX;
     this.addChild( this.spinMeasurementArea );
 
+    this.spinMeasurementArea.pdomOrder = [
+      ...this.spinMeasurementArea.pdomOrder!,
+      this.resetAllButton
+    ];
+
     model.currentExperimentProperty.notifyListenersStatic();
   }
 
