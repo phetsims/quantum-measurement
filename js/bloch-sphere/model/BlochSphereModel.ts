@@ -11,7 +11,6 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
-import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
 import TModel from '../../../../joist/js/TModel.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
@@ -34,6 +33,7 @@ export default class BlochSphereModel implements TModel {
 
   public readonly preparationBlochSphere: ComplexBlochSphere;
   public readonly singleMeasurementBlochSphere: ComplexBlochSphere;
+  public readonly multiMeasurementBlochSpheres: ComplexBlochSphere[] = [];
 
   // Coefficients of the state equation. They are derived from the Bloch Sphere representation on the multilink below.
   // |psi> = upCoefficient |up> + downCoefficient * exp( i * phase * PI ) |down>
@@ -79,7 +79,13 @@ export default class BlochSphereModel implements TModel {
     this.singleMeasurementBlochSphere = new ComplexBlochSphere( {
       tandem: providedOptions.tandem.createTandem( 'singleMeasurementBlochSphere' )
     } );
-    this.singleMeasurementBlochSphere.polarAngleProperty.value = Math.PI / 2;
+
+    const multiMeasurementTandem = providedOptions.tandem.createTandem( 'multiMeasurementBlochSpheres' );
+    _.times( 10, index => {
+      this.multiMeasurementBlochSpheres.push( new ComplexBlochSphere( {
+        tandem: multiMeasurementTandem.createTandem( `blochSphere${index}` )
+      } ) );
+    } );
 
     this.upCoefficientProperty = new NumberProperty( 0, {
       tandem: providedOptions.tandem.createTandem( 'upCoefficientProperty' ),
@@ -170,15 +176,26 @@ export default class BlochSphereModel implements TModel {
         this.singleMeasurementBlochSphere.rotatingSpeedProperty.value = selectedScene === BlochSphereScene.PRECESSION ?
                                                                         magneticFieldStrength :
                                                                         0;
+        this.multiMeasurementBlochSpheres.forEach( blochSphere => {
+          blochSphere.rotatingSpeedProperty.value = selectedScene === BlochSphereScene.PRECESSION ?
+                                                     magneticFieldStrength :
+                                                     0;
+        } );
       }
     );
 
     this.preparationBlochSphere.polarAngleProperty.link( polarAngle => {
       this.singleMeasurementBlochSphere.polarAngleProperty.value = polarAngle;
+      this.multiMeasurementBlochSpheres.forEach( blochSphere => {
+        blochSphere.polarAngleProperty.value = polarAngle;
+      } );
     } );
 
     this.preparationBlochSphere.azimuthalAngleProperty.link( azimuthalAngle => {
       this.singleMeasurementBlochSphere.azimuthalAngleProperty.value = azimuthalAngle;
+      this.multiMeasurementBlochSpheres.forEach( blochSphere => {
+        blochSphere.azimuthalAngleProperty.value = azimuthalAngle;
+      } );
     } );
 
     this.measurementBasisProperty.link( () => {
@@ -192,29 +209,13 @@ export default class BlochSphereModel implements TModel {
   public observe(): void {
     if ( this.readyToObserveProperty.value ) {
 
-      const measurementVector = StateDirection.directionToVector( this.measurementBasisProperty.value );
-      const stateVector = StateDirection.anglesToVector(
-        this.singleMeasurementBlochSphere.polarAngleProperty.value,
-        this.singleMeasurementBlochSphere.azimuthalAngleProperty.value
-      );
-
-      const dotProduct = measurementVector.dot( stateVector );
-
-      const isUp = ( dotRandom.nextDouble() * 2 - 1 ) < dotProduct;
-      if ( isUp ) {
-        this.upMeasurementCountProperty.value++;
-        this.singleMeasurementBlochSphere.setDirection(
-          this.measurementBasisProperty.value.polarAngle,
-          this.measurementBasisProperty.value.azimuthalAngle
-        );
+      if ( this.isSingleMeasurementModeProperty.value ) {
+        this.singleMeasurementBlochSphere.measure( this.measurementBasisProperty.value, this.upMeasurementCountProperty, this.downMeasurementCountProperty );
       }
       else {
-        this.downMeasurementCountProperty.value++;
-        const oppositeDirection = this.measurementBasisProperty.value.oppositeDirection;
-        this.singleMeasurementBlochSphere.setDirection(
-          oppositeDirection.polarAngle,
-          oppositeDirection.azimuthalAngle
-        );
+        this.multiMeasurementBlochSpheres.forEach( blochSphere => {
+          blochSphere.measure( this.measurementBasisProperty.value, this.upMeasurementCountProperty, this.downMeasurementCountProperty );
+        } );
       }
 
       // Update the measurement state.
@@ -233,6 +234,13 @@ export default class BlochSphereModel implements TModel {
       this.preparationBlochSphere.polarAngleProperty.value,
       this.preparationBlochSphere.azimuthalAngleProperty.value
     );
+
+    this.multiMeasurementBlochSpheres.forEach( blochSphere => {
+      blochSphere.setDirection(
+        this.preparationBlochSphere.polarAngleProperty.value,
+        this.preparationBlochSphere.azimuthalAngleProperty.value
+      );
+    } );
   }
 
   /**
@@ -262,6 +270,9 @@ export default class BlochSphereModel implements TModel {
    */
   public step( dt: number ): void {
     this.singleMeasurementBlochSphere.step( dt );
+    this.multiMeasurementBlochSpheres.forEach( blochSphere => {
+      blochSphere.step( dt );
+    } );
   }
 }
 
