@@ -55,7 +55,7 @@ export default class LaserNode extends Node {
       buttonOptions: {
         radius: 18
       },
-      right: modelViewTransform.modelToViewX( model.position.x ),
+      right: modelViewTransform.modelToViewX( model.position.x ) + nozzleSize.width,
       centerY: modelViewTransform.modelToViewY( model.position.y ),
       tandem: providedOptions.tandem.createTandem( 'laserPointerNode' ),
       phetioVisiblePropertyInstrumented: false
