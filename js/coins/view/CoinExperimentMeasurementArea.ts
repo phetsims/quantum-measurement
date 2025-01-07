@@ -118,7 +118,8 @@ export default class CoinExperimentMeasurementArea extends VBox {
     // Create a control that consists of a label and a group of radio buttons for selecting the number of coins to model
     // in the multi-coin mode.
     const numberOfCoinsSelectorTitle = new Text( QuantumMeasurementStrings.identicalCoinsStringProperty, {
-      font: new PhetFont( 14 )
+      font: new PhetFont( 14 ),
+      maxWidth: 200 // empirically determined
     } );
 
     const createRadioButtonGroupItem = ( value: number ) => {
