@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * LaserNode represents the laser, which emits photons, in the view.  It allows the user to set the rate at which
