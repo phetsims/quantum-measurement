@@ -30,6 +30,7 @@ import { MeasurementBasis } from '../model/MeasurementBasis.js';
 import BlochSphereNumericalEquationNode from './BlochSphereNumericalEquationNode.js';
 import MagneticFieldControl from './MagneticFieldControl.js';
 import MagneticFieldNode from './MagneticFieldNode.js';
+import MeasurementTimerControl from './MeasurementTimerControl.js';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -142,6 +143,11 @@ export default class BlochSphereMeasurementArea extends Node {
       }
     );
 
+    const measurementTimerControl = new MeasurementTimerControl( model.timeToMeasurementProperty, model.singleMeasurementBlochSphere.azimuthalAngleProperty, {
+      tandem: providedOptions.tandem.createTandem( 'measurementTimerControl' ),
+      visibleProperty: DerivedProperty.valueEqualsConstant( model.selectedSceneProperty, BlochSphereScene.PRECESSION )
+    } );
+
     const measurementControlPanel = new Panel( new VBox( {
       spacing: 10,
       align: 'left',
@@ -149,7 +155,8 @@ export default class BlochSphereMeasurementArea extends Node {
         new Text( 'Measurement Parameters', { font: new PhetFont( 18 ) } ),
         singleOrMultipleRadioButtonGroup,
         new Text( 'Basis', { font: new PhetFont( 18 ) } ),
-        basisRadioButtonGroup
+        basisRadioButtonGroup,
+        measurementTimerControl
       ]
     } ), QuantumMeasurementConstants.panelOptions );
 
@@ -184,7 +191,7 @@ export default class BlochSphereMeasurementArea extends Node {
 
     const measurementControls = new VBox( {
       left: singleMeasurementBlochSphereNode.right + 20,
-      top: 0,
+      top: magneticFieldNode.top - 50,
       spacing: 10,
       children: [
         measurementResultHistogram,

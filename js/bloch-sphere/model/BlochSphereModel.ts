@@ -31,6 +31,7 @@ export default class BlochSphereModel implements TModel {
 
   public readonly selectedSceneProperty: Property<BlochSphereScene>;
 
+  // Bloch Spheres shown in the screen
   public readonly preparationBlochSphere: ComplexBlochSphere;
   public readonly singleMeasurementBlochSphere: ComplexBlochSphere;
   public readonly multiMeasurementBlochSpheres: ComplexBlochSphere[] = [];
@@ -66,7 +67,7 @@ export default class BlochSphereModel implements TModel {
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
-    this.selectedSceneProperty = new Property( BlochSphereScene.MEASUREMENT, {
+    this.selectedSceneProperty = new Property( BlochSphereScene.PRECESSION, {
       tandem: providedOptions.tandem.createTandem( 'selectedSceneProperty' ),
       phetioReadOnly: true,
       phetioValueType: EnumerationIO( BlochSphereScene ),
