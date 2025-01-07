@@ -45,7 +45,7 @@ export default class BlochSphereWithProjectionNode extends BlochSphereNode {
       const xProjectionLength = spinVector.dot( new Vector2( 1, 0 ) );
       if ( Math.abs( xProjectionLength ) > 1e-5 ) {
         xProjectionArrowNode.visible = true;
-        const xProjectionPosition = this.pointOnTheEquator( 0 ).times( xProjectionLength );
+        const xProjectionPosition = this.pointOnTheEquator( 0, this.xAxisOffsetAngleProperty.value ).times( xProjectionLength );
         xProjectionArrowNode.setTailAndTip( 0, 0, xProjectionPosition.x, xProjectionPosition.y );
       }
       else {
