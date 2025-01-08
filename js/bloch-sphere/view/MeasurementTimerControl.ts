@@ -31,35 +31,9 @@ export default class MeasurementTimerControl extends Node {
 
   public constructor(
     timeToMeasurementProperty: NumberProperty,
-    azimuthProperty: NumberProperty,
+    measurementTimeProperty: NumberProperty,
     providedOptions: MeasurementTimerControlOptions
   ) {
-    //
-    // new Path( new Shape().moveTo( -SLIDER_TRACK_SIZE.width / 2, 0 ).lineTo( SLIDER_TRACK_SIZE.width / 2, 0 ), {
-    //   stroke: 'grey',
-    //   lineWidth: 1,
-    //   lineDash: [ 2, 2 ]
-    // } );
-    //
-    // // Add horizontal lines to the magnetic field indicator.
-    // const numberOfIndicatorLines = 5;
-    // _.times( numberOfIndicatorLines, num => {
-    //   const indicatorLine = new Line( -5, 0, 5, 0, {
-    //     stroke: 'gray',
-    //     centerY: -SLIDER_TRACK_SIZE.height / 2 + num * SLIDER_TRACK_SIZE.height / ( numberOfIndicatorLines - 1 )
-    //   } );
-    //   magneticFieldIndicator.addChild( indicatorLine );
-    //   indicatorLine.moveToBack();
-    // } );
-    //
-    // const labeledMagneticFieldIndicator = new HBox( {
-    //   children: [
-    //     new Text( '0', { font: new PhetFont( 12 ) } ),
-    //     magneticFieldIndicator
-    //   ],
-    //   spacing: 5,
-    //   resize: false
-    // } );
 
     const thumbOffset = 30;
     const thumbDimensions = new Dimension2( 30, 30 );
@@ -84,17 +58,17 @@ export default class MeasurementTimerControl extends Node {
     timeToMeasurementSlider.addMinorTick( 0.6 );
     timeToMeasurementSlider.addMinorTick( 0.8 );
 
-    const azimuthIndicatorScale = 15;
-    const azimuthIndicator = new ArrowNode( 0, azimuthIndicatorScale, 0, 0, {
+    const timeIndicatorScale = 15;
+    const timeIndicator = new ArrowNode( 0, timeIndicatorScale, 0, 0, {
       fill: 'magenta',
       stroke: null,
-      headHeight: azimuthIndicatorScale,
-      headWidth: azimuthIndicatorScale,
+      headHeight: timeIndicatorScale,
+      headWidth: timeIndicatorScale,
       tailWidth: 0
     } );
 
-    azimuthProperty.link( azimuth => {
-      azimuthIndicator.centerX = azimuth / ( 2 * Math.PI ) * SLIDER_TRACK_SIZE.width;
+    measurementTimeProperty.link( measurementTime => {
+      timeIndicator.centerX = measurementTime / 2 * SLIDER_TRACK_SIZE.width;
     } );
 
     const thumbLine = new Path( new Shape().circle( 0, 0, 2 ).moveTo( 0, 0 ).lineTo( 0, thumbOffset - thumbDimensions.height / 2 ), {
@@ -136,7 +110,7 @@ export default class MeasurementTimerControl extends Node {
 
     const options = optionize<MeasurementTimerControlOptions, SelfOptions, PanelOptions>()( {
       children: [
-        azimuthIndicator,
+        timeIndicator,
         timeToMeasurementSlider,
         thumbLine,
         measurementSymbol

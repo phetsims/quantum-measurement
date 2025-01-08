@@ -51,6 +51,9 @@ export default class BlochSphereModel implements TModel {
   // Time to measurement
   public timeToMeasurementProperty: NumberProperty;
 
+  // Current time
+  public measurementTimeProperty: NumberProperty;
+
   // Measurement basis
   public measurementBasisProperty: Property<MeasurementBasis>;
 
@@ -120,14 +123,20 @@ export default class BlochSphereModel implements TModel {
       range: new Range( 0, 1 )
     } );
 
+    this.measurementTimeProperty = new NumberProperty( 0, {
+      tandem: providedOptions.tandem.createTandem( 'measurementTimeProperty' )
+    } );
+
     this.measurementBasisProperty = new Property( MeasurementBasis.S_SUB_Z, {
       tandem: providedOptions.tandem.createTandem( 'measurementBasisProperty' ),
-      phetioValueType: EnumerationIO( MeasurementBasis )
+      phetioValueType: EnumerationIO( MeasurementBasis ),
+      phetioFeatured: true
     } );
 
     this.isSingleMeasurementModeProperty = new BooleanProperty( true, {
       tandem: providedOptions.tandem.createTandem( 'isSingleMeasurementModeProperty' ),
-      phetioReadOnly: true
+      phetioReadOnly: true,
+      phetioFeatured: true
     } );
 
     this.upMeasurementCountProperty = new NumberProperty( 0, {
@@ -264,6 +273,7 @@ export default class BlochSphereModel implements TModel {
     this.magneticFieldStrengthProperty.reset();
     this.measurementBasisProperty.reset();
     this.isSingleMeasurementModeProperty.reset();
+    this.measurementTimeProperty.reset();
   }
 
   /**
@@ -275,6 +285,10 @@ export default class BlochSphereModel implements TModel {
     this.multiMeasurementBlochSpheres.forEach( blochSphere => {
       blochSphere.step( dt );
     } );
+    if ( this.selectedSceneProperty.value === BlochSphereScene.PRECESSION ) {
+      this.measurementTimeProperty.value += dt;
+      this.measurementTimeProperty.value %= 2;
+    }
   }
 }
 

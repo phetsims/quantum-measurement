@@ -14,6 +14,7 @@ import Utils from '../../../../dot/js/Utils.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import AbstractBlochSphere, { AbstractBlochSphereOptions } from '../../common/model/AbstractBlochSphere.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { MeasurementBasis } from './MeasurementBasis.js';
 import { StateDirection } from './StateDirection.js';
@@ -46,11 +47,12 @@ export default class ComplexBlochSphere extends AbstractBlochSphere {
 
 
   /**
-   * Abstract method that should run calculations to update the Bloch Sphere representation.
+   * Calculate precession and add it to azimuthal angle, constrained from 0 to 2 PI.
    */
   public override step( dt: number ): void {
+    const precession = this.rotatingSpeedProperty.value * QuantumMeasurementConstants.MAX_PRECESSION_RATE * dt;
     this.azimuthalAngleProperty.value = Utils.moduloBetweenDown(
-      this.azimuthalAngleProperty.value + this.rotatingSpeedProperty.value * dt, 0, 2 * Math.PI
+      this.azimuthalAngleProperty.value + precession, 0, 2 * Math.PI
     );
   }
 

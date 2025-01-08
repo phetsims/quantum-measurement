@@ -10,7 +10,7 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
-import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Node, NodeOptions, RichText, RichTextOptions, Text, VBox } from '../../../../scenery/js/imports.js';
@@ -40,18 +40,14 @@ export default class BlochSphereMeasurementArea extends Node {
 
   public constructor( model: BlochSphereModel, providedOptions: BlochSphereMeasurementAreaOptions ) {
 
-    super( providedOptions );
-
     const equationNode = new BlochSphereNumericalEquationNode( model, {
       tandem: providedOptions.tandem.createTandem( 'equationNode' ),
       centerY: -50
     } );
-    this.addChild( equationNode );
 
     const magneticFieldNode = new MagneticFieldNode( model.magneticFieldStrengthProperty, {
       visibleProperty: DerivedProperty.valueEqualsConstant( model.selectedSceneProperty, BlochSphereScene.PRECESSION )
     } );
-    this.addChild( magneticFieldNode );
 
     const singleMeasurementBlochSphereNode = new BlochSphereNode( model.singleMeasurementBlochSphere, {
       tandem: providedOptions.tandem.createTandem( 'singleMeasurementBlochSphereNode' ),
@@ -61,7 +57,6 @@ export default class BlochSphereMeasurementArea extends Node {
       center: magneticFieldNode.center,
       visibleProperty: model.isSingleMeasurementModeProperty
     } );
-    this.addChild( singleMeasurementBlochSphereNode );
 
     const multipleMeasurementBlochSpheresTandem = providedOptions.tandem.createTandem( 'multipleMeasurementBlochSpheres' );
     const multipleMeasurementBlochSpheresNode = new Node( {
@@ -81,7 +76,6 @@ export default class BlochSphereMeasurementArea extends Node {
       multipleMeasurementBlochSpheresNode.addChild( blochSphereNode );
     } );
     multipleMeasurementBlochSpheresNode.center = magneticFieldNode.center.plusXY( 0, 30 );
-    this.addChild( multipleMeasurementBlochSpheresNode );
 
     const spinUpLabelStringProperty = new DerivedStringProperty(
       [ model.measurementBasisProperty ],
@@ -107,10 +101,14 @@ export default class BlochSphereMeasurementArea extends Node {
       isSingleMeasurement => {
         return {
           createNode: () => new Text( isSingleMeasurement ? 'Single' : 'Multiple', { font: new PhetFont( 16 ) } ),
-          value: isSingleMeasurement
+          value: isSingleMeasurement,
+          tandemName: isSingleMeasurement ? 'singleMeasurementRadioButton' : 'multipleMeasurementRadioButton'
         };
       } );
-    const singleOrMultipleRadioButtonGroup = new AquaRadioButtonGroup( model.isSingleMeasurementModeProperty, radioButtonItems, { orientation: 'vertical' } );
+    const singleOrMultipleRadioButtonGroup = new AquaRadioButtonGroup( model.isSingleMeasurementModeProperty, radioButtonItems, {
+      orientation: 'vertical',
+      tandem: providedOptions.tandem.createTandem( 'singleOrMultipleRadioButtonGroup' )
+    } );
 
     const basisRadioButtonTextOptions: RichTextOptions = {
       font: new PhetFont( 18 ),
@@ -143,7 +141,7 @@ export default class BlochSphereMeasurementArea extends Node {
       }
     );
 
-    const measurementTimerControl = new MeasurementTimerControl( model.timeToMeasurementProperty, model.singleMeasurementBlochSphere.azimuthalAngleProperty, {
+    const measurementTimerControl = new MeasurementTimerControl( model.timeToMeasurementProperty, model.measurementTimeProperty, {
       tandem: providedOptions.tandem.createTandem( 'measurementTimerControl' ),
       visibleProperty: DerivedProperty.valueEqualsConstant( model.selectedSceneProperty, BlochSphereScene.PRECESSION )
     } );
@@ -199,16 +197,26 @@ export default class BlochSphereMeasurementArea extends Node {
         prepareObserveButton
       ]
     } );
-    this.addChild( measurementControls );
 
-    this.addChild( new MagneticFieldControl( model.magneticFieldStrengthProperty, {
+    const magneticFieldControl = new MagneticFieldControl( model.magneticFieldStrengthProperty, {
       centerX: singleMeasurementBlochSphereNode.centerX,
       top: magneticFieldNode.bottom + 10,
       visibleProperty: DerivedProperty.valueEqualsConstant( model.selectedSceneProperty, BlochSphereScene.PRECESSION ),
       tandem: providedOptions.tandem.createTandem( 'magneticFieldControl' )
-    } ) );
+    } );
 
-    this.mutate( providedOptions );
+    const options = optionize<BlochSphereMeasurementAreaOptions, SelfOptions, NodeOptions>()( {
+      children: [
+        equationNode,
+        magneticFieldNode,
+        singleMeasurementBlochSphereNode,
+        multipleMeasurementBlochSpheresNode,
+        measurementControls,
+        magneticFieldControl
+      ]
+    }, providedOptions );
+
+    super( options );
 
     this.pdomOrder = [
       measurementControlPanel,

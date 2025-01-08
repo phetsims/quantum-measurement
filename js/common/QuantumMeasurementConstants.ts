@@ -29,6 +29,8 @@ const QuantumMeasurementConstants = {
   KET: '\u27e9',
   HBAR: '\u210F',
 
+  MAX_PRECESSION_RATE: Math.PI, // radians per second
+
   expectedPercentagePathOptions: {
     stroke: '#0a0',
     lineWidth: 5
