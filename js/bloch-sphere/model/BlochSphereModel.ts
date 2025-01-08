@@ -18,7 +18,6 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { BlochSphereScene } from './BlochSphereScene.js';
 import ComplexBlochSphere from './ComplexBlochSphere.js';
 import { MeasurementBasis } from './MeasurementBasis.js';
 import { StateDirection } from './StateDirection.js';
@@ -29,7 +28,7 @@ type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOpt
 
 export default class BlochSphereModel implements TModel {
 
-  public readonly selectedSceneProperty: Property<BlochSphereScene>;
+  public readonly showMagneticFieldProperty: BooleanProperty;
 
   // Bloch Spheres shown in the screen
   public readonly preparationBlochSphere: ComplexBlochSphere;
@@ -70,10 +69,8 @@ export default class BlochSphereModel implements TModel {
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
-    this.selectedSceneProperty = new Property( BlochSphereScene.MEASUREMENT, {
-      tandem: providedOptions.tandem.createTandem( 'selectedSceneProperty' ),
-      phetioReadOnly: true,
-      phetioValueType: EnumerationIO( BlochSphereScene ),
+    this.showMagneticFieldProperty = new BooleanProperty( false, {
+      tandem: providedOptions.tandem.createTandem( 'showMagneticFieldProperty' ),
       phetioFeatured: true
     } );
 
@@ -182,13 +179,13 @@ export default class BlochSphereModel implements TModel {
 
     // Set the precession rate of the Bloch sphere based on the magnetic field strength and the selected scene.
     Multilink.multilink(
-      [ this.magneticFieldStrengthProperty, this.selectedSceneProperty ],
-      ( magneticFieldStrength, selectedScene ) => {
-        this.singleMeasurementBlochSphere.rotatingSpeedProperty.value = selectedScene === BlochSphereScene.PRECESSION ?
+      [ this.magneticFieldStrengthProperty, this.showMagneticFieldProperty ],
+      ( magneticFieldStrength, showMagneticField ) => {
+        this.singleMeasurementBlochSphere.rotatingSpeedProperty.value = showMagneticField ?
                                                                         magneticFieldStrength :
                                                                         0;
         this.multiMeasurementBlochSpheres.forEach( blochSphere => {
-          blochSphere.rotatingSpeedProperty.value = selectedScene === BlochSphereScene.PRECESSION ?
+          blochSphere.rotatingSpeedProperty.value = showMagneticField ?
                                                      magneticFieldStrength :
                                                      0;
         } );
@@ -268,7 +265,7 @@ export default class BlochSphereModel implements TModel {
   public reset(): void {
     this.resetCounts();
     this.preparationBlochSphere.reset();
-    this.selectedSceneProperty.reset();
+    this.showMagneticFieldProperty.reset();
     this.readyToObserveProperty.reset();
     this.magneticFieldStrengthProperty.reset();
     this.measurementBasisProperty.reset();
@@ -285,7 +282,7 @@ export default class BlochSphereModel implements TModel {
     this.multiMeasurementBlochSpheres.forEach( blochSphere => {
       blochSphere.step( dt );
     } );
-    if ( this.selectedSceneProperty.value === BlochSphereScene.PRECESSION ) {
+    if ( this.showMagneticFieldProperty.value ) {
       this.measurementTimeProperty.value += dt;
       this.measurementTimeProperty.value %= 2;
     }

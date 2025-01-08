@@ -8,12 +8,11 @@
 
 import BlochSphereModel from 'model/BlochSphereModel.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, Line, Text, VBox } from '../../../../scenery/js/imports.js';
-import ComboBox, { ComboBoxItem } from '../../../../sun/js/ComboBox.js';
+import { Color, Line, Text } from '../../../../scenery/js/imports.js';
+import Checkbox from '../../../../sun/js/Checkbox.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { BlochSphereScene } from '../model/BlochSphereScene.js';
 import BlochSphereMeasurementArea from './BlochSphereMeasurementArea.js';
 import BlochSpherePreparationArea from './BlochSpherePreparationArea.js';
 
@@ -43,39 +42,28 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
     } );
     this.addChild( dividingLine );
 
-    const comboBoxItems: ComboBoxItem<BlochSphereScene>[] = BlochSphereScene.enumeration.values.map( scene => {
-      return {
-        value: scene,
-        createNode: () => new Text( scene.description, { font: new PhetFont( 16 ) } )
-      };
-    } );
-
-    const sceneSelectionComboBox = new ComboBox( model.selectedSceneProperty, comboBoxItems, this, {
-      tandem: tandem.createTandem( 'sceneSelectionComboBox' )
-    } );
-
-    const measurementAreaTitleAndComboBox = new VBox( {
-      children: [
-        new Text( 'Spin Measurement', { font: new PhetFont( { size: 20, weight: 'bolder' } ) } ),
-        sceneSelectionComboBox
-      ],
-      spacing: 10,
-      centerX: this.layoutBounds.centerX + 150,
-      top: this.layoutBounds.top + 20
-    } );
-    this.addChild( measurementAreaTitleAndComboBox );
+    const showMagneticFieldCheckbox = new Checkbox(
+      model.showMagneticFieldProperty,
+      new Text( 'Show Magnetic Field', { font: new PhetFont( { size: 16 } ) } ),
+      {
+        tandem: tandem.createTandem( 'showMagneticFieldCheckbox' ),
+        spacing: 10,
+        centerX: this.layoutBounds.centerX + 150,
+        top: this.layoutBounds.top + 20
+      } );
+    this.addChild( showMagneticFieldCheckbox );
 
 
     const measurementArea = new BlochSphereMeasurementArea( model, {
       tandem: tandem.createTandem( 'measurementArea' ),
       left: dividingLineX + 20,
-      top: measurementAreaTitleAndComboBox.bottom + 20
+      top: showMagneticFieldCheckbox.bottom + 20
     } );
     this.addChild( measurementArea );
 
     this.pdomPlayAreaNode.pdomOrder = [
       preparationArea,
-      measurementAreaTitleAndComboBox,
+      showMagneticFieldCheckbox,
       measurementArea
     ];
 

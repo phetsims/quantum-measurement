@@ -25,7 +25,6 @@ import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHis
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import BlochSphereModel from '../model/BlochSphereModel.js';
-import { BlochSphereScene } from '../model/BlochSphereScene.js';
 import { MeasurementBasis } from '../model/MeasurementBasis.js';
 import BlochSphereNumericalEquationNode from './BlochSphereNumericalEquationNode.js';
 import MagneticFieldControl from './MagneticFieldControl.js';
@@ -46,7 +45,7 @@ export default class BlochSphereMeasurementArea extends Node {
     } );
 
     const magneticFieldNode = new MagneticFieldNode( model.magneticFieldStrengthProperty, {
-      visibleProperty: DerivedProperty.valueEqualsConstant( model.selectedSceneProperty, BlochSphereScene.PRECESSION )
+      visibleProperty: model.showMagneticFieldProperty
     } );
 
     const singleMeasurementBlochSphereNode = new BlochSphereNode( model.singleMeasurementBlochSphere, {
@@ -143,7 +142,7 @@ export default class BlochSphereMeasurementArea extends Node {
 
     const measurementTimerControl = new MeasurementTimerControl( model.timeToMeasurementProperty, model.measurementTimeProperty, {
       tandem: providedOptions.tandem.createTandem( 'measurementTimerControl' ),
-      visibleProperty: DerivedProperty.valueEqualsConstant( model.selectedSceneProperty, BlochSphereScene.PRECESSION )
+      visibleProperty: model.showMagneticFieldProperty
     } );
 
     const measurementControlPanel = new Panel( new VBox( {
@@ -201,7 +200,7 @@ export default class BlochSphereMeasurementArea extends Node {
     const magneticFieldControl = new MagneticFieldControl( model.magneticFieldStrengthProperty, {
       centerX: singleMeasurementBlochSphereNode.centerX,
       top: magneticFieldNode.bottom + 10,
-      visibleProperty: DerivedProperty.valueEqualsConstant( model.selectedSceneProperty, BlochSphereScene.PRECESSION ),
+      visibleProperty: model.showMagneticFieldProperty,
       tandem: providedOptions.tandem.createTandem( 'magneticFieldControl' )
     } );
 
