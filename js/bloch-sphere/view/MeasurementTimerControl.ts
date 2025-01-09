@@ -39,6 +39,7 @@ export default class MeasurementTimerControl extends Node {
     // TODO: This should probably be rewritten to use thumbNode.  Seems like that would be way simpler.  See https://github.com/phetsims/quantum-measurement/issues/54.
 
     const maxMeasurementTime = timeToMeasurementProperty.rangeProperty.value.max;
+    const minMeasurementTime = timeToMeasurementProperty.rangeProperty.value.getLength() / ( NUMBER_OF_MINOR_TICKS + 1 );
     const thumbOffset = 30;
     const thumbDimensions = new Dimension2( 30, 30 );
     const timeToMeasurementSlider = new Slider( timeToMeasurementProperty, timeToMeasurementProperty.range, {
@@ -50,10 +51,13 @@ export default class MeasurementTimerControl extends Node {
       thumbCenterLineStroke: null,
       trackSize: SLIDER_TRACK_SIZE,
       trackFillEnabled: Color.BLACK,
-      constrainValue: value => Utils.roundToInterval(
-        value,
-        timeToMeasurementProperty.rangeProperty.value.max / ( NUMBER_OF_MINOR_TICKS + 1 )
-      ),
+      constrainValue: value => {
+        const roundedValue = Utils.roundToInterval(
+          value,
+          timeToMeasurementProperty.rangeProperty.value.max / ( NUMBER_OF_MINOR_TICKS + 1 )
+        );
+        return Math.max( minMeasurementTime, roundedValue );
+      },
       orientation: Orientation.HORIZONTAL,
       majorTickLength: 10,
       minorTickLength: 5
