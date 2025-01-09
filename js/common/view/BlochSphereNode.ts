@@ -281,17 +281,21 @@ export default class BlochSphereNode extends Node {
           false
         );
 
-        azimuthalAngleIndicator.shape = new Shape().ellipticalArc(
-          0,
-          0,
-          equatorSemiMajorAxis / 2,
-          equatorSemiMinorAxis / 2,
-          0,
-          // Begins with offset; Ends at the azimuthal angle with an adjustement due to the sphere perspective
-          -xAxisOffsetAngle + Math.PI / 2,
-          -( azimuthalAngle + xAxisOffsetAngle - Math.PI / 2 ) % ( 2 * Math.PI ),
-          true
-        );
+        if ( options.drawAngleIndicators && Math.abs( Math.sin( polarAngle ) ) > 1e-5 ) {
+          azimuthalAngleIndicator.shape = new Shape().ellipticalArc(
+            0,
+            0,
+            equatorSemiMajorAxis / 2,
+            equatorSemiMinorAxis / 2,
+            0,
+            // Begins with offset; Ends at the azimuthal angle with an adjustement due to the sphere perspective
+            -xAxisOffsetAngle + Math.PI / 2,
+            -( azimuthalAngle + xAxisOffsetAngle - Math.PI / 2 ) % ( 2 * Math.PI ),
+            true
+          );
+          azimuthalAngleIndicator.visible = true;
+        }
+        azimuthalAngleIndicator.visible = false;
       }
     );
   }
