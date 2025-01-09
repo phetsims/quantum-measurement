@@ -84,6 +84,8 @@ export default class MeasurementTimerControl extends Node {
       lineWidth: 2
     } );
 
+    // TODO: Can the measurement symbol be a common code item?  See https://github.com/phetsims/quantum-measurement/issues/54.
+
     const measurementSymbol = new Node( {
       scale: 0.8,
       children: [

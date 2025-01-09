@@ -5,6 +5,7 @@
  * measurements, equations and rotation under magnetic field.
  *
  * @author Agustín Vallejo (PhET Interactive Simulations)
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
@@ -31,7 +32,7 @@ type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOpt
 // constants
 const MAX_OBSERVATION_TIME = 2 * Math.PI / QuantumMeasurementConstants.MAX_PRECESSION_RATE;
 
-export default class BlochSphereModel implements TModel {
+class BlochSphereModel implements TModel {
 
   public readonly showMagneticFieldProperty: BooleanProperty;
 
@@ -52,10 +53,10 @@ export default class BlochSphereModel implements TModel {
   // Strength of the magnetic field
   public magneticFieldStrengthProperty: NumberProperty;
 
-  // Time to measurement
+  // The amount of time to wait before making a measurement when the magnetic field is present.
   public timeToMeasurementProperty: NumberProperty;
 
-  // Current time
+  // Current measurement time.
   public measurementTimeProperty: NumberProperty;
 
   // Measurement basis
@@ -222,20 +223,31 @@ export default class BlochSphereModel implements TModel {
    * Make whatever observation ths mode is currently set up to make.
    */
   private observe(): void {
-    if ( this.measurementStateProperty.value === 'prepared' ) {
 
-      if ( this.isSingleMeasurementModeProperty.value ) {
-        this.singleMeasurementBlochSphere.measure( this.measurementBasisProperty.value, this.upMeasurementCountProperty, this.downMeasurementCountProperty );
-      }
-      else {
-        this.multiMeasurementBlochSpheres.forEach( blochSphere => {
-          blochSphere.measure( this.measurementBasisProperty.value, this.upMeasurementCountProperty, this.downMeasurementCountProperty );
-        } );
-      }
+    assert && assert(
+      this.measurementStateProperty.value === 'prepared' || this.measurementStateProperty.value === 'timingObservation',
+      'The model is not in state where a new observation can be made.'
+    );
 
-      // Update the measurement state.
-      this.measurementStateProperty.value = 'observed';
+    if ( this.isSingleMeasurementModeProperty.value ) {
+      this.singleMeasurementBlochSphere.measure(
+        this.measurementBasisProperty.value,
+        this.upMeasurementCountProperty,
+        this.downMeasurementCountProperty
+      );
     }
+    else {
+      this.multiMeasurementBlochSpheres.forEach( blochSphere => {
+        blochSphere.measure(
+          this.measurementBasisProperty.value,
+          this.upMeasurementCountProperty,
+          this.downMeasurementCountProperty
+        );
+      } );
+    }
+
+    // Update the measurement state.
+    this.measurementStateProperty.value = 'observed';
   }
 
   /**
@@ -245,7 +257,10 @@ export default class BlochSphereModel implements TModel {
    */
   public initiateObservation(): void {
 
-    this.reprepare();
+    assert && assert(
+      this.measurementStateProperty.value === 'prepared',
+      'The model should be prepared for measurement prior to calling this method.'
+    );
 
     if ( this.showMagneticFieldProperty.value ) {
 
@@ -264,7 +279,6 @@ export default class BlochSphereModel implements TModel {
    * Reprepare the model for a new observation.
    */
   public reprepare(): void {
-    this.measurementStateProperty.value = 'prepared';
 
     // Copy the settings from the preparation bloch sphere
     this.singleMeasurementBlochSphere.setDirection(
@@ -278,6 +292,9 @@ export default class BlochSphereModel implements TModel {
         this.preparationBlochSphere.azimuthalAngleProperty.value
       );
     } );
+
+    this.measurementTimeProperty.value = 0;
+    this.measurementStateProperty.value = 'prepared';
   }
 
   /**
@@ -299,6 +316,7 @@ export default class BlochSphereModel implements TModel {
     this.magneticFieldStrengthProperty.reset();
     this.measurementBasisProperty.reset();
     this.isSingleMeasurementModeProperty.reset();
+    this.timeToMeasurementProperty.reset();
     this.measurementTimeProperty.reset();
   }
 
@@ -315,7 +333,8 @@ export default class BlochSphereModel implements TModel {
     if ( this.measurementStateProperty.value === 'timingObservation' ) {
       this.measurementTimeProperty.value = this.measurementTimeProperty.value + dt;
       if ( this.measurementTimeProperty.value > this.timeToMeasurementProperty.value ) {
-        this.reprepare();
+
+        // The time when the observation should be made has been reached.  Make the observation.
         this.observe();
       }
     }
@@ -323,3 +342,5 @@ export default class BlochSphereModel implements TModel {
 }
 
 quantumMeasurement.register( 'BlochSphereModel', BlochSphereModel );
+
+export default BlochSphereModel;
