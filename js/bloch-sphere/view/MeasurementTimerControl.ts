@@ -28,6 +28,7 @@ export type MeasurementTimerControlOptions = SelfOptions & WithRequired<PanelOpt
 
 // constants
 const SLIDER_TRACK_SIZE = new Dimension2( 150, 0.1 );
+const NUMBER_OF_MINOR_TICKS = 7;
 
 export default class MeasurementTimerControl extends Node {
 
@@ -49,17 +50,20 @@ export default class MeasurementTimerControl extends Node {
       thumbCenterLineStroke: null,
       trackSize: SLIDER_TRACK_SIZE,
       trackFillEnabled: Color.BLACK,
-      constrainValue: value => Utils.roundToInterval( value, 0.2 ),
+      constrainValue: value => Utils.roundToInterval(
+        value,
+        timeToMeasurementProperty.rangeProperty.value.max / ( NUMBER_OF_MINOR_TICKS + 1 )
+      ),
       orientation: Orientation.HORIZONTAL,
       majorTickLength: 10,
       minorTickLength: 5
     } );
     timeToMeasurementSlider.addMajorTick( 0, new Text( '0', { font: new PhetFont( 15 ) } ) );
     timeToMeasurementSlider.addMajorTick( maxMeasurementTime, new Text( 't', { font: new PhetFont( 15 ) } ) );
-    timeToMeasurementSlider.addMinorTick( 0.2 * maxMeasurementTime );
-    timeToMeasurementSlider.addMinorTick( 0.4 * maxMeasurementTime );
-    timeToMeasurementSlider.addMinorTick( 0.6 * maxMeasurementTime );
-    timeToMeasurementSlider.addMinorTick( 0.8 * maxMeasurementTime );
+    _.times( NUMBER_OF_MINOR_TICKS, i => {
+      const fraction = ( i + 1 ) / ( NUMBER_OF_MINOR_TICKS + 1 );
+      timeToMeasurementSlider.addMinorTick( fraction * maxMeasurementTime );
+    } );
 
     const timeIndicatorScale = 15;
     const timeIndicator = new ArrowNode( 0, timeIndicatorScale, 0, 0, {
