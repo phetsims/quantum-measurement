@@ -62,6 +62,8 @@ export default class MeasurementTimerControl extends Node {
       majorTickLength: 10,
       minorTickLength: 5
     } );
+
+    // Add the major and minor tick marks to the slider.
     timeToMeasurementSlider.addMajorTick( 0, new Text( '0', { font: new PhetFont( 15 ) } ) );
     timeToMeasurementSlider.addMajorTick( maxMeasurementTime, new Text( 't', { font: new PhetFont( 15 ) } ) );
     _.times( NUMBER_OF_MINOR_TICKS, i => {

@@ -169,6 +169,11 @@ class BlochSphereModel implements TModel {
       tandem: providedOptions.tandem.createTandem( 'measurementStateProperty' )
     } );
 
+    // Clear the measurement counts when the time to measurement changes, since this changes the nature of the
+    // measurement that is being made.
+    this.timeToMeasurementProperty.link( () => this.resetCounts() );
+
+    // Change the selected preset state direction to CUSTOM when the user manually changes the angles of the Bloch Sphere.
     Multilink.multilink(
       [
         this.preparationBlochSphere.polarAngleProperty,
@@ -331,8 +336,11 @@ class BlochSphereModel implements TModel {
     } );
 
     if ( this.measurementStateProperty.value === 'timingObservation' ) {
-      this.measurementTimeProperty.value = this.measurementTimeProperty.value + dt;
-      if ( this.measurementTimeProperty.value > this.timeToMeasurementProperty.value ) {
+      this.measurementTimeProperty.value = Math.min(
+        this.measurementTimeProperty.value + dt,
+        this.timeToMeasurementProperty.value
+      );
+      if ( this.measurementTimeProperty.value >= this.timeToMeasurementProperty.value ) {
 
         // The time when the observation should be made has been reached.  Make the observation.
         this.observe();
