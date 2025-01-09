@@ -159,19 +159,21 @@ export default class BlochSphereMeasurementArea extends Node {
 
     const prepareObserveButtonTextProperty = new DerivedStringProperty(
       [
-        model.readyToObserveProperty,
+        model.measurementStateProperty,
         QuantumMeasurementStrings.observeStringProperty,
         QuantumMeasurementStrings.reprepareStringProperty
       ],
-      ( readyToObserve, observeString, reprepareString ) => readyToObserve ? observeString : reprepareString
+      ( measurementState, observeString, reprepareString ) => measurementState === 'observed' ?
+                                                              reprepareString :
+                                                              observeString
     );
 
     const prepareObserveButton = new TextPushButton(
       prepareObserveButtonTextProperty,
       {
         listener: () => {
-          if ( model.readyToObserveProperty.value ) {
-            model.observe();
+          if ( model.measurementStateProperty.value === 'prepared' ) {
+            model.initiateObservation();
           }
           else {
             model.reprepare();
@@ -179,6 +181,7 @@ export default class BlochSphereMeasurementArea extends Node {
         },
         baseColor: QuantumMeasurementColors.experimentButtonColorProperty,
         font: new PhetFont( 18 ),
+        enabledProperty: DerivedProperty.valueNotEqualsConstant( model.measurementStateProperty, 'timingObservation' ),
         xMargin: 20,
         yMargin: 6,
         maxWidth: measurementControlPanel.width,

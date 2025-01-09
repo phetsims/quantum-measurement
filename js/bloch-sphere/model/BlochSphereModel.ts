@@ -17,14 +17,19 @@ import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
+import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import ComplexBlochSphere from './ComplexBlochSphere.js';
 import { MeasurementBasis } from './MeasurementBasis.js';
+import { SpinMeasurementState, SpinMeasurementStateValues } from './SpinMeasurementState.js';
 import { StateDirection } from './StateDirection.js';
 
 type SelfOptions = EmptySelfOptions;
-
 type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
+
+// constants
+const MAX_OBSERVATION_TIME = 2 * Math.PI / QuantumMeasurementConstants.MAX_PRECESSION_RATE;
 
 export default class BlochSphereModel implements TModel {
 
@@ -61,7 +66,7 @@ export default class BlochSphereModel implements TModel {
 
   // A flag that indicates whether the model is ready to observe or needs the state to be prepared.  This should not be
   // modified directly by client code, but rather by the model's observe() and reprepare() methods.
-  public readonly readyToObserveProperty: BooleanProperty;
+  public readonly measurementStateProperty: Property<SpinMeasurementState>;
 
   // Properties for the spin measurements made.
   public readonly upMeasurementCountProperty: NumberProperty;
@@ -115,9 +120,9 @@ export default class BlochSphereModel implements TModel {
       range: new Range( -1, 1 )
     } );
 
-    this.timeToMeasurementProperty = new NumberProperty( 0, {
+    this.timeToMeasurementProperty = new NumberProperty( MAX_OBSERVATION_TIME / 2, {
       tandem: providedOptions.tandem.createTandem( 'timeToMeasurementProperty' ),
-      range: new Range( 0, 1 )
+      range: new Range( 0, MAX_OBSERVATION_TIME )
     } );
 
     this.measurementTimeProperty = new NumberProperty( 0, {
@@ -156,9 +161,11 @@ export default class BlochSphereModel implements TModel {
       }
     } );
 
-    this.readyToObserveProperty = new BooleanProperty( true, {
+    this.measurementStateProperty = new Property<SpinMeasurementState>( 'prepared', {
       phetioReadOnly: true,
-      tandem: providedOptions.tandem.createTandem( 'readyToObserveProperty' )
+      phetioValueType: StringUnionIO( SpinMeasurementStateValues ),
+      validValues: SpinMeasurementStateValues,
+      tandem: providedOptions.tandem.createTandem( 'measurementStateProperty' )
     } );
 
     Multilink.multilink(
@@ -186,8 +193,8 @@ export default class BlochSphereModel implements TModel {
                                                                         0;
         this.multiMeasurementBlochSpheres.forEach( blochSphere => {
           blochSphere.rotatingSpeedProperty.value = showMagneticField ?
-                                                     magneticFieldStrength :
-                                                     0;
+                                                    magneticFieldStrength :
+                                                    0;
         } );
       }
     );
@@ -214,8 +221,8 @@ export default class BlochSphereModel implements TModel {
   /**
    * Make whatever observation ths mode is currently set up to make.
    */
-  public observe(): void {
-    if ( this.readyToObserveProperty.value ) {
+  private observe(): void {
+    if ( this.measurementStateProperty.value === 'prepared' ) {
 
       if ( this.isSingleMeasurementModeProperty.value ) {
         this.singleMeasurementBlochSphere.measure( this.measurementBasisProperty.value, this.upMeasurementCountProperty, this.downMeasurementCountProperty );
@@ -227,7 +234,29 @@ export default class BlochSphereModel implements TModel {
       }
 
       // Update the measurement state.
-      this.readyToObserveProperty.value = false;
+      this.measurementStateProperty.value = 'observed';
+    }
+  }
+
+  /**
+   * Initiates an observation, aka a measurement, of the spin value or values.  If the model is in the state where
+   * precession is occurring, this starts a timer that will trigger the measurement when it expires.  If precession is
+   * not occurring, the measurement is made immediately.
+   */
+  public initiateObservation(): void {
+
+    this.reprepare();
+
+    if ( this.showMagneticFieldProperty.value ) {
+
+      // Transition to the state where the model is waiting to take a measurement.
+      this.measurementStateProperty.value = 'timingObservation';
+      this.measurementTimeProperty.value = 0;
+    }
+    else {
+
+      // Make the measurement immediately.
+      this.observe();
     }
   }
 
@@ -235,7 +264,7 @@ export default class BlochSphereModel implements TModel {
    * Reprepare the model for a new observation.
    */
   public reprepare(): void {
-    this.readyToObserveProperty.value = true;
+    this.measurementStateProperty.value = 'prepared';
 
     // Copy the settings from the preparation bloch sphere
     this.singleMeasurementBlochSphere.setDirection(
@@ -266,7 +295,7 @@ export default class BlochSphereModel implements TModel {
     this.resetCounts();
     this.preparationBlochSphere.reset();
     this.showMagneticFieldProperty.reset();
-    this.readyToObserveProperty.reset();
+    this.measurementStateProperty.reset();
     this.magneticFieldStrengthProperty.reset();
     this.measurementBasisProperty.reset();
     this.isSingleMeasurementModeProperty.reset();
@@ -282,9 +311,13 @@ export default class BlochSphereModel implements TModel {
     this.multiMeasurementBlochSpheres.forEach( blochSphere => {
       blochSphere.step( dt );
     } );
-    if ( this.showMagneticFieldProperty.value ) {
-      this.measurementTimeProperty.value += dt;
-      this.measurementTimeProperty.value %= 2;
+
+    if ( this.measurementStateProperty.value === 'timingObservation' ) {
+      this.measurementTimeProperty.value = this.measurementTimeProperty.value + dt;
+      if ( this.measurementTimeProperty.value > this.timeToMeasurementProperty.value ) {
+        this.reprepare();
+        this.observe();
+      }
     }
   }
 }

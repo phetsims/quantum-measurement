@@ -5,6 +5,7 @@
  * Bloch Sphere is measured.
  *
  * @author Agustín Vallejo
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
@@ -25,16 +26,18 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 type SelfOptions = EmptySelfOptions;
 export type MeasurementTimerControlOptions = SelfOptions & WithRequired<PanelOptions, 'tandem'>;
 
+// constants
 const SLIDER_TRACK_SIZE = new Dimension2( 150, 0.1 );
 
 export default class MeasurementTimerControl extends Node {
 
-  public constructor(
-    timeToMeasurementProperty: NumberProperty,
-    measurementTimeProperty: NumberProperty,
-    providedOptions: MeasurementTimerControlOptions
-  ) {
+  public constructor( timeToMeasurementProperty: NumberProperty,
+                      measurementTimeProperty: NumberProperty,
+                      providedOptions: MeasurementTimerControlOptions ) {
 
+    // TODO: This should probably be rewritten to use thumbNode.  Seems like that would be way simpler.  See https://github.com/phetsims/quantum-measurement/issues/54.
+
+    const maxMeasurementTime = timeToMeasurementProperty.rangeProperty.value.max;
     const thumbOffset = 30;
     const thumbDimensions = new Dimension2( 30, 30 );
     const timeToMeasurementSlider = new Slider( timeToMeasurementProperty, timeToMeasurementProperty.range, {
@@ -52,11 +55,11 @@ export default class MeasurementTimerControl extends Node {
       minorTickLength: 5
     } );
     timeToMeasurementSlider.addMajorTick( 0, new Text( '0', { font: new PhetFont( 15 ) } ) );
-    timeToMeasurementSlider.addMajorTick( 1, new Text( 't', { font: new PhetFont( 15 ) } ) );
-    timeToMeasurementSlider.addMinorTick( 0.2 );
-    timeToMeasurementSlider.addMinorTick( 0.4 );
-    timeToMeasurementSlider.addMinorTick( 0.6 );
-    timeToMeasurementSlider.addMinorTick( 0.8 );
+    timeToMeasurementSlider.addMajorTick( maxMeasurementTime, new Text( 't', { font: new PhetFont( 15 ) } ) );
+    timeToMeasurementSlider.addMinorTick( 0.2 * maxMeasurementTime );
+    timeToMeasurementSlider.addMinorTick( 0.4 * maxMeasurementTime );
+    timeToMeasurementSlider.addMinorTick( 0.6 * maxMeasurementTime );
+    timeToMeasurementSlider.addMinorTick( 0.8 * maxMeasurementTime );
 
     const timeIndicatorScale = 15;
     const timeIndicator = new ArrowNode( 0, timeIndicatorScale, 0, 0, {
@@ -68,7 +71,7 @@ export default class MeasurementTimerControl extends Node {
     } );
 
     measurementTimeProperty.link( measurementTime => {
-      timeIndicator.centerX = measurementTime / 2 * SLIDER_TRACK_SIZE.width;
+      timeIndicator.centerX = measurementTime / timeToMeasurementProperty.rangeProperty.value.max * SLIDER_TRACK_SIZE.width;
     } );
 
     const thumbLine = new Path( new Shape().circle( 0, 0, 2 ).moveTo( 0, 0 ).lineTo( 0, thumbOffset - thumbDimensions.height / 2 ), {
@@ -101,10 +104,10 @@ export default class MeasurementTimerControl extends Node {
     } );
 
     timeToMeasurementProperty.link( time => {
-      thumbLine.centerX = time * SLIDER_TRACK_SIZE.width;
+      thumbLine.centerX = time / maxMeasurementTime * SLIDER_TRACK_SIZE.width;
       thumbLine.top = -2;
 
-      measurementSymbol.centerX = time * SLIDER_TRACK_SIZE.width;
+      measurementSymbol.centerX = time / maxMeasurementTime * SLIDER_TRACK_SIZE.width;
       measurementSymbol.centerY = thumbOffset / 2 + thumbDimensions.height / 2;
     } );
 
