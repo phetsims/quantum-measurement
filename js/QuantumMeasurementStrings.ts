@@ -93,6 +93,7 @@ type StringsType = {
   'expectedPercentageStringProperty': LocalizedStringProperty;
   'noneStringProperty': LocalizedStringProperty;
   'lotsStringProperty': LocalizedStringProperty;
+  'experimentNPatternStringProperty': LocalizedStringProperty;
 };
 
 const QuantumMeasurementStrings = getStringModule( 'QUANTUM_MEASUREMENT' ) as StringsType;

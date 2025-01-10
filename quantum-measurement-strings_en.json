@@ -229,5 +229,8 @@
   },
   "lots": {
     "value": "Lots"
+  },
+  "experimentNPattern": {
+    "value": "Experiment {{number}} {{order}}"
   }
 }
