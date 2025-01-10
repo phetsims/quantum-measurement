@@ -14,7 +14,6 @@ import { Shape } from '../../../../kite/js/imports.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import { Node, Path, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
@@ -22,6 +21,7 @@ import quantumMeasurementConstants from '../../common/QuantumMeasurementConstant
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import MeasurementDevice from '../model/MeasurementDevice.js';
+import MeasurementSymbolNode from '../../common/view/MeasurementSymbolNode.js';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -48,25 +48,10 @@ export default class MeasurementDeviceNode extends VBox {
       scale: 0.1,
       center: Vector2.ZERO
     } );
-    const measurementArcPath = new Path( Shape.arc( 0, 0, 20, 0, Math.PI, true ), {
-      stroke: 'white',
-      lineWidth: 5,
-      lineCap: 'round',
-      lineJoin: 'round',
-      center: new Vector2( 0, 5 ),
-      scale: 0.6
-    } );
-    const measurementArrowPath = new ArrowNode( 0, 0, 30, -35, {
-      fill: 'white',
-      stroke: 'white',
-      lineWidth: 1,
-      lineCap: 'round',
-      lineJoin: 'round',
-      center: new Vector2( 5, 4 ),
-      scale: 0.6
-    } );
+
+    const measurementSymbol = new MeasurementSymbolNode();
     const cameraNode = new Node( {
-      children: [ cameraPath, measurementArcPath, measurementArrowPath ],
+      children: [ cameraPath, measurementSymbol ],
       scale: 0.7
     } );
 

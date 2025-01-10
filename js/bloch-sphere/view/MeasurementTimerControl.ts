@@ -11,7 +11,6 @@
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Utils from '../../../../dot/js/Utils.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Orientation from '../../../../phet-core/js/Orientation.js';
@@ -21,6 +20,7 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Color, Node, Path, Text } from '../../../../scenery/js/imports.js';
 import { PanelOptions } from '../../../../sun/js/Panel.js';
 import Slider from '../../../../sun/js/Slider.js';
+import MeasurementSymbolNode from '../../common/view/MeasurementSymbolNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -92,28 +92,7 @@ export default class MeasurementTimerControl extends Node {
 
     // TODO: Can the measurement symbol be a common code item?  See https://github.com/phetsims/quantum-measurement/issues/54.
 
-    const measurementSymbol = new Node( {
-      scale: 0.8,
-      children: [
-        new Path( Shape.arc( 0, 0, 20, 0, Math.PI, true ), {
-          stroke: 'black',
-          lineWidth: 5,
-          lineCap: 'round',
-          lineJoin: 'round',
-          center: new Vector2( 0, 5 ),
-          scale: 0.6
-        } ),
-        new ArrowNode( 0, 0, 30, -35, {
-          fill: 'black',
-          stroke: 'black',
-          lineWidth: 0.9,
-          lineCap: 'round',
-          lineJoin: 'round',
-          center: new Vector2( 5, 4 ),
-          scale: 0.6
-        } )
-      ]
-    } );
+    const measurementSymbol = new MeasurementSymbolNode();
 
     timeToMeasurementProperty.link( time => {
       thumbLine.centerX = time / maxMeasurementTime * SLIDER_TRACK_SIZE.width;
