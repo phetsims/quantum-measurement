@@ -8,15 +8,25 @@
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
-import { combineOptions } from '../../../../phet-core/js/optionize.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
-import { Node, NodeOptions, Path } from '../../../../scenery/js/imports.js';
+import { Node, NodeOptions, Path, TPaint } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
+type SelfOptions = {
+  stroke?: TPaint;
+};
+
+type MeasurementSymbolNodeOptions = SelfOptions & NodeOptions;
+
 export default class MeasurementSymbolNode extends Node {
-  public constructor( providedOptions?: NodeOptions ) {
+  public constructor( providedOptions?: MeasurementSymbolNodeOptions ) {
+    const options = optionize<MeasurementSymbolNodeOptions, SelfOptions, NodeOptions>()( {
+      stroke: 'white'
+    }, providedOptions );
+
     const measurementArcPath = new Path( Shape.arc( 0, 0, 20, 0, Math.PI, true ), {
-      stroke: 'white',
+      stroke: options.stroke,
       lineWidth: 5,
       lineCap: 'round',
       lineJoin: 'round',
@@ -24,8 +34,8 @@ export default class MeasurementSymbolNode extends Node {
       scale: 0.6
     } );
     const measurementArrowPath = new ArrowNode( 0, 0, 30, -35, {
-      fill: 'white',
-      stroke: 'white',
+      fill: options.stroke,
+      stroke: options.stroke,
       lineWidth: 1,
       lineCap: 'round',
       lineJoin: 'round',
@@ -33,9 +43,9 @@ export default class MeasurementSymbolNode extends Node {
       scale: 0.6
     } );
 
-    super( combineOptions<NodeOptions>( {
-      children: [ measurementArcPath, measurementArrowPath ]
-    }, providedOptions ) );
+    options.children = [ measurementArcPath, measurementArrowPath ];
+
+    super( options );
   }
 }
 

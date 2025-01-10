@@ -11,15 +11,17 @@
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Utils from '../../../../dot/js/Utils.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Orientation from '../../../../phet-core/js/Orientation.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, Node, Path, Text } from '../../../../scenery/js/imports.js';
+import { Color, Node, Path, PressListener, Text } from '../../../../scenery/js/imports.js';
 import { PanelOptions } from '../../../../sun/js/Panel.js';
 import Slider from '../../../../sun/js/Slider.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import MeasurementSymbolNode from '../../common/view/MeasurementSymbolNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
@@ -36,19 +38,50 @@ export default class MeasurementTimerControl extends Node {
                       measurementTimeProperty: NumberProperty,
                       providedOptions: MeasurementTimerControlOptions ) {
 
-    // TODO: This should probably be rewritten to use thumbNode.  Seems like that would be way simpler.  See https://github.com/phetsims/quantum-measurement/issues/54.
+    const thumbOffset = 30;
+    const thumbDimensions = new Dimension2( 30, 30 );
+    const thumbPathOptions = {
+      fill: '#aaa',
+      fillHighlighted: '#fff',
+      stroke: 'black',
+      lineWidth: 2
+    };
+    const thumbNodeRect = new Path( new Shape().roundRect(
+      -thumbDimensions.width / 2,
+      thumbOffset - thumbDimensions.height / 2,
+      thumbDimensions.width,
+      thumbDimensions.height,
+      5,
+      5
+    ), thumbPathOptions );
+    const thumbNode = new Node( {
+      children: [
+        new Path( new Shape().circle( 0, 0, 2 ).moveTo( 0, 0 ).lineTo( 0, thumbOffset - thumbDimensions.height / 2 ), thumbPathOptions ),
+        thumbNodeRect,
+        new MeasurementSymbolNode( {
+          center: new Vector2( 0, thumbOffset ),
+          scale: 0.8,
+          stroke: 'black'
+        } )
+      ]
+    } );
+
+    // highlight thumb on pointer over
+    const pressListener = new PressListener( {
+      attach: false,
+      tandem: Tandem.OPT_OUT // Highlighting doesn't need instrumentation
+    } );
+    pressListener.isHighlightedProperty.link( isHighlighted => {
+      thumbNodeRect.fill = isHighlighted ? thumbPathOptions.fillHighlighted : thumbPathOptions.fill;
+    } );
+    thumbNode.addInputListener( pressListener );
 
     const maxMeasurementTime = timeToMeasurementProperty.rangeProperty.value.max;
     const minMeasurementTime = timeToMeasurementProperty.rangeProperty.value.getLength() / ( NUMBER_OF_MINOR_TICKS + 1 );
-    const thumbOffset = 30;
-    const thumbDimensions = new Dimension2( 30, 30 );
     const timeToMeasurementSlider = new Slider( timeToMeasurementProperty, timeToMeasurementProperty.range, {
       tandem: providedOptions.tandem.createTandem( 'timeToMeasurementSlider' ),
-      thumbSize: thumbDimensions,
-      thumbYOffset: thumbOffset,
-      thumbFill: 'white',
-      thumbFillHighlighted: '#ddd',
-      thumbCenterLineStroke: null,
+      thumbNode: thumbNode,
+      thumbYOffset: thumbOffset - 8,
       trackSize: SLIDER_TRACK_SIZE,
       trackFillEnabled: Color.BLACK,
       constrainValue: value => {
@@ -84,30 +117,10 @@ export default class MeasurementTimerControl extends Node {
       timeIndicator.centerX = measurementTime / timeToMeasurementProperty.rangeProperty.value.max * SLIDER_TRACK_SIZE.width;
     } );
 
-    const thumbLine = new Path( new Shape().circle( 0, 0, 2 ).moveTo( 0, 0 ).lineTo( 0, thumbOffset - thumbDimensions.height / 2 ), {
-      fill: '#bbb',
-      stroke: 'black',
-      lineWidth: 2
-    } );
-
-    // TODO: Can the measurement symbol be a common code item?  See https://github.com/phetsims/quantum-measurement/issues/54.
-
-    const measurementSymbol = new MeasurementSymbolNode();
-
-    timeToMeasurementProperty.link( time => {
-      thumbLine.centerX = time / maxMeasurementTime * SLIDER_TRACK_SIZE.width;
-      thumbLine.top = -2;
-
-      measurementSymbol.centerX = time / maxMeasurementTime * SLIDER_TRACK_SIZE.width;
-      measurementSymbol.centerY = thumbOffset / 2 + thumbDimensions.height / 2;
-    } );
-
     const options = optionize<MeasurementTimerControlOptions, SelfOptions, PanelOptions>()( {
       children: [
         timeIndicator,
-        timeToMeasurementSlider,
-        thumbLine,
-        measurementSymbol
+        timeToMeasurementSlider
       ]
     }, providedOptions );
 
