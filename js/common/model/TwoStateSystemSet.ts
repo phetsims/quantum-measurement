@@ -39,7 +39,6 @@ export type StateSetMeasurementResult<T> = {
 // Define the time that it will take to prepare a measurement, in seconds.  This is empirically determined.
 export const MEASUREMENT_PREPARATION_TIME = 1;
 
-// TODO AV: Should T only extend string or some system type? See https://github.com/phetsims/quantum-measurement/issues/20
 export default class TwoStateSystemSet<T extends string> extends PhetioObject {
 
   public readonly systemType: SystemType;
