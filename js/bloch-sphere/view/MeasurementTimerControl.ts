@@ -38,6 +38,10 @@ export default class MeasurementTimerControl extends Node {
                       measurementTimeProperty: NumberProperty,
                       providedOptions: MeasurementTimerControlOptions ) {
 
+    // Create the tandem for the slider, since we'll need it for other things before creating the slider itself.
+    const sliderTandem = providedOptions.tandem.createTandem( 'timeToMeasurementSlider' );
+
+    // Create the thumb node for the slider that will control the time at which the system is measured.
     const thumbOffset = 30;
     const thumbDimensions = new Dimension2( 30, 30 );
     const thumbPathOptions = {
@@ -63,7 +67,8 @@ export default class MeasurementTimerControl extends Node {
           scale: 0.8,
           stroke: 'black'
         } )
-      ]
+      ],
+      tandem: sliderTandem.createTandem( 'thumbNode' )
     } );
 
     // highlight thumb on pointer over
@@ -76,10 +81,11 @@ export default class MeasurementTimerControl extends Node {
     } );
     thumbNode.addInputListener( pressListener );
 
+    // Create the slider that will control the time at which the system is measured.
     const maxMeasurementTime = timeToMeasurementProperty.rangeProperty.value.max;
     const minMeasurementTime = timeToMeasurementProperty.rangeProperty.value.getLength() / ( NUMBER_OF_MINOR_TICKS + 1 );
     const timeToMeasurementSlider = new Slider( timeToMeasurementProperty, timeToMeasurementProperty.range, {
-      tandem: providedOptions.tandem.createTandem( 'timeToMeasurementSlider' ),
+      tandem: sliderTandem,
       thumbNode: thumbNode,
       thumbYOffset: thumbOffset - 8,
       trackSize: SLIDER_TRACK_SIZE,
