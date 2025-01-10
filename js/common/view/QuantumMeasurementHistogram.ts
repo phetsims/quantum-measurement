@@ -272,11 +272,11 @@ class QuantumMeasurementHistogram extends Node {
       ],
       ( leftNumber, rightNumber ) => {
         const leftProportion = totalNumberProperty.value ? leftNumber / totalNumberProperty.value : 0;
-        leftPercentageProperty.value = leftProportion * 100;
+        leftPercentageProperty.value = Utils.clamp( leftProportion * 100, 0, 100 );
         leftHistogramBar.setRect( 0, 0, options.barWidth, leftProportion * maxBarHeight );
         leftHistogramBar.bottom = xAxis.centerY;
         const rightProportion = totalNumberProperty.value ? rightNumber / totalNumberProperty.value : 0;
-        rightPercentageProperty.value = rightProportion * 100;
+        rightPercentageProperty.value = Utils.clamp( rightProportion * 100, 0, 100 );
         rightHistogramBar.setRect( 0, 0, options.barWidth, rightProportion * maxBarHeight );
         rightHistogramBar.bottom = xAxis.centerY;
 
