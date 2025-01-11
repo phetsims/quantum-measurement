@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * TwoStateSystemSet is a simple model for a set of values that can be in one of two states when measured.

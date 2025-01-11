@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * MeasurementDeviceNode contains the UI elements of the single particle measurement zone. It includes a simple bloch sphere,

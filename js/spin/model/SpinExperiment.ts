@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * SpinExperiment contains the details for all posisble Stern-Gerlach configurations of the Spin Screen.
