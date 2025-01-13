@@ -116,6 +116,7 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
     this.measurementStateProperty = new Property<ExperimentMeasurementState>( initialMeasurementState, {
       tandem: options.tandem.createTandem( 'measurementStateProperty' ),
       phetioValueType: StringUnionIO( ExperimentMeasurementStateValues ),
+      validValues: ExperimentMeasurementStateValues,
       phetioReadOnly: true
     } );
 
