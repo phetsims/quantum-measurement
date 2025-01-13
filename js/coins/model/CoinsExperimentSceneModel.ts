@@ -99,6 +99,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
     if ( options.systemType === 'classical' ) {
       this.initialCoinStateProperty = new Property<ClassicalCoinStates>( 'heads', {
         tandem: options.tandem.createTandem( 'initialCoinStateProperty' ),
+        phetioDocumentation: 'This is the initial orientation of the classical coin',
         phetioValueType: StringUnionIO( ClassicalCoinStateValues ),
         validValues: ClassicalCoinStateValues,
         phetioFeatured: true
@@ -123,6 +124,8 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
       this.initialCoinStateProperty = new Property<QuantumUncollapsedCoinStates>( 'up', {
         tandem: options.tandem.createTandem( 'initialCoinStateProperty' ),
         phetioValueType: StringUnionIO( QuantumUncollapsedCoinStateValues ),
+        phetioDocumentation: 'This is the basis state of the quantum coin',
+        phetioReadOnly: true,
         validValues: QuantumUncollapsedCoinStateValues,
         phetioFeatured: true
       } );
