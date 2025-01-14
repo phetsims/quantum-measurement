@@ -47,7 +47,8 @@ class PhotonTestingArea extends Node {
       tandem: providedOptions.tandem.createTandem( 'laserNode' )
     } );
 
-    // TODO: This might live here temporarily mainly for a demo. If the feature stays, consider moving elsewhere https://github.com/phetsims/quantum-measurement/issues/63
+    // TODO: See https://github.com/phetsims/quantum-measurement/issues/68.  This selector was added to allow designers
+    //       to compare the behavior for classical versus quantum systems.  It may be removed in the future.
     const particleBehaviorModeRadioButtonGroupTandem = providedOptions.tandem.createTandem( 'particleBehaviorModeRadioButtonGroup' );
     const particleBehaviorModeRadioButtonGroup = new AquaRadioButtonGroup<SystemType>(
       model.particleBehaviorModeProperty as PhetioProperty<SystemType>,
