@@ -121,6 +121,12 @@ class CoinsExperimentSceneView extends Node {
       this.updateActivityAreaPositions();
     } );
 
+    // Because phet-io actions can cause the size of the measurement area to change, we need to update the positions of
+    // the activity areas when the bounds of the measurement area change.
+    this.measurementArea.boundsProperty.link( () => {
+      this.updateActivityAreaPositions();
+    } );
+
     // Set the initial position that will be used when adding the coins that move (animate) between the preparation and
     // measurement areas.
     this.travelingCoinsOrigin = this.globalToLocalPoint( this.preparationArea.getIndicatorCoinGlobalCenter() );

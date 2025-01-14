@@ -46,7 +46,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
   public constructor( sceneModel: CoinsExperimentSceneModel, tandem: Tandem ) {
 
     const textColorProperty = sceneModel.systemType === 'quantum' ?
-                      QuantumMeasurementColors.quantumSceneTextColorProperty : QuantumMeasurementColors.classicalSceneTextColorProperty;
+                              QuantumMeasurementColors.quantumSceneTextColorProperty : QuantumMeasurementColors.classicalSceneTextColorProperty;
     const singleCoinInTestBoxProperty = new BooleanProperty( false );
     const coinSetInTestBoxProperty = new BooleanProperty( false );
 
@@ -100,9 +100,13 @@ export default class CoinExperimentMeasurementArea extends VBox {
       sceneModel.coinSet.measuredDataChangedEmitter,
       { tandem: tandem.createTandem( 'multipleCoinTestBox' ) }
     );
+    const multiCoinExperimentHistogramTandem = tandem.createTandem( 'multiCoinExperimentHistogram' );
     const multiCoinExperimentHistogram = new CoinMeasurementHistogram( sceneModel.coinSet, sceneModel.systemType, {
-      visibleProperty: DerivedProperty.not( sceneModel.preparingExperimentProperty ),
-      tandem: tandem.createTandem( 'multiCoinExperimentHistogram' ),
+      visibleProperty: new GatedVisibleProperty(
+        DerivedProperty.not( sceneModel.preparingExperimentProperty ),
+        multiCoinExperimentHistogramTandem
+      ),
+      tandem: multiCoinExperimentHistogramTandem,
       leftFillColorProperty: sceneModel.systemType === 'classical' ? QuantumMeasurementColors.headsColorProperty : QuantumMeasurementColors.upColorProperty,
       rightFillColorProperty: sceneModel.systemType === 'classical' ? QuantumMeasurementColors.tailsColorProperty : QuantumMeasurementColors.downColorProperty
     } );
