@@ -60,9 +60,11 @@ export default class CoinMeasurementHistogram extends QuantumMeasurementHistogra
 
     // Create the number Properties for the left and right histogram bars.
     const leftNumberProperty = new NumberProperty( 0, {
+      phetioReadOnly: true,
       tandem: providedOptions.tandem.createTandem( 'leftNumberProperty' )
     } );
     const rightNumberProperty = new NumberProperty( 0, {
+      phetioReadOnly: true,
       tandem: providedOptions.tandem.createTandem( 'rightNumberProperty' )
     } );
 
