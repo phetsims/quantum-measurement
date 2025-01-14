@@ -12,14 +12,9 @@ import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import { Shape } from '../../../../kite/js/imports.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import { Color, LinearGradient, Node, NodeOptions, Rectangle } from '../../../../scenery/js/imports.js';
+import { Color, LinearGradient, Node, Rectangle } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { ExperimentMeasurementState } from '../model/ExperimentMeasurementState.js';
-
-type SelfOptions = EmptySelfOptions;
-export type SingleCoinTestBoxOptions = SelfOptions & PickRequired<NodeOptions, 'tandem'>;
 
 // constants
 const SINGLE_COIN_AREA_RECT_LINE_WIDTH = 18;
@@ -34,8 +29,7 @@ export default class SingleCoinTestBox extends Node {
   // advantage of the clip area.
   public readonly clippedTestBox: Node;
 
-  public constructor( measurementStateProperty: Property<ExperimentMeasurementState>,
-                      providedOptions: SingleCoinTestBoxOptions ) {
+  public constructor( measurementStateProperty: Property<ExperimentMeasurementState> ) {
 
     const testBoxBounds = new Bounds2(
       0,
@@ -64,18 +58,7 @@ export default class SingleCoinTestBox extends Node {
       clipArea: Shape.bounds( testBoxBounds )
     } );
 
-    // Put the test box into another parent node so that a clip area can be included.  The clip area will be used to
-    // clip the mask that is used to hide the value of the coin.
-    // const testBoxRectangleClipped = new Node( {
-    //   children: [ testBoxRectangle ],
-    //   clipArea: Shape.bounds( testBoxRectangle.getRectBounds() )
-    // } );
-
-    const options = optionize<SingleCoinTestBoxOptions, SelfOptions, NodeOptions>()( {
-      children: [ testBoxRectangleClipped, testBoxRectangle ]
-    }, providedOptions );
-
-    super( options );
+    super( { children: [ testBoxRectangleClipped, testBoxRectangle ] } );
 
     this.clippedTestBox = testBoxRectangleClipped;
   }

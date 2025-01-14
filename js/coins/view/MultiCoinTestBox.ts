@@ -14,9 +14,7 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
-import { Color, HBox, HBoxOptions, LinearGradient, Node, Rectangle } from '../../../../scenery/js/imports.js';
+import { Color, HBox, LinearGradient, Node, Rectangle } from '../../../../scenery/js/imports.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
 import quantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
@@ -24,9 +22,6 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import { MULTI_COIN_ANIMATION_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
 import { ExperimentMeasurementState } from '../model/ExperimentMeasurementState.js';
 import SmallCoinNode, { SmallCoinDisplayMode } from './SmallCoinNode.js';
-
-type SelfOptions = EmptySelfOptions;
-export type MultiCoinTestBoxOptions = SelfOptions & WithRequired<HBoxOptions, 'tandem'>;
 
 // constants
 const BOX_SIZE = new Dimension2( 200, 200 );
@@ -37,7 +32,7 @@ const TEST_BOX_CONTENTS_REVEALED_FILL_COLOR_PROPERTY = quantumMeasurementColors.
 const LANDING_ZONE_WIDTH = 1;
 const LANDING_ZONE_FILL_COLOR_PROPERTY = quantumMeasurementColors.landingZoneFillColorProperty; // useful for debug, opacity should be 0 in production version
 
-export default class MultiCoinTestBox extends HBox {
+class MultiCoinTestBox extends HBox {
 
   private readonly testBoxWithClipArea: Node;
   private readonly numberOfActiveSystemsProperty: TReadOnlyProperty<number>;
@@ -46,8 +41,7 @@ export default class MultiCoinTestBox extends HBox {
   public constructor( coinSet: TwoStateSystemSet<string>,
                       measurementStateProperty: Property<ExperimentMeasurementState>,
                       numberOfActiveSystemsProperty: TReadOnlyProperty<number>,
-                      measuredDataChangedEmitter: TEmitter,
-                      providedOptions?: MultiCoinTestBoxOptions ) {
+                      measuredDataChangedEmitter: TEmitter ) {
 
     // Create the main rectangle that will represent the area where the coins will be hidden and shown.
     const multipleCoinTestBoxRectangle = new Rectangle(
@@ -77,11 +71,7 @@ export default class MultiCoinTestBox extends HBox {
       fill: LANDING_ZONE_FILL_COLOR_PROPERTY
     } );
 
-    const options = optionize<MultiCoinTestBoxOptions, SelfOptions, HBoxOptions>()( {
-      children: [ coinLandingZone, testBoxWithClipArea ]
-    }, providedOptions );
-
-    super( options );
+    super( { children: [ coinLandingZone, testBoxWithClipArea ] } );
 
     this.testBoxWithClipArea = testBoxWithClipArea;
     this.numberOfActiveSystemsProperty = numberOfActiveSystemsProperty;
@@ -200,3 +190,5 @@ export default class MultiCoinTestBox extends HBox {
 }
 
 quantumMeasurement.register( 'MultiCoinTestBox', MultiCoinTestBox );
+
+export default MultiCoinTestBox;

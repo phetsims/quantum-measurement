@@ -34,7 +34,7 @@ import SingleCoinTestBox from './SingleCoinTestBox.js';
 
 const RADIO_BUTTON_FONT = new PhetFont( 12 );
 
-export default class CoinExperimentMeasurementArea extends VBox {
+class CoinExperimentMeasurementArea extends VBox {
 
   // Boolean Properties that track whether the coins that go into the test boxes are fully enclosed there. This is an
   // internal-only thing and is not available to phet-io.
@@ -64,9 +64,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
     );
 
     // Create the box where the single coin will be placed while it is experimented with.
-    const singleCoinTestBox = new SingleCoinTestBox( sceneModel.singleCoin.measurementStateProperty, {
-      tandem: tandem.createTandem( 'singleCoinTestBox' )
-    } );
+    const singleCoinTestBox = new SingleCoinTestBox( sceneModel.singleCoin.measurementStateProperty );
 
     // Create the buttons that will be used to control the single-coin test box.
     const singleCoinExperimentButtonSet = new CoinExperimentButtonSet(
@@ -97,8 +95,7 @@ export default class CoinExperimentMeasurementArea extends VBox {
       sceneModel.coinSet,
       sceneModel.coinSet.measurementStateProperty,
       sceneModel.coinSet.numberOfActiveSystemsProperty,
-      sceneModel.coinSet.measuredDataChangedEmitter,
-      { tandem: tandem.createTandem( 'multipleCoinTestBox' ) }
+      sceneModel.coinSet.measuredDataChangedEmitter
     );
     const multiCoinExperimentHistogramTandem = tandem.createTandem( 'multiCoinExperimentHistogram' );
     const multiCoinExperimentHistogram = new CoinMeasurementHistogram( sceneModel.coinSet, sceneModel.systemType, {
@@ -308,3 +305,5 @@ export default class CoinExperimentMeasurementArea extends VBox {
 }
 
 quantumMeasurement.register( 'CoinExperimentMeasurementArea', CoinExperimentMeasurementArea );
+
+export default CoinExperimentMeasurementArea;
