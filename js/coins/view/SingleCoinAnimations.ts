@@ -36,7 +36,7 @@ const SINGLE_COIN_TEST_BOX_SIZE = new Dimension2( 165, 145 );
 const COIN_FLIP_RATE = 3; // full flips per second
 const COIN_TRAVEL_ANIMATION_DURATION = MEASUREMENT_PREPARATION_TIME * 0.95;
 
-export default class SingleCoinAnimations {
+class SingleCoinAnimations {
 
   public readonly abortIngressAnimationForSingleCoin: () => void;
   public readonly startIngressAnimationForSingleCoin: ( forReprepare: boolean ) => void;
@@ -282,3 +282,5 @@ export default class SingleCoinAnimations {
 }
 
 quantumMeasurement.register( 'SingleCoinAnimations', SingleCoinAnimations );
+
+export default SingleCoinAnimations;

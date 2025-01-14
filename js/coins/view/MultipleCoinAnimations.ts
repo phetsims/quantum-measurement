@@ -23,17 +23,15 @@ import SmallCoinNode from './SmallCoinNode.js';
 
 const COIN_TRAVEL_ANIMATION_DURATION = MEASUREMENT_PREPARATION_TIME * 0.95;
 
-export default class MultipleCoinAnimations {
+class MultipleCoinAnimations {
 
-public readonly abortIngressAnimationForCoinSet: () => void;
-public readonly startIngressAnimationForCoinSet: ( forReprepare: boolean ) => void;
+  public readonly abortIngressAnimationForCoinSet: () => void;
+  public readonly startIngressAnimationForCoinSet: ( forReprepare: boolean ) => void;
 
-  public constructor(
-    sceneModel: CoinsExperimentSceneModel,
-    measurementArea: CoinExperimentMeasurementArea,
-    multipleCoinTestBox: MultiCoinTestBox,
-    coinSetInTestBoxProperty: TProperty<boolean>
-  ) {
+  public constructor( sceneModel: CoinsExperimentSceneModel,
+                      measurementArea: CoinExperimentMeasurementArea,
+                      multipleCoinTestBox: MultiCoinTestBox,
+                      coinSetInTestBoxProperty: TProperty<boolean> ) {
 
     // Create the nodes that will be used to animate coin motion for the multiple coin experiments.  These are sized
     // differently based on the quantity being animated.
@@ -196,3 +194,5 @@ public readonly startIngressAnimationForCoinSet: ( forReprepare: boolean ) => vo
 }
 
 quantumMeasurement.register( 'MultipleCoinAnimations', MultipleCoinAnimations );
+
+export default MultipleCoinAnimations;
