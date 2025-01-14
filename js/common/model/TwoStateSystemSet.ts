@@ -39,7 +39,7 @@ export type StateSetMeasurementResult<T> = {
 // Define the time that it will take to prepare a measurement, in seconds.  This is empirically determined.
 export const MEASUREMENT_PREPARATION_TIME = 1;
 
-export default class TwoStateSystemSet<T extends string> extends PhetioObject {
+class TwoStateSystemSet<T extends string> extends PhetioObject {
 
   public readonly systemType: SystemType;
 
@@ -116,7 +116,9 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
     this.measurementStateProperty = new Property<ExperimentMeasurementState>( initialMeasurementState, {
       tandem: options.tandem.createTandem( 'measurementStateProperty' ),
       phetioValueType: StringUnionIO( ExperimentMeasurementStateValues ),
-      validValues: ExperimentMeasurementStateValues,
+      validValues: options.systemType === 'classical' ?
+                   _.without( ExperimentMeasurementStateValues, 'readyToBeMeasured' ) :
+                   _.without( ExperimentMeasurementStateValues, 'measuredAndHidden' ),
       phetioReadOnly: true
     } );
 
@@ -302,3 +304,5 @@ export default class TwoStateSystemSet<T extends string> extends PhetioObject {
 }
 
 quantumMeasurement.register( 'TwoStateSystemSet', TwoStateSystemSet );
+
+export default TwoStateSystemSet;

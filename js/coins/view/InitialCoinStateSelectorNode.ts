@@ -125,7 +125,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
       orientationIndicatorCoinNode = new ClassicalCoinNode(
         initialCoinStateProperty as Property<ClassicalCoinStates>,
         INDICATOR_COIN_NODE_RADIUS,
-        tandem.createTandem( 'coinIndicatorNode' )
+        Tandem.OPT_OUT
       );
     }
     else {
@@ -133,7 +133,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
         initialCoinStateProperty as Property<QuantumCoinStates>,
         upProbabilityProperty,
         INDICATOR_COIN_NODE_RADIUS,
-        tandem.createTandem( 'coinIndicatorNode' )
+        Tandem.OPT_OUT
       );
     }
 

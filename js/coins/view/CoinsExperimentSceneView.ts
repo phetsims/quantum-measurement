@@ -8,6 +8,7 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
@@ -44,7 +45,7 @@ const DIVIDER_X_POSITION_DURING_PREPARATION = Math.floor( ScreenView.DEFAULT_LAY
 const DIVIDER_X_POSITION_DURING_MEASUREMENT = Math.ceil( ScreenView.DEFAULT_LAYOUT_BOUNDS.width * 0.2 );
 const DIVIDER_HEIGHT = 500; // empirically determined
 
-export default class CoinsExperimentSceneView extends Node {
+class CoinsExperimentSceneView extends Node {
 
   // The coin experiment scene view has two areas, one for preparing the experiment and one for running it and measuring
   // the results. These are the root nodes for each of these areas. They are mostly populated by subclasses.
@@ -100,6 +101,7 @@ export default class CoinsExperimentSceneView extends Node {
     } );
 
     // Add the button for switching from preparation mode to measurement mode.
+    const startMeasurementButtonTandem = options.tandem.createTandem( 'startMeasurementButton' );
     const startMeasurementButton = new RectangularPushButton( {
       baseColor: QuantumMeasurementColors.startMeasurementButtonColorProperty,
       content: new ArrowNode( 0, 0, 60, 0, {
@@ -107,9 +109,9 @@ export default class CoinsExperimentSceneView extends Node {
         headHeight: 15
       } ),
       listener: () => { sceneModel.preparingExperimentProperty.value = false; },
-      visibleProperty: sceneModel.preparingExperimentProperty,
+      visibleProperty: new GatedVisibleProperty( sceneModel.preparingExperimentProperty, startMeasurementButtonTandem ),
       centerY: 245, // empirically determined
-      tandem: options.tandem.createTandem( 'startMeasurementButton' )
+      tandem: startMeasurementButtonTandem
     } );
 
     // Position the dividing line and the two areas of activity.
@@ -159,14 +161,18 @@ export default class CoinsExperimentSceneView extends Node {
     } );
 
     // Create and add the button for starting a new experiment by preparing a new coin.
+    const newCoinButtonTandem = options.tandem.createTandem( 'newCoinButton' );
     this.newCoinButton = new TextPushButton( QuantumMeasurementStrings.newCoinStringProperty, {
-      visibleProperty: DerivedProperty.not( sceneModel.preparingExperimentProperty ),
+      visibleProperty: new GatedVisibleProperty(
+        DerivedProperty.not( sceneModel.preparingExperimentProperty ),
+        newCoinButtonTandem
+      ),
       baseColor: QuantumMeasurementColors.newCoinButtonColorProperty,
       font: new PhetFont( 14 ),
       listener: () => {
         sceneModel.preparingExperimentProperty.value = true;
       },
-      tandem: options.tandem.createTandem( 'newCoinButton' )
+      tandem: newCoinButtonTandem
     } );
 
     // Position the "New Coin" button below the preparation area.
@@ -248,3 +254,5 @@ export default class CoinsExperimentSceneView extends Node {
 }
 
 quantumMeasurement.register( 'CoinsExperimentSceneView', CoinsExperimentSceneView );
+
+export default CoinsExperimentSceneView;

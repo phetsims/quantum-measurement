@@ -23,14 +23,14 @@ import OutcomeProbabilityControl from './OutcomeProbabilityControl.js';
 import ProbabilityEquationsNode from './ProbabilityEquationsNode.js';
 import SceneSectionHeader from './SceneSectionHeader.js';
 
-export default class CoinExperimentPreparationArea extends VBox {
+class CoinExperimentPreparationArea extends VBox {
 
   private readonly initialCoinStateSelectorNode: InitialCoinStateSelectorNode;
 
   public constructor( sceneModel: CoinsExperimentSceneModel, tandem: Tandem ) {
 
     const textColorProperty = sceneModel.systemType === 'quantum' ?
-                      QuantumMeasurementColors.quantumSceneTextColorProperty : QuantumMeasurementColors.classicalSceneTextColorProperty;
+                              QuantumMeasurementColors.quantumSceneTextColorProperty : QuantumMeasurementColors.classicalSceneTextColorProperty;
 
     // Create the header. It is somewhat different depending on whether this is for a classical or quantum system.
     const prepAreaHeadingTextProperty: TReadOnlyProperty<string> = new DerivedProperty(
@@ -79,7 +79,8 @@ export default class CoinExperimentPreparationArea extends VBox {
     // Create the node that will show the probabilities for the possible outcomes as equations.
     const probabilityEquationsNode = new ProbabilityEquationsNode(
       sceneModel.upProbabilityProperty,
-      sceneModel.systemType
+      sceneModel.systemType,
+      { tandem: tandem.createTandem( 'probabilityEquationsNode' ) }
     );
 
     // Create the control that will allow the user to manipulate the probability of the various outcomes.
@@ -116,3 +117,5 @@ export default class CoinExperimentPreparationArea extends VBox {
 }
 
 quantumMeasurement.register( 'CoinExperimentPreparationArea', CoinExperimentPreparationArea );
+
+export default CoinExperimentPreparationArea;

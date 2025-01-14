@@ -183,7 +183,7 @@ export default class SpinMeasurementArea extends VBox {
       }
     );
 
-    const exectedPercentageCheckboxTandem = tandem.createTandem( 'expectedPercentageCheckbox' );
+    const expectedPercentageCheckboxTandem = tandem.createTandem( 'expectedPercentageCheckbox' );
     const expectedPercentageCheckbox = new Checkbox(
       model.expectedPercentageVisibleProperty,
       new HBox( {
@@ -202,8 +202,8 @@ export default class SpinMeasurementArea extends VBox {
         visibleProperty: new GatedVisibleProperty( new DerivedProperty(
           [ model.particleSourceModel.sourceModeProperty ],
           sourceMode => sourceMode === SourceMode.CONTINUOUS
-        ), exectedPercentageCheckboxTandem ),
-        tandem: exectedPercentageCheckboxTandem
+        ), expectedPercentageCheckboxTandem ),
+        tandem: expectedPercentageCheckboxTandem
       } );
 
     const exitBlockerNode = new Path( new Shape().moveTo( 0, 0 ).lineTo( 0, 35 ), {
