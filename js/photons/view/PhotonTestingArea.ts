@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * PhotonTestingArea is a view element that contains all the components for production, reflecting, and detecting

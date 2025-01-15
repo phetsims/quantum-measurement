@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * CoinAnimations is a composite UI component that presents two areas - one for a single coin and one for
