@@ -7,16 +7,14 @@
  */
 
 import BlochSphereModel from 'model/BlochSphereModel.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, Line, Text } from '../../../../scenery/js/imports.js';
-import Checkbox from '../../../../sun/js/Checkbox.js';
+import { Color, Line } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import BlochSphereMeasurementArea from './BlochSphereMeasurementArea.js';
 import BlochSpherePreparationArea from './BlochSpherePreparationArea.js';
 
-export default class BlochSphereScreenView extends QuantumMeasurementScreenView {
+class BlochSphereScreenView extends QuantumMeasurementScreenView {
 
   private readonly model: BlochSphereModel;
 
@@ -42,28 +40,15 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
     } );
     this.addChild( dividingLine );
 
-    const showMagneticFieldCheckbox = new Checkbox(
-      model.showMagneticFieldProperty,
-      new Text( 'Show Magnetic Field', { font: new PhetFont( { size: 16 } ) } ),
-      {
-        tandem: tandem.createTandem( 'showMagneticFieldCheckbox' ),
-        spacing: 10,
-        centerX: this.layoutBounds.centerX + 150,
-        top: this.layoutBounds.top + 20
-      } );
-    this.addChild( showMagneticFieldCheckbox );
-
-
     const measurementArea = new BlochSphereMeasurementArea( model, {
       tandem: tandem.createTandem( 'measurementArea' ),
       left: dividingLineX + 20,
-      top: showMagneticFieldCheckbox.bottom + 20
+      top: this.layoutBounds.top + 40
     } );
     this.addChild( measurementArea );
 
     this.pdomPlayAreaNode.pdomOrder = [
       preparationArea,
-      showMagneticFieldCheckbox,
       measurementArea
     ];
 
@@ -79,3 +64,5 @@ export default class BlochSphereScreenView extends QuantumMeasurementScreenView 
 }
 
 quantumMeasurement.register( 'BlochSphereScreenView', BlochSphereScreenView );
+
+export default BlochSphereScreenView;

@@ -6,32 +6,39 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Dimension2 from '../../../../dot/js/Dimension2.js';
+import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import { Node, NodeOptions } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import MagneticFieldArrowNode from './MagneticFieldArrowNode.js';
 
+const SIZE = new Dimension2( 150, 170 );
+
 export default class MagneticFieldNode extends Node {
 
-  public constructor( magneticFieldStrength: NumberProperty, providedOptions: NodeOptions ) {
+  public constructor( magneticFieldStrength: NumberProperty, providedOptions?: NodeOptions ) {
 
-    super( providedOptions );
-
-    const columns = 8;
-    const rows = 7;
-    const separationX = 300 / columns;
-    const separationY = 300 / rows;
+    const columns = 5;
+    const rows = 5;
+    const separationX = SIZE.width / columns;
+    const separationY = SIZE.height / rows;
+    const arrowNodes: MagneticFieldArrowNode[] = [];
 
     for ( let i = 0; i < columns; i++ ) {
       for ( let j = 0; j < rows; j++ ) {
-        const magneticFieldArrowNode = new MagneticFieldArrowNode( magneticFieldStrength, 30 );
-        magneticFieldStrength.link( strength => {
+        const magneticFieldArrowNode = new MagneticFieldArrowNode( magneticFieldStrength, 20 );
+        magneticFieldStrength.link( () => {
           magneticFieldArrowNode.centerX = i * separationX;
           magneticFieldArrowNode.centerY = j * separationY;
         } );
 
-        this.addChild( magneticFieldArrowNode );
+        arrowNodes.push( magneticFieldArrowNode );
       }
     }
+
+    const options = combineOptions<NodeOptions>( { children: arrowNodes }, providedOptions );
+
+    super( options );
   }
 }
 

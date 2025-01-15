@@ -37,7 +37,7 @@ export default class MagneticFieldControl extends Panel {
       fill: QuantumMeasurementColors.controlPanelFillColorProperty,
       stroke: null,
       xMargin: 10,
-      yMargin: 10
+      yMargin: 20
     }, providedOptions );
 
     const magneticFieldIndicator = new Node( {

@@ -1,8 +1,8 @@
 // Copyright 2025, University of Colorado Boulder
 
 /**
- * BlochSphereMeasurementArea is the node that contains the measurement area for the Bloch Sphere screen. It contains the
- * UI elements for controlling magnetic field and basis of measurements...
+ * BlochSphereMeasurementArea is the node that contains the measurement area for the Bloch Sphere screen. It contains
+ * the UI elements for controlling various aspects of the measurement that is to be performed.
  *
  * @author Agustín Vallejo
  * @author John Blanco (PhET Interactive Simulations)
@@ -10,13 +10,15 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
+import Dimension2 from '../../../../dot/js/Dimension2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Node, NodeOptions, RichText, RichTextOptions, Text, VBox } from '../../../../scenery/js/imports.js';
+import { HBox, Node, NodeOptions, RichText, RichTextOptions, Text, VBox } from '../../../../scenery/js/imports.js';
 import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
+import Checkbox from '../../../../sun/js/Checkbox.js';
 import Panel from '../../../../sun/js/Panel.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
@@ -28,8 +30,8 @@ import BlochSphereModel from '../model/BlochSphereModel.js';
 import { MeasurementBasis } from '../model/MeasurementBasis.js';
 import BlochSphereNumericalEquationNode from './BlochSphereNumericalEquationNode.js';
 import MagneticFieldControl from './MagneticFieldControl.js';
-import MagneticFieldNode from './MagneticFieldNode.js';
 import MeasurementTimerControl from './MeasurementTimerControl.js';
+import SystemUnderTestNode from './SystemUnderTestNode.js';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -40,12 +42,7 @@ export default class BlochSphereMeasurementArea extends Node {
   public constructor( model: BlochSphereModel, providedOptions: BlochSphereMeasurementAreaOptions ) {
 
     const equationNode = new BlochSphereNumericalEquationNode( model, {
-      tandem: providedOptions.tandem.createTandem( 'equationNode' ),
-      centerY: -50
-    } );
-
-    const magneticFieldNode = new MagneticFieldNode( model.magneticFieldStrengthProperty, {
-      visibleProperty: model.showMagneticFieldProperty
+      tandem: providedOptions.tandem.createTandem( 'equationNode' )
     } );
 
     const singleMeasurementBlochSphereNode = new BlochSphereNode( model.singleMeasurementBlochSphere, {
@@ -53,7 +50,8 @@ export default class BlochSphereMeasurementArea extends Node {
       drawTitle: false,
       drawKets: false,
       drawAngleIndicators: true,
-      center: magneticFieldNode.center,
+      top: equationNode.bottom + 50,
+      left: equationNode.left,
       visibleProperty: model.isSingleMeasurementModeProperty
     } );
 
@@ -83,7 +81,8 @@ export default class BlochSphereMeasurementArea extends Node {
         currentRow++;
       }
     } );
-    multipleMeasurementBlochSpheresNode.center = magneticFieldNode.center.plusXY( 0, 30 );
+    multipleMeasurementBlochSpheresNode.centerX = singleMeasurementBlochSphereNode.centerX;
+    multipleMeasurementBlochSpheresNode.top = 70;
 
     const spinUpLabelStringProperty = new DerivedStringProperty(
       [ model.measurementBasisProperty ],
@@ -122,6 +121,7 @@ export default class BlochSphereMeasurementArea extends Node {
       font: new PhetFont( 18 ),
       fill: 'black'
     };
+
     // Create and add the radio buttons that select the chart type view in the nuclideChartAccordionBox.
     const basisRadioButtonGroupTandem = providedOptions.tandem.createTandem( 'basisRadioButtonGroup' );
 
@@ -151,7 +151,7 @@ export default class BlochSphereMeasurementArea extends Node {
 
     const measurementTimerControl = new MeasurementTimerControl( model.timeToMeasurementProperty, model.measurementTimeProperty, {
       tandem: providedOptions.tandem.createTandem( 'measurementTimerControl' ),
-      visibleProperty: model.showMagneticFieldProperty
+      visibleProperty: model.magneticFieldEnabledProperty
     } );
 
     const measurementControlPanel = new Panel( new VBox( {
@@ -200,7 +200,7 @@ export default class BlochSphereMeasurementArea extends Node {
 
     const measurementControls = new VBox( {
       left: singleMeasurementBlochSphereNode.right + 20,
-      top: magneticFieldNode.top - 50,
+      top: equationNode.bottom + 10,
       spacing: 10,
       children: [
         measurementResultHistogram,
@@ -209,21 +209,49 @@ export default class BlochSphereMeasurementArea extends Node {
       ]
     } );
 
+    const magneticFieldCheckbox = new Checkbox(
+      model.magneticFieldEnabledProperty,
+      // TODO: This text should be localized, see https://github.com/phetsims/quantum-measurement/issues/54
+      new Text( 'Enable Magnetic Field', { font: new PhetFont( { size: 16 } ) } ),
+      {
+        spacing: 10,
+        centerX: multipleMeasurementBlochSpheresNode.centerX,
+        bottom: QuantumMeasurementConstants.LAYOUT_BOUNDS.bottom - 55,
+        tandem: providedOptions.tandem.createTandem( 'magneticFieldCheckbox' )
+      }
+    );
+
     const magneticFieldControl = new MagneticFieldControl( model.magneticFieldStrengthProperty, {
-      centerX: singleMeasurementBlochSphereNode.centerX,
-      top: magneticFieldNode.bottom + 10,
-      visibleProperty: model.showMagneticFieldProperty,
+      visibleProperty: model.magneticFieldEnabledProperty,
       tandem: providedOptions.tandem.createTandem( 'magneticFieldControl' )
+    } );
+
+    const systemUnderTestNode = new SystemUnderTestNode(
+      new Dimension2( 150, 180 ),
+      model.magneticFieldEnabledProperty,
+      model.magneticFieldStrengthProperty,
+      model.isSingleMeasurementModeProperty
+    );
+
+    const magneticFieldAndStrengthControl = new HBox( {
+      children: [ magneticFieldControl, systemUnderTestNode ],
+      spacing: 12,
+      centerX: singleMeasurementBlochSphereNode.centerX,
+      bottom: magneticFieldCheckbox.top - 20
+    } );
+
+    magneticFieldAndStrengthControl.localBoundsProperty.link( () => {
+      magneticFieldAndStrengthControl.centerX = singleMeasurementBlochSphereNode.centerX;
     } );
 
     const options = optionize<BlochSphereMeasurementAreaOptions, SelfOptions, NodeOptions>()( {
       children: [
         equationNode,
-        magneticFieldNode,
         singleMeasurementBlochSphereNode,
         multipleMeasurementBlochSpheresNode,
         measurementControls,
-        magneticFieldControl
+        magneticFieldAndStrengthControl,
+        magneticFieldCheckbox
       ]
     }, providedOptions );
 

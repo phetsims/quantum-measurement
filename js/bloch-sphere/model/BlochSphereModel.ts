@@ -34,7 +34,7 @@ const MAX_OBSERVATION_TIME = 2 * Math.PI / QuantumMeasurementConstants.MAX_PRECE
 
 class BlochSphereModel implements TModel {
 
-  public readonly showMagneticFieldProperty: BooleanProperty;
+  public readonly magneticFieldEnabledProperty: BooleanProperty;
 
   // Bloch Spheres shown in the screen
   public readonly preparationBlochSphere: ComplexBlochSphere;
@@ -75,8 +75,8 @@ class BlochSphereModel implements TModel {
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
-    this.showMagneticFieldProperty = new BooleanProperty( false, {
-      tandem: providedOptions.tandem.createTandem( 'showMagneticFieldProperty' ),
+    this.magneticFieldEnabledProperty = new BooleanProperty( false, {
+      tandem: providedOptions.tandem.createTandem( 'magneticFieldEnabledProperty' ),
       phetioFeatured: true
     } );
 
@@ -192,7 +192,7 @@ class BlochSphereModel implements TModel {
 
     // Set the precession rate of the Bloch sphere based on the magnetic field strength and the selected scene.
     Multilink.multilink(
-      [ this.magneticFieldStrengthProperty, this.showMagneticFieldProperty ],
+      [ this.magneticFieldStrengthProperty, this.magneticFieldEnabledProperty ],
       ( magneticFieldStrength, showMagneticField ) => {
         this.singleMeasurementBlochSphere.rotatingSpeedProperty.value = showMagneticField ?
                                                                         magneticFieldStrength :
@@ -267,7 +267,7 @@ class BlochSphereModel implements TModel {
       'The model should be prepared for measurement prior to calling this method.'
     );
 
-    if ( this.showMagneticFieldProperty.value ) {
+    if ( this.magneticFieldEnabledProperty.value ) {
 
       // Transition to the state where the model is waiting to take a measurement.
       this.measurementStateProperty.value = 'timingObservation';
@@ -316,7 +316,7 @@ class BlochSphereModel implements TModel {
   public reset(): void {
     this.resetCounts();
     this.preparationBlochSphere.reset();
-    this.showMagneticFieldProperty.reset();
+    this.magneticFieldEnabledProperty.reset();
     this.measurementStateProperty.reset();
     this.magneticFieldStrengthProperty.reset();
     this.measurementBasisProperty.reset();
