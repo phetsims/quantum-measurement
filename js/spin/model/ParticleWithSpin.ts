@@ -1,8 +1,8 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
 /**
- * ParticleWithSpin is the model for a particle with a predetermined spin. It has a lifetime, which will
- * determine its position in the Ray Path, and a spin value, which will be modified as it passes through the SG apparatuses.
+ * ParticleWithSpin is the model for a particle with a predetermined spin. It has a lifetime, which will determine its
+ * position in the Ray Path, and a spin value, which will be modified as it passes through the SG apparatuses.
  *
  * @author Agustín Vallejo
  */
@@ -16,28 +16,28 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 
 export class ParticleWithSpin {
 
-  // Lifetime, will determine when the particle dies off
+  // lifetime, will determine when the particle dies off
   public lifetime = 0;
 
-  // Randomized offset to give a more natural look
+  // randomized offset to give a more natural look
   private readonly offset: Vector2;
 
-  // Position of the particle
+  // position of the particle in 2D space
   public position: Vector2;
 
-  // Velocity of the particle
+  // velocity of the particle
   public velocity: Vector2;
 
-  // Spin values of the particle in the XZ plane along its lifetime
+  // spin values of the particle in the XZ plane along its lifetime
   public spinVectors = [ new Vector2( 0, 0 ), new Vector2( 0, 0 ), new Vector2( 0, 0 ) ];
 
-  // Same but simplified to spinUp booleans
+  // same but simplified to spinUp booleans
   public isSpinUp = [ false, false, false ];
 
-  // If the particle spin was already counted for the histograms or detectors
+  // whether the particle spin was already counted for the histograms or detectors
   public stageCompleted = [ false, false, false ];
 
-  // Start and end position properties for defining the particle paths
+  // start and end position properties for defining the particle paths
   public startPosition: Vector2;
   public endPosition: Vector2;
 
@@ -82,8 +82,8 @@ export class ParticleWithSpin {
 
   /**
    * Individual Particle instances are not PhET-iO Instrumented. Instead, the ParticleCollection that contains the
-   * Particles calls ParticleWithSpinIO.toStateObject to serialize the Particle instances. ParticleCollectionIO uses
-   * reference type serialization as a composite of the Particles, which use data type serialization.
+   * Particle instances calls ParticleWithSpinIO.toStateObject to serialize the Particle instances. ParticleCollectionIO
+   * uses reference type serialization as a composite of the Particles, which use data type serialization.
    *
    * Please see https://github.com/phetsims/phet-io/blob/main/doc/phet-io-instrumentation-technical-guide.md#serialization
    * for more information on the different serialization types.

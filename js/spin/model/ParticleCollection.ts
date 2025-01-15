@@ -1,9 +1,8 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
 /**
- * ParticleCollection is the model for particles with a predetermined spin. It has a lifetime, which will
- * determine its position in the Ray Path, and a spin value, which will be modified as it passes through the SG
- * apparatuses.
+ * ParticleCollection is the model for a set of particles where each has a predetermined spin. It provides and API that
+ * allows clients to create, remove, and measure particles.
  *
  * @author Agustín Vallejo
  */
@@ -34,11 +33,7 @@ export class ParticleCollection extends PhetioObject {
 
   public readonly model: SpinModel;
 
-  public constructor(
-    model: SpinModel,
-    maxParticles: number,
-    tandem: Tandem
-  ) {
+  public constructor( model: SpinModel, maxParticles: number, tandem: Tandem ) {
     super( {
       tandem: tandem,
       phetioType: ParticleCollection.ParticleCollectionIO
@@ -94,6 +89,7 @@ export class ParticleCollection extends PhetioObject {
    * @param dt - time step, in seconds
    */
   public step( dt: number ): void {
+
     // Remove old particles
     this.particles.forEach( particle => {
       if ( particle.lifetime > 4 ) {
@@ -102,15 +98,16 @@ export class ParticleCollection extends PhetioObject {
     } );
   }
 
-
   /**
    * Check if the particle would be blocked by the exit blocker, and if so, reset it and return true.
    */
   protected checkParticleBlocking( particle: ParticleWithSpin ): boolean {
+
     // If there is no blocker in place
     if ( this.model.sternGerlachs[ 0 ].blockingModeProperty.value !== BlockingMode.NO_BLOCKER ) {
       const exitPositionProperty = this.model.exitBlockerPositionProperty.value;
       if (
+
         // If the blocker is on the 'up' position and the particle is spin up, and blocker position exists (can be null),
         // and particle position is greater than the blocker position
         this.model.sternGerlachs[ 0 ].blockingModeProperty.value === BlockingMode.BLOCK_UP &&
@@ -235,6 +232,5 @@ export class ParticleCollection extends PhetioObject {
     }
   } );
 }
-
 
 quantumMeasurement.register( 'ParticleCollection', ParticleCollection );
