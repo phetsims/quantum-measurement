@@ -42,6 +42,7 @@ export default class BlochSphereMeasurementArea extends Node {
   public constructor( model: BlochSphereModel, providedOptions: BlochSphereMeasurementAreaOptions ) {
 
     const equationNode = new BlochSphereNumericalEquationNode( model, {
+      visibleProperty: model.isSingleMeasurementModeProperty,
       tandem: providedOptions.tandem.createTandem( 'equationNode' )
     } );
 
