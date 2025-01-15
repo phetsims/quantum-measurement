@@ -94,6 +94,8 @@ type StringsType = {
   'noneStringProperty': LocalizedStringProperty;
   'lotsStringProperty': LocalizedStringProperty;
   'experimentNPatternStringProperty': LocalizedStringProperty;
+  'measurementParametersStringProperty': LocalizedStringProperty;
+  'measurementAxisStringProperty': LocalizedStringProperty;
 };
 
 const QuantumMeasurementStrings = getStringModule( 'QUANTUM_MEASUREMENT' ) as StringsType;

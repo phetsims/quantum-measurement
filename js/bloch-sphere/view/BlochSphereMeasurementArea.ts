@@ -158,9 +158,9 @@ export default class BlochSphereMeasurementArea extends Node {
       spacing: 10,
       align: 'left',
       children: [
-        new Text( 'Measurement Parameters', { font: new PhetFont( 18 ) } ),
+        new Text( QuantumMeasurementStrings.measurementParametersStringProperty, { font: new PhetFont( 18 ) } ),
         singleOrMultipleRadioButtonGroup,
-        new Text( 'Basis', { font: new PhetFont( 18 ) } ),
+        new Text( QuantumMeasurementStrings.measurementAxisStringProperty, { font: new PhetFont( 16 ) } ),
         basisRadioButtonGroup,
         measurementTimerControl
       ]
