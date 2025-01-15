@@ -116,10 +116,13 @@ class TwoStateSystemSet<T extends string> extends PhetioObject {
     this.measurementStateProperty = new Property<ExperimentMeasurementState>( initialMeasurementState, {
       tandem: options.tandem.createTandem( 'measurementStateProperty' ),
       phetioValueType: StringUnionIO( ExperimentMeasurementStateValues ),
+      phetioReadOnly: true,
+
+      // Set the valid values for the measurement state.  Note that there is one value that is only used in the quantum
+      // case.
       validValues: options.systemType === 'classical' ?
                    _.without( ExperimentMeasurementStateValues, 'readyToBeMeasured' ) :
-                   _.without( ExperimentMeasurementStateValues, 'measuredAndHidden' ),
-      phetioReadOnly: true
+                   ExperimentMeasurementStateValues
     } );
 
     this.biasProperty = biasProperty;
