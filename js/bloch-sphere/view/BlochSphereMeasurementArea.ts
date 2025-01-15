@@ -231,7 +231,8 @@ export default class BlochSphereMeasurementArea extends Node {
       new Dimension2( 150, 180 ),
       model.magneticFieldEnabledProperty,
       model.magneticFieldStrengthProperty,
-      model.isSingleMeasurementModeProperty
+      model.isSingleMeasurementModeProperty,
+      model.measurementStateProperty
     );
 
     const magneticFieldAndStrengthControl = new HBox( {

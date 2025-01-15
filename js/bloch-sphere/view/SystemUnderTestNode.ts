@@ -9,6 +9,7 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
@@ -16,6 +17,7 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ShadedSphereNode from '../../../../scenery-phet/js/ShadedSphereNode.js';
 import { Color, HBox, Node, NodeOptions, Rectangle, Text, VBox } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import { SpinMeasurementState } from '../model/SpinMeasurementState.js';
 import MagneticFieldNode from './MagneticFieldNode.js';
 
 const ATOM_RADIUS = 18; // in view coordinates
@@ -32,12 +34,14 @@ class SystemUnderTestNode extends Node {
    * @param magneticFieldEnabledProperty - whether the magnetic field is enabled
    * @param magneticFieldStrengthProperty - the property that indicates the magnetic field strength
    * @param isSingleMeasurementModeProperty - whether the system is in single measurement mode
+   * @param measurementStateProperty - the state of the spin measurement
    * @param providedOptions - options for the node, mostly used for positioning if at all
    */
   public constructor( size: Dimension2,
                       magneticFieldEnabledProperty: TReadOnlyProperty<boolean>,
                       magneticFieldStrengthProperty: NumberProperty,
                       isSingleMeasurementModeProperty: TReadOnlyProperty<boolean>,
+                      measurementStateProperty: Property<SpinMeasurementState>,
                       providedOptions?: NodeOptions ) {
 
     const rect = new Rectangle( 0, 0, size.width, size.height, {
@@ -46,9 +50,8 @@ class SystemUnderTestNode extends Node {
       cornerRadius: 8
     } );
 
-    const magneticFieldNode = new MagneticFieldNode( magneticFieldStrengthProperty, {
+    const magneticFieldNode = new MagneticFieldNode( magneticFieldStrengthProperty, measurementStateProperty, {
       center: rect.center,
-      opacity: 0.25,
       visibleProperty: magneticFieldEnabledProperty
     } );
 

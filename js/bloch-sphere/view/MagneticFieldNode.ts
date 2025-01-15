@@ -6,17 +6,21 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import { Node, NodeOptions } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import { SpinMeasurementState } from '../model/SpinMeasurementState.js';
 import MagneticFieldArrowNode from './MagneticFieldArrowNode.js';
 
 const SIZE = new Dimension2( 150, 170 );
 
 export default class MagneticFieldNode extends Node {
 
-  public constructor( magneticFieldStrength: NumberProperty, providedOptions?: NodeOptions ) {
+  public constructor( magneticFieldStrength: NumberProperty,
+                      measurementStateProperty: Property<SpinMeasurementState>,
+                      providedOptions?: NodeOptions ) {
 
     const columns = 5;
     const rows = 5;
@@ -39,6 +43,10 @@ export default class MagneticFieldNode extends Node {
     const options = combineOptions<NodeOptions>( { children: arrowNodes }, providedOptions );
 
     super( options );
+
+    measurementStateProperty.link( ( measurementState: SpinMeasurementState ) => {
+      this.opacity = measurementState === 'timingObservation' ? 1 : 0.25;
+    } );
   }
 }
 
