@@ -62,6 +62,9 @@ export default class BlochSphereMeasurementArea extends Node {
       visibleProperty: DerivedProperty.not( model.isSingleMeasurementModeProperty )
     } );
     const blochSpheresSpacing = 70;
+    const lattice = [ 3, 2, 3, 2 ];
+    let currentRow = 0;
+    let currentColumn = 0;
     model.multiMeasurementBlochSpheres.forEach( ( blochSphere, index ) => {
       const blochSphereNode = new BlochSphereNode( blochSphere, {
         tandem: multipleMeasurementBlochSpheresTandem.createTandem( `blochSphere${index}` ),
@@ -69,10 +72,16 @@ export default class BlochSphereMeasurementArea extends Node {
         drawTitle: false,
         drawKets: false,
         drawAngleIndicators: true,
-        centerX: index !== 9 ? ( ( index + 1 ) % 3 ) * blochSpheresSpacing : blochSpheresSpacing,
-        centerY: Math.floor( index / 3 ) * blochSpheresSpacing
+        centerX: currentColumn * blochSpheresSpacing,
+        centerY: currentRow * blochSpheresSpacing
       } );
       multipleMeasurementBlochSpheresNode.addChild( blochSphereNode );
+
+      currentColumn++;
+      if ( currentColumn >= lattice[ currentRow % lattice.length ] ) {
+        currentColumn = lattice[ currentRow % lattice.length ] === 3 ? 0.5 : 0;
+        currentRow++;
+      }
     } );
     multipleMeasurementBlochSpheresNode.center = magneticFieldNode.center.plusXY( 0, 30 );
 
