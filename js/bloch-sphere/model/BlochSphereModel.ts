@@ -201,21 +201,18 @@ class BlochSphereModel implements TModel {
     // Set the precession rate of the Bloch sphere based on the state of the magnetic field, the selected scene, and the
     // measurement state.
     Multilink.lazyMultilink(
-      [ this.magneticFieldStrengthProperty, this.magneticFieldEnabledProperty ],
-      ( magneticFieldStrength, showMagneticField ) => {
+      [ this.magneticFieldStrengthProperty, this.magneticFieldEnabledProperty, this.measurementStateProperty ],
+      ( magneticFieldStrength, showMagneticField, measurementState ) => {
 
         // Changes to the field state should clear any accumulated counts.
         this.resetCounts();
 
-        // Set the precession rate of the Bloch sphere based on the state of the magnetic field.
-
-        this.singleMeasurementBlochSphere.rotatingSpeedProperty.value = showMagneticField ?
-                                                                        magneticFieldStrength :
-                                                                        0;
+        // Set the precession rate of the Bloch sphere based on the measurement state and the state of the magnetic
+        // field.
+        const rotationRate = measurementState === 'timingObservation' && showMagneticField ? magneticFieldStrength : 0;
+        this.singleMeasurementBlochSphere.rotatingSpeedProperty.value = rotationRate;
         this.multiMeasurementBlochSpheres.forEach( blochSphere => {
-          blochSphere.rotatingSpeedProperty.value = showMagneticField ?
-                                                    magneticFieldStrength :
-                                                    0;
+          blochSphere.rotatingSpeedProperty.value = rotationRate;
         } );
       }
     );
