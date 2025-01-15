@@ -173,27 +173,42 @@ class BlochSphereModel implements TModel {
     // measurement that is being made.
     this.timeToMeasurementProperty.link( () => this.resetCounts() );
 
-    // Change the selected preset state direction to CUSTOM when the user manually changes the angles of the Bloch Sphere.
+    // Update the coefficients, clear accumulated counts, and potentially change the selected preset state direction to
+    // CUSTOM when the user changes the angles of the Bloch Sphere.
     Multilink.multilink(
       [
         this.preparationBlochSphere.polarAngleProperty,
         this.preparationBlochSphere.azimuthalAngleProperty
       ],
       ( polarAngle, azimuthalAngle ) => {
+
+        // Update the coefficients of the state equation.
         this.upCoefficientProperty.value = Math.cos( polarAngle / 2 );
         this.downCoefficientProperty.value = Math.sin( polarAngle / 2 );
         this.phaseFactorProperty.value = azimuthalAngle / Math.PI;
 
+        // Clear the accumulated counts.
+        this.resetCounts();
+
         if ( !selectingStateDirection ) {
+
+          // Change the selected state to indicate that the user has moved away from the preset states.
           this.selectedStateDirectionProperty.value = StateDirection.CUSTOM;
         }
       }
     );
 
-    // Set the precession rate of the Bloch sphere based on the magnetic field strength and the selected scene.
-    Multilink.multilink(
+    // Set the precession rate of the Bloch sphere based on the state of the magnetic field, the selected scene, and the
+    // measurement state.
+    Multilink.lazyMultilink(
       [ this.magneticFieldStrengthProperty, this.magneticFieldEnabledProperty ],
       ( magneticFieldStrength, showMagneticField ) => {
+
+        // Changes to the field state should clear any accumulated counts.
+        this.resetCounts();
+
+        // Set the precession rate of the Bloch sphere based on the state of the magnetic field.
+
         this.singleMeasurementBlochSphere.rotatingSpeedProperty.value = showMagneticField ?
                                                                         magneticFieldStrength :
                                                                         0;
