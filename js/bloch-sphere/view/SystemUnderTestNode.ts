@@ -1,7 +1,8 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- *
+ * SystemUnderTestNode is a node that show a single atom or multiple atoms in a box where a magnetic field may or may
+ * not be present.  The node is used to represent the system under test in the quantum measurement simulation.
  *
  * @author John Blanco, PhET Interactive Simulations
  */
@@ -13,7 +14,7 @@ import Dimension2 from '../../../../dot/js/Dimension2.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ShadedSphereNode from '../../../../scenery-phet/js/ShadedSphereNode.js';
-import { Color, GridBox, Node, NodeOptions, Rectangle, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Color, HBox, Node, NodeOptions, Rectangle, Text, VBox } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import MagneticFieldNode from './MagneticFieldNode.js';
 
@@ -59,29 +60,30 @@ class SystemUnderTestNode extends Node {
         new Text( 'Atom', { font: LABEL_FONT } )
       ],
       center: rect.center,
+      spacing: 10,
       visibleProperty: isSingleMeasurementModeProperty
     } );
 
-    // Create the set of atoms for the multiple measurement mode.  The layout here is quite specific and will need to
-    // be adjusted if the number of atoms changes.
-    const atomNodesForMultipleMode: Array<Array<Node | null>> = [];
-    const numColumns = 3;
-    const numRows = 4;
-    for ( let row = 0; row < numRows; row++ ) {
-      for ( let column = 0; column < numColumns; column++ ) {
-        if ( !atomNodesForMultipleMode[ row ] ) {
-          atomNodesForMultipleMode[ row ] = [];
-        }
-        if ( row <= 2 || column === 1 ) {
-          atomNodesForMultipleMode[ row ][ column ] = new ShadedSphereNode( ATOM_RADIUS, ATOM_NODE_OPTIONS );
-        }
-        else {
-          atomNodesForMultipleMode[ row ][ column ] = null;
-        }
+    // Create the set of atom nodes for the multiple measurement mode.  The layout used here is quite specific to the
+    // desired number of atoms and will need to be adjusted if that number ever changes.
+    const atomRowHBoxes: HBox[] = [];
+    _.times( 4, i => {
+      const atomNodes: ShadedSphereNode[] = [];
+      _.times( 2, () => {
+        atomNodes.push( new ShadedSphereNode( ATOM_RADIUS, ATOM_NODE_OPTIONS ) );
+      } );
+      if ( i % 2 === 0 ) {
+        atomNodes.push( new ShadedSphereNode( ATOM_RADIUS, ATOM_NODE_OPTIONS ) );
       }
-    }
-    const multipleSphericalAtomNode = new GridBox( {
-      rows: atomNodesForMultipleMode,
+      atomRowHBoxes.push( new HBox( {
+          children: atomNodes,
+          spacing: 5
+        } )
+      );
+    } );
+
+    const multipleSphericalAtomNode = new VBox( {
+      children: atomRowHBoxes,
       spacing: 10,
       center: rect.center
     } );
@@ -91,6 +93,7 @@ class SystemUnderTestNode extends Node {
         multipleSphericalAtomNode,
         new Text( 'Atoms', { font: LABEL_FONT } )
       ],
+      spacing: 10,
       center: rect.center,
       visibleProperty: DerivedProperty.valueEqualsConstant( isSingleMeasurementModeProperty, false )
     } );
