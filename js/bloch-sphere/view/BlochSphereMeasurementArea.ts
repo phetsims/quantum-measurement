@@ -169,12 +169,12 @@ export default class BlochSphereMeasurementArea extends Node {
     const prepareObserveButtonTextProperty = new DerivedStringProperty(
       [
         model.measurementStateProperty,
-        QuantumMeasurementStrings.observeStringProperty,
+        QuantumMeasurementStrings.startStringProperty,
         QuantumMeasurementStrings.reprepareStringProperty
       ],
-      ( measurementState, observeString, reprepareString ) => measurementState === 'observed' ?
+      ( measurementState, startString, reprepareString ) => measurementState === 'observed' ?
                                                               reprepareString :
-                                                              observeString
+                                                              startString
     );
 
     const prepareObserveButton = new TextPushButton(

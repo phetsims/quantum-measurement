@@ -46,6 +46,7 @@ type StringsType = {
   'multipleCoinMeasurementsStringProperty': LocalizedStringProperty;
   'newCoinStringProperty': LocalizedStringProperty;
   'observeStringProperty': LocalizedStringProperty;
+  'startStringProperty': LocalizedStringProperty;
   'photonPolarizationAngleStringProperty': LocalizedStringProperty;
   'polarizationStringProperty': LocalizedStringProperty;
   'polarizationDetectorLabelPatternStringProperty': LocalizedStringProperty;
