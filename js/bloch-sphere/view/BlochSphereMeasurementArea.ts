@@ -46,7 +46,7 @@ export default class BlochSphereMeasurementArea extends Node {
       return {
         value: direction,
         createNode: () => new Text( direction.shortName, { font: new PhetFont( 16 ) } ),
-        tandemName: direction.tandemName
+        tandemName: `${direction.tandemName}RadioButton`
       };
     } );
 
