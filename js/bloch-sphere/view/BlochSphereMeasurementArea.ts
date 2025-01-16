@@ -242,7 +242,7 @@ export default class BlochSphereMeasurementArea extends Node {
 
     const magneticFieldCheckbox = new Checkbox(
       model.magneticFieldEnabledProperty,
-      // TODO: This text should be localized, see https://github.com/phetsims/quantum-measurement/issues/54
+      // TODO: This text should be localized, see https://github.com/phetsims/quantum-measurement/issues/80
       new Text( 'Enable Magnetic Field', { font: new PhetFont( { size: 16 } ) } ),
       {
         spacing: 10,

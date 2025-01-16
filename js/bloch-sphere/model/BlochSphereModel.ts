@@ -162,22 +162,26 @@ class BlochSphereModel implements TModel {
     // measurement that is being made.
     this.timeToMeasurementProperty.link( () => this.resetCounts() );
 
-    // Clear accumulated counts, and potentially change the selected preset state direction to
-    // CUSTOM when the user changes the angles of the Bloch Sphere.
+    // Clear accumulated counts and potentially change the selected preset state direction to CUSTOM when the user
+    // changes the angles of the Bloch Sphere.
     Multilink.multilink(
-      [
-        this.preparationBlochSphere.polarAngleProperty,
-        this.preparationBlochSphere.azimuthalAngleProperty
-      ],
+      [ this.preparationBlochSphere.polarAngleProperty, this.preparationBlochSphere.azimuthalAngleProperty ],
       () => {
         // Clear the accumulated counts.
         this.resetCounts();
 
         if ( !selectingStateDirection ) {
+
           // Change the selected state to indicate that the user has moved away from the preset states.
           this.selectedStateDirectionProperty.value = StateDirection.CUSTOM;
         }
       }
+    );
+
+    // Reset the counts when the user changes the magnetic field attributes.
+    Multilink.lazyMultilink(
+      [ this.magneticFieldStrengthProperty, this.magneticFieldEnabledProperty ],
+      () => this.resetCounts()
     );
 
     // Set the precession rate of the Bloch sphere based on the state of the magnetic field, the selected scene, and the
@@ -185,9 +189,6 @@ class BlochSphereModel implements TModel {
     Multilink.lazyMultilink(
       [ this.magneticFieldStrengthProperty, this.magneticFieldEnabledProperty, this.measurementStateProperty ],
       ( magneticFieldStrength, showMagneticField, measurementState ) => {
-
-        // Changes to the field state should clear any accumulated counts.
-        this.resetCounts();
 
         // Set the precession rate of the Bloch sphere based on the measurement state and the state of the magnetic
         // field.
@@ -213,6 +214,7 @@ class BlochSphereModel implements TModel {
       } );
     } );
 
+    // Reset accumulated data when the user changes the measurement axis.
     this.measurementAxisProperty.link( () => {
       this.resetCounts();
     } );
