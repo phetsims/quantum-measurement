@@ -50,11 +50,15 @@ export default class BlochSphereMeasurementArea extends Node {
       };
     } );
 
+    const equationPanelTandem = providedOptions.tandem.createTandem( 'equationPanel' );
+
     const equationBasisBox = new HBox( {
       spacing: 5,
       children: [
         new Text( 'Basis: ', { font: new PhetFont( 16 ) } ),
-        new AquaRadioButtonGroup( model.equationBasisProperty, aquaRadioButtonGroupItems, { orientation: 'horizontal', margin: 5 } )
+        new AquaRadioButtonGroup( model.equationBasisProperty, aquaRadioButtonGroupItems, {
+          orientation: 'horizontal', margin: 5, tandem: equationPanelTandem.createTandem( 'equationBasisRadioButtonGroup' )
+        } )
       ]
     } );
 
@@ -69,6 +73,7 @@ export default class BlochSphereMeasurementArea extends Node {
         equationNode,
         equationBasisBox
       ],
+      tandem: equationPanelTandem,
       visibleProperty: model.isSingleMeasurementModeProperty
     } ), QuantumMeasurementConstants.panelOptions );
 
