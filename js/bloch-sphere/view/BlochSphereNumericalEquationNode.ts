@@ -47,14 +47,40 @@ export default class BlochSphereNumericalEquationNode extends HBox {
         blochSphere.azimuthalAngleProperty,
         options.basisProperty
       ],
-      ( polarAngle, azimuthalAngle, basisProperty ) => {
+      ( polarAngle, azimuthalAngle, basis ) => {
+
+        let upCoefficientValue;
+        let downCoefficientValue;
+        let azimuthalCoefficientValue;
+
+        const projectionToCoefficient = ( value: number ) => {
+          return Math.sqrt( ( value + 1 ) / 2 );
+        };
+
+        switch( basis ) {
+          case StateDirection.X_PLUS:
+            upCoefficientValue = projectionToCoefficient( Math.cos( azimuthalAngle ) * Math.sin( polarAngle ) );
+            downCoefficientValue = projectionToCoefficient( -Math.cos( azimuthalAngle ) * Math.sin( polarAngle ) );
+            azimuthalCoefficientValue = 0;
+            break;
+          case StateDirection.Y_PLUS:
+            upCoefficientValue = projectionToCoefficient( Math.sin( azimuthalAngle ) * Math.sin( polarAngle ) );
+            downCoefficientValue = projectionToCoefficient( -Math.sin( azimuthalAngle ) * Math.sin( polarAngle ) );
+            azimuthalCoefficientValue = 0;
+            break;
+          default: // StateDirection.Z_PLUS
+            upCoefficientValue = Math.abs( Math.cos( polarAngle / 2 ) );
+            downCoefficientValue = Math.abs( Math.sin( polarAngle / 2 ) );
+            azimuthalCoefficientValue = azimuthalAngle / Math.PI;
+            break;
+        }
 
         // Update the coefficients of the state equation.
-        const upCoefficientString = Utils.toFixed( Math.cos( polarAngle / 2 ), 2 );
-        const downCoefficientString = Utils.toFixed( Math.sin( polarAngle / 2 ), 2 );
-        const azimuthalCoefficientString = Utils.toFixed( azimuthalAngle / Math.PI, 2 );
+        const upCoefficientString = Utils.toFixed( upCoefficientValue, 2 );
+        const downCoefficientString = Utils.toFixed( downCoefficientValue, 2 );
+        const azimuthalCoefficientString = Utils.toFixed( azimuthalCoefficientValue, 2 );
 
-        const direction = basisProperty.description.split( '' )[ 1 ];
+        const direction = basis.description.split( '' )[ 1 ];
 
         return `|${PSI}⟩ = ${upCoefficientString} |${UP}<sub>${direction}</sub> ${KET} + ` +
                `${downCoefficientString}e<sup>i${azimuthalCoefficientString}${PI}</sup> |${DOWN}<sub>${direction}</sub> ${KET}`;
