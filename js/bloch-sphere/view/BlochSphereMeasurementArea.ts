@@ -27,7 +27,7 @@ import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHis
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import BlochSphereModel from '../model/BlochSphereModel.js';
-import { MeasurementBasis } from '../model/MeasurementBasis.js';
+import { MeasurementAxis } from '../model/MeasurementAxis.js';
 import BlochSphereNumericalEquationNode from './BlochSphereNumericalEquationNode.js';
 import MagneticFieldControl from './MagneticFieldControl.js';
 import MeasurementTimerControl from './MeasurementTimerControl.js';
@@ -86,12 +86,12 @@ export default class BlochSphereMeasurementArea extends Node {
     multipleMeasurementBlochSpheresNode.top = 70;
 
     const spinUpLabelStringProperty = new DerivedStringProperty(
-      [ model.measurementBasisProperty ],
-      measurementBasis => measurementBasis.label.value + QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER
+      [ model.measurementAxisProperty ],
+      measurementAxis => measurementAxis.label.value + QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER
     );
     const spinDownLabelStringProperty = new DerivedStringProperty(
-      [ model.measurementBasisProperty ],
-      measurementBasis => measurementBasis.label.value + QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER
+      [ model.measurementAxisProperty ],
+      measurementAxis => measurementAxis.label.value + QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER
     );
 
     const measurementResultHistogram = new QuantumMeasurementHistogram(
@@ -126,7 +126,7 @@ export default class BlochSphereMeasurementArea extends Node {
     // Create and add the radio buttons that select the chart type view in the nuclideChartAccordionBox.
     const basisRadioButtonGroupTandem = providedOptions.tandem.createTandem( 'basisRadioButtonGroup' );
 
-    const basisRadioGroupItems = MeasurementBasis.enumeration.values.map( basis => {
+    const basisRadioGroupItems = MeasurementAxis.enumeration.values.map( basis => {
       return {
         value: basis,
         createNode: () => new RichText(
@@ -136,8 +136,8 @@ export default class BlochSphereMeasurementArea extends Node {
       };
     } );
 
-    const basisRadioButtonGroup = new RectangularRadioButtonGroup<MeasurementBasis>(
-      model.measurementBasisProperty,
+    const basisRadioButtonGroup = new RectangularRadioButtonGroup<MeasurementAxis>(
+      model.measurementAxisProperty,
       basisRadioGroupItems,
       {
         orientation: 'horizontal',

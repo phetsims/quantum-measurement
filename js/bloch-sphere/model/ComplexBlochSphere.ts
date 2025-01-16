@@ -16,7 +16,7 @@ import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import AbstractBlochSphere, { AbstractBlochSphereOptions } from '../../common/model/AbstractBlochSphere.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { MeasurementBasis } from './MeasurementBasis.js';
+import { MeasurementAxis } from './MeasurementAxis.js';
 import { StateDirection } from './StateDirection.js';
 
 type SelfOptions = {
@@ -63,12 +63,12 @@ export default class ComplexBlochSphere extends AbstractBlochSphere {
 
   /**
    * Given a measurement basis, measures along that axis and updates the counters accordingly.
-   * @param measurementBasis
+   * @param measurementAxis
    * @param upCounterProperty
    * @param downCounterProperty
    */
-  public measure( measurementBasis: MeasurementBasis, upCounterProperty: NumberProperty, downCounterProperty: NumberProperty ): void {
-    const measurementVector = StateDirection.directionToVector( measurementBasis );
+  public measure( measurementAxis: MeasurementAxis, upCounterProperty: NumberProperty, downCounterProperty: NumberProperty ): void {
+    const measurementVector = StateDirection.directionToVector( measurementAxis );
     const stateVector = StateDirection.anglesToVector(
       this.polarAngleProperty.value,
       this.azimuthalAngleProperty.value
@@ -80,13 +80,13 @@ export default class ComplexBlochSphere extends AbstractBlochSphere {
     if ( isUp ) {
       upCounterProperty.value++;
       this.setDirection(
-        measurementBasis.polarAngle,
-        measurementBasis.azimuthalAngle
+        measurementAxis.polarAngle,
+        measurementAxis.azimuthalAngle
       );
     }
     else {
       downCounterProperty.value++;
-      const oppositeDirection = measurementBasis.oppositeDirection;
+      const oppositeDirection = measurementAxis.oppositeDirection;
       this.setDirection(
         oppositeDirection.polarAngle,
         oppositeDirection.azimuthalAngle

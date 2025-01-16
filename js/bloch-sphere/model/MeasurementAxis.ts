@@ -13,18 +13,18 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { StateDirection } from './StateDirection.js';
 
-export class MeasurementBasis extends EnumerationValue {
-  public static readonly S_SUB_X = new MeasurementBasis(
+export class MeasurementAxis extends EnumerationValue {
+  public static readonly X_PLUS = new MeasurementAxis(
     QuantumMeasurementStrings.SSubXStringProperty, Math.PI / 2, 0, StateDirection.X_MINUS, 'SSubX'
   );
-  public static readonly S_SUB_Y = new MeasurementBasis(
+  public static readonly Y_PLUS = new MeasurementAxis(
     QuantumMeasurementStrings.SSubYStringProperty, Math.PI / 2, Math.PI / 2, StateDirection.Y_MINUS, 'SSubY'
   );
-  public static readonly S_SUB_Z = new MeasurementBasis(
+  public static readonly Z_PLUS = new MeasurementAxis(
     QuantumMeasurementStrings.SSubZStringProperty, 0, 0, StateDirection.Z_MINUS, 'SSubZ'
   );
 
-  public static readonly enumeration = new Enumeration( MeasurementBasis );
+  public static readonly enumeration = new Enumeration( MeasurementAxis );
 
   public constructor( public readonly label: TReadOnlyProperty<string>,
                       public readonly polarAngle: number,
@@ -35,4 +35,4 @@ export class MeasurementBasis extends EnumerationValue {
   }
 }
 
-quantumMeasurement.register( 'MeasurementBasis', MeasurementBasis );
+quantumMeasurement.register( 'MeasurementAxis', MeasurementAxis );

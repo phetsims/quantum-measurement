@@ -22,7 +22,7 @@ import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import ComplexBlochSphere from './ComplexBlochSphere.js';
-import { MeasurementBasis } from './MeasurementBasis.js';
+import { MeasurementAxis } from './MeasurementAxis.js';
 import { SpinMeasurementState, SpinMeasurementStateValues } from './SpinMeasurementState.js';
 import { StateDirection } from './StateDirection.js';
 
@@ -54,7 +54,7 @@ class BlochSphereModel implements TModel {
   public measurementTimeProperty: NumberProperty;
 
   // Measurement basis
-  public measurementBasisProperty: Property<MeasurementBasis>;
+  public measurementAxisProperty: Property<MeasurementAxis>;
 
   // If is single or multiple measurement mode
   public isSingleMeasurementModeProperty: BooleanProperty;
@@ -109,9 +109,9 @@ class BlochSphereModel implements TModel {
       tandem: providedOptions.tandem.createTandem( 'measurementTimeProperty' )
     } );
 
-    this.measurementBasisProperty = new Property( MeasurementBasis.S_SUB_Z, {
-      tandem: providedOptions.tandem.createTandem( 'measurementBasisProperty' ),
-      phetioValueType: EnumerationIO( MeasurementBasis ),
+    this.measurementAxisProperty = new Property( MeasurementAxis.Z_PLUS, {
+      tandem: providedOptions.tandem.createTandem( 'measurementAxisProperty' ),
+      phetioValueType: EnumerationIO( MeasurementAxis ),
       phetioFeatured: true
     } );
 
@@ -203,7 +203,7 @@ class BlochSphereModel implements TModel {
       } );
     } );
 
-    this.measurementBasisProperty.link( () => {
+    this.measurementAxisProperty.link( () => {
       this.resetCounts();
     } );
   }
@@ -220,7 +220,7 @@ class BlochSphereModel implements TModel {
 
     if ( this.isSingleMeasurementModeProperty.value ) {
       this.singleMeasurementBlochSphere.measure(
-        this.measurementBasisProperty.value,
+        this.measurementAxisProperty.value,
         this.upMeasurementCountProperty,
         this.downMeasurementCountProperty
       );
@@ -228,7 +228,7 @@ class BlochSphereModel implements TModel {
     else {
       this.multiMeasurementBlochSpheres.forEach( blochSphere => {
         blochSphere.measure(
-          this.measurementBasisProperty.value,
+          this.measurementAxisProperty.value,
           this.upMeasurementCountProperty,
           this.downMeasurementCountProperty
         );
@@ -303,7 +303,7 @@ class BlochSphereModel implements TModel {
     this.magneticFieldEnabledProperty.reset();
     this.measurementStateProperty.reset();
     this.magneticFieldStrengthProperty.reset();
-    this.measurementBasisProperty.reset();
+    this.measurementAxisProperty.reset();
     this.isSingleMeasurementModeProperty.reset();
     this.timeToMeasurementProperty.reset();
     this.measurementTimeProperty.reset();
