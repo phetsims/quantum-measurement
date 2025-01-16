@@ -95,7 +95,7 @@ export default class BlochSpherePreparationArea extends VBox {
         new Text( 'State to Prepare', { font: new PhetFont( { size: 20, weight: 'bolder' } ) } ),
         new BlochSphereSymbolicEquationNode(),
         new Panel(
-          new BlochSphereNumericalEquationNode( model ), {
+          new BlochSphereNumericalEquationNode( model.preparationBlochSphere ), {
             fill: '#aff',
             cornerRadius: 5,
             stroke: null,

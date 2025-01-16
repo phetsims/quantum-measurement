@@ -41,12 +41,6 @@ class BlochSphereModel implements TModel {
   public readonly singleMeasurementBlochSphere: ComplexBlochSphere;
   public readonly multiMeasurementBlochSpheres: ComplexBlochSphere[] = [];
 
-  // Coefficients of the state equation. They are derived from the Bloch Sphere representation on the multilink below.
-  // |psi> = upCoefficient |up> + downCoefficient * exp( i * phase * PI ) |down>
-  public readonly upCoefficientProperty: NumberProperty;
-  public readonly downCoefficientProperty: NumberProperty;
-  public readonly phaseFactorProperty: NumberProperty;
-
   // Selected State Direction
   public selectedStateDirectionProperty: Property<StateDirection>;
 
@@ -93,21 +87,6 @@ class BlochSphereModel implements TModel {
       this.multiMeasurementBlochSpheres.push( new ComplexBlochSphere( {
         tandem: multiMeasurementTandem.createTandem( `blochSphere${index}` )
       } ) );
-    } );
-
-    this.upCoefficientProperty = new NumberProperty( 0, {
-      tandem: providedOptions.tandem.createTandem( 'upCoefficientProperty' ),
-      phetioReadOnly: true
-    } );
-
-    this.downCoefficientProperty = new NumberProperty( 0, {
-      tandem: providedOptions.tandem.createTandem( 'downCoefficientProperty' ),
-      phetioReadOnly: true
-    } );
-
-    this.phaseFactorProperty = new NumberProperty( 0, {
-      tandem: providedOptions.tandem.createTandem( 'phaseFactorProperty' ),
-      phetioReadOnly: true
     } );
 
     this.selectedStateDirectionProperty = new Property( StateDirection.Z_PLUS, {
@@ -173,25 +152,18 @@ class BlochSphereModel implements TModel {
     // measurement that is being made.
     this.timeToMeasurementProperty.link( () => this.resetCounts() );
 
-    // Update the coefficients, clear accumulated counts, and potentially change the selected preset state direction to
+    // Clear accumulated counts, and potentially change the selected preset state direction to
     // CUSTOM when the user changes the angles of the Bloch Sphere.
     Multilink.multilink(
       [
         this.preparationBlochSphere.polarAngleProperty,
         this.preparationBlochSphere.azimuthalAngleProperty
       ],
-      ( polarAngle, azimuthalAngle ) => {
-
-        // Update the coefficients of the state equation.
-        this.upCoefficientProperty.value = Math.cos( polarAngle / 2 );
-        this.downCoefficientProperty.value = Math.sin( polarAngle / 2 );
-        this.phaseFactorProperty.value = azimuthalAngle / Math.PI;
-
+      () => {
         // Clear the accumulated counts.
         this.resetCounts();
 
         if ( !selectingStateDirection ) {
-
           // Change the selected state to indicate that the user has moved away from the preset states.
           this.selectedStateDirectionProperty.value = StateDirection.CUSTOM;
         }

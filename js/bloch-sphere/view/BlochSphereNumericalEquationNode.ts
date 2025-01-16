@@ -13,9 +13,9 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import MathSymbolFont from '../../../../scenery-phet/js/MathSymbolFont.js';
 import { HBox, HBoxOptions, RichText } from '../../../../scenery/js/imports.js';
+import AbstractBlochSphere from '../../common/model/AbstractBlochSphere.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import BlochSphereModel from '../model/BlochSphereModel.js';
 
 type SelfOptions = EmptySelfOptions;
 type BlochSphereNumericalEquationNodeOptions = SelfOptions & WithRequired<HBoxOptions, 'tandem'>;
@@ -29,18 +29,19 @@ const KET = QuantumMeasurementConstants.KET;
 
 export default class BlochSphereNumericalEquationNode extends HBox {
 
-  public constructor( model: BlochSphereModel, providedOptions?: BlochSphereNumericalEquationNodeOptions ) {
+  public constructor( blochSphere: AbstractBlochSphere, providedOptions?: BlochSphereNumericalEquationNodeOptions ) {
 
     const equationNode = new RichText( new DerivedStringProperty(
       [
-        model.upCoefficientProperty,
-        model.downCoefficientProperty,
-        model.phaseFactorProperty
+        blochSphere.polarAngleProperty,
+        blochSphere.azimuthalAngleProperty
       ],
-      ( upCoefficient: number, downCoefficient: number, phaseFactor: number ) => {
-        const upCoefficientString = Utils.toFixed( upCoefficient, 2 );
-        const downCoefficientString = Utils.toFixed( downCoefficient, 2 );
-        const azimuthalCoefficientString = Utils.toFixed( phaseFactor, 2 );
+      ( polarAngle, azimuthalAngle ) => {
+
+        // Update the coefficients of the state equation.
+        const upCoefficientString = Utils.toFixed( Math.cos( polarAngle / 2 ), 2 );
+        const downCoefficientString = Utils.toFixed( Math.sin( polarAngle / 2 ), 2 );
+        const azimuthalCoefficientString = Utils.toFixed( azimuthalAngle / Math.PI, 2 );
 
         return `|${PSI}⟩ = ${upCoefficientString}|${UP}${KET} + ${downCoefficientString}e<sup>i${azimuthalCoefficientString}${PI}</sup>|${DOWN}${KET}`;
       }
