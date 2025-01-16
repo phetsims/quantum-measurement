@@ -10,7 +10,6 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
-import Dimension2 from '../../../../dot/js/Dimension2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -259,7 +258,6 @@ export default class BlochSphereMeasurementArea extends Node {
     } );
 
     const systemUnderTestNode = new SystemUnderTestNode(
-      new Dimension2( 150, 180 ),
       model.magneticFieldEnabledProperty,
       model.magneticFieldStrengthProperty,
       model.isSingleMeasurementModeProperty,
