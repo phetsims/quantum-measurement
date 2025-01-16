@@ -13,6 +13,7 @@ import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js'
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import EraserButton from '../../../../scenery-phet/js/buttons/EraserButton.js';
 import { HBox, Node, NodeOptions, RichText, RichTextOptions, Text, VBox } from '../../../../scenery/js/imports.js';
 import AquaRadioButtonGroup, { AquaRadioButtonGroupItem } from '../../../../sun/js/AquaRadioButtonGroup.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
@@ -135,6 +136,11 @@ export default class BlochSphereMeasurementArea extends Node {
       }
     );
 
+    const resetCountsButton = new EraserButton( {
+      listener: () => model.resetCounts(),
+      tandem: providedOptions.tandem.createTandem( 'resetCountsButton' )
+    } );
+
     const radioButtonItems = [ true, false ].map(
       isSingleMeasurement => {
         return {
@@ -142,7 +148,8 @@ export default class BlochSphereMeasurementArea extends Node {
           value: isSingleMeasurement,
           tandemName: isSingleMeasurement ? 'singleMeasurementRadioButton' : 'multipleMeasurementRadioButton'
         };
-      } );
+      }
+    );
     const singleOrMultipleRadioButtonGroup = new AquaRadioButtonGroup( model.isSingleMeasurementModeProperty, radioButtonItems, {
       orientation: 'vertical',
       tandem: providedOptions.tandem.createTandem( 'singleOrMultipleRadioButtonGroup' )
@@ -231,10 +238,11 @@ export default class BlochSphereMeasurementArea extends Node {
 
     const measurementControls = new VBox( {
       left: singleMeasurementBlochSphereNode.right + 20,
-      top: equationNodePanel.bottom - 40,
+      top: 10,
       spacing: 10,
       children: [
         measurementResultHistogram,
+        resetCountsButton,
         measurementControlPanel,
         prepareObserveButton
       ]

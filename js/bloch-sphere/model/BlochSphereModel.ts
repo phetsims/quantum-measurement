@@ -301,7 +301,7 @@ class BlochSphereModel implements TModel {
   /**
    * Resets the measurement counts.
    */
-  private resetCounts(): void {
+  public resetCounts(): void {
     this.upMeasurementCountProperty.reset();
     this.downMeasurementCountProperty.reset();
   }
