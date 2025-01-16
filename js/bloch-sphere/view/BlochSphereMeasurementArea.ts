@@ -15,7 +15,7 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { HBox, Node, NodeOptions, RichText, RichTextOptions, Text, VBox } from '../../../../scenery/js/imports.js';
-import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
+import AquaRadioButtonGroup, { AquaRadioButtonGroupItem } from '../../../../sun/js/AquaRadioButtonGroup.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
@@ -28,6 +28,7 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import BlochSphereModel from '../model/BlochSphereModel.js';
 import { MeasurementAxis } from '../model/MeasurementAxis.js';
+import { StateDirection } from '../model/StateDirection.js';
 import BlochSphereNumericalEquationNode from './BlochSphereNumericalEquationNode.js';
 import MagneticFieldControl from './MagneticFieldControl.js';
 import MeasurementTimerControl from './MeasurementTimerControl.js';
@@ -41,18 +42,43 @@ export default class BlochSphereMeasurementArea extends Node {
 
   public constructor( model: BlochSphereModel, providedOptions: BlochSphereMeasurementAreaOptions ) {
 
-    const equationNode = new BlochSphereNumericalEquationNode( model.singleMeasurementBlochSphere, {
-      visibleProperty: model.isSingleMeasurementModeProperty,
-      tandem: providedOptions.tandem.createTandem( 'equationNode' )
+    const aquaRadioButtonGroupItems: AquaRadioButtonGroupItem<StateDirection>[] = QuantumMeasurementConstants.plusDirections.map( direction => {
+      return {
+        value: direction,
+        createNode: () => new Text( direction.shortName, { font: new PhetFont( 16 ) } ),
+        tandemName: direction.tandemName
+      };
     } );
+
+    const equationBasisBox = new HBox( {
+      spacing: 5,
+      children: [
+        new Text( 'Basis: ', { font: new PhetFont( 16 ) } ),
+        new AquaRadioButtonGroup( model.equationBasisProperty, aquaRadioButtonGroupItems, { orientation: 'horizontal', margin: 5 } )
+      ]
+    } );
+
+    const equationNode = new BlochSphereNumericalEquationNode( model.singleMeasurementBlochSphere, {
+      tandem: providedOptions.tandem.createTandem( 'equationNode' ),
+      basisProperty: model.equationBasisProperty
+    } );
+
+    const equationNodePanel = new Panel( new VBox( {
+      spacing: 5,
+      children: [
+        equationNode,
+        equationBasisBox
+      ],
+      visibleProperty: model.isSingleMeasurementModeProperty
+    } ), QuantumMeasurementConstants.panelOptions );
 
     const singleMeasurementBlochSphereNode = new BlochSphereNode( model.singleMeasurementBlochSphere, {
       tandem: providedOptions.tandem.createTandem( 'singleMeasurementBlochSphereNode' ),
       drawTitle: false,
       drawKets: false,
       drawAngleIndicators: true,
-      top: equationNode.bottom + 50,
-      left: equationNode.left,
+      top: equationNodePanel.bottom + 25,
+      left: equationNodePanel.left,
       visibleProperty: model.isSingleMeasurementModeProperty
     } );
 
@@ -174,8 +200,8 @@ export default class BlochSphereMeasurementArea extends Node {
         QuantumMeasurementStrings.reprepareStringProperty
       ],
       ( measurementState, startString, reprepareString ) => measurementState === 'observed' ?
-                                                              reprepareString :
-                                                              startString
+                                                            reprepareString :
+                                                            startString
     );
 
     const prepareObserveButton = new TextPushButton(
@@ -201,7 +227,7 @@ export default class BlochSphereMeasurementArea extends Node {
 
     const measurementControls = new VBox( {
       left: singleMeasurementBlochSphereNode.right + 20,
-      top: equationNode.bottom + 10,
+      top: equationNodePanel.bottom - 40,
       spacing: 10,
       children: [
         measurementResultHistogram,
@@ -248,7 +274,7 @@ export default class BlochSphereMeasurementArea extends Node {
 
     const options = optionize<BlochSphereMeasurementAreaOptions, SelfOptions, NodeOptions>()( {
       children: [
-        equationNode,
+        equationNodePanel,
         singleMeasurementBlochSphereNode,
         multipleMeasurementBlochSpheresNode,
         measurementControls,

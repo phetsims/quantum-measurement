@@ -34,8 +34,8 @@ export default class BlochSphereSymbolicEquationNode extends HBox {
     const richTextEquationOptions = { font: EQUATION_FONT };
     const newRichText = ( text: string ) => new RichText( text, richTextEquationOptions );
     const psiEqualsCos = newRichText( `|${PSI}⟩ = cos` );
-    const upPlusSin = newRichText( `|${UP}${KET} + sin` );
-    const downKet = newRichText( `e<sup>i${PHI}</sup>|${DOWN}${KET}` );
+    const upPlusSin = newRichText( `|${UP}<sub>Z</sub> ${KET} + sin` );
+    const downKet = newRichText( `e<sup>i${PHI}</sup>|${DOWN}<sub>Z</sub> ${KET}` );
 
     const parenthesesOptions: RichTextOptions = {
       font: new MathSymbolFont( 17 ),

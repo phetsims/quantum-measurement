@@ -23,11 +23,15 @@ export class StateDirection extends EnumerationValue {
 
   public static readonly enumeration = new Enumeration( StateDirection );
 
+  public readonly shortName: string;
+
   public constructor( public readonly description: string,
                       public readonly polarAngle: number,
                       public readonly azimuthalAngle: number,
                       public readonly tandemName: string ) {
     super();
+
+    this.shortName = description.toLowerCase().replace( '+', '' );
   }
 
   public static directionToVector( direction: StateDirection | MeasurementAxis ): Vector3 {

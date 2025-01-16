@@ -8,6 +8,7 @@
 
 import ScreenView from '../../../joist/js/ScreenView.js';
 import { Color } from '../../../scenery/js/imports.js';
+import { StateDirection } from '../bloch-sphere/model/StateDirection.js';
 import quantumMeasurement from '../quantumMeasurement.js';
 import QuantumMeasurementColors from './QuantumMeasurementColors.js';
 
@@ -42,6 +43,12 @@ const QuantumMeasurementConstants = {
     yMargin: 10,
     xMargin: 10
   },
+
+  plusDirections: [
+    StateDirection.X_PLUS,
+    StateDirection.Y_PLUS,
+    StateDirection.Z_PLUS
+  ],
 
   CREATE_COLOR_SPAN: ( text: string, color: Color, bold = false ): string => {
     const weight = bold ? 'bold' : 'normal';

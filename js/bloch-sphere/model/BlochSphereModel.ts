@@ -36,6 +36,9 @@ class BlochSphereModel implements TModel {
 
   public readonly magneticFieldEnabledProperty: BooleanProperty;
 
+  // Strength of the magnetic field
+  public magneticFieldStrengthProperty: NumberProperty;
+
   // Bloch Spheres shown in the screen
   public readonly preparationBlochSphere: ComplexBlochSphere;
   public readonly singleMeasurementBlochSphere: ComplexBlochSphere;
@@ -44,8 +47,18 @@ class BlochSphereModel implements TModel {
   // Selected State Direction
   public selectedStateDirectionProperty: Property<StateDirection>;
 
-  // Strength of the magnetic field
-  public magneticFieldStrengthProperty: NumberProperty;
+  // Selected Equation Basis
+  public equationBasisProperty: Property<StateDirection>;
+
+  // Measurement axis, wether to measure spin in X,Y, or Z axis
+  public measurementAxisProperty: Property<MeasurementAxis>;
+
+  // Counts for the number of times the spin has been measured in the up and down states. Shown in the histograms.
+  public readonly upMeasurementCountProperty: NumberProperty;
+  public readonly downMeasurementCountProperty: NumberProperty;
+
+  // If is single or multiple measurement mode
+  public isSingleMeasurementModeProperty: BooleanProperty;
 
   // The amount of time to wait before making a measurement when the magnetic field is present.
   public timeToMeasurementProperty: NumberProperty;
@@ -53,19 +66,9 @@ class BlochSphereModel implements TModel {
   // Current measurement time.
   public measurementTimeProperty: NumberProperty;
 
-  // Measurement basis
-  public measurementAxisProperty: Property<MeasurementAxis>;
-
-  // If is single or multiple measurement mode
-  public isSingleMeasurementModeProperty: BooleanProperty;
-
   // A flag that indicates whether the model is ready to observe or needs the state to be prepared.  This should not be
   // modified directly by client code, but rather by the model's observe() and reprepare() methods.
   public readonly measurementStateProperty: Property<SpinMeasurementState>;
-
-  // Properties for the spin measurements made.
-  public readonly upMeasurementCountProperty: NumberProperty;
-  public readonly downMeasurementCountProperty: NumberProperty;
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
@@ -93,6 +96,13 @@ class BlochSphereModel implements TModel {
       tandem: providedOptions.tandem.createTandem( 'selectedStateDirectionProperty' ),
       phetioValueType: EnumerationIO( StateDirection ),
       phetioFeatured: true
+    } );
+
+    this.equationBasisProperty = new Property( StateDirection.Z_PLUS, {
+      tandem: providedOptions.tandem.createTandem( 'equationBasisProperty' ),
+      phetioValueType: EnumerationIO( StateDirection ),
+      phetioFeatured: true,
+      validValues: QuantumMeasurementConstants.plusDirections
     } );
 
     this.magneticFieldStrengthProperty = new NumberProperty( 1, {
