@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2025, University of Colorado Boulder
 
 /**
  * SystemUnderTestNode is a node that show a single atom or multiple atoms in a box where a magnetic field may or may
