@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * BlochSphereSymbolicEquationNode displays the equation that is used to calculate the expected value of polarization.
