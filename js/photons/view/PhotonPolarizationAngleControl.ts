@@ -114,13 +114,13 @@ export default class PhotonPolarizationAngleControl extends Panel {
       trackFillEnabled: Color.BLACK,
       majorTickLength: 10,
       majorTickLineWidth: 1.5,
-      constrainValue: value => Utils.roundToInterval( value, 1 ),
+      constrainValue: value => Utils.roundToInterval( value, 5 ),
       tandem: providedOptions.tandem.createTandem( 'customAngleSlider' )
     } );
 
     // slider tick marks
-    customAngleSlider.addMajorTick( 0, new Text( 0, TICK_MARK_TEXT_OPTIONS ) );
-    customAngleSlider.addMajorTick( 90, new Text( 90, TICK_MARK_TEXT_OPTIONS ) );
+    customAngleSlider.addMajorTick( 0, new Text( '0°', TICK_MARK_TEXT_OPTIONS ) );
+    customAngleSlider.addMajorTick( 90, new Text( '90°', TICK_MARK_TEXT_OPTIONS ) );
 
     // Assemble the title, radio button group, and slider into a VBox.
     const leftPortionOfPanel = new VBox( {

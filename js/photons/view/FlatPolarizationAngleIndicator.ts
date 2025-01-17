@@ -8,6 +8,7 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -16,6 +17,7 @@ import ArrowNode, { ArrowNodeOptions } from '../../../../scenery-phet/js/ArrowNo
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Circle, Color, Node, NodeOptions, Text } from '../../../../scenery/js/imports.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import VectorTailNode from './VectorTailNode.js';
@@ -95,6 +97,16 @@ export default class FlatPolarizationAngleIndicator extends Node {
       fill: QuantumMeasurementColors.photonBaseColorProperty
     } );
 
+    // Create and position the angle readout label
+    const angleReadoutLabel = new Text( new DerivedStringProperty(
+      [ polarizationAngleProperty ],
+      angle => angle === null ? '' : `${QuantumMeasurementConstants.THETA} = ${angle}°`
+    ), {
+      centerX: horizontalAxis.centerX + 35,
+      centerY: verticalAxis.top + 5,
+      font: new PhetFont( 12 )
+    } );
+
     const options = optionize<PolarizationPlaneRepresentationOptions, SelfOptions, NodeOptions>()( {
       children: [
         unitCircle,
@@ -103,7 +115,8 @@ export default class FlatPolarizationAngleIndicator extends Node {
         horizontalAxisLabel,
         verticalAxisLabel,
         polarizationVectorNode,
-        vectorTailSymbol
+        vectorTailSymbol,
+        angleReadoutLabel
       ]
     }, providedOptions );
 
