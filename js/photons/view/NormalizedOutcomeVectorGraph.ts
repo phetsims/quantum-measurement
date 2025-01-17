@@ -45,7 +45,7 @@ export default class NormalizedOutcomeVectorGraph extends Node {
     } );
     const topTickMarkLabel = new Text( '+1', {
       font: LABEL_FONT,
-      left: topTickMark.right + LABEL_SPACING,
+      right: topTickMark.left - LABEL_SPACING,
       centerY: topTickMark.centerY
     } );
 
@@ -56,7 +56,7 @@ export default class NormalizedOutcomeVectorGraph extends Node {
     } );
     const middleTickMarkLabel = new Text( '0', {
       font: LABEL_FONT,
-      left: middleTickMark.right + LABEL_SPACING,
+      right: middleTickMark.left - LABEL_SPACING,
       centerY: middleTickMark.centerY
     } );
 
@@ -67,7 +67,7 @@ export default class NormalizedOutcomeVectorGraph extends Node {
     } );
     const bottomTickMarkLabel = new Text( '-1', {
       font: LABEL_FONT,
-      left: bottomTickMark.right + LABEL_SPACING,
+      right: bottomTickMark.left - LABEL_SPACING,
       centerY: bottomTickMark.centerY
     } );
 
