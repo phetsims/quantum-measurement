@@ -30,6 +30,8 @@ type SelfOptions = {
   drawKets?: boolean;
   drawTitle?: boolean;
   drawAngleIndicators?: boolean;
+  drawAxesLabels?: boolean;
+  stateVectorScale?: number; // Scale for the vector's widths (head, body, etc)
   expandBounds?: boolean;
 };
 export type BlochSphereNodeOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
@@ -64,8 +66,10 @@ export default class BlochSphereNode extends Node {
       drawKets: true,
       drawTitle: true,
       drawAngleIndicators: false,
+      drawAxesLabels: true,
       expandBounds: true,
-      excludeInvisibleChildrenFromBounds: true
+      excludeInvisibleChildrenFromBounds: true,
+      stateVectorScale: 1
     }, providedOptions );
 
     const sphereRadius = 100;
@@ -107,17 +111,20 @@ export default class BlochSphereNode extends Node {
 
     const xAxisLabel = new Text( '+X', {
       fill: 'black',
-      font: LABELS_FONT
+      font: LABELS_FONT,
+      visible: options.drawAxesLabels
     } );
     const yAxisLabel = new Text( 'Y', {
       fill: 'black',
-      font: LABELS_FONT
+      font: LABELS_FONT,
+      visible: options.drawAxesLabels
     } );
     const zAxisLabel = new Text( 'Z', {
       centerX: -2 * LABELS_OFFSET,
       centerY: -sphereRadius + LABELS_OFFSET,
       fill: 'black',
-      font: LABELS_FONT
+      font: LABELS_FONT,
+      visible: options.drawAxesLabels
     } );
 
     const UP = QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
@@ -152,9 +159,9 @@ export default class BlochSphereNode extends Node {
     } );
     const stateVector = new ArrowNode( 0, 0, 0, -sphereRadius, {
       tandem: options.tandem.createTandem( 'stateVector' ),
-      headWidth: 10,
-      headHeight: 10,
-      tailWidth: 3,
+      headWidth: 10 * options.stateVectorScale,
+      headHeight: 10 * options.stateVectorScale,
+      tailWidth: 3 * options.stateVectorScale,
       fill: 'black',
       visibleProperty: stateVectorVisibleProperty
     } );

@@ -102,6 +102,8 @@ export default class BlochSphereMeasurementArea extends Node {
         drawTitle: false,
         drawKets: false,
         drawAngleIndicators: true,
+        drawAxesLabels: false,
+        stateVectorScale: 2,
         centerX: currentColumn * blochSpheresSpacing,
         centerY: currentRow * blochSpheresSpacing
       } );
