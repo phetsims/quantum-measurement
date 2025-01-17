@@ -60,9 +60,16 @@ export default class PhotonDetectorNode extends Node {
     } );
 
     // detector body
-    const bodyRectangle = new Rectangle( 0, 0, DETECTOR_BODY_SIZE.width, DETECTOR_BODY_SIZE.height, {
+    const body = new Rectangle( 0, 0, DETECTOR_BODY_SIZE.width, DETECTOR_BODY_SIZE.height, {
       cornerRadius: 10,
-      fill: QuantumMeasurementColors.photonDetectorBodyColor,
+      fill: new LinearGradient( 0, 0, 0, DETECTOR_BODY_SIZE.height )
+        .addColorStop( 0, QuantumMeasurementColors.photonDetectorBodyColor.value )
+        .addColorStop( 0.1, QuantumMeasurementColors.photonDetectorBodyColor.value.colorUtilsBrighter( 0.7 ) )
+        .addColorStop( 0.3, QuantumMeasurementColors.photonDetectorBodyColor.value )
+        .addColorStop( 0.8, QuantumMeasurementColors.photonDetectorBodyColor.value )
+        .addColorStop( 1, QuantumMeasurementColors.photonDetectorBodyColor.value.colorUtilsDarker( 0.2 ) ),
+      stroke: QuantumMeasurementColors.photonDetectorBodyColor.value.colorUtilsDarker( 0.5 ),
+      lineWidth: 0.5,
       centerX: aperture.centerX
     } );
 
@@ -73,7 +80,7 @@ export default class PhotonDetectorNode extends Node {
     if ( model.detectionDirection === 'up' ) {
 
       // Position the body above the aperture.
-      bodyRectangle.bottom = aperture.top;
+      body.bottom = aperture.top;
 
       // Create a derived property for the label.
       const labelStringProperty = new DerivedProperty(
@@ -91,14 +98,14 @@ export default class PhotonDetectorNode extends Node {
       label = new RichText( labelStringProperty, {
         font: new PhetFont( 12 ),
         align: 'center',
-        centerX: bodyRectangle.centerX,
-        bottom: bodyRectangle.top - 5
+        centerX: body.centerX,
+        bottom: body.top - 5
       } );
     }
     else if ( model.detectionDirection === 'down' ) {
 
       // Position the body below the aperture.
-      bodyRectangle.top = aperture.bottom;
+      body.top = aperture.bottom;
 
       // Create a derived property for the label.
       const labelStringProperty = new DerivedProperty(
@@ -116,8 +123,8 @@ export default class PhotonDetectorNode extends Node {
       label = new RichText( labelStringProperty, {
         font: new PhetFont( 12 ),
         align: 'center',
-        centerX: bodyRectangle.centerX,
-        top: bodyRectangle.bottom + 5
+        centerX: body.centerX,
+        top: body.bottom + 5
       } );
     }
     else {
@@ -130,18 +137,18 @@ export default class PhotonDetectorNode extends Node {
                          new PhotonCountDisplay(
                            model.detectionCountProperty,
                            model.detectionDirection,
-                           bodyRectangle.center
+                           body.center
                          ) :
                          new PhotonRateDisplay(
                            model.detectionRateProperty,
                            model.detectionDirection,
                            DETECTOR_BODY_SIZE.width,
-                           bodyRectangle.center
+                           body.center
                          );
 
     const options = optionize<PhotonDetectorNodeOptions, SelfOptions, NodeOptions>()(
       {
-        children: [ aperture, bodyRectangle, countReadout, label ],
+        children: [ aperture, body, countReadout, label ],
         phetioVisiblePropertyInstrumented: false
       },
       providedOptions
@@ -205,7 +212,7 @@ class PhotonCountDisplay extends HBox {
     // Create a NumberDisplay that will show the count.
     const numberDisplay = new NumberDisplay( photonCountProperty, COUNT_RANGE, {
       align: 'center',
-      backgroundFill: QuantumMeasurementColors.photonDetectorBodyColor,
+      backgroundFill: QuantumMeasurementColors.photonDetectorBodyColor.value.withAlpha( 0.1 ),
       backgroundStroke: null,
       xMargin: 0,
       textOptions: {
