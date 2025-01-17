@@ -12,8 +12,10 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
+import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import EraserButton from '../../../../scenery-phet/js/buttons/EraserButton.js';
+import ShadedSphereNode from '../../../../scenery-phet/js/ShadedSphereNode.js';
 import { HBox, Node, NodeOptions, RichText, RichTextOptions, Text, VBox } from '../../../../scenery/js/imports.js';
 import AquaRadioButtonGroup, { AquaRadioButtonGroupItem } from '../../../../sun/js/AquaRadioButtonGroup.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
@@ -32,11 +34,13 @@ import { StateDirection } from '../model/StateDirection.js';
 import BlochSphereNumericalEquationNode from './BlochSphereNumericalEquationNode.js';
 import MagneticFieldControl from './MagneticFieldControl.js';
 import MeasurementTimerControl from './MeasurementTimerControl.js';
-import SystemUnderTestNode from './SystemUnderTestNode.js';
+import SystemUnderTestNode, { ATOM_NODE_OPTIONS } from './SystemUnderTestNode.js';
 
 type SelfOptions = EmptySelfOptions;
-
 type BlochSphereMeasurementAreaOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
+
+// constants
+const TIMES = MathSymbols.TIMES;
 
 export default class BlochSphereMeasurementArea extends Node {
 
@@ -146,16 +150,27 @@ export default class BlochSphereMeasurementArea extends Node {
     const radioButtonItems = [ true, false ].map(
       isSingleMeasurement => {
         return {
-          createNode: () => new Text( isSingleMeasurement ? 'Single' : 'Multiple', { font: new PhetFont( 16 ) } ),
+          createNode: () => new HBox( {
+            children: [
+              new ShadedSphereNode( 14, ATOM_NODE_OPTIONS ),
+              new Text( isSingleMeasurement ? `${TIMES}1` : `${TIMES}10`, { font: new PhetFont( 18 ) } )
+            ],
+            spacing: 5
+          } ),
           value: isSingleMeasurement,
           tandemName: isSingleMeasurement ? 'singleMeasurementRadioButton' : 'multipleMeasurementRadioButton'
         };
       }
     );
-    const singleOrMultipleRadioButtonGroup = new AquaRadioButtonGroup( model.isSingleMeasurementModeProperty, radioButtonItems, {
-      orientation: 'vertical',
-      tandem: providedOptions.tandem.createTandem( 'singleOrMultipleRadioButtonGroup' )
-    } );
+    const singleOrMultipleRadioButtonGroup = new AquaRadioButtonGroup(
+      model.isSingleMeasurementModeProperty,
+      radioButtonItems,
+      {
+        orientation: 'vertical',
+        stretch: false,
+        tandem: providedOptions.tandem.createTandem( 'singleOrMultipleRadioButtonGroup' )
+      }
+    );
 
     const basisRadioButtonTextOptions: RichTextOptions = {
       font: new PhetFont( 18 ),

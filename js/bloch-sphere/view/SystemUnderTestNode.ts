@@ -21,7 +21,7 @@ import { SpinMeasurementState } from '../model/SpinMeasurementState.js';
 import MagneticFieldNode from './MagneticFieldNode.js';
 
 const ATOM_RADIUS = 18; // in view coordinates
-const ATOM_NODE_OPTIONS = {
+export const ATOM_NODE_OPTIONS = {
   mainColor: Color.RED,
   highlightColor: Color.RED.colorUtilsBrighter( 0.7 )
 };
