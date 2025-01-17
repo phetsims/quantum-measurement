@@ -205,7 +205,7 @@ export default class BlochSphereMeasurementArea extends Node {
     } ), QuantumMeasurementConstants.panelOptions );
 
     // Define a DerivedStringProperty for the label that will appear on the button.
-    const prepareObserveButtonTextProperty = new DerivedStringProperty(
+    const experimentControlButtonTextProperty = new DerivedStringProperty(
       [
         model.measurementStateProperty,
         model.magneticFieldEnabledProperty,
@@ -214,7 +214,7 @@ export default class BlochSphereMeasurementArea extends Node {
         QuantumMeasurementStrings.reprepareStringProperty
       ],
       ( measurementState, magneticFieldEnabled, startString, observeString, reprepareString ) => {
-        let buttonText = '';
+        let buttonText;
         if ( measurementState === 'observed' ) {
           buttonText = reprepareString;
         }
@@ -229,15 +229,15 @@ export default class BlochSphereMeasurementArea extends Node {
     );
 
     // Define a derived Property for the color of the button, which changes based on the measurement state.
-    const prepareObserveButtonColorProperty = new DerivedProperty(
+    const experimentControlButtonColorProperty = new DerivedProperty(
       [ model.measurementStateProperty ],
       measurementState => measurementState === 'observed' ?
                           QuantumMeasurementColors.experimentButtonColorProperty.value :
                           QuantumMeasurementColors.startMeasurementButtonColorProperty.value
     );
 
-    const prepareObserveButton = new TextPushButton(
-      prepareObserveButtonTextProperty,
+    const experimentControlButton = new TextPushButton(
+      experimentControlButtonTextProperty,
       {
         listener: () => {
           if ( model.measurementStateProperty.value === 'prepared' ) {
@@ -247,13 +247,13 @@ export default class BlochSphereMeasurementArea extends Node {
             model.reprepare();
           }
         },
-        baseColor: prepareObserveButtonColorProperty,
+        baseColor: experimentControlButtonColorProperty,
         font: new PhetFont( 18 ),
         enabledProperty: DerivedProperty.valueNotEqualsConstant( model.measurementStateProperty, 'timingObservation' ),
         xMargin: 20,
         yMargin: 6,
         maxWidth: measurementControlPanel.width,
-        tandem: providedOptions.tandem.createTandem( 'prepareObserveButton' )
+        tandem: providedOptions.tandem.createTandem( 'experimentControlButton' )
       }
     );
 
@@ -265,7 +265,7 @@ export default class BlochSphereMeasurementArea extends Node {
         measurementResultHistogram,
         resetCountsButton,
         measurementControlPanel,
-        prepareObserveButton
+        experimentControlButton
       ]
     } );
 
@@ -319,7 +319,7 @@ export default class BlochSphereMeasurementArea extends Node {
 
     this.pdomOrder = [
       measurementControlPanel,
-      prepareObserveButton
+      experimentControlButton
     ];
   }
 }
