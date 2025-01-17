@@ -154,6 +154,7 @@ class PhotonsExperimentSceneView extends Node {
         leftFillColorProperty: QuantumMeasurementColors.verticalPolarizationColorProperty,
         rightFillColorProperty: QuantumMeasurementColors.horizontalPolarizationColorProperty,
         topTickMarkTextProperty: histogramTickMarkLabelProperty,
+        barPositionProportion: 0.75,
         tandem: providedOptions.tandem.createTandem( 'histogram' )
       }
     );

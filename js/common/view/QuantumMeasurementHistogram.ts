@@ -43,12 +43,14 @@ type SelfOptions = {
 
   // label for the top tick mark, if present
   topTickMarkTextProperty?: TReadOnlyProperty<string>;
+
+  // proportionate position of the center of the histogram bars; 0.5 is centered, 0.25 is 1/4 of the way from the
+  // center, etc.
+  barPositionProportion?: number;
 };
 export type QuantumMeasurementHistogramOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
 
 export const HISTOGRAM_SIZE = new Dimension2( 200, 160 ); // size excluding labels at bottom, in screen coordinates
-const RIGHT_HISTOGRAM_BAR_CENTER_X = HISTOGRAM_SIZE.width / 4;
-const LEFT_HISTOGRAM_BAR_CENTER_X = -HISTOGRAM_SIZE.width / 4;
 const AXIS_STROKE = Color.BLACK;
 const AXIS_LINE_WIDTH = 2;
 const LABEL_FONT = new PhetFont( { size: 20, weight: 'bold' } );
@@ -86,6 +88,7 @@ class QuantumMeasurementHistogram extends Node {
       displayMode: 'number',
       matchLabelColors: false,
       barWidth: HISTOGRAM_BAR_WIDTH,
+      barPositionProportion: 0.5,
       leftFillColorProperty: QuantumMeasurementColors.headsColorProperty,
       rightFillColorProperty: QuantumMeasurementColors.tailsColorProperty,
       showTickMarks: true,
@@ -228,17 +231,20 @@ class QuantumMeasurementHistogram extends Node {
       );
     }
 
+    const leftHistogramBarCenterX = -options.barPositionProportion * HISTOGRAM_SIZE.width / 2;
+    const rightHistogramBarCenterX = options.barPositionProportion * HISTOGRAM_SIZE.width / 2;
+
     // Create the histogram bars for the right and left sides.
     const maxBarHeight = yAxis.height;
     const leftFillColorProperty = options.leftFillColorProperty;
     const rightFillColorProperty = options.rightFillColorProperty;
     const leftHistogramBar = new Rectangle( 0, 0, options.barWidth, maxBarHeight, {
       fill: leftFillColorProperty,
-      centerX: LEFT_HISTOGRAM_BAR_CENTER_X
+      centerX: leftHistogramBarCenterX
     } );
     const rightHistogramBar = new Rectangle( 0, 0, options.barWidth, maxBarHeight, {
       fill: rightFillColorProperty,
-      centerX: RIGHT_HISTOGRAM_BAR_CENTER_X
+      centerX: rightHistogramBarCenterX
     } );
 
     // Create and position the labels for the X axis.
@@ -247,9 +253,9 @@ class QuantumMeasurementHistogram extends Node {
     const xAxisRightLabel = providedXAxisLabels[ 1 ];
     xAxisLeftLabel.rotation = textRotation;
     xAxisRightLabel.rotation = textRotation;
-    xAxisLeftLabel.centerX = LEFT_HISTOGRAM_BAR_CENTER_X;
+    xAxisLeftLabel.centerX = leftHistogramBarCenterX;
     xAxisLeftLabel.top = xAxis.centerY + axisLabelMargin;
-    xAxisRightLabel.centerX = RIGHT_HISTOGRAM_BAR_CENTER_X;
+    xAxisRightLabel.centerX = rightHistogramBarCenterX;
     xAxisRightLabel.top = xAxis.centerY + axisLabelMargin;
 
     const leftPercentageProperty = new NumberProperty( 0, {
@@ -281,8 +287,8 @@ class QuantumMeasurementHistogram extends Node {
         rightHistogramBar.bottom = xAxis.centerY;
 
         // Update the position of the labels for each of the bars.
-        leftNumberDisplay.centerX = LEFT_HISTOGRAM_BAR_CENTER_X;
-        rightNumberDisplay.centerX = RIGHT_HISTOGRAM_BAR_CENTER_X;
+        leftNumberDisplay.centerX = leftHistogramBarCenterX;
+        rightNumberDisplay.centerX = rightHistogramBarCenterX;
         if ( options.floatingLabels ) {
           leftNumberDisplay.bottom = leftHistogramBar.top - FLOATING_LABEL_MARGIN;
           rightNumberDisplay.bottom = rightHistogramBar.top - FLOATING_LABEL_MARGIN;

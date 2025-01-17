@@ -17,7 +17,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
-const HEIGHT = 200;
+const HEIGHT = 150;
 const TICK_MARK_LENGTH = 20;
 const TICK_MARK_LINE_WIDTH = 1.5;
 const EXPECTATION_VALUE_LINE_LENGTH = TICK_MARK_LENGTH * 1.5;
