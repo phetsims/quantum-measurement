@@ -204,15 +204,36 @@ export default class BlochSphereMeasurementArea extends Node {
       ]
     } ), QuantumMeasurementConstants.panelOptions );
 
+    // Define a DerivedStringProperty for the label that will appear on the button.
     const prepareObserveButtonTextProperty = new DerivedStringProperty(
       [
         model.measurementStateProperty,
+        model.magneticFieldEnabledProperty,
         QuantumMeasurementStrings.startStringProperty,
+        QuantumMeasurementStrings.observeStringProperty,
         QuantumMeasurementStrings.reprepareStringProperty
       ],
-      ( measurementState, startString, reprepareString ) => measurementState === 'observed' ?
-                                                            reprepareString :
-                                                            startString
+      ( measurementState, magneticFieldEnabled, startString, observeString, reprepareString ) => {
+        let buttonText = '';
+        if ( measurementState === 'observed' ) {
+          buttonText = reprepareString;
+        }
+        else if ( magneticFieldEnabled ) {
+          buttonText = startString;
+        }
+        else {
+          buttonText = observeString;
+        }
+        return buttonText;
+      }
+    );
+
+    // Define a derived Property for the color of the button, which changes based on the measurement state.
+    const prepareObserveButtonColorProperty = new DerivedProperty(
+      [ model.measurementStateProperty ],
+      measurementState => measurementState === 'observed' ?
+                          QuantumMeasurementColors.experimentButtonColorProperty.value :
+                          QuantumMeasurementColors.startMeasurementButtonColorProperty.value
     );
 
     const prepareObserveButton = new TextPushButton(
@@ -226,7 +247,7 @@ export default class BlochSphereMeasurementArea extends Node {
             model.reprepare();
           }
         },
-        baseColor: QuantumMeasurementColors.experimentButtonColorProperty,
+        baseColor: prepareObserveButtonColorProperty,
         font: new PhetFont( 18 ),
         enabledProperty: DerivedProperty.valueNotEqualsConstant( model.measurementStateProperty, 'timingObservation' ),
         xMargin: 20,
