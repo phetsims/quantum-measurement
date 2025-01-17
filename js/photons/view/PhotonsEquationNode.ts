@@ -102,7 +102,8 @@ export default class PhotonsEquationNode extends HBox {
     );
 
     const numericalTextOptions = combineOptions<RichTextOptions>( {}, equationTextOptions, {
-      visibleProperty: new DerivedProperty( [ totalNumberProperty ], totalNumber => totalNumber > 0 )
+      visibleProperty: new DerivedProperty( [ totalNumberProperty ], totalNumber => totalNumber > 0 ),
+      font: new PhetFont( 17 )
     } );
 
     const numericalEquationNumerator = new RichText( numericalEquationNumeratorProperty, numericalTextOptions );
