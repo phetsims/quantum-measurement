@@ -28,7 +28,7 @@ import Photon from '../model/Photon.js';
 // constants
 const TARGET_PHOTON_VIEW_WIDTH = 10; // in screen coords, empirically determined to match the design
 
-export default class PhotonSprites extends Sprites {
+class PhotonSprites extends Sprites {
 
   private readonly spriteInstances: SpriteInstance[];
   private readonly photons: Photon[];
@@ -74,7 +74,7 @@ export default class PhotonSprites extends Sprites {
     // canvas.  That is an asynchronous process, so we need to wait for it to complete before adding the sprites.
     const outlineCircle = new Circle( TARGET_PHOTON_VIEW_WIDTH / 2, {
       stroke: QuantumMeasurementColors.photonBaseColorProperty.value,
-      lineWidth: 0.5
+      lineWidth: 1
     } );
     outlineCircle.toCanvas( canvas => {
       this.photonOutlineSprite = new Sprite( new SpriteImage(
@@ -138,10 +138,11 @@ export default class PhotonSprites extends Sprites {
           interiorSpriteInstance.matrix.setToAffine( scale, 0, xPos, 0, scale, yPos );
           interiorSpriteInstance.alpha = photonMotionState.probability; // Probability based opacity
 
-          // Update the matrix for the photon outline.  The outline is always fully opaque.
+          // Update the matrix for the photon outline.
           const outlineSpriteInstance = this.spriteInstances[ ( numberOfPhotonsDisplayed - 1 ) * 2 + 1 ];
           outlineSpriteInstance.sprite = this.photonOutlineSprite;
           outlineSpriteInstance.matrix.setToAffine( 1, 0, xPos, 0, 1, yPos );
+          outlineSpriteInstance.alpha = 1; // Always fully opaque
         }
       }
     }
@@ -158,3 +159,5 @@ export default class PhotonSprites extends Sprites {
 }
 
 quantumMeasurement.register( 'PhotonSprites', PhotonSprites );
+
+export default PhotonSprites;
