@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * FlatPolarizationAngleIndicator provides a visual representation of the photon polarization angle in a flat drawing.
