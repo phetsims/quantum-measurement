@@ -45,7 +45,7 @@ export default class PhotonPolarizationAngleControl extends Panel {
       xMargin: 10
     }, providedOptions );
 
-    const titleProperty = new Text( QuantumMeasurementStrings.photonPolarizationAngleStringProperty, {
+    const titleNode = new Text( QuantumMeasurementStrings.photonPolarizationAngleStringProperty, {
       font: new PhetFont( { size: 16, weight: 'bold' } )
     } );
 
@@ -124,7 +124,7 @@ export default class PhotonPolarizationAngleControl extends Panel {
 
     // Assemble the title, radio button group, and slider into a VBox.
     const leftPortionOfPanel = new VBox( {
-      children: [ titleProperty, presetPolarizationDirectionRadioButtonGroup, customAngleSlider ],
+      children: [ titleNode, presetPolarizationDirectionRadioButtonGroup, customAngleSlider ],
       excludeInvisibleChildrenFromBounds: false,
       align: 'left',
       spacing: 10

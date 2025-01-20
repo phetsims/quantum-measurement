@@ -76,6 +76,9 @@ class PhotonsExperimentSceneModel {
   // at the beam splitter.  When they are quantum, they will be in a superposition of states.
   public readonly particleBehaviorModeProperty: Property<SystemType>;
 
+  // Wether the probability accordion box is expanded
+  public readonly isProbabilityAccordionExpandedProperty: BooleanProperty;
+
   public constructor( providedOptions: PhotonsExperimentSceneModelOptions ) {
 
     // Create all photons that will be used in the experiment.  It works better for phet-io if these are created at
@@ -203,6 +206,11 @@ class PhotonsExperimentSceneModel {
     // Create the Property that will be used to control whether the simulation is playing.
     this.isPlayingProperty = new BooleanProperty( true, {
       tandem: providedOptions.tandem.createTandem( 'isPlayingProperty' ),
+      phetioFeatured: true
+    } );
+
+    this.isProbabilityAccordionExpandedProperty = new BooleanProperty( true, {
+      tandem: providedOptions.tandem.createTandem( 'isProbabilityAccordionExpandedProperty' ),
       phetioFeatured: true
     } );
   }

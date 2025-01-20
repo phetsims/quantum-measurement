@@ -8,32 +8,39 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Color, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
-import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
+import AccordionBox, { AccordionBoxOptions } from '../../../../sun/js/AccordionBox.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 
 type SelfOptions = EmptySelfOptions;
-type PhotonDetectionProbabilityPanelOptions = SelfOptions & WithRequired<PanelOptions, 'tandem'>;
+type PhotonDetectionProbabilityAccordionBoxOptions = SelfOptions & WithRequired<AccordionBoxOptions, 'tandem'>;
 
-const FONT_SIZE = 18;
+const FONT_SIZE = 16;
 const NORMAL_FONT = new PhetFont( FONT_SIZE );
 const BOLD_FONT = new PhetFont( { size: FONT_SIZE, weight: 'bold' } );
 
-export default class PhotonDetectionProbabilityPanel extends Panel {
+export default class PhotonDetectionProbabilityPanel extends AccordionBox {
 
   public constructor( polarizationAngleProperty: TReadOnlyProperty<number | null>,
-                      providedOptions: PhotonDetectionProbabilityPanelOptions ) {
+                      expandedProperty: Property<boolean>,
+                      providedOptions: PhotonDetectionProbabilityAccordionBoxOptions ) {
 
-    const options = optionize<PhotonDetectionProbabilityPanelOptions, SelfOptions, PanelOptions>()( {
-      fill: QuantumMeasurementColors.screenBackgroundColorProperty,
-      stroke: null
+    const options = optionize<PhotonDetectionProbabilityAccordionBoxOptions, SelfOptions, AccordionBoxOptions>()( {
+      stroke: null,
+      titleNode: new Text( QuantumMeasurementStrings.probabilityStringProperty, { font: BOLD_FONT } ),
+      cornerRadius: 5,
+      buttonXMargin: 10,
+      buttonYMargin: 5,
+
+      expandedProperty: expandedProperty
     }, providedOptions );
 
     // Calculate the probability of a photon being detected as horizontally polarized.  A null value indicates that the
@@ -85,11 +92,10 @@ export default class PhotonDetectionProbabilityPanel extends Panel {
     );
 
     // Create the textual nodes and assemble them in a VBox.
-    const title = new Text( QuantumMeasurementStrings.probabilityStringProperty, { font: BOLD_FONT } );
     const probabilityOfVerticalText = new RichText( probabilityOfVerticalStringProperty, { font: NORMAL_FONT } );
     const probabilityOfHorizontalText = new RichText( probabilityOfHorizontalStringProperty, { font: NORMAL_FONT } );
     const content = new VBox( {
-      children: [ title, probabilityOfVerticalText, probabilityOfHorizontalText ],
+      children: [ probabilityOfVerticalText, probabilityOfHorizontalText ],
       spacing: 15
     } );
 
