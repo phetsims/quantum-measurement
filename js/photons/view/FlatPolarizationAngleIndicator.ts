@@ -12,10 +12,11 @@ import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js'
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import { Shape } from '../../../../kite/js/imports.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import ArrowNode, { ArrowNodeOptions } from '../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Circle, Color, Node, NodeOptions, Text } from '../../../../scenery/js/imports.js';
+import { Circle, Color, Node, NodeOptions, Path, Text } from '../../../../scenery/js/imports.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
@@ -107,16 +108,27 @@ export default class FlatPolarizationAngleIndicator extends Node {
       font: new PhetFont( 12 )
     } );
 
+    const angleIndicatorNode = new Path( null, {
+      stroke: 'black',
+      lineWidth: 1
+    } );
+
+    const angleIndicatorSymbol = new Text( QuantumMeasurementConstants.THETA, {
+      font: new PhetFont( 12 )
+    } );
+
     const options = optionize<PolarizationPlaneRepresentationOptions, SelfOptions, NodeOptions>()( {
       children: [
         unitCircle,
         horizontalAxis,
         verticalAxis,
+        angleIndicatorNode,
         horizontalAxisLabel,
         verticalAxisLabel,
         polarizationVectorNode,
         vectorTailSymbol,
-        angleReadoutLabel
+        angleReadoutLabel,
+        angleIndicatorSymbol
       ]
     }, providedOptions );
 
@@ -124,11 +136,16 @@ export default class FlatPolarizationAngleIndicator extends Node {
 
     // Update the positions of the polarization vectors as the polarization angle changes.
     polarizationAngleProperty.link( polarizationAngle => {
-
-      // Only show the polarization vector if the angle is not null.
-      polarizationVectorNode.visible = polarizationAngle !== null;
-
-      if ( polarizationAngle !== null ) {
+      if ( polarizationAngle === null ) {
+        angleIndicatorNode.shape = null;
+        angleIndicatorSymbol.visible = false;
+        polarizationVectorNode.visible = false;
+      }
+      else {
+        polarizationVectorNode.visible = true;
+        angleIndicatorNode.shape = new Shape().ellipticalArc( 0, 0, UNIT_LENGTH / 2, UNIT_LENGTH / 2, 0, 0, Utils.toRadians( -polarizationAngle ), true );
+        angleIndicatorSymbol.center = new Vector2( 1.5 * UNIT_LENGTH / 2, 0 ).rotated( -Utils.toRadians( polarizationAngle / 2 ) );
+        angleIndicatorSymbol.visible = polarizationAngle > 35;
 
         // Calculate the positions for the two ends of the polarization vector.
         const polarizationVectorTipPosition = new Vector2(
