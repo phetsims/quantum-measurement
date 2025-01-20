@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * PhotonDetectionProbabilityPanel displays the probabilities for detection of photons being measured as vertically or
