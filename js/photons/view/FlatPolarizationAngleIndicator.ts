@@ -117,9 +117,20 @@ export default class FlatPolarizationAngleIndicator extends Node {
     } );
 
     // Create the angle indicator, which is the curved line between the horizontal axis and the polarization vector.
-    const angleIndicatorNode = new Path( null, {
+    const angleArc = new Path( null, {
       stroke: 'black',
       lineWidth: 1
+    } );
+    const arrowHeadShape = new Shape();
+    const arrowHeadWidth = 5;
+    const arrowHeadLength = 8;
+    arrowHeadShape.moveTo( 0, 0 )
+      .lineTo( -arrowHeadWidth / 2, arrowHeadLength )
+      .lineTo( arrowHeadWidth / 2, arrowHeadLength )
+      .close();
+    const angleArcArrowHead = new Path( arrowHeadShape, {
+      lineWidth: 1,
+      fill: 'black'
     } );
 
     // Create the angle indicator symbol (theta) that will appear near the angle indicator when there's sufficient space.
@@ -132,7 +143,8 @@ export default class FlatPolarizationAngleIndicator extends Node {
         unitCircle,
         horizontalAxis,
         verticalAxis,
-        angleIndicatorNode,
+        angleArc,
+        angleArcArrowHead,
         horizontalAxisLabel,
         verticalAxisLabel,
         polarizationVectorNode,
@@ -147,14 +159,37 @@ export default class FlatPolarizationAngleIndicator extends Node {
     // Update the positions of the polarization vectors as the polarization angle changes.
     polarizationAngleProperty.link( polarizationAngle => {
       if ( polarizationAngle === null ) {
-        angleIndicatorNode.shape = null;
+        angleArc.shape = null;
+        angleArcArrowHead.visible = false;
         polarizationVectorNode.visible = false;
+        angleIndicatorSymbol.visible = false;
       }
       else {
         polarizationVectorNode.visible = true;
-        angleIndicatorNode.shape = new Shape().ellipticalArc( 0, 0, UNIT_LENGTH / 2, UNIT_LENGTH / 2, 0, 0, Utils.toRadians( -polarizationAngle ), true );
+
+        // Update the angle arc and arrow head.
+        angleArc.shape = new Shape().ellipticalArc(
+          0,
+          0,
+          UNIT_LENGTH / 2,
+          UNIT_LENGTH / 2,
+          0,
+          0,
+          Utils.toRadians( -polarizationAngle ),
+          true
+        );
+        if ( polarizationAngle > 30 ) {
+          angleArcArrowHead.visible = true;
+          angleArcArrowHead.x = angleArc.shape.bounds.minX;
+          angleArcArrowHead.y = angleArc.shape.bounds.minY;
+          angleArcArrowHead.rotation = -Utils.toRadians( polarizationAngle - 12 );
+        }
+        else {
+          angleArcArrowHead.visible = false;
+        }
+
         angleIndicatorSymbol.center = new Vector2( 1.5 * UNIT_LENGTH / 2, 0 ).rotated( -Utils.toRadians( polarizationAngle / 2 ) );
-        angleIndicatorSymbol.visible = polarizationAngle > 35;
+        angleIndicatorSymbol.visible = polarizationAngle > 30;
 
         // Calculate the positions for the two ends of the polarization vector.
         const polarizationVectorTipPosition = new Vector2(
