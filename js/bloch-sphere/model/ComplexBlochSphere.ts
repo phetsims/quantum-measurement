@@ -43,6 +43,8 @@ export default class ComplexBlochSphere extends AbstractBlochSphere {
       phetioReadOnly: true
     } );
 
+    this.polarAngleProperty.value = Math.PI / 2;
+    this.azimuthalAngleProperty.value = 0;
   }
 
 

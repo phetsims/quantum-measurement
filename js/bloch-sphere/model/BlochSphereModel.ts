@@ -92,7 +92,7 @@ class BlochSphereModel implements TModel {
       } ) );
     } );
 
-    this.selectedStateDirectionProperty = new Property( StateDirection.Z_PLUS, {
+    this.selectedStateDirectionProperty = new Property( StateDirection.X_PLUS, {
       tandem: providedOptions.tandem.createTandem( 'selectedStateDirectionProperty' ),
       phetioValueType: EnumerationIO( StateDirection ),
       phetioFeatured: true

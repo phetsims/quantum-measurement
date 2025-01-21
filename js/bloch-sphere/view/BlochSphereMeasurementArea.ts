@@ -124,11 +124,11 @@ export default class BlochSphereMeasurementArea extends Node {
 
     const spinUpLabelStringProperty = new DerivedStringProperty(
       [ model.measurementAxisProperty ],
-      measurementAxis => measurementAxis.label.value + QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER
+      measurementAxis => `|${QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER}<sub>${measurementAxis.label.value}</sub>>`
     );
     const spinDownLabelStringProperty = new DerivedStringProperty(
       [ model.measurementAxisProperty ],
-      measurementAxis => measurementAxis.label.value + QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER
+      measurementAxis => `|${QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER}<sub>${measurementAxis.label.value}</sub>>`
     );
 
     const measurementResultHistogram = new QuantumMeasurementHistogram(

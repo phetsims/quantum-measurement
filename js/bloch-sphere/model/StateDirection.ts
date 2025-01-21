@@ -31,7 +31,7 @@ export class StateDirection extends EnumerationValue {
                       public readonly tandemName: string ) {
     super();
 
-    this.shortName = description.toLowerCase().replace( '+', '' );
+    this.shortName = description.replace( '+', '' );
   }
 
   public static directionToVector( direction: StateDirection | MeasurementAxis ): Vector3 {

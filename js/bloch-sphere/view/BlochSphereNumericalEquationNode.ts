@@ -1,4 +1,4 @@
-// Copyright 2024-2025, University of Colorado Boulder
+// Copyright 2024, University of Colorado Boulder
 
 /**
  * BlochSphereNumericalEquationNode displays the equation that is used to calculate the expected value of polarization.
@@ -13,7 +13,7 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
-import MathSymbolFont from '../../../../scenery-phet/js/MathSymbolFont.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { HBox, HBoxOptions, RichText } from '../../../../scenery/js/imports.js';
 import AbstractBlochSphere from '../../common/model/AbstractBlochSphere.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
@@ -25,7 +25,7 @@ type SelfOptions = {
 };
 type BlochSphereNumericalEquationNodeOptions = SelfOptions & WithRequired<HBoxOptions, 'tandem'>;
 
-const EQUATION_FONT = new MathSymbolFont( 17 );
+const EQUATION_FONT = new PhetFont( 17 );
 const PI = QuantumMeasurementConstants.PI;
 const PSI = QuantumMeasurementConstants.PSI;
 const UP = QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
@@ -82,8 +82,19 @@ export default class BlochSphereNumericalEquationNode extends HBox {
 
         const direction = basis.description.split( '' )[ 1 ];
 
-        return `|${PSI}⟩ = ${upCoefficientString} |${UP}<sub>${direction}</sub> ${KET} + ` +
-               `${downCoefficientString}e<sup>i${azimuthalCoefficientString}${PI}</sup> |${DOWN}<sub>${direction}</sub> ${KET}`;
+        const zero = 1e-5;
+        const one = 1 - zero;
+        const upPart = upCoefficientValue > zero ? upCoefficientValue < one ?
+                                                        `${upCoefficientString} |${UP}<sub>${direction}</sub> ${KET}` :
+                                                        `|${UP}<sub>${direction}</sub> ${KET}` :
+                                                        '';
+        const plus = upCoefficientValue > zero && downCoefficientValue > zero ? ' + ' : '';
+        const downPart = downCoefficientValue > zero ? downCoefficientValue < one ?
+                                                              `${downCoefficientString}e<sup>i${azimuthalCoefficientString}${PI}</sup> |${DOWN}<sub>${direction}</sub> ${KET}` :
+                                                              `|${DOWN}<sub>${direction}</sub> ${KET}` :
+                                                              '';
+
+        return `|${PSI}⟩ = ${upPart}${plus}${downPart}`;
       }
     ), { font: EQUATION_FONT } );
 

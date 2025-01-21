@@ -15,7 +15,6 @@ import Utils from '../../../../dot/js/Utils.js';
 import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
-import MathSymbolFont from '../../../../scenery-phet/js/MathSymbolFont.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { HBox, HBoxOptions, Node, RichText, RichTextOptions, Text } from '../../../../scenery/js/imports.js';
 import Dialog from '../../../../sun/js/Dialog.js';
@@ -70,7 +69,7 @@ export default class PhotonsEquationNode extends HBox {
     );
 
     const equationTextOptions = {
-      font: new MathSymbolFont( 17 )
+      font: new PhetFont( 17 )
     };
     const symbolicEquationNumerator = new RichText( symbolicEquationStringProperty, equationTextOptions );
     const symbolicEquationDenominator = new RichText( 'N(Total)', equationTextOptions );
