@@ -15,10 +15,11 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import ArrowNode, { ArrowNodeOptions } from '../../../../scenery-phet/js/ArrowNode.js';
+import MathSymbolFont from '../../../../scenery-phet/js/MathSymbolFont.js';
+import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Circle, Color, Node, NodeOptions, Path, Text } from '../../../../scenery/js/imports.js';
+import { Circle, Color, HBox, Node, NodeOptions, Path, Text } from '../../../../scenery/js/imports.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
-import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import VectorTailNode from './VectorTailNode.js';
@@ -98,23 +99,32 @@ export default class FlatPolarizationAngleIndicator extends Node {
       fill: QuantumMeasurementColors.photonBaseColorProperty
     } );
 
-    // Create and position the angle readout label
-    const angleReadoutLabel = new Text( new DerivedStringProperty(
-      [ polarizationAngleProperty ],
-      angle => angle === null ? '' : `${QuantumMeasurementConstants.THETA} = ${angle}°`
-    ), {
-      centerX: horizontalAxis.centerX + 35,
-      centerY: verticalAxis.top + 5,
-      font: new PhetFont( 12 )
+    // Create and position the angle readout label.
+    const thetaNode = new Text( MathSymbols.THETA, {
+      font: new MathSymbolFont( 14 )
+    } );
+    const angleReadoutText = new Text( new DerivedStringProperty(
+        [ polarizationAngleProperty ],
+        angle => angle === null ? '' : ` = ${angle}°`
+      ),
+      { font: new PhetFont( 14 ) }
+    );
+    const angleReadoutLabel = new HBox( {
+      children: [ thetaNode, angleReadoutText ],
+      centerX: horizontalAxis.centerX + 40,
+      centerY: verticalAxis.top,
+      visibleProperty: new DerivedProperty( [ polarizationAngleProperty ], angle => angle !== null )
     } );
 
+    // Create the angle indicator, which is the curved line between the horizontal axis and the polarization vector.
     const angleIndicatorNode = new Path( null, {
       stroke: 'black',
       lineWidth: 1
     } );
 
-    const angleIndicatorSymbol = new Text( QuantumMeasurementConstants.THETA, {
-      font: new PhetFont( 12 )
+    // Create the angle indicator symbol (theta) that will appear near the angle indicator when there's sufficient space.
+    const angleIndicatorSymbol = new Text( MathSymbols.THETA, {
+      font: new MathSymbolFont( 12 )
     } );
 
     const options = optionize<PolarizationPlaneRepresentationOptions, SelfOptions, NodeOptions>()( {
@@ -138,7 +148,6 @@ export default class FlatPolarizationAngleIndicator extends Node {
     polarizationAngleProperty.link( polarizationAngle => {
       if ( polarizationAngle === null ) {
         angleIndicatorNode.shape = null;
-        angleIndicatorSymbol.visible = false;
         polarizationVectorNode.visible = false;
       }
       else {
