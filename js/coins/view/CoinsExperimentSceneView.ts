@@ -67,7 +67,10 @@ class CoinsExperimentSceneView extends Node {
   // is updated as the size and layout of the preparation area changes.
   private travelingCoinsOrigin: Vector2;
 
-  public constructor( sceneModel: CoinsExperimentSceneModel, providedOptions?: CoinsExperimentSceneViewOptions ) {
+  public constructor(
+    sceneModel: CoinsExperimentSceneModel,
+    providedOptions?: CoinsExperimentSceneViewOptions
+  ) {
 
     const options = optionize<CoinsExperimentSceneViewOptions, SelfOptions, NodeOptions>()(
       {
@@ -190,12 +193,15 @@ class CoinsExperimentSceneView extends Node {
     } );
 
     this.children = [
+      this.measurementArea.manyCoinsAnimations,
       this.preparationArea,
       this.measurementArea,
       dividingLine,
       startMeasurementButton,
       this.newCoinButton
     ];
+
+    this.measurementArea.manyCoinsAnimations.center = this.preparationArea.center.plusXY( 0, -50 );
 
     this.pdomOrder = [
       this.preparationArea,

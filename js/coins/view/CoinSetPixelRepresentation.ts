@@ -11,66 +11,97 @@
 import TProperty from '../../../../axon/js/TProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import { CanvasNode, CanvasNodeOptions } from '../../../../scenery/js/imports.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Animation from '../../../../twixt/js/Animation.js';
+import Easing from '../../../../twixt/js/Easing.js';
 import { MEASUREMENT_PREPARATION_TIME } from '../../common/model/TwoStateSystemSet.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { ExperimentMeasurementState } from '../model/ExperimentMeasurementState.js';
 
-export default class CoinSetPixelRepresentation extends CanvasNode {
+type SelfOptions = {
+  animationDuration?: number;
+};
+
+type CoinSetPixelRepresentationOptions = SelfOptions & CanvasNodeOptions;
+
+class CoinSetPixelRepresentation extends CanvasNode {
   private readonly sideLength = 100;
   private pixels = new Array( 100 * 100 ).fill( 0 );
   private pixelScale = 1;
   private currentFrame = 0;
 
-  public readonly populatingAnimation: Animation;
-  public readonly flippingAnimation: Animation;
+  public populatingAnimation: Animation | null = null;
+  public flippingAnimation: Animation | null = null;
+
+  public animationDuration: number;
 
   public constructor(
     private readonly systemType: 'classical' | 'quantum',
     private readonly experimentStateProperty: TReadOnlyProperty<ExperimentMeasurementState>,
     private readonly coinSetInTestBoxProperty: TProperty<boolean>,
-    providedOptions?: CanvasNodeOptions
+    providedOptions?: CoinSetPixelRepresentationOptions
   ) {
-    super( providedOptions );
+
+    const options = optionize<CoinSetPixelRepresentationOptions, SelfOptions, CanvasNodeOptions>()( {
+      animationDuration: MEASUREMENT_PREPARATION_TIME
+    }, providedOptions );
+
+    super( options );
+
+    this.animationDuration = options.animationDuration;
+
+    this.createAnimations();
+
+    this.setAllPixels( 0 );
+
+    this.experimentStateProperty.lazyLink( state => {
+      this.invalidatePaint();
+      if ( state === 'readyToBeMeasured' ) {
+        this.setAllPixels( 1 );
+      }
+    } );
+  }
+
+  public createAnimations(): void {
 
     const center = Math.floor( this.sideLength / 2 );
     const maxRadius = Math.sqrt( 2 ) * center * 1.1; // 10% extra radius to avoid missed pixels at the corners
     const fps = 40;
-    const totalFrames = 4 * MEASUREMENT_PREPARATION_TIME / fps;
+    const totalFrames = 4 * this.animationDuration / fps;
 
-
-    // TODO: Try isSettingPhetioStateProperty.value ? 0 : MEASUREMENT_PREPARATION_TIME, https://github.com/phetsims/quantum-measurement/issues/39
     this.populatingAnimation = new Animation( {
       to: totalFrames,
-      duration: MEASUREMENT_PREPARATION_TIME,
-      getValue: () => this.currentFrame,
+      duration: isSettingPhetioStateProperty.value ? 0 : this.animationDuration,
+      easing: Easing.LINEAR,
+      getValue: () => {
+        return this.currentFrame;
+      },
       setValue: frame => {
-        {
-          const progress = frame / totalFrames;
-          const currentRadius = progress * maxRadius;
+        const progress = this.currentFrame / totalFrames;
+        const currentRadius = progress * maxRadius;
 
-          for ( let i = 0; i < this.sideLength; i++ ) {
-            for ( let j = 0; j < this.sideLength; j++ ) {
-              const dx = i - center;
-              const dy = j - center;
-              const distance = Math.sqrt( dx * dx + dy * dy );
+        for ( let i = 0; i < this.sideLength; i++ ) {
+          for ( let j = 0; j < this.sideLength; j++ ) {
+            const dx = i - center;
+            const dy = j - center;
+            const distance = Math.sqrt( dx * dx + dy * dy );
 
-              if ( distance <= currentRadius ) {
-                const index = i * this.sideLength + j;
-                if ( this.pixels[ index ] === 0 ) {
-                  // Some chance to populate a pixel
-                  if ( dotRandom.nextDouble() < 0.3 ) {
-                    this.pixels[ index ] = 1; // Set to grey
-                  }
+            if ( distance <= currentRadius ) {
+              const index = i * this.sideLength + j;
+              if ( this.pixels[ index ] === 0 ) {
+                // Some chance to populate a pixel
+                if ( dotRandom.nextDouble() < 0.3 ) {
+                  this.pixels[ index ] = 1; // Set to grey
                 }
               }
             }
           }
-
-          this.invalidatePaint();
-          this.currentFrame = frame;
         }
+
+        this.invalidatePaint();
+        this.currentFrame = frame;
       }
     } );
 
@@ -91,24 +122,15 @@ export default class CoinSetPixelRepresentation extends CanvasNode {
       }
     } );
 
-    this.populatingAnimation.finishEmitter.addListener( () => {
+    this.populatingAnimation.endedEmitter.addListener( () => {
       this.setAllPixels( 1 );
       this.currentFrame = 0;
       this.coinSetInTestBoxProperty.value = true;
     } );
 
-    this.flippingAnimation.finishEmitter.addListener( () => {
+    this.flippingAnimation.endedEmitter.addListener( () => {
       this.setAllPixels( 1 );
       this.currentFrame = 0;
-    } );
-
-    this.setAllPixels( 0 );
-
-    this.experimentStateProperty.lazyLink( state => {
-      this.invalidatePaint();
-      if ( state === 'readyToBeMeasured' ) {
-        this.setAllPixels( 1 );
-      }
     } );
   }
 
@@ -126,6 +148,46 @@ export default class CoinSetPixelRepresentation extends CanvasNode {
    */
   public setPixelScale( scale: number ): void {
     this.pixelScale = scale;
+  }
+
+  public startPopulatingAnimation(): void {
+    assert && assert( this.populatingAnimation, 'populatingAnimation should be defined, perhaps createAnimations() was not properly called?' );
+
+    if ( this.visible ) {
+      // Set all pixels to 0
+      this.setAllPixels( 0 );
+      this.currentFrame = 0;
+      this.populatingAnimation?.start();
+    }
+  }
+
+  public startFlippingAnimation(): void {
+    assert && assert( this.flippingAnimation, 'flippingAnimation should be defined, perhaps createAnimations() was not properly called?' );
+
+    if ( this.visible ) {
+      this.flippingAnimation?.start();
+    }
+  }
+
+  /**
+   * Closure function to stop all ongoing animations and revert pixels back to their initial state.
+   */
+  public abortAllAnimations( pixelState = 1 ): void {
+    assert && assert( this.populatingAnimation, 'populatingAnimation should be defined, perhaps createAnimations() was not properly called?' );
+    assert && assert( this.flippingAnimation, 'flippingAnimation should be defined, perhaps createAnimations() was not properly called?' );
+
+    this.flippingAnimation?.stop();
+    this.populatingAnimation?.stop();
+    this.setAllPixels( pixelState );
+
+    // Set the flag to indicate that the coins aren't in the box.
+    this.coinSetInTestBoxProperty.value = false;
+
+    this.createAnimations();
+  }
+
+  public setAllPixels( value: number ): void {
+    this.pixels = new Array( this.sideLength * this.sideLength ).fill( value );
   }
 
   /**
@@ -186,38 +248,7 @@ export default class CoinSetPixelRepresentation extends CanvasNode {
 
     context.restore();
   }
-
-  public startPopulatingAnimation(): void {
-    if ( this.visible ) {
-      // Set all pixels to 0
-      this.setAllPixels( 0 );
-
-      this.populatingAnimation.start();
-    }
-  }
-
-  public startFlippingAnimation(): void {
-    if ( this.visible ) {
-      this.flippingAnimation.start();
-    }
-  }
-
-  /**
-   * Closure function to stop all ongoing animations and revert pixels back to their initial state.
-   */
-  public abortAllAnimations( pixelState = 1 ): void {
-    this.flippingAnimation.stop();
-    this.populatingAnimation.stop();
-    this.currentFrame = 0;
-    this.setAllPixels( pixelState );
-
-    // Set the flag to indicate that the coins aren't in the box.
-    this.coinSetInTestBoxProperty.value = false;
-  }
-
-  public setAllPixels( value: number ): void {
-    this.pixels = new Array( this.sideLength * this.sideLength ).fill( value );
-  }
 }
 
+export default CoinSetPixelRepresentation;
 quantumMeasurement.register( 'CoinSetPixelRepresentation', CoinSetPixelRepresentation );

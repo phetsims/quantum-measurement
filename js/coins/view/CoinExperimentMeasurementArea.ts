@@ -26,6 +26,7 @@ import CoinExperimentButtonSet from './CoinExperimentButtonSet.js';
 import CoinMeasurementHistogram from './CoinMeasurementHistogram.js';
 import CoinSetPixelRepresentation from './CoinSetPixelRepresentation.js';
 import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
+import ManyCoinsAnimations from './ManyCoinsAnimations.js';
 import MultiCoinTestBox from './MultiCoinTestBox.js';
 import MultipleCoinAnimations from './MultipleCoinAnimations.js';
 import SceneSectionHeader from './SceneSectionHeader.js';
@@ -42,6 +43,8 @@ class CoinExperimentMeasurementArea extends VBox {
   private readonly coinSetInTestBoxProperty: TProperty<boolean>;
 
   private measuredCoinsPixelRepresentation: CoinSetPixelRepresentation;
+
+  public readonly manyCoinsAnimations: ManyCoinsAnimations;
 
   public constructor( sceneModel: CoinsExperimentSceneModel, tandem: Tandem ) {
 
@@ -253,6 +256,22 @@ class CoinExperimentMeasurementArea extends VBox {
       this.coinSetInTestBoxProperty
     );
 
+    const manyCoinsAnimations = new ManyCoinsAnimations(
+      sceneModel,
+      this,
+      measuredCoinsPixelRepresentation,
+      this.coinSetInTestBoxProperty,
+      {
+        visibleProperty: DerivedProperty.valueEqualsConstant( sceneModel.coinSet.numberOfActiveSystemsProperty, 10000 )
+      }
+    );
+
+    // Convenience property to conditionally call functions on the many coins animation
+    const usingManyCoinsProperty = new DerivedProperty(
+      [ sceneModel.coinSet.numberOfActiveSystemsProperty ],
+      numberOfActiveSystems => numberOfActiveSystems === 10000
+    );
+
     // Monitor the preparation state and start or stop animations as needed.
     sceneModel.preparingExperimentProperty.lazyLink( preparingExperiment => {
       if ( preparingExperiment ) {
@@ -261,6 +280,7 @@ class CoinExperimentMeasurementArea extends VBox {
         // such animations, this has no effect.
         singleCoinAnimations.abortIngressAnimationForSingleCoin();
         multipleCoinAnimations.abortIngressAnimationForCoinSet();
+        manyCoinsAnimations.abortIngressAnimationForCoinSet();
         this.measuredCoinsPixelRepresentation.abortAllAnimations();
 
         // Clear out the test boxes.
@@ -273,8 +293,9 @@ class CoinExperimentMeasurementArea extends VBox {
         // experiments moving from the preparation area to the measurement area.
         singleCoinAnimations.startIngressAnimationForSingleCoin( false );
         multipleCoinAnimations.startIngressAnimationForCoinSet( false );
+        usingManyCoinsProperty.value && manyCoinsAnimations.startIngressAnimationForCoinSet( false );
 
-        this.measuredCoinsPixelRepresentation.startPopulatingAnimation();
+        // this.measuredCoinsPixelRepresentation.startPopulatingAnimation();
       }
     } );
 
@@ -288,19 +309,22 @@ class CoinExperimentMeasurementArea extends VBox {
         if ( sceneModel.systemType === 'quantum' ) {
           // Abort any previous animations and clear out the test box.
           multipleCoinAnimations.abortIngressAnimationForCoinSet();
+          manyCoinsAnimations.abortIngressAnimationForCoinSet();
           this.measuredCoinsPixelRepresentation.abortAllAnimations();
           multipleCoinTestBox.clearContents();
 
           // Animate a coin from the prep area to the single coin test box to indicate that a new "quantum coin" is
           // being prepared for measurement.
           multipleCoinAnimations.startIngressAnimationForCoinSet( true );
-          this.measuredCoinsPixelRepresentation.startPopulatingAnimation();
+          usingManyCoinsProperty.value && manyCoinsAnimations.startIngressAnimationForCoinSet( true );
         }
-        else if ( sceneModel.coinSet.numberOfActiveSystemsProperty.value === 10000 ) {
+        else if ( usingManyCoinsProperty.value ) {
           this.measuredCoinsPixelRepresentation.startFlippingAnimation();
         }
       }
     } );
+
+    this.manyCoinsAnimations = manyCoinsAnimations;
   }
 }
 
