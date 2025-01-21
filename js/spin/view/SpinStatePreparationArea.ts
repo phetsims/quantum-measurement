@@ -13,6 +13,7 @@ import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.j
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { HBox, Node, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
@@ -30,8 +31,8 @@ import SpinModel from '../model/SpinModel.js';
 import BlochSphereWithProjectionNode from './BlochSphereWithProjectionNode.js';
 import HBarOverTwoNode from './HBarOverTwoNode.js';
 
-const ALPHA = QuantumMeasurementConstants.ALPHA;
-const BETA = QuantumMeasurementConstants.BETA;
+const ALPHA = MathSymbols.ALPHA;
+const BETA = MathSymbols.BETA;
 const UP = QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
 const DOWN = QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER;
 const KET = QuantumMeasurementConstants.KET;
@@ -126,12 +127,12 @@ export default class SpinStatePreparationArea extends VBox {
       visibleProperty: new DerivedProperty( [ model.currentExperimentProperty ], currentExperiment => currentExperiment === SpinExperiment.CUSTOM ),
       children: [
         new ProbabilityValueControl(
-          `|${QuantumMeasurementConstants.ALPHA}|<sup>2`,
+          `|${MathSymbols.ALPHA}|<sup>2`,
           model.alphaSquaredProperty,
           tandem.createTandem( 'alphaSquaredControl' )
         ),
         new ProbabilityValueControl(
-          `|${QuantumMeasurementConstants.BETA}|<sup>2`,
+          `|${MathSymbols.BETA}|<sup>2`,
           model.betaSquaredProperty,
           tandem.createTandem( 'betaSquaredControl' )
         )

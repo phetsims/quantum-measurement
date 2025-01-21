@@ -13,6 +13,7 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
+import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { HBox, HBoxOptions, RichText } from '../../../../scenery/js/imports.js';
 import AbstractBlochSphere from '../../common/model/AbstractBlochSphere.js';
@@ -26,8 +27,8 @@ type SelfOptions = {
 type BlochSphereNumericalEquationNodeOptions = SelfOptions & WithRequired<HBoxOptions, 'tandem'>;
 
 const EQUATION_FONT = new PhetFont( 17 );
-const PI = QuantumMeasurementConstants.PI;
-const PSI = QuantumMeasurementConstants.PSI;
+const PI = MathSymbols.PI;
+const PSI = MathSymbols.PSI;
 const UP = QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
 const DOWN = QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER;
 const KET = QuantumMeasurementConstants.KET;

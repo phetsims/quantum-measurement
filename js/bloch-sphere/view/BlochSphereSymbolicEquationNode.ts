@@ -10,6 +10,7 @@
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
+import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { HBox, HBoxOptions, RichText, RichTextOptions } from '../../../../scenery/js/imports.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
@@ -20,9 +21,9 @@ type SelfOptions = EmptySelfOptions;
 type BlochSphereSymbolicEquationNodeOptions = SelfOptions & WithRequired<HBoxOptions, 'tandem'>;
 
 const EQUATION_FONT = new PhetFont( 17 );
-const THETA = QuantumMeasurementConstants.THETA;
-const PHI = QuantumMeasurementConstants.PHI;
-const PSI = QuantumMeasurementConstants.PSI;
+const THETA = MathSymbols.THETA;
+const PHI = MathSymbols.PHI;
+const PSI = MathSymbols.PSI;
 const UP = QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
 const DOWN = QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER;
 const KET = QuantumMeasurementConstants.KET;

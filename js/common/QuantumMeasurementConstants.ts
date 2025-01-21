@@ -17,12 +17,6 @@ const QuantumMeasurementConstants = {
   COIN_SET_AREA_PROPORTION: 0.9, // Side of the explicit coin area with respect to the measurement area
   SCREEN_VIEW_X_MARGIN: 15,
   SCREEN_VIEW_Y_MARGIN: 15,
-  ALPHA: '\u03b1',
-  BETA: '\u03b2',
-  THETA: '\u03b8',
-  PHI: '\u03c6',
-  PI: '\u03c0',
-  PSI: '\u03c8',
   SPIN_UP_ARROW_CHARACTER: '\u2b61',
   SPIN_DOWN_ARROW_CHARACTER: '\u2b63',
   CLASSICAL_UP_SYMBOL: '\uD83C\uDF1E\uFE0E\uFE0E', // 🌞 Sun symbol
