@@ -80,24 +80,28 @@ export default class BlochSphereMeasurementArea extends Node {
       visibleProperty: model.isSingleMeasurementModeProperty
     } ), QuantumMeasurementConstants.panelOptions );
 
+    // Keep the equation node panel centered based on its initial position.
+    const equationNodePanelInitialCenterX = equationNodePanel.centerX;
+    equationNodePanel.localBoundsProperty.link( () => {
+      equationNodePanel.centerX = equationNodePanelInitialCenterX;
+    } );
+
     const singleMeasurementBlochSphereNode = new BlochSphereNode( model.singleMeasurementBlochSphere, {
       tandem: providedOptions.tandem.createTandem( 'singleMeasurementBlochSphereNode' ),
       drawTitle: false,
       drawKets: false,
       drawAngleIndicators: true,
-      top: equationNodePanel.bottom + 25,
       centerX: equationNodePanel.centerX,
+      top: equationNodePanel.bottom + 25,
       visibleProperty: model.isSingleMeasurementModeProperty
     } );
 
     const multipleMeasurementBlochSpheresTandem = providedOptions.tandem.createTandem( 'multipleMeasurementBlochSpheres' );
-    const multipleMeasurementBlochSpheresNode = new Node( {
-      visibleProperty: DerivedProperty.not( model.isSingleMeasurementModeProperty )
-    } );
     const blochSpheresSpacing = 70;
     const lattice = [ 3, 2, 3, 2 ];
     let currentRow = 0;
     let currentColumn = 0;
+    const multipleMeasurementBlochSpheresNodes: BlochSphereNode[] = [];
     model.multiMeasurementBlochSpheres.forEach( ( blochSphere, index ) => {
       const blochSphereNode = new BlochSphereNode( blochSphere, {
         tandem: multipleMeasurementBlochSpheresTandem.createTandem( `blochSphere${index}` ),
@@ -110,7 +114,7 @@ export default class BlochSphereMeasurementArea extends Node {
         centerX: currentColumn * blochSpheresSpacing,
         centerY: currentRow * blochSpheresSpacing
       } );
-      multipleMeasurementBlochSpheresNode.addChild( blochSphereNode );
+      multipleMeasurementBlochSpheresNodes.push( blochSphereNode );
 
       currentColumn++;
       if ( currentColumn >= lattice[ currentRow % lattice.length ] ) {
@@ -118,8 +122,12 @@ export default class BlochSphereMeasurementArea extends Node {
         currentRow++;
       }
     } );
-    multipleMeasurementBlochSpheresNode.centerX = singleMeasurementBlochSphereNode.centerX;
-    multipleMeasurementBlochSpheresNode.top = 70;
+    const multipleMeasurementBlochSpheresNode = new Node( {
+      children: multipleMeasurementBlochSpheresNodes,
+      centerX: equationNodePanel.centerX,
+      top: 70, // empirically determined
+      visibleProperty: DerivedProperty.not( model.isSingleMeasurementModeProperty )
+    } );
 
     const KET = QuantumMeasurementConstants.KET;
 
