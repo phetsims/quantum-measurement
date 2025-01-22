@@ -155,8 +155,8 @@
   "singlePhoton": {
     "value": "Single Photon"
   },
-  "stateToPrepare": {
-    "value": "State to Prepare"
+  "spinStateToPrepare": {
+    "value": "Spin State to Prepare"
   },
   "tails": {
     "value": "Tails"
@@ -239,7 +239,7 @@
   "measurementParameters": {
     "value": "Measurement Parameters"
   },
-  "measurementAxis": {
-    "value": "Measurement Axis"
+  "spinMeasurementAxis": {
+    "value": "Spin Measurement Axis"
   }
 }

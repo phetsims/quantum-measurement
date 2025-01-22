@@ -214,7 +214,7 @@ export default class BlochSphereMeasurementArea extends Node {
       children: [
         new Text( QuantumMeasurementStrings.measurementParametersStringProperty, { font: new PhetFont( 18 ) } ),
         singleOrMultipleRadioButtonGroup,
-        new Text( QuantumMeasurementStrings.measurementAxisStringProperty, { font: new PhetFont( 16 ) } ),
+        new Text( QuantumMeasurementStrings.spinMeasurementAxisStringProperty, { font: new PhetFont( 16 ) } ),
         basisRadioButtonGroup,
         measurementTimerControl
       ]

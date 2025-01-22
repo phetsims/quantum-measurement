@@ -68,7 +68,7 @@ type StringsType = {
   'revealStringProperty': LocalizedStringProperty;
   'singleCoinMeasurementsStringProperty': LocalizedStringProperty;
   'singlePhotonStringProperty': LocalizedStringProperty;
-  'stateToPrepareStringProperty': LocalizedStringProperty;
+  'spinStateToPrepareStringProperty': LocalizedStringProperty;
   'tailsStringProperty': LocalizedStringProperty;
   'upStringProperty': LocalizedStringProperty;
   'VStringProperty': LocalizedStringProperty;
@@ -96,7 +96,7 @@ type StringsType = {
   'lotsStringProperty': LocalizedStringProperty;
   'experimentNPatternStringProperty': LocalizedStringProperty;
   'measurementParametersStringProperty': LocalizedStringProperty;
-  'measurementAxisStringProperty': LocalizedStringProperty;
+  'spinMeasurementAxisStringProperty': LocalizedStringProperty;
 };
 
 const QuantumMeasurementStrings = getStringModule( 'QUANTUM_MEASUREMENT' ) as StringsType;
