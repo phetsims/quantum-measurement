@@ -1,4 +1,4 @@
-// Copyright 2024-2025, University of Colorado Boulder
+// Copyright 2024, University of Colorado Boulder
 
 /**
  * SpinStatePreparationArea is a composite UI component that allows users to prepare the spin state of a quantum system
@@ -8,7 +8,6 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Utils from '../../../../dot/js/Utils.js';
@@ -98,15 +97,8 @@ export default class SpinStatePreparationArea extends VBox {
         scale: 0.9
       } );
 
-    const stateToPrepareStringProperty = new DerivedStringProperty(
-      [
-        QuantumMeasurementStrings.stateToPrepareStringProperty,
-        QuantumMeasurementColors.tailsColorProperty,
-        QuantumMeasurementColors.downColorProperty
-      ],
-      stateToPrepareString => `<b>${stateToPrepareString}</b> ( ${ALPHA}|${UP}${KET} + ${BETA}|${DOWN}${KET} )`
-    );
-    const stateToPrepareText = new RichText( stateToPrepareStringProperty, { font: new PhetFont( { size: 18, weight: 'bolder' } ) } );
+    const stateToPrepareText = new RichText( QuantumMeasurementStrings.stateToPrepareStringProperty, { font: new PhetFont( { size: 18, weight: 'bolder' } ) } );
+    const symbolicEquationText = new RichText( `${ALPHA}|${UP}${KET} + ${BETA}|${DOWN}${KET}`, { font: new PhetFont( { size: 18, weight: 'bolder' } ) } );
 
     const stateReadoutStringProperty = new DerivedProperty(
       [
@@ -186,7 +178,7 @@ export default class SpinStatePreparationArea extends VBox {
       children: [
         blochSphereNode,
         projectionCheckboxes,
-        stateToPrepareText,
+        new VBox( { children: [ stateToPrepareText, symbolicEquationText ], spacing: 5 } ),
         stateReadout,
         spinStatePanel,
         probabilityControlBox

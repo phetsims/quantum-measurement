@@ -122,13 +122,15 @@ export default class BlochSphereMeasurementArea extends Node {
     multipleMeasurementBlochSpheresNode.centerX = singleMeasurementBlochSphereNode.centerX;
     multipleMeasurementBlochSpheresNode.top = 70;
 
+    const KET = QuantumMeasurementConstants.KET;
+
     const spinUpLabelStringProperty = new DerivedStringProperty(
       [ model.measurementAxisProperty ],
-      measurementAxis => `|${QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER}<sub>${measurementAxis.label.value}</sub>>`
+      measurementAxis => `|${QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER}<sub>${measurementAxis.label.value}</sub>${KET}`
     );
     const spinDownLabelStringProperty = new DerivedStringProperty(
       [ model.measurementAxisProperty ],
-      measurementAxis => `|${QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER}<sub>${measurementAxis.label.value}</sub>>`
+      measurementAxis => `|${QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER}<sub>${measurementAxis.label.value}</sub>${KET}`
     );
 
     const measurementResultHistogram = new QuantumMeasurementHistogram(
