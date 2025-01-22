@@ -63,12 +63,12 @@ export default class PhotonDetectorNode extends Node {
     const body = new Rectangle( 0, 0, DETECTOR_BODY_SIZE.width, DETECTOR_BODY_SIZE.height, {
       cornerRadius: 10,
       fill: new LinearGradient( 0, 0, 0, DETECTOR_BODY_SIZE.height )
-        .addColorStop( 0, QuantumMeasurementColors.photonDetectorBodyColor.value )
-        .addColorStop( 0.1, QuantumMeasurementColors.photonDetectorBodyColor.value.colorUtilsBrighter( 0.7 ) )
-        .addColorStop( 0.3, QuantumMeasurementColors.photonDetectorBodyColor.value )
-        .addColorStop( 0.8, QuantumMeasurementColors.photonDetectorBodyColor.value )
-        .addColorStop( 1, QuantumMeasurementColors.photonDetectorBodyColor.value.colorUtilsDarker( 0.2 ) ),
-      stroke: QuantumMeasurementColors.photonDetectorBodyColor.value.colorUtilsDarker( 0.5 ),
+        .addColorStop( 0, QuantumMeasurementColors.photonDetectorBodyColorProperty.value )
+        .addColorStop( 0.1, QuantumMeasurementColors.photonDetectorBodyColorProperty.value.colorUtilsBrighter( 0.7 ) )
+        .addColorStop( 0.3, QuantumMeasurementColors.photonDetectorBodyColorProperty.value )
+        .addColorStop( 0.8, QuantumMeasurementColors.photonDetectorBodyColorProperty.value )
+        .addColorStop( 1, QuantumMeasurementColors.photonDetectorBodyColorProperty.value.colorUtilsDarker( 0.2 ) ),
+      stroke: QuantumMeasurementColors.photonDetectorBodyColorProperty.value.colorUtilsDarker( 0.5 ),
       lineWidth: 0.5,
       centerX: aperture.centerX
     } );
@@ -212,7 +212,7 @@ class PhotonCountDisplay extends HBox {
     // Create a NumberDisplay that will show the count.
     const numberDisplay = new NumberDisplay( photonCountProperty, COUNT_RANGE, {
       align: 'center',
-      backgroundFill: QuantumMeasurementColors.photonDetectorBodyColor.value.withAlpha( 0.1 ),
+      backgroundFill: QuantumMeasurementColors.photonDetectorBodyColorProperty.value.withAlpha( 0.1 ),
       backgroundStroke: null,
       xMargin: 0,
       textOptions: {

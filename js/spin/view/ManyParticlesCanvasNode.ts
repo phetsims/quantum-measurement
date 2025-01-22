@@ -30,7 +30,7 @@ export default class ManyParticlesCanvasNode extends CanvasNode {
    */
   public paintCanvas( context: CanvasRenderingContext2D ): void {
 
-    context.fillStyle = QuantumMeasurementColors.particleColor.value.toCSS();
+    context.fillStyle = QuantumMeasurementColors.particleColorProperty.value.toCSS();
     for ( let i = 0; i < this.particles.length; i++ ) {
       const position = this.modelViewTransform.modelToViewPosition( this.particles[ i ].position );
       context.fillRect( position.x, position.y, 2, 2 );

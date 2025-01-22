@@ -139,17 +139,17 @@ const QuantumMeasurementColors = {
   } ),
 
   // Colors for elements on the "Photons" screen
-  photonDetectorBodyColor: new ProfileColorProperty( quantumMeasurement, 'photonDetectorBody', {
+  photonDetectorBodyColorProperty: new ProfileColorProperty( quantumMeasurement, 'photonDetectorBody', {
     default: '#D1E2FA'
   } ),
 
   // Color for particles on the "Spin" screen particles.
-  particleColor: new ProfileColorProperty( quantumMeasurement, 'particleColor', {
+  particleColorProperty: new ProfileColorProperty( quantumMeasurement, 'particleColor', {
     default: '#F0F'
   } ),
 
   // Color for the arrows that depict that magnetic field and the elements that control it.
-  magneticFieldColor: new ProfileColorProperty( quantumMeasurement, 'magneticFieldColor', {
+  magneticFieldColorProperty: new ProfileColorProperty( quantumMeasurement, 'magneticFieldColor', {
     default: '#FF0'
   } ),
 

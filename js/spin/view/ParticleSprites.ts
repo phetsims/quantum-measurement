@@ -46,7 +46,7 @@ export default class ParticleSprites extends Sprites {
 
     let particleSprite: Sprite;
     new ShadedSphereNode( 15, {
-      mainColor: QuantumMeasurementColors.particleColor,
+      mainColor: QuantumMeasurementColors.particleColorProperty,
       highlightColor: 'white'
     } ).toCanvas( ( canvas, x, y ) => {
       // Create the sprite that will be used to represent the particles.
