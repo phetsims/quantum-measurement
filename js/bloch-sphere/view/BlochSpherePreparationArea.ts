@@ -9,6 +9,7 @@
 
 import BlochSphereModel from 'model/BlochSphereModel.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
+import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
@@ -37,14 +38,18 @@ export default class BlochSpherePreparationArea extends VBox {
       tandem: providedOptions.tandem.createTandem( 'polarSlider' ),
       thumbFill: '#444',
       trackSize: new Dimension2( 150, 0.5 ),
-      majorTickLength: 10
+      majorTickLength: 10,
+      constrainValue: value => Utils.roundToInterval( value, 5 / 180 * Math.PI ), // 5 degree intervals
+      shiftKeyboardStep: 5 / 180 * Math.PI
     } );
     const azimuthSlider = new Slider( model.preparationBlochSphere.azimuthalAngleProperty, model.preparationBlochSphere.azimuthalAngleProperty.range, {
       center: new Vector2( 100, 100 ),
       tandem: providedOptions.tandem.createTandem( 'azimuthSlider' ),
       thumbFill: '#444',
       trackSize: new Dimension2( 150, 0.5 ),
-      majorTickLength: 10
+      majorTickLength: 10,
+      constrainValue: value => Utils.roundToInterval( value, 5 / 360 * Math.PI * 2 ), // 5 degree intervals
+      shiftKeyboardStep: 5 / 360 * Math.PI * 2
     } );
 
     polarSlider.addMajorTick( 0, new Text( '0', { font: new PhetFont( 15 ) } ) );

@@ -12,13 +12,12 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
+import EraserButton from '../../../../scenery-phet/js/buttons/EraserButton.js';
 import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import EraserButton from '../../../../scenery-phet/js/buttons/EraserButton.js';
 import ShadedSphereNode from '../../../../scenery-phet/js/ShadedSphereNode.js';
 import { HBox, Node, NodeOptions, RichText, RichTextOptions, Text, VBox } from '../../../../scenery/js/imports.js';
 import AquaRadioButtonGroup, { AquaRadioButtonGroupItem } from '../../../../sun/js/AquaRadioButtonGroup.js';
-import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import Panel from '../../../../sun/js/Panel.js';
@@ -192,19 +191,9 @@ export default class BlochSphereMeasurementArea extends Node {
       };
     } );
 
-    const basisRadioButtonGroup = new RectangularRadioButtonGroup<MeasurementAxis>(
-      model.measurementAxisProperty,
-      basisRadioGroupItems,
-      {
-        orientation: 'horizontal',
-        tandem: basisRadioButtonGroupTandem,
-        phetioFeatured: true,
-        radioButtonOptions: {
-          baseColor: QuantumMeasurementColors.controlPanelFillColorProperty,
-          phetioVisiblePropertyInstrumented: false
-        }
-      }
-    );
+    const basisRadioButtonGroup = new AquaRadioButtonGroup( model.measurementAxisProperty, basisRadioGroupItems, {
+      orientation: 'horizontal', margin: 5, tandem: basisRadioButtonGroupTandem
+    } );
 
     const measurementTimerControl = new MeasurementTimerControl( model.timeToMeasurementProperty, model.measurementTimeProperty, {
       tandem: providedOptions.tandem.createTandem( 'measurementTimerControl' ),

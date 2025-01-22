@@ -16,9 +16,9 @@ import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { HBox, HBoxOptions, RichText } from '../../../../scenery/js/imports.js';
-import AbstractBlochSphere from '../../common/model/AbstractBlochSphere.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import ComplexBlochSphere from '../model/ComplexBlochSphere.js';
 import { StateDirection } from '../model/StateDirection.js';
 
 type SelfOptions = {
@@ -35,7 +35,7 @@ const KET = QuantumMeasurementConstants.KET;
 
 export default class BlochSphereNumericalEquationNode extends HBox {
 
-  public constructor( blochSphere: AbstractBlochSphere, providedOptions?: BlochSphereNumericalEquationNodeOptions ) {
+  public constructor( blochSphere: ComplexBlochSphere, providedOptions?: BlochSphereNumericalEquationNodeOptions ) {
 
     const options = optionize<BlochSphereNumericalEquationNodeOptions, SelfOptions, HBoxOptions>()( {
       align: 'center',
@@ -46,28 +46,46 @@ export default class BlochSphereNumericalEquationNode extends HBox {
       [
         blochSphere.polarAngleProperty,
         blochSphere.azimuthalAngleProperty,
+        blochSphere.rotatingSpeedProperty,
         options.basisProperty
       ],
-      ( polarAngle, azimuthalAngle, basis ) => {
+      ( polarAngle, azimuthalAngle, rotatingSpeed, basis ) => {
 
         let upCoefficientValue;
         let downCoefficientValue;
         let azimuthalCoefficientValue;
 
+
+        // Mapping from projection space [-1,1], temporarily to probability space [0,1],
+        // and finally to coefficient space [0,1], which is the square root of the probability.
         const projectionToCoefficient = ( value: number ) => {
           return Math.sqrt( ( value + 1 ) / 2 );
         };
+
+        // Equation coefficients in the Z basis, will be used for the basis transformations to X and Y basis.
+        const a = Math.cos( polarAngle / 2 );
+        const b = Math.sin( polarAngle / 2 );
+
+        let phiPlus: number;
+        let phiMinus: number;
 
         switch( basis ) {
           case StateDirection.X_PLUS:
             upCoefficientValue = projectionToCoefficient( Math.cos( azimuthalAngle ) * Math.sin( polarAngle ) );
             downCoefficientValue = projectionToCoefficient( -Math.cos( azimuthalAngle ) * Math.sin( polarAngle ) );
-            azimuthalCoefficientValue = 0;
+
+            phiPlus = Math.atan2( b * Math.sin( azimuthalAngle ), a + b * Math.cos( azimuthalAngle ) ) / Math.PI;
+            phiMinus = Math.atan2( -b * Math.sin( azimuthalAngle ), a - b * Math.cos( azimuthalAngle ) ) / Math.PI;
+            azimuthalCoefficientValue = phiMinus - phiPlus;
+
             break;
           case StateDirection.Y_PLUS:
             upCoefficientValue = projectionToCoefficient( Math.sin( azimuthalAngle ) * Math.sin( polarAngle ) );
             downCoefficientValue = projectionToCoefficient( -Math.sin( azimuthalAngle ) * Math.sin( polarAngle ) );
-            azimuthalCoefficientValue = 0;
+
+            phiPlus = Math.atan2( b * Math.cos( azimuthalAngle ), a + b * Math.sin( azimuthalAngle ) ) / Math.PI;
+            phiMinus = Math.atan2( -b * Math.cos( azimuthalAngle ), a - b * Math.sin( azimuthalAngle ) ) / Math.PI;
+            azimuthalCoefficientValue = phiMinus - phiPlus;
             break;
           default: // StateDirection.Z_PLUS
             upCoefficientValue = Math.abs( Math.cos( polarAngle / 2 ) );
@@ -76,6 +94,9 @@ export default class BlochSphereNumericalEquationNode extends HBox {
             break;
         }
 
+        // Normalize the azimuthal coefficient to be between 0 and 2.
+        azimuthalCoefficientValue < 0 ? azimuthalCoefficientValue += 2 : null;
+
         // Update the coefficients of the state equation.
         const upCoefficientString = Utils.toFixed( upCoefficientValue, 2 );
         const downCoefficientString = Utils.toFixed( downCoefficientValue, 2 );
@@ -83,19 +104,31 @@ export default class BlochSphereNumericalEquationNode extends HBox {
 
         const direction = basis.description.split( '' )[ 1 ];
 
+        // Thresholds to avoid displaying the coefficients when they are 0 or 1.
         const zero = 1e-5;
         const one = 1 - zero;
-        const upPart = upCoefficientValue > zero ? upCoefficientValue < one ?
-                                                        `${upCoefficientString} |${UP}<sub>${direction}</sub> ${KET}` :
-                                                        `|${UP}<sub>${direction}</sub> ${KET}` :
-                                                        '';
-        const plus = upCoefficientValue > zero && downCoefficientValue > zero ? ' + ' : '';
-        const downPart = downCoefficientValue > zero ? downCoefficientValue < one ?
-                                                              `${downCoefficientString}e<sup>i${azimuthalCoefficientString}${PI}</sup> |${DOWN}<sub>${direction}</sub> ${KET}` :
-                                                              `|${DOWN}<sub>${direction}</sub> ${KET}` :
-                                                              '';
 
-        return `|${PSI}⟩ = ${upPart}${plus}${downPart}`;
+        let upComponent = `${upCoefficientString} |${UP}<sub>${direction}</sub> ${KET}`;
+        let downComponent = `${downCoefficientString}e<sup>i${azimuthalCoefficientString}${PI}</sup> |${DOWN}<sub>${direction}</sub> ${KET}`;
+        let plus = '+';
+
+        // If there is no rotation, allow some simplification of the equation
+        // Usually, if one coefficient is 0, the other one is 1. But they are handled separately anyway.
+        if ( rotatingSpeed === 0 ) {
+
+          // Remove the entire component when the coefficient is aprox equal to 0. i.e.
+          upCoefficientValue < zero ? upComponent = '' : null;
+          downCoefficientValue < zero ? downComponent = '' : null;
+
+          // Remove the plus sign when one of the coefficients is 0.
+          upCoefficientValue < zero || downCoefficientValue < zero ? plus = '' : null;
+
+          // Don't show the coefficient if it's aprox equal to 1. i.e. |psi>=|up_Z>
+          upCoefficientValue > one ? upComponent = `|${UP}<sub>${direction}</sub> ${KET}` : null;
+          downCoefficientValue > one ? downComponent = `|${DOWN}<sub>${direction}</sub> ${KET}` : null;
+        }
+
+        return `|${PSI}⟩ = ${upComponent}${plus}${downComponent}`;
       }
     ), { font: EQUATION_FONT } );
 
