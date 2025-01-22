@@ -86,7 +86,7 @@ export default class BlochSphereMeasurementArea extends Node {
       drawKets: false,
       drawAngleIndicators: true,
       top: equationNodePanel.bottom + 25,
-      left: equationNodePanel.left,
+      centerX: equationNodePanel.centerX,
       visibleProperty: model.isSingleMeasurementModeProperty
     } );
 

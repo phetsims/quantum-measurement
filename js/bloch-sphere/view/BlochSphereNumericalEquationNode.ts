@@ -110,7 +110,7 @@ export default class BlochSphereNumericalEquationNode extends HBox {
 
         let upComponent = `${upCoefficientString} |${UP}<sub>${direction}</sub> ${KET}`;
         let downComponent = `${downCoefficientString}e<sup>i${azimuthalCoefficientString}${PI}</sup> |${DOWN}<sub>${direction}</sub> ${KET}`;
-        let plus = '+';
+        let plus = ' + ';
 
         // If there is no rotation, allow some simplification of the equation
         // Usually, if one coefficient is 0, the other one is 1. But they are handled separately anyway.
