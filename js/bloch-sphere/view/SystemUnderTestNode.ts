@@ -16,6 +16,7 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ShadedSphereNode, { ShadedSphereNodeOptions } from '../../../../scenery-phet/js/ShadedSphereNode.js';
 import { Color, HBox, Node, Text, VBox } from '../../../../scenery/js/imports.js';
 import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { SpinMeasurementState } from '../model/SpinMeasurementState.js';
 import MagneticFieldNode from './MagneticFieldNode.js';
@@ -103,7 +104,7 @@ class SystemUnderTestNode extends Panel {
 
     const options = combineOptions<PanelOptions>( {
       stroke: Color.BLACK,
-      fill: new Color( 235, 255, 235 ),
+      fill: QuantumMeasurementColors.systemUnderTestBackgroundColorProperty,
       cornerRadius: 8,
       resize: false
     }, providedOptions );

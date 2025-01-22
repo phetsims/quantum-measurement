@@ -148,9 +148,13 @@ const QuantumMeasurementColors = {
     default: '#F0F'
   } ),
 
-  // Magnetic field color
+  // Color for the arrows that depict that magnetic field and the elements that control it.
   magneticFieldColor: new ProfileColorProperty( quantumMeasurement, 'magneticFieldColor', {
     default: '#FF0'
+  } ),
+
+  systemUnderTestBackgroundColorProperty: new ProfileColorProperty( quantumMeasurement, 'systemUnderTestBackgroundColorProperty', {
+    default: '#FFF'
   } )
 };
 
