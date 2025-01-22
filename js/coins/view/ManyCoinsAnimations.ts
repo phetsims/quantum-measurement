@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2025, University of Colorado Boulder
 
 /**
  * ManyCoinsAnimations handles the exceptional 10_000 coins case, where each coin is represented as a pixel.

@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * SpinStatePreparationArea is a composite UI component that allows users to prepare the spin state of a quantum system
