@@ -21,6 +21,7 @@ import Slider from '../../../../sun/js/Slider.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { StateDirection } from '../model/StateDirection.js';
 import BlochSphereNumericalEquationNode from './BlochSphereNumericalEquationNode.js';
 import BlochSphereSymbolicEquationNode from './BlochSphereSymbolicEquationNode.js';
@@ -97,7 +98,7 @@ export default class BlochSpherePreparationArea extends VBox {
       spacing: 10,
       align: 'center',
       children: [
-        new Text( 'State to Prepare', { font: new PhetFont( { size: 20, weight: 'bolder' } ) } ),
+        new Text( QuantumMeasurementStrings.spinStateToPrepareStringProperty, { font: new PhetFont( { size: 20, weight: 'bolder' } ) } ),
         new BlochSphereSymbolicEquationNode(),
         new Panel(
           new BlochSphereNumericalEquationNode( model.preparationBlochSphere ), {

@@ -10,21 +10,19 @@
  * @author Agustín Vallejo
  */
 
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
 export class SpinDirection extends EnumerationValue {
-  public static readonly Z_PLUS = new SpinDirection( '"+Z"', '⟨Sz⟩ = + ', 'ZPlus' );
-  public static readonly X_PLUS = new SpinDirection( '"+X"', '⟨Sz⟩ = 0', 'XPlus' );
-  public static readonly Z_MINUS = new SpinDirection( '"-Z"', '⟨Sz⟩ = - ', 'ZMinus' );
+  public static readonly Z_PLUS = new SpinDirection( '+Z', 'ZPlus' );
+  public static readonly X_PLUS = new SpinDirection( '+X', 'XPlus' );
+  public static readonly Z_MINUS = new SpinDirection( '-Z', 'ZMinus' );
 
   public static readonly enumeration = new Enumeration( SpinDirection );
 
   public constructor( public readonly direction: string,
-                      public readonly description: string | TReadOnlyProperty<string>,
                       public readonly tandemName: string ) {
     super();
   }

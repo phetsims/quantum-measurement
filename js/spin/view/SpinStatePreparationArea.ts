@@ -14,12 +14,11 @@ import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { HBox, Node, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
-import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
+import { HBox, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
+import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import ProbabilityValueControl from '../../coins/view/ProbabilityValueControl.js';
-import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import DashedArrowNode from '../../common/view/DashedArrowNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
@@ -28,12 +27,11 @@ import { SpinDirection } from '../model/SpinDirection.js';
 import SpinExperiment from '../model/SpinExperiment.js';
 import SpinModel from '../model/SpinModel.js';
 import BlochSphereWithProjectionNode from './BlochSphereWithProjectionNode.js';
-import HBarOverTwoNode from './HBarOverTwoNode.js';
 
 const ALPHA = MathSymbols.ALPHA;
 const BETA = MathSymbols.BETA;
-const UP = QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
-const DOWN = QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER;
+const UP = `${QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER}<sub>Z</sub>`;
+const DOWN = `${QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER}<sub>Z</sub>`;
 const KET = QuantumMeasurementConstants.KET;
 
 export default class SpinStatePreparationArea extends VBox {
@@ -43,44 +41,25 @@ export default class SpinStatePreparationArea extends VBox {
     layoutBounds: Bounds2,
     tandem: Tandem ) {
 
-    const createRadioButtonGroupItem = ( spinDirection: SpinDirection ) => {
-      const textSize = 15;
-      const textOptions = { font: new PhetFont( textSize ) };
-      return {
-        createNode: () => new HBox( {
-          justify: 'center',
-          spacing: 30,
-          children: [
-            new Text( spinDirection.direction, textOptions ),
-            new HBox( {
-              justify: 'center',
-              children: [
-                new Text( spinDirection.description, textOptions ),
-                spinDirection === SpinDirection.X_PLUS ? new Node() : new HBarOverTwoNode( textSize )
-              ]
-            } )
-          ]
-        } ),
-        value: spinDirection,
-        tandemName: `${spinDirection.tandemName}SpinDirectionRadioButton`
-      };
-    };
-
     const spinStateRadioButtonGroupTandem = tandem.createTandem( 'spinStateRadioButtonGroup' );
-    const spinStateRadioButtonGroup = new RectangularRadioButtonGroup(
-      model.particleSourceModel.spinStateProperty,
-      SpinDirection.enumeration.values.map( quantity => createRadioButtonGroupItem( quantity ) ),
-      {
-        spacing: 10,
-        center: new Vector2( 100, 100 ),
-        tandem: spinStateRadioButtonGroupTandem,
-        visibleProperty: new GatedVisibleProperty( new DerivedProperty( [ model.currentExperimentProperty ], currentExperiment => currentExperiment !== SpinExperiment.CUSTOM ), spinStateRadioButtonGroupTandem ),
-        radioButtonOptions: {
-          minWidth: 200,
-          baseColor: QuantumMeasurementColors.controlPanelFillColorProperty
-        }
-      }
-    );
+
+    const basisRadioButtonTextOptions = { font: new PhetFont( 15 ) };
+    const basisRadioGroupItems = SpinDirection.enumeration.values.map( basis => {
+      return {
+        value: basis,
+        createNode: () => new RichText(
+          basis.direction, basisRadioButtonTextOptions
+        ),
+        tandemName: `${basis.tandemName}RadioButton`
+      };
+    } );
+
+    const spinStateRadioButtonGroup = new AquaRadioButtonGroup( model.particleSourceModel.spinStateProperty, basisRadioGroupItems, {
+      orientation: 'horizontal',
+      margin: 5,
+      tandem: spinStateRadioButtonGroupTandem,
+      visibleProperty: new GatedVisibleProperty( new DerivedProperty( [ model.currentExperimentProperty ], currentExperiment => currentExperiment !== SpinExperiment.CUSTOM ), spinStateRadioButtonGroupTandem )
+    } );
 
     const spinStatePanel = new VBox( {
       children: [
@@ -183,8 +162,12 @@ export default class SpinStatePreparationArea extends VBox {
         spinStatePanel,
         probabilityControlBox
       ],
-      spacing: 20,
-      centerY: layoutBounds.centerY
+      spacing: 20
+    } );
+
+    // Reposition for a wider layout
+    model.currentExperimentProperty.link( () => {
+      this.centerY = layoutBounds.centerY;
     } );
   }
 }
