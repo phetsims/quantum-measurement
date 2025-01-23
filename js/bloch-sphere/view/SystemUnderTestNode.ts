@@ -10,13 +10,18 @@
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
+import stepTimer from '../../../../axon/js/stepTimer.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import { Shape } from '../../../../kite/js/imports.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ShadedSphereNode, { ShadedSphereNodeOptions } from '../../../../scenery-phet/js/ShadedSphereNode.js';
-import { Color, HBox, Node, Text, VBox } from '../../../../scenery/js/imports.js';
+import { Color, HBox, Node, Path, Text, VBox } from '../../../../scenery/js/imports.js';
 import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import quantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
+import MeasurementSymbolNode from '../../common/view/MeasurementSymbolNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { SpinMeasurementState } from '../model/SpinMeasurementState.js';
@@ -107,6 +112,38 @@ class SystemUnderTestNode extends Panel {
       children: [ titleNode, fieldAndAtomsNode ],
       spacing: 5,
       resize: false
+    } );
+
+    // Create an icon that will be used to indicate that a measurement has been made.
+    const measurementIconBackground = new Path( new Shape(
+      quantumMeasurementConstants.CAMERA_SOLID_SHAPE_SVG
+    ).makeImmutable(), {
+      fill: QuantumMeasurementColors.particleColorProperty,
+      scale: 0.1,
+      center: Vector2.ZERO
+    } );
+    const measurementSymbol = new MeasurementSymbolNode();
+    const measurementNode = new Node( {
+      children: [ measurementIconBackground, measurementSymbol ],
+      scale: 0.5,
+      right: content.width - 3,
+      bottom: content.height - 3
+    } );
+
+    // Add the measurement icon to the top of the z-order in the content node.
+    content.addChild( measurementNode );
+
+    // Control the visibility of the measurement icon based on the state of the measurement.  It will be shown breifly
+    // when a measurement is made.
+    measurementStateProperty.link( state => {
+      measurementNode.visible = state === 'observed';
+      if ( state === 'observed' ) {
+
+        // Start a timer that will turn off the measurement icon after a short delay.
+        stepTimer.setTimeout( () => {
+          measurementNode.visible = false;
+        }, 500 );
+      }
     } );
 
     const options = combineOptions<PanelOptions>( {

@@ -40,7 +40,6 @@ export default class MeasurementDeviceNode extends VBox {
       scale: 0.5
     } );
 
-
     const cameraPath = new Path( new Shape(
       quantumMeasurementConstants.CAMERA_SOLID_SHAPE_SVG
     ).makeImmutable(), {
