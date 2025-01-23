@@ -10,7 +10,6 @@
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
-import stepTimer from '../../../../axon/js/stepTimer.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
@@ -19,6 +18,7 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ShadedSphereNode, { ShadedSphereNodeOptions } from '../../../../scenery-phet/js/ShadedSphereNode.js';
 import { Color, HBox, Node, Path, Text, VBox } from '../../../../scenery/js/imports.js';
 import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
+import Animation from '../../../../twixt/js/Animation.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import MeasurementSymbolNode from '../../common/view/MeasurementSymbolNode.js';
@@ -123,26 +123,47 @@ class SystemUnderTestNode extends Panel {
       center: Vector2.ZERO
     } );
     const measurementSymbol = new MeasurementSymbolNode();
-    const measurementNode = new Node( {
+    const measurementIconNode = new Node( {
       children: [ measurementIconBackground, measurementSymbol ],
       scale: 0.5,
       right: content.width - 3,
       bottom: content.height - 3
     } );
 
-    // Add the measurement icon to the top of the z-order in the content node.
-    content.addChild( measurementNode );
+    // Add the measurement icon to the content node on top of the other nodes.
+    content.addChild( measurementIconNode );
 
-    // Control the visibility of the measurement icon based on the state of the measurement.  It will be shown breifly
-    // when a measurement is made.
+    // Control the visibility of the measurement icon based on the state of the measurement.  It will be shown briefly
+    // when a measurement is made, then faded out.
+    let iconFadeAnimation: Animation | null = null;
     measurementStateProperty.link( state => {
-      measurementNode.visible = state === 'observed';
+      measurementIconNode.visible = state === 'observed';
       if ( state === 'observed' ) {
 
-        // Start a timer that will turn off the measurement icon after a short delay.
-        stepTimer.setTimeout( () => {
-          measurementNode.visible = false;
-        }, 500 );
+        // Finish any existing animation.
+        if ( iconFadeAnimation !== null ) {
+          iconFadeAnimation.stop();
+        }
+
+        // Start an animation to fade out the icon.
+        iconFadeAnimation = new Animation( {
+          from: 1,
+          to: 0,
+          delay: 0.5,
+          getValue: () => measurementIconNode.opacity,
+          setValue: opacity => { measurementIconNode.opacity = opacity; },
+          duration: 0.5
+        } );
+        measurementIconNode.opacity = 1;
+        iconFadeAnimation.start();
+        iconFadeAnimation.endedEmitter.addListener( () => { iconFadeAnimation = null; } );
+      }
+      else if ( state === 'prepared' ) {
+
+        // If the state transitions to 'prepared' whilst an animation is in progress, that animation should be finished.
+        if ( iconFadeAnimation !== null ) {
+          iconFadeAnimation.stop();
+        }
       }
     } );
 
