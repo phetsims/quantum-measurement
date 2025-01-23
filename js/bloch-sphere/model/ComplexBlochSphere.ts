@@ -42,9 +42,6 @@ export default class ComplexBlochSphere extends AbstractBlochSphere {
       tandem: options.tandem.createTandem( 'rotatingSpeedProperty' ),
       phetioReadOnly: true
     } );
-
-    this.polarAngleProperty.value = Math.PI / 2;
-    this.azimuthalAngleProperty.value = 0;
   }
 
 

@@ -163,8 +163,8 @@ class BlochSphereModel implements TModel {
     this.timeToMeasurementProperty.link( () => this.resetCounts() );
 
     // Clear accumulated counts and potentially change the selected preset state direction to CUSTOM when the user
-    // changes the angles of the Bloch Sphere.
-    Multilink.multilink(
+    // changes the angles of the Bloch Sphere. Lazy to not change the selected state direction on build up.
+    Multilink.lazyMultilink(
       [ this.preparationBlochSphere.polarAngleProperty, this.preparationBlochSphere.azimuthalAngleProperty ],
       () => {
         // Clear the accumulated counts.
@@ -319,6 +319,7 @@ class BlochSphereModel implements TModel {
     this.isSingleMeasurementModeProperty.reset();
     this.timeToMeasurementProperty.reset();
     this.measurementTimeProperty.reset();
+    this.selectedStateDirectionProperty.reset();
   }
 
   /**

@@ -8,12 +8,15 @@
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
-type SelfOptions = EmptySelfOptions;
+type SelfOptions = {
+  initialPolarAngle?: number;
+  initialAzimuthalAngle?: number;
+};
 
 export type AbstractBlochSphereOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
@@ -32,19 +35,21 @@ export default abstract class AbstractBlochSphere extends PhetioObject {
   protected constructor( providedOptions: AbstractBlochSphereOptions ) {
 
     const options = optionize<AbstractBlochSphereOptions, SelfOptions, PhetioObjectOptions>()( {
-      phetioState: false
+      phetioState: false,
+      initialPolarAngle: 0,
+      initialAzimuthalAngle: Math.PI / 2
     }, providedOptions );
 
     super( options );
 
-    this.azimuthalAngleProperty = new NumberProperty( 0, {
+    this.azimuthalAngleProperty = new NumberProperty( options.initialAzimuthalAngle, {
       range: new Range( 0, 2 * Math.PI ),
       tandem: options.tandem.createTandem( 'azimuthalAngleProperty' ),
       phetioReadOnly: true,
       reentrant: true
     } );
 
-    this.polarAngleProperty = new NumberProperty( 0, {
+    this.polarAngleProperty = new NumberProperty( options.initialPolarAngle, {
       range: new Range( 0, Math.PI ),
       tandem: options.tandem.createTandem( 'polarAngleProperty' ),
       phetioReadOnly: true,
