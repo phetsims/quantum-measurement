@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * ParticleSprites is a class that can be used to perform high-performance rendering of a set of particles.  It uses
