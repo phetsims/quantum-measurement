@@ -162,21 +162,25 @@ class BlochSphereModel implements TModel {
     // measurement that is being made.
     this.timeToMeasurementProperty.link( () => this.resetCounts() );
 
+
     // Clear accumulated counts and potentially change the selected preset state direction to CUSTOM when the user
     // changes the angles of the Bloch Sphere. Lazy to not change the selected state direction on build up.
-    Multilink.lazyMultilink(
+    selectingStateDirection = true;
+    Multilink.multilink(
       [ this.preparationBlochSphere.polarAngleProperty, this.preparationBlochSphere.azimuthalAngleProperty ],
-      () => {
+      ( polarAngle, azimuthalAngle ) => {
         // Clear the accumulated counts.
         this.resetCounts();
 
         if ( !selectingStateDirection ) {
-
           // Change the selected state to indicate that the user has moved away from the preset states.
           this.selectedStateDirectionProperty.value = StateDirection.CUSTOM;
         }
+
+        this.reprepare();
       }
     );
+    selectingStateDirection = false;
 
     // Reset the counts when the user changes the magnetic field attributes.
     Multilink.lazyMultilink(
@@ -199,20 +203,6 @@ class BlochSphereModel implements TModel {
         } );
       }
     );
-
-    this.preparationBlochSphere.polarAngleProperty.link( polarAngle => {
-      this.singleMeasurementBlochSphere.polarAngleProperty.value = polarAngle;
-      this.multiMeasurementBlochSpheres.forEach( blochSphere => {
-        blochSphere.polarAngleProperty.value = polarAngle;
-      } );
-    } );
-
-    this.preparationBlochSphere.azimuthalAngleProperty.link( azimuthalAngle => {
-      this.singleMeasurementBlochSphere.azimuthalAngleProperty.value = azimuthalAngle;
-      this.multiMeasurementBlochSpheres.forEach( blochSphere => {
-        blochSphere.azimuthalAngleProperty.value = azimuthalAngle;
-      } );
-    } );
 
     // Reset accumulated data when the user changes the measurement axis.
     this.measurementAxisProperty.link( () => {
@@ -320,6 +310,7 @@ class BlochSphereModel implements TModel {
     this.timeToMeasurementProperty.reset();
     this.measurementTimeProperty.reset();
     this.selectedStateDirectionProperty.reset();
+    this.equationBasisProperty.reset();
   }
 
   /**

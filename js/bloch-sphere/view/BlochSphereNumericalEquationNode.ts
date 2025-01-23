@@ -69,6 +69,7 @@ export default class BlochSphereNumericalEquationNode extends HBox {
         let phiPlus: number;
         let phiMinus: number;
 
+        // These calculations are better described and discussed in https://github.com/phetsims/quantum-measurement/issues/82
         switch( basis ) {
           case StateDirection.X_PLUS:
             upCoefficientValue = projectionToCoefficient( Math.cos( azimuthalAngle ) * Math.sin( polarAngle ) );
