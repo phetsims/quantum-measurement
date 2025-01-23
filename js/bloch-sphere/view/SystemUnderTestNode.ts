@@ -18,6 +18,7 @@ import { Color, HBox, Node, Text, VBox } from '../../../../scenery/js/imports.js
 import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { SpinMeasurementState } from '../model/SpinMeasurementState.js';
 import MagneticFieldNode from './MagneticFieldNode.js';
 
@@ -43,17 +44,23 @@ class SystemUnderTestNode extends Panel {
                       measurementStateProperty: Property<SpinMeasurementState>,
                       providedOptions?: PanelOptions ) {
 
-    // TODO: See https://github.com/phetsims/quantum-measurement/issues/80.  Make the title strings translatable once
-    //       this class is essentially approved by the design team.
-    const titleStringProperty = new DerivedProperty( [ isSingleMeasurementModeProperty ], isSingleMode => {
-      return isSingleMode ? 'Atom' : 'Atoms';
-    } );
+    // Set up the title for this node.
+    const titleStringProperty = new DerivedProperty(
+      [
+        isSingleMeasurementModeProperty,
+        QuantumMeasurementStrings.atomStringProperty,
+        QuantumMeasurementStrings.atomsStringProperty
+      ],
+      ( ( isSingleMode, atomString, atomsString ) => isSingleMode ? atomString : atomsString )
+    );
     const titleNode = new Text( titleStringProperty, { font: LABEL_FONT } );
 
+    // Create the magnetic field node, which is only visible when the magnetic field is enabled.
     const magneticFieldNode = new MagneticFieldNode( magneticFieldStrengthProperty, measurementStateProperty, {
       visibleProperty: magneticFieldEnabledProperty
     } );
 
+    // Create the single atom node for the single measurement mode.
     const singleSphericalAtomNode = new ShadedSphereNode(
       ATOM_RADIUS,
       combineOptions<ShadedSphereNodeOptions>(
@@ -90,12 +97,12 @@ class SystemUnderTestNode extends Panel {
       visibleProperty: DerivedProperty.valueEqualsConstant( isSingleMeasurementModeProperty, false )
     } );
 
-    // Create a node with the magnetic field in the background and the atoms in the foreground.
+    // Create a Node with the magnetic field in the background and the atoms in the foreground.
     const fieldAndAtomsNode = new Node( {
       children: [ magneticFieldNode, singleSphericalAtomNode, multipleSphericalAtomNode ]
     } );
 
-    // Combine the title and the field and atoms node into a single node for the content.
+    // Combine the title and the other elements into a single node for the content.
     const content = new VBox( {
       children: [ titleNode, fieldAndAtomsNode ],
       spacing: 5,

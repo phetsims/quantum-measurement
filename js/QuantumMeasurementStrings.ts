@@ -21,12 +21,15 @@ type StringsType = {
     'spinStringProperty': LocalizedStringProperty;
     'blochSphereStringProperty': LocalizedStringProperty;
   };
+  'atomStringProperty': LocalizedStringProperty;
+  'atomsStringProperty': LocalizedStringProperty;
   'averagePolarizationStringProperty': LocalizedStringProperty;
   'averagePolarizationRateStringProperty': LocalizedStringProperty;
   'coinStringProperty': LocalizedStringProperty;
   'coinBiasStringProperty': LocalizedStringProperty;
   'customStringProperty': LocalizedStringProperty;
   'downStringProperty': LocalizedStringProperty;
+  'enableMagneticFieldStringProperty': LocalizedStringProperty;
   'eventsPerSecondPatternStringProperty': LocalizedStringProperty;
   'expectationValueStringProperty': LocalizedStringProperty;
   'flipStringProperty': LocalizedStringProperty;
