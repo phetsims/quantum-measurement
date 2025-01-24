@@ -6,6 +6,7 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -14,6 +15,7 @@ import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PlayPauseStepButtonGroup from '../../../../scenery-phet/js/buttons/PlayPauseStepButtonGroup.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { HBox, Node, NodeOptions, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
+import Checkbox from '../../../../sun/js/Checkbox.js';
 import Panel from '../../../../sun/js/Panel.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
@@ -34,6 +36,7 @@ type PhotonsExperimentSceneViewOptions = SelfOptions & WithRequired<NodeOptions,
 
 const INSET = 10; // inset for nodes at edges of the view, in screen coordinates
 const STEP_FORWARD_TIME = 2 / 60; // empirically determined, in seconds, adjust as desired
+const CHECKBOX_TEXT_FONT = new PhetFont( 18 );
 
 class PhotonsExperimentSceneView extends Node {
 
@@ -166,17 +169,19 @@ class PhotonsExperimentSceneView extends Node {
       children: [ normalizedOutcomeVectorGraph, histogram ],
       spacing: 20,
       align: 'center',
+      resize: false,
       left: titleAndEquationsBox.left,
       centerY: photonTestingArea.y
     } );
 
+    const showOutcomeVectorCheckbox = new Checkbox(
+      normalizedOutcomeVectorGraph.showVectorProperty,
+      new Text( QuantumMeasurementStrings.vectorRepresentationStringProperty, { font: CHECKBOX_TEXT_FONT } )
+    );
+
     const expectationValueControl = new ExpectationValueControl(
       normalizedOutcomeVectorGraph.showExpectationLineProperty,
-      {
-        left: titleAndEquationsBox.left,
-        top: dynamicDataDisplayBox.bottom + 30,
-        tandem: providedOptions.tandem.createTandem( 'expectationValueControl' )
-      }
+      { tandem: providedOptions.tandem.createTandem( 'expectationValueControl' ) }
     );
 
     // Wrap the expectation value control in a separate parent node so that it can be hidden when the expectation value
@@ -189,6 +194,22 @@ class PhotonsExperimentSceneView extends Node {
         [ model.normalizedExpectationValueProperty ],
         expectationValue => expectationValue !== null
       )
+    } );
+
+    const showDecimalValuesProperty = new BooleanProperty( false );
+    const decimalValuesCheckbox = new Checkbox(
+      showDecimalValuesProperty,
+      new Text( QuantumMeasurementStrings.decimalValuesStringProperty, { font: CHECKBOX_TEXT_FONT } )
+    );
+
+    // Assemble the controls that allow the users to set what is and isn't shown in the "average polarization" area.
+    const averagePolarizationDisplayControls = new VBox( {
+      children: [ showOutcomeVectorCheckbox, expectationValueControlParent, decimalValuesCheckbox ],
+      spacing: 10,
+      align: 'left',
+      left: titleAndEquationsBox.left,
+      top: dynamicDataDisplayBox.bottom + 30,
+      resize: false
     } );
 
     // Create a play/pause/step time control.
@@ -212,7 +233,7 @@ class PhotonsExperimentSceneView extends Node {
         photonTestingArea,
         titleAndEquationsBox,
         dynamicDataDisplayBox,
-        expectationValueControlParent,
+        averagePolarizationDisplayControls,
         playPauseStepButtonGroup
       ]
     }, providedOptions );

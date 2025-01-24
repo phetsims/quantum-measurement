@@ -29,9 +29,21 @@ export default class NormalizedOutcomeVectorGraph extends Node {
   // Property that controls whether the expectation value line is visible when there is a valid expectation value.
   public readonly showExpectationLineProperty: BooleanProperty;
 
+  // Property the controls whether the vector is shown on the number line.
+  public readonly showVectorProperty: BooleanProperty;
+
   public constructor( normalizedOutcomeValueProperty: TReadOnlyProperty<number>,
                       normalizedExpectationValueProperty: TReadOnlyProperty<number | null>,
                       tandem: Tandem ) {
+
+    const showExpectationLineProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'showExpectationLineProperty' ),
+      phetioFeatured: true
+    } );
+    const showVectorProperty = new BooleanProperty( true, {
+      tandem: tandem.createTandem( 'showVectorProperty' ),
+      phetioFeatured: true
+    } );
 
     const verticalAxis = new Line( 0, -HEIGHT / 2, 0, HEIGHT / 2, {
       stroke: Color.BLACK,
@@ -77,24 +89,13 @@ export default class NormalizedOutcomeVectorGraph extends Node {
       fill: Color.BLACK,
       headWidth: 15,
       headHeight: 12,
-      tailWidth: 4
+      tailWidth: 4,
+      visibleProperty: showVectorProperty
     } );
 
     // Link the normalized outcome vector to the normalized outcome value property.
     normalizedOutcomeValueProperty.link( normalizedOutcomeValue => {
-      if ( normalizedOutcomeValue === 0 ) {
-        normalizedOutcomeVector.visible = false;
-      }
-      else {
-        normalizedOutcomeVector.visible = true;
-        normalizedOutcomeVector.setTip( 0, normalizedOutcomeValue * HEIGHT / 2 );
-      }
-    } );
-
-    // Property that controls whether the expectation value line is visible when there is a valid expectation value.
-    const showExpectationLineProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'showExpectationLineProperty' ),
-      phetioFeatured: true
+      normalizedOutcomeVector.setTip( 0, normalizedOutcomeValue * HEIGHT / 2 );
     } );
 
     // The expectation value line can only be shown when there is a valid expectation value, so we need a derived
@@ -133,11 +134,16 @@ export default class NormalizedOutcomeVectorGraph extends Node {
         bottomTickMark,
         bottomTickMarkLabel,
         normalizedOutcomeVector
-      ],
-      tandem: tandem
+      ]
     } );
 
     this.showExpectationLineProperty = showExpectationLineProperty;
+    this.showVectorProperty = showVectorProperty;
+  }
+
+  public reset(): void {
+    this.showExpectationLineProperty.reset();
+    this.showVectorProperty.reset();
   }
 }
 

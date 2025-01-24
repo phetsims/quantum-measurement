@@ -28,6 +28,7 @@ type StringsType = {
   'coinStringProperty': LocalizedStringProperty;
   'coinBiasStringProperty': LocalizedStringProperty;
   'customStringProperty': LocalizedStringProperty;
+  'decimalValuesStringProperty': LocalizedStringProperty;
   'downStringProperty': LocalizedStringProperty;
   'enableMagneticFieldStringProperty': LocalizedStringProperty;
   'eventsPerSecondPatternStringProperty': LocalizedStringProperty;
@@ -76,6 +77,7 @@ type StringsType = {
   'upStringProperty': LocalizedStringProperty;
   'VStringProperty': LocalizedStringProperty;
   'NStringProperty': LocalizedStringProperty;
+  'vectorRepresentationStringProperty': LocalizedStringProperty;
   'verticalStringProperty': LocalizedStringProperty;
   'SGSubXStringProperty': LocalizedStringProperty;
   'SGSubZStringProperty': LocalizedStringProperty;

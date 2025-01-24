@@ -35,6 +35,9 @@
   "custom": {
     "value": "Custom"
   },
+  "decimalValues": {
+    "value": "Decimal Values"
+  },
   "down": {
     "value": "Down"
   },
@@ -178,6 +181,9 @@
   },
   "N": {
     "value": "N"
+  },
+  "vectorRepresentation": {
+    "value": "Vector Representation"
   },
   "vertical": {
     "value": "Vertical"
