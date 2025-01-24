@@ -40,7 +40,7 @@ export default class ExpectationValueControl extends HBox {
 
     const options = optionize<ExpectationValueControlOptions, SelfOptions, HBoxOptions>()( {
       children: [ expectationValueCheckbox, expectationValueLineIcon ],
-      spacing: 15
+      spacing: 10
     }, providedOptions );
 
     super( options );

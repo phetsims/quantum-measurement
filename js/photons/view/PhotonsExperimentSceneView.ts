@@ -24,6 +24,7 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import PhotonsExperimentSceneModel from '../model/PhotonsExperimentSceneModel.js';
 import ExpectationValueControl from './ExpectationValueControl.js';
+import ExpectationValueVectorControl from './ExpectationValueVectorControl.js';
 import NormalizedOutcomeVectorGraph from './NormalizedOutcomeVectorGraph.js';
 import ObliquePolarizationAngleIndicator from './ObliquePolarizationAngleIndicator.js';
 import PhotonDetectionProbabilityPanel from './PhotonDetectionProbabilityPanel.js';
@@ -174,9 +175,9 @@ class PhotonsExperimentSceneView extends Node {
       centerY: photonTestingArea.y
     } );
 
-    const showOutcomeVectorCheckbox = new Checkbox(
+    const showOutcomeVectorControl = new ExpectationValueVectorControl(
       normalizedOutcomeVectorGraph.showVectorProperty,
-      new Text( QuantumMeasurementStrings.vectorRepresentationStringProperty, { font: CHECKBOX_TEXT_FONT } )
+      { tandem: providedOptions.tandem.createTandem( 'showOutcomeVectorControl' ) }
     );
 
     const expectationValueControl = new ExpectationValueControl(
@@ -204,7 +205,7 @@ class PhotonsExperimentSceneView extends Node {
 
     // Assemble the controls that allow the users to set what is and isn't shown in the "average polarization" area.
     const averagePolarizationDisplayControls = new VBox( {
-      children: [ showOutcomeVectorCheckbox, expectationValueControlParent, decimalValuesCheckbox ],
+      children: [ showOutcomeVectorControl, expectationValueControlParent, decimalValuesCheckbox ],
       spacing: 10,
       align: 'left',
       left: titleAndEquationsBox.left,
