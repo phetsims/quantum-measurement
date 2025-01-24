@@ -79,6 +79,8 @@ class PhotonsScreenView extends QuantumMeasurementScreenView {
 
   public override reset(): void {
     this.model.reset();
+    this.singlePhotonExperimentSceneView.reset();
+    this.manyPhotonsExperimentSceneView.reset();
     super.reset();
   }
 

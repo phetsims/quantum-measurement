@@ -44,6 +44,12 @@ class PhotonsExperimentSceneView extends Node {
   // The photon testing area is the part of the scene where photons are produced, reflected, and detected.
   private readonly photonTestingArea: PhotonTestingArea;
 
+  // The normalized outcome vector graph shows the relative proportions of vertical and horizontal detections.
+  private readonly normalizedOutcomeVectorGraph: NormalizedOutcomeVectorGraph;
+
+  // Property that controls whether decimal values are shown in the average polarization area.
+  private readonly showDecimalValuesProperty: BooleanProperty;
+
   public constructor( model: PhotonsExperimentSceneModel, providedOptions: PhotonsExperimentSceneViewOptions ) {
 
     const photonDetectionProbabilityAccordionBox = new PhotonDetectionProbabilityPanel(
@@ -242,10 +248,17 @@ class PhotonsExperimentSceneView extends Node {
     super( options );
 
     this.photonTestingArea = photonTestingArea;
+    this.normalizedOutcomeVectorGraph = normalizedOutcomeVectorGraph;
+    this.showDecimalValuesProperty = showDecimalValuesProperty;
   }
 
   public update(): void {
     this.photonTestingArea.update();
+  }
+
+  public reset(): void {
+    this.normalizedOutcomeVectorGraph.reset();
+    this.showDecimalValuesProperty.reset();
   }
 }
 
