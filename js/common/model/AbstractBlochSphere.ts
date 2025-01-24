@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * AbstractBlochSphere is a simple model for a sphere representation of a Quantum system.
