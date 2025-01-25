@@ -52,6 +52,8 @@ class PhotonsExperimentSceneView extends Node {
 
   public constructor( model: PhotonsExperimentSceneModel, providedOptions: PhotonsExperimentSceneViewOptions ) {
 
+    const showDecimalValuesProperty = new BooleanProperty( false );
+
     const photonDetectionProbabilityAccordionBox = new PhotonDetectionProbabilityPanel(
       model.laser.polarizationAngleProperty,
       model.isProbabilityAccordionExpandedProperty,
@@ -188,6 +190,8 @@ class PhotonsExperimentSceneView extends Node {
 
     const expectationValueControl = new ExpectationValueControl(
       normalizedOutcomeVectorGraph.showExpectationLineProperty,
+      model.normalizedExpectationValueProperty,
+      showDecimalValuesProperty,
       { tandem: providedOptions.tandem.createTandem( 'expectationValueControl' ) }
     );
 
@@ -203,7 +207,6 @@ class PhotonsExperimentSceneView extends Node {
       )
     } );
 
-    const showDecimalValuesProperty = new BooleanProperty( false );
     const decimalValuesCheckbox = new Checkbox(
       showDecimalValuesProperty,
       new Text( QuantumMeasurementStrings.decimalValuesStringProperty, { font: CHECKBOX_TEXT_FONT } )
