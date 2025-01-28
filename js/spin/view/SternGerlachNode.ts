@@ -113,7 +113,7 @@ export default class SternGerlachNode extends Node {
         },
         {
           value: false, createNode: () => new RichText(
-            QuantumMeasurementStrings.SGSubZStringProperty, radioButtonTextOptions
+            QuantumMeasurementStrings.SGSubXStringProperty, radioButtonTextOptions
           ), tandemName: 'isXOrientedRadioButton'
         }
       ], {
