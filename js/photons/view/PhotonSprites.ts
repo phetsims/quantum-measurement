@@ -19,9 +19,9 @@
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import { Circle, Sprite, SpriteImage, SpriteInstance, SpriteInstanceTransformType, Sprites } from '../../../../scenery/js/imports.js';
+import { Sprite, SpriteImage, SpriteInstance, SpriteInstanceTransformType, Sprites } from '../../../../scenery/js/imports.js';
 import greenPhoton_png from '../../../images/greenPhoton_png.js';
-import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import greenPhotonOutline_png from '../../../images/greenPhotonOutline_png.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import Photon from '../model/Photon.js';
 
@@ -34,8 +34,8 @@ class PhotonSprites extends Sprites {
   private readonly photons: Photon[];
   private readonly modelViewTransform: ModelViewTransform2;
 
-  // The scale value used to render the photon interior.
-  private readonly photonInteriorScale: number;
+  // The scale value used to render the photon.
+  private readonly photonScale: number;
 
   // The sprites used to render the photons.
   private readonly photonInteriorSprite: Sprite | null = null;
@@ -62,28 +62,20 @@ class PhotonSprites extends Sprites {
       new Vector2( greenPhoton_png.width / 2, greenPhoton_png.height / 2 ),
       { pickable: false }
     ) );
+    this.photonOutlineSprite = new Sprite( new SpriteImage(
+      greenPhotonOutline_png,
+      new Vector2( greenPhotonOutline_png.width / 2, greenPhotonOutline_png.height / 2 ),
+      { pickable: false }
+    ) );
+    this.mutate( { sprites: [ this.photonInteriorSprite, this.photonOutlineSprite ] } );
 
     // Calculate the scale that will be used to render the photon interior.
-    this.photonInteriorScale = TARGET_PHOTON_VIEW_WIDTH / greenPhoton_png.width;
-    assert && assert(
-    this.photonInteriorScale > 0 && this.photonInteriorScale < 100,
-      `photon scale factor not reasonable: ${this.photonInteriorScale}`
-    );
+    this.photonScale = TARGET_PHOTON_VIEW_WIDTH / greenPhoton_png.width;
 
-    // Create the sprite for the outline of the photons.  This is done be creating a circle and rendering it to a
-    // canvas.  That is an asynchronous process, so we need to wait for it to complete before adding the sprites.
-    const outlineCircle = new Circle( TARGET_PHOTON_VIEW_WIDTH / 2, {
-      stroke: QuantumMeasurementColors.photonBaseColorProperty.value,
-      lineWidth: 1
-    } );
-    outlineCircle.toCanvas( canvas => {
-      this.photonOutlineSprite = new Sprite( new SpriteImage(
-        canvas,
-        new Vector2( canvas.width / 2, canvas.height / 2 ),
-        { pickable: false }
-      ) );
-      this.mutate( { sprites: [ this.photonInteriorSprite!, this.photonOutlineSprite ] } );
-    } );
+    assert && assert(
+    this.photonScale > 0 && this.photonScale < 100,
+      `photon scale factor not reasonable: ${this.photonScale}`
+    );
 
     // local variables needed for the methods
     this.spriteInstances = spriteInstances;
@@ -130,7 +122,7 @@ class PhotonSprites extends Sprites {
 
           const xPos = this.modelViewTransform.modelToViewX( photonStatePosition.x );
           const yPos = this.modelViewTransform.modelToViewY( photonStatePosition.y );
-          const scale = this.photonInteriorScale;
+          const scale = this.photonScale;
 
           // Update the matrix and opacity for the photon interior.
           const interiorSpriteInstance = this.spriteInstances[ ( numberOfPhotonsDisplayed - 1 ) * 2 ];
@@ -141,7 +133,7 @@ class PhotonSprites extends Sprites {
           // Update the matrix for the photon outline.
           const outlineSpriteInstance = this.spriteInstances[ ( numberOfPhotonsDisplayed - 1 ) * 2 + 1 ];
           outlineSpriteInstance.sprite = this.photonOutlineSprite;
-          outlineSpriteInstance.matrix.setToAffine( 1, 0, xPos, 0, 1, yPos );
+          outlineSpriteInstance.matrix.setToAffine( scale, 0, xPos, 0, scale, yPos );
           outlineSpriteInstance.alpha = 1; // Always fully opaque
         }
       }
