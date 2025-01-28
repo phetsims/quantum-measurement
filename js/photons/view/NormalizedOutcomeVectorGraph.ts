@@ -118,7 +118,7 @@ export default class NormalizedOutcomeVectorGraph extends Node {
     );
 
     // Create the line that will visually connect the tip of the arrow to the numeric display of the normalized outcome.
-    const lineToValueDisplay = new Line( 0, 0, 20, 0, {
+    const lineToValueDisplay = new Line( 0, 0, 40, 0, {
       stroke: Color.BLACK,
       lineWidth: 1,
       right: 0,

@@ -14,7 +14,7 @@ import Dimension2 from '../../../../dot/js/Dimension2.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { HBox, LinearGradient, Node, Path, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
+import { LinearGradient, Node, Path, RichText, Text, VBox } from '../../../../scenery/js/imports.js';
 import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
 import RoundMomentaryButton from '../../../../sun/js/buttons/RoundMomentaryButton.js';
 import HSlider from '../../../../sun/js/HSlider.js';
@@ -25,7 +25,6 @@ import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import ParticleSourceModel from '../model/ParticleSourceModel.js';
 import { SingleParticleCollection } from '../model/SingleParticleCollection.js';
 import { SourceMode } from '../model/SourceMode.js';
-import HBarOverTwoNode from './HBarOverTwoNode.js';
 
 const SPACING = 10;
 
@@ -150,14 +149,10 @@ export default class ParticleSourceNode extends Node {
       tandem: tandem,
       phetioVisiblePropertyInstrumented: false,
       children: [
-        new HBox( {
+        new RichText( QuantumMeasurementStrings.spinSourceStringProperty, {
+          font: new PhetFont( 12 ),
           bottom: particleSourceApparatus.top - SPACING,
-          left: particleSourceApparatus.left,
-          spacing: SPACING,
-          children: [
-            new HBarOverTwoNode( 20 ),
-            new RichText( QuantumMeasurementStrings.spinSourceStringProperty, { font: new PhetFont( 20 ) } )
-          ]
+          left: particleSourceApparatus.left + SPACING
         } ),
         particleSourceApparatus,
         sourceModeBox

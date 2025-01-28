@@ -43,7 +43,7 @@ export default class SpinStatePreparationArea extends VBox {
 
     const spinStateRadioButtonGroupTandem = tandem.createTandem( 'spinStateRadioButtonGroup' );
 
-    const basisRadioButtonTextOptions = { font: new PhetFont( 15 ) };
+    const basisRadioButtonTextOptions = { font: new PhetFont( { size: 22, weight: 'bold' } ) };
     const basisRadioGroupItems = SpinDirection.enumeration.values.map( basis => {
       return {
         value: basis,
@@ -55,8 +55,11 @@ export default class SpinStatePreparationArea extends VBox {
     } );
 
     const spinStateRadioButtonGroup = new AquaRadioButtonGroup( model.particleSourceModel.spinStateProperty, basisRadioGroupItems, {
-      orientation: 'horizontal',
+      orientation: 'vertical',
       margin: 5,
+      radioButtonOptions: {
+        radius: 10
+      },
       tandem: spinStateRadioButtonGroupTandem,
       visibleProperty: new GatedVisibleProperty( new DerivedProperty( [ model.currentExperimentProperty ], currentExperiment => currentExperiment !== SpinExperiment.CUSTOM ), spinStateRadioButtonGroupTandem )
     } );

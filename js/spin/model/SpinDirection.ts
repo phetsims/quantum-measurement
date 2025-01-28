@@ -13,12 +13,13 @@
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
+import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
 export class SpinDirection extends EnumerationValue {
-  public static readonly Z_PLUS = new SpinDirection( '+Z', 'ZPlus' );
-  public static readonly X_PLUS = new SpinDirection( '+X', 'XPlus' );
-  public static readonly Z_MINUS = new SpinDirection( '-Z', 'ZMinus' );
+  public static readonly Z_PLUS = new SpinDirection( `${MathSymbols.PLUS}Z`, 'ZPlus' );
+  public static readonly X_PLUS = new SpinDirection( `${MathSymbols.PLUS}X`, 'XPlus' );
+  public static readonly Z_MINUS = new SpinDirection( `${MathSymbols.MINUS}Z`, 'ZMinus' );
 
   public static readonly enumeration = new Enumeration( SpinDirection );
 

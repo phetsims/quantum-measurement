@@ -19,7 +19,7 @@ import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ShadedSphereNode from '../../../../scenery-phet/js/ShadedSphereNode.js';
-import { LinearGradient, Node, NodeOptions, Path, Text } from '../../../../scenery/js/imports.js';
+import { LinearGradient, Node, NodeOptions, Path, RichText, Text } from '../../../../scenery/js/imports.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import AbstractBlochSphere from '../model/AbstractBlochSphere.js';
@@ -114,13 +114,13 @@ export default class BlochSphereNode extends Node {
       font: LABELS_FONT,
       visible: options.drawAxesLabels
     } );
-    const yAxisLabel = new Text( 'Y', {
+    const yAxisLabel = new Text( '+Y', {
       fill: 'black',
       font: LABELS_FONT,
       visible: options.drawAxesLabels
     } );
-    const zAxisLabel = new Text( 'Z', {
-      centerX: -2 * LABELS_OFFSET,
+    const zAxisLabel = new Text( '+Z', {
+      centerX: -3 * LABELS_OFFSET,
       centerY: -sphereRadius + LABELS_OFFSET,
       fill: 'black',
       font: LABELS_FONT,
@@ -131,7 +131,7 @@ export default class BlochSphereNode extends Node {
     const DOWN = QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER;
     const KET = QuantumMeasurementConstants.KET;
     const STATES_FONT = new PhetFont( { size: 18, weight: 'bold' } );
-    const upStateLabel = new Text( `|${UP}${KET}`, {
+    const upStateLabel = new RichText( `|${UP}<sub>Z</sub>${KET}`, {
       centerX: 0,
       centerY: -sphereRadius - 3 * LABELS_OFFSET,
       fill: 'black',
@@ -139,7 +139,7 @@ export default class BlochSphereNode extends Node {
       visible: options.drawKets
     } );
 
-    const downStateLabel = new Text( `|${DOWN}${KET}`, {
+    const downStateLabel = new RichText( `|${DOWN}<sub>Z</sub>${KET}`, {
       centerX: 0,
       centerY: sphereRadius + 3 * LABELS_OFFSET,
       fill: 'black',

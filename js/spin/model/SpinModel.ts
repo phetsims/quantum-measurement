@@ -147,7 +147,7 @@ export default class SpinModel implements TModel {
         true, { tandem: measurementLinesTandem.createTandem( 'secondMeasurementDevice' ) }
       ),
       new MeasurementDevice(
-        new Vector2( ( this.sternGerlachs[ 1 ].topExitPositionProperty.value.x + this.sternGerlachs[ 1 ].topExitPositionProperty.value.plusXY( 1, 0 ).x ) / 2, 1 ),
+        new Vector2( ( this.sternGerlachs[ 1 ].topExitPositionProperty.value.x + this.sternGerlachs[ 1 ].topExitPositionProperty.value.plusXY( 0.5, 0 ).x ) / 2, 1 ),
         false, { tandem: measurementLinesTandem.createTandem( 'thirdMeasurementDevice' ) }
       )
     ];

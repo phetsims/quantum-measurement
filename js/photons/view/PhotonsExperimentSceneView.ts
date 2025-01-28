@@ -8,6 +8,7 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
@@ -184,7 +185,7 @@ class PhotonsExperimentSceneView extends Node {
       spacing: 20,
       align: 'center',
       resize: false,
-      left: titleAndEquationsBox.left,
+      left: titleAndEquationsBox.left - 20,
       centerY: photonTestingArea.y
     } );
 
@@ -193,24 +194,19 @@ class PhotonsExperimentSceneView extends Node {
       { tandem: providedOptions.tandem.createTandem( 'showOutcomeVectorControl' ) }
     );
 
+    const expectationValueControlTandem = providedOptions.tandem.createTandem( 'expectationValueControl' );
     const expectationValueControl = new ExpectationValueControl(
       normalizedOutcomeVectorGraph.showExpectationLineProperty,
       model.normalizedExpectationValueProperty,
       showDecimalValuesProperty,
-      { tandem: providedOptions.tandem.createTandem( 'expectationValueControl' ) }
+      {
+        tandem: expectationValueControlTandem,
+        visibleProperty: new GatedVisibleProperty( new DerivedProperty(
+          [ model.normalizedExpectationValueProperty ],
+          expectationValue => expectationValue !== null
+        ), expectationValueControlTandem )
+      }
     );
-
-    // Wrap the expectation value control in a separate parent node so that it can be hidden when the expectation value
-    // is not available.
-    const expectationValueControlParent = new Node( {
-      children: [ expectationValueControl ],
-
-      // Don't show this control when there isn't a valid expectation value to display.
-      visibleProperty: new DerivedProperty(
-        [ model.normalizedExpectationValueProperty ],
-        expectationValue => expectationValue !== null
-      )
-    } );
 
     const decimalValuesCheckbox = new Checkbox(
       showDecimalValuesProperty,
@@ -221,12 +217,11 @@ class PhotonsExperimentSceneView extends Node {
 
     // Assemble the controls that allow the users to set what is and isn't shown in the "average polarization" area.
     const averagePolarizationDisplayControls = new VBox( {
-      children: [ showOutcomeVectorControl, expectationValueControlParent, decimalValuesCheckbox ],
+      children: [ showOutcomeVectorControl, expectationValueControl, decimalValuesCheckbox ],
       spacing: 10,
       align: 'left',
       left: titleAndEquationsBox.left,
-      top: dynamicDataDisplayBox.bottom + 30,
-      resize: false
+      top: dynamicDataDisplayBox.bottom + 30
     } );
 
     // Create a play/pause/step time control.

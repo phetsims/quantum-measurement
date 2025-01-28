@@ -98,21 +98,17 @@ export default class SpinMeasurementArea extends VBox {
 
       const spinUpLabelStringProperty = new DerivedStringProperty(
         [
-          sternGerlach.isZOrientedProperty,
-          QuantumMeasurementStrings.SGSubZStringProperty,
-          QuantumMeasurementStrings.SGSubXStringProperty
-        ], ( isZOriented, SGSubZ, SGSubX ) => isZOriented ?
-                                              SGSubZ + QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER :
-                                              SGSubX + QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER
+          sternGerlach.isZOrientedProperty
+        ], isZOriented => isZOriented ?
+                                              `|${QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER}<sub>Z</sub>${QuantumMeasurementConstants.KET}` :
+                                              `|${QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER}<sub>X</sub>${QuantumMeasurementConstants.KET}`
       );
       const spinDownLabelStringProperty = new DerivedStringProperty(
         [
-          sternGerlach.isZOrientedProperty,
-          QuantumMeasurementStrings.SGSubZStringProperty,
-          QuantumMeasurementStrings.SGSubXStringProperty
-        ], ( isZOriented, SGSubZ, SGSubX ) => isZOriented ?
-                                              SGSubZ + QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER :
-                                              SGSubX + QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER
+          sternGerlach.isZOrientedProperty
+        ], isZOriented => isZOriented ?
+                                              `|${QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER}<sub>Z</sub>${QuantumMeasurementConstants.KET}` :
+                                              `|${QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER}<sub>X</sub>${QuantumMeasurementConstants.KET}`
       );
 
       const tandemName = `histogram${histogramCounter++}`;
@@ -123,8 +119,8 @@ export default class SpinMeasurementArea extends VBox {
         sternGerlach.upProbabilityProperty,
         model.expectedPercentageVisibleProperty,
         [
-          new RichText( spinUpLabelStringProperty, { font: new PhetFont( { size: 17, weight: 'bold' } ) } ),
-          new RichText( spinDownLabelStringProperty, { font: new PhetFont( { size: 17, weight: 'bold' } ) } )
+          new RichText( spinUpLabelStringProperty, { font: new PhetFont( { size: 20, weight: 'bold' } ) } ),
+          new RichText( spinDownLabelStringProperty, { font: new PhetFont( { size: 20, weight: 'bold' } ) } )
         ],
         {
           center: modelViewTransform.modelToViewPosition( new Vector2( sternGerlach.positionProperty.value.x, 1.1 ) ),
