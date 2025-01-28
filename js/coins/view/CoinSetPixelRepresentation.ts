@@ -29,6 +29,7 @@ export const SIDE_LENGTH = 100;
 class CoinSetPixelRepresentation extends CanvasNode {
   private readonly sideLength = SIDE_LENGTH;
   private pixels = new Array( SIDE_LENGTH * SIDE_LENGTH ).fill( 0 );
+  private readonly pixelBuffer = document.createElement( 'canvas' );
   private pixelScale = 1;
   private currentFrame = 0;
 
@@ -37,18 +38,19 @@ class CoinSetPixelRepresentation extends CanvasNode {
 
   public animationDuration: number;
 
-  public constructor(
-    private readonly systemType: 'classical' | 'quantum',
-    private readonly experimentStateProperty: TReadOnlyProperty<ExperimentMeasurementState>,
-    private readonly coinSetInTestBoxProperty: TProperty<boolean>,
-    providedOptions?: CoinSetPixelRepresentationOptions
-  ) {
+  public constructor( private readonly systemType: 'classical' | 'quantum',
+                      private readonly experimentStateProperty: TReadOnlyProperty<ExperimentMeasurementState>,
+                      private readonly coinSetInTestBoxProperty: TProperty<boolean>,
+                      providedOptions?: CoinSetPixelRepresentationOptions ) {
 
     const options = optionize<CoinSetPixelRepresentationOptions, SelfOptions, CanvasNodeOptions>()( {
       animationDuration: MEASUREMENT_PREPARATION_TIME
     }, providedOptions );
 
     super( options );
+
+    this.pixelBuffer.width = this.sideLength;
+    this.pixelBuffer.height = this.sideLength;
 
     this.animationDuration = options.animationDuration;
 
@@ -91,6 +93,7 @@ class CoinSetPixelRepresentation extends CanvasNode {
             if ( distance <= currentRadius ) {
               const index = i * this.sideLength + j;
               if ( this.pixels[ index ] === 0 ) {
+
                 // Some chance to populate a pixel
                 if ( dotRandom.nextDouble() < 0.3 ) {
                   this.pixels[ index ] = 1; // Set to grey
@@ -247,18 +250,20 @@ class CoinSetPixelRepresentation extends CanvasNode {
         break;
     }
 
-    context.save();
-
-    // Draw pixels on canvas.
-    const pixelOversize = 1.2;
+    // Render the pixels to the buffer canvas.
+    const bufferContext = this.pixelBuffer.getContext( '2d' )!;
     for ( let i = 0; i < this.sideLength; i++ ) {
       for ( let j = 0; j < this.sideLength; j++ ) {
         const index = i * this.sideLength + j;
-        context.fillStyle = getColor( this.pixels[ index ] );
-        context.fillRect( j * this.pixelScale, i * this.pixelScale, this.pixelScale * pixelOversize, this.pixelScale * pixelOversize );
+        bufferContext.fillStyle = getColor( this.pixels[ index ] );
+        bufferContext.fillRect( j, i, 1, 1 );
       }
     }
 
+    // Draw the pixels on the visible canvas.
+    context.save();
+    const scaledSideLength = this.sideLength * this.pixelScale;
+    context.drawImage( this.pixelBuffer, 0, 0, scaledSideLength, scaledSideLength );
     context.restore();
   }
 }
