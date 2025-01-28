@@ -10,7 +10,9 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Range from '../../../../dot/js/Range.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
+import NumberDisplay from '../../../../scenery-phet/js/NumberDisplay.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Color, Line, Node, Text } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -34,6 +36,7 @@ export default class NormalizedOutcomeVectorGraph extends Node {
 
   public constructor( normalizedOutcomeValueProperty: TReadOnlyProperty<number>,
                       normalizedExpectationValueProperty: TReadOnlyProperty<number | null>,
+                      displayNumericValueProperty: TReadOnlyProperty<boolean>,
                       tandem: Tandem ) {
 
     const showExpectationLineProperty = new BooleanProperty( false, {
@@ -83,7 +86,7 @@ export default class NormalizedOutcomeVectorGraph extends Node {
       centerY: bottomTickMark.centerY
     } );
 
-    // Create the normalized outcome vector.  The initial position is arbitrary, it will be set by the link below.
+    // Create the normalized outcome vector.  The initial position of the head is arbitrary, it will be set below.
     const normalizedOutcomeVector = new ArrowNode( 0, 0, 0, HEIGHT / 3, {
       stroke: null,
       fill: Color.BLACK,
@@ -93,9 +96,42 @@ export default class NormalizedOutcomeVectorGraph extends Node {
       visibleProperty: showVectorProperty
     } );
 
-    // Link the normalized outcome vector to the normalized outcome value property.
+    // Create a numeric display of the value of the normalized outcome value.
+    const invertedNormalizedOutcomeValueProperty = new DerivedProperty(
+      [ normalizedOutcomeValueProperty ],
+      value => -value
+    );
+    const showNumericValueProperty = DerivedProperty.and( [ showVectorProperty, displayNumericValueProperty ] );
+    const normalizedOutcomeValueDisplay = new NumberDisplay(
+      invertedNormalizedOutcomeValueProperty,
+      new Range( -1, 1 ),
+      {
+        decimalPlaces: 3,
+        textOptions: {
+          font: new PhetFont( 12 )
+        },
+        backgroundStroke: null,
+        backgroundFill: Color.WHITE.withAlpha( 0.8 ),
+        xMargin: 2,
+        visibleProperty: showNumericValueProperty
+      }
+    );
+
+    // Create the line that will visually connect the tip of the arrow to the numeric display of the normalized outcome.
+    const lineToValueDisplay = new Line( 0, 0, 20, 0, {
+      stroke: Color.BLACK,
+      lineWidth: 1,
+      right: 0,
+      visibleProperty: showNumericValueProperty
+    } );
+
+    // Monitor the normalized outcome value and update the position of the arrow and the numeric display as it changes.
     normalizedOutcomeValueProperty.link( normalizedOutcomeValue => {
-      normalizedOutcomeVector.setTip( 0, normalizedOutcomeValue * HEIGHT / 2 );
+      const arrowTipYPosition = normalizedOutcomeValue * HEIGHT / 2;
+      normalizedOutcomeVector.setTip( 0, arrowTipYPosition );
+      lineToValueDisplay.centerY = arrowTipYPosition;
+      normalizedOutcomeValueDisplay.right = lineToValueDisplay.left;
+      normalizedOutcomeValueDisplay.centerY = arrowTipYPosition;
     } );
 
     // The expectation value line can only be shown when there is a valid expectation value, so we need a derived
@@ -133,7 +169,9 @@ export default class NormalizedOutcomeVectorGraph extends Node {
         middleTickMarkLabel,
         bottomTickMark,
         bottomTickMarkLabel,
-        normalizedOutcomeVector
+        normalizedOutcomeVector,
+        lineToValueDisplay,
+        normalizedOutcomeValueDisplay
       ]
     } );
 

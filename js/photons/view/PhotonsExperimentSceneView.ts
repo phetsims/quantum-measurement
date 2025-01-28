@@ -133,6 +133,7 @@ class PhotonsExperimentSceneView extends Node {
     const normalizedOutcomeVectorGraph = new NormalizedOutcomeVectorGraph(
       model.normalizedOutcomeValueProperty,
       model.normalizedExpectationValueProperty,
+      showDecimalValuesProperty,
       providedOptions.tandem.createTandem( 'normalizedOutcomeVectorGraph' )
     );
 
