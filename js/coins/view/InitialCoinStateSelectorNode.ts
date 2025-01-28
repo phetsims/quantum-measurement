@@ -12,10 +12,9 @@ import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.j
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, HBox, Text, VBox } from '../../../../scenery/js/imports.js';
-import RectangularRadioButton, { RectangularRadioButtonOptions } from '../../../../sun/js/buttons/RectangularRadioButton.js';
+import { Color, Text, VBox } from '../../../../scenery/js/imports.js';
+import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import Panel from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import { SystemType } from '../../common/model/SystemType.js';
@@ -58,50 +57,52 @@ export default class InitialCoinStateSelectorNode extends VBox {
       font: new PhetFont( { size: 18, weight: 'bold' } )
     } );
 
-    const radioButtonOptions = {
-      xMargin: 4,
-      yMargin: 4,
-      baseColor: Color.WHITE
-    };
-
     const radioButtonGroupTandem = tandem.createTandem( 'radioButtonGroup' );
-
-    const createCoinRadioButton = ( stateValue: string, coinNode: CoinNode ) => {
-      return new RectangularRadioButton(
-        initialCoinStateProperty as Property<ClassicalCoinStates>,
-        stateValue,
-        combineOptions<RectangularRadioButtonOptions>( {
-          content: coinNode,
-          tandem: radioButtonGroupTandem.createTandem( `${stateValue.toLowerCase()}RadioButton` )
-        }, radioButtonOptions )
-      );
-    };
 
     let initialCoinStateItems;
     if ( systemType === 'classical' ) {
       initialCoinStateItems = ClassicalCoinStateValues.map( stateValue => {
-        return createCoinRadioButton( stateValue, new ClassicalCoinNode(
-          new Property<ClassicalCoinStates>( stateValue ),
-          RADIO_BUTTON_COIN_NODE_RADIUS,
-          Tandem.OPT_OUT
-        ) );
+        return {
+          value: stateValue,
+          createNode: () => new ClassicalCoinNode(
+            new Property<ClassicalCoinStates>( stateValue ),
+            RADIO_BUTTON_COIN_NODE_RADIUS,
+            Tandem.OPT_OUT
+          ),
+          tandemName: `${stateValue}RadioButton`
+        };
       } );
     }
     else {
       initialCoinStateItems = QuantumCoinStateValues.map( stateValue => {
-        return createCoinRadioButton( stateValue, new QuantumCoinNode(
-          new Property<QuantumCoinStates>( stateValue ),
-          new NumberProperty( stateValue === 'up' ? 1 : 0 ),
-          RADIO_BUTTON_COIN_NODE_RADIUS,
-          Tandem.OPT_OUT
-        ) );
+        return {
+          value: stateValue,
+          createNode: () => new QuantumCoinNode(
+            new Property<QuantumCoinStates>( stateValue ),
+            new NumberProperty( stateValue === 'up' ? 1 : 0 ),
+            RADIO_BUTTON_COIN_NODE_RADIUS,
+            Tandem.OPT_OUT
+          ),
+          tandemName: `${stateValue}RadioButton`
+        };
       } );
     }
 
-    const initialOrientationRadioButtonGroup = new HBox( {
-      children: initialCoinStateItems,
-      spacing: 22
-    } );
+    const initialOrientationRadioButtonGroup = new RectangularRadioButtonGroup(
+      initialCoinStateProperty,
+      initialCoinStateItems,
+      {
+        spacing: 22,
+        tandem: radioButtonGroupTandem.createTandem( 'initialOrientationRadioButtonGroup' ),
+        orientation: 'horizontal',
+        phetioVisiblePropertyInstrumented: false,
+        radioButtonOptions: {
+          xMargin: 4,
+          yMargin: 4,
+          baseColor: Color.WHITE
+        }
+      }
+    );
 
     const selectorPanelContent = new VBox( {
       children: [ selectionPanelTitle, initialOrientationRadioButtonGroup ],
