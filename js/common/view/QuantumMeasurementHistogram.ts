@@ -6,6 +6,7 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
@@ -14,11 +15,12 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
+import { Shape } from '../../../../kite/js/imports.js';
 import optionize, { combineOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import NumberDisplay, { NumberDisplayOptions } from '../../../../scenery-phet/js/NumberDisplay.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Color, Line, Node, NodeOptions, Rectangle, RichText } from '../../../../scenery/js/imports.js';
+import { Color, Line, Node, NodeOptions, Path, Rectangle, RichText } from '../../../../scenery/js/imports.js';
 import { MAX_COINS } from '../../coins/model/CoinsExperimentSceneModel.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
@@ -47,6 +49,9 @@ type SelfOptions = {
   // proportionate position of the center of the histogram bars; 0.5 is centered, 0.25 is 1/4 of the way from the
   // center, etc.
   barPositionProportion?: number;
+
+  // Show the bar values on top of the middle axis
+  showCentralNumberDisplaysProperty?: TReadOnlyProperty<boolean>;
 };
 export type QuantumMeasurementHistogramOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
 
@@ -79,6 +84,17 @@ class QuantumMeasurementHistogram extends Node {
       ( leftNumber, rightNumber ) => leftNumber + rightNumber
     );
 
+    // Create properties that represent the relative proportions of the left and right values.
+    const relativeLeftNumberProperty = new DerivedProperty(
+      [ leftNumberProperty, totalNumberProperty ],
+      ( leftNumber, totalNumber ) => totalNumber ? leftNumber / totalNumber : 0
+    );
+
+    const relativeRightNumberProperty = new DerivedProperty(
+      [ rightNumberProperty, totalNumberProperty ],
+      ( rightNumber, totalNumber ) => totalNumber ? rightNumber / totalNumber : 0
+    );
+
     // Create a property that indicates whether the number displays should be visible.  They should only be visible
     // when the total of the left and right values is greater than zero.
     const numberDisplaysVisibleProperty = new DerivedProperty( [ totalNumberProperty ], totalNumber => totalNumber > 0 );
@@ -94,6 +110,7 @@ class QuantumMeasurementHistogram extends Node {
       showTickMarks: true,
       topTickMarkTextProperty: new StringProperty( '' ),
       floatingLabels: false,
+      showCentralNumberDisplaysProperty: new BooleanProperty( false ),
       children: [],
       numberDisplayOptions: {
         align: 'center',
@@ -175,19 +192,13 @@ class QuantumMeasurementHistogram extends Node {
         numberFormatter: value => `${Utils.toFixed( value * 100, 1 )}%`
       };
       leftNumberDisplay = new NumberDisplay(
-        new DerivedProperty(
-          [ leftNumberProperty, totalNumberProperty ],
-          ( leftNumber, totalNumber ) => totalNumber ? leftNumber / totalNumber : 0
-        ),
+        relativeLeftNumberProperty,
         new Range( 0, 1 ),
         combineOptions<NumberDisplayOptions>( percentDisplayOptions, options.numberDisplayOptions )
       );
 
       rightNumberDisplay = new NumberDisplay(
-        new DerivedProperty(
-          [ rightNumberProperty, totalNumberProperty ],
-          ( rightNumber, totalNumber ) => totalNumber ? rightNumber / totalNumber : 0
-        ),
+        relativeRightNumberProperty,
         new Range( 0, 1 ),
         combineOptions<NumberDisplayOptions>( percentDisplayOptions, options.numberDisplayOptions )
       );
@@ -247,6 +258,38 @@ class QuantumMeasurementHistogram extends Node {
       centerX: rightHistogramBarCenterX
     } );
 
+    // Create the number displays of the center axis, one corresponding to each histogram bar
+    const centralLinesWidth = 30;
+    const createCentralNumberDisplay = ( valueProperty: TReadOnlyProperty<number>, fillColorProperty: TReadOnlyProperty<Color>, left: boolean ) => {
+      return new Node( {
+        visibleProperty: DerivedProperty.and(
+          [ options.showCentralNumberDisplaysProperty, DerivedProperty.valueNotEqualsConstant( totalNumberProperty, 0 ) ]
+        ),
+        children: [
+          new Path( new Shape().moveTo( 0, 0 ).lineTo( left ? -centralLinesWidth : centralLinesWidth, 0 ), {
+            stroke: fillColorProperty,
+            lineWidth: 2,
+            centerX: 0
+          } ),
+          new NumberDisplay(
+            valueProperty,
+            new Range( 0, 1 ),
+            {
+              textOptions: { fill: fillColorProperty, font: new PhetFont( 14 ) },
+              centerX: left ? -centralLinesWidth : centralLinesWidth,
+              rotation: textRotation,
+              backgroundFill: new Color( 255, 255, 255, 0.8 ),
+              backgroundStroke: null,
+              centerY: 0,
+              numberFormatter: value => Utils.toFixed( value, 3 )
+            }
+          )
+        ]
+      } );
+    };
+    const leftNumberCenterDisplay = createCentralNumberDisplay( relativeLeftNumberProperty, leftFillColorProperty, true );
+    const rightNumberCenterDisplay = createCentralNumberDisplay( relativeRightNumberProperty, rightFillColorProperty, false );
+
     // Create and position the labels for the X axis.
     const axisLabelMargin = 6;
     const xAxisLeftLabel = providedXAxisLabels[ 0 ];
@@ -297,6 +340,9 @@ class QuantumMeasurementHistogram extends Node {
           leftNumberDisplay.bottom = yAxis.top;
           rightNumberDisplay.bottom = yAxis.top;
         }
+
+        leftNumberCenterDisplay.centerY = -leftProportion * maxBarHeight;
+        rightNumberCenterDisplay.centerY = -rightProportion * maxBarHeight;
       }
     );
 
@@ -335,7 +381,9 @@ class QuantumMeasurementHistogram extends Node {
           xAxisLeftLabel,
           xAxisRightLabel,
           leftNumberDisplay,
-          rightNumberDisplay
+          rightNumberDisplay,
+          leftNumberCenterDisplay,
+          rightNumberCenterDisplay
         ]
       } )
     ];

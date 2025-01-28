@@ -168,6 +168,7 @@ class PhotonsExperimentSceneView extends Node {
         orientation: 'horizontal',
         floatingLabels: true,
         matchLabelColors: true,
+        showCentralNumberDisplaysProperty: showDecimalValuesProperty,
         leftFillColorProperty: QuantumMeasurementColors.verticalPolarizationColorProperty,
         rightFillColorProperty: QuantumMeasurementColors.horizontalPolarizationColorProperty,
         topTickMarkTextProperty: histogramTickMarkLabelProperty,
