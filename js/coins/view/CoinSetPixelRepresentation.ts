@@ -238,11 +238,12 @@ class CoinSetPixelRepresentation extends CanvasNode {
 
     context.save();
     // Draw pixels on canvas
+    const pixelOversize = 1.2;
     for ( let i = 0; i < this.sideLength; i++ ) {
       for ( let j = 0; j < this.sideLength; j++ ) {
         const index = i * this.sideLength + j;
         context.fillStyle = getColor( this.pixels[ index ] );
-        context.fillRect( j * this.pixelScale, i * this.pixelScale, this.pixelScale, this.pixelScale );
+        context.fillRect( j * this.pixelScale, i * this.pixelScale, this.pixelScale * pixelOversize, this.pixelScale * pixelOversize );
       }
     }
 
