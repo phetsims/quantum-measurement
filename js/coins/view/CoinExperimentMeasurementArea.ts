@@ -24,7 +24,7 @@ import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import CoinsExperimentSceneModel, { MAX_COINS, MULTI_COIN_EXPERIMENT_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
 import CoinExperimentButtonSet from './CoinExperimentButtonSet.js';
 import CoinMeasurementHistogram from './CoinMeasurementHistogram.js';
-import CoinSetPixelRepresentation from './CoinSetPixelRepresentation.js';
+import CoinSetPixelRepresentation, { SIDE_LENGTH } from './CoinSetPixelRepresentation.js';
 import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
 import ManyCoinsAnimations from './ManyCoinsAnimations.js';
 import MultiCoinTestBox from './MultiCoinTestBox.js';
@@ -199,7 +199,7 @@ class CoinExperimentMeasurementArea extends VBox {
     this.coinSetInTestBoxProperty = coinSetInTestBoxProperty;
     this.measuredCoinsPixelRepresentation = measuredCoinsPixelRepresentation;
     this.measuredCoinsPixelRepresentation.setPixelScale(
-      multipleCoinTestBox.width / 100 * QuantumMeasurementConstants.COIN_SET_AREA_PROPORTION
+      multipleCoinTestBox.width / SIDE_LENGTH * QuantumMeasurementConstants.COIN_SET_AREA_PROPORTION
     );
     this.measuredCoinsPixelRepresentation.setCanvasBounds(
       new Bounds2(

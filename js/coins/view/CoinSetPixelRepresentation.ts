@@ -1,11 +1,9 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
 /**
- * CoinSetPixelRepresentation handles the creation and display of an NxN grid of coins,
- * each represented by a pixel.
+ * CoinSetPixelRepresentation handles the creation and display of an NxN grid of coins, each represented by a pixel.
  *
  * @author Agustín Vallejo
- *
  */
 
 import TProperty from '../../../../axon/js/TProperty.js';
@@ -26,9 +24,11 @@ type SelfOptions = {
 
 type CoinSetPixelRepresentationOptions = SelfOptions & CanvasNodeOptions;
 
+export const SIDE_LENGTH = 100;
+
 class CoinSetPixelRepresentation extends CanvasNode {
-  private readonly sideLength = 100;
-  private pixels = new Array( 100 * 100 ).fill( 0 );
+  private readonly sideLength = SIDE_LENGTH;
+  private pixels = new Array( SIDE_LENGTH * SIDE_LENGTH ).fill( 0 );
   private pixelScale = 1;
   private currentFrame = 0;
 
@@ -113,7 +113,8 @@ class CoinSetPixelRepresentation extends CanvasNode {
         for ( let i = 0; i < this.sideLength; i++ ) {
           for ( let j = 0; j < this.sideLength; j++ ) {
             const index = i * this.sideLength + j;
-            // Set a random value between 0 and 1 for each pixel
+
+            // Set a random value between 0 and 1 for each pixel.
             this.pixels[ index ] = ( dotRandom.nextInt( 2 ) + 1 ) / 2;
           }
         }
@@ -137,14 +138,15 @@ class CoinSetPixelRepresentation extends CanvasNode {
   public redraw( measuredValues: Array<string | null> ): void {
 
     const comparisonValue = this.systemType === 'classical' ? 'heads' : 'up';
-    // Create an array of pixel colors (1 for fuchsia, 0 for black)
+
+    // Create an array of pixel colors (1 for fuchsia, 0 for black).
     this.pixels = measuredValues.map( value => value === comparisonValue ? 1 : 0 );
 
     this.invalidatePaint();
   }
 
   /**
-   * Sets the scale of the grid.
+   * Sets the scale of the individual pixels.
    */
   public setPixelScale( scale: number ): void {
     this.pixelScale = scale;
@@ -154,7 +156,8 @@ class CoinSetPixelRepresentation extends CanvasNode {
     assert && assert( this.populatingAnimation, 'populatingAnimation should be defined, perhaps createAnimations() was not properly called?' );
 
     if ( this.visible ) {
-      // Set all pixels to 0
+
+      // Set all pixels to 0.
       this.setAllPixels( 0 );
       this.currentFrame = 0;
       this.populatingAnimation?.start();
@@ -191,13 +194,14 @@ class CoinSetPixelRepresentation extends CanvasNode {
   }
 
   /**
-   * Paints the grid lines on the canvas node.
+   * Paints the pixels on the canvas node.
    */
   public paintCanvas( context: CanvasRenderingContext2D ): void {
 
     let getColor: ( value: number ) => string;
     switch( this.experimentStateProperty.value ) {
       case 'preparingToBeMeasured':
+
         // Coins are flipping, so alternate between grey and light grey. 0 is used when repreparing.
         getColor = ( value: number ) => {
           return value === 1 ? 'grey' :
@@ -205,29 +209,36 @@ class CoinSetPixelRepresentation extends CanvasNode {
                  'transparent';
         };
         break;
+
       case 'revealed':
         getColor = ( value: number ) => {
           return value === 1 ? 'black' : 'fuchsia';
         };
         break;
+
       case 'readyToBeMeasured':
-        // Quantum case for coins traveling to the box
+
+        // quantum case for coins traveling to the box
         getColor = ( value: number ) => {
           return value === 1 ? 'grey' : 'transparent';
         };
         break;
+
       case 'measuredAndHidden':
         if ( this.coinSetInTestBoxProperty.value ) {
-          // The coins are already in the box, just show them as grey.
+
+          // The coins are already in the box, so just show them as grey.
           getColor = () => 'grey';
         }
         else {
+
           // Classical case for coins traveling to the box
           getColor = ( value: number ) => {
             return value === 1 ? 'grey' : 'transparent';
           };
         }
         break;
+
       default:
         assert && assert( false, 'Not all states are being considered in CoinSetPixelRepresentation' );
         getColor = () => {
@@ -237,7 +248,8 @@ class CoinSetPixelRepresentation extends CanvasNode {
     }
 
     context.save();
-    // Draw pixels on canvas
+
+    // Draw pixels on canvas.
     const pixelOversize = 1.2;
     for ( let i = 0; i < this.sideLength; i++ ) {
       for ( let j = 0; j < this.sideLength; j++ ) {
