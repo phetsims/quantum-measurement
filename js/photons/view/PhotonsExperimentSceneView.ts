@@ -52,7 +52,10 @@ class PhotonsExperimentSceneView extends Node {
 
   public constructor( model: PhotonsExperimentSceneModel, providedOptions: PhotonsExperimentSceneViewOptions ) {
 
-    const showDecimalValuesProperty = new BooleanProperty( false );
+    const showDecimalValuesProperty = new BooleanProperty( false, {
+      tandem: providedOptions.tandem.createTandem( 'showDecimalValuesProperty' ),
+      phetioFeatured: true
+    } );
 
     const photonDetectionProbabilityAccordionBox = new PhotonDetectionProbabilityPanel(
       model.laser.polarizationAngleProperty,
@@ -210,7 +213,9 @@ class PhotonsExperimentSceneView extends Node {
 
     const decimalValuesCheckbox = new Checkbox(
       showDecimalValuesProperty,
-      new Text( QuantumMeasurementStrings.decimalValuesStringProperty, { font: CHECKBOX_TEXT_FONT } )
+      new Text( QuantumMeasurementStrings.decimalValuesStringProperty, { font: CHECKBOX_TEXT_FONT } ), {
+        tandem: providedOptions.tandem.createTandem( 'decimalValuesCheckbox' )
+      }
     );
 
     // Assemble the controls that allow the users to set what is and isn't shown in the "average polarization" area.
