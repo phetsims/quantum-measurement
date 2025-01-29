@@ -4,7 +4,7 @@
  * PhotonMotionState is a class that represents a possible state of a photon's motion.  It contains variables for
  * position, direction, and the probability of the photon being in that state.
  *
- * @author Agustín Vallejo (PhET Interactive Simulations)
+ * @author Agustín Vallejo
  * * @author John Blanco (PhET Interactive Simulations)
  */
 

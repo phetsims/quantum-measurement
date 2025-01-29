@@ -4,7 +4,7 @@
  * AveragingCounterNumberProperty is a simple class that extends NumberProperty and keeps track of a counter,
  * while also providing the ability to average the counter over a specified number of measurements.
  *
- * @author Agustín Vallejo (PhET Interactive Simulations)
+ * @author Agustín Vallejo
  * @author John Blanco (PhET Interactive Simulations)
  */
 

@@ -4,7 +4,7 @@
  * PhotonCollection is a model element that represents a collection of photons.  It is used to manage the pool of photons
  * and serialize the individual photons.
  *
- * @author Agustín Vallejo (PhET Interactive Simulations)
+ * @author Agustín Vallejo
  * @author John Blanco (PhET Interactive Simulations)
  */
 

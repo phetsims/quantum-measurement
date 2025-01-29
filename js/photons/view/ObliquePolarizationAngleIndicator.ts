@@ -16,7 +16,7 @@
  *                       /
  *                     x (H)
  *
- * @author Agustín Vallejo (PhET Interactive Simulations)
+ * @author Agustín Vallejo
  * @author John Blanco (PhET Interactive Simulations)
  */
 
