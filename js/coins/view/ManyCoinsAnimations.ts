@@ -22,24 +22,26 @@ import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
 
 const COIN_TRAVEL_ANIMATION_DURATION = MEASUREMENT_PREPARATION_TIME * 0.95;
 
-export default class ManyCoinsAnimations extends Rectangle {
+class ManyCoinsAnimations extends Rectangle {
 
   public readonly abortIngressAnimationForCoinSet: () => void;
   public readonly startIngressAnimationForCoinSet: ( forReprepare: boolean ) => void;
 
-  public constructor(
-    sceneModel: CoinsExperimentSceneModel,
-    measurementArea: CoinExperimentMeasurementArea,
-    manyCoinsPixelRepresentation: CoinSetPixelRepresentation,
-    coinSetInTestBoxProperty: TProperty<boolean>,
-    providedOptions?: RectangleOptions
-  ) {
+  public constructor( sceneModel: CoinsExperimentSceneModel,
+                      measurementArea: CoinExperimentMeasurementArea,
+                      manyCoinsPixelRepresentation: CoinSetPixelRepresentation,
+                      coinSetInTestBoxProperty: TProperty<boolean>,
+                      providedOptions?: RectangleOptions ) {
+
     super( 0, 0, 1, 1, providedOptions );
 
     const animationsToCoinBox: Animation[] = [];
 
     const pixelRepresentation = new CoinSetPixelRepresentation(
-      'classical', new Property<ExperimentMeasurementState>( 'preparingToBeMeasured' ), coinSetInTestBoxProperty, {
+      'classical',
+      new Property<ExperimentMeasurementState>( 'preparingToBeMeasured' ),
+      coinSetInTestBoxProperty,
+      {
         canvasBounds: this.bounds,
         animationDuration: COIN_TRAVEL_ANIMATION_DURATION
       }
@@ -75,12 +77,11 @@ export default class ManyCoinsAnimations extends Rectangle {
 
       const totalAnimationDuration = isSettingPhetioStateProperty.value ? 0 : COIN_TRAVEL_ANIMATION_DURATION;
 
-      // Create an animation that will move this coin node to the edge of the multi-coin test box.
+      // Create an animation that will move this node to the edge of the multi-coin test box.
       const animationToBoxCenter = new Animation( {
         to: boxTopLeftCorner,
         from: new Vector2( -100, -100 ),
         duration: totalAnimationDuration,
-        // easing: Easing.CUBIC_IN_OUT,
         setValue: position => {
           pixelRepresentation.visible = true;
           pixelRepresentation.center = position;
@@ -119,3 +120,5 @@ export default class ManyCoinsAnimations extends Rectangle {
 }
 
 quantumMeasurement.register( 'ManyCoinsAnimations', ManyCoinsAnimations );
+
+export default ManyCoinsAnimations;

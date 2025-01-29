@@ -66,7 +66,7 @@ class CoinSetPixelRepresentation extends CanvasNode {
     } );
   }
 
-  public createAnimations(): void {
+  private createAnimations(): void {
 
     const center = Math.floor( this.sideLength / 2 );
     const maxRadius = Math.sqrt( 2 ) * center * 1.1; // 10% extra radius to avoid missed pixels at the corners
@@ -156,7 +156,11 @@ class CoinSetPixelRepresentation extends CanvasNode {
   }
 
   public startPopulatingAnimation(): void {
-    assert && assert( this.populatingAnimation, 'populatingAnimation should be defined, perhaps createAnimations() was not properly called?' );
+
+    assert && assert(
+      this.populatingAnimation,
+      'populatingAnimation should be defined, perhaps createAnimations() was not properly called?'
+    );
 
     if ( this.visible ) {
 
@@ -252,6 +256,7 @@ class CoinSetPixelRepresentation extends CanvasNode {
 
     // Render the pixels to the buffer canvas.
     const bufferContext = this.pixelBuffer.getContext( '2d' )!;
+    bufferContext.clearRect( 0, 0, this.sideLength, this.sideLength );
     for ( let i = 0; i < this.sideLength; i++ ) {
       for ( let j = 0; j < this.sideLength; j++ ) {
         const index = i * this.sideLength + j;
