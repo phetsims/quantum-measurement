@@ -6,13 +6,12 @@
  * @author Agustín Vallejo
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
-import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import AbstractBlochSphere, { AbstractBlochSphereOptions } from '../../common/model/AbstractBlochSphere.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import SimpleBlochSphere from './SimpleBlochSphere.js';
@@ -36,7 +35,7 @@ export default class MeasurementDevice {
   public readonly measurementEmitter: Emitter;
 
   // Flag to indicate if the line is active
-  public readonly isActiveProperty: Property<boolean>;
+  public readonly isActiveProperty: BooleanProperty;
 
   public constructor( position: Vector2, originallyActive: boolean, providedOptions: MeasurementDeviceOptions ) {
 
@@ -47,9 +46,8 @@ export default class MeasurementDevice {
 
     this.measurementEmitter = new Emitter();
 
-    this.isActiveProperty = new Property<boolean>( originallyActive, {
-      tandem: providedOptions.tandem.createTandem( 'isActiveProperty' ),
-      phetioValueType: BooleanIO
+    this.isActiveProperty = new BooleanProperty( originallyActive, {
+      tandem: providedOptions.tandem.createTandem( 'isActiveProperty' )
     } );
 
     this.simpleBlochSphere = new SimpleBlochSphere( this.spinStateProperty, {

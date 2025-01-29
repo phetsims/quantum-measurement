@@ -7,6 +7,7 @@
  * @author Agustín Vallejo
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
@@ -15,7 +16,6 @@ import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { SourceMode } from './SourceMode.js';
@@ -35,7 +35,7 @@ export default class ParticleSourceModel {
   public readonly exitPositionProperty: TReadOnlyProperty<Vector2>;
 
   // Wether the source is currently shooting particles
-  public readonly currentlyShootingParticlesProperty: Property<boolean>;
+  public readonly currentlyShootingParticlesProperty: BooleanProperty;
 
   // Mapped from [0, 1] to control the Continuous mode, 0 is 'None' and 1 is 'Lots'
   public readonly particleAmountProperty: NumberProperty;
@@ -80,9 +80,8 @@ export default class ParticleSourceModel {
 
     this.customSpinStateProperty = new Vector2Property( SpinDirection.spinToVector( initialSpinState ) );
 
-    this.currentlyShootingParticlesProperty = new Property<boolean>( false, {
+    this.currentlyShootingParticlesProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'currentlyShootingParticlesProperty' ),
-      phetioValueType: BooleanIO,
       phetioReadOnly: true
     } );
 
