@@ -44,6 +44,7 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
       SYSTEM_TYPE_TO_STRING_MAP,
       {
         centerX: QuantumMeasurementConstants.LAYOUT_BOUNDS.centerX,
+        top: QuantumMeasurementConstants.SCREEN_VIEW_Y_MARGIN,
         tandem: tandem.createTandem( 'experimentTypeRadioButtonGroup' )
       }
     );

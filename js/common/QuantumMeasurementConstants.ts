@@ -15,8 +15,8 @@ import QuantumMeasurementColors from './QuantumMeasurementColors.js';
 const QuantumMeasurementConstants = {
   LAYOUT_BOUNDS: ScreenView.DEFAULT_LAYOUT_BOUNDS,
   COIN_SET_AREA_PROPORTION: 0.9, // Side of the explicit coin area with respect to the measurement area
-  SCREEN_VIEW_X_MARGIN: 15,
-  SCREEN_VIEW_Y_MARGIN: 15,
+  SCREEN_VIEW_X_MARGIN: 10,
+  SCREEN_VIEW_Y_MARGIN: 10,
   SPIN_UP_ARROW_CHARACTER: '\u2b61',
   SPIN_DOWN_ARROW_CHARACTER: '\u2b63',
   CLASSICAL_UP_SYMBOL: '\uD83C\uDF1E\uFE0E\uFE0E', // 🌞 Sun symbol

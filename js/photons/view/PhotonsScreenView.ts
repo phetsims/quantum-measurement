@@ -40,7 +40,7 @@ class PhotonsScreenView extends QuantumMeasurementScreenView {
       EXPERIMENT_MODE_TO_STRING_MAP,
       {
         centerX: QuantumMeasurementConstants.LAYOUT_BOUNDS.centerX,
-        top: 15, // empirically determined to match design doc
+        top: QuantumMeasurementConstants.SCREEN_VIEW_Y_MARGIN,
         tandem: tandem.createTandem( 'experimentModeRadioButtonGroup' )
       }
     );
