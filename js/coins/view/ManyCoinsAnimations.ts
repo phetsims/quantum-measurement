@@ -21,6 +21,7 @@ import CoinSetPixelRepresentation from './CoinSetPixelRepresentation.js';
 import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
 
 const COIN_TRAVEL_ANIMATION_DURATION = MEASUREMENT_PREPARATION_TIME * 0.95;
+const GLOBAL_DESTINATION = new Vector2( 400, 545 );
 
 class ManyCoinsAnimations extends Rectangle {
 
@@ -73,20 +74,16 @@ class ManyCoinsAnimations extends Rectangle {
       // Create a typed reference to the parent node, since we'll need to invoke some methods on it.
       assert && assert( measurementArea.getParent() instanceof CoinsExperimentSceneView );
 
-      const boxTopLeftCorner = this.globalToLocalPoint( manyCoinsPixelRepresentation.localToGlobalPoint( manyCoinsPixelRepresentation.leftTop ) ).minusXY( manyCoinsPixelRepresentation.width / 2, 10 );
-
+      const testBoxCenter = this.globalToLocalPoint( GLOBAL_DESTINATION );
       const totalAnimationDuration = isSettingPhetioStateProperty.value ? 0 : COIN_TRAVEL_ANIMATION_DURATION;
 
       // Create an animation that will move this node to the edge of the multi-coin test box.
       const animationToBoxCenter = new Animation( {
-        to: boxTopLeftCorner,
         from: new Vector2( -100, -100 ),
-        duration: totalAnimationDuration,
-        setValue: position => {
-          pixelRepresentation.visible = true;
-          pixelRepresentation.center = position;
-        },
-        getValue: () => pixelRepresentation.center
+        to: testBoxCenter,
+        setValue: position => { pixelRepresentation.center = position; },
+        getValue: () => pixelRepresentation.center,
+        duration: totalAnimationDuration
       } );
 
       animationsToCoinBox.push( animationToBoxCenter );
@@ -114,6 +111,7 @@ class ManyCoinsAnimations extends Rectangle {
       } );
 
       animationToBoxCenter.start();
+      pixelRepresentation.visible = true;
       pixelRepresentation.startPopulatingAnimation();
     };
   }
