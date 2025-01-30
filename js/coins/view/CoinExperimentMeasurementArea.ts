@@ -294,8 +294,6 @@ class CoinExperimentMeasurementArea extends VBox {
         singleCoinAnimations.startIngressAnimationForSingleCoin( false );
         multipleCoinAnimations.startIngressAnimationForCoinSet( false );
         usingManyCoinsProperty.value && manyCoinsAnimations.startIngressAnimationForCoinSet( false );
-
-        // this.measuredCoinsPixelRepresentation.startPopulatingAnimation();
       }
     } );
 

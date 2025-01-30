@@ -125,7 +125,7 @@ class SingleCoinAnimations {
       }
 
       // Add the coin to our parent node. This is done so that we don't change our bounds, which could mess up the
-      // layout. It will be added back to this area when it is back within the bounds.
+      // layout. It will be added back to this area when it is back within this node's bounds.
       coinsExperimentSceneView.addSingleCoinNode( singleCoinNode );
 
       // Make sure the coin mask is outside the test box so that it isn't visible until it slides into the test box.
@@ -138,7 +138,7 @@ class SingleCoinAnimations {
       // process consists of two animations, one to move the coin to the left edge of the test box while the test box is
       // potentially also moving, then a second one to move the coin into the box. The durations must be set up such
       // that the test box is in place before the 2nd animation begins or the coin won't end up in the right place.
-      const testBoxXOffset = forReprepare ? 180 : 390; // empirically determined
+      const testBoxXOffset = forReprepare ? 180 : 250; // empirically determined
       const leftOfTestBoxGlobal = singleCoinTestBox.parentToGlobalPoint(
         singleCoinTestBox.center.minusXY( testBoxXOffset, 0 )
       );

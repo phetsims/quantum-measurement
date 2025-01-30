@@ -107,7 +107,7 @@ class MultipleCoinAnimations {
       // the test box is potentially also moving, then a second one to move the coin into the box. The durations must
       // be set up such that the test box is in place before the 2nd animation begins or the coins won't end up in the
       // right places.
-      const testAreaXOffset = forReprepare ? 100 : 300;
+      const testAreaXOffset = forReprepare ? 100 : 200;
       const multipleCoinTestBoxBounds = measurementArea.globalToLocalBounds( multipleCoinTestBox.getGlobalBounds() );
       const leftOfTestBox = multipleCoinTestBoxBounds.center.minusXY( testAreaXOffset, 0 );
       const leftOfTestAreaInParentCoords = measurementArea.localToParentPoint( leftOfTestBox );
