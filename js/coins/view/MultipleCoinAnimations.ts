@@ -1,9 +1,9 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
 /**
- * CoinAnimations is a composite UI component that presents two areas - one for a single coin and one for
- * multiple coins - where users can flip and reveal coins. Depending on how this is parameterized, the coins may either
- * be classical or quantum coins.
+ * MultipleCoinAnimations creates and animates the coins that are configured in the preparation area, and thus originate
+ * there, and move into the measurement area.  This is used for the 10 and 100 coin cases.  The 10k case is handled
+ * differently and is not included here.
  *
  * @author John Blanco, PhET Interactive Simulations
  */
@@ -25,34 +25,38 @@ const COIN_TRAVEL_ANIMATION_DURATION = MEASUREMENT_PREPARATION_TIME * 0.95;
 
 class MultipleCoinAnimations {
 
-  public readonly abortIngressAnimationForCoinSet: () => void;
+  // Method for starting the animation that moves the coins from the preparation area to the test box.  It is created
+  // as a closure to make things easier.
   public readonly startIngressAnimationForCoinSet: ( forReprepare: boolean ) => void;
+
+  // Method for aborting the animation that moves the coins from the preparation area to the test box.  It is created
+  // as a closure to make things easier.
+  public readonly abortIngressAnimationForCoinSet: () => void;
 
   public constructor( sceneModel: CoinsExperimentSceneModel,
                       measurementArea: CoinExperimentMeasurementArea,
                       multipleCoinTestBox: MultiCoinTestBox,
                       coinSetInTestBoxProperty: TProperty<boolean> ) {
 
-    // Create the nodes that will be used to animate coin motion for the multiple coin experiments.  These are sized
-    // differently based on the quantity being animated.
-    const movingCoinNodes = new Map<number, SmallCoinNode[]>();
+    // map of the size of the coin set to the nodes used for that set
+    const coinNodeSets = new Map<number, SmallCoinNode[]>();
 
-    // The 10000 coins case will be animated separately
+    // Set up the coin nodes for each of the quantities that can be selected by the user.  As of Jan 2025, this includes
+    // 10 and 100 coins.  The 10k case is handled differently and is not included here.
     MULTI_COIN_ANIMATION_QUANTITIES.forEach( quantity => {
       const radius = MultiCoinTestBox.getRadiusFromCoinQuantity( quantity );
       const coinNodes: SmallCoinNode[] = [];
       _.times( quantity, () => {
         coinNodes.push( new SmallCoinNode( radius, { tandem: Tandem.OPT_OUT } ) );
       } );
-      movingCoinNodes.set( quantity, coinNodes );
+      coinNodeSets.set( quantity, coinNodes );
     } );
 
-    const animationsToEdgeOfMultiCoinTestBox: Animation[] = [];
-    const animationsFromEdgeOfMultiCoinBoxToInside: Animation[] = [];
+    const animations: Animation[] = [];
 
-    // Create a closure function for aborting the animation of the incoming single coin. This is intended to be called
-    // when a state change occurs that prevents the ingress animation from finishing normally. If no animation is in
-    // progress, this does nothing, so it safe to call as a preventative measure.
+    // Create a closure function for aborting the animations. This is intended to be called when a state change occurs
+    // that prevents the ingress animation from finishing normally. If no animation is in progress, this does nothing,
+    // so it is safe to call as a preventative measure.
     this.abortIngressAnimationForCoinSet = () => {
 
       // Create a typed reference to the parent node, since we'll need to invoke some methods on it.
@@ -60,12 +64,10 @@ class MultipleCoinAnimations {
       const sceneGraphParent = measurementArea.getParent() as CoinsExperimentSceneView;
 
       // Stop any of the animations that exist.
-      animationsToEdgeOfMultiCoinTestBox.forEach( animation => animation.stop() );
-      animationsFromEdgeOfMultiCoinBoxToInside.forEach( animation => animation.stop() );
+      animations.forEach( animation => animation.stop() );
 
       // Remove the animations from the list of active ones.
-      animationsToEdgeOfMultiCoinTestBox.length = 0;
-      animationsFromEdgeOfMultiCoinBoxToInside.length = 0;
+      animations.length = 0;
 
       // Clear out any coins that made it to the test box.
       multipleCoinTestBox.clearContents();
@@ -81,9 +83,10 @@ class MultipleCoinAnimations {
 
     this.startIngressAnimationForCoinSet = ( forReprepare: boolean ) => {
 
-      if ( sceneModel.coinSet.numberOfActiveSystemsProperty.value === 10000 ) {
-        return;
-      }
+      assert && assert(
+        coinNodeSets.has( sceneModel.coinSet.numberOfActiveSystemsProperty.value ),
+        `No coin nodes exist for the needed quantity: ${sceneModel.coinSet.numberOfActiveSystemsProperty.value}`
+      );
 
       // Create a typed reference to the parent node, since we'll need to invoke some methods on it.
       assert && assert( measurementArea.getParent() instanceof CoinsExperimentSceneView );
@@ -92,104 +95,72 @@ class MultipleCoinAnimations {
       // Make sure the test box is empty.
       multipleCoinTestBox.clearContents();
 
-      assert && assert(
-        movingCoinNodes.has( sceneModel.coinSet.numberOfActiveSystemsProperty.value ),
-        'No coin nodes exist for the needed quantity.'
-      );
-      const coinsToAnimate = movingCoinNodes.get( sceneModel.coinSet.numberOfActiveSystemsProperty.value );
+      // Get the set of coin nodes that will be animated.
+      const coinsToAnimate = coinNodeSets.get( sceneModel.coinSet.numberOfActiveSystemsProperty.value );
 
-      // Add the coins to our parent node. This is done so that we don't change our bounds, which could mess up the
-      // layout. It will be added back to this area when it is back within the bounds.
+      // Add the coins to our parent node. This is done so that we don't change the local bounds of the measurement
+      // area, since this would break the layout.  These will be added back to the measurement area when they reach the
+      // desired location and are thus withing the bounds of the measurement area.
       sceneGraphParent.addCoinNodeSet( coinsToAnimate! );
 
-      // Create and start a set of animations to move these new created coin nodes to the side of the multiple coin test
-      // box. The entire process consists of two animations, one to move a coin to the left edge of the test box while
-      // the test box is potentially also moving, then a second one to move the coin into the box. The durations must
-      // be set up such that the test box is in place before the 2nd animation begins or the coins won't end up in the
-      // right places.
-      const testAreaXOffset = forReprepare ? 100 : 200;
-      const multipleCoinTestBoxBounds = measurementArea.globalToLocalBounds( multipleCoinTestBox.getGlobalBounds() );
-      const leftOfTestBox = multipleCoinTestBoxBounds.center.minusXY( testAreaXOffset, 0 );
-      const leftOfTestAreaInParentCoords = measurementArea.localToParentPoint( leftOfTestBox );
+      const multipleCoinTestBoxBounds = sceneGraphParent.globalToLocalBounds( multipleCoinTestBox.getGlobalBounds() );
+
+      // The tricky bit about this animation is that the test box that is their destination could itself be moving due
+      // to the way the measurement area works.  This unfortunately means we need to have a bit of the "tweak factor" to
+      // get the destination right.
+      const testAreaXOffset = forReprepare ? 0 : -91; // empirically determined
+      const destinationCenter = multipleCoinTestBoxBounds.center.plusXY( testAreaXOffset, 0 );
+
+      // Set up and start the animation for each of the individual coins.
       coinsToAnimate!.forEach( ( coinNode, index ) => {
 
         // Get the final destination for this coin node in terms of its offset from the center of the test box.
         const finalDestinationOffset = multipleCoinTestBox.getOffsetFromCenter( index );
 
-        // Calculate a destination at the edge of the test box such that this coin will just move right to its final
-        // position.
-        const destinationAtBoxEdge = leftOfTestAreaInParentCoords.plusXY( 0, finalDestinationOffset.y );
-
-        // Determine the total animation duration, but use zero if phet-io state is being set.
-        const totalAnimationDuration = isSettingPhetioStateProperty.value ? 0 : COIN_TRAVEL_ANIMATION_DURATION;
-
-        // Create an animation that will move this coin node to the edge of the multi-coin test box.
-        const animationToTestBoxEdge = new Animation( {
+        // Start the 2nd portion of the animation, which moves the coin into the test box.
+        const animationToTestBox = new Animation( {
           setValue: value => { coinNode.center = value; },
           getValue: () => coinNode.center,
-          to: destinationAtBoxEdge,
-          duration: totalAnimationDuration / 2,
-          easing: Easing.LINEAR
+          to: destinationCenter.plus( finalDestinationOffset ),
+          duration: isSettingPhetioStateProperty.value ? 0 : COIN_TRAVEL_ANIMATION_DURATION,
+          easing: Easing.CUBIC_OUT
         } );
-        animationsToEdgeOfMultiCoinTestBox.push( animationToTestBoxEdge );
-        animationToTestBoxEdge.finishEmitter.addListener( () => {
+        animations.push( animationToTestBox );
+        animationToTestBox.finishEmitter.addListener( () => {
 
-          const boxCenter = measurementArea.globalToParentBounds( multipleCoinTestBox.getGlobalBounds() ).center;
+          // The coin node should now be within the bounds of the multi-coin test box. Remove the coin node from the
+          // scene graph parent and add it to the test box.
+          sceneGraphParent.removeChild( coinNode );
+          const offset = multipleCoinTestBox.getOffsetFromCenter( coinsToAnimate!.indexOf( coinNode ) );
+          coinNode.center = multipleCoinTestBox.getLocalBounds().center.plus( offset );
+          multipleCoinTestBox.addCoinNodeToBox( coinNode );
 
-          // Start the 2nd portion of the animation, which moves the coin into the test box.
-          const animationFromTestBoxEdgeToInside = new Animation( {
-            setValue: value => { coinNode.center = value; },
-            getValue: () => coinNode.center,
-            to: boxCenter.plus( finalDestinationOffset ),
-            duration: totalAnimationDuration / 2,
-            easing: Easing.CUBIC_OUT
-          } );
-          animationsFromEdgeOfMultiCoinBoxToInside.push( animationFromTestBoxEdgeToInside );
-          animationFromTestBoxEdgeToInside.finishEmitter.addListener( () => {
+          if ( sceneModel.systemType === 'quantum' ) {
+            sceneModel.coinSet.prepareNow();
+          }
 
-            // The coin node should now be within the bounds of the multi-coin test box. Remove the coin node from the
-            // scene graph parent and add it to the test box.
-            sceneGraphParent.removeChild( coinNode );
-            const offset = multipleCoinTestBox.getOffsetFromCenter( coinsToAnimate!.indexOf( coinNode ) );
-            coinNode.center = multipleCoinTestBox.getLocalBounds().center.plus( offset );
-            multipleCoinTestBox.addCoinNodeToBox( coinNode );
-
-            if ( sceneModel.systemType === 'quantum' ) {
-              sceneModel.coinSet.prepareNow();
-            }
-
-            // If all animations have completed, set the flag that indicates the coins are fully in the box.
-            const runningAnimations = animationsFromEdgeOfMultiCoinBoxToInside.filter(
-              animation => animation.animatingProperty.value
-            );
-            if ( runningAnimations.length === 0 ) {
-              coinSetInTestBoxProperty.value = true;
-            }
-          } );
-
-          // Regardless of how the animation terminated its reference needs to be removed when it is done.
-          animationFromTestBoxEdgeToInside.endedEmitter.addListener( () => {
-
-            // Remove the now-completed animation from the list of active ones.
-            animationsFromEdgeOfMultiCoinBoxToInside.filter(
-              animation => animation !== animationFromTestBoxEdgeToInside
-            );
-          } );
-
-          // Kick off the 2nd animation, which moves the coin from the edge of the test box to inside.
-          animationFromTestBoxEdgeToInside.start();
+          // If all animations have completed, set the flag that indicates the coins are fully in the box.
+          const runningAnimations = animations.filter(
+            animation => animation.animatingProperty.value
+          );
+          if ( runningAnimations.length === 0 ) {
+            coinSetInTestBoxProperty.value = true;
+          }
         } );
 
         // Regardless of how the animation terminated its reference needs to be removed when it is done.
-        animationToTestBoxEdge.endedEmitter.addListener( () => {
-          animationsToEdgeOfMultiCoinTestBox.filter( animation => animation !== animationToTestBoxEdge );
+        animationToTestBox.endedEmitter.addListener( () => {
+
+          // Remove the now-completed animation from the list of active ones.
+          animations.filter(
+            animation => animation !== animationToTestBox
+          );
         } );
 
-        // Kick off the animation to the test box edge.
-        animationToTestBoxEdge.start();
+        // Kick off the 2nd animation, which moves the coin from the edge of the test box to inside.
+        animationToTestBox.start();
       } );
     };
-
   }
 }
 

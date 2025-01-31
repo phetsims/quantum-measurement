@@ -175,8 +175,7 @@ class MultiCoinTestBox extends HBox {
    * Get the radius that should be used for coin nodes in this test box based on the number of them that will be shown.
    */
   public static getRadiusFromCoinQuantity( coinQuantity: number ): number {
-    assert && assert(
-      MULTI_COIN_ANIMATION_QUANTITIES.includes( coinQuantity ), 'unsupported number of coins' );
+    assert && assert( MULTI_COIN_ANIMATION_QUANTITIES.includes( coinQuantity ), 'unsupported number of coins' );
     let radius;
     if ( coinQuantity === 10 ) {
       radius = 12;

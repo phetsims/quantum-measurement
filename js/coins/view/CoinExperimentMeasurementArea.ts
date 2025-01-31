@@ -49,7 +49,8 @@ class CoinExperimentMeasurementArea extends VBox {
   public constructor( sceneModel: CoinsExperimentSceneModel, tandem: Tandem ) {
 
     const textColorProperty = sceneModel.systemType === 'quantum' ?
-                              QuantumMeasurementColors.quantumSceneTextColorProperty : QuantumMeasurementColors.classicalSceneTextColorProperty;
+                              QuantumMeasurementColors.quantumSceneTextColorProperty :
+                              QuantumMeasurementColors.classicalSceneTextColorProperty;
     const singleCoinInTestBoxProperty = new BooleanProperty( false );
     const coinSetInTestBoxProperty = new BooleanProperty( false );
 
