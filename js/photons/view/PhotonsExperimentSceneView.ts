@@ -99,7 +99,7 @@ class PhotonsExperimentSceneView extends Node {
                               QuantumMeasurementStrings.averagePolarizationStringProperty :
                               QuantumMeasurementStrings.averagePolarizationRateStringProperty;
     const averagePolarizationTitlePanel = new Panel(
-      new Text( titleTextProperty, { font: new PhetFont( 18 ) } ),
+      new Text( titleTextProperty, { font: new PhetFont( 18 ), maxWidth: 250 } ),
       {
         fill: QuantumMeasurementColors.controlPanelFillColorProperty,
         stroke: null,
@@ -154,14 +154,16 @@ class PhotonsExperimentSceneView extends Node {
           QuantumMeasurementStrings.VStringProperty,
           {
             font: new PhetFont( { size: 17, weight: 'bold' } ),
-            fill: QuantumMeasurementColors.verticalPolarizationColorProperty
+            fill: QuantumMeasurementColors.verticalPolarizationColorProperty,
+            maxWidth: 15
           }
         ),
         new RichText(
           QuantumMeasurementStrings.HStringProperty,
           {
             font: new PhetFont( { size: 17, weight: 'bold' } ),
-            fill: QuantumMeasurementColors.horizontalPolarizationColorProperty
+            fill: QuantumMeasurementColors.horizontalPolarizationColorProperty,
+            maxWidth: 15
           } )
       ],
       {
@@ -210,7 +212,10 @@ class PhotonsExperimentSceneView extends Node {
 
     const decimalValuesCheckbox = new Checkbox(
       showDecimalValuesProperty,
-      new Text( QuantumMeasurementStrings.decimalValuesStringProperty, { font: CHECKBOX_TEXT_FONT } ), {
+      new Text( QuantumMeasurementStrings.decimalValuesStringProperty, {
+        font: CHECKBOX_TEXT_FONT,
+        maxWidth: 200
+      } ), {
         tandem: providedOptions.tandem.createTandem( 'decimalValuesCheckbox' )
       }
     );

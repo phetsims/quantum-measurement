@@ -135,7 +135,7 @@ export default class SternGerlachNode extends Node {
             blockingMode === BlockingMode.BLOCK_UP ?
             QuantumMeasurementStrings.blockUpStringProperty :
             QuantumMeasurementStrings.blockDownStringProperty,
-            { font: new PhetFont( 15 ) } ),
+            { font: new PhetFont( 15 ), maxWidth: 150 } ),
           tandemName: `${blockingMode.tandemName}RadioButton`,
           phetioVisiblePropertyInstrumented: false
         };

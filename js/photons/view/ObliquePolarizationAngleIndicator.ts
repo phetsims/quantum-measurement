@@ -101,7 +101,11 @@ export default class ObliquePolarizationAngleIndicator extends Node {
       centerY: -AXIS_LENGTH - LABELS_OFFSET,
       centerX: 0,
       fill: QuantumMeasurementColors.verticalPolarizationColorProperty,
-      font: LABELS_FONT
+      font: LABELS_FONT,
+      maxWidth: 30
+    } );
+    QuantumMeasurementStrings.VStringProperty.link( () => {
+      zAxisLabel.centerX = 0;
     } );
 
     // Create the X axis.  This is the projected dimension that is perpendicular to the screen.
@@ -112,7 +116,11 @@ export default class ObliquePolarizationAngleIndicator extends Node {
     const xAxisLabel = new Text( QuantumMeasurementStrings.HStringProperty, {
       fill: QuantumMeasurementColors.horizontalPolarizationColorProperty,
       font: LABELS_FONT,
-      center: xAxisTipPosition.times( 1.4 )
+      center: xAxisTipPosition.times( 1.4 ),
+      maxWidth: 30
+    } );
+    QuantumMeasurementStrings.HStringProperty.link( () => {
+      xAxisLabel.center = xAxisTipPosition.times( 1.4 );
     } );
 
     // Create a Property for the fill used for the unit circle, since it changes when the photons are unpolarized.

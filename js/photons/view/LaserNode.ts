@@ -63,7 +63,11 @@ export default class LaserNode extends Node {
     const caption = new Text( QuantumMeasurementStrings.photonSourceStringProperty, {
       font: new PhetFont( 12 ),
       centerX: laserPointerNode.centerX,
-      top: laserPointerNode.bottom + 5
+      top: laserPointerNode.bottom + 5,
+      maxWidth: 150
+    } );
+    QuantumMeasurementStrings.photonSourceStringProperty.link( () => {
+      caption.centerX = laserPointerNode.centerX;
     } );
 
     const nodeChildren: Node[] = [ laserPointerNode, caption ];
@@ -89,7 +93,8 @@ export default class LaserNode extends Node {
           value: model.emissionRateProperty
         } ),
         {
-          font: new PhetFont( 16 )
+          font: new PhetFont( 16 ),
+          maxWidth: 100
         }
       );
       const labelAlignBox = new AlignBox( label, {

@@ -154,7 +154,10 @@ export default class SpinStatePreparationArea extends VBox {
       tandem: projectionsCheckboxesTandem,
       visibleProperty: model.isCustomExperimentProperty,
       children: [
-        new Text( QuantumMeasurementStrings.projectionStringProperty, { font: new PhetFont( 15 ) } ),
+        new Text( QuantumMeasurementStrings.projectionStringProperty, {
+          font: new PhetFont( 15 ),
+          maxWidth: 100
+        } ),
         zProjectionCheckbox,
         xProjectionCheckbox
       ]

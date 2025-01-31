@@ -70,7 +70,8 @@ export default class PhotonsEquationNode extends HBox {
     );
 
     const symbolicEquationTextOptions = {
-      font: new MathSymbolFont( 17 )
+      font: new MathSymbolFont( 17 ),
+      maxWidth: 100
     };
     const symbolicEquationNumerator = new RichText( symbolicEquationStringProperty, symbolicEquationTextOptions );
     const symbolicEquationDenominator = new RichText( 'N(Total)', symbolicEquationTextOptions );

@@ -11,7 +11,7 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Color, HBox, Text, TextOptions, VBox } from '../../../../scenery/js/imports.js';
@@ -46,46 +46,48 @@ export default class PhotonPolarizationAngleControl extends Panel {
     }, providedOptions );
 
     const titleNode = new Text( QuantumMeasurementStrings.photonPolarizationAngleStringProperty, {
-      font: new PhetFont( { size: 16, weight: 'bold' } )
+      font: new PhetFont( { size: 16, weight: 'bold' } ),
+      maxWidth: 200
     } );
 
+    const radioButtonTextOptions: TextOptions = {
+      font: RADIO_BUTTON_TEXT_FONT,
+      maxWidth: 150
+    };
     const radioButtonGroupItems = [
       {
         value: 'vertical',
-        createNode: () => new Text( QuantumMeasurementStrings.verticalStringProperty, {
-          font: RADIO_BUTTON_TEXT_FONT,
-          fill: QuantumMeasurementColors.verticalPolarizationColorProperty
-        } ),
+        createNode: () => new Text( QuantumMeasurementStrings.verticalStringProperty,
+          combineOptions<TextOptions>( {
+            fill: QuantumMeasurementColors.verticalPolarizationColorProperty
+          }, radioButtonTextOptions ) ),
         tandemName: 'verticalRadioButton'
       },
       {
         value: 'horizontal',
-        createNode: () => new Text( QuantumMeasurementStrings.horizontalStringProperty, {
-          font: RADIO_BUTTON_TEXT_FONT,
-          fill: QuantumMeasurementColors.horizontalPolarizationColorProperty
-        } ),
+        createNode: () => new Text( QuantumMeasurementStrings.horizontalStringProperty,
+          combineOptions<TextOptions>( {
+            fill: QuantumMeasurementColors.horizontalPolarizationColorProperty
+          }, radioButtonTextOptions ) ),
         tandemName: 'horizontalRadioButton'
       },
       {
         value: 'fortyFiveDegrees',
-        createNode: () => new Text( QuantumMeasurementStrings.fortyFiveDegreesStringProperty, {
-          font: RADIO_BUTTON_TEXT_FONT
-        } ),
+        createNode: () => new Text( QuantumMeasurementStrings.fortyFiveDegreesStringProperty,
+          radioButtonTextOptions ),
         tandemName: 'fortyFiveDegreesRadioButton'
       },
       {
         value: 'unpolarized',
-        createNode: () => new Text( QuantumMeasurementStrings.unpolarizedStringProperty, {
-          font: RADIO_BUTTON_TEXT_FONT
-        } ),
+        createNode: () => new Text( QuantumMeasurementStrings.unpolarizedStringProperty,
+          radioButtonTextOptions ),
         tandemName: 'unpolarizedRadioButton'
       },
 
       {
         value: 'custom',
-        createNode: () => new Text( QuantumMeasurementStrings.customStringProperty, {
-          font: RADIO_BUTTON_TEXT_FONT
-        } ),
+        createNode: () => new Text( QuantumMeasurementStrings.customStringProperty,
+          radioButtonTextOptions ),
         tandemName: 'customRadioButton'
       }
     ];
@@ -137,7 +139,10 @@ export default class PhotonPolarizationAngleControl extends Panel {
     const polarizationIndicatorCaption = new HBox( {
       children: [
         new VectorTailNode( 6 ),
-        new Text( QuantumMeasurementStrings.propagationIntoPageStringProperty, { font: new PhetFont( 14 ) } )
+        new Text( QuantumMeasurementStrings.propagationIntoPageStringProperty, {
+          font: new PhetFont( 14 ),
+          maxWidth: 100
+        } )
       ],
       spacing: 5,
       tandem: providedOptions.tandem.createTandem( 'polarizationIndicatorCaption' )

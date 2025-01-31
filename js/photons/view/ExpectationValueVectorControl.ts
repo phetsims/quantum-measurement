@@ -27,7 +27,10 @@ export default class ExpectationValueVectorControl extends HBox {
 
     const expectationValueCheckbox = new Checkbox(
       vectorVisibleProperty,
-      new Text( QuantumMeasurementStrings.vectorRepresentationStringProperty, { font: new PhetFont( 18 ) } ),
+      new Text( QuantumMeasurementStrings.vectorRepresentationStringProperty, {
+        font: new PhetFont( 18 ),
+        maxWidth: 250
+      } ),
       {
         tandem: providedOptions.tandem.createTandem( 'expectationValueCheckbox' ),
         phetioVisiblePropertyInstrumented: false // Remove the whole control if checkbox isn't desired.

@@ -44,7 +44,8 @@ export default class MirrorNode extends Node {
     const label = new Text( QuantumMeasurementStrings.mirrorStringProperty, {
       font: new PhetFont( 12 ),
       left: mirrorLine.centerX + 2,
-      bottom: mirrorLine.centerY
+      bottom: mirrorLine.centerY,
+      maxWidth: 100
     } );
 
     const options = optionize<MirrorNodeOptions, SelfOptions, NodeOptions>()( {

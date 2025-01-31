@@ -35,7 +35,10 @@ export default class PhotonDetectionProbabilityPanel extends AccordionBox {
 
     const options = optionize<PhotonDetectionProbabilityAccordionBoxOptions, SelfOptions, AccordionBoxOptions>()( {
       stroke: null,
-      titleNode: new Text( QuantumMeasurementStrings.probabilityStringProperty, { font: BOLD_FONT } ),
+      titleNode: new Text( QuantumMeasurementStrings.probabilityStringProperty, {
+        font: BOLD_FONT,
+        maxWidth: 200
+      } ),
       cornerRadius: 5,
       buttonXMargin: 10,
       buttonYMargin: 5,
@@ -92,8 +95,12 @@ export default class PhotonDetectionProbabilityPanel extends AccordionBox {
     );
 
     // Create the textual nodes and assemble them in a VBox.
-    const probabilityOfVerticalText = new RichText( probabilityOfVerticalStringProperty, { font: NORMAL_FONT } );
-    const probabilityOfHorizontalText = new RichText( probabilityOfHorizontalStringProperty, { font: NORMAL_FONT } );
+    const probabilityOfTextOptions = {
+      font: NORMAL_FONT,
+      maxWidth: 150
+    };
+    const probabilityOfVerticalText = new RichText( probabilityOfVerticalStringProperty, probabilityOfTextOptions );
+    const probabilityOfHorizontalText = new RichText( probabilityOfHorizontalStringProperty, probabilityOfTextOptions );
     const content = new VBox( {
       children: [ probabilityOfVerticalText, probabilityOfHorizontalText ],
       spacing: 15

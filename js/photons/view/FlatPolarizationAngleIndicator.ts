@@ -58,7 +58,11 @@ export default class FlatPolarizationAngleIndicator extends Node {
       centerX: 0,
       bottom: verticalAxis.top - LABELS_OFFSET,
       fill: QuantumMeasurementColors.verticalPolarizationColorProperty,
-      font: LABELS_FONT
+      font: LABELS_FONT,
+      maxWidth: 20
+    } );
+    QuantumMeasurementStrings.VStringProperty.link( () => {
+      verticalAxisLabel.centerX = 0;
     } );
 
     // Create the horizontal axis.
@@ -69,7 +73,8 @@ export default class FlatPolarizationAngleIndicator extends Node {
       fill: QuantumMeasurementColors.horizontalPolarizationColorProperty,
       font: LABELS_FONT,
       left: horizontalAxis.right + LABELS_OFFSET,
-      centerY: horizontalAxis.centerY
+      centerY: horizontalAxis.centerY,
+      maxWidth: 20
     } );
 
     // Create a Property for the fill used for the unit circle, since it changes when the photons are unpolarized.

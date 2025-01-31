@@ -99,7 +99,15 @@ export default class PhotonDetectorNode extends Node {
         font: new PhetFont( 12 ),
         align: 'center',
         centerX: body.centerX,
-        bottom: body.top - 5
+        bottom: body.top - 5,
+        maxWidth: 200,
+        maxHeight: 40
+      } );
+
+      // Make sure the label stays centered over the body.
+      labelStringProperty.link( () => {
+        label.centerX = body.centerX;
+        label.bottom = body.top - 5;
       } );
     }
     else if ( model.detectionDirection === 'down' ) {
@@ -124,7 +132,15 @@ export default class PhotonDetectorNode extends Node {
         font: new PhetFont( 12 ),
         align: 'center',
         centerX: body.centerX,
-        top: body.bottom + 5
+        top: body.bottom + 5,
+        maxWidth: 200,
+        maxHeight: 40
+      } );
+
+      // Make sure the label stays centered over the body.
+      labelStringProperty.link( () => {
+        label.centerX = body.centerX;
+        label.top = body.bottom + 5;
       } );
     }
     else {

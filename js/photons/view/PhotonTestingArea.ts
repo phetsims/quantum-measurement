@@ -65,7 +65,7 @@ class PhotonTestingArea extends Node {
             value: behaviorMode,
             createNode: () => new Text(
               nameProperty,
-              { font: new PhetFont( 15 ) }
+              { font: new PhetFont( 15 ), maxWidth: 100 }
             ),
             tandemName: tandemName,
             phetioVisiblePropertyInstrumented: false

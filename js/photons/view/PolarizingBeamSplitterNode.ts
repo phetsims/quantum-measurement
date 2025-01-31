@@ -48,7 +48,13 @@ export default class PolarizingBeamSplitterNode extends Node {
       font: new PhetFont( 12 ),
       centerX: lineNode.centerX,
       top: lineNode.bottom + 4,
-      align: 'center'
+      align: 'center',
+      maxWidth: 100,
+      maxHeight: 50
+    } );
+    QuantumMeasurementStrings.polarizingBeamSplitterStringProperty.link( () => {
+      label.centerX = lineNode.centerX;
+      label.top = lineNode.bottom + 4;
     } );
 
     const options = optionize<PolarizingBeamSplitterNodeOptions, SelfOptions, RectangleOptions>()( {
