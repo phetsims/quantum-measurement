@@ -102,6 +102,7 @@ type StringsType = {
   'experimentNPatternStringProperty': LocalizedStringProperty;
   'measurementParametersStringProperty': LocalizedStringProperty;
   'spinMeasurementAxisStringProperty': LocalizedStringProperty;
+  'basisColonStringProperty': LocalizedStringProperty;
 };
 
 const QuantumMeasurementStrings = getStringModule( 'QUANTUM_MEASUREMENT' ) as StringsType;

@@ -13,6 +13,7 @@ import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
+import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Node, Text, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
 import ComboBox, { ComboBoxItem } from '../../../../sun/js/ComboBox.js';
@@ -54,10 +55,10 @@ export default class BlochSpherePreparationArea extends VBox {
     } );
 
     polarSlider.addMajorTick( 0, new Text( '0', { font: new PhetFont( 15 ) } ) );
-    polarSlider.addMajorTick( Math.PI, new Text( 'π', { font: new PhetFont( 15 ) } ) );
+    polarSlider.addMajorTick( Math.PI, new Text( `${MathSymbols.PI}`, { font: new PhetFont( 15 ) } ) );
 
     azimuthSlider.addMajorTick( 0, new Text( '0', { font: new PhetFont( 15 ) } ) );
-    azimuthSlider.addMajorTick( 2 * Math.PI, new Text( '2π', { font: new PhetFont( 15 ) } ) );
+    azimuthSlider.addMajorTick( 2 * Math.PI, new Text( `2${MathSymbols.PI}`, { font: new PhetFont( 15 ) } ) );
 
     const comboBoxItems: ComboBoxItem<StateDirection>[] = StateDirection.enumeration.values.map( direction => {
       return {
@@ -74,9 +75,9 @@ export default class BlochSpherePreparationArea extends VBox {
       spacing: 10,
       children: [
         directionComboBox,
-        new Text( 'Polar Angle (θ): ', { font: new PhetFont( 15 ) } ), // Theta symbol: θ
+        new Text( `Polar Angle (${MathSymbols.THETA}): `, { font: new PhetFont( 15 ) } ), // Theta symbol: θ
         polarSlider,
-        new Text( 'Azimuthal Angle (φ)', { font: new PhetFont( 15 ) } ), // Phi symbol: φ
+        new Text( `Azimuthal Angle (${MathSymbols.PHI})`, { font: new PhetFont( 15 ) } ), // Phi symbol: φ
         azimuthSlider
       ]
     } ), {

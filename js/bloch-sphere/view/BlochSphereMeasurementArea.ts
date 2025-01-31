@@ -58,7 +58,7 @@ export default class BlochSphereMeasurementArea extends Node {
     const equationBasisBox = new HBox( {
       spacing: 5,
       children: [
-        new Text( 'Basis: ', { font: new PhetFont( 16 ) } ),
+        new Text( QuantumMeasurementStrings.basisColonStringProperty, { font: new PhetFont( 16 ) } ),
         new AquaRadioButtonGroup( model.equationBasisProperty, aquaRadioButtonGroupItems, {
           orientation: 'horizontal', margin: 5, tandem: equationPanelTandem.createTandem( 'equationBasisRadioButtonGroup' )
         } )
