@@ -71,7 +71,8 @@ export default class OutcomeProbabilityControl extends VBox {
     if ( systemType === 'classical' ) {
       title = new Text( QuantumMeasurementStrings.coinBiasStringProperty, {
         font: TITLE_AND_LABEL_FONT,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        maxWidth: 250
       } );
     }
     else {
@@ -84,7 +85,8 @@ export default class OutcomeProbabilityControl extends VBox {
         stateToPrepareString => `<b>${stateToPrepareString}</b> ${BRA_KET_TITLE_STRING}`
       );
       title = new RichText( titleStringProperty, {
-        font: TITLE_AND_LABEL_FONT
+        font: TITLE_AND_LABEL_FONT,
+        maxWidth: 250
       } );
     }
 

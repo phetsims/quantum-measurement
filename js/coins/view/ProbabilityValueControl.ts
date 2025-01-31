@@ -35,7 +35,8 @@ export default class ProbabilityValueControl extends VBox {
                       tandem: Tandem ) {
 
     const title = new RichText( titleStringProperty, {
-      font: TITLE_FONT
+      font: TITLE_FONT,
+      maxWidth: 250
     } );
 
     // Create a slider surrounded by two buttons to control the probability value.

@@ -54,7 +54,8 @@ export default class InitialCoinStateSelectorNode extends VBox {
                                 QuantumMeasurementStrings.basisStateStringProperty;
 
     const selectionPanelTitle = new Text( titleStringProperty, {
-      font: new PhetFont( { size: 18, weight: 'bold' } )
+      font: new PhetFont( { size: 18, weight: 'bold' } ),
+      maxWidth: 250
     } );
 
     const radioButtonGroupTandem = tandem.createTandem( 'radioButtonGroup' );
