@@ -41,6 +41,9 @@ type BlochSphereMeasurementAreaOptions = SelfOptions & WithRequired<NodeOptions,
 // constants
 const TIMES = MathSymbols.TIMES;
 
+// Nominal max width of texts, empirically determined
+const MAX_WIDTH = 200;
+
 export default class BlochSphereMeasurementArea extends Node {
 
   public constructor( model: BlochSphereModel, providedOptions: BlochSphereMeasurementAreaOptions ) {
@@ -58,7 +61,7 @@ export default class BlochSphereMeasurementArea extends Node {
     const equationBasisBox = new HBox( {
       spacing: 5,
       children: [
-        new Text( QuantumMeasurementStrings.basisColonStringProperty, { font: new PhetFont( 16 ) } ),
+        new Text( QuantumMeasurementStrings.basisColonStringProperty, { font: new PhetFont( 16 ), maxWidth: 100 } ),
         new AquaRadioButtonGroup( model.equationBasisProperty, aquaRadioButtonGroupItems, {
           orientation: 'horizontal', margin: 5, tandem: equationPanelTandem.createTandem( 'equationBasisRadioButtonGroup' )
         } )
@@ -133,11 +136,11 @@ export default class BlochSphereMeasurementArea extends Node {
 
     const spinUpLabelStringProperty = new DerivedStringProperty(
       [ model.measurementAxisProperty ],
-      measurementAxis => `|${QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER}<sub>${measurementAxis.label.value}</sub>${KET}`
+      measurementAxis => `|${QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER}<sub>${measurementAxis.label}</sub>${KET}`
     );
     const spinDownLabelStringProperty = new DerivedStringProperty(
       [ model.measurementAxisProperty ],
-      measurementAxis => `|${QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER}<sub>${measurementAxis.label.value}</sub>${KET}`
+      measurementAxis => `|${QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER}<sub>${measurementAxis.label}</sub>${KET}`
     );
 
     const measurementResultHistogram = new QuantumMeasurementHistogram(
@@ -212,9 +215,9 @@ export default class BlochSphereMeasurementArea extends Node {
       spacing: 10,
       align: 'left',
       children: [
-        new Text( QuantumMeasurementStrings.measurementParametersStringProperty, { font: new PhetFont( 18 ) } ),
+        new Text( QuantumMeasurementStrings.measurementParametersStringProperty, { font: new PhetFont( 18 ), maxWidth: MAX_WIDTH } ),
         singleOrMultipleRadioButtonGroup,
-        new Text( QuantumMeasurementStrings.spinMeasurementAxisStringProperty, { font: new PhetFont( 16 ) } ),
+        new Text( QuantumMeasurementStrings.spinMeasurementAxisStringProperty, { font: new PhetFont( 16 ), maxWidth: MAX_WIDTH } ),
         basisRadioButtonGroup,
         measurementTimerControl
       ]
@@ -269,7 +272,10 @@ export default class BlochSphereMeasurementArea extends Node {
         xMargin: 20,
         yMargin: 6,
         maxWidth: measurementControlPanel.width,
-        tandem: providedOptions.tandem.createTandem( 'experimentControlButton' )
+        tandem: providedOptions.tandem.createTandem( 'experimentControlButton' ),
+        textNodeOptions: {
+          maxWidth: 150
+        }
       }
     );
 
@@ -287,7 +293,7 @@ export default class BlochSphereMeasurementArea extends Node {
 
     const magneticFieldCheckbox = new Checkbox(
       model.magneticFieldEnabledProperty,
-      new Text( QuantumMeasurementStrings.enableMagneticFieldStringProperty, { font: new PhetFont( { size: 16 } ) } ),
+      new Text( QuantumMeasurementStrings.enableMagneticFieldStringProperty, { font: new PhetFont( { size: 16 } ), maxWidth: MAX_WIDTH } ),
       {
         spacing: 10,
         centerX: multipleMeasurementBlochSpheresNode.centerX,

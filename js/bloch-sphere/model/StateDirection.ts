@@ -31,6 +31,8 @@ export class StateDirection extends EnumerationValue {
                       public readonly tandemName: string ) {
     super();
 
+
+    // TODO: Should this be linked?? It ends up being X,Y,Z, see https://github.com/phetsims/quantum-measurement/issues/86
     this.shortName = description.replace( '+', '' );
   }
 

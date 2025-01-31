@@ -120,7 +120,7 @@ export default class SpinStatePreparationArea extends VBox {
       new HBox( {
         spacing: 5,
         children: [
-          new Text( QuantumMeasurementStrings.ZStringProperty, { font: new PhetFont( 15 ) } ),
+          new Text( 'Z', { font: new PhetFont( 15 ) } ),
           new DashedArrowNode( 0, 0, 0, -20, { stroke: 'blue', fill: 'blue', scale: 1 } )
         ]
       } ),
@@ -135,7 +135,7 @@ export default class SpinStatePreparationArea extends VBox {
       new HBox( {
         spacing: 5,
         children: [
-          new Text( QuantumMeasurementStrings.XStringProperty, { font: new PhetFont( 15 ) } ),
+          new Text( 'X', { font: new PhetFont( 15 ) } ),
           new DashedArrowNode( 0, 0, 20, 0, { stroke: 'red', fill: 'red', scale: 1 } )
         ]
       } ),

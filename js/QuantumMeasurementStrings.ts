@@ -81,9 +81,6 @@ type StringsType = {
   'verticalStringProperty': LocalizedStringProperty;
   'SGSubXStringProperty': LocalizedStringProperty;
   'SGSubZStringProperty': LocalizedStringProperty;
-  'SSubXStringProperty': LocalizedStringProperty;
-  'SSubYStringProperty': LocalizedStringProperty;
-  'SSubZStringProperty': LocalizedStringProperty;
   'SternGerlachMeasurementsStringProperty': LocalizedStringProperty;
   'sourceModeStringProperty': LocalizedStringProperty;
   'spinSourceStringProperty': LocalizedStringProperty;
@@ -92,8 +89,6 @@ type StringsType = {
   'unpolarizedStringProperty': LocalizedStringProperty;
   'unknownProbabilitySymbolStringProperty': LocalizedStringProperty;
   'projectionStringProperty': LocalizedStringProperty;
-  'XStringProperty': LocalizedStringProperty;
-  'ZStringProperty': LocalizedStringProperty;
   'blockUpStringProperty': LocalizedStringProperty;
   'blockDownStringProperty': LocalizedStringProperty;
   'expectedPercentageStringProperty': LocalizedStringProperty;
@@ -103,6 +98,8 @@ type StringsType = {
   'measurementParametersStringProperty': LocalizedStringProperty;
   'spinMeasurementAxisStringProperty': LocalizedStringProperty;
   'basisColonStringProperty': LocalizedStringProperty;
+  'polarAngleParenthesesSymbolPatternStringProperty': LocalizedStringProperty;
+  'azimuthalAngleParenthesesSymbolPatternStringProperty': LocalizedStringProperty;
 };
 
 const QuantumMeasurementStrings = getStringModule( 'QUANTUM_MEASUREMENT' ) as StringsType;

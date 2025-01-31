@@ -8,11 +8,13 @@
  */
 
 import BlochSphereModel from 'model/BlochSphereModel.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
+import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Node, Text, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
@@ -35,24 +37,30 @@ export default class BlochSpherePreparationArea extends VBox {
 
   public constructor( model: BlochSphereModel, parentNode: Node, providedOptions: BlochSpherePreparationAreaOptions ) {
 
-    const polarSlider = new Slider( model.preparationBlochSphere.polarAngleProperty, model.preparationBlochSphere.polarAngleProperty.range, {
-      center: new Vector2( 100, 200 ),
-      tandem: providedOptions.tandem.createTandem( 'polarSlider' ),
-      thumbFill: '#444',
-      trackSize: new Dimension2( 150, 0.5 ),
-      majorTickLength: 10,
-      constrainValue: value => Utils.roundToInterval( value, 5 / 180 * Math.PI ), // 5 degree intervals
-      shiftKeyboardStep: 5 / 180 * Math.PI
-    } );
-    const azimuthSlider = new Slider( model.preparationBlochSphere.azimuthalAngleProperty, model.preparationBlochSphere.azimuthalAngleProperty.range, {
-      center: new Vector2( 100, 100 ),
-      tandem: providedOptions.tandem.createTandem( 'azimuthSlider' ),
-      thumbFill: '#444',
-      trackSize: new Dimension2( 150, 0.5 ),
-      majorTickLength: 10,
-      constrainValue: value => Utils.roundToInterval( value, 5 / 360 * Math.PI * 2 ), // 5 degree intervals
-      shiftKeyboardStep: 5 / 360 * Math.PI * 2
-    } );
+    const polarSlider = new Slider(
+      model.preparationBlochSphere.polarAngleProperty,
+      model.preparationBlochSphere.polarAngleProperty.range,
+      {
+        center: new Vector2( 100, 200 ),
+        tandem: providedOptions.tandem.createTandem( 'polarSlider' ),
+        thumbFill: '#444',
+        trackSize: new Dimension2( 150, 0.5 ),
+        majorTickLength: 10,
+        constrainValue: value => Utils.roundToInterval( value, 5 / 180 * Math.PI ), // 5 degree intervals
+        shiftKeyboardStep: 5 / 180 * Math.PI
+      } );
+    const azimuthSlider = new Slider(
+      model.preparationBlochSphere.azimuthalAngleProperty,
+      model.preparationBlochSphere.azimuthalAngleProperty.range,
+      {
+        center: new Vector2( 100, 100 ),
+        tandem: providedOptions.tandem.createTandem( 'azimuthSlider' ),
+        thumbFill: '#444',
+        trackSize: new Dimension2( 150, 0.5 ),
+        majorTickLength: 10,
+        constrainValue: value => Utils.roundToInterval( value, 5 / 360 * Math.PI * 2 ), // 5 degree intervals
+        shiftKeyboardStep: 5 / 360 * Math.PI * 2
+      } );
 
     polarSlider.addMajorTick( 0, new Text( '0', { font: new PhetFont( 15 ) } ) );
     polarSlider.addMajorTick( Math.PI, new Text( `${MathSymbols.PI}`, { font: new PhetFont( 15 ) } ) );
@@ -75,9 +83,17 @@ export default class BlochSpherePreparationArea extends VBox {
       spacing: 10,
       children: [
         directionComboBox,
-        new Text( `Polar Angle (${MathSymbols.THETA}): `, { font: new PhetFont( 15 ) } ), // Theta symbol: θ
+        new Text(
+          new DerivedProperty(
+            [ QuantumMeasurementStrings.polarAngleParenthesesSymbolPatternStringProperty ],
+            stringPattern => StringUtils.fillIn( stringPattern, { symbol: MathSymbols.THETA } )
+          ), { font: new PhetFont( 15 ), maxWidth: 200 } ), // Theta symbol: θ
         polarSlider,
-        new Text( `Azimuthal Angle (${MathSymbols.PHI})`, { font: new PhetFont( 15 ) } ), // Phi symbol: φ
+        new Text(
+          new DerivedProperty(
+            [ QuantumMeasurementStrings.azimuthalAngleParenthesesSymbolPatternStringProperty ],
+            stringPattern => StringUtils.fillIn( stringPattern, { symbol: MathSymbols.PHI } )
+          ), { font: new PhetFont( 15 ), maxWidth: 200 } ), // Phi symbol: φ
         azimuthSlider
       ]
     } ), {
@@ -99,7 +115,10 @@ export default class BlochSpherePreparationArea extends VBox {
       spacing: 10,
       align: 'center',
       children: [
-        new Text( QuantumMeasurementStrings.spinStateToPrepareStringProperty, { font: new PhetFont( { size: 20, weight: 'bolder' } ) } ),
+        new Text( QuantumMeasurementStrings.spinStateToPrepareStringProperty, {
+          font: new PhetFont( { size: 20, weight: 'bolder' } ),
+          maxWidth: 250
+        } ),
         new BlochSphereSymbolicEquationNode(),
         new Panel(
           new BlochSphereNumericalEquationNode( model.preparationBlochSphere ), {

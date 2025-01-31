@@ -6,27 +6,25 @@
  * @author Agustín Vallejo
  */
 
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { StateDirection } from './StateDirection.js';
 
 export class MeasurementAxis extends EnumerationValue {
   public static readonly X_PLUS = new MeasurementAxis(
-    QuantumMeasurementStrings.SSubXStringProperty, Math.PI / 2, 0, StateDirection.X_MINUS, 'SSubX'
+    'X', Math.PI / 2, 0, StateDirection.X_MINUS, 'X'
   );
   public static readonly Y_PLUS = new MeasurementAxis(
-    QuantumMeasurementStrings.SSubYStringProperty, Math.PI / 2, Math.PI / 2, StateDirection.Y_MINUS, 'SSubY'
+    'Y', Math.PI / 2, Math.PI / 2, StateDirection.Y_MINUS, 'Y'
   );
   public static readonly Z_PLUS = new MeasurementAxis(
-    QuantumMeasurementStrings.SSubZStringProperty, 0, 0, StateDirection.Z_MINUS, 'SSubZ'
+    'Z', 0, 0, StateDirection.Z_MINUS, 'Z'
   );
 
   public static readonly enumeration = new Enumeration( MeasurementAxis );
 
-  public constructor( public readonly label: TReadOnlyProperty<string>,
+  public constructor( public readonly label: string,
                       public readonly polarAngle: number,
                       public readonly azimuthalAngle: number,
                       public readonly oppositeDirection: StateDirection,
