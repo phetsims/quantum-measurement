@@ -51,7 +51,7 @@ export default class SpinMeasurementArea extends VBox {
     const items: ComboBoxItem<SpinExperiment>[] = SpinExperiment.enumeration.values.map( experiment => {
       return {
         value: experiment,
-        createNode: () => new Text( experiment.experimentName, { font: new PhetFont( 16 ) } )
+        createNode: () => new Text( experiment.experimentName, { font: new PhetFont( 16 ), maxWidth: 300 } )
       };
     } );
 
@@ -100,15 +100,15 @@ export default class SpinMeasurementArea extends VBox {
         [
           sternGerlach.isZOrientedProperty
         ], isZOriented => isZOriented ?
-                                              `|${QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER}<sub>Z</sub>${QuantumMeasurementConstants.KET}` :
-                                              `|${QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER}<sub>X</sub>${QuantumMeasurementConstants.KET}`
+                          `|${QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER}<sub>Z</sub>${QuantumMeasurementConstants.KET}` :
+                          `|${QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER}<sub>X</sub>${QuantumMeasurementConstants.KET}`
       );
       const spinDownLabelStringProperty = new DerivedStringProperty(
         [
           sternGerlach.isZOrientedProperty
         ], isZOriented => isZOriented ?
-                                              `|${QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER}<sub>Z</sub>${QuantumMeasurementConstants.KET}` :
-                                              `|${QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER}<sub>X</sub>${QuantumMeasurementConstants.KET}`
+                          `|${QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER}<sub>Z</sub>${QuantumMeasurementConstants.KET}` :
+                          `|${QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER}<sub>X</sub>${QuantumMeasurementConstants.KET}`
       );
 
       const tandemName = `histogram${histogramCounter++}`;
@@ -184,7 +184,10 @@ export default class SpinMeasurementArea extends VBox {
       model.expectedPercentageVisibleProperty,
       new HBox( {
         children: [
-          new Text( QuantumMeasurementStrings.expectedPercentageStringProperty, { font: new PhetFont( 16 ) } ),
+          new Text( QuantumMeasurementStrings.expectedPercentageStringProperty, {
+            font: new PhetFont( 16 ),
+            maxWidth: 200
+          } ),
           new Path( new Shape().moveTo( 0, 0 ).lineTo( 20, 0 ),
             QuantumMeasurementConstants.expectedPercentagePathOptions
           )
@@ -238,7 +241,10 @@ export default class SpinMeasurementArea extends VBox {
     super( {
       children: [
         experimentComboBox,
-        new Text( QuantumMeasurementStrings.SternGerlachMeasurementsStringProperty, { font: new PhetFont( { size: 20, weight: 'bolder' } ) } ),
+        new Text( QuantumMeasurementStrings.SternGerlachMeasurementsStringProperty, {
+          font: new PhetFont( { size: 20, weight: 'bolder' } ),
+          maxWidth: 400
+        } ),
         experimentAreaNode
       ],
       align: 'left',

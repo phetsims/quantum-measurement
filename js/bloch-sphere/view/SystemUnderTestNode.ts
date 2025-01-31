@@ -58,7 +58,6 @@ class SystemUnderTestNode extends Panel {
       ],
       ( ( isSingleMode, atomString, atomsString ) => isSingleMode ? atomString : atomsString )
     );
-    // TODO: Should this be recentering?? https://github.com/phetsims/quantum-measurement/issues/86
     const titleNode = new Text( titleStringProperty, { font: LABEL_FONT, maxWidth: 70 } );
 
     // Create the magnetic field node, which is only visible when the magnetic field is enabled.

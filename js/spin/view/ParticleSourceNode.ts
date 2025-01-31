@@ -100,7 +100,7 @@ export default class ParticleSourceNode extends Node {
     } );
 
     // major ticks at 0%, 33%, 66%, 100%
-    const tickLabelOptions = { font: new PhetFont( 12 ) };
+    const tickLabelOptions = { font: new PhetFont( 12 ), maxWidth: 40 };
     particleAmountSlider.addMajorTick( sliderRange.min, new Text( QuantumMeasurementStrings.noneStringProperty, tickLabelOptions ) );
     particleAmountSlider.addMajorTick( sliderRange.max, new Text( QuantumMeasurementStrings.lotsStringProperty, tickLabelOptions ) );
     particleAmountSlider.addMajorTick( sliderRange.min + ( sliderRange.max - sliderRange.min ) / 3 );
@@ -120,7 +120,7 @@ export default class ParticleSourceNode extends Node {
     const sourceModeRadioButtonGroup = new AquaRadioButtonGroup( particleSourceModel.sourceModeProperty, SourceMode.enumeration.values.map( sourceMode => {
       return {
         value: sourceMode,
-        createNode: () => new Text( sourceMode.sourceName, { font: new PhetFont( 15 ) } ),
+        createNode: () => new Text( sourceMode.sourceName, { font: new PhetFont( 15 ), maxWidth: 150 } ),
         options: {
           accessibleName: sourceMode.sourceName
         },
@@ -132,6 +132,7 @@ export default class ParticleSourceNode extends Node {
     } );
     const sourceModeTitle = new RichText( QuantumMeasurementStrings.sourceModeStringProperty, {
       font: new PhetFont( { size: 20, weight: 'bold' } ),
+      maxWidth: 200,
       visibleProperty: sourceModeRadioButtonGroup.visibleProperty
     } );
 
@@ -152,7 +153,8 @@ export default class ParticleSourceNode extends Node {
         new RichText( QuantumMeasurementStrings.spinSourceStringProperty, {
           font: new PhetFont( 12 ),
           bottom: particleSourceApparatus.top - SPACING,
-          left: particleSourceApparatus.left + SPACING
+          left: particleSourceApparatus.left + SPACING,
+          maxWidth: 200
         } ),
         particleSourceApparatus,
         sourceModeBox

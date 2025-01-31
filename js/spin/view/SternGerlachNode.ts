@@ -85,11 +85,9 @@ export default class SternGerlachNode extends Node {
 
     const experimentLabel = new RichText( new DerivedProperty(
         [
-          sternGerlach.isZOrientedProperty,
-          QuantumMeasurementStrings.SGSubZStringProperty,
-          QuantumMeasurementStrings.SGSubXStringProperty
+          sternGerlach.isZOrientedProperty
         ],
-        ( isZOriented, SGSubZ, SGSubX ) => isZOriented ? SGSubZ : SGSubX ),
+        isZOriented => isZOriented ? 'SG<sub>Z</sub>' : 'SG<sub>X</sub>' ),
       { font: new PhetFont( 18 ), fill: 'white', center: new Vector2( -STERN_GERLACH_WIDTH / 2 + 25, -STERN_GERLACH_HEIGHT / 2 + 70 ) } );
 
     const sternGerlachControls = new VBox( {
@@ -108,12 +106,12 @@ export default class SternGerlachNode extends Node {
       sternGerlach.isZOrientedProperty, [
         {
           value: true, createNode: () => new RichText(
-            QuantumMeasurementStrings.SGSubZStringProperty, radioButtonTextOptions
+            'SG<sub>Z</sub>', radioButtonTextOptions
           ), tandemName: 'isZOrientedRadioButton'
         },
         {
           value: false, createNode: () => new RichText(
-            QuantumMeasurementStrings.SGSubXStringProperty, radioButtonTextOptions
+            'SG<sub>X</sub>', radioButtonTextOptions
           ), tandemName: 'isXOrientedRadioButton'
         }
       ], {

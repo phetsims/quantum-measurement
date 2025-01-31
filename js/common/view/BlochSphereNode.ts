@@ -149,9 +149,13 @@ export default class BlochSphereNode extends Node {
 
     const title = new Text( QuantumMeasurementStrings.blochSphereStringProperty, {
       font: new PhetFont( { size: 16, weight: 'bolder' } ),
+      maxWidth: 200,
       visible: options.drawTitle,
       bottom: upStateLabel.top - 10,
       centerX: upStateLabel.centerX
+    } );
+    QuantumMeasurementStrings.blochSphereStringProperty.link( () => {
+      title.centerX = upStateLabel.centerX;
     } );
 
     const stateVectorVisibleProperty = new BooleanProperty( true, {
