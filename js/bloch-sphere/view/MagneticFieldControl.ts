@@ -94,7 +94,8 @@ export default class MagneticFieldControl extends Panel {
     } );
 
     const panelTitle = new Text( QuantumMeasurementStrings.magneticFieldStringProperty, {
-      font: new PhetFont( 18 )
+      font: new PhetFont( 18 ),
+      maxWidth: 150
     } );
 
     super(
