@@ -293,8 +293,12 @@ class CoinExperimentMeasurementArea extends VBox {
         // The user is ready to make measurements on the coins, so animate the coins for both the single and multi-coin
         // experiments moving from the preparation area to the measurement area.
         singleCoinAnimations.startIngressAnimationForSingleCoin( false );
-        multipleCoinAnimations.startIngressAnimationForCoinSet( false );
-        usingManyCoinsProperty.value && manyCoinsAnimations.startIngressAnimationForCoinSet( false );
+        if ( usingManyCoinsProperty.value ) {
+          manyCoinsAnimations.startIngressAnimationForCoinSet( false );
+        }
+        else {
+          multipleCoinAnimations.startIngressAnimationForCoinSet( false );
+        }
       }
     } );
 
@@ -314,8 +318,12 @@ class CoinExperimentMeasurementArea extends VBox {
 
           // Animate a coin from the prep area to the single coin test box to indicate that a new "quantum coin" is
           // being prepared for measurement.
-          multipleCoinAnimations.startIngressAnimationForCoinSet( true );
-          usingManyCoinsProperty.value && manyCoinsAnimations.startIngressAnimationForCoinSet( true );
+          if ( usingManyCoinsProperty.value ) {
+            manyCoinsAnimations.startIngressAnimationForCoinSet( true );
+          }
+          else {
+            multipleCoinAnimations.startIngressAnimationForCoinSet( true );
+          }
         }
         else if ( usingManyCoinsProperty.value ) {
           this.measuredCoinsPixelRepresentation.startFlippingAnimation();
