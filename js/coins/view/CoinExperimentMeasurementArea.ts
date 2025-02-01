@@ -260,11 +260,8 @@ class CoinExperimentMeasurementArea extends VBox {
     const manyCoinsAnimations = new ManyCoinsAnimations(
       sceneModel,
       this,
-      measuredCoinsPixelRepresentation,
-      this.coinSetInTestBoxProperty,
-      {
-        visibleProperty: DerivedProperty.valueEqualsConstant( sceneModel.coinSet.numberOfActiveSystemsProperty, 10000 )
-      }
+      multipleCoinTestBox,
+      this.coinSetInTestBoxProperty
     );
 
     // Convenience property to conditionally call functions on the many coins animation
@@ -310,6 +307,7 @@ class CoinExperimentMeasurementArea extends VBox {
 
       if ( measurementState === 'preparingToBeMeasured' ) {
         if ( sceneModel.systemType === 'quantum' ) {
+
           // Abort any previous animations and clear out the test box.
           multipleCoinAnimations.abortIngressAnimationForCoinSet();
           manyCoinsAnimations.abortIngressAnimationForCoinSet();

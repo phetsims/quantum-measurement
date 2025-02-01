@@ -34,6 +34,7 @@ import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
 import CoinExperimentMeasurementArea from './CoinExperimentMeasurementArea.js';
 import CoinExperimentPreparationArea from './CoinExperimentPreparationArea.js';
 import CoinNode from './CoinNode.js';
+import CoinSetPixelRepresentation from './CoinSetPixelRepresentation.js';
 import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
 import SmallCoinNode from './SmallCoinNode.js';
 
@@ -193,15 +194,12 @@ class CoinsExperimentSceneView extends Node {
     } );
 
     this.children = [
-      this.measurementArea.manyCoinsAnimations,
       this.preparationArea,
       this.measurementArea,
       dividingLine,
       startMeasurementButton,
       this.newCoinButton
     ];
-
-    this.measurementArea.manyCoinsAnimations.center = this.preparationArea.center.plusXY( 0, -50 );
 
     this.pdomOrder = [
       this.preparationArea,
@@ -250,6 +248,15 @@ class CoinsExperimentSceneView extends Node {
       this.addChild( coinNode );
       coinNode.moveToBack();
     } );
+  }
+
+  /**
+   * Add the node that is used to represent the state of a large number of coins to the scene graph.
+   */
+  public addManyCoinsNode( manyCoinNode: CoinSetPixelRepresentation ): void {
+    manyCoinNode.center = this.travelingCoinsOrigin;
+    this.addChild( manyCoinNode );
+    manyCoinNode.moveToBack();
   }
 
   protected updateActivityAreaPositions(): void {

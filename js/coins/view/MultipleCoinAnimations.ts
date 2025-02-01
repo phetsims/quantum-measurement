@@ -105,9 +105,9 @@ class MultipleCoinAnimations {
 
       const multipleCoinTestBoxBounds = sceneGraphParent.globalToLocalBounds( multipleCoinTestBox.getGlobalBounds() );
 
-      // The tricky bit about this animation is that the test box that is their destination could itself be moving due
-      // to the way the measurement area works.  This unfortunately means we need to have a bit of the "tweak factor" to
-      // get the destination right.
+      // The tricky bit about this animation is that the test box where these coins are headed could itself be moving
+      // due to the way the measurement area works.  This unfortunately means we need to have a bit of the "tweak
+      // factor" to get the destination right.
       const testAreaXOffset = forReprepare ? 0 : -91; // empirically determined
       const destinationCenter = multipleCoinTestBoxBounds.center.plusXY( testAreaXOffset, 0 );
 

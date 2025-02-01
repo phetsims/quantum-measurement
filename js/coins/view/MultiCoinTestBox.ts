@@ -21,6 +21,7 @@ import quantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { MULTI_COIN_ANIMATION_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
 import { ExperimentMeasurementState } from '../model/ExperimentMeasurementState.js';
+import CoinSetPixelRepresentation from './CoinSetPixelRepresentation.js';
 import SmallCoinNode, { SmallCoinDisplayMode } from './SmallCoinNode.js';
 
 // constants
@@ -36,7 +37,12 @@ class MultiCoinTestBox extends HBox {
 
   private readonly testBoxWithClipArea: Node;
   private readonly numberOfActiveSystemsProperty: TReadOnlyProperty<number>;
+
+  // The coin nodes that are currently in the test box.  These are the represented as one node per coin.
   private readonly residentCoinNodes: SmallCoinNode[] = [];
+
+  // The pixel representation of the coin set, which is used for the many coin case.
+  private pixelRepresentation: CoinSetPixelRepresentation | null = null;
 
   public constructor( coinSet: TwoStateSystemSet<string>,
                       measurementStateProperty: Property<ExperimentMeasurementState>,
@@ -135,18 +141,53 @@ class MultiCoinTestBox extends HBox {
         coinNode.displayModeProperty.value = 'masked';
       }
     } );
+
+    // Handle the pixel-based representation of the coin set if present.
+    if ( this.pixelRepresentation ) {
+
+      if ( measurementState === 'revealed' ) {
+
+        // JPB: Stop any in-progress animation and reveal.
+      }
+      else if ( measurementState === 'preparingToBeMeasured' ) {
+        this.pixelRepresentation.startFlippingAnimation();
+      }
+      else if ( measurementState === 'readyToBeMeasured' || measurementState === 'measuredAndHidden' ) {
+
+        // JPB: Do the equivalent of stopping the flipping animation and hiding the pixels.
+        // if ( coinNode.isFlipping ) {
+        //   coinNode.stopFlipping();
+        // }
+        // coinNode.displayModeProperty.value = 'masked';
+      }
+    }
   }
 
   // Clear out the contents of this test box.
   public clearContents(): void {
     this.residentCoinNodes.forEach( coinNode => this.testBoxWithClipArea.removeChild( coinNode ) );
     this.residentCoinNodes.length = 0;
+    if ( this.pixelRepresentation ) {
+      this.testBoxWithClipArea.removeChild( this.pixelRepresentation );
+      this.pixelRepresentation = null;
+    }
   }
 
   public addCoinNodeToBox( coinNode: SmallCoinNode ): void {
     this.testBoxWithClipArea.addChild( coinNode );
     coinNode.moveToBack();
     this.residentCoinNodes.push( coinNode );
+  }
+
+  // Add the pixel-based representation of the coin set to the test box.
+  public addPixelRepresentationToBox( pixelRepresentation: CoinSetPixelRepresentation ): void {
+
+    // Center it, add it, and keep a record of it.
+    pixelRepresentation.center = this.testBoxWithClipArea.center;
+    console.log( `pixelRepresentation.center = ${pixelRepresentation.center}` );
+    // debugger;
+    this.testBoxWithClipArea.addChild( pixelRepresentation );
+    this.pixelRepresentation = pixelRepresentation;
   }
 
   /**
@@ -186,6 +227,8 @@ class MultiCoinTestBox extends HBox {
 
     return radius;
   }
+
+  public static readonly SIZE = BOX_SIZE;
 }
 
 quantumMeasurement.register( 'MultiCoinTestBox', MultiCoinTestBox );
