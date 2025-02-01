@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * SpinVector is a simple EnumerationValue class to switch between Single Particle and Continuous source modes.
