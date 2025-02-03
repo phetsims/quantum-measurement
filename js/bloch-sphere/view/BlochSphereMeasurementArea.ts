@@ -69,7 +69,7 @@ export default class BlochSphereMeasurementArea extends Node {
     } );
 
     const equationNode = new BlochSphereNumericalEquationNode( model.singleMeasurementBlochSphere, {
-      tandem: providedOptions.tandem.createTandem( 'equationNode' ),
+      tandem: equationPanelTandem.createTandem( 'equationNode' ),
       basisProperty: model.equationBasisProperty
     } );
 
@@ -143,6 +143,7 @@ export default class BlochSphereMeasurementArea extends Node {
       measurementAxis => `|${QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER}<sub>${measurementAxis.label}</sub>${KET}`
     );
 
+    const measurementResultHistogramTandem = providedOptions.tandem.createTandem( 'measurementResultHistogram' );
     const measurementResultHistogram = new QuantumMeasurementHistogram(
       model.upMeasurementCountProperty,
       model.downMeasurementCountProperty,
@@ -150,14 +151,16 @@ export default class BlochSphereMeasurementArea extends Node {
         new RichText( spinUpLabelStringProperty ),
         new RichText( spinDownLabelStringProperty ) ],
       {
-        tandem: providedOptions.tandem.createTandem( 'measurementResultHistogram' )
+        tandem: measurementResultHistogramTandem
       }
     );
 
     const resetCountsButton = new EraserButton( {
       listener: () => model.resetCounts(),
-      tandem: providedOptions.tandem.createTandem( 'resetCountsButton' )
+      tandem: measurementResultHistogramTandem.createTandem( 'resetCountsButton' )
     } );
+
+    const measurementControlsTandem = providedOptions.tandem.createTandem( 'measurementControls' );
 
     const radioButtonItems = [ true, false ].map(
       isSingleMeasurement => {
@@ -180,7 +183,7 @@ export default class BlochSphereMeasurementArea extends Node {
       {
         orientation: 'vertical',
         stretch: false,
-        tandem: providedOptions.tandem.createTandem( 'singleOrMultipleRadioButtonGroup' )
+        tandem: measurementControlsTandem.createTandem( 'singleOrMultipleRadioButtonGroup' )
       }
     );
 
@@ -190,7 +193,7 @@ export default class BlochSphereMeasurementArea extends Node {
     };
 
     // Create and add the radio buttons that select the chart type view in the nuclideChartAccordionBox.
-    const basisRadioButtonGroupTandem = providedOptions.tandem.createTandem( 'basisRadioButtonGroup' );
+    const basisRadioButtonGroupTandem = measurementControlsTandem.createTandem( 'basisRadioButtonGroup' );
 
     const basisRadioGroupItems = MeasurementAxis.enumeration.values.map( basis => {
       return {
@@ -207,13 +210,14 @@ export default class BlochSphereMeasurementArea extends Node {
     } );
 
     const measurementTimerControl = new MeasurementTimerControl( model.timeToMeasurementProperty, model.measurementTimeProperty, {
-      tandem: providedOptions.tandem.createTandem( 'measurementTimerControl' ),
+      tandem: measurementControlsTandem.createTandem( 'measurementTimerControl' ),
       visibleProperty: model.magneticFieldEnabledProperty
     } );
 
     const measurementControlPanel = new Panel( new VBox( {
       spacing: 10,
       align: 'left',
+      tandem: measurementControlsTandem,
       children: [
         new Text( QuantumMeasurementStrings.measurementParametersStringProperty, { font: new PhetFont( 18 ), maxWidth: MAX_WIDTH } ),
         singleOrMultipleRadioButtonGroup,
@@ -291,6 +295,8 @@ export default class BlochSphereMeasurementArea extends Node {
       ]
     } );
 
+    const magneticFieldControlsTandem = providedOptions.tandem.createTandem( 'magneticFieldControls' );
+
     const magneticFieldCheckbox = new Checkbox(
       model.magneticFieldEnabledProperty,
       new Text( QuantumMeasurementStrings.enableMagneticFieldStringProperty, { font: new PhetFont( { size: 16 } ), maxWidth: MAX_WIDTH } ),
@@ -298,20 +304,23 @@ export default class BlochSphereMeasurementArea extends Node {
         spacing: 10,
         centerX: multipleMeasurementBlochSpheresNode.centerX,
         bottom: QuantumMeasurementConstants.LAYOUT_BOUNDS.bottom - 55,
-        tandem: providedOptions.tandem.createTandem( 'magneticFieldCheckbox' )
+        tandem: magneticFieldControlsTandem.createTandem( 'magneticFieldCheckbox' )
       }
     );
 
     const magneticFieldControl = new MagneticFieldControl( model.magneticFieldStrengthProperty, {
       visibleProperty: model.magneticFieldEnabledProperty,
-      tandem: providedOptions.tandem.createTandem( 'magneticFieldControl' )
+      tandem: magneticFieldControlsTandem
     } );
 
     const systemUnderTestNode = new SystemUnderTestNode(
       model.magneticFieldEnabledProperty,
       model.magneticFieldStrengthProperty,
       model.isSingleMeasurementModeProperty,
-      model.measurementStateProperty
+      model.measurementStateProperty,
+      {
+        tandem: providedOptions.tandem.createTandem( 'systemUnderTestNode' )
+      }
     );
 
     const magneticFieldAndStrengthControl = new HBox( {

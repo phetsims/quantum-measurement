@@ -34,28 +34,25 @@ const MAX_OBSERVATION_TIME = 2 * Math.PI / QuantumMeasurementConstants.MAX_PRECE
 
 class BlochSphereModel implements TModel {
 
-  public readonly magneticFieldEnabledProperty: BooleanProperty;
-
-  // Strength of the magnetic field
-  public magneticFieldStrengthProperty: NumberProperty;
-
   // Bloch Spheres shown in the screen
   public readonly preparationBlochSphere: ComplexBlochSphere;
   public readonly singleMeasurementBlochSphere: ComplexBlochSphere;
   public readonly multiMeasurementBlochSpheres: ComplexBlochSphere[] = [];
 
+  // Preparation area related properties
   // Selected State Direction
   public selectedStateDirectionProperty: Property<StateDirection>;
 
+  // Measurement area related properties
+  // A flag that indicates whether the model is ready to observe or needs the state to be prepared.  This should not be
+  // modified directly by client code, but rather by the model's observe() and reprepare() methods.
+  public readonly measurementStateProperty: Property<SpinMeasurementState>;
+
   // Selected Equation Basis
   public equationBasisProperty: Property<StateDirection>;
-
+  // Measurement controls
   // Measurement axis, wether to measure spin in X,Y, or Z axis
   public measurementAxisProperty: Property<MeasurementAxis>;
-
-  // Counts for the number of times the spin has been measured in the up and down states. Shown in the histograms.
-  public readonly upMeasurementCountProperty: NumberProperty;
-  public readonly downMeasurementCountProperty: NumberProperty;
 
   // If is single or multiple measurement mode
   public isSingleMeasurementModeProperty: BooleanProperty;
@@ -66,79 +63,106 @@ class BlochSphereModel implements TModel {
   // Current measurement time.
   public measurementTimeProperty: NumberProperty;
 
-  // A flag that indicates whether the model is ready to observe or needs the state to be prepared.  This should not be
-  // modified directly by client code, but rather by the model's observe() and reprepare() methods.
-  public readonly measurementStateProperty: Property<SpinMeasurementState>;
+  // Histograms
+  // Counts for the number of times the spin has been measured in the up and down states. Shown in the histograms.
+  public readonly upMeasurementCountProperty: NumberProperty;
+  public readonly downMeasurementCountProperty: NumberProperty;
+
+  // Magnetic Field Controls
+  public readonly magneticFieldEnabledProperty: BooleanProperty;
+
+  // Strength of the magnetic field
+  public magneticFieldStrengthProperty: NumberProperty;
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
-    this.magneticFieldEnabledProperty = new BooleanProperty( false, {
-      tandem: providedOptions.tandem.createTandem( 'magneticFieldEnabledProperty' ),
+    // Nesting tandems
+    const preparationAreaTandem = providedOptions.tandem.createTandem( 'preparationAreaModel' );
+    const measurementAreaTandem = providedOptions.tandem.createTandem( 'measurementAreaModel' );
+    const measurementControlsTandem = measurementAreaTandem.createTandem( 'measurementControls' );
+    const histogramsTandem = measurementAreaTandem.createTandem( 'histograms' );
+    const magneticFieldControlsTandem = measurementAreaTandem.createTandem( 'magneticFieldControls' );
+
+    // Preparation area related properties
+    this.preparationBlochSphere = new ComplexBlochSphere( {
+      tandem: preparationAreaTandem.createTandem( 'preparationBlochSphere' )
+    } );
+
+    this.selectedStateDirectionProperty = new Property( StateDirection.X_PLUS, {
+      tandem: preparationAreaTandem.createTandem( 'selectedStateDirectionProperty' ),
+      phetioValueType: EnumerationIO( StateDirection ),
       phetioFeatured: true
     } );
 
-    this.preparationBlochSphere = new ComplexBlochSphere( {
-      tandem: providedOptions.tandem.createTandem( 'preparationBlochSphere' )
-    } );
-
+    // Measurement area related properties
     this.singleMeasurementBlochSphere = new ComplexBlochSphere( {
-      tandem: providedOptions.tandem.createTandem( 'singleMeasurementBlochSphere' )
+      tandem: measurementAreaTandem.createTandem( 'singleMeasurementBlochSphere' )
     } );
 
-    const multiMeasurementTandem = providedOptions.tandem.createTandem( 'multiMeasurementBlochSpheres' );
+    const multiMeasurementTandem = measurementAreaTandem.createTandem( 'multiMeasurementBlochSpheres' );
     _.times( 10, index => {
       this.multiMeasurementBlochSpheres.push( new ComplexBlochSphere( {
         tandem: multiMeasurementTandem.createTandem( `blochSphere${index}` )
       } ) );
     } );
 
-    this.selectedStateDirectionProperty = new Property( StateDirection.X_PLUS, {
-      tandem: providedOptions.tandem.createTandem( 'selectedStateDirectionProperty' ),
-      phetioValueType: EnumerationIO( StateDirection ),
-      phetioFeatured: true
+    this.measurementStateProperty = new Property<SpinMeasurementState>( 'prepared', {
+      phetioReadOnly: true,
+      phetioValueType: StringUnionIO( SpinMeasurementStateValues ),
+      validValues: SpinMeasurementStateValues,
+      tandem: measurementAreaTandem.createTandem( 'measurementStateProperty' )
     } );
 
+    // Selected Equation Basis
     this.equationBasisProperty = new Property( StateDirection.Z_PLUS, {
-      tandem: providedOptions.tandem.createTandem( 'equationBasisProperty' ),
+      tandem: measurementAreaTandem.createTandem( 'equationBasisProperty' ),
       phetioValueType: EnumerationIO( StateDirection ),
       phetioFeatured: true,
       validValues: QuantumMeasurementConstants.plusDirections
     } );
 
-    this.magneticFieldStrengthProperty = new NumberProperty( 1, {
-      tandem: providedOptions.tandem.createTandem( 'magneticFieldStrengthProperty' ),
-      range: new Range( -1, 1 )
-    } );
-
+    // Measurement controls
     this.timeToMeasurementProperty = new NumberProperty( MAX_OBSERVATION_TIME / 2, {
-      tandem: providedOptions.tandem.createTandem( 'timeToMeasurementProperty' ),
+      tandem: measurementControlsTandem.createTandem( 'timeToMeasurementProperty' ),
       range: new Range( 0, MAX_OBSERVATION_TIME )
     } );
 
     this.measurementTimeProperty = new NumberProperty( 0, {
-      tandem: providedOptions.tandem.createTandem( 'measurementTimeProperty' )
+      tandem: measurementControlsTandem.createTandem( 'measurementTimeProperty' )
     } );
 
     this.measurementAxisProperty = new Property( MeasurementAxis.Z_PLUS, {
-      tandem: providedOptions.tandem.createTandem( 'measurementAxisProperty' ),
+      tandem: measurementControlsTandem.createTandem( 'measurementAxisProperty' ),
       phetioValueType: EnumerationIO( MeasurementAxis ),
       phetioFeatured: true
     } );
 
     this.isSingleMeasurementModeProperty = new BooleanProperty( true, {
-      tandem: providedOptions.tandem.createTandem( 'isSingleMeasurementModeProperty' ),
+      tandem: measurementControlsTandem.createTandem( 'isSingleMeasurementModeProperty' ),
       phetioReadOnly: true,
       phetioFeatured: true
     } );
 
+    // Histograms
     this.upMeasurementCountProperty = new NumberProperty( 0, {
-      tandem: providedOptions.tandem.createTandem( 'upMeasurementCountProperty' ),
+      tandem: histogramsTandem.createTandem( 'upMeasurementCountProperty' ),
       phetioReadOnly: true
     } );
 
     this.downMeasurementCountProperty = new NumberProperty( 0, {
-      tandem: providedOptions.tandem.createTandem( 'downMeasurementCountProperty' ),
+      tandem: histogramsTandem.createTandem( 'downMeasurementCountProperty' ),
       phetioReadOnly: true
+    } );
+
+    // Magnetic Field Controls
+    this.magneticFieldEnabledProperty = new BooleanProperty( false, {
+      tandem: magneticFieldControlsTandem.createTandem( 'magneticFieldEnabledProperty' ),
+      phetioFeatured: true
+    } );
+
+    this.magneticFieldStrengthProperty = new NumberProperty( 1, {
+      tandem: magneticFieldControlsTandem.createTandem( 'magneticFieldStrengthProperty' ),
+      range: new Range( -1, 1 )
     } );
 
     let selectingStateDirection = false;
@@ -151,17 +175,9 @@ class BlochSphereModel implements TModel {
       }
     } );
 
-    this.measurementStateProperty = new Property<SpinMeasurementState>( 'prepared', {
-      phetioReadOnly: true,
-      phetioValueType: StringUnionIO( SpinMeasurementStateValues ),
-      validValues: SpinMeasurementStateValues,
-      tandem: providedOptions.tandem.createTandem( 'measurementStateProperty' )
-    } );
-
     // Clear the measurement counts when the time to measurement changes, since this changes the nature of the
     // measurement that is being made.
     this.timeToMeasurementProperty.link( () => this.resetCounts() );
-
 
     // Clear accumulated counts and potentially change the selected preset state direction to CUSTOM when the user
     // changes the angles of the Bloch Sphere. Lazy to not change the selected state direction on build up.
