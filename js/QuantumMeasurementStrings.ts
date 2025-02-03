@@ -100,6 +100,12 @@ type StringsType = {
   'azimuthalAngleParenthesesSymbolPatternStringProperty': LocalizedStringProperty;
   'singleParticleStringProperty': LocalizedStringProperty;
   'continuousStringProperty': LocalizedStringProperty;
+  'preferences': {
+    'showGlobalPhase': {
+      'titleStringProperty': LocalizedStringProperty;
+      'descriptionStringProperty': LocalizedStringProperty;
+    }
+  }
 };
 
 const QuantumMeasurementStrings = getStringModule( 'QUANTUM_MEASUREMENT' ) as StringsType;

@@ -6,11 +6,13 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
+import PreferencesModel from '../../joist/js/preferences/PreferencesModel.js';
 import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import BlochSphereScreen from './bloch-sphere/BlochSphereScreen.js';
 import CoinsScreen from './coins/CoinsScreen.js';
+import QuantumMeasurementPreferencesNode from './common/view/QuantumMeasurementPreferencesNode.js';
 import PhotonsScreen from './photons/PhotonsScreen.js';
 import QuantumMeasurementStrings from './QuantumMeasurementStrings.js';
 import './common/QuantumMeasurementQueryParameters.js';
@@ -40,7 +42,15 @@ simLauncher.launch( () => {
       graphicArts: '',
       soundDesign: '',
       thanks: ''
-    }
+    },
+
+    preferencesModel: new PreferencesModel( {
+      simulationOptions: {
+        customPreferences: [ {
+          createContent: tandem => new QuantumMeasurementPreferencesNode( tandem.createTandem( 'simPreferences' ) )
+        } ]
+      }
+    } )
   };
 
   const sim = new Sim( titleStringProperty, screens, options );

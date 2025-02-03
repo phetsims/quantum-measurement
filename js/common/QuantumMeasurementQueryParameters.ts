@@ -10,13 +10,12 @@
 import logGlobal from '../../../phet-core/js/logGlobal.js';
 import quantumMeasurement from '../quantumMeasurement.js';
 
-const SCHEMA_MAP = {
-};
-
-const QuantumMeasurementQueryParameters = QueryStringMachine.getAll( SCHEMA_MAP );
-
-// The schema map is a read-only part of the public API, in case schema details (e.g. validValues) are needed elsewhere.
-QuantumMeasurementQueryParameters.SCHEMA_MAP = SCHEMA_MAP;
+const QuantumMeasurementQueryParameters = QueryStringMachine.getAll( {
+  showGlobalPhase: {
+    type: 'boolean',
+    defaultValue: false
+  }
+} );
 
 quantumMeasurement.register( 'QuantumMeasurementQueryParameters', QuantumMeasurementQueryParameters );
 
