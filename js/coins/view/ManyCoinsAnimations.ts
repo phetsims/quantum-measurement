@@ -6,7 +6,6 @@
  * @author Agustín Vallejo
  */
 
-import Property from '../../../../axon/js/Property.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
@@ -15,7 +14,6 @@ import Easing from '../../../../twixt/js/Easing.js';
 import { MEASUREMENT_PREPARATION_TIME } from '../../common/model/TwoStateSystemSet.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
-import { ExperimentMeasurementState } from '../model/ExperimentMeasurementState.js';
 import CoinExperimentMeasurementArea from './CoinExperimentMeasurementArea.js';
 import CoinSetPixelRepresentation from './CoinSetPixelRepresentation.js';
 import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
@@ -39,8 +37,8 @@ class ManyCoinsAnimations {
     // const pixelRepresentationBounds = MultiCoinTestBox.SIZE.toBounds();
     const pixelRepresentationBounds = new Bounds2( 0, 0, 180, 180 );
     const pixelRepresentation = new CoinSetPixelRepresentation(
-      'classical',
-      new Property<ExperimentMeasurementState>( 'preparingToBeMeasured' ),
+      sceneModel.coinSet,
+      sceneModel.systemType,
       coinSetInTestBoxProperty,
       {
         canvasBounds: pixelRepresentationBounds,

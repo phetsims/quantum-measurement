@@ -7,16 +7,16 @@
  */
 
 import TProperty from '../../../../axon/js/TProperty.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import { CanvasNode, CanvasNodeOptions } from '../../../../scenery/js/imports.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
-import { MEASUREMENT_PREPARATION_TIME } from '../../common/model/TwoStateSystemSet.js';
+import TwoStateSystemSet, { MEASUREMENT_PREPARATION_TIME } from '../../common/model/TwoStateSystemSet.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { ExperimentMeasurementState } from '../model/ExperimentMeasurementState.js';
+import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
+import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
 
 type SelfOptions = {
   animationDuration?: number;
@@ -38,8 +38,8 @@ class CoinSetPixelRepresentation extends CanvasNode {
 
   public animationDuration: number;
 
-  public constructor( private readonly systemType: 'classical' | 'quantum',
-                      private readonly experimentStateProperty: TReadOnlyProperty<ExperimentMeasurementState>,
+  public constructor( private readonly coinSet: TwoStateSystemSet<ClassicalCoinStates> | TwoStateSystemSet<QuantumCoinStates>,
+                      private readonly systemType: 'classical' | 'quantum',
                       private readonly coinSetInTestBoxProperty: TProperty<boolean>,
                       providedOptions?: CoinSetPixelRepresentationOptions ) {
 
@@ -58,11 +58,12 @@ class CoinSetPixelRepresentation extends CanvasNode {
 
     this.setAllPixels( 0 );
 
-    this.experimentStateProperty.lazyLink( state => {
-      this.invalidatePaint();
-      if ( state === 'readyToBeMeasured' ) {
-        this.setAllPixels( 1 );
-      }
+    this.coinSet.measurementStateProperty.lazyLink( () => {
+      this.redraw( this.coinSet.measuredValues );
+    } );
+
+    this.coinSet.measuredDataChangedEmitter.addListener( () => {
+      this.redraw( this.coinSet.measuredValues );
     } );
   }
 
@@ -206,7 +207,7 @@ class CoinSetPixelRepresentation extends CanvasNode {
   public paintCanvas( context: CanvasRenderingContext2D ): void {
 
     let getColor: ( value: number ) => string;
-    switch( this.experimentStateProperty.value ) {
+    switch( this.coinSet.measurementStateProperty.value ) {
       case 'preparingToBeMeasured':
 
         // Coins are flipping, so alternate between grey and light grey. 0 is used when repreparing.

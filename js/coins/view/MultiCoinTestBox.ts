@@ -143,23 +143,8 @@ class MultiCoinTestBox extends HBox {
     } );
 
     // Handle the pixel-based representation of the coin set if present.
-    if ( this.pixelRepresentation ) {
-
-      if ( measurementState === 'revealed' ) {
-
-        // JPB: Stop any in-progress animation and reveal.
-      }
-      else if ( measurementState === 'preparingToBeMeasured' ) {
-        this.pixelRepresentation.startFlippingAnimation();
-      }
-      else if ( measurementState === 'readyToBeMeasured' || measurementState === 'measuredAndHidden' ) {
-
-        // JPB: Do the equivalent of stopping the flipping animation and hiding the pixels.
-        // if ( coinNode.isFlipping ) {
-        //   coinNode.stopFlipping();
-        // }
-        // coinNode.displayModeProperty.value = 'masked';
-      }
+    if ( this.pixelRepresentation && measurementState === 'preparingToBeMeasured' ) {
+      this.pixelRepresentation.startFlippingAnimation();
     }
   }
 
@@ -184,8 +169,6 @@ class MultiCoinTestBox extends HBox {
 
     // Center it, add it, and keep a record of it.
     pixelRepresentation.center = this.testBoxWithClipArea.center;
-    console.log( `pixelRepresentation.center = ${pixelRepresentation.center}` );
-    // debugger;
     this.testBoxWithClipArea.addChild( pixelRepresentation );
     this.pixelRepresentation = pixelRepresentation;
   }

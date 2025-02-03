@@ -12,19 +12,16 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
 import TProperty from '../../../../axon/js/TProperty.js';
-import Bounds2 from '../../../../dot/js/Bounds2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Circle, HBox, Node, Text, VBox } from '../../../../scenery/js/imports.js';
 import VerticalAquaRadioButtonGroup from '../../../../sun/js/VerticalAquaRadioButtonGroup.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
-import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import CoinsExperimentSceneModel, { MAX_COINS, MULTI_COIN_EXPERIMENT_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
 import CoinExperimentButtonSet from './CoinExperimentButtonSet.js';
 import CoinMeasurementHistogram from './CoinMeasurementHistogram.js';
-import CoinSetPixelRepresentation, { SIDE_LENGTH } from './CoinSetPixelRepresentation.js';
 import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
 import ManyCoinsAnimations from './ManyCoinsAnimations.js';
 import MultiCoinTestBox from './MultiCoinTestBox.js';
@@ -41,8 +38,6 @@ class CoinExperimentMeasurementArea extends VBox {
   // internal-only thing and is not available to phet-io.
   private readonly singleCoinInTestBoxProperty: TProperty<boolean>;
   private readonly coinSetInTestBoxProperty: TProperty<boolean>;
-
-  private measuredCoinsPixelRepresentation: CoinSetPixelRepresentation;
 
   public readonly manyCoinsAnimations: ManyCoinsAnimations;
 
@@ -154,23 +149,9 @@ class CoinExperimentMeasurementArea extends VBox {
       tandem: numberOfCoinsRadioButtonGroupTandem
     } );
 
-    const measuredCoinsPixelRepresentation = new CoinSetPixelRepresentation(
-      sceneModel.systemType,
-      sceneModel.coinSet.measurementStateProperty,
-      coinSetInTestBoxProperty,
-      {
-        visibleProperty: new DerivedProperty( [
-          sceneModel.coinSet.numberOfActiveSystemsProperty,
-          sceneModel.preparingExperimentProperty
-        ], ( numberOfActiveSystems, preparingExperiment ) => {
-          return numberOfActiveSystems === MAX_COINS && !preparingExperiment;
-        } )
-      } );
-
     const multipleCoinTestBoxContainer = new Node( {
       children: [
-        multipleCoinTestBox,
-        measuredCoinsPixelRepresentation
+        multipleCoinTestBox
       ]
     } );
 
@@ -198,34 +179,6 @@ class CoinExperimentMeasurementArea extends VBox {
 
     this.singleCoinInTestBoxProperty = singleCoinInTestBoxProperty;
     this.coinSetInTestBoxProperty = coinSetInTestBoxProperty;
-    this.measuredCoinsPixelRepresentation = measuredCoinsPixelRepresentation;
-    this.measuredCoinsPixelRepresentation.setPixelScale(
-      multipleCoinTestBox.width / SIDE_LENGTH * QuantumMeasurementConstants.COIN_SET_AREA_PROPORTION
-    );
-    this.measuredCoinsPixelRepresentation.setCanvasBounds(
-      new Bounds2(
-        0,
-        0,
-        multipleCoinTestBox.width,
-        multipleCoinTestBox.height
-      )
-    );
-
-    const offset = multipleCoinTestBox.width * ( 1 - QuantumMeasurementConstants.COIN_SET_AREA_PROPORTION ) / 2;
-    this.measuredCoinsPixelRepresentation.setX( offset );
-    this.measuredCoinsPixelRepresentation.setY( offset );
-
-    sceneModel.coinSet.measurementStateProperty.link( measurementState => {
-      if ( measurementState === 'revealed' ) {
-        this.measuredCoinsPixelRepresentation.redraw( sceneModel.coinSet.measuredValues );
-      }
-    } );
-
-    sceneModel.coinSet.measuredDataChangedEmitter.addListener( () => {
-      this.measuredCoinsPixelRepresentation.redraw( sceneModel.coinSet.measuredValues );
-    } );
-
-    sceneModel.preparingExperimentProperty.link( () => this.measuredCoinsPixelRepresentation.abortAllAnimations( 0 ) );
 
     // Create the node that will be used to cover (aka "mask") the coin so that its state can't be seen.
     const maskRadius = InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS * 1.02;
@@ -264,12 +217,6 @@ class CoinExperimentMeasurementArea extends VBox {
       this.coinSetInTestBoxProperty
     );
 
-    // Convenience property to conditionally call functions on the many coins animation
-    const usingManyCoinsProperty = new DerivedProperty(
-      [ sceneModel.coinSet.numberOfActiveSystemsProperty ],
-      numberOfActiveSystems => numberOfActiveSystems === 10000
-    );
-
     // Monitor the preparation state and start or stop animations as needed.
     sceneModel.preparingExperimentProperty.lazyLink( preparingExperiment => {
       if ( preparingExperiment ) {
@@ -279,7 +226,6 @@ class CoinExperimentMeasurementArea extends VBox {
         singleCoinAnimations.abortIngressAnimationForSingleCoin();
         multipleCoinAnimations.abortIngressAnimationForCoinSet();
         manyCoinsAnimations.abortIngressAnimationForCoinSet();
-        this.measuredCoinsPixelRepresentation.abortAllAnimations();
 
         // Clear out the test boxes.
         singleCoinAnimations.clearSingleCoinTestBox();
@@ -288,9 +234,9 @@ class CoinExperimentMeasurementArea extends VBox {
       else {
 
         // The user is ready to make measurements on the coins, so animate the coins for both the single and multi-coin
-        // experiments moving from the preparation area to the measurement area.
+        // experiments from the preparation area to the measurement area.
         singleCoinAnimations.startIngressAnimationForSingleCoin( false );
-        if ( usingManyCoinsProperty.value ) {
+        if ( sceneModel.coinSet.numberOfActiveSystemsProperty.value === MAX_COINS ) {
           manyCoinsAnimations.startIngressAnimationForCoinSet( false );
         }
         else {
@@ -311,20 +257,16 @@ class CoinExperimentMeasurementArea extends VBox {
           // Abort any previous animations and clear out the test box.
           multipleCoinAnimations.abortIngressAnimationForCoinSet();
           manyCoinsAnimations.abortIngressAnimationForCoinSet();
-          this.measuredCoinsPixelRepresentation.abortAllAnimations();
           multipleCoinTestBox.clearContents();
 
           // Animate a coin from the prep area to the single coin test box to indicate that a new "quantum coin" is
           // being prepared for measurement.
-          if ( usingManyCoinsProperty.value ) {
+          if ( sceneModel.coinSet.numberOfActiveSystemsProperty.value === MAX_COINS ) {
             manyCoinsAnimations.startIngressAnimationForCoinSet( true );
           }
           else {
             multipleCoinAnimations.startIngressAnimationForCoinSet( true );
           }
-        }
-        else if ( usingManyCoinsProperty.value ) {
-          this.measuredCoinsPixelRepresentation.startFlippingAnimation();
         }
       }
     } );
