@@ -177,6 +177,9 @@ class CoinsExperimentSceneView extends Node {
         DerivedProperty.not( sceneModel.preparingExperimentProperty ),
         newCoinButtonTandem
       ),
+      textNodeOptions: {
+        maxWidth: 150
+      },
       baseColor: QuantumMeasurementColors.newCoinButtonColorProperty,
       font: new PhetFont( 14 ),
       listener: () => {
