@@ -54,6 +54,8 @@ export default class ProbabilityValueControl extends NumberControl {
         thumbSize: new Dimension2( 12, 26 ),
         majorTickLength: 10,
         tickLabelSpacing: 4,
+        keyboardStep: BUTTON_CHANGE_AMOUNT,
+        shiftKeyboardStep: BUTTON_CHANGE_AMOUNT / 10,
         constrainValue: ( number: number ) => Utils.toFixedNumber( number, 2 ),
         majorTicks: [
           { value: RANGE.min, label: new Text( RANGE.min.toString(), { font: TICK_MARK_FONT } ) },
