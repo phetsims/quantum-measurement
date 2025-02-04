@@ -9,6 +9,7 @@
 import BlochSphereModel from 'model/BlochSphereModel.js';
 import { Color, Line } from '../../../../scenery/js/imports.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import BlochSphereMeasurementArea from './BlochSphereMeasurementArea.js';
@@ -25,8 +26,8 @@ class BlochSphereScreenView extends QuantumMeasurementScreenView {
     this.model = model;
 
     const preparationArea = new BlochSpherePreparationArea( model, this, {
-      left: this.layoutBounds.left + 20,
-      top: this.layoutBounds.top + 20,
+      left: this.layoutBounds.left + QuantumMeasurementConstants.SCREEN_VIEW_X_MARGIN,
+      top: this.layoutBounds.top + QuantumMeasurementConstants.SCREEN_VIEW_Y_MARGIN,
       tandem: tandem.createTandem( 'preparationArea' )
     } );
     this.addChild( preparationArea );

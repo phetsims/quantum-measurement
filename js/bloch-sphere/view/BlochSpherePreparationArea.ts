@@ -79,28 +79,31 @@ export default class BlochSpherePreparationArea extends VBox {
       tandem: providedOptions.tandem.createTandem( 'directionComboBox' )
     } );
 
-    const slidersPanel = new Panel( new VBox( {
-      spacing: 10,
-      children: [
-        directionComboBox,
-        new Text(
-          new DerivedProperty(
-            [ QuantumMeasurementStrings.polarAngleParenthesesSymbolPatternStringProperty ],
-            stringPattern => StringUtils.fillIn( stringPattern, { symbol: MathSymbols.THETA } )
-          ), { font: new PhetFont( 15 ), maxWidth: 200 } ), // Theta symbol: θ
-        polarSlider,
-        new Text(
-          new DerivedProperty(
-            [ QuantumMeasurementStrings.azimuthalAngleParenthesesSymbolPatternStringProperty ],
-            stringPattern => StringUtils.fillIn( stringPattern, { symbol: MathSymbols.PHI } )
-          ), { font: new PhetFont( 15 ), maxWidth: 200 } ), // Phi symbol: φ
-        azimuthSlider
-      ]
-    } ), {
-      fill: QuantumMeasurementColors.controlPanelFillColorProperty,
-      stroke: QuantumMeasurementColors.controlPanelStrokeColorProperty,
-      minWidth: 270
-    } );
+    const slidersPanel = new Panel(
+      new VBox( {
+        spacing: 10,
+        children: [
+          directionComboBox,
+          new Text(
+            new DerivedProperty(
+              [ QuantumMeasurementStrings.polarAngleParenthesesSymbolPatternStringProperty ],
+              stringPattern => StringUtils.fillIn( stringPattern, { symbol: MathSymbols.THETA } )
+            ), { font: new PhetFont( 15 ), maxWidth: 200 } ), // Theta symbol: θ
+          polarSlider,
+          new Text(
+            new DerivedProperty(
+              [ QuantumMeasurementStrings.azimuthalAngleParenthesesSymbolPatternStringProperty ],
+              stringPattern => StringUtils.fillIn( stringPattern, { symbol: MathSymbols.PHI } )
+            ), { font: new PhetFont( 15 ), maxWidth: 200 } ), // Phi symbol: φ
+          azimuthSlider
+        ]
+      } ),
+      {
+        fill: QuantumMeasurementColors.controlPanelFillColorProperty,
+        stroke: QuantumMeasurementColors.controlPanelStrokeColorProperty,
+        minWidth: 270
+      }
+    );
 
     const blochSphereNode = new BlochSphereNode(
       model.preparationBlochSphere, {
@@ -109,10 +112,11 @@ export default class BlochSpherePreparationArea extends VBox {
         drawTitle: false,
         drawAngleIndicators: true,
         scale: 0.9
-      } );
+      }
+    );
 
     const options = optionize<BlochSpherePreparationAreaOptions, SelfOptions, VBoxOptions>()( {
-      spacing: 10,
+      spacing: 12,
       align: 'center',
       children: [
         new Text( QuantumMeasurementStrings.spinStateToPrepareStringProperty, {

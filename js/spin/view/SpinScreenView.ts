@@ -39,7 +39,12 @@ export default class SpinScreenView extends QuantumMeasurementScreenView {
     } );
     this.addChild( dividingLine );
 
-    this.spinMeasurementArea = new SpinMeasurementArea( model, this, QuantumMeasurementConstants.LAYOUT_BOUNDS, tandem.createTandem( 'spinMeasurementArea' ) );
+    this.spinMeasurementArea = new SpinMeasurementArea(
+      model,
+      this,
+      QuantumMeasurementConstants.LAYOUT_BOUNDS,
+      tandem.createTandem( 'spinMeasurementArea' )
+    );
     this.spinMeasurementArea.left = dividingLineX;
     this.addChild( this.spinMeasurementArea );
 

@@ -34,9 +34,9 @@ import PhotonsEquationNode from './PhotonsEquationNode.js';
 import PhotonTestingArea from './PhotonTestingArea.js';
 
 type SelfOptions = EmptySelfOptions;
-type PhotonsExperimentSceneViewOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
+type PhotonsExperimentSceneViewOptions = SelfOptions & WithRequired<NodeOptions, 'tandem' | 'translation'>;
 
-const INSET = 10; // inset for nodes at edges of the view, in screen coordinates
+const X_INSET = QuantumMeasurementConstants.SCREEN_VIEW_X_MARGIN;
 const STEP_FORWARD_TIME = 2 / 60; // empirically determined, in seconds, adjust as desired
 const CHECKBOX_TEXT_FONT = new PhetFont( 18 );
 
@@ -87,8 +87,10 @@ class PhotonsExperimentSceneView extends Node {
     } );
 
     const photonPolarizationAngleControl = new PhotonPolarizationAngleControl( model.laser, {
-        left: INSET,
-        top: polarizationIndicator.bottom + 5,
+        left: X_INSET,
+        bottom: QuantumMeasurementConstants.LAYOUT_BOUNDS.height -
+                providedOptions.translation.y -
+                QuantumMeasurementConstants.SCREEN_VIEW_Y_MARGIN,
         tandem: providedOptions.tandem.createTandem( 'photonPolarizationAngleControl' ),
         phetioFeatured: true
       }
@@ -129,7 +131,7 @@ class PhotonsExperimentSceneView extends Node {
       children: [ averagePolarizationTitlePanel, equationsBox ],
       spacing: 10,
       align: 'left',
-      right: QuantumMeasurementConstants.LAYOUT_BOUNDS.width - INSET,
+      right: QuantumMeasurementConstants.LAYOUT_BOUNDS.width - X_INSET,
       top: 0
     } );
 
