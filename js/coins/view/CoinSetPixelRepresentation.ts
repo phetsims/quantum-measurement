@@ -4,6 +4,7 @@
  * CoinSetPixelRepresentation handles the creation and display of an NxN grid of coins, each represented by a pixel.
  *
  * @author Agustín Vallejo
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import TProperty from '../../../../axon/js/TProperty.js';
@@ -54,8 +55,6 @@ class CoinSetPixelRepresentation extends CanvasNode {
 
     this.animationDuration = options.animationDuration;
 
-    this.createAnimations();
-
     this.setAllPixels( 0 );
 
     this.coinSet.measurementStateProperty.lazyLink( () => {
@@ -67,7 +66,32 @@ class CoinSetPixelRepresentation extends CanvasNode {
     } );
   }
 
-  private createAnimations(): void {
+  public redraw( measuredValues: Array<string | null> ): void {
+
+    const comparisonValue = this.systemType === 'classical' ? 'heads' : 'up';
+
+    // Create an array of pixel colors (1 for fuchsia, 0 for black).
+    this.pixels = measuredValues.map( value => value === comparisonValue ? 1 : 0 );
+
+    this.invalidatePaint();
+  }
+
+  /**
+   * Sets the scale of the individual pixels.
+   */
+  public setPixelScale( scale: number ): void {
+    this.pixelScale = scale;
+  }
+
+  public startPopulatingAnimation(): void {
+
+    // Stop any previously initiated animation.
+    if ( this.populatingAnimation ) {
+      this.populatingAnimation.stop();
+    }
+
+    this.setAllPixels( 0 );
+    this.currentFrame = 0;
 
     const center = Math.floor( this.sideLength / 2 );
     const maxRadius = Math.sqrt( 2 ) * center * 1.1; // 10% extra radius to avoid missed pixels at the corners
@@ -108,6 +132,22 @@ class CoinSetPixelRepresentation extends CanvasNode {
         this.currentFrame = frame;
       }
     } );
+    this.populatingAnimation.start();
+
+    this.populatingAnimation.endedEmitter.addListener( () => {
+      this.setAllPixels( 1 );
+      this.currentFrame = 0;
+      this.coinSetInTestBoxProperty.value = true;
+      this.populatingAnimation = null;
+    } );
+  }
+
+  public startFlippingAnimation(): void {
+
+    // Stop any previously initiated animation.
+    if ( this.flippingAnimation ) {
+      this.flippingAnimation.stop();
+    }
 
     this.flippingAnimation = new Animation( {
       to: 100,
@@ -127,74 +167,25 @@ class CoinSetPixelRepresentation extends CanvasNode {
       }
     } );
 
-    this.populatingAnimation.endedEmitter.addListener( () => {
-      this.setAllPixels( 1 );
-      this.currentFrame = 0;
-      this.coinSetInTestBoxProperty.value = true;
-    } );
-
     this.flippingAnimation.endedEmitter.addListener( () => {
       this.setAllPixels( 1 );
       this.currentFrame = 0;
     } );
-  }
 
-  public redraw( measuredValues: Array<string | null> ): void {
-
-    const comparisonValue = this.systemType === 'classical' ? 'heads' : 'up';
-
-    // Create an array of pixel colors (1 for fuchsia, 0 for black).
-    this.pixels = measuredValues.map( value => value === comparisonValue ? 1 : 0 );
-
-    this.invalidatePaint();
+    this.flippingAnimation?.start();
   }
 
   /**
-   * Sets the scale of the individual pixels.
-   */
-  public setPixelScale( scale: number ): void {
-    this.pixelScale = scale;
-  }
-
-  public startPopulatingAnimation(): void {
-
-    assert && assert(
-      this.populatingAnimation,
-      'populatingAnimation should be defined, perhaps createAnimations() was not properly called?'
-    );
-
-    if ( this.visible ) {
-
-      // Set all pixels to 0.
-      this.setAllPixels( 0 );
-      this.currentFrame = 0;
-      this.populatingAnimation?.start();
-    }
-  }
-
-  public startFlippingAnimation(): void {
-    assert && assert( this.flippingAnimation, 'flippingAnimation should be defined, perhaps createAnimations() was not properly called?' );
-
-    if ( this.visible ) {
-      this.flippingAnimation?.start();
-    }
-  }
-
-  /**
-   * Closure function to stop all ongoing animations and revert pixels back to their initial state.
+   * Stop any in-progress animations and revert pixels back to their initial state.
    */
   public abortAllAnimations( pixelState = 1 ): void {
-    assert && assert( this.populatingAnimation, 'populatingAnimation should be defined, perhaps createAnimations() was not properly called?' );
-    assert && assert( this.flippingAnimation, 'flippingAnimation should be defined, perhaps createAnimations() was not properly called?' );
 
-    this.flippingAnimation?.stop();
-    this.populatingAnimation?.stop();
+    this.populatingAnimation && this.populatingAnimation.stop();
+    this.flippingAnimation && this.flippingAnimation.stop();
     this.setAllPixels( pixelState );
 
     // Set the flag to indicate that the coins aren't in the box.
     this.coinSetInTestBoxProperty.value = false;
-
-    this.createAnimations();
   }
 
   public setAllPixels( value: number ): void {
@@ -202,7 +193,7 @@ class CoinSetPixelRepresentation extends CanvasNode {
   }
 
   /**
-   * Paints the pixels on the canvas node.
+   * Paint the pixels on the canvas node.
    */
   public paintCanvas( context: CanvasRenderingContext2D ): void {
 
