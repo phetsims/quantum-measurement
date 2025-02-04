@@ -34,16 +34,16 @@ export class SingleParticleCollection extends ParticleCollection {
 
     // Moves single particles and triggers measurements when they pass through Measuring Lines
     this.particles.forEach( particle => {
-      const behindMeasurementDevice: boolean[] = this.model.measurementLines.map( line => line.isParticleBehind( particle.position ) );
+      const behindMeasurementDevice: boolean[] = this.model.measurementDevices.map( device => device.isParticleBehind( particle.position ) );
 
       particle.step( dt );
       this.decideParticleDestiny( particle );
 
-      // If the particle crosses a measurement line, we update the line
-      this.model.measurementLines.forEach( ( line, index ) => {
-        if ( behindMeasurementDevice[ index ] && !line.isParticleBehind( particle.position ) ) {
-          line.measurementEmitter.emit();
-          line.spinStateProperty.value = particle.spinVectors[ index ];
+      // If the particle crosses a measurement device, we update the device
+      this.model.measurementDevices.forEach( ( device, index ) => {
+        if ( behindMeasurementDevice[ index ] && !device.isParticleBehind( particle.position ) ) {
+          device.measurementEmitter.emit();
+          device.spinStateProperty.value = particle.spinVectors[ index ];
           // particle.stageCompleted[ index ] = true;
         }
       } );

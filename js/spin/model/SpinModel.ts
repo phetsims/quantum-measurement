@@ -18,6 +18,7 @@ import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import TModel from '../../../../joist/js/TModel.js';
+import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
@@ -34,13 +35,12 @@ import { SpinDirection } from './SpinDirection.js';
 import SpinExperiment from './SpinExperiment.js';
 import SternGerlach from './SternGerlach.js';
 
-type SelfOptions = {
-  // TODO add options that are specific to QuantumMeasurementModel here, see see https://github.com/phetsims/quantum-measurement/issues/1.
-};
+type SelfOptions = EmptySelfOptions;
 
 type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
 // Constants
+// Blocker in front of Stern Gerlach (SG) exits
 export const BLOCKER_OFFSET = new Vector2( 0.1, 0 );
 const MAX_NUMBER_OF_SINGLE_PARTICLES = 50;
 const MAX_NUMBER_OF_MULTIPLE_PARTICLES = 1250;
@@ -62,6 +62,7 @@ export default class SpinModel implements TModel {
   public readonly currentExperimentProperty: Property<SpinExperiment>;
   public readonly isCustomExperimentProperty: TReadOnlyProperty<boolean>;
 
+  // The particle collections, for single shooting mode, and continuous mode.
   public readonly singleParticlesCollection: SingleParticleCollection;
   public readonly multipleParticlesCollection: MultipleParticleCollection;
 
@@ -72,7 +73,7 @@ export default class SpinModel implements TModel {
   public readonly sternGerlachs: SternGerlach[];
 
   // Invisible lines that trigger measurement of the particles when they fly through them
-  public readonly measurementLines: MeasurementDevice[];
+  public readonly measurementDevices: MeasurementDevice[];
 
   // Expected percentage of particles that should be visible in the histogram
   public readonly expectedPercentageVisibleProperty: BooleanProperty;
@@ -83,12 +84,22 @@ export default class SpinModel implements TModel {
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
+    // Preparation Area properties
+    this.alphaSquaredProperty = new NumberProperty( 1, {
+      tandem: providedOptions.tandem.createTandem( 'alphaSquaredProperty' )
+    } );
+
+    // Since both alpha and beta can be controlled via the slider
+    // they have to be derived manually from eachother below
+    this.betaSquaredProperty = new NumberProperty( 1 - this.alphaSquaredProperty.value );
+
     this.currentExperimentProperty = new Property<SpinExperiment>( SpinExperiment.EXPERIMENT_1, {
       tandem: providedOptions.tandem.createTandem( 'currentExperimentProperty' ),
       phetioValueType: EnumerationIO( SpinExperiment ),
       validValues: SpinExperiment.enumeration.values,
       phetioFeatured: true
     } );
+
     this.isCustomExperimentProperty = new DerivedProperty(
       [ this.currentExperimentProperty ],
       ( experiment: SpinExperiment ) => experiment === SpinExperiment.CUSTOM
@@ -116,14 +127,6 @@ export default class SpinModel implements TModel {
       this.derivedSpinStateProperty, { tandem: providedOptions.tandem.createTandem( 'blochSphere' ) }
     );
 
-    this.alphaSquaredProperty = new NumberProperty( 1, {
-      tandem: providedOptions.tandem.createTandem( 'alphaSquaredProperty' )
-    } );
-
-    // Create a Property with the inverse probability as the provided one and hook the two Properties up to one another.
-    // This is needed for the number sliders to work properly.
-    this.betaSquaredProperty = new NumberProperty( 1 - this.alphaSquaredProperty.value );
-
     const sternGerlachsTandem = providedOptions.tandem.createTandem( 'sternGerlachs' );
     this.sternGerlachs = [
       new SternGerlach( new Vector2( 0.8, 0 ), true, sternGerlachsTandem.createTandem( 'firstSternGerlach' ) ),
@@ -136,19 +139,20 @@ export default class SpinModel implements TModel {
       this.sternGerlachs[ 1 ].isZOrientedProperty.value = isZOriented;
     } );
 
-    const measurementLinesTandem = providedOptions.tandem.createTandem( 'measurementLines' );
-    this.measurementLines = [
+    // Three measurement devices: at the exit of the particle source, at the exit of SG0 and at the exit of SG1/2
+    const measurementDevicesTandem = providedOptions.tandem.createTandem( 'measurementDevices' );
+    this.measurementDevices = [
       new MeasurementDevice(
         new Vector2( ( this.particleSourceModel.exitPositionProperty.value.x + this.sternGerlachs[ 0 ].entrancePositionProperty.value.x ) / 2, 1 ),
-        true, { tandem: measurementLinesTandem.createTandem( 'firstMeasurementDevice' ) }
+        true, { tandem: measurementDevicesTandem.createTandem( 'firstMeasurementDevice' ) }
       ),
       new MeasurementDevice(
         new Vector2( ( this.sternGerlachs[ 0 ].topExitPositionProperty.value.x + this.sternGerlachs[ 1 ].entrancePositionProperty.value.x ) / 2, 1 ),
-        true, { tandem: measurementLinesTandem.createTandem( 'secondMeasurementDevice' ) }
+        true, { tandem: measurementDevicesTandem.createTandem( 'secondMeasurementDevice' ) }
       ),
       new MeasurementDevice(
         new Vector2( ( this.sternGerlachs[ 1 ].topExitPositionProperty.value.x + this.sternGerlachs[ 1 ].topExitPositionProperty.value.plusXY( 0.5, 0 ).x ) / 2, 1 ),
-        false, { tandem: measurementLinesTandem.createTandem( 'thirdMeasurementDevice' ) }
+        false, { tandem: measurementDevicesTandem.createTandem( 'thirdMeasurementDevice' ) }
       )
     ];
 
@@ -158,6 +162,7 @@ export default class SpinModel implements TModel {
       phetioDocumentation: 'Expected percentage of particles that would be counted in the histogram. Only for continuous mode.'
     } );
 
+    // SGs are blocked for multi-SG experiments and continuous mode
     this.isBlockingProperty = new DerivedProperty(
       [
         this.particleSourceModel.sourceModeProperty,
@@ -256,9 +261,9 @@ export default class SpinModel implements TModel {
         const singleParticle = sourceMode === SourceMode.SINGLE;
         const longExperiment = !experiment.usingSingleApparatus;
 
-        this.measurementLines[ 0 ].isActiveProperty.value = singleParticle;
-        this.measurementLines[ 1 ].isActiveProperty.value = singleParticle;
-        this.measurementLines[ 2 ].isActiveProperty.value = singleParticle && longExperiment;
+        this.measurementDevices[ 0 ].isActiveProperty.value = singleParticle;
+        this.measurementDevices[ 1 ].isActiveProperty.value = singleParticle;
+        this.measurementDevices[ 2 ].isActiveProperty.value = singleParticle && longExperiment;
 
         this.sternGerlachs[ 0 ].isDirectionControllableProperty.value = customExperiment;
         this.sternGerlachs[ 1 ].isDirectionControllableProperty.value = customExperiment && !singleParticle;
@@ -319,7 +324,7 @@ export default class SpinModel implements TModel {
    * Resets the model.
    */
   public reset(): void {
-    this.measurementLines.forEach( line => line.reset() );
+    this.measurementDevices.forEach( device => device.reset() );
     this.sternGerlachs.forEach( sternGerlach => sternGerlach.reset() );
     this.singleParticlesCollection.clear();
     this.multipleParticlesCollection.clear();

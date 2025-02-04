@@ -42,7 +42,7 @@ export default class SpinMeasurementArea extends VBox {
 
   private manyParticlesCanvasNode: ManyParticlesCanvasNode;
 
-  private readonly measurementLines: MeasurementDeviceNode[];
+  private readonly measurementDevices: MeasurementDeviceNode[];
 
   private readonly particleSprites: ParticleSprites;
 
@@ -87,10 +87,10 @@ export default class SpinMeasurementArea extends VBox {
         { tandem: tandem.createTandem( 'thirdSternGerlachNode' ) } )
     ];
 
-    const measurementLines = [
-      new MeasurementDeviceNode( model.measurementLines[ 0 ], modelViewTransform, { tandem: tandem.createTandem( 'firstMeasurementDevice' ) } ),
-      new MeasurementDeviceNode( model.measurementLines[ 1 ], modelViewTransform, { tandem: tandem.createTandem( 'secondMeasurementDevice' ) } ),
-      new MeasurementDeviceNode( model.measurementLines[ 2 ], modelViewTransform, { tandem: tandem.createTandem( 'thirdMeasurementDevice' ) } )
+    const measurementDevices = [
+      new MeasurementDeviceNode( model.measurementDevices[ 0 ], modelViewTransform, { tandem: tandem.createTandem( 'firstMeasurementDevice' ) } ),
+      new MeasurementDeviceNode( model.measurementDevices[ 1 ], modelViewTransform, { tandem: tandem.createTandem( 'secondMeasurementDevice' ) } ),
+      new MeasurementDeviceNode( model.measurementDevices[ 2 ], modelViewTransform, { tandem: tandem.createTandem( 'thirdMeasurementDevice' ) } )
     ];
 
     let histogramCounter = 1;
@@ -229,7 +229,7 @@ export default class SpinMeasurementArea extends VBox {
         ...singleParticleNodes,
         particleSourceNode,
         ...sternGerlachNodes,
-        ...measurementLines,
+        ...measurementDevices,
         ...histograms,
         expectedPercentageCheckbox,
         exitBlockerNode
@@ -264,7 +264,7 @@ export default class SpinMeasurementArea extends VBox {
     experimentAreaNode.addChild( this.particleSprites );
     this.particleSprites.moveToBack();
 
-    this.measurementLines = measurementLines;
+    this.measurementDevices = measurementDevices;
     this.manyParticlesCanvasNode = manyParticlesCanvasNode;
 
     this.pdomOrder = [
@@ -279,7 +279,7 @@ export default class SpinMeasurementArea extends VBox {
   }
 
   public reset(): void {
-    this.measurementLines.forEach( line => line.reset() );
+    this.measurementDevices.forEach( device => device.reset() );
   }
 }
 

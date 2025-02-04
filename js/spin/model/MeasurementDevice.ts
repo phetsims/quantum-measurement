@@ -25,10 +25,10 @@ export default class MeasurementDevice {
   // The bloch sphere representation of the spin state
   public readonly simpleBlochSphere: AbstractBlochSphere;
 
-  // The spin state of the particle that last crossed the line
+  // The spin state of the particle that last crossed the measurement line
   public readonly spinStateProperty: Vector2Property;
 
-  // The position of the line in the model
+  // The position of the device in the model
   public readonly positionProperty: Vector2Property;
 
   // Emitter that informs that there has been a measurement
