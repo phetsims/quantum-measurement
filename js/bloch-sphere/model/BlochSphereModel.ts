@@ -108,6 +108,7 @@ class BlochSphereModel implements TModel {
 
     this.measurementStateProperty = new Property<SpinMeasurementState>( 'prepared', {
       phetioReadOnly: true,
+      phetioDocumentation: 'For internal use only.',
       phetioValueType: StringUnionIO( SpinMeasurementStateValues ),
       validValues: SpinMeasurementStateValues,
       tandem: measurementAreaTandem.createTandem( 'measurementStateProperty' )
@@ -124,11 +125,15 @@ class BlochSphereModel implements TModel {
     // Measurement controls
     this.timeToMeasurementProperty = new NumberProperty( MAX_OBSERVATION_TIME / 2, {
       tandem: measurementControlsTandem.createTandem( 'timeToMeasurementProperty' ),
-      range: new Range( 0, MAX_OBSERVATION_TIME )
+      range: new Range( 0, MAX_OBSERVATION_TIME ),
+      phetioDocumentation: 'Time at which the measurement will be made after the start of the experiment.',
+      phetioFeatured: true
     } );
 
     this.measurementTimeProperty = new NumberProperty( 0, {
-      tandem: measurementControlsTandem.createTandem( 'measurementTimeProperty' )
+      tandem: measurementControlsTandem.createTandem( 'measurementTimeProperty' ),
+      phetioReadOnly: true,
+      phetioDocumentation: 'Current time of the experiment. For internal use only.'
     } );
 
     this.measurementAxisProperty = new Property( MeasurementAxis.Z_PLUS, {
@@ -139,7 +144,6 @@ class BlochSphereModel implements TModel {
 
     this.isSingleMeasurementModeProperty = new BooleanProperty( true, {
       tandem: measurementControlsTandem.createTandem( 'isSingleMeasurementModeProperty' ),
-      phetioReadOnly: true,
       phetioFeatured: true
     } );
 
