@@ -75,6 +75,13 @@ class PhotonsScreenView extends QuantumMeasurementScreenView {
     this.model = model;
     this.singlePhotonExperimentSceneView = singlePhotonExperimentSceneView;
     this.manyPhotonsExperimentSceneView = manyPhotonsExperimentSceneView;
+
+    // Set the order for alt-input navigation.
+    this.pdomPlayAreaNode.pdomOrder = [
+      experimentModeRadioButtonGroup,
+      singlePhotonExperimentSceneView,
+      manyPhotonsExperimentSceneView
+    ];
   }
 
   public override reset(): void {
