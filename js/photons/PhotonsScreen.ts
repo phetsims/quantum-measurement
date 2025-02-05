@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * PhotonsScreen constructs both the model and the view for the "Photons" screen in the sim.
