@@ -14,7 +14,7 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
-import { Color, HBox, LinearGradient, Node, Rectangle } from '../../../../scenery/js/imports.js';
+import { Color, LinearGradient, Node, Rectangle } from '../../../../scenery/js/imports.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
 import quantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
@@ -30,10 +30,8 @@ const TEST_BOX_CONTENTS_HIDDEN_FILL = new LinearGradient( 0, 0, BOX_SIZE.width, 
   .addColorStop( 0, quantumMeasurementColors.multiCoinFirstGradientColorProperty )
   .addColorStop( 1, quantumMeasurementColors.multiCoinSecondGradientColorProperty );
 const TEST_BOX_CONTENTS_REVEALED_FILL_COLOR_PROPERTY = quantumMeasurementColors.testBoxContentsRevealedFillColorProperty;
-const LANDING_ZONE_WIDTH = 1;
-const LANDING_ZONE_FILL_COLOR_PROPERTY = quantumMeasurementColors.landingZoneFillColorProperty; // useful for debug, opacity should be 0 in production version
 
-class MultiCoinTestBox extends HBox {
+class MultiCoinTestBox extends Node {
 
   private readonly testBoxWithClipArea: Node;
   private readonly numberOfActiveSystemsProperty: TReadOnlyProperty<number>;
@@ -70,14 +68,7 @@ class MultiCoinTestBox extends HBox {
       clipArea: Shape.bounds( multipleCoinTestBoxRectangle.getRectBounds() )
     } );
 
-    // Create an area that will set to the left of the test box where coins that are animating into the box can be
-    // placed before moving into it. This is done so that the bounds of this node don't change when the coins and the
-    // masks for those coins are added as children.
-    const coinLandingZone = new Rectangle( 0, 0, LANDING_ZONE_WIDTH, BOX_SIZE.height, {
-      fill: LANDING_ZONE_FILL_COLOR_PROPERTY
-    } );
-
-    super( { children: [ coinLandingZone, testBoxWithClipArea ] } );
+    super( { children: [ testBoxWithClipArea ] } );
 
     this.testBoxWithClipArea = testBoxWithClipArea;
     this.numberOfActiveSystemsProperty = numberOfActiveSystemsProperty;
