@@ -19,7 +19,7 @@ import CoinsExperimentSceneModel, { MULTI_COIN_ANIMATION_QUANTITIES } from '../m
 import CoinExperimentMeasurementArea from './CoinExperimentMeasurementArea.js';
 import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
 import MultiCoinTestBox from './MultiCoinTestBox.js';
-import SmallCoinNode from './SmallCoinNode.js';
+import SmallCoinNode, { SmallCoinDisplayMode } from './SmallCoinNode.js';
 
 const COIN_TRAVEL_ANIMATION_DURATION = MEASUREMENT_PREPARATION_TIME * 0.95;
 
@@ -112,7 +112,14 @@ class MultipleCoinAnimations {
       const destinationCenter = multipleCoinTestBoxBounds.center.plusXY( testAreaXOffset, 0 );
 
       // Set up and start the animation for each of the individual coins.
+      const coinsMasked = sceneModel.coinSet.measurementStateProperty.value !== 'revealed';
+
       coinsToAnimate!.forEach( ( coinNode, index ) => {
+
+        // Mask or display the coin value based on the measurement state.
+        coinNode.displayModeProperty.value = coinsMasked ?
+                                             'masked' :
+                                             sceneModel.coinSet.measuredValues[ index ] as SmallCoinDisplayMode;
 
         // Get the final destination for this coin node in terms of its offset from the center of the test box.
         const finalDestinationOffset = multipleCoinTestBox.getOffsetFromCenter( index );

@@ -112,7 +112,7 @@ class TwoStateSystemSet<T extends string> extends PhetioObject {
     }
 
     // The initial system state differs for classical versus quantum systems.
-    const initialMeasurementState = this.systemType === 'classical' ? 'measuredAndHidden' : 'readyToBeMeasured';
+    const initialMeasurementState = this.systemType === 'classical' ? 'revealed' : 'readyToBeMeasured';
     this.measurementStateProperty = new Property<ExperimentMeasurementState>( initialMeasurementState, {
       tandem: options.tandem.createTandem( 'measurementStateProperty' ),
       phetioValueType: StringUnionIO( ExperimentMeasurementStateValues ),
@@ -296,7 +296,7 @@ class TwoStateSystemSet<T extends string> extends PhetioObject {
     this.seedProperty.value = valueIndex;
 
     // Update the measurement state.
-    this.measurementStateProperty.value = this.systemType === 'classical' ? 'measuredAndHidden' : 'readyToBeMeasured';
+    this.measurementStateProperty.value = this.systemType === 'classical' ? 'revealed' : 'readyToBeMeasured';
   }
 
   public reset(): void {

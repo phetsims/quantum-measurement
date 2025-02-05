@@ -7,7 +7,6 @@
  */
 
 import TProperty from '../../../../axon/js/TProperty.js';
-import Bounds2 from '../../../../dot/js/Bounds2.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
@@ -33,20 +32,14 @@ class ManyCoinsAnimations {
 
     let animationToCoinBox: Animation | null = null;
 
-    // TODO: Get this worked out better, see https://github.com/phetsims/quantum-measurement/issues/87
-    // const pixelRepresentationBounds = MultiCoinTestBox.SIZE.toBounds();
-    const pixelRepresentationBounds = new Bounds2( 0, 0, 180, 180 );
     const pixelRepresentation = new CoinSetPixelRepresentation(
       sceneModel.coinSet,
-      sceneModel.systemType,
+      MultiCoinTestBox.SIZE.width * 0.9, // somewhat smaller than the test box so that it will fit inside
       coinSetInTestBoxProperty,
       {
-        canvasBounds: pixelRepresentationBounds,
-        animationDuration: COIN_TRAVEL_ANIMATION_DURATION
+        populatingAnimationDuration: COIN_TRAVEL_ANIMATION_DURATION
       }
     );
-    // pixelRepresentation.setCanvasBounds( pixelRepresentationBounds );
-    pixelRepresentation.setPixelScale( 1.8 );
 
     // Create a closure function for aborting the animation of the incoming single coin. This is intended to be called
     // when a state change occurs that prevents the ingress animation from finishing normally. If no animation is in
@@ -60,7 +53,7 @@ class ManyCoinsAnimations {
       coinSetInTestBoxProperty.value = false;
 
       // Stop the pixel representation from doing its inflation animation.
-      pixelRepresentation.abortAllAnimations( 0 );
+      pixelRepresentation.abortAllAnimations();
 
       // Create a typed reference to the parent node, since we'll need to invoke some methods on it.
       assert && assert( measurementArea.getParent() instanceof CoinsExperimentSceneView );
