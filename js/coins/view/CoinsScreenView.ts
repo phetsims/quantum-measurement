@@ -73,9 +73,9 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
     this.model = model;
 
     this.pdomPlayAreaNode.pdomOrder = [
-      experimentTypeRadioButtonGroup,
       classicalCoinsExperimentSceneView,
-      quantumCoinsExperimentSceneView
+      quantumCoinsExperimentSceneView,
+      experimentTypeRadioButtonGroup
     ];
 
     // Changing the background color based on the experiment type

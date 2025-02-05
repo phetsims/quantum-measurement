@@ -206,9 +206,9 @@ class CoinsExperimentSceneView extends Node {
 
     this.pdomOrder = [
       this.preparationArea,
+      this.measurementArea,
       startMeasurementButton,
-      this.newCoinButton,
-      this.measurementArea
+      this.newCoinButton
     ];
   }
 
