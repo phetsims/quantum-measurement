@@ -75,7 +75,7 @@ export default class MeasurementDeviceNode extends VBox {
         simpleBlochSphereNode,
         cameraNode
       ],
-      spacing: 25,
+      spacing: 30,
       visibleProperty: new GatedVisibleProperty( measurementLine.isActiveProperty, providedOptions.tandem )
     }, providedOptions );
 
