@@ -33,7 +33,7 @@ class ManyCoinsAnimations {
 
     let animationToCoinBox: Animation | null = null;
 
-    // TODO: Get this worked out better, see https://github.com/phetsims/quantum-measurement/issues/48
+    // TODO: Get this worked out better, see https://github.com/phetsims/quantum-measurement/issues/87
     // const pixelRepresentationBounds = MultiCoinTestBox.SIZE.toBounds();
     const pixelRepresentationBounds = new Bounds2( 0, 0, 180, 180 );
     const pixelRepresentation = new CoinSetPixelRepresentation(
