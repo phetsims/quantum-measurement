@@ -1,9 +1,9 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
 /**
- * CoinAnimations is a composite UI component that presents two areas - one for a single coin and one for
- * multiple coins - where users can flip and reveal coins. Depending on how this is parameterized, the coins may either
- * be classical or quantum coins.
+ * SingleCoinNodeManager is responsible for creating an animating the motion of the single coin that is used in the
+ * experiment.  This includes the animation of the coin moving from the preparation area to the measurement area, as
+ * well as providing support for the coin flipping animation.
  *
  * @author John Blanco, PhET Interactive Simulations
  */
@@ -36,7 +36,7 @@ const SINGLE_COIN_TEST_BOX_SIZE = new Dimension2( 165, 145 );
 const COIN_FLIP_RATE = 3; // full flips per second
 const COIN_TRAVEL_ANIMATION_DURATION = MEASUREMENT_PREPARATION_TIME * 0.95;
 
-class SingleCoinAnimations {
+class SingleCoinNodeManager {
 
   public readonly abortIngressAnimationForSingleCoin: () => void;
   public readonly startIngressAnimationForSingleCoin: ( forReprepare: boolean ) => void;
@@ -281,6 +281,6 @@ class SingleCoinAnimations {
   }
 }
 
-quantumMeasurement.register( 'SingleCoinAnimations', SingleCoinAnimations );
+quantumMeasurement.register( 'SingleCoinNodeManager', SingleCoinNodeManager );
 
-export default SingleCoinAnimations;
+export default SingleCoinNodeManager;

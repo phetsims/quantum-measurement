@@ -23,11 +23,11 @@ import CoinsExperimentSceneModel, { MAX_COINS, MULTI_COIN_EXPERIMENT_QUANTITIES 
 import CoinExperimentButtonSet from './CoinExperimentButtonSet.js';
 import CoinMeasurementHistogram from './CoinMeasurementHistogram.js';
 import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
-import ManyCoinsAnimations from './ManyCoinsAnimations.js';
+import ManyCoinNodeManager from './ManyCoinNodeManager.js';
 import MultiCoinTestBox from './MultiCoinTestBox.js';
-import MultipleCoinAnimations from './MultipleCoinAnimations.js';
+import MultipleCoinNodeManager from './MultipleCoinNodeManager.js';
 import SceneSectionHeader from './SceneSectionHeader.js';
-import SingleCoinAnimations from './SingleCoinAnimations.js';
+import SingleCoinNodeManager from './SingleCoinNodeManager.js';
 import SingleCoinTestBox from './SingleCoinTestBox.js';
 
 const RADIO_BUTTON_FONT = new PhetFont( 12 );
@@ -39,7 +39,7 @@ class CoinExperimentMeasurementArea extends VBox {
   private readonly singleCoinInTestBoxProperty: TProperty<boolean>;
   private readonly coinSetInTestBoxProperty: TProperty<boolean>;
 
-  public readonly manyCoinsAnimations: ManyCoinsAnimations;
+  public readonly manyCoinsAnimations: ManyCoinNodeManager;
 
   public constructor( sceneModel: CoinsExperimentSceneModel, tandem: Tandem ) {
 
@@ -195,7 +195,7 @@ class CoinExperimentMeasurementArea extends VBox {
     singleCoinTestBox.clippedTestBox.addChild( coinMask );
     coinMask.moveToBack();
 
-    const singleCoinAnimations = new SingleCoinAnimations(
+    const singleCoinAnimations = new SingleCoinNodeManager(
       sceneModel,
       this,
       coinMask,
@@ -203,14 +203,14 @@ class CoinExperimentMeasurementArea extends VBox {
       this.singleCoinInTestBoxProperty
     );
 
-    const multipleCoinAnimations = new MultipleCoinAnimations(
+    const multipleCoinAnimations = new MultipleCoinNodeManager(
       sceneModel,
       this,
       multipleCoinTestBox,
       this.coinSetInTestBoxProperty
     );
 
-    const manyCoinsAnimations = new ManyCoinsAnimations(
+    const manyCoinsAnimations = new ManyCoinNodeManager(
       sceneModel,
       this,
       multipleCoinTestBox,
