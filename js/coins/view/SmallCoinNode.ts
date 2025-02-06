@@ -40,7 +40,7 @@ const TAILS_FILL_COLOR_PROPERTY = QuantumMeasurementColors.tailsColorProperty;
 const UP_COLOR_PROPERTY = QuantumMeasurementColors.upColorProperty;
 const DOWN_COLOR_PROPERTY = QuantumMeasurementColors.downColorProperty;
 
-export default class SmallCoinNode extends Node {
+class SmallCoinNode extends Node {
 
   public readonly displayModeProperty: TProperty<SmallCoinDisplayMode>;
   public readonly radius: number;
@@ -52,7 +52,7 @@ export default class SmallCoinNode extends Node {
     const coinCircle = new Circle( radius, {
       fill: MASKED_FILL_COLOR_PROPERTY,
       stroke: COIN_STROKE_COLOR_PROPERTY,
-      lineWidth: Math.max( Math.floor( radius / 4 ), 1 )
+      lineWidth: Math.max( Math.floor( radius / 4 ), 1.5 )
     } );
 
     // Create the up and down arrows as Text nodes.
@@ -93,13 +93,13 @@ export default class SmallCoinNode extends Node {
         upArrow.visible = false;
         downArrow.visible = false;
         coinCircle.fill = HEADS_FILL_COLOR_PROPERTY;
-        coinCircle.stroke = COIN_STROKE_COLOR_PROPERTY;
+        coinCircle.stroke = HEADS_FILL_COLOR_PROPERTY.value.colorUtilsBrighter( 0.5 );
       }
       else if ( displayMode === 'tails' ) {
         upArrow.visible = false;
         downArrow.visible = false;
         coinCircle.fill = TAILS_FILL_COLOR_PROPERTY;
-        coinCircle.stroke = COIN_STROKE_COLOR_PROPERTY;
+        coinCircle.stroke = TAILS_FILL_COLOR_PROPERTY.value.colorUtilsDarker( 0.5 );
       }
       else if ( displayMode === 'up' ) {
         upArrow.visible = true;
@@ -159,3 +159,5 @@ export default class SmallCoinNode extends Node {
 }
 
 quantumMeasurement.register( 'SmallCoinNode', SmallCoinNode );
+
+export default SmallCoinNode;
