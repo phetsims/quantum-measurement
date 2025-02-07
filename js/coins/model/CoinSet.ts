@@ -1,7 +1,7 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
 /**
- * TwoStateSystemSet is a simple model for a set of values that can be in one of two states when measured.
+ * CoinSet is a simple model for a set of values that can be in one of two states when measured.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
@@ -39,7 +39,7 @@ export type StateSetMeasurementResult<T> = {
 // Define the time that it will take to prepare a measurement, in seconds.  This is empirically determined.
 export const MEASUREMENT_PREPARATION_TIME = 1;
 
-class TwoStateSystemSet<T extends string> extends PhetioObject {
+class CoinSet<T extends string> extends PhetioObject {
 
   public readonly systemType: SystemType;
 
@@ -306,6 +306,6 @@ class TwoStateSystemSet<T extends string> extends PhetioObject {
   }
 }
 
-quantumMeasurement.register( 'TwoStateSystemSet', TwoStateSystemSet );
+quantumMeasurement.register( 'CoinSet', CoinSet );
 
-export default TwoStateSystemSet;
+export default CoinSet;

@@ -1,7 +1,7 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * TwoStateSystem is a model for a system that can be in one of two states, and can be prepared (similar to flipping a
+ * Coin is a model for a system that can be in one of two states, and can be prepared (similar to flipping a
  * coin) and measured (similar to reading how the flip turned out).
  *
  * @author John Blanco (PhET Interactive Simulations)
@@ -12,12 +12,12 @@ import Property from '../../../../axon/js/Property.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import TwoStateSystemSet, { TwoStateSystemSetOptions } from './TwoStateSystemSet.js';
+import CoinSet, { TwoStateSystemSetOptions } from './CoinSet.js';
 
 type SelfOptions = EmptySelfOptions;
 type TwoStateSystemOptions = SelfOptions & TwoStateSystemSetOptions;
 
-export default class TwoStateSystem<T extends string> extends TwoStateSystemSet<T> {
+export default class Coin<T extends string> extends CoinSet<T> {
 
   // the value of most recent measurement, null indicates indeterminate
   public readonly measuredValueProperty: Property<T>;
@@ -46,4 +46,4 @@ export default class TwoStateSystem<T extends string> extends TwoStateSystemSet<
   }
 }
 
-quantumMeasurement.register( 'TwoStateSystem', TwoStateSystem );
+quantumMeasurement.register( 'Coin', Coin );

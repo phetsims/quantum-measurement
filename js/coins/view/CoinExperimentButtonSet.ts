@@ -17,7 +17,7 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import VBox, { VBoxOptions } from '../../../../scenery/js/layout/nodes/VBox.js';
 import { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import TextPushButton, { TextPushButtonOptions } from '../../../../sun/js/buttons/TextPushButton.js';
-import TwoStateSystemSet from '../model/TwoStateSystemSet.js';
+import CoinSet from '../model/CoinSet.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
@@ -32,7 +32,7 @@ const BUTTON_WIDTH = 160; // empirically determined to match spec
 
 export default class CoinExperimentButtonSet extends VBox {
 
-  public constructor( coinSet: TwoStateSystemSet<string>,
+  public constructor( coinSet: CoinSet<string>,
                       coinSetInTestBoxProperty: TProperty<boolean>,
                       providedOptions: CoinExperimentButtonSetOptions ) {
 

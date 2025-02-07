@@ -19,7 +19,7 @@ import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
-import TwoStateSystemSet from '../model/TwoStateSystemSet.js';
+import CoinSet from '../model/CoinSet.js';
 import quantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { MULTI_COIN_ANIMATION_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
@@ -45,7 +45,7 @@ class MultiCoinTestBox extends Node {
   // The pixel representation of the coin set, which is used for the many coin case.
   private pixelRepresentation: CoinSetPixelRepresentation | null = null;
 
-  public constructor( coinSet: TwoStateSystemSet<string>,
+  public constructor( coinSet: CoinSet<string>,
                       measurementStateProperty: Property<ExperimentMeasurementState>,
                       numberOfActiveSystemsProperty: TReadOnlyProperty<number>,
                       measuredDataChangedEmitter: TEmitter ) {
@@ -104,7 +104,7 @@ class MultiCoinTestBox extends Node {
    * nodes that automatically update because there can be many thousands of coins, so this approach is needed to get
    * reasonable performance.
    */
-  private updateCoinNodes( coinSet: TwoStateSystemSet<string>, measurementState: ExperimentMeasurementState ): void {
+  private updateCoinNodes( coinSet: CoinSet<string>, measurementState: ExperimentMeasurementState ): void {
     this.residentCoinNodes.forEach( ( coinNode, index ) => {
 
       if ( measurementState === 'revealed' ) {

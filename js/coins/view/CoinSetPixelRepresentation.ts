@@ -21,7 +21,7 @@ import Color from '../../../../scenery/js/util/Color.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
-import TwoStateSystemSet, { MEASUREMENT_PREPARATION_TIME } from '../model/TwoStateSystemSet.js';
+import CoinSet, { MEASUREMENT_PREPARATION_TIME } from '../model/CoinSet.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
@@ -70,7 +70,7 @@ class CoinSetPixelRepresentation extends CanvasNode {
   // the radius used during rending of the populating animation
   private renderingRadius = MAX_RENDERING_RADIUS;
 
-  public constructor( private readonly coinSet: TwoStateSystemSet<ClassicalCoinStates> | TwoStateSystemSet<QuantumCoinStates>,
+  public constructor( private readonly coinSet: CoinSet<ClassicalCoinStates> | CoinSet<QuantumCoinStates>,
                       sideLengthInView: number,
                       private readonly coinSetInTestBoxProperty: TProperty<boolean>,
                       providedOptions?: CoinSetPixelRepresentationOptions ) {

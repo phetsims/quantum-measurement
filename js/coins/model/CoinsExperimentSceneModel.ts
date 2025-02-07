@@ -16,8 +16,8 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import { SystemType } from '../../common/model/SystemType.js';
-import TwoStateSystem from '../../coins/model/TwoStateSystem.js';
-import TwoStateSystemSet from './TwoStateSystemSet.js';
+import Coin from './Coin.js';
+import CoinSet from './CoinSet.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { ClassicalCoinStates, ClassicalCoinStateValues } from './ClassicalCoinStates.js';
 import { QuantumCoinStates, QuantumCoinStateValues } from './QuantumCoinStates.js';
@@ -58,9 +58,9 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
   public readonly preparingExperimentProperty: BooleanProperty;
 
   // The coins that are flipped/prepared and then measured during the experiment.
-  public readonly singleCoin: TwoStateSystem<ClassicalCoinStates> | TwoStateSystem<QuantumCoinStates>;
+  public readonly singleCoin: Coin<ClassicalCoinStates> | Coin<QuantumCoinStates>;
 
-  public readonly coinSet: TwoStateSystemSet<ClassicalCoinStates> | TwoStateSystemSet<QuantumCoinStates>;
+  public readonly coinSet: CoinSet<ClassicalCoinStates> | CoinSet<QuantumCoinStates>;
 
   // The initial state of the coin(s) before any flipping or other experiment preparation occurs.
   public readonly initialCoinStateProperty: Property<ClassicalCoinStates> | Property<QuantumUncollapsedCoinStates>;
@@ -104,13 +104,13 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
         validValues: ClassicalCoinStateValues,
         phetioFeatured: true
       } );
-      this.singleCoin = new TwoStateSystem<ClassicalCoinStates>(
+      this.singleCoin = new Coin<ClassicalCoinStates>(
         ClassicalCoinStateValues,
         'heads',
         this.upProbabilityProperty,
         { tandem: singleCoinTandem, systemType: 'classical' }
       );
-      this.coinSet = new TwoStateSystemSet<ClassicalCoinStates>(
+      this.coinSet = new CoinSet<ClassicalCoinStates>(
         ClassicalCoinStateValues,
         MAX_COINS,
         MULTI_COIN_EXPERIMENT_QUANTITIES[ 1 ], // use the middle value as the default
@@ -129,13 +129,13 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
         validValues: QuantumUncollapsedCoinStateValues,
         phetioFeatured: true
       } );
-      this.singleCoin = new TwoStateSystem<QuantumCoinStates>(
+      this.singleCoin = new Coin<QuantumCoinStates>(
         QuantumCoinStateValues,
         'up',
         this.upProbabilityProperty,
         { tandem: singleCoinTandem }
       );
-      this.coinSet = new TwoStateSystemSet<QuantumCoinStates>(
+      this.coinSet = new CoinSet<QuantumCoinStates>(
         QuantumCoinStateValues,
         MAX_COINS,
         MULTI_COIN_EXPERIMENT_QUANTITIES[ 1 ], // use the middle value as the default
