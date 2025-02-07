@@ -17,7 +17,7 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import { SystemType } from '../../common/model/SystemType.js';
-import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
+import TwoStateSystemSet from '../model/TwoStateSystemSet.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import QuantumMeasurementHistogram, { QuantumMeasurementHistogramOptions } from '../../common/view/QuantumMeasurementHistogram.js';

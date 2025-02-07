@@ -21,7 +21,7 @@ import Color from '../../../../scenery/js/util/Color.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
-import TwoStateSystemSet, { MEASUREMENT_PREPARATION_TIME } from '../../common/model/TwoStateSystemSet.js';
+import TwoStateSystemSet, { MEASUREMENT_PREPARATION_TIME } from '../model/TwoStateSystemSet.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';

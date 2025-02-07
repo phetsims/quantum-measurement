@@ -20,7 +20,7 @@ import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioS
 import Tandem from '../../../../tandem/js/Tandem.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
-import { MEASUREMENT_PREPARATION_TIME } from '../../common/model/TwoStateSystemSet.js';
+import { MEASUREMENT_PREPARATION_TIME } from '../model/TwoStateSystemSet.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
 import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';

@@ -20,10 +20,10 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
-import { MULTI_COIN_EXPERIMENT_QUANTITIES } from '../../coins/model/CoinsExperimentSceneModel.js';
-import { ExperimentMeasurementState, ExperimentMeasurementStateValues } from '../../coins/model/ExperimentMeasurementState.js';
+import { MULTI_COIN_EXPERIMENT_QUANTITIES } from './CoinsExperimentSceneModel.js';
+import { ExperimentMeasurementState, ExperimentMeasurementStateValues } from './ExperimentMeasurementState.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { SystemType } from './SystemType.js';
+import { SystemType } from '../../common/model/SystemType.js';
 
 type SelfOptions = {
   systemType?: SystemType;

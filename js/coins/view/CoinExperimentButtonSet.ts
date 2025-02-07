@@ -17,7 +17,7 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import VBox, { VBoxOptions } from '../../../../scenery/js/layout/nodes/VBox.js';
 import { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import TextPushButton, { TextPushButtonOptions } from '../../../../sun/js/buttons/TextPushButton.js';
-import TwoStateSystemSet from '../../common/model/TwoStateSystemSet.js';
+import TwoStateSystemSet from '../model/TwoStateSystemSet.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';

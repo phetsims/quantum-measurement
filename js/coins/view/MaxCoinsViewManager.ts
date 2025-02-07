@@ -12,7 +12,7 @@ import TProperty from '../../../../axon/js/TProperty.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
-import { MEASUREMENT_PREPARATION_TIME } from '../../common/model/TwoStateSystemSet.js';
+import { MEASUREMENT_PREPARATION_TIME } from '../model/TwoStateSystemSet.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
 import CoinExperimentMeasurementArea from './CoinExperimentMeasurementArea.js';
