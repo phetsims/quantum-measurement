@@ -11,7 +11,7 @@
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import TProperty from '../../../../axon/js/TProperty.js';
-import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize, { combineOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import VBox, { VBoxOptions } from '../../../../scenery/js/layout/nodes/VBox.js';
@@ -22,7 +22,9 @@ import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 
-type SelfOptions = EmptySelfOptions;
+type SelfOptions = {
+  singleCoin: boolean;
+};
 export type CoinExperimentButtonSetOptions = SelfOptions & PickRequired<NodeOptions, 'tandem' | 'visibleProperty'>;
 
 const BUTTON_FONT = new PhetFont( 14 );
@@ -73,6 +75,9 @@ export default class CoinExperimentButtonSet extends VBox {
       }
     );
 
+    const coinOrCoins = providedOptions.singleCoin ? 'coin' : 'coins';
+    const coinOrSetOfCoins = providedOptions.singleCoin ? 'coin' : 'set of coins';
+
     // Create the button that will be used to hide and reveal the coin without re-preparing it.
     const revealHideButton = new TextPushButton(
       revealHideButtonTextProperty,
@@ -87,7 +92,11 @@ export default class CoinExperimentButtonSet extends VBox {
             coinSet.hide();
           }
         },
-        tandem: providedOptions.tandem.createTandem( 'revealHideButton' )
+        tandem: providedOptions.tandem.createTandem( 'revealHideButton' ),
+        accessibleName: revealHideButtonTextProperty,
+        helpText: coinSet.systemType === 'classical' ?
+                  `Show or hide the ${coinOrCoins}` : `Observe or hide the ${coinOrCoins}`
+
       } )
     );
 
@@ -97,7 +106,12 @@ export default class CoinExperimentButtonSet extends VBox {
       QuantumMeasurementStrings.reprepareStringProperty,
       combineOptions<TextPushButtonOptions>( commonButtonOptions, {
         listener: () => coinSet.prepare(),
-        tandem: providedOptions.tandem.createTandem( 'flipOrReprepareButton' )
+        tandem: providedOptions.tandem.createTandem( 'flipOrReprepareButton' ),
+        accessibleName: coinSet.systemType === 'classical' ?
+                        QuantumMeasurementStrings.flipStringProperty :
+                        QuantumMeasurementStrings.reprepareStringProperty,
+        helpText: coinSet.systemType === 'classical' ?
+                  `Flip the ${coinOrCoins} and hide the result` : `Prepare a new ${coinOrSetOfCoins} for observation`
       } )
     );
 
@@ -107,7 +121,12 @@ export default class CoinExperimentButtonSet extends VBox {
       QuantumMeasurementStrings.reprepareAndRevealStringProperty,
       combineOptions<TextPushButtonOptions>( commonButtonOptions, {
         listener: () => coinSet.prepare( true ),
-        tandem: providedOptions.tandem.createTandem( 'flipOrReprepareAndRevealButton' )
+        tandem: providedOptions.tandem.createTandem( 'flipOrReprepareAndRevealButton' ),
+        accessibleName: coinSet.systemType === 'classical' ?
+                        QuantumMeasurementStrings.flipAndRevealStringProperty :
+                        QuantumMeasurementStrings.reprepareAndRevealStringProperty,
+        helpText: coinSet.systemType === 'classical' ?
+                  `Flip the ${coinOrCoins} and reveal the result` : `Reprepare a new ${coinOrSetOfCoins} and observe it`
       } )
     );
 

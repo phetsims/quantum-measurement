@@ -256,5 +256,65 @@
   },
   "preferences.showGlobalPhase.description": {
     "value": "Show the global phase of the quantum state on the Bloch Sphere screen"
+  },
+  "a11y": {
+    "coinsScreen": {
+      "probabilityNumberControls": {
+        "probabilityOfHeads": {
+          "value": "Probability of Heads"
+        },
+        "probabilityOfHeadsHelpText": {
+          "value": "Probability of flipped coin landing on heads"
+        },
+        "probabilityOfTails": {
+          "value": "Probability of Tails"
+        },
+        "probabilityOfTailsHelpText": {
+          "value": "Probability of flipped coin landing on tails"
+        },
+        "probabilityOfUp": {
+          "value": "Probability of Up, Alpha Squared"
+        },
+        "probabilityOfUpHelpText": {
+          "value": "Probability of flipped coin landing on up state"
+        },
+        "probabilityOfDown": {
+          "value": "Probability of Down, Beta Squared"
+        },
+        "probabilityOfDownHelpText": {
+          "value": "Probability of flipped coin landing on down state"
+        }
+      },
+      "initialOrientation": {
+        "value": "Initial Orientation Group"
+      },
+      "initialOrientationHelpText": {
+        "value": "Coin orientation before flipping"
+      },
+      "startMeasurement": {
+        "value": "Start Measurement"
+      },
+      "startMeasurementHelpText": {
+        "value": "Prepare coins to be measured"
+      },
+      "prepareNewCoinHelpText": {
+        "value": "Button to prepare a new coin"
+      },
+      "coinToPrepare": {
+        "value": "Coin to Prepare"
+      },
+      "singleCoinMeasurements": {
+        "value": "Single Coin Measurements"
+      },
+      "multipleCoinMeasurements": {
+        "value": "Multiple Coin Measurements"
+      },
+      "identicalCoins": {
+        "value": "Identical Coins"
+      },
+      "identicalCoinsHelpText": {
+        "value": "Number of identical coins to prepare"
+      }
+    }
   }
 }

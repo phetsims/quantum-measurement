@@ -100,7 +100,10 @@ class CoinExperimentPreparationArea extends VBox {
         probabilityEquationsNode,
         outcomeProbabilityControl
       ],
-      spacing: 15
+      spacing: 15,
+      accessibleName: QuantumMeasurementStrings.a11y.coinsScreen.coinToPrepareStringProperty,
+      tagName: 'div',
+      labelTagName: 'h3'
     } );
 
     this.initialCoinStateSelectorNode = initialCoinStateSelectorNode;

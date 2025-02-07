@@ -105,6 +105,30 @@ type StringsType = {
       'titleStringProperty': LocalizedStringProperty;
       'descriptionStringProperty': LocalizedStringProperty;
     }
+  };
+  'a11y': {
+    'coinsScreen': {
+      'probabilityNumberControls': {
+        'probabilityOfHeadsStringProperty': LocalizedStringProperty;
+        'probabilityOfHeadsHelpTextStringProperty': LocalizedStringProperty;
+        'probabilityOfTailsStringProperty': LocalizedStringProperty;
+        'probabilityOfTailsHelpTextStringProperty': LocalizedStringProperty;
+        'probabilityOfUpStringProperty': LocalizedStringProperty;
+        'probabilityOfUpHelpTextStringProperty': LocalizedStringProperty;
+        'probabilityOfDownStringProperty': LocalizedStringProperty;
+        'probabilityOfDownHelpTextStringProperty': LocalizedStringProperty;
+      };
+      'initialOrientationStringProperty': LocalizedStringProperty;
+      'initialOrientationHelpTextStringProperty': LocalizedStringProperty;
+      'startMeasurementStringProperty': LocalizedStringProperty;
+      'startMeasurementHelpTextStringProperty': LocalizedStringProperty;
+      'prepareNewCoinHelpTextStringProperty': LocalizedStringProperty;
+      'coinToPrepareStringProperty': LocalizedStringProperty;
+      'singleCoinMeasurementsStringProperty': LocalizedStringProperty;
+      'multipleCoinMeasurementsStringProperty': LocalizedStringProperty;
+      'identicalCoinsStringProperty': LocalizedStringProperty;
+      'identicalCoinsHelpTextStringProperty': LocalizedStringProperty;
+    }
   }
 };
 

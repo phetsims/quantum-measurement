@@ -117,7 +117,9 @@ class CoinsExperimentSceneView extends Node {
       listener: () => { sceneModel.preparingExperimentProperty.value = false; },
       visibleProperty: new GatedVisibleProperty( sceneModel.preparingExperimentProperty, startMeasurementButtonTandem ),
       centerY: 245, // empirically determined
-      tandem: startMeasurementButtonTandem
+      tandem: startMeasurementButtonTandem,
+      accessibleName: QuantumMeasurementStrings.a11y.coinsScreen.startMeasurementStringProperty,
+      helpText: QuantumMeasurementStrings.a11y.coinsScreen.startMeasurementHelpTextStringProperty
     } );
 
     // Position the dividing line and the two areas of activity.
@@ -187,7 +189,9 @@ class CoinsExperimentSceneView extends Node {
       listener: () => {
         sceneModel.preparingExperimentProperty.value = true;
       },
-      tandem: newCoinButtonTandem
+      tandem: newCoinButtonTandem,
+      accessibleName: QuantumMeasurementStrings.newCoinStringProperty,
+      helpText: QuantumMeasurementStrings.a11y.coinsScreen.prepareNewCoinHelpTextStringProperty
     } );
 
     // Position the "New Coin" button below the preparation area.

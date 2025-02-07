@@ -62,7 +62,10 @@ export default class InitialCoinStateSelectorNode extends VBox {
 
     const radioButtonGroupTandem = tandem.createTandem( 'radioButtonGroup' );
 
-    let initialCoinStateItems;
+    const toTitleCase = ( str: string ) => {
+      return str.charAt( 0 ).toUpperCase() + str.slice( 1 );
+    };
+    let initialCoinStateItems; //: RectangularRadioButtonGroupItem[];
     if ( systemType === 'classical' ) {
       initialCoinStateItems = ClassicalCoinStateValues.map( stateValue => {
         return {
@@ -72,7 +75,10 @@ export default class InitialCoinStateSelectorNode extends VBox {
             RADIO_BUTTON_COIN_NODE_RADIUS,
             Tandem.OPT_OUT
           ),
-          tandemName: `${stateValue}RadioButton`
+          tandemName: `${stateValue}RadioButton`,
+          options: {
+            accessibleName: toTitleCase( stateValue )
+          }
         };
       } );
     }
@@ -86,7 +92,10 @@ export default class InitialCoinStateSelectorNode extends VBox {
             RADIO_BUTTON_COIN_NODE_RADIUS,
             Tandem.OPT_OUT
           ),
-          tandemName: `${stateValue}RadioButton`
+          tandemName: `${stateValue}RadioButton`,
+          options: {
+            accessibleName: toTitleCase( stateValue )
+          }
         };
       } );
     }
@@ -99,6 +108,9 @@ export default class InitialCoinStateSelectorNode extends VBox {
         tandem: radioButtonGroupTandem.createTandem( 'initialOrientationRadioButtonGroup' ),
         orientation: 'horizontal',
         phetioVisiblePropertyInstrumented: false,
+        labelTagName: 'h4',
+        accessibleName: QuantumMeasurementStrings.a11y.coinsScreen.initialOrientationStringProperty,
+        helpText: QuantumMeasurementStrings.a11y.coinsScreen.initialOrientationHelpTextStringProperty,
         radioButtonOptions: {
           xMargin: 4,
           yMargin: 4,

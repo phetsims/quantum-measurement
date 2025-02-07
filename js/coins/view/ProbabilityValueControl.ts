@@ -14,7 +14,8 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
-import NumberControl from '../../../../scenery-phet/js/NumberControl.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import NumberControl, { NumberControlOptions } from '../../../../scenery-phet/js/NumberControl.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
@@ -27,13 +28,18 @@ const TICK_MARK_FONT = new PhetFont( 14 );
 const RANGE = new Range( 0, 1 );
 const BUTTON_CHANGE_AMOUNT = 0.1;
 
+type SelfOptions = EmptySelfOptions;
+type ProbabilityValueControlOptions = SelfOptions & NumberControlOptions;
+
 export default class ProbabilityValueControl extends NumberControl {
 
   public constructor( titleStringProperty: TReadOnlyProperty<string> | string,
                       probabilityProperty: NumberProperty,
-                      tandem: Tandem ) {
+                      tandem: Tandem,
+                      providedOptions?: ProbabilityValueControlOptions
+                      ) {
 
-    super( titleStringProperty, probabilityProperty, RANGE, {
+    super( titleStringProperty, probabilityProperty, RANGE, optionize<ProbabilityValueControlOptions, SelfOptions, NumberControlOptions>()( {
       layoutFunction: ( titleNode, numberDisplay, slider, leftArrowButton, rightArrowButton ) => {
         assert && assert( leftArrowButton && rightArrowButton );
         return new VBox( {
@@ -58,6 +64,7 @@ export default class ProbabilityValueControl extends NumberControl {
         tickLabelSpacing: 4,
         keyboardStep: BUTTON_CHANGE_AMOUNT,
         shiftKeyboardStep: BUTTON_CHANGE_AMOUNT / 10,
+        pageKeyboardStep: BUTTON_CHANGE_AMOUNT * 2,
         constrainValue: ( number: number ) => Utils.toFixedNumber( number, 2 ),
         majorTicks: [
           { value: RANGE.min, label: new Text( RANGE.min.toString(), { font: TICK_MARK_FONT } ) },
@@ -66,7 +73,7 @@ export default class ProbabilityValueControl extends NumberControl {
       },
       delta: BUTTON_CHANGE_AMOUNT,
       tandem: tandem
-    } );
+    }, providedOptions ) );
   }
 }
 

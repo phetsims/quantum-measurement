@@ -75,7 +75,8 @@ class CoinExperimentMeasurementArea extends VBox {
       singleCoinInTestBoxProperty,
       {
         tandem: tandem.createTandem( 'singleCoinExperimentButtonSet' ),
-        visibleProperty: DerivedProperty.not( sceneModel.preparingExperimentProperty )
+        visibleProperty: DerivedProperty.not( sceneModel.preparingExperimentProperty ),
+        singleCoin: true
       }
     );
 
@@ -83,7 +84,10 @@ class CoinExperimentMeasurementArea extends VBox {
     // single coin.
     const singleCoinMeasurementArea = new HBox( {
       children: [ singleCoinTestBox, singleCoinExperimentButtonSet ],
-      spacing: 30
+      spacing: 30,
+      accessibleName: QuantumMeasurementStrings.a11y.coinsScreen.singleCoinMeasurementsStringProperty,
+      tagName: 'div',
+      labelTagName: 'h3'
     } );
 
     // Add the lower heading for the measurement area.
@@ -115,7 +119,8 @@ class CoinExperimentMeasurementArea extends VBox {
       coinSetInTestBoxProperty,
       {
         tandem: tandem.createTandem( 'multipleCoinExperimentButtonSet' ),
-        visibleProperty: DerivedProperty.not( sceneModel.preparingExperimentProperty )
+        visibleProperty: DerivedProperty.not( sceneModel.preparingExperimentProperty ),
+        singleCoin: false
       }
     );
 
@@ -131,7 +136,10 @@ class CoinExperimentMeasurementArea extends VBox {
       return {
         createNode: () => new Text( valueText, { font: RADIO_BUTTON_FONT } ),
         value: value,
-        tandemName: `${valueText}CoinsRadioButton`
+        tandemName: `${valueText}CoinsRadioButton`,
+        options: {
+          accessibleName: valueText
+        }
       };
     };
 
@@ -142,7 +150,10 @@ class CoinExperimentMeasurementArea extends VBox {
       {
         spacing: 10,
         tandem: numberOfCoinsRadioButtonGroupTandem.createTandem( 'radioButtonGroup' ),
-        phetioVisiblePropertyInstrumented: false
+        phetioVisiblePropertyInstrumented: false,
+        accessibleName: QuantumMeasurementStrings.a11y.coinsScreen.identicalCoinsStringProperty,
+        helpText: QuantumMeasurementStrings.a11y.coinsScreen.identicalCoinsHelpTextStringProperty,
+        labelTagName: 'h4'
       }
     );
 
@@ -168,7 +179,10 @@ class CoinExperimentMeasurementArea extends VBox {
         multiCoinExperimentHistogram,
         multipleCoinExperimentButtonSet
       ],
-      spacing: 30
+      spacing: 30,
+      accessibleName: QuantumMeasurementStrings.a11y.coinsScreen.multipleCoinMeasurementsStringProperty,
+      tagName: 'div',
+      labelTagName: 'h3'
     } );
 
     super( {
