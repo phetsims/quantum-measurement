@@ -2,7 +2,7 @@
 
 /**
  * MaxCoinsViewManager creates and manages the node that is used to represent the set of 10k coins in the experiment. It
- * creates the node that represents the set of coins and animates it from the preparation area to the test box.
+ * creates the node that represents this set of coins and animates it from the preparation area to the test box.
  *
  * @author John Blanco (PhET Interactive Simulations)
  * @author Agustín Vallejo
