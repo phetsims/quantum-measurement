@@ -1,7 +1,7 @@
 // Copyright 2025, University of Colorado Boulder
 
 /**
- * ManyCoinNodeManager creates and manages the node that is used to represent the set of 10k coins in the experiment. It
+ * MaxCoinsViewManager creates and manages the node that is used to represent the set of 10k coins in the experiment. It
  * creates the node that represents the set of coins and animates it from the preparation area to the test box.
  *
  * @author John Blanco (PhET Interactive Simulations)
@@ -22,7 +22,7 @@ import MultiCoinTestBox from './MultiCoinTestBox.js';
 
 const COIN_TRAVEL_ANIMATION_DURATION = MEASUREMENT_PREPARATION_TIME * 0.95;
 
-class ManyCoinNodeManager {
+class MaxCoinsViewManager {
 
   public readonly abortIngressAnimationForCoinSet: () => void;
   public readonly startIngressAnimationForCoinSet: ( forReprepare: boolean ) => void;
@@ -124,6 +124,6 @@ class ManyCoinNodeManager {
   }
 }
 
-quantumMeasurement.register( 'ManyCoinNodeManager', ManyCoinNodeManager );
+quantumMeasurement.register( 'MaxCoinsViewManager', MaxCoinsViewManager );
 
-export default ManyCoinNodeManager;
+export default MaxCoinsViewManager;

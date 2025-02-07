@@ -27,7 +27,7 @@ import CoinsExperimentSceneModel, { MAX_COINS, MULTI_COIN_EXPERIMENT_QUANTITIES 
 import CoinExperimentButtonSet from './CoinExperimentButtonSet.js';
 import CoinMeasurementHistogram from './CoinMeasurementHistogram.js';
 import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
-import ManyCoinNodeManager from './ManyCoinNodeManager.js';
+import MaxCoinsViewManager from './MaxCoinsViewManager.js';
 import MultiCoinTestBox from './MultiCoinTestBox.js';
 import MultipleCoinsViewManager from './MultipleCoinsViewManager.js';
 import SceneSectionHeader from './SceneSectionHeader.js';
@@ -43,7 +43,7 @@ class CoinExperimentMeasurementArea extends VBox {
   private readonly singleCoinInTestBoxProperty: TProperty<boolean>;
   private readonly coinSetInTestBoxProperty: TProperty<boolean>;
 
-  public readonly manyCoinsAnimations: ManyCoinNodeManager;
+  public readonly manyCoinsAnimations: MaxCoinsViewManager;
 
   public constructor( sceneModel: CoinsExperimentSceneModel, tandem: Tandem ) {
 
@@ -228,7 +228,7 @@ class CoinExperimentMeasurementArea extends VBox {
       this.coinSetInTestBoxProperty
     );
 
-    const manyCoinsAnimations = new ManyCoinNodeManager(
+    const manyCoinsAnimations = new MaxCoinsViewManager(
       sceneModel,
       this,
       multipleCoinTestBox,
