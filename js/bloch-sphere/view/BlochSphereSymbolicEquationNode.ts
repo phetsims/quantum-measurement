@@ -12,7 +12,8 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { HBox, HBoxOptions, RichText, RichTextOptions } from '../../../../scenery/js/imports.js';
+import HBox, { HBoxOptions } from '../../../../scenery/js/layout/nodes/HBox.js';
+import RichText, { RichTextOptions } from '../../../../scenery/js/nodes/RichText.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import FractionNode from '../../common/view/FractionNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';

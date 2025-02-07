@@ -13,7 +13,7 @@ import LocalizedStringProperty from '../../../../chipper/js/browser/LocalizedStr
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { Text } from '../../../../scenery/js/imports.js';
+import Text from '../../../../scenery/js/nodes/Text.js';
 import RectangularRadioButtonGroup, { RectangularRadioButtonGroupItem, RectangularRadioButtonGroupOptions } from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementColors from '../QuantumMeasurementColors.js';

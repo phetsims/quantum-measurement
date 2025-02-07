@@ -19,7 +19,10 @@
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import { Sprite, SpriteImage, SpriteInstance, SpriteInstanceTransformType, Sprites } from '../../../../scenery/js/imports.js';
+import Sprites from '../../../../scenery/js/nodes/Sprites.js';
+import Sprite from '../../../../scenery/js/util/Sprite.js';
+import SpriteImage from '../../../../scenery/js/util/SpriteImage.js';
+import SpriteInstance, { SpriteInstanceTransformType } from '../../../../scenery/js/util/SpriteInstance.js';
 import greenPhoton_png from '../../../images/greenPhoton_png.js';
 import greenPhotonOutline_png from '../../../images/greenPhotonOutline_png.js';
 import quantumMeasurement from '../../quantumMeasurement.js';

@@ -11,7 +11,9 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import { Circle, Node, NodeOptions, TPaint } from '../../../../scenery/js/imports.js';
+import Circle from '../../../../scenery/js/nodes/Circle.js';
+import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
+import TPaint from '../../../../scenery/js/util/TPaint.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
 // constants

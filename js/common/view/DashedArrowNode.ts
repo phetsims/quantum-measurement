@@ -8,7 +8,8 @@
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import ArrowNode, { ArrowNodeOptions } from '../../../../scenery-phet/js/ArrowNode.js';
-import { Line, Node } from '../../../../scenery/js/imports.js';
+import Line from '../../../../scenery/js/nodes/Line.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
 type SelfOptions = EmptySelfOptions;

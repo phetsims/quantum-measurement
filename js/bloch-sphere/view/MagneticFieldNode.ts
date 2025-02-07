@@ -10,7 +10,7 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
-import { Node, NodeOptions } from '../../../../scenery/js/imports.js';
+import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { SpinMeasurementState } from '../model/SpinMeasurementState.js';
 import MagneticFieldArrowNode from './MagneticFieldArrowNode.js';

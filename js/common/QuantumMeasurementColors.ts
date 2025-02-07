@@ -14,7 +14,7 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import { ProfileColorProperty } from '../../../scenery/js/imports.js';
+import ProfileColorProperty from '../../../scenery/js/util/ProfileColorProperty.js';
 import quantumMeasurement from '../quantumMeasurement.js';
 
 const QuantumMeasurementColors = {

@@ -7,7 +7,7 @@
  */
 
 import ScreenView from '../../../joist/js/ScreenView.js';
-import { Color } from '../../../scenery/js/imports.js';
+import Color from '../../../scenery/js/util/Color.js';
 import { StateDirection } from '../bloch-sphere/model/StateDirection.js';
 import quantumMeasurement from '../quantumMeasurement.js';
 import QuantumMeasurementColors from './QuantumMeasurementColors.js';

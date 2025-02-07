@@ -6,7 +6,8 @@
  * @author Agustín Vallejo
  */
 
-import { Color, Line } from '../../../../scenery/js/imports.js';
+import Line from '../../../../scenery/js/nodes/Line.js';
+import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
