@@ -1,8 +1,9 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * Coin is a model for a system that can be in one of two states, and can be prepared (similar to flipping a
- * coin) and measured (similar to reading how the flip turned out).
+ * Coin is a model for a classical or quantum coin whose face can be in one of two states or, in the quantum case, in
+ * a superposed state.  The coin can be prepared for measurement (similar to flipping a coin) and then measured (similar
+ * to reading how the flip turned out).
  *
  * @author John Blanco (PhET Interactive Simulations)
  */

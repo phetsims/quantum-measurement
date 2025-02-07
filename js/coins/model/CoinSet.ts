@@ -1,7 +1,9 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
 /**
- * CoinSet is a simple model for a set of values that can be in one of two states when measured.
+ * CoinSet models a set of classical or quantum coins.  The face of each of these coins can be in one of two states or,
+ * in the quantum case, in a superposed state.  The coin set can be prepared for measurement (similar to flipping a
+ * coin) and subsequently measured (similar to reading how the flip turned out).
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
