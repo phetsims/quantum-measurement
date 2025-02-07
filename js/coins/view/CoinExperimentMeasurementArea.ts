@@ -31,7 +31,7 @@ import ManyCoinNodeManager from './ManyCoinNodeManager.js';
 import MultiCoinTestBox from './MultiCoinTestBox.js';
 import MultipleCoinNodeManager from './MultipleCoinNodeManager.js';
 import SceneSectionHeader from './SceneSectionHeader.js';
-import SingleCoinNodeManager from './SingleCoinNodeManager.js';
+import SingleCoinViewManager from './SingleCoinViewManager.js';
 import SingleCoinTestBox from './SingleCoinTestBox.js';
 
 const RADIO_BUTTON_FONT = new PhetFont( 12 );
@@ -213,7 +213,7 @@ class CoinExperimentMeasurementArea extends VBox {
     singleCoinTestBox.clippedTestBox.addChild( coinMask );
     coinMask.moveToBack();
 
-    const singleCoinAnimations = new SingleCoinNodeManager(
+    const singleCoinAnimations = new SingleCoinViewManager(
       sceneModel,
       this,
       coinMask,

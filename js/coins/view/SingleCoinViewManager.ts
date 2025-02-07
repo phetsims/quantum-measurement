@@ -1,7 +1,7 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
 /**
- * SingleCoinNodeManager is responsible for creating an animating the motion of the single coin that is used in the
+ * SingleCoinViewManager is responsible for creating an animating the motion of the single coin that is used in the
  * experiment.  This includes the animation of the coin moving from the preparation area to the measurement area, as
  * well as providing support for the coin flipping animation.
  *
@@ -37,7 +37,7 @@ const SINGLE_COIN_TEST_BOX_SIZE = new Dimension2( 165, 145 );
 const COIN_FLIP_RATE = 3; // full flips per second
 const COIN_TRAVEL_ANIMATION_DURATION = MEASUREMENT_PREPARATION_TIME * 0.95;
 
-class SingleCoinNodeManager {
+class SingleCoinViewManager {
 
   public readonly abortIngressAnimationForSingleCoin: () => void;
   public readonly startIngressAnimationForSingleCoin: ( forReprepare: boolean ) => void;
@@ -282,6 +282,6 @@ class SingleCoinNodeManager {
   }
 }
 
-quantumMeasurement.register( 'SingleCoinNodeManager', SingleCoinNodeManager );
+quantumMeasurement.register( 'SingleCoinViewManager', SingleCoinViewManager );
 
-export default SingleCoinNodeManager;
+export default SingleCoinViewManager;
