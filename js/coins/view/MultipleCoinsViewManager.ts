@@ -1,7 +1,7 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
 /**
- * MultipleCoinNodeManager creates and animates the sets of coin nodes that are configured in the preparation area, and
+ * MultipleCoinsViewManager creates and animates the sets of coin nodes that are configured in the preparation area, and
  * thus appear to originate there, and move into the measurement area.  This is used for the 10 and 100 coin cases.  The
  * 10k case is handled differently and is not included here.
  *
@@ -23,7 +23,7 @@ import SmallCoinNode, { SmallCoinDisplayMode } from './SmallCoinNode.js';
 
 const COIN_TRAVEL_ANIMATION_DURATION = MEASUREMENT_PREPARATION_TIME * 0.95;
 
-class MultipleCoinNodeManager {
+class MultipleCoinsViewManager {
 
   // Method for starting the animation that moves the coins from the preparation area to the test box.  It is created
   // as a closure to make things easier.
@@ -171,6 +171,6 @@ class MultipleCoinNodeManager {
   }
 }
 
-quantumMeasurement.register( 'MultipleCoinNodeManager', MultipleCoinNodeManager );
+quantumMeasurement.register( 'MultipleCoinsViewManager', MultipleCoinsViewManager );
 
-export default MultipleCoinNodeManager;
+export default MultipleCoinsViewManager;

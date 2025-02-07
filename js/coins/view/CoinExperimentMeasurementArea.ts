@@ -29,7 +29,7 @@ import CoinMeasurementHistogram from './CoinMeasurementHistogram.js';
 import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
 import ManyCoinNodeManager from './ManyCoinNodeManager.js';
 import MultiCoinTestBox from './MultiCoinTestBox.js';
-import MultipleCoinNodeManager from './MultipleCoinNodeManager.js';
+import MultipleCoinsViewManager from './MultipleCoinsViewManager.js';
 import SceneSectionHeader from './SceneSectionHeader.js';
 import SingleCoinViewManager from './SingleCoinViewManager.js';
 import SingleCoinTestBox from './SingleCoinTestBox.js';
@@ -221,7 +221,7 @@ class CoinExperimentMeasurementArea extends VBox {
       this.singleCoinInTestBoxProperty
     );
 
-    const multipleCoinAnimations = new MultipleCoinNodeManager(
+    const multipleCoinAnimations = new MultipleCoinsViewManager(
       sceneModel,
       this,
       multipleCoinTestBox,
