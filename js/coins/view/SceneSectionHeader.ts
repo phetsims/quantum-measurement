@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * SceneSectionHeader is a composite Scenery Node that consists of a textual header and a line below it, where the line

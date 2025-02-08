@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * PhotonDetector is the model element for the instrument that, based on how it is configured, either detects the number

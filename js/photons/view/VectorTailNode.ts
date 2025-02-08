@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * VectorTailNode provides a visual representation of the tail of a vector.  It is used to indicate the direction of

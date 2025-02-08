@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * The Coin class is a model for a classical or quantum coin whose face can be in one of two states or, in the quantum

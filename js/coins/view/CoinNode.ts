@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * CoinNode portrays a coin with two faces. It can show one or the other, and also supports cross-fading between the

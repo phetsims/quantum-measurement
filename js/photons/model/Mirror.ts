@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * Mirror is a model element that reflects photons that arrive from the left downward.  It is very specific to the

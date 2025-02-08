@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2025, University of Colorado Boulder
 
 /**
  * CoinFaceStates is a union type that represents the possible states for the face of a classical or quantum coin.

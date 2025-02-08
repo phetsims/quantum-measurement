@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * ClassicalCoinNode portrays a single classical coin in the view, allowing users to see its orientation, e.g. heads up
