@@ -1,9 +1,12 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * Coin is a model for a classical or quantum coin whose face can be in one of two states or, in the quantum case, in
- * a superposed state.  The coin can be prepared for measurement (similar to flipping a coin) and then measured (similar
- * to reading how the flip turned out).
+ * The Coin class is a model for a classical or quantum coin whose face can be in one of two states or, in the quantum
+ * case, in a superposed state.  The coin can be prepared for measurement (similar to flipping a coin) and then measured
+ * (similar to reading how the flip turned out).
+ *
+ * The Coin class is implemented as a specialization of the CoinSet class with a single coin.  This is done for
+ * simplicity of the code base and for consistency of the phet-io serialization and state behavior.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
@@ -12,30 +15,32 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
+import { SystemType } from '../../common/model/SystemType.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import { CoinFaceStates } from './CoinFaceStates.js';
 import CoinSet, { TwoStateSystemSetOptions } from './CoinSet.js';
 
 type SelfOptions = EmptySelfOptions;
 type TwoStateSystemOptions = SelfOptions & TwoStateSystemSetOptions;
 
-export default class Coin<T extends string> extends CoinSet<T> {
+export default class Coin extends CoinSet {
 
   // the value of most recent measurement, null indicates indeterminate
-  public readonly measuredValueProperty: Property<T>;
+  public readonly measuredValueProperty: Property<CoinFaceStates>;
 
-  public constructor( stateValues: readonly T[],
-                      initialState: T,
+  public constructor( coinType: SystemType,
+                      initialState: CoinFaceStates,
                       biasProperty: NumberProperty,
                       providedOptions: TwoStateSystemOptions ) {
 
     const options = optionize<TwoStateSystemOptions, SelfOptions, TwoStateSystemSetOptions>()( {}, providedOptions );
 
-    super( stateValues, 1, 1, initialState, biasProperty, options );
+    super( coinType, 1, 1, initialState, biasProperty, options );
 
     this.measuredValueProperty = new Property( initialState, {
       tandem: options.tandem.createTandem( 'measuredValueProperty' ),
-      phetioValueType: StringUnionIO( stateValues ),
-      validValues: [ ...stateValues ],
+      phetioValueType: StringUnionIO( this.validValues ),
+      validValues: [ ...this.validValues ],
       phetioFeatured: true,
       phetioReadOnly: true
     } );

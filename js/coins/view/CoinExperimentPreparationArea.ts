@@ -69,7 +69,7 @@ class CoinExperimentPreparationArea extends VBox {
 
     // Create the UI element that will allow the user to specify the initial state of the coin.
     const initialCoinStateSelectorNode = new InitialCoinStateSelectorNode(
-      sceneModel.initialCoinStateProperty,
+      sceneModel.initialCoinFaceStateProperty,
       sceneModel.upProbabilityProperty,
       sceneModel.preparingExperimentProperty,
       sceneModel.systemType,

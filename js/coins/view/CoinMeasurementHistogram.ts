@@ -17,14 +17,12 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import { SystemType } from '../../common/model/SystemType.js';
-import CoinSet from '../model/CoinSet.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import QuantumMeasurementHistogram, { QuantumMeasurementHistogramOptions } from '../../common/view/QuantumMeasurementHistogram.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
-import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
-import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
+import CoinSet from '../model/CoinSet.js';
 
 type SelfOptions = EmptySelfOptions;
 export type CoinMeasurementHistogramOptions = SelfOptions & QuantumMeasurementHistogramOptions;
@@ -33,7 +31,7 @@ const LABEL_FONT = new PhetFont( { size: 20, weight: 'bold' } );
 
 export default class CoinMeasurementHistogram extends QuantumMeasurementHistogram {
 
-  public constructor( coinSet: CoinSet<ClassicalCoinStates | QuantumCoinStates>,
+  public constructor( coinSet: CoinSet,
                       systemType: SystemType,
                       providedOptions: CoinMeasurementHistogramOptions ) {
 

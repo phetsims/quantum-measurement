@@ -16,11 +16,11 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import { SystemType } from '../../common/model/SystemType.js';
-import Coin from './Coin.js';
-import CoinSet from './CoinSet.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { ClassicalCoinStates, ClassicalCoinStateValues } from './ClassicalCoinStates.js';
-import { QuantumCoinStates, QuantumCoinStateValues } from './QuantumCoinStates.js';
+import { ClassicalCoinStateValues } from './ClassicalCoinStates.js';
+import Coin from './Coin.js';
+import { CoinFaceStates } from './CoinFaceStates.js';
+import CoinSet from './CoinSet.js';
 
 type SelfOptions = {
   initiallyActive?: boolean;
@@ -28,8 +28,6 @@ type SelfOptions = {
   systemType?: SystemType;
 };
 type CoinExperimentSceneModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
-
-type MeasuredCoinStates = ClassicalCoinStates | QuantumCoinStates;
 
 // constants
 
@@ -46,7 +44,7 @@ export const MULTI_COIN_ANIMATION_QUANTITIES = MULTI_COIN_EXPERIMENT_QUANTITIES.
 // max coins used in any of the experiments
 export const MAX_COINS = Math.max( ...MULTI_COIN_EXPERIMENT_QUANTITIES );
 
-export default class CoinsExperimentSceneModel extends PhetioObject {
+class CoinsExperimentSceneModel extends PhetioObject {
 
   // whether this scene is active, which is mostly about whether it is shown in the view
   public readonly activeProperty: BooleanProperty;
@@ -58,12 +56,11 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
   public readonly preparingExperimentProperty: BooleanProperty;
 
   // The coins that are flipped/prepared and then measured during the experiment.
-  public readonly singleCoin: Coin<ClassicalCoinStates> | Coin<QuantumCoinStates>;
-
-  public readonly coinSet: CoinSet<ClassicalCoinStates> | CoinSet<QuantumCoinStates>;
+  public readonly singleCoin: Coin;
+  public readonly coinSet: CoinSet;
 
   // The initial state of the coin(s) before any flipping or other experiment preparation occurs.
-  public readonly initialCoinStateProperty: Property<ClassicalCoinStates> | Property<QuantumUncollapsedCoinStates>;
+  public readonly initialCoinFaceStateProperty: Property<CoinFaceStates>;
 
   // The probability of the 'up' state. The 'down' probability will be (1 - thisValue).
   public readonly upProbabilityProperty: NumberProperty;
@@ -97,46 +94,46 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
     const singleCoinTandem = options.tandem.createTandem( 'singleCoin' );
     const coinSetTandem = options.tandem.createTandem( 'coinSet' );
     if ( options.systemType === 'classical' ) {
-      this.initialCoinStateProperty = new Property<ClassicalCoinStates>( 'heads', {
-        tandem: options.tandem.createTandem( 'initialCoinStateProperty' ),
+      this.initialCoinFaceStateProperty = new Property<CoinFaceStates>( 'heads', {
+        tandem: options.tandem.createTandem( 'initialCoinFaceStateProperty' ),
         phetioDocumentation: 'This is the initial orientation of the classical coin',
         phetioValueType: StringUnionIO( ClassicalCoinStateValues ),
         validValues: ClassicalCoinStateValues,
         phetioFeatured: true
       } );
-      this.singleCoin = new Coin<ClassicalCoinStates>(
-        ClassicalCoinStateValues,
+      this.singleCoin = new Coin(
+        'classical',
         'heads',
         this.upProbabilityProperty,
-        { tandem: singleCoinTandem, systemType: 'classical' }
+        { tandem: singleCoinTandem }
       );
-      this.coinSet = new CoinSet<ClassicalCoinStates>(
-        ClassicalCoinStateValues,
+      this.coinSet = new CoinSet(
+        'classical',
         MAX_COINS,
         MULTI_COIN_EXPERIMENT_QUANTITIES[ 1 ], // use the middle value as the default
         'heads',
         this.upProbabilityProperty,
-        { tandem: coinSetTandem, systemType: 'classical' }
+        { tandem: coinSetTandem }
       );
     }
     else {
       assert && assert( options.systemType === 'quantum', 'unhandled system type' );
-      this.initialCoinStateProperty = new Property<QuantumUncollapsedCoinStates>( 'up', {
-        tandem: options.tandem.createTandem( 'initialCoinStateProperty' ),
+      this.initialCoinFaceStateProperty = new Property<CoinFaceStates>( 'up', {
+        tandem: options.tandem.createTandem( 'initialCoinFaceStateProperty' ),
         phetioValueType: StringUnionIO( QuantumUncollapsedCoinStateValues ),
         phetioDocumentation: 'This is the basis state of the quantum coin',
         phetioReadOnly: true,
         validValues: QuantumUncollapsedCoinStateValues,
         phetioFeatured: true
       } );
-      this.singleCoin = new Coin<QuantumCoinStates>(
-        QuantumCoinStateValues,
+      this.singleCoin = new Coin(
+        'quantum',
         'up',
         this.upProbabilityProperty,
         { tandem: singleCoinTandem }
       );
-      this.coinSet = new CoinSet<QuantumCoinStates>(
-        QuantumCoinStateValues,
+      this.coinSet = new CoinSet(
+        'quantum',
         MAX_COINS,
         MULTI_COIN_EXPERIMENT_QUANTITIES[ 1 ], // use the middle value as the default
         'up',
@@ -158,18 +155,18 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
         // The scene is moving from preparation mode to measurement mode. Set the coins to be in the initial state
         // chosen by the user.  If these are quantum coins and the initial state is set to superposed, set an arbitrary
         // initial state.  This is okay because the values won't be shown to the user.
-        const initialState: MeasuredCoinStates = this.initialCoinStateProperty.value === 'superposed' ?
-                                                 'up' :
-                                                 this.initialCoinStateProperty.value;
+        const initialState: CoinFaceStates = this.initialCoinFaceStateProperty.value === 'superposed' ?
+                                             'up' :
+                                             this.initialCoinFaceStateProperty.value;
         // TODO: How can this be better and avoid the "as never" weirdness?  See https://github.com/phetsims/quantum-measurement/issues/42.
-        this.singleCoin.setMeasurementValuesImmediate( initialState as never );
-        this.coinSet.setMeasurementValuesImmediate( initialState as never );
+        this.singleCoin.setMeasurementValuesImmediate( initialState );
+        this.coinSet.setMeasurementValuesImmediate( initialState );
       }
     } );
 
     // If this is a quantum system, changing the initial state of the coin sets the bias to match that coin.
     if ( this.systemType === 'quantum' ) {
-      this.initialCoinStateProperty.lazyLink( initialCoinState => {
+      this.initialCoinFaceStateProperty.lazyLink( initialCoinState => {
         if ( initialCoinState !== 'superposed' ) {
           this.upProbabilityProperty.value = initialCoinState === 'up' ? 1 : 0;
         }
@@ -177,10 +174,10 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
 
       this.upProbabilityProperty.lazyLink( bias => {
         if ( bias !== 0 && bias !== 1 ) {
-          this.initialCoinStateProperty.value = 'superposed';
+          this.initialCoinFaceStateProperty.value = 'superposed';
         }
         else {
-          this.initialCoinStateProperty.value = bias === 1 ? 'up' : 'down';
+          this.initialCoinFaceStateProperty.value = bias === 1 ? 'up' : 'down';
         }
       } );
     }
@@ -188,7 +185,7 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
 
   public reset(): void {
     this.preparingExperimentProperty.reset();
-    this.initialCoinStateProperty.reset();
+    this.initialCoinFaceStateProperty.reset();
     this.upProbabilityProperty.reset();
     this.singleCoin.reset();
     this.coinSet.reset();
@@ -196,3 +193,5 @@ export default class CoinsExperimentSceneModel extends PhetioObject {
 }
 
 quantumMeasurement.register( 'CoinsExperimentSceneModel', CoinsExperimentSceneModel );
+
+export default CoinsExperimentSceneModel;

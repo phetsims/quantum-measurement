@@ -45,7 +45,7 @@ class MultiCoinTestBox extends Node {
   // The pixel representation of the coin set, which is used for the many coin case.
   private pixelRepresentation: CoinSetPixelRepresentation | null = null;
 
-  public constructor( coinSet: CoinSet<string>,
+  public constructor( coinSet: CoinSet,
                       measurementStateProperty: Property<ExperimentMeasurementState>,
                       numberOfActiveSystemsProperty: TReadOnlyProperty<number>,
                       measuredDataChangedEmitter: TEmitter ) {
@@ -101,10 +101,10 @@ class MultiCoinTestBox extends Node {
 
   /**
    * Update the appearance of the coin nodes.  This is done in a batch rather than having separate model elements and
-   * nodes that automatically update because there can be many thousands of coins, so this approach is needed to get
-   * reasonable performance.
+   * nodes that automatically update because there can be many thousands of coins, so an approach like this is needed to
+   * get reasonable performance.
    */
-  private updateCoinNodes( coinSet: CoinSet<string>, measurementState: ExperimentMeasurementState ): void {
+  private updateCoinNodes( coinSet: CoinSet, measurementState: ExperimentMeasurementState ): void {
     this.residentCoinNodes.forEach( ( coinNode, index ) => {
 
       if ( measurementState === 'revealed' ) {
@@ -124,7 +124,7 @@ class MultiCoinTestBox extends Node {
         // Hide the faces of the coin.
         coinNode.displayModeProperty.value = 'masked';
 
-        if ( coinSet.systemType === 'classical' ) {
+        if ( coinSet.coinType === 'classical' ) {
           coinNode.startFlipping();
         }
       }

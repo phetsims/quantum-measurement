@@ -24,7 +24,7 @@ import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { ClassicalCoinStates, ClassicalCoinStateValues } from '../model/ClassicalCoinStates.js';
-import { QuantumUncollapsedCoinStates } from '../model/CoinsExperimentSceneModel.js';
+import { CoinFaceStates } from '../model/CoinFaceStates.js';
 import { QuantumCoinStates, QuantumCoinStateValues } from '../model/QuantumCoinStates.js';
 import ClassicalCoinNode from './ClassicalCoinNode.js';
 import CoinNode from './CoinNode.js';
@@ -37,21 +37,21 @@ export default class InitialCoinStateSelectorNode extends VBox {
 
   public readonly orientationIndicatorCoinNode: CoinNode;
 
-  public constructor( initialCoinStateProperty: Property<ClassicalCoinStates> | Property<QuantumUncollapsedCoinStates>,
+  public constructor( initialCoinStateProperty: Property<CoinFaceStates>,
                       upProbabilityProperty: TReadOnlyProperty<number>,
                       preparingExperimentProperty: TReadOnlyProperty<boolean>,
-                      systemType: SystemType,
+                      coinType: SystemType,
                       tandem: Tandem ) {
 
     assert && assert(
-      systemType === 'classical' &&
+      coinType === 'classical' &&
       ClassicalCoinStateValues.includes( initialCoinStateProperty.value as ClassicalCoinStates ) ||
-      systemType === 'quantum' &&
+      coinType === 'quantum' &&
       QuantumCoinStateValues.includes( initialCoinStateProperty.value as QuantumCoinStates ),
-      'the specified systemType does not match with initialCoinStateProperty'
+      'the specified coinType does not match with initialCoinStateProperty'
     );
 
-    const titleStringProperty = systemType === 'classical' ?
+    const titleStringProperty = coinType === 'classical' ?
                                 QuantumMeasurementStrings.initialOrientationStringProperty :
                                 QuantumMeasurementStrings.basisStateStringProperty;
 
@@ -66,7 +66,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
       return str.charAt( 0 ).toUpperCase() + str.slice( 1 );
     };
     let initialCoinStateItems; //: RectangularRadioButtonGroupItem[];
-    if ( systemType === 'classical' ) {
+    if ( coinType === 'classical' ) {
       initialCoinStateItems = ClassicalCoinStateValues.map( stateValue => {
         return {
           value: stateValue,
@@ -137,7 +137,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
 
     // Add the Node that will indicate the initial orientation of the coin.
     let orientationIndicatorCoinNode;
-    if ( systemType === 'classical' ) {
+    if ( coinType === 'classical' ) {
       orientationIndicatorCoinNode = new ClassicalCoinNode(
         initialCoinStateProperty as Property<ClassicalCoinStates>,
         INDICATOR_COIN_NODE_RADIUS,
