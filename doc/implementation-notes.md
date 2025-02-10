@@ -1,6 +1,6 @@
 # Quantum Measurement - Implementation Notes
 
-## Terminology
+## Terminologyy
 
 Classical System - A system that behaves in a deterministic way, where the state of the system can be known with
 certainty and is always in a specific state.
