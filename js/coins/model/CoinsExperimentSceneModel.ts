@@ -21,6 +21,7 @@ import { ClassicalCoinStateValues } from './ClassicalCoinStates.js';
 import Coin from './Coin.js';
 import { CoinFaceStates } from './CoinFaceStates.js';
 import CoinSet from './CoinSet.js';
+import { QuantumCoinStateValues } from './QuantumCoinStates.js';
 
 type SelfOptions = {
   initiallyActive?: boolean;
@@ -30,10 +31,6 @@ type SelfOptions = {
 type CoinExperimentSceneModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
 // constants
-
-// Uncollapsed states when preparing the coin
-const QuantumUncollapsedCoinStateValues = [ 'up', 'down', 'superposed' ] as const;
-export type QuantumUncollapsedCoinStates = ( typeof QuantumUncollapsedCoinStateValues )[number];
 
 // allowed values for the number of coins to use in the multi-coin experiment
 export const MULTI_COIN_EXPERIMENT_QUANTITIES = [ 10, 100, 10000 ];
@@ -123,10 +120,10 @@ class CoinsExperimentSceneModel extends PhetioObject {
       assert && assert( options.systemType === 'quantum', 'unhandled system type' );
       this.initialCoinFaceStateProperty = new Property<CoinFaceStates>( 'up', {
         tandem: options.tandem.createTandem( 'initialCoinFaceStateProperty' ),
-        phetioValueType: StringUnionIO( QuantumUncollapsedCoinStateValues ),
+        phetioValueType: StringUnionIO( QuantumCoinStateValues ),
         phetioDocumentation: 'This is the basis state of the quantum coin',
         phetioReadOnly: true,
-        validValues: QuantumUncollapsedCoinStateValues,
+        validValues: QuantumCoinStateValues,
         phetioFeatured: true
       } );
       this.singleCoin = new Coin(

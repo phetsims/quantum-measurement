@@ -83,7 +83,10 @@ export default class InitialCoinStateSelectorNode extends VBox {
       } );
     }
     else {
-      initialCoinStateItems = QuantumCoinStateValues.map( stateValue => {
+
+      // The user isn't allowed to directly select the 'superposed' state, so we don't include it in the list.
+      const collapsedQuantumCoinStateValues = QuantumCoinStateValues.filter( stateValue => stateValue !== 'superposed' );
+      initialCoinStateItems = collapsedQuantumCoinStateValues.map( stateValue => {
         return {
           value: stateValue,
           createNode: () => new QuantumCoinNode(
