@@ -31,7 +31,7 @@ import { ExperimentMeasurementState, ExperimentMeasurementStateValues } from './
 type SelfOptions = {
   initialBias?: number;
 };
-export type TwoStateSystemSetOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
+export type CoinSetOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
 export type StateSetMeasurementResult = {
   length: number;
@@ -100,9 +100,9 @@ class CoinSet extends PhetioObject {
                       initialNumberOfActiveCoins: number,
                       initialFaceState: CoinStates,
                       biasProperty: NumberProperty,
-                      providedOptions: TwoStateSystemSetOptions ) {
+                      providedOptions: CoinSetOptions ) {
 
-    const options = optionize<TwoStateSystemSetOptions, SelfOptions, PhetioObjectOptions>()( {
+    const options = optionize<CoinSetOptions, SelfOptions, PhetioObjectOptions>()( {
       initialBias: 0.5,
       phetioState: false
     }, providedOptions );

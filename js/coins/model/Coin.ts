@@ -18,10 +18,10 @@ import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { CoinStates } from './CoinStates.js';
-import CoinSet, { TwoStateSystemSetOptions } from './CoinSet.js';
+import CoinSet, { CoinSetOptions } from './CoinSet.js';
 
 type SelfOptions = EmptySelfOptions;
-type TwoStateSystemOptions = SelfOptions & TwoStateSystemSetOptions;
+type CoinOptions = SelfOptions & CoinSetOptions;
 
 export default class Coin extends CoinSet {
 
@@ -31,9 +31,9 @@ export default class Coin extends CoinSet {
   public constructor( coinType: SystemType,
                       initialState: CoinStates,
                       biasProperty: NumberProperty,
-                      providedOptions: TwoStateSystemOptions ) {
+                      providedOptions: CoinOptions ) {
 
-    const options = optionize<TwoStateSystemOptions, SelfOptions, TwoStateSystemSetOptions>()( {}, providedOptions );
+    const options = optionize<CoinOptions, SelfOptions, CoinSetOptions>()( {}, providedOptions );
 
     super( coinType, 1, 1, initialState, biasProperty, options );
 
