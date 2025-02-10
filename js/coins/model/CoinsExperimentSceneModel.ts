@@ -162,7 +162,6 @@ class CoinsExperimentSceneModel extends PhetioObject {
         const initialState: CoinFaceStates = this.initialCoinFaceStateProperty.value === 'superposed' ?
                                              'up' :
                                              this.initialCoinFaceStateProperty.value;
-        // TODO: How can this be better and avoid the "as never" weirdness?  See https://github.com/phetsims/quantum-measurement/issues/42.
         this.singleCoin.setMeasurementValuesImmediate( initialState );
         this.coinSet.setMeasurementValuesImmediate( initialState );
       }
