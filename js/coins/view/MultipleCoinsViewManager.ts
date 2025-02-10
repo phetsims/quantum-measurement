@@ -84,8 +84,8 @@ class MultipleCoinsViewManager {
     this.startIngressAnimationForCoinSet = ( forReprepare: boolean ) => {
 
       assert && assert(
-        coinNodeSets.has( sceneModel.coinSet.numberOfActiveSystemsProperty.value ),
-        `No coin nodes exist for the needed quantity: ${sceneModel.coinSet.numberOfActiveSystemsProperty.value}`
+        coinNodeSets.has( sceneModel.coinSet.numberOfActiveCoinsProperty.value ),
+        `No coin nodes exist for the needed quantity: ${sceneModel.coinSet.numberOfActiveCoinsProperty.value}`
       );
 
       // Create a typed reference to the parent node, since we'll need to invoke some methods on it.
@@ -96,7 +96,7 @@ class MultipleCoinsViewManager {
       multipleCoinTestBox.clearContents();
 
       // Get the set of coin nodes that will be animated.
-      const coinsToAnimate = coinNodeSets.get( sceneModel.coinSet.numberOfActiveSystemsProperty.value );
+      const coinsToAnimate = coinNodeSets.get( sceneModel.coinSet.numberOfActiveCoinsProperty.value );
 
       // Add the coins to our parent node. This is done so that we don't change the local bounds of the measurement
       // area, since this would break the layout.  These will be added back to the measurement area when they reach the

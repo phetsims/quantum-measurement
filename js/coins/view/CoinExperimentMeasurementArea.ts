@@ -31,8 +31,8 @@ import MaxCoinsViewManager from './MaxCoinsViewManager.js';
 import MultiCoinTestBox from './MultiCoinTestBox.js';
 import MultipleCoinsViewManager from './MultipleCoinsViewManager.js';
 import SceneSectionHeader from './SceneSectionHeader.js';
-import SingleCoinViewManager from './SingleCoinViewManager.js';
 import SingleCoinTestBox from './SingleCoinTestBox.js';
+import SingleCoinViewManager from './SingleCoinViewManager.js';
 
 const RADIO_BUTTON_FONT = new PhetFont( 12 );
 
@@ -98,12 +98,7 @@ class CoinExperimentMeasurementArea extends VBox {
     );
 
     // Add the area where the multiple coins will be hidden and revealed.
-    const multipleCoinTestBox = new MultiCoinTestBox(
-      sceneModel.coinSet,
-      sceneModel.coinSet.measurementStateProperty,
-      sceneModel.coinSet.numberOfActiveSystemsProperty,
-      sceneModel.coinSet.measuredDataChangedEmitter
-    );
+    const multipleCoinTestBox = new MultiCoinTestBox( sceneModel.coinSet );
     const multiCoinExperimentHistogramTandem = tandem.createTandem( 'multiCoinExperimentHistogram' );
     const multiCoinExperimentHistogram = new CoinMeasurementHistogram( sceneModel.coinSet, sceneModel.systemType, {
       visibleProperty: new GatedVisibleProperty(
@@ -145,7 +140,7 @@ class CoinExperimentMeasurementArea extends VBox {
 
     const numberOfCoinsRadioButtonGroupTandem = tandem.createTandem( 'numberOfCoinsRadioButtonGroup' );
     const numberOfCoinsRadioButtonGroup = new VerticalAquaRadioButtonGroup(
-      sceneModel.coinSet.numberOfActiveSystemsProperty,
+      sceneModel.coinSet.numberOfActiveCoinsProperty,
       MULTI_COIN_EXPERIMENT_QUANTITIES.map( quantity => createRadioButtonGroupItem( quantity ) ),
       {
         spacing: 10,
@@ -260,7 +255,7 @@ class CoinExperimentMeasurementArea extends VBox {
         // The user is ready to make measurements on the coins, so animate the coins for both the single and multi-coin
         // experiments from the preparation area to the measurement area.
         singleCoinViewManager.startIngressAnimationForSingleCoin( false );
-        if ( sceneModel.coinSet.numberOfActiveSystemsProperty.value === MAX_COINS ) {
+        if ( sceneModel.coinSet.numberOfActiveCoinsProperty.value === MAX_COINS ) {
           maxCoinsViewManager.startIngressAnimationForCoinSet( false );
         }
         else {
@@ -285,7 +280,7 @@ class CoinExperimentMeasurementArea extends VBox {
 
           // Animate a coin from the prep area to the single coin test box to indicate that a new "quantum coin" is
           // being prepared for measurement.
-          if ( sceneModel.coinSet.numberOfActiveSystemsProperty.value === MAX_COINS ) {
+          if ( sceneModel.coinSet.numberOfActiveCoinsProperty.value === MAX_COINS ) {
             maxCoinsViewManager.startIngressAnimationForCoinSet( true );
           }
           else {

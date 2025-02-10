@@ -8,8 +8,6 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import Property from '../../../../axon/js/Property.js';
-import TEmitter from '../../../../axon/js/TEmitter.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -19,9 +17,9 @@ import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
-import CoinSet from '../model/CoinSet.js';
 import quantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import CoinSet from '../model/CoinSet.js';
 import { MULTI_COIN_ANIMATION_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
 import { ExperimentMeasurementState } from '../model/ExperimentMeasurementState.js';
 import CoinSetPixelRepresentation from './CoinSetPixelRepresentation.js';
@@ -37,7 +35,7 @@ const TEST_BOX_CONTENTS_REVEALED_FILL_COLOR_PROPERTY = quantumMeasurementColors.
 class MultiCoinTestBox extends Node {
 
   private readonly testBoxWithClipArea: Node;
-  private readonly numberOfActiveSystemsProperty: TReadOnlyProperty<number>;
+  private readonly numberOfActiveCoinsProperty: TReadOnlyProperty<number>;
 
   // The coin nodes that are currently in the test box.  These are the represented as one node per coin.
   private readonly residentCoinNodes: SmallCoinNode[] = [];
@@ -45,10 +43,7 @@ class MultiCoinTestBox extends Node {
   // The pixel representation of the coin set, which is used for the many coin case.
   private pixelRepresentation: CoinSetPixelRepresentation | null = null;
 
-  public constructor( coinSet: CoinSet,
-                      measurementStateProperty: Property<ExperimentMeasurementState>,
-                      numberOfActiveSystemsProperty: TReadOnlyProperty<number>,
-                      measuredDataChangedEmitter: TEmitter ) {
+  public constructor( coinSet: CoinSet ) {
 
     // Create the main rectangle that will represent the area where the coins will be hidden and shown.
     const multipleCoinTestBoxRectangle = new Rectangle(
@@ -74,10 +69,10 @@ class MultiCoinTestBox extends Node {
     super( { children: [ testBoxWithClipArea ] } );
 
     this.testBoxWithClipArea = testBoxWithClipArea;
-    this.numberOfActiveSystemsProperty = numberOfActiveSystemsProperty;
+    this.numberOfActiveCoinsProperty = coinSet.numberOfActiveCoinsProperty;
 
     // Update the fill for the rectangle based on the measurement state.
-    measurementStateProperty.link( measurementState => {
+    coinSet.measurementStateProperty.link( measurementState => {
 
       // Make the box look hazy when the measurement is not revealed.
       multipleCoinTestBoxRectangle.fill = measurementState === 'revealed' ?
@@ -89,12 +84,12 @@ class MultiCoinTestBox extends Node {
     } );
 
     // Update the appearance of the coin nodes when the data changes.
-    measuredDataChangedEmitter.addListener( () => {
+    coinSet.measuredDataChangedEmitter.addListener( () => {
 
       // When phet-io state is being set, the measured data can change without any change to the measurement state of
       // the coin set.  This makes sure that the coin nodes are updated in that situation.
       if ( isSettingPhetioStateProperty.value ) {
-        this.updateCoinNodes( coinSet, measurementStateProperty.value );
+        this.updateCoinNodes( coinSet, coinSet.measurementStateProperty.value );
       }
     } );
   }
@@ -171,7 +166,7 @@ class MultiCoinTestBox extends Node {
    * Get an offset value from the center of the test box rectangle where a coin at the given index should go.
    */
   public getOffsetFromCenter( index: number ): Vector2 {
-    assert && assert( index < this.numberOfActiveSystemsProperty.value, 'index is out of range for current capacity' );
+    assert && assert( index < this.numberOfActiveCoinsProperty.value, 'index is out of range for current capacity' );
     const offset = new Vector2( 0, 0 );
 
     const setOffsets = ( box: Dimension2, columns: number, rows: number ) => {
@@ -180,10 +175,10 @@ class MultiCoinTestBox extends Node {
       offset.setXY( xOffset, yOffset );
     };
 
-    if ( this.numberOfActiveSystemsProperty.value === 10 ) {
+    if ( this.numberOfActiveCoinsProperty.value === 10 ) {
       setOffsets( BOX_SIZE, 5, 2 );
     }
-    else if ( this.numberOfActiveSystemsProperty.value === 100 ) {
+    else if ( this.numberOfActiveCoinsProperty.value === 100 ) {
       setOffsets( BOX_SIZE, 10, 10 );
     }
     return offset;

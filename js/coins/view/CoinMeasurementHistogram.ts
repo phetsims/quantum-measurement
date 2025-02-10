@@ -76,7 +76,7 @@ export default class CoinMeasurementHistogram extends QuantumMeasurementHistogra
       let rightTotal = 0;
 
       if ( coinSet.measurementStateProperty.value === 'revealed' ) {
-        _.times( coinSet.numberOfActiveSystemsProperty.value, i => {
+        _.times( coinSet.numberOfActiveCoinsProperty.value, i => {
           if ( coinSet.measuredValues[ i ] === leftTestValue ) {
             leftTotal++;
           }
@@ -90,7 +90,7 @@ export default class CoinMeasurementHistogram extends QuantumMeasurementHistogra
     };
 
     Multilink.multilink(
-      [ coinSet.numberOfActiveSystemsProperty, coinSet.measurementStateProperty ],
+      [ coinSet.numberOfActiveCoinsProperty, coinSet.measurementStateProperty ],
       updateNumberProperties
     );
 
@@ -104,7 +104,7 @@ export default class CoinMeasurementHistogram extends QuantumMeasurementHistogra
     );
 
     const numberOfCoinsStringProperty = new DerivedStringProperty(
-      [ coinSet.numberOfActiveSystemsProperty ],
+      [ coinSet.numberOfActiveCoinsProperty ],
       numberOfCoins => StringUtils.fillIn(
         QuantumMeasurementStrings.numberOfCoinsPatternStringProperty,
         { number: numberOfCoins }
