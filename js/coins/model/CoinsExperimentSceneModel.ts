@@ -59,7 +59,7 @@ class CoinsExperimentSceneModel extends PhetioObject {
   public readonly singleCoin: Coin;
   public readonly coinSet: CoinSet;
 
-  // The initial state of the coin(s) before any flipping or other experiment preparation occurs.
+  // The initial state that the coin(s) should be in before any flipping or other experiment preparation occurs.
   public readonly initialCoinFaceStateProperty: Property<CoinFaceStates>;
 
   // The probability of the 'up' state. The 'down' probability will be (1 - thisValue).
@@ -91,6 +91,9 @@ class CoinsExperimentSceneModel extends PhetioObject {
       phetioFeatured: true,
       phetioDocumentation: 'The probability of the "up" state for the coin(s) in this scene.'
     } );
+
+    // Create the coins that will be used in the experiment, as well as the Property that will track the user's choice
+    // of the initial state for the coins.  This is done a little differently for classical versus quantum systems.
     const singleCoinTandem = options.tandem.createTandem( 'singleCoin' );
     const coinSetTandem = options.tandem.createTandem( 'coinSet' );
     if ( options.systemType === 'classical' ) {
@@ -142,6 +145,7 @@ class CoinsExperimentSceneModel extends PhetioObject {
       );
     }
 
+    // Update the internal state when moving between preparation and measurement modes.
     this.preparingExperimentProperty.lazyLink( preparingExperiment => {
 
       if ( preparingExperiment ) {
@@ -164,7 +168,8 @@ class CoinsExperimentSceneModel extends PhetioObject {
       }
     } );
 
-    // If this is a quantum system, changing the initial state of the coin sets the bias to match that coin.
+    // If this is a quantum system, changing the initial state of the coin sets the bias to match that coin.  This code
+    // sets up the listeners that will make this happen.
     if ( this.systemType === 'quantum' ) {
       this.initialCoinFaceStateProperty.lazyLink( initialCoinState => {
         if ( initialCoinState !== 'superposed' ) {
