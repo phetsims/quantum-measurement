@@ -19,6 +19,7 @@ import Circle from '../../../../scenery/js/nodes/Circle.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import VerticalAquaRadioButtonGroup from '../../../../sun/js/VerticalAquaRadioButtonGroup.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
@@ -286,6 +287,20 @@ class CoinExperimentMeasurementArea extends VBox {
           else {
             multipleCoinsViewManager.startIngressAnimationForCoinSet( true );
           }
+        }
+      }
+    } );
+
+    // During normal operation the number of active coins can't change without cycling through the preparation state,
+    // but during phet-io state setting it can.  The following linkage handles this case, and makes sure that the view
+    // reflects the state of the model.
+    sceneModel.coinSet.numberOfActiveCoinsProperty.lazyLink( numberOfActiveCoins => {
+      if ( isSettingPhetioStateProperty.value ) {
+        if ( numberOfActiveCoins === MAX_COINS ) {
+          maxCoinsViewManager.startIngressAnimationForCoinSet( false );
+        }
+        else {
+          multipleCoinsViewManager.startIngressAnimationForCoinSet( false );
         }
       }
     } );
