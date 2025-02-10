@@ -17,7 +17,7 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { CoinFaceStates } from './CoinFaceStates.js';
+import { CoinStates } from './CoinStates.js';
 import CoinSet, { TwoStateSystemSetOptions } from './CoinSet.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -26,10 +26,10 @@ type TwoStateSystemOptions = SelfOptions & TwoStateSystemSetOptions;
 export default class Coin extends CoinSet {
 
   // the value of most recent measurement, null indicates indeterminate
-  public readonly measuredValueProperty: Property<CoinFaceStates>;
+  public readonly measuredValueProperty: Property<CoinStates>;
 
   public constructor( coinType: SystemType,
-                      initialState: CoinFaceStates,
+                      initialState: CoinStates,
                       biasProperty: NumberProperty,
                       providedOptions: TwoStateSystemOptions ) {
 

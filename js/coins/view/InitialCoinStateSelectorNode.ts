@@ -24,7 +24,7 @@ import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { ClassicalCoinStates, ClassicalCoinStateValues } from '../model/ClassicalCoinStates.js';
-import { CoinFaceStates } from '../model/CoinFaceStates.js';
+import { CoinStates } from '../model/CoinStates.js';
 import { QuantumCoinStates, QuantumCoinStateValues } from '../model/QuantumCoinStates.js';
 import ClassicalCoinNode from './ClassicalCoinNode.js';
 import CoinNode from './CoinNode.js';
@@ -37,7 +37,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
 
   public readonly orientationIndicatorCoinNode: CoinNode;
 
-  public constructor( initialCoinStateProperty: Property<CoinFaceStates>,
+  public constructor( initialCoinStateProperty: Property<CoinStates>,
                       upProbabilityProperty: TReadOnlyProperty<number>,
                       preparingExperimentProperty: TReadOnlyProperty<boolean>,
                       coinType: SystemType,

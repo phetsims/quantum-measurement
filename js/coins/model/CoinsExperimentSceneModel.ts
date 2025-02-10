@@ -19,7 +19,7 @@ import { SystemType } from '../../common/model/SystemType.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { ClassicalCoinStateValues } from './ClassicalCoinStates.js';
 import Coin from './Coin.js';
-import { CoinFaceStates } from './CoinFaceStates.js';
+import { CoinStates } from './CoinStates.js';
 import CoinSet from './CoinSet.js';
 import { QuantumCoinStateValues } from './QuantumCoinStates.js';
 
@@ -57,7 +57,7 @@ class CoinsExperimentSceneModel extends PhetioObject {
   public readonly coinSet: CoinSet;
 
   // The initial state that the coin(s) should be in before any flipping or other experiment preparation occurs.
-  public readonly initialCoinFaceStateProperty: Property<CoinFaceStates>;
+  public readonly initialCoinFaceStateProperty: Property<CoinStates>;
 
   // The probability of the 'up' state. The 'down' probability will be (1 - thisValue).
   public readonly upProbabilityProperty: NumberProperty;
@@ -94,7 +94,7 @@ class CoinsExperimentSceneModel extends PhetioObject {
     const singleCoinTandem = options.tandem.createTandem( 'singleCoin' );
     const coinSetTandem = options.tandem.createTandem( 'coinSet' );
     if ( options.systemType === 'classical' ) {
-      this.initialCoinFaceStateProperty = new Property<CoinFaceStates>( 'heads', {
+      this.initialCoinFaceStateProperty = new Property<CoinStates>( 'heads', {
         tandem: options.tandem.createTandem( 'initialCoinFaceStateProperty' ),
         phetioDocumentation: 'This is the initial orientation of the classical coin',
         phetioValueType: StringUnionIO( ClassicalCoinStateValues ),
@@ -118,7 +118,7 @@ class CoinsExperimentSceneModel extends PhetioObject {
     }
     else {
       assert && assert( options.systemType === 'quantum', 'unhandled system type' );
-      this.initialCoinFaceStateProperty = new Property<CoinFaceStates>( 'up', {
+      this.initialCoinFaceStateProperty = new Property<CoinStates>( 'up', {
         tandem: options.tandem.createTandem( 'initialCoinFaceStateProperty' ),
         phetioValueType: StringUnionIO( QuantumCoinStateValues ),
         phetioDocumentation: 'This is the basis state of the quantum coin',
@@ -156,9 +156,9 @@ class CoinsExperimentSceneModel extends PhetioObject {
         // The scene is moving from preparation mode to measurement mode. Set the coins to be in the initial state
         // chosen by the user.  If these are quantum coins and the initial state is set to superposed, set an arbitrary
         // initial state.  This is okay because the values won't be shown to the user.
-        const initialState: CoinFaceStates = this.initialCoinFaceStateProperty.value === 'superposed' ?
-                                             'up' :
-                                             this.initialCoinFaceStateProperty.value;
+        const initialState: CoinStates = this.initialCoinFaceStateProperty.value === 'superposed' ?
+                                         'up' :
+                                         this.initialCoinFaceStateProperty.value;
         this.singleCoin.setMeasurementValuesImmediate( initialState );
         this.coinSet.setMeasurementValuesImmediate( initialState );
       }

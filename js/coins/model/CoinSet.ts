@@ -24,8 +24,8 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { CoinFaceStates } from './CoinFaceStates.js';
 import { MULTI_COIN_EXPERIMENT_QUANTITIES } from './CoinsExperimentSceneModel.js';
+import { CoinStates } from './CoinStates.js';
 import { ExperimentMeasurementState, ExperimentMeasurementStateValues } from './ExperimentMeasurementState.js';
 
 type SelfOptions = {
@@ -35,7 +35,7 @@ export type TwoStateSystemSetOptions = SelfOptions & PickRequired<PhetioObjectOp
 
 export type StateSetMeasurementResult = {
   length: number;
-  measuredValues: CoinFaceStates[];
+  measuredValues: CoinStates[];
 };
 
 // Define the time that it will take to prepare a measurement, in seconds.  This is empirically determined.
@@ -43,7 +43,7 @@ export const MEASUREMENT_PREPARATION_TIME = 1;
 
 // Valid values for the coin faces for each system type.
 // TODO: Should superposed be included in the valid values for the quantum case?  See https://github.com/phetsims/quantum-measurement/issues/91.
-const MAP_OF_VALID_VALUES_FOR_COIN_TYPE = new Map<SystemType, CoinFaceStates[]>( [
+const MAP_OF_VALID_VALUES_FOR_COIN_TYPE = new Map<SystemType, CoinStates[]>( [
   [ 'classical', [ 'heads', 'tails' ] ],
   [ 'quantum', [ 'up', 'down' ] ]
 ] );
@@ -57,10 +57,10 @@ class CoinSet extends PhetioObject {
   public readonly measurementStateProperty: Property<ExperimentMeasurementState>;
 
   // valid values for a measurement
-  public readonly validValues: readonly CoinFaceStates[];
+  public readonly validValues: readonly CoinStates[];
 
   // The values of most recent measurement.  These are only valid in some - and not all - measurement states.
-  public readonly measuredValues: CoinFaceStates[] = [];
+  public readonly measuredValues: CoinStates[] = [];
 
   // The number of systems that will be measured each time a measurement is made.
   public readonly numberOfActiveSystemsProperty: NumberProperty;
@@ -98,7 +98,7 @@ class CoinSet extends PhetioObject {
   public constructor( coinType: SystemType,
                       maxNumberOfActiveCoins: number,
                       initialNumberOfActiveCoins: number,
-                      initialFaceState: CoinFaceStates,
+                      initialFaceState: CoinStates,
                       biasProperty: NumberProperty,
                       providedOptions: TwoStateSystemSetOptions ) {
 
@@ -299,7 +299,7 @@ class CoinSet extends PhetioObject {
    * Set the measurement values immediately to the provided value for all elements in this set without transitioning
    * through the 'preparingToBeMeasured' state.
    */
-  public setMeasurementValuesImmediate( value: CoinFaceStates ): void {
+  public setMeasurementValuesImmediate( value: CoinStates ): void {
 
     assert && assert( this.validValues.includes( value ), 'Invalid value for this type of coin.' );
 
