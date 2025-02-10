@@ -24,9 +24,11 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import { ClassicalCoinStateValues } from './ClassicalCoinStates.js';
 import { MULTI_COIN_EXPERIMENT_QUANTITIES } from './CoinsExperimentSceneModel.js';
 import { CoinStates } from './CoinStates.js';
 import { ExperimentMeasurementState, ExperimentMeasurementStateValues } from './ExperimentMeasurementState.js';
+import { QuantumCoinStateValues } from './QuantumCoinStates.js';
 
 type SelfOptions = {
   initialBias?: number;
@@ -42,10 +44,9 @@ export type StateSetMeasurementResult = {
 export const MEASUREMENT_PREPARATION_TIME = 1;
 
 // Valid values for the coin faces for each system type.
-// TODO: Should superposed be included in the valid values for the quantum case?  See https://github.com/phetsims/quantum-measurement/issues/91.
 const MAP_OF_VALID_VALUES_FOR_COIN_TYPE = new Map<SystemType, CoinStates[]>( [
-  [ 'classical', [ 'heads', 'tails' ] ],
-  [ 'quantum', [ 'up', 'down' ] ]
+  [ 'classical', [ ...ClassicalCoinStateValues ] ],
+  [ 'quantum', QuantumCoinStateValues.filter( stateValue => stateValue !== 'superposed' ) ]
 ] );
 
 class CoinSet extends PhetioObject {
