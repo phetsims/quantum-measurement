@@ -1,6 +1,5 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
-
 /**
  * ProbabilityValueControl is a UI component that allows the user to control the value of a NumberProperty whose value
  * ranges from 0 to 1. The control includes horizontal slider, arrow controls on each side of the slider for
@@ -55,7 +54,8 @@ export default class ProbabilityValueControl extends NumberControl {
       },
       useRichText: true,
       titleNodeOptions: {
-        font: TITLE_FONT
+        font: TITLE_FONT,
+        maxWidth: 250 // empirically determined to work well with layout
       },
       sliderOptions: {
         trackSize: new Dimension2( 150, 1 ),
