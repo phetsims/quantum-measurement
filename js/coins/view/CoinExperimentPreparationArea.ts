@@ -80,7 +80,10 @@ class CoinExperimentPreparationArea extends VBox {
     const probabilityEquationsNode = new ProbabilityEquationsNode(
       sceneModel.upProbabilityProperty,
       sceneModel.systemType,
-      { tandem: tandem.createTandem( 'probabilityEquationsNode' ) }
+      {
+        maxWidth: 200,
+        tandem: tandem.createTandem( 'probabilityEquationsNode' )
+      }
     );
 
     // Create the control that will allow the user to manipulate the probability of the various outcomes.
