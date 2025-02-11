@@ -100,6 +100,9 @@ type StringsType = {
   'azimuthalAngleParenthesesSymbolPatternStringProperty': LocalizedStringProperty;
   'singleParticleStringProperty': LocalizedStringProperty;
   'continuousStringProperty': LocalizedStringProperty;
+  'behaviorStringProperty': LocalizedStringProperty;
+  'numberOfAtomsStringProperty': LocalizedStringProperty;
+  'measurementDelayStringProperty': LocalizedStringProperty;
   'preferences': {
     'showGlobalPhase': {
       'titleStringProperty': LocalizedStringProperty;

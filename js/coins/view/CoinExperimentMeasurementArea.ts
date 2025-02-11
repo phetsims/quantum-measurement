@@ -54,16 +54,8 @@ class CoinExperimentMeasurementArea extends VBox {
     const singleCoinInTestBoxProperty = new BooleanProperty( false );
     const coinSetInTestBoxProperty = new BooleanProperty( false );
 
-    // Add the top header for the measurement area. It changes based on the mode and the strings.
-    const measurementAreaHeaderLineWidthProperty = new DerivedProperty(
-      [ sceneModel.preparingExperimentProperty ],
-
-      // TODO: Values below are empirically determined, but there is probably a better way. See https://github.com/phetsims/quantum-measurement/issues/35.
-      preparingExperiment => preparingExperiment ? 300 : 400
-    );
     const singleCoinSectionHeader = new SceneSectionHeader(
       QuantumMeasurementStrings.singleCoinMeasurementsStringProperty,
-      measurementAreaHeaderLineWidthProperty,
       { textColor: textColorProperty }
     );
 
@@ -94,7 +86,6 @@ class CoinExperimentMeasurementArea extends VBox {
     // Add the lower heading for the measurement area.
     const multiCoinSectionHeader = new SceneSectionHeader(
       QuantumMeasurementStrings.multipleCoinMeasurementsStringProperty,
-      measurementAreaHeaderLineWidthProperty,
       { textColor: textColorProperty }
     );
 
@@ -188,7 +179,7 @@ class CoinExperimentMeasurementArea extends VBox {
         multiCoinSectionHeader,
         multipleCoinMeasurementArea
       ],
-      spacing: 25
+      spacing: 20
     } );
 
     this.singleCoinInTestBoxProperty = singleCoinInTestBoxProperty;

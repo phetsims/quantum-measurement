@@ -4,8 +4,8 @@
  * SceneSectionHeader is a composite Scenery Node that consists of a textual header and a line below it, where the line
  * is generally wider than text. It looks something like this:
  *
- *          Coin to Prepare
- *      -------------------------
+ *      Coin to Prepare
+ *      ---------------
  *
  * @author John Blanco, PhET Interactive Simulations
  */
@@ -28,27 +28,26 @@ type SceneSectionHeaderOptions = {
 export default class SceneSectionHeader extends VBox {
 
   public constructor( textProperty: TReadOnlyProperty<string>,
-                      lineWidthProperty: TReadOnlyProperty<number>,
                       providedOptions?: SceneSectionHeaderOptions ) {
 
     const options = optionize<SceneSectionHeaderOptions>()( {
       textColor: QuantumMeasurementColors.classicalSceneTextColorProperty
     }, providedOptions );
 
+    const maxWidth = 250;
     const heading = new Text( textProperty, {
       fill: options.textColor,
-      font: new PhetFont( 24 )
+      font: new PhetFont( 24 ),
+      maxWidth: maxWidth
     } );
-    const line = new Line( 0, 0, lineWidthProperty.value, 0, {
+    const line = new Line( 0, 0, heading.width, 0, {
       stroke: Color.LIGHT_GRAY,
       lineWidth: 2,
       lineCap: 'round'
     } );
 
-    // Update the line and the max width of the text as the width changes.
-    lineWidthProperty.link( lineWidth => {
-      line.setPoint2( lineWidth, 0 );
-      heading.maxWidth = lineWidth;
+    heading.localBoundsProperty.link( bounds => {
+      line.setPoint2( Math.min( bounds.width, maxWidth ), 0 );
     } );
 
     super( { children: [ heading, line ] } );

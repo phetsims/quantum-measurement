@@ -230,9 +230,6 @@
   "experimentNPattern": {
     "value": "Experiment {{number}} {{order}}"
   },
-  "measurementParameters": {
-    "value": "Measurement Parameters"
-  },
   "spinMeasurementAxis": {
     "value": "Spin Measurement Axis"
   },
@@ -250,6 +247,15 @@
   },
   "continuous": {
     "value": "Continuous"
+  },
+  "behavior": {
+    "value": "Behavior"
+  },
+  "numberOfAtoms": {
+    "value": "Number of Atoms"
+  },
+  "measurementDelay": {
+    "value": "Measurement Delay (ns)"
   },
   "preferences.showGlobalPhase.title": {
     "value": "Show Global Phase"

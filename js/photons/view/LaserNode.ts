@@ -103,7 +103,7 @@ export default class LaserNode extends Node {
       const labelAlignBox = new AlignBox( label, {
         alignBounds: new Bounds2(
           laserPointerNode.bounds.x,
-          laserPointerNode.bounds.y - +label.height * 1.5,
+          laserPointerNode.bounds.y - label.height * 1.5,
           laserPointerNode.bounds.maxX,
           laserPointerNode.bounds.y
         ),

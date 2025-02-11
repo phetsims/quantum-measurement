@@ -45,7 +45,7 @@ class BlochSphereScreenView extends QuantumMeasurementScreenView {
     const measurementArea = new BlochSphereMeasurementArea( model, {
       tandem: tandem.createTandem( 'measurementArea' ),
       left: dividingLineX + 20,
-      top: this.layoutBounds.top + 40
+      top: this.layoutBounds.top + QuantumMeasurementConstants.SCREEN_VIEW_Y_MARGIN
     } );
     this.addChild( measurementArea );
 

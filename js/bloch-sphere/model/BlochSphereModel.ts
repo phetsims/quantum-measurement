@@ -127,13 +127,15 @@ class BlochSphereModel implements TModel {
       tandem: measurementControlsTandem.createTandem( 'timeToMeasurementProperty' ),
       range: new Range( 0, MAX_OBSERVATION_TIME ),
       phetioDocumentation: 'Time at which the measurement will be made after the start of the experiment.',
-      phetioFeatured: true
+      phetioFeatured: true,
+      units: 'ns'
     } );
 
     this.measurementTimeProperty = new NumberProperty( 0, {
       tandem: measurementControlsTandem.createTandem( 'measurementTimeProperty' ),
       phetioReadOnly: true,
-      phetioDocumentation: 'Current time of the experiment. For internal use only.'
+      phetioDocumentation: 'Current time of the experiment. For internal use only.',
+      units: 'ns'
     } );
 
     this.measurementAxisProperty = new Property( MeasurementAxis.Z_PLUS, {

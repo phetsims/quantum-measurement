@@ -114,8 +114,11 @@ export default class CoinMeasurementHistogram extends QuantumMeasurementHistogra
     const numberOfSystemsText = new Text( numberOfCoinsStringProperty, {
       font: new PhetFont( 16 ),
       centerX: 0,
-      centerY: this.yAxis.top * 1.2,
+      centerY: this.yAxis.top - 40,
       maxWidth: 200 // empirically determined to work well with layout
+    } );
+    numberOfCoinsStringProperty.link( () => {
+      numberOfSystemsText.centerX = 0;
     } );
 
     this.addChild( numberOfSystemsText );

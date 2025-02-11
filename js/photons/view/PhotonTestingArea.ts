@@ -13,6 +13,7 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
@@ -48,8 +49,6 @@ class PhotonTestingArea extends Node {
       tandem: providedOptions.tandem.createTandem( 'laserNode' )
     } );
 
-    // TODO: See https://github.com/phetsims/quantum-measurement/issues/68.  This selector was added to allow designers
-    //       to compare the behavior for classical versus quantum systems.  It may be removed in the future.
     const particleBehaviorModeRadioButtonGroupTandem = providedOptions.tandem.createTandem( 'particleBehaviorModeRadioButtonGroup' );
     const particleBehaviorModeRadioButtonGroup = new AquaRadioButtonGroup<SystemType>(
       model.particleBehaviorModeProperty as PhetioProperty<SystemType>,
@@ -75,12 +74,23 @@ class PhotonTestingArea extends Node {
       ),
       {
         spacing: 10,
-        left: laserNode.left,
-        bottom: laserNode.top - 20,
-        tandem: particleBehaviorModeRadioButtonGroupTandem,
-        phetioFeatured: true
+        tandem: particleBehaviorModeRadioButtonGroupTandem
       }
     );
+    const particleBehaviorModeBox = new VBox( {
+      spacing: 10,
+      align: 'left',
+      left: laserNode.left,
+      bottom: laserNode.top - 15,
+      phetioFeatured: true,
+      children: [
+        new Text( QuantumMeasurementStrings.behaviorStringProperty, {
+          font: new PhetFont( { size: 15, weight: 'bold' } ),
+          maxWidth: 150
+        } ),
+        particleBehaviorModeRadioButtonGroup
+      ]
+    } );
 
     const verticalPolarizationDetector = new PhotonDetectorNode(
       model.verticalPolarizationDetector,
@@ -104,7 +114,7 @@ class PhotonTestingArea extends Node {
 
     const options = optionize<PhotonTestingAreaOptions, SelfOptions, NodeOptions>()( {
       children: [
-        particleBehaviorModeRadioButtonGroup,
+        particleBehaviorModeBox,
         laserNode,
         polarizingBeamSplitterNode,
         verticalPolarizationDetector,

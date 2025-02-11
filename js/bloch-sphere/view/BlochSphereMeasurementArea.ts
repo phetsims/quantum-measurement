@@ -10,6 +10,7 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
+import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import EraserButton from '../../../../scenery-phet/js/buttons/EraserButton.js';
@@ -165,6 +166,9 @@ export default class BlochSphereMeasurementArea extends Node {
     } );
 
     const measurementControlsTandem = providedOptions.tandem.createTandem( 'measurementControls' );
+    const numberOfAtomsControlTandem = measurementControlsTandem.createTandem( 'numberOfAtomsControl' );
+    const measurementAxisControlTandem = measurementControlsTandem.createTandem( 'measurementAxisControl' );
+    const measurementDelayControlTandem = measurementControlsTandem.createTandem( 'measurementDelayControl' );
 
     const radioButtonItems = [ true, false ].map(
       isSingleMeasurement => {
@@ -181,13 +185,14 @@ export default class BlochSphereMeasurementArea extends Node {
         };
       }
     );
-    const singleOrMultipleRadioButtonGroup = new AquaRadioButtonGroup(
+    const numberOfAtomsRadioButtonGroup = new AquaRadioButtonGroup(
       model.isSingleMeasurementModeProperty,
       radioButtonItems,
       {
         orientation: 'vertical',
         stretch: false,
-        tandem: measurementControlsTandem.createTandem( 'singleOrMultipleRadioButtonGroup' )
+        tandem: numberOfAtomsControlTandem.createTandem( 'numberOfAtomsRadioButtonGroup' ),
+        phetioVisiblePropertyInstrumented: false // Visibility controlled by parent node
       }
     );
 
@@ -196,10 +201,7 @@ export default class BlochSphereMeasurementArea extends Node {
       fill: 'black'
     };
 
-    // Create and add the radio buttons that select the chart type view in the nuclideChartAccordionBox.
-    const basisRadioButtonGroupTandem = measurementControlsTandem.createTandem( 'basisRadioButtonGroup' );
-
-    const basisRadioGroupItems = MeasurementAxis.enumeration.values.map( basis => {
+    const measurementAxisRadioGroupItems = MeasurementAxis.enumeration.values.map( basis => {
       return {
         value: basis,
         createNode: () => new RichText(
@@ -209,25 +211,49 @@ export default class BlochSphereMeasurementArea extends Node {
       };
     } );
 
-    const basisRadioButtonGroup = new AquaRadioButtonGroup( model.measurementAxisProperty, basisRadioGroupItems, {
-      orientation: 'horizontal', margin: 5, tandem: basisRadioButtonGroupTandem
+    const measurementAxisRadioButtonGroup = new AquaRadioButtonGroup( model.measurementAxisProperty, measurementAxisRadioGroupItems, {
+      orientation: 'horizontal',
+      margin: 5,
+      tandem: measurementAxisControlTandem.createTandem( 'measurementAxisRadioButtonGroup' ),
+      phetioVisiblePropertyInstrumented: false // Visibility controlled by parent node
     } );
 
     const measurementTimerControl = new MeasurementTimerControl( model.timeToMeasurementProperty, model.measurementTimeProperty, {
-      tandem: measurementControlsTandem.createTandem( 'measurementTimerControl' ),
-      visibleProperty: model.magneticFieldEnabledProperty
+      tandem: measurementDelayControlTandem.createTandem( 'measurementTimerControl' ),
+      phetioVisiblePropertyInstrumented: false // Visibility controlled by parent node
     } );
 
+    const boxSpacing = 5;
     const measurementControlPanel = new Panel( new VBox( {
       spacing: 10,
       align: 'left',
       tandem: measurementControlsTandem,
       children: [
-        new Text( QuantumMeasurementStrings.measurementParametersStringProperty, { font: new PhetFont( 18 ), maxWidth: MAX_WIDTH } ),
-        singleOrMultipleRadioButtonGroup,
-        new Text( QuantumMeasurementStrings.spinMeasurementAxisStringProperty, { font: new PhetFont( 16 ), maxWidth: MAX_WIDTH } ),
-        basisRadioButtonGroup,
-        measurementTimerControl
+        new VBox( {
+          spacing: boxSpacing,
+          children: [
+            new Text( QuantumMeasurementStrings.numberOfAtomsStringProperty, { font: new PhetFont( 16 ), maxWidth: MAX_WIDTH } ),
+            numberOfAtomsRadioButtonGroup
+          ],
+          tandem: numberOfAtomsControlTandem
+        } ),
+        new VBox( {
+          spacing: boxSpacing,
+          children: [
+            new Text( QuantumMeasurementStrings.spinMeasurementAxisStringProperty, { font: new PhetFont( 16 ), maxWidth: MAX_WIDTH } ),
+            measurementAxisRadioButtonGroup
+          ],
+          tandem: measurementAxisControlTandem
+        } ),
+        new VBox( {
+          spacing: boxSpacing,
+          children: [
+            new Text( QuantumMeasurementStrings.measurementDelayStringProperty, { font: new PhetFont( 16 ), maxWidth: MAX_WIDTH } ),
+            measurementTimerControl
+          ],
+          tandem: measurementDelayControlTandem,
+          visibleProperty: new GatedVisibleProperty( model.magneticFieldEnabledProperty, measurementDelayControlTandem )
+        } )
       ]
     } ), QuantumMeasurementConstants.panelOptions );
 

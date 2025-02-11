@@ -108,7 +108,7 @@ export default class MeasurementTimerControl extends Node {
 
     // Add the major and minor tick marks to the slider.
     timeToMeasurementSlider.addMajorTick( 0, new Text( '0', { font: new PhetFont( 15 ) } ) );
-    timeToMeasurementSlider.addMajorTick( maxMeasurementTime, new Text( 't', { font: new PhetFont( 15 ) } ) );
+    timeToMeasurementSlider.addMajorTick( maxMeasurementTime, new Text( '1', { font: new PhetFont( 15 ) } ) );
     _.times( NUMBER_OF_MINOR_TICKS, i => {
       const fraction = ( i + 1 ) / ( NUMBER_OF_MINOR_TICKS + 1 );
       timeToMeasurementSlider.addMinorTick( fraction * maxMeasurementTime );
