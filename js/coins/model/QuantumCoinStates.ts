@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * QuantumCoinStates is a union type the represents the possible states for a quantum coin.  Note that one of the states
