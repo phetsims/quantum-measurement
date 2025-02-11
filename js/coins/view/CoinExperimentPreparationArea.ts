@@ -77,12 +77,12 @@ class CoinExperimentPreparationArea extends VBox {
     );
 
     // Create the node that will show the probabilities for the possible outcomes as equations.
-    const probabilityEquationsNode = new ProbabilityEquationsNode(
+    const probabilityEquationsText = new ProbabilityEquationsNode(
       sceneModel.upProbabilityProperty,
       sceneModel.systemType,
       {
         maxWidth: 150, // empirically determined to work well with layout
-        tandem: tandem.createTandem( 'probabilityEquationsNode' )
+        tandem: tandem.createTandem( 'probabilityEquationsText' )
       }
     );
 
@@ -100,7 +100,7 @@ class CoinExperimentPreparationArea extends VBox {
       children: [
         preparationAreaHeader,
         initialCoinStateSelectorNode,
-        probabilityEquationsNode,
+        probabilityEquationsText,
         outcomeProbabilityControl
       ],
       spacing: 15,
