@@ -81,7 +81,7 @@ class CoinExperimentPreparationArea extends VBox {
       sceneModel.upProbabilityProperty,
       sceneModel.systemType,
       {
-        maxWidth: 200,
+        maxWidth: 150, // empirically determined to work well with layout
         tandem: tandem.createTandem( 'probabilityEquationsNode' )
       }
     );
