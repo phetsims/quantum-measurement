@@ -89,11 +89,11 @@ export default class CoinMeasurementHistogram extends QuantumMeasurementHistogra
       rightNumberProperty.value = rightTotal;
     };
 
+    // Update the number Properties when the number of coins changes or when the measured data changes.
     Multilink.multilink(
       [ coinSet.numberOfActiveCoinsProperty, coinSet.measurementStateProperty ],
       updateNumberProperties
     );
-
     coinSet.measuredDataChangedEmitter.addListener( updateNumberProperties );
 
     super(
@@ -114,7 +114,8 @@ export default class CoinMeasurementHistogram extends QuantumMeasurementHistogra
     const numberOfSystemsText = new Text( numberOfCoinsStringProperty, {
       font: new PhetFont( 16 ),
       centerX: 0,
-      centerY: this.yAxis.top * 1.2
+      centerY: this.yAxis.top * 1.2,
+      maxWidth: 200 // empirically determined to work well with layout
     } );
 
     this.addChild( numberOfSystemsText );
