@@ -31,6 +31,7 @@ type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOpt
 
 // constants
 const MAX_OBSERVATION_TIME = 2 * Math.PI / QuantumMeasurementConstants.MAX_PRECESSION_RATE;
+const MODEL_TO_VIEW_TIME = 1 / MAX_OBSERVATION_TIME;
 
 class BlochSphereModel implements TModel {
 
@@ -123,9 +124,9 @@ class BlochSphereModel implements TModel {
     } );
 
     // Measurement controls
-    this.timeToMeasurementProperty = new NumberProperty( MAX_OBSERVATION_TIME / 2, {
+    this.timeToMeasurementProperty = new NumberProperty( MODEL_TO_VIEW_TIME * MAX_OBSERVATION_TIME / 2, {
       tandem: measurementControlsTandem.createTandem( 'timeToMeasurementProperty' ),
-      range: new Range( 0, MAX_OBSERVATION_TIME ),
+      range: new Range( 0, MODEL_TO_VIEW_TIME * MAX_OBSERVATION_TIME ),
       phetioDocumentation: 'Time at which the measurement will be made after the start of the experiment.',
       phetioFeatured: true,
       units: 'ns'
@@ -347,7 +348,7 @@ class BlochSphereModel implements TModel {
 
     if ( this.measurementStateProperty.value === 'timingObservation' ) {
       this.measurementTimeProperty.value = Math.min(
-        this.measurementTimeProperty.value + dt,
+        this.measurementTimeProperty.value + dt * MODEL_TO_VIEW_TIME,
         this.timeToMeasurementProperty.value
       );
       if ( this.measurementTimeProperty.value >= this.timeToMeasurementProperty.value ) {
