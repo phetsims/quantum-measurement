@@ -8,14 +8,17 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
 import Utils from '../../../../dot/js/Utils.js';
 import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
+import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
+import RichText from '../../../../scenery/js/nodes/RichText.js';
 import Text, { TextOptions } from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
@@ -53,6 +56,25 @@ export default class PhotonPolarizationAngleControl extends Panel {
       maxWidth: 200
     } );
 
+    const verticalRadioButtonLabelTextProperty = new DerivedStringProperty(
+      [
+        QuantumMeasurementStrings.verticalStringProperty,
+        QuantumMeasurementStrings.VStringProperty,
+        QuantumMeasurementStrings.nameAndAbbreviationPatternStringProperty
+      ],
+      ( verticalString, vString, nameAndAbbreviationPatternString ) =>
+        StringUtils.fillIn( nameAndAbbreviationPatternString, { name: verticalString, abbreviation: vString } )
+    );
+    const horizontalRadioButtonLabelTextProperty = new DerivedStringProperty(
+      [
+        QuantumMeasurementStrings.horizontalStringProperty,
+        QuantumMeasurementStrings.HStringProperty,
+        QuantumMeasurementStrings.nameAndAbbreviationPatternStringProperty
+      ],
+      ( horizontalString, hString, nameAndAbbreviationPatternString ) =>
+        StringUtils.fillIn( nameAndAbbreviationPatternString, { name: horizontalString, abbreviation: hString } )
+    );
+
     const radioButtonTextOptions: TextOptions = {
       font: RADIO_BUTTON_TEXT_FONT,
       maxWidth: 150
@@ -60,18 +82,22 @@ export default class PhotonPolarizationAngleControl extends Panel {
     const radioButtonGroupItems = [
       {
         value: 'vertical',
-        createNode: () => new Text( QuantumMeasurementStrings.verticalStringProperty,
-          combineOptions<TextOptions>( {
-            fill: QuantumMeasurementColors.verticalPolarizationColorProperty
-          }, radioButtonTextOptions ) ),
+        createNode: () => new RichText( verticalRadioButtonLabelTextProperty,
+          combineOptions<TextOptions>(
+            { fill: QuantumMeasurementColors.verticalPolarizationColorProperty },
+            radioButtonTextOptions
+          )
+        ),
         tandemName: 'verticalRadioButton'
       },
       {
         value: 'horizontal',
-        createNode: () => new Text( QuantumMeasurementStrings.horizontalStringProperty,
-          combineOptions<TextOptions>( {
-            fill: QuantumMeasurementColors.horizontalPolarizationColorProperty
-          }, radioButtonTextOptions ) ),
+        createNode: () => new RichText( horizontalRadioButtonLabelTextProperty,
+          combineOptions<TextOptions>(
+            { fill: QuantumMeasurementColors.horizontalPolarizationColorProperty },
+            radioButtonTextOptions
+          )
+        ),
         tandemName: 'horizontalRadioButton'
       },
       {

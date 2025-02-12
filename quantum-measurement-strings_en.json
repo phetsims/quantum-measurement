@@ -95,6 +95,9 @@
   "multipleCoinMeasurements": {
     "value": "Multiple Coin Measurements"
   },
+  "nameAndAbbreviationPattern": {
+    "value": "{{name}} (<b>{{abbreviation}}</b>)"
+  },
   "newCoin": {
     "value": "New Coin"
   },

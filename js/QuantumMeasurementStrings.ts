@@ -48,6 +48,7 @@ type StringsType = {
   'manyPhotonsStringProperty': LocalizedStringProperty;
   'mirrorStringProperty': LocalizedStringProperty;
   'multipleCoinMeasurementsStringProperty': LocalizedStringProperty;
+  'nameAndAbbreviationPatternStringProperty': LocalizedStringProperty;
   'newCoinStringProperty': LocalizedStringProperty;
   'observeStringProperty': LocalizedStringProperty;
   'startStringProperty': LocalizedStringProperty;
@@ -93,7 +94,6 @@ type StringsType = {
   'noneStringProperty': LocalizedStringProperty;
   'lotsStringProperty': LocalizedStringProperty;
   'experimentNPatternStringProperty': LocalizedStringProperty;
-  'measurementParametersStringProperty': LocalizedStringProperty;
   'spinMeasurementAxisStringProperty': LocalizedStringProperty;
   'basisColonStringProperty': LocalizedStringProperty;
   'polarAngleParenthesesSymbolPatternStringProperty': LocalizedStringProperty;
