@@ -57,7 +57,7 @@ class CoinExperimentPreparationArea extends VBox {
 
     const preparationAreaHeader = new SceneSectionHeader(
       prepAreaHeadingTextProperty,
-      { textColor: textColorProperty }
+      { textColor: textColorProperty, maxWidth: 200 }
     );
 
     // Create the UI element that will allow the user to specify the initial state of the coin.

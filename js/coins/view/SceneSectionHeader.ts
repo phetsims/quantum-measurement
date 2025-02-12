@@ -23,6 +23,7 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 
 type SceneSectionHeaderOptions = {
   textColor?: TPaint;
+  maxWidth?: number;
 };
 
 export default class SceneSectionHeader extends VBox {
@@ -31,14 +32,14 @@ export default class SceneSectionHeader extends VBox {
                       providedOptions?: SceneSectionHeaderOptions ) {
 
     const options = optionize<SceneSectionHeaderOptions>()( {
-      textColor: QuantumMeasurementColors.classicalSceneTextColorProperty
+      textColor: QuantumMeasurementColors.classicalSceneTextColorProperty,
+      maxWidth: 250
     }, providedOptions );
 
-    const maxWidth = 250;
     const heading = new Text( textProperty, {
       fill: options.textColor,
       font: new PhetFont( 24 ),
-      maxWidth: maxWidth
+      maxWidth: options.maxWidth
     } );
     const line = new Line( 0, 0, heading.width, 0, {
       stroke: Color.LIGHT_GRAY,
@@ -47,7 +48,7 @@ export default class SceneSectionHeader extends VBox {
     } );
 
     heading.localBoundsProperty.link( bounds => {
-      line.setPoint2( Math.min( bounds.width, maxWidth ), 0 );
+      line.setPoint2( Math.min( bounds.width, options.maxWidth ), 0 );
     } );
 
     super( { children: [ heading, line ] } );
