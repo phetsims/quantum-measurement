@@ -57,7 +57,11 @@ class CoinExperimentPreparationArea extends VBox {
 
     const preparationAreaHeader = new SceneSectionHeader(
       prepAreaHeadingTextProperty,
-      { textColor: textColorProperty, maxWidth: 200 }
+      {
+        textColor: textColorProperty,
+        maxWidth: 200,
+        accessibleName: sceneModel.systemType === 'classical' ? 'Classical Coin to Prepare' : null
+      }
     );
 
     // Create the UI element that will allow the user to specify the initial state of the coin.
@@ -96,10 +100,7 @@ class CoinExperimentPreparationArea extends VBox {
         probabilityEquationsText,
         outcomeProbabilityControl
       ],
-      spacing: 15,
-      accessibleName: QuantumMeasurementStrings.a11y.coinsScreen.coinToPrepareStringProperty,
-      tagName: 'div',
-      labelTagName: 'h3'
+      spacing: 15
     } );
 
     this.initialCoinStateSelectorNode = initialCoinStateSelectorNode;

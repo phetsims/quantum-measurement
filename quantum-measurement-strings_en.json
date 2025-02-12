@@ -267,6 +267,17 @@
     "value": "Show the global phase of the quantum state on the Bloch Sphere screen"
   },
   "a11y": {
+    "translatable": {
+      "equationAccessibleParagraphPattern": {
+        "value": "{{alpha}} times up state plus {{beta}} times down state."
+      },
+      "singleCoinStatePattern": {
+        "value": "Single coin: {{state}}"
+      },
+      "quantumCoinsAccessibleParagraph": {
+        "value": "Spin State to Prepare (alpha times up state plus beta times down state)"
+      }
+    },
     "coinsScreen": {
       "probabilityNumberControls": {
         "probabilityOfHeads": {

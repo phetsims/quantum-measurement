@@ -110,6 +110,11 @@ type StringsType = {
     }
   };
   'a11y': {
+    'translatable': {
+      'equationAccessibleParagraphPatternStringProperty': LocalizedStringProperty;
+      'singleCoinStatePatternStringProperty': LocalizedStringProperty;
+      'quantumCoinsAccessibleParagraphStringProperty': LocalizedStringProperty;
+    };
     'coinsScreen': {
       'probabilityNumberControls': {
         'probabilityOfHeadsStringProperty': LocalizedStringProperty;

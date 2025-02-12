@@ -13,6 +13,7 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import StringProperty from '../../../../axon/js/StringProperty.js';
 import Utils from '../../../../dot/js/Utils.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
@@ -75,7 +76,8 @@ export default class OutcomeProbabilityControl extends VBox {
       title = new Text( QuantumMeasurementStrings.coinBiasStringProperty, {
         font: TITLE_AND_LABEL_FONT,
         fontWeight: 'bold',
-        maxWidth: 250
+        maxWidth: 250,
+        accessibleParagraph: QuantumMeasurementStrings.coinBiasStringProperty
       } );
     }
     else {
@@ -89,7 +91,8 @@ export default class OutcomeProbabilityControl extends VBox {
       );
       title = new RichText( titleStringProperty, {
         font: TITLE_AND_LABEL_FONT,
-        maxWidth: 250
+        maxWidth: 250,
+        accessibleParagraph: QuantumMeasurementStrings.a11y.translatable.quantumCoinsAccessibleParagraphStringProperty
       } );
     }
 
@@ -187,22 +190,35 @@ export default class OutcomeProbabilityControl extends VBox {
     }
     else {
 
+      const equationAccessibleParagraphStringProperty = new StringProperty( '' );
+
       // There is an additional child node in the quantum case that shows the quantum state and updates dynamically.
-      const quantumStateReadoutStringProperty = new DerivedProperty(
+      const quantumStateReadoutStringProperty = new StringProperty( '' );
+
+      Multilink.multilink(
         [
           outcomeProbabilityProperty,
           QuantumMeasurementColors.tailsColorProperty,
-          QuantumMeasurementColors.downColorProperty
+          QuantumMeasurementColors.downColorProperty,
+          QuantumMeasurementStrings.a11y.translatable.equationAccessibleParagraphPatternStringProperty
         ],
-        outcomeProbability => {
-
+        ( outcomeProbability, tailsColor, downColor, equationPattern ) => {
           const alphaValue = Utils.toFixed( Math.sqrt( outcomeProbability ), 3 );
           const betaValue = Utils.toFixed( Math.sqrt( 1 - outcomeProbability ), 3 );
-          return `${alphaValue}|${UP}${KET} + ${COLOR_SPAN( betaValue )}|${COLOR_SPAN( DOWN )}${KET}`;
+
+          equationAccessibleParagraphStringProperty.value = StringUtils.fillIn( equationPattern, {
+            alpha: alphaValue,
+            beta: betaValue
+          } );
+
+          quantumStateReadoutStringProperty.value = `${alphaValue}|${UP}${KET} + ${COLOR_SPAN( betaValue )}|${COLOR_SPAN( DOWN )}${KET}`;
         }
       );
 
-      quantumReadout = new RichText( quantumStateReadoutStringProperty, { font: TITLE_AND_LABEL_FONT } );
+      quantumReadout = new RichText( quantumStateReadoutStringProperty, {
+        font: TITLE_AND_LABEL_FONT,
+        accessibleParagraph: equationAccessibleParagraphStringProperty
+      } );
 
       upProbabilityValueControl = new ProbabilityValueControl(
         quantumUpTitleProperty,

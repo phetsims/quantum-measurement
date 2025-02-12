@@ -13,25 +13,28 @@
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
+import VBox, { VBoxOptions } from '../../../../scenery/js/layout/nodes/VBox.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import TPaint from '../../../../scenery/js/util/TPaint.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
-type SceneSectionHeaderOptions = {
+type SelfOptions = {
   textColor?: TPaint;
   maxWidth?: number;
 };
+
+type SceneSectionHeaderOptions = SelfOptions & VBoxOptions;
 
 export default class SceneSectionHeader extends VBox {
 
   public constructor( textProperty: TReadOnlyProperty<string>,
                       providedOptions?: SceneSectionHeaderOptions ) {
 
-    const options = optionize<SceneSectionHeaderOptions>()( {
+    const options = optionize<SceneSectionHeaderOptions, SelfOptions, VBoxOptions>()( {
       textColor: QuantumMeasurementColors.classicalSceneTextColorProperty,
       maxWidth: 250
     }, providedOptions );
@@ -51,7 +54,21 @@ export default class SceneSectionHeader extends VBox {
       line.setPoint2( Math.min( bounds.width, options.maxWidth ), 0 );
     } );
 
-    super( { children: [ heading, line ] } );
+    super( {
+      children: [ heading, line ],
+      accessibleName: options.accessibleName ? options.accessibleName : textProperty,
+      // TODO: Implement accessible header https://github.com/phetsims/scenery/issues/1689
+      labelTagName: 'h3',
+      tagName: 'div'
+    } );
+
+    if ( options.accessibleParagraph ) {
+      // TODO: This is super broken iugh, accessible paragraph should come AFTER the title!! https://github.com/phetsims/scenery/issues/1673
+      this.addChild( new Node( {
+        tagName: 'div',
+        accessibleParagraph: options.accessibleParagraph
+      } ) );
+    }
   }
 }
 

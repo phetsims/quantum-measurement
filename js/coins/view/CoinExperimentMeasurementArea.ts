@@ -10,7 +10,9 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
+import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
@@ -54,9 +56,28 @@ class CoinExperimentMeasurementArea extends VBox {
     const singleCoinInTestBoxProperty = new BooleanProperty( false );
     const coinSetInTestBoxProperty = new BooleanProperty( false );
 
+    const coinStateStringProperty = new PatternStringProperty(
+      QuantumMeasurementStrings.a11y.translatable.singleCoinStatePatternStringProperty,
+      {
+        state: new DerivedStringProperty(
+          [
+            sceneModel.singleCoin.measurementStateProperty,
+            sceneModel.singleCoin.measuredValueProperty
+          ],
+          ( coinMeasurementState, measurementValue ) => {
+            // TODO: Make this a translatable pattern!! Also add all the possibilities to the stringLink https://github.com/phetsims/scenery/issues/1673
+            return `${coinMeasurementState}, ${measurementValue}`;
+          }
+        )
+      }
+    );
+
     const singleCoinSectionHeader = new SceneSectionHeader(
       QuantumMeasurementStrings.singleCoinMeasurementsStringProperty,
-      { textColor: textColorProperty }
+      {
+        textColor: textColorProperty,
+        accessibleParagraph: coinStateStringProperty
+      }
     );
 
     // Create the box where the single coin will be placed while it is experimented with.
@@ -77,10 +98,7 @@ class CoinExperimentMeasurementArea extends VBox {
     // single coin.
     const singleCoinMeasurementArea = new HBox( {
       children: [ singleCoinTestBox, singleCoinExperimentButtonSet ],
-      spacing: 30,
-      accessibleName: QuantumMeasurementStrings.a11y.coinsScreen.singleCoinMeasurementsStringProperty,
-      tagName: 'div',
-      labelTagName: 'h3'
+      spacing: 30
     } );
 
     // Add the lower heading for the measurement area.
@@ -166,10 +184,7 @@ class CoinExperimentMeasurementArea extends VBox {
         multiCoinExperimentHistogram,
         multipleCoinExperimentButtonSet
       ],
-      spacing: 30,
-      accessibleName: QuantumMeasurementStrings.a11y.coinsScreen.multipleCoinMeasurementsStringProperty,
-      tagName: 'div',
-      labelTagName: 'h3'
+      spacing: 30
     } );
 
     super( {
