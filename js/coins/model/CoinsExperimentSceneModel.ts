@@ -150,6 +150,13 @@ class CoinsExperimentSceneModel extends PhetioObject {
         // Set the coin measurement states back to their initial values.
         this.singleCoin.prepareNow();
         this.coinSet.prepareNow();
+
+        // If this is a classical system, reveal the coins after preparing them.  This is a design choice that was made
+        // to make the classical behavior more distinct from the quantum behavior.
+        if ( this.systemType === 'classical' ) {
+          this.singleCoin.reveal();
+          this.coinSet.reveal();
+        }
       }
       else {
 
