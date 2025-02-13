@@ -78,6 +78,7 @@ type StringsType = {
   'SternGerlachMeasurementsStringProperty': LocalizedStringProperty;
   'sourceModeStringProperty': LocalizedStringProperty;
   'spinSourceStringProperty': LocalizedStringProperty;
+  'totalStringProperty': LocalizedStringProperty;
   'blochSphereStringProperty': LocalizedStringProperty;
   'unpolarizedStringProperty': LocalizedStringProperty;
   'unknownProbabilitySymbolStringProperty': LocalizedStringProperty;

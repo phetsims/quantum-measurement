@@ -8,6 +8,7 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
@@ -77,7 +78,11 @@ export default class PhotonsEquationNode extends HBox {
       maxWidth: 100
     };
     const symbolicEquationNumerator = new RichText( symbolicEquationStringProperty, symbolicEquationTextOptions );
-    const symbolicEquationDenominator = new RichText( 'N(Total)', symbolicEquationTextOptions );
+    const denominatorTextProperty = new DerivedStringProperty(
+      [ QuantumMeasurementStrings.NStringProperty, QuantumMeasurementStrings.totalStringProperty ],
+      ( nString, totalString ) => `${nString}(${totalString})`
+    );
+    const symbolicEquationDenominator = new RichText( denominatorTextProperty, symbolicEquationTextOptions );
     const symbolicEquationFraction = new FractionNode( symbolicEquationNumerator, symbolicEquationDenominator, {
       fractionLineMargin: 1
     } );
