@@ -1,6 +1,5 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
-
 /**
  * CoinMeasurementHistogram displays a histogram with two bars, one for the quantity of each of the two possible
  * outcomes for an experiment where multiple classical or quantum coins are flipped.

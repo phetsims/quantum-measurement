@@ -1,6 +1,5 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
-
 /**
  * SmallCoinNode portrays the relatively small coins that are used in the "Multiple Coin Measurements" area on the Coins
  * screen. These are distinct from the larger coins shown in the "Single Coin Measurements" section.

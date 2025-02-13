@@ -1,8 +1,8 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
 /**
- * Main model class for the "Classical Coin" and "Quantum Coin" scenes on the "Coins" screen. This manages the
- * preparation and measurement phases for the experiments.
+ * CoinsExperimentSceneModel is the main model class for the "Classical Coin" and "Quantum Coin" scenes on the "Coins"
+ * screen. This manages the preparation and measurement phases for the experiments and the measurement of the coins.
  *
  * @author John Blanco, PhET Interactive Simulations
  */
@@ -43,7 +43,7 @@ export const MAX_COINS = Math.max( ...MULTI_COIN_EXPERIMENT_QUANTITIES );
 
 class CoinsExperimentSceneModel extends PhetioObject {
 
-  // whether this scene is active, which is mostly about whether it is shown in the view
+  // Whether this scene is active, which is primarily about whether it is shown in the view.
   public readonly activeProperty: BooleanProperty;
 
   // The type of system - classical or quantum - that is being modeled in this scene.
@@ -56,7 +56,7 @@ class CoinsExperimentSceneModel extends PhetioObject {
   public readonly singleCoin: Coin;
   public readonly coinSet: CoinSet;
 
-  // The initial state that the coin(s) should be in before any flipping or other experiment preparation occurs.
+  // The initial state that all coin(s) should be in before any flipping or other experiment preparation occurs.
   public readonly initialCoinFaceStateProperty: Property<CoinStates>;
 
   // The probability of the 'up' state. The 'down' probability will be (1 - thisValue).

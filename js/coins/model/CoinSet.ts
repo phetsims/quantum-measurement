@@ -2,8 +2,8 @@
 
 /**
  * CoinSet models a set of classical or quantum coins.  The face of each of these coins can be in one of two states or,
- * in the quantum case, in a superposed state.  The coin set can be prepared for measurement (similar to flipping a
- * coin) and subsequently measured (similar to reading how the flip turned out).
+ * in the quantum case, in a superposed state.  The coin set can be prepared for measurement (similar to flipping all
+ * the coins at once) and subsequently measured (similar to reading how the flips turned out).
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
@@ -40,7 +40,8 @@ export type StateSetMeasurementResult = {
   measuredValues: CoinStates[];
 };
 
-// Define the time that it will take to prepare a measurement, in seconds.  This is empirically determined.
+// Define the time that it will take to prepare a measurement, in seconds.  This is done for visual effect and the
+// duration is arbitrary.
 export const MEASUREMENT_PREPARATION_TIME = 1;
 
 // Valid values for the coin faces for each system type.
@@ -54,7 +55,7 @@ class CoinSet extends PhetioObject {
   // the type of this coin, either classical or quantum
   public readonly coinType: SystemType;
 
-  // the state of the measurement for this system
+  // the state of the measurement for this coin set
   public readonly measurementStateProperty: Property<ExperimentMeasurementState>;
 
   // valid values for a measurement
@@ -63,10 +64,10 @@ class CoinSet extends PhetioObject {
   // The values of most recent measurement.  These are only valid in some - and not all - measurement states.
   public readonly measuredValues: CoinStates[] = [];
 
-  // The number of coins that will be measured when a measurement is made.
+  // the number of coins that will be measured when a measurement is made
   public readonly numberOfActiveCoinsProperty: NumberProperty;
 
-  // Timeout for the preparingToBeMeasured state.
+  // timeout listener for the preparingToBeMeasured state
   private preparingToBeMeasuredTimeoutListener: null | TimerListener = null;
 
   // The bias for each two-state system, and specifically the probability of the system being found in the first of the
@@ -76,15 +77,15 @@ class CoinSet extends PhetioObject {
 
   // The seed that is used to generate the most recent set of measured values.  This exists primarily as a way to
   // support phet-io - it is conveyed in the state information and used to generate the data when phet-io state is set.
-  // This is done to avoid sending values for every individual measurement, which could be 10000 values.
+  // This is done to avoid sending values for every individual measurement, which could be as many as 10000 values.
   //
-  // The contained value ranges from 0 to 1 inclusive, and 0 and 1 have special meaning - they indicate that all
-  // measurement values should be set to either the 0th or 1st valid value.  All other values are used as a seed to a
-  // random number generator to produce random measurement values.
+  // The seed value ranges from 0 to 1 inclusive, and 0 and 1 have special meaning - they indicate that all measurement
+  // values should be set to either the 0th or 1st valid value.  All other values are used as a seed to a random number
+  // generator to produce random measurement values.
   public readonly seedProperty: NumberProperty;
 
   // An emitter that fires when the measured data changed, which is essentially any time a new measurement is made after
-  // the system has been prepared for measurement.  This is intended to be used as a signal to the view that and update
+  // the system has been prepared for measurement.  This is intended to be used as a signal to the view that an update
   // of the information being presented to the user is needed.
   public readonly measuredDataChangedEmitter: TEmitter = new Emitter();
 

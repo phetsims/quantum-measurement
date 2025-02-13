@@ -1,8 +1,7 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
-
 /**
- * OutcomeProbabilityControl is a UI component that allows the user to manipulate the probability of the outcome for
+ * OutcomeProbabilityControl is a UI component that allows the user to control the probability of the outcome for
  * the measurement of a two-state system. For a classical coin, this is essentially setting the bias of the coin. For
  * a quantum system, it is more like preparing the state of an experiment.
  *
@@ -34,7 +33,6 @@ import ProbabilityValueControl from './ProbabilityValueControl.js';
 
 type SelfOptions = EmptySelfOptions;
 type OutcomeProbabilityControlOptions = SelfOptions & PickRequired<VBox, 'tandem' | 'visibleProperty'>;
-
 
 // constants that don't rely on systemType for the color
 const TITLE_AND_LABEL_FONT = new PhetFont( 16 );
