@@ -57,11 +57,16 @@ export default class SpinStatePreparationArea extends VBox {
       };
     } );
 
+    const pointerAreaDilation = 6;
     const spinStateRadioButtonGroup = new AquaRadioButtonGroup( model.particleSourceModel.spinStateProperty, basisRadioGroupItems, {
       orientation: 'vertical',
       margin: 5,
       radioButtonOptions: {
-        radius: 10
+        radius: 10,
+        mouseAreaXDilation: pointerAreaDilation,
+        mouseAreaYDilation: pointerAreaDilation,
+        touchAreaXDilation: pointerAreaDilation,
+        touchAreaYDilation: pointerAreaDilation
       },
       tandem: spinStateRadioButtonGroupTandem,
       visibleProperty: new GatedVisibleProperty( new DerivedProperty( [ model.currentExperimentProperty ], currentExperiment => currentExperiment !== SpinExperiment.CUSTOM ), spinStateRadioButtonGroupTandem )
