@@ -52,7 +52,6 @@ export default class SimpleBlochSphere extends AbstractBlochSphere {
 
   }
 
-
   /**
    * Abstract method that should run calculations to update the Bloch Sphere representation.
    */

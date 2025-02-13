@@ -7,8 +7,8 @@
  * Understanding this implementation requires an understanding of the scenery Sprites API. In a nutshell: Sprites has an
  * array of Sprite and an array of SpriteInstance. The array of Sprite is the complete unique set of images used to
  * render all SpriteInstances. Each SpriteInstance has a reference to a Sprite (which determines what it looks like) and
- * a Matrix3 (which determines how it's transformed).  At each model step, the positions of the ParticleInstance instances
- * are updated by adjusting their matrix, and then invalidatePaint is called to re-render the sprites.
+ * a Matrix3 (which determines how it's transformed).  At each model step, the positions of the ParticleInstance
+ * instances are updated by adjusting their matrix, and then invalidatePaint is called to re-render the sprites.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
@@ -31,7 +31,7 @@ export default class ParticleSprites extends Sprites {
   private readonly particles: ParticleWithSpin[];
   private readonly modelViewTransform: ModelViewTransform2;
 
-  // The sprite used to render the particles
+  // the sprite used to render the particles
   private particleSprite: Sprite | null = null;
 
   public constructor( particles: ParticleWithSpin[], modelViewTransform: ModelViewTransform2, canvasBounds: Bounds2 ) {
@@ -51,7 +51,8 @@ export default class ParticleSprites extends Sprites {
     new ShadedSphereNode( 15, {
       mainColor: QuantumMeasurementColors.particleColorProperty,
       highlightColor: 'white'
-    } ).toCanvas( ( canvas, x, y ) => {
+    } ).toCanvas( canvas => {
+
       // Create the sprite that will be used to represent the particles.
       particleSprite = new Sprite( new SpriteImage(
         canvas,

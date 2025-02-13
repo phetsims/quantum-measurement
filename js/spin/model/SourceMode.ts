@@ -15,7 +15,6 @@ import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 export class SourceMode extends EnumerationValue {
 
   public static readonly SINGLE = new SourceMode( QuantumMeasurementStrings.singleParticleStringProperty, 'singleParticle' );
-
   public static readonly CONTINUOUS = new SourceMode( QuantumMeasurementStrings.continuousStringProperty, 'continuous' );
 
   public static readonly enumeration = new Enumeration( SourceMode );

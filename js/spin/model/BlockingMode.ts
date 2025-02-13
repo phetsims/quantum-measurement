@@ -13,9 +13,7 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 export class BlockingMode extends EnumerationValue {
 
   public static readonly NO_BLOCKER = new BlockingMode( 'noBlocker' );
-
   public static readonly BLOCK_UP = new BlockingMode( 'blockingUp' );
-
   public static readonly BLOCK_DOWN = new BlockingMode( 'blockingDown' );
 
   public static readonly enumeration = new Enumeration( BlockingMode );

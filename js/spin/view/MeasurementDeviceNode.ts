@@ -1,8 +1,8 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
 /**
- * MeasurementDeviceNode contains the UI elements of the single particle measurement zone. It includes a simple bloch sphere,
- * and a camera node which lights on trigger.
+ * MeasurementDeviceNode contains the UI elements of the single particle measurement zone. It includes a simple bloch
+ * sphere, and a camera node which lights on trigger.
  *
  * @author Agustín Vallejo
  */
@@ -33,7 +33,9 @@ export default class MeasurementDeviceNode extends VBox {
 
   private readonly simpleBlochSphereNode: BlochSphereNode;
 
-  public constructor( measurementLine: MeasurementDevice, modelViewTransform: ModelViewTransform2, providedOptions: MeasurementDeviceNodeOptions ) {
+  public constructor( measurementLine: MeasurementDevice,
+                      modelViewTransform: ModelViewTransform2,
+                      providedOptions: MeasurementDeviceNodeOptions ) {
 
     const simpleBlochSphereNode = new BlochSphereNode( measurementLine.simpleBlochSphere, {
       tandem: Tandem.OPT_OUT,
@@ -70,7 +72,6 @@ export default class MeasurementDeviceNode extends VBox {
         cameraPath.fill = 'black';
       }, 500 );
     } );
-
 
     const options = optionize<MeasurementDeviceNodeOptions, SelfOptions, VBoxOptions>()( {
       children: [

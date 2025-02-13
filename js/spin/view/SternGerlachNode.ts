@@ -53,7 +53,7 @@ export default class SternGerlachNode extends Node {
     const PARTICLE_HOLE_WIDTH = modelViewTransform.modelToViewDeltaX( SternGerlach.PARTICLE_HOLE_WIDTH );
     const PARTICLE_HOLE_HEIGHT = modelViewTransform.modelToViewDeltaY( -SternGerlach.PARTICLE_HOLE_HEIGHT ); // Minus because of inverted Y
 
-    // Component for the entry and exit points of the SG sternGerlach
+    // component for the entry and exit points of the SG sternGerlach
     const createParticleHole = ( center: Vector2 ) => {
       const path = new Path( new Shape().rect( 0, 0, PARTICLE_HOLE_WIDTH, PARTICLE_HOLE_HEIGHT ),
         {
@@ -69,7 +69,7 @@ export default class SternGerlachNode extends Node {
       return Math.pow( x, 2 );
     };
 
-    // Decoration curves that go in the front of the main rectangle
+    // decoration curves that go in the front of the main rectangle
     const curveUpShape = new Shape().moveTo( -STERN_GERLACH_WIDTH / 2, 0 );
     const curveDownShape = new Shape().moveTo( -STERN_GERLACH_WIDTH / 2, 0 );
 
@@ -105,6 +105,7 @@ export default class SternGerlachNode extends Node {
       font: new PhetFont( 18 ),
       fill: 'black'
     };
+
     // Create and add the radio buttons that select the chart type view in the nuclideChartAccordionBox.
     const orientationRadioButtonGroupTandem = options.tandem.createTandem( 'orientationRadioButtonGroup' );
     const orientationRadioButtonGroup = new RectangularRadioButtonGroup<boolean>(
@@ -128,51 +129,57 @@ export default class SternGerlachNode extends Node {
           phetioVisiblePropertyInstrumented: false
         },
         visibleProperty: new GatedVisibleProperty( sternGerlach.isDirectionControllableProperty, orientationRadioButtonGroupTandem )
-      } );
+      }
+    );
     sternGerlachControls.addChild( orientationRadioButtonGroup );
 
     if ( options.isBlockable ) {
       const blockingRadioButtonGroupTandem = options.tandem.createTandem( 'blockingRadioButtonGroup' );
-      const blockingRadioButtonGroup = new AquaRadioButtonGroup( sternGerlach.blockingModeProperty, [ BlockingMode.BLOCK_UP, BlockingMode.BLOCK_DOWN ].map( blockingMode => {
-        return {
-          value: blockingMode,
-          createNode: () => new Text(
-            blockingMode === BlockingMode.BLOCK_UP ?
-            QuantumMeasurementStrings.blockUpStringProperty :
-            QuantumMeasurementStrings.blockDownStringProperty,
-            { font: new PhetFont( 15 ), maxWidth: 150 } ),
-          tandemName: `${blockingMode.tandemName}RadioButton`,
-          phetioVisiblePropertyInstrumented: false
-        };
-      } ), {
-        spacing: 10,
-        tandem: blockingRadioButtonGroupTandem,
-        phetioFeatured: true,
-        visibleProperty: new GatedVisibleProperty(
-          DerivedProperty.valueNotEqualsConstant( sternGerlach.blockingModeProperty, BlockingMode.NO_BLOCKER ),
-          blockingRadioButtonGroupTandem
-        )
-      } );
+      const blockingRadioButtonGroup = new AquaRadioButtonGroup(
+        sternGerlach.blockingModeProperty,
+        [ BlockingMode.BLOCK_UP, BlockingMode.BLOCK_DOWN ].map( blockingMode => {
+          return {
+            value: blockingMode,
+            createNode: () => new Text(
+              blockingMode === BlockingMode.BLOCK_UP ?
+              QuantumMeasurementStrings.blockUpStringProperty :
+              QuantumMeasurementStrings.blockDownStringProperty,
+              { font: new PhetFont( 15 ), maxWidth: 150 } ),
+            tandemName: `${blockingMode.tandemName}RadioButton`,
+            phetioVisiblePropertyInstrumented: false
+          };
+        } ),
+        {
+          spacing: 10,
+          tandem: blockingRadioButtonGroupTandem,
+          phetioFeatured: true,
+          visibleProperty: new GatedVisibleProperty(
+            DerivedProperty.valueNotEqualsConstant( sternGerlach.blockingModeProperty, BlockingMode.NO_BLOCKER ),
+            blockingRadioButtonGroupTandem
+          )
+        }
+      );
       sternGerlachControls.addChild( blockingRadioButtonGroup );
     }
 
     const mainApparatusNode = new Node( {
       children: [
-        // Main body of the SG sternGerlach
+
+        // main body of the SG sternGerlach
         mainApparatus,
 
-        // Curved paths for the particle to follow
+        // curved paths for the particle to follow
         curveUpPath,
         curveDownPath,
 
-        // Particle entry point
+        // particle entry point
         particleEntrance,
 
-        // Particle exit points
+        // particle exit points
         topParticleExit,
         bottomParticleExit,
 
-        // Text for the experiment name
+        // text for the experiment name
         experimentLabel
       ]
     } );

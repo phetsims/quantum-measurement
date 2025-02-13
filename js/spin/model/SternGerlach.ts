@@ -28,10 +28,10 @@ export default class SternGerlach extends PhetioObject {
   // Position of the Stern Gerlach (SG) apparatus in the model coordinates
   public readonly positionProperty: Vector2Property;
 
-  // Wether the SG measures in the Z or X direction
+  // Whether the SG measures in the Z or X direction
   public readonly isZOrientedProperty: BooleanProperty;
 
-  // Wether the direction of the SG is controllable
+  // Whether the direction of the SG is controllable
   public readonly isDirectionControllableProperty: BooleanProperty;
 
   // Visibility of the SG apparatus
@@ -145,7 +145,7 @@ export default class SternGerlach extends PhetioObject {
 
   }
 
-  // Updates the counters so they average properly
+  // Updates the counters so they average properly.
   public step( dt: number ): void {
     this.upCounterProperty.step( dt );
     this.downCounterProperty.step( dt );
@@ -157,6 +157,7 @@ export default class SternGerlach extends PhetioObject {
    * through the apparatus.
    */
   public calculateProbability( incomingStateVector: Vector2 ): number {
+
     // Using a XZ vector to calculate the projected probability.
     // The experiment has a measurement vector and the incoming state has a spin vector
     // Based on the dot product we'll obtain the probability

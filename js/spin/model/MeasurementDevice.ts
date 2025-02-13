@@ -22,19 +22,19 @@ export type MeasurementDeviceOptions = SelfOptions & AbstractBlochSphereOptions;
 
 export default class MeasurementDevice {
 
-  // The bloch sphere representation of the spin state
+  // Bloch sphere representation of the spin state
   public readonly simpleBlochSphere: AbstractBlochSphere;
 
-  // The spin state of the particle that last crossed the measurement line
+  // spin state of the particle that last crossed the measurement line
   public readonly spinStateProperty: Vector2Property;
 
-  // The position of the device in the model
+  // position of the device in the model
   public readonly positionProperty: Vector2Property;
 
-  // Emitter that informs that there has been a measurement
+  // emitter that fires when a measurement is made
   public readonly measurementEmitter: Emitter;
 
-  // Flag to indicate if the line is active
+  // flag to indicate if the line is active
   public readonly isActiveProperty: BooleanProperty;
 
   public constructor( position: Vector2, originallyActive: boolean, providedOptions: MeasurementDeviceOptions ) {

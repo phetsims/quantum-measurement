@@ -29,7 +29,8 @@ export class SpinDirection extends EnumerationValue {
   }
 
   public static spinToVector( spin: SpinDirection | null ): Vector2 {
-    // Since X_MINUS is not a valid initial state, we support null here to represent that case as a vector
+
+    // Since X_MINUS is not a valid initial state, we support null here to represent that case as a vector.
     return spin === SpinDirection.Z_PLUS ? new Vector2( 0, 1 ) :
            spin === SpinDirection.Z_MINUS ? new Vector2( 0, -1 ) :
            spin === SpinDirection.X_PLUS ? new Vector2( 1, 0 ) : new Vector2( -1, 0 );

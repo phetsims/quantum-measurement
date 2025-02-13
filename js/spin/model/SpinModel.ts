@@ -89,8 +89,7 @@ export default class SpinModel implements TModel {
       tandem: providedOptions.tandem.createTandem( 'alphaSquaredProperty' )
     } );
 
-    // Since both alpha and beta can be controlled via the slider
-    // they have to be derived manually from eachother below
+    // Since both alpha and beta can be controlled via the slider they must be derived manually.
     this.betaSquaredProperty = new NumberProperty( 1 - this.alphaSquaredProperty.value );
 
     this.currentExperimentProperty = new Property<SpinExperiment>( SpinExperiment.EXPERIMENT_1, {
@@ -279,7 +278,6 @@ export default class SpinModel implements TModel {
           this.sternGerlachs[ index ].isZOrientedProperty.value = setting.isZOriented;
         } );
 
-
         // Set the probabilities of the experiment. In the continuous case, this immediately alters the shown rays
         // In the single case, this prepares the probabilities for the particle that will be shot
         this.prepare();
@@ -294,34 +292,39 @@ export default class SpinModel implements TModel {
   }
 
   public prepare(): void {
-    // Measure on the first SG, this will change its upProbabilityProperty
+
+    // Measure on the first SG, this will change its upProbabilityProperty.
     this.sternGerlachs[ 0 ].updateProbability( this.derivedSpinStateProperty.value );
 
     if ( !this.currentExperimentProperty.value.usingSingleApparatus ) {
-      // Measure on the second SG according to the orientation of the first one
+
+      // Measure on the second SG according to the orientation of the first one.
       this.sternGerlachs[ 1 ].updateProbability(
-        // SG0 passes the up-spin particles to SG1
+
+        // SG0 passes the up-spin particles to SG1.
         SpinDirection.spinToVector( this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS )
       );
 
       this.sternGerlachs[ 2 ].updateProbability(
-        // SG0 passes the down-spin particles to SG2, and because X- is not in the initial spin values, we pass null
+
+        // SG0 passes the down-spin particles to SG2, and because X- is not in the initial spin values, we pass null.
         SpinDirection.spinToVector( this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_MINUS : null )
       );
-
     }
   }
 
   public step( dt: number ): void {
-    // Stepping the Stern Gerlachs so their counters average over time
+
+    // Step each of the Stern Gerlach devices so their counters average over time.
     this.sternGerlachs.forEach( sternGerlach => sternGerlach.step( dt ) );
 
+    // Step the particle collections, which is how they move forward in time.
     this.singleParticlesCollection.step( dt );
     this.multipleParticlesCollection.step( dt );
   }
 
   /**
-   * Resets the model.
+   * Reset the model.
    */
   public reset(): void {
     this.measurementDevices.forEach( device => device.reset() );

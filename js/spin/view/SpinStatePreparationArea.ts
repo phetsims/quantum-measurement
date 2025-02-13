@@ -125,7 +125,6 @@ export default class SpinStatePreparationArea extends VBox {
       ]
     } );
 
-
     const projectionsCheckboxesTandem = tandem.createTandem( 'projectionsCheckboxes' );
     const zProjectionCheckbox = new Checkbox(
       model.blochSphere.showZProjectionProperty,

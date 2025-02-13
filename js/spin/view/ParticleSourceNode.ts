@@ -41,14 +41,16 @@ export default class ParticleSourceNode extends Node {
     modelViewTransform: ModelViewTransform2,
     tandem: Tandem ) {
 
-    // Constants
+    // constants
     const PARTICLE_SOURCE_WIDTH = modelViewTransform.modelToViewDeltaX( ParticleSourceModel.PARTICLE_SOURCE_WIDTH );
     const PARTICLE_SOURCE_HEIGHT = modelViewTransform.modelToViewDeltaY( -ParticleSourceModel.PARTICLE_SOURCE_HEIGHT ); // Minus because of inverted Y
     const PARTICLE_SOURCE_CORNER_RADIUS = modelViewTransform.modelToViewDeltaX( ParticleSourceModel.PARTICLE_SOURCE_CORNER_RADIUS );
 
-    // Main shape of the component
-    const particleSourceRectangle = new Path( new Shape()
-        .roundRect( 0, 0, PARTICLE_SOURCE_WIDTH, PARTICLE_SOURCE_HEIGHT, PARTICLE_SOURCE_CORNER_RADIUS, PARTICLE_SOURCE_CORNER_RADIUS ),
+    // main shape of the component
+    const particleSourceRectangle = new Path(
+      new Shape().roundRect(
+        0, 0, PARTICLE_SOURCE_WIDTH, PARTICLE_SOURCE_HEIGHT, PARTICLE_SOURCE_CORNER_RADIUS, PARTICLE_SOURCE_CORNER_RADIUS
+      ),
       {
         stroke: 'black',
         lineWidth: 0.5,
@@ -56,12 +58,19 @@ export default class ParticleSourceNode extends Node {
           .addColorStop( 0, '#88f' )
           .addColorStop( 0.2, 'white' )
           .addColorStop( 1, 'blue' )
-      } );
+      }
+    );
 
     const particleSourceBarrelWidth = PARTICLE_SOURCE_WIDTH / 5;
-    const particleSourceBarrel = new Path( new Shape()
-        .roundRect( PARTICLE_SOURCE_WIDTH - particleSourceBarrelWidth / 2,
-          PARTICLE_SOURCE_HEIGHT / 2 - particleSourceBarrelWidth / 2, particleSourceBarrelWidth, particleSourceBarrelWidth, 4, 4 ),
+    const particleSourceBarrel = new Path(
+      new Shape().roundRect(
+        PARTICLE_SOURCE_WIDTH - particleSourceBarrelWidth / 2,
+        PARTICLE_SOURCE_HEIGHT / 2 - particleSourceBarrelWidth / 2,
+        particleSourceBarrelWidth,
+        particleSourceBarrelWidth,
+        4,
+        4
+      ),
       {
         stroke: 'black',
         lineWidth: 0.5,
@@ -69,13 +78,14 @@ export default class ParticleSourceNode extends Node {
           .addColorStop( 0, '#88f' )
           .addColorStop( 0.2, 'white' )
           .addColorStop( 1, 'blue' )
-      } );
+      }
+    );
     particleSourceBarrel.rotateAround( particleSourceBarrel.center, Math.PI / 4 );
     particleSourceBarrel.center.y = particleSourceRectangle.center.y;
 
     const currentlyShootingParticlesProperty = new BooleanProperty( false );
 
-    // Button for 'single' mode
+    // button for 'single' mode
     const shootParticleButtonTandem = tandem.createTandem( 'shootParticleButton' );
     const shootParticleButton = new RoundMomentaryButton<boolean>(
       currentlyShootingParticlesProperty, false, true, {
@@ -84,7 +94,8 @@ export default class ParticleSourceNode extends Node {
         visibleProperty: new GatedVisibleProperty( DerivedProperty.not( particleSourceModel.isContinuousModeProperty ), shootParticleButtonTandem ),
         center: particleSourceRectangle.center,
         tandem: shootParticleButtonTandem
-      } );
+      }
+    );
 
     currentlyShootingParticlesProperty.link( shooting => {
       if ( shooting ) {
@@ -92,7 +103,7 @@ export default class ParticleSourceNode extends Node {
       }
     } );
 
-    // Slider for 'continuous' mode
+    // slider for 'continuous' mode
     const sliderRange = particleSourceModel.particleAmountProperty.range;
     const particleAmountSliderTandem = tandem.createTandem( 'particleAmountSlider' );
     const particleAmountSlider = new HSlider( particleSourceModel.particleAmountProperty, sliderRange, {
@@ -122,19 +133,23 @@ export default class ParticleSourceNode extends Node {
 
     particleSourceApparatus.center = modelViewTransform.modelToViewPosition( particleSourceModel.positionProperty.value );
 
-    const sourceModeRadioButtonGroup = new AquaRadioButtonGroup( particleSourceModel.sourceModeProperty, SourceMode.enumeration.values.map( sourceMode => {
-      return {
-        value: sourceMode,
-        createNode: () => new Text( sourceMode.sourceName, { font: new PhetFont( 15 ), maxWidth: 150 } ),
-        options: {
-          accessibleName: sourceMode.sourceName
-        },
-        tandemName: `${sourceMode.tandemName}RadioButton`
-      };
-    } ), {
-      tandem: tandem.createTandem( 'sourceModeRadioButtonGroup' ),
-      spacing: SPACING
-    } );
+    const sourceModeRadioButtonGroup = new AquaRadioButtonGroup(
+      particleSourceModel.sourceModeProperty,
+      SourceMode.enumeration.values.map( sourceMode => {
+        return {
+          value: sourceMode,
+          createNode: () => new Text( sourceMode.sourceName, { font: new PhetFont( 15 ), maxWidth: 150 } ),
+          options: {
+            accessibleName: sourceMode.sourceName
+          },
+          tandemName: `${sourceMode.tandemName}RadioButton`
+        };
+      } ),
+      {
+        tandem: tandem.createTandem( 'sourceModeRadioButtonGroup' ),
+        spacing: SPACING
+      }
+    );
     const sourceModeTitle = new RichText( QuantumMeasurementStrings.sourceModeStringProperty, {
       font: new PhetFont( { size: 20, weight: 'bold' } ),
       maxWidth: 200,

@@ -1,7 +1,8 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
 /**
- * SpinExperiment contains the details for all posisble Stern-Gerlach configurations of the Spin Screen.
+ * SpinExperiment is an enumeration that contains the details for all possible Stern-Gerlach configurations used on the
+ * Spin Screen.
  *
  * @author Agustín Vallejo
  */
@@ -15,7 +16,6 @@ import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { BlockingMode } from './BlockingMode.js';
-
 
 type SternGerlachExperimentSetting = {
   isZOriented: boolean;
@@ -63,7 +63,7 @@ export default class SpinExperiment extends EnumerationValue {
 
   public readonly usingSingleApparatus: boolean;
 
-  // Wether the blocker is blocking the up or down exit, if applicable
+  // whether the blocker is blocking the up or down exit, if applicable
   public readonly blockingModeProperty: Property<BlockingMode>;
 
   public constructor(

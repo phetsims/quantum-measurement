@@ -13,11 +13,9 @@ import SpinModel from './SpinModel.js';
 
 export class SingleParticleCollection extends ParticleCollection {
 
-  public constructor(
-    model: SpinModel,
-    maxParticles: number,
-    tandem: Tandem
-  ) {
+  public constructor( model: SpinModel,
+                      maxParticles: number,
+                      tandem: Tandem ) {
     super( model, maxParticles, tandem );
   }
 

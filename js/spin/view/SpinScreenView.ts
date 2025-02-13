@@ -18,7 +18,7 @@ import SpinStatePreparationArea from './SpinStatePreparationArea.js';
 
 export default class SpinScreenView extends QuantumMeasurementScreenView {
 
-  private spinMeasurementArea: SpinMeasurementArea;
+  private readonly spinMeasurementArea: SpinMeasurementArea;
 
   public constructor( public readonly model: SpinModel, tandem: Tandem ) {
 

@@ -26,10 +26,9 @@ export default class ManyParticlesCanvasNode extends CanvasNode {
   }
 
   /**
-   * Paints the grid lines on the canvas node.
+   * Paint the grid lines on the canvas node.
    */
   public paintCanvas( context: CanvasRenderingContext2D ): void {
-
     context.fillStyle = QuantumMeasurementColors.particleColorProperty.value.toCSS();
     for ( let i = 0; i < this.particles.length; i++ ) {
       const position = this.modelViewTransform.modelToViewPosition( this.particles[ i ].position );

@@ -139,7 +139,8 @@ export default class SpinMeasurementArea extends VBox {
               font: new PhetFont( 17 )
             }
           }
-        } );
+        }
+      );
     };
 
     const histograms = [
@@ -158,7 +159,9 @@ export default class SpinMeasurementArea extends VBox {
           ],
           ( sourceMode, experiment, blockingMode ) => {
             return sourceMode === SourceMode.CONTINUOUS && !experiment.usingSingleApparatus && blockingMode === BlockingMode.BLOCK_DOWN;
-          } ) ),
+          }
+        )
+      ),
 
       createPercentageHistogram(
         model.sternGerlachs[ 2 ],
@@ -170,7 +173,9 @@ export default class SpinMeasurementArea extends VBox {
           ],
           ( sourceMode, experiment, blockingMode ) => {
             return sourceMode === SourceMode.CONTINUOUS && !experiment.usingSingleApparatus && blockingMode === BlockingMode.BLOCK_UP;
-          } ) )
+          }
+        )
+      )
     ];
 
     const singleParticleNodes: ShadedSphereNode[] = [];
@@ -208,7 +213,8 @@ export default class SpinMeasurementArea extends VBox {
           sourceMode => sourceMode === SourceMode.CONTINUOUS
         ), expectedPercentageCheckboxTandem ),
         tandem: expectedPercentageCheckboxTandem
-      } );
+      }
+    );
 
     const exitBlockerNode = new Path( new Shape().moveTo( 0, 0 ).lineTo( 0, 35 ), {
       stroke: 'black',
@@ -240,8 +246,6 @@ export default class SpinMeasurementArea extends VBox {
         exitBlockerNode
       ]
     } );
-
-    // experimentAreaNode.clipArea = Shape.bounds( experimentAreaNode.localBounds );
 
     super( {
       children: [
