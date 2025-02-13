@@ -329,11 +329,17 @@ export default class BlochSphereMeasurementArea extends Node {
 
     const magneticFieldCheckbox = new Checkbox(
       model.magneticFieldEnabledProperty,
-      new Text( QuantumMeasurementStrings.enableMagneticFieldStringProperty, { font: new PhetFont( { size: 16 } ), maxWidth: MAX_WIDTH } ),
+      new Text( QuantumMeasurementStrings.enableMagneticFieldStringProperty, {
+        font: new PhetFont( { size: 16 } ), maxWidth: MAX_WIDTH
+      } ),
       {
         spacing: 10,
         centerX: multipleMeasurementBlochSpheresNode.centerX,
         bottom: QuantumMeasurementConstants.LAYOUT_BOUNDS.bottom - 55,
+        mouseAreaXDilation: 5,
+        mouseAreaYDilation: 5,
+        touchAreaXDilation: 5,
+        touchAreaYDilation: 5,
         tandem: magneticFieldControlsTandem.createTandem( 'magneticFieldCheckbox' )
       }
     );
