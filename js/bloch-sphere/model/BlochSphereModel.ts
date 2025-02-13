@@ -51,8 +51,8 @@ class BlochSphereModel implements TModel {
 
   // Selected Equation Basis
   public equationBasisProperty: Property<StateDirection>;
-  // Measurement controls
-  // Measurement axis, wether to measure spin in X,Y, or Z axis
+
+  // Measurement axis, whether to measure spin in X,Y, or Z axis
   public measurementAxisProperty: Property<MeasurementAxis>;
 
   // If is single or multiple measurement mode
@@ -64,7 +64,6 @@ class BlochSphereModel implements TModel {
   // Current measurement time.
   public measurementTimeProperty: NumberProperty;
 
-  // Histograms
   // Counts for the number of times the spin has been measured in the up and down states. Shown in the histograms.
   public readonly upMeasurementCountProperty: NumberProperty;
   public readonly downMeasurementCountProperty: NumberProperty;
@@ -77,14 +76,14 @@ class BlochSphereModel implements TModel {
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
-    // Nesting tandems
+    // nesting tandems
     const preparationAreaTandem = providedOptions.tandem.createTandem( 'preparationAreaModel' );
     const measurementAreaTandem = providedOptions.tandem.createTandem( 'measurementAreaModel' );
     const measurementControlsTandem = measurementAreaTandem.createTandem( 'measurementControls' );
     const histogramsTandem = measurementAreaTandem.createTandem( 'histograms' );
     const magneticFieldControlsTandem = measurementAreaTandem.createTandem( 'magneticFieldControls' );
 
-    // Preparation area related properties
+    // preparation-area-related properties
     this.preparationBlochSphere = new ComplexBlochSphere( {
       tandem: preparationAreaTandem.createTandem( 'preparationBlochSphere' )
     } );
@@ -95,7 +94,7 @@ class BlochSphereModel implements TModel {
       phetioFeatured: true
     } );
 
-    // Measurement area related properties
+    // measurement-area-related properties
     this.singleMeasurementBlochSphere = new ComplexBlochSphere( {
       tandem: measurementAreaTandem.createTandem( 'singleMeasurementBlochSphere' )
     } );
