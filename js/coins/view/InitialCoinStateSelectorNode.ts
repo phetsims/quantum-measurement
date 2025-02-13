@@ -154,6 +154,13 @@ export default class InitialCoinStateSelectorNode extends VBox {
         INDICATOR_COIN_NODE_RADIUS,
         Tandem.OPT_OUT
       );
+
+      // Setting the quantum coin initial state to superposed if the probability is not deterministic
+      // This has to be done AFTER the creation of radio buttons because they need to be associated to a
+      // valid value
+      if ( ( upProbabilityProperty.value !== 1 ) && ( upProbabilityProperty.value !== 0 ) ) {
+        initialCoinStateProperty.value = 'superposed';
+      }
     }
 
     super( {
