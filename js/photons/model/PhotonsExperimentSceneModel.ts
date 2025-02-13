@@ -225,6 +225,7 @@ class PhotonsExperimentSceneModel {
     this.horizontalPolarizationDetector.reset();
     this.isPlayingProperty.reset();
     this.particleBehaviorModeProperty.reset();
+    this.isProbabilityAccordionExpandedProperty.reset();
   }
 
   public stepForwardInTime( dt: number ): void {

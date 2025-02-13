@@ -330,6 +330,10 @@ export default class SpinModel implements TModel {
     this.multipleParticlesCollection.clear();
     this.currentExperimentProperty.reset();
     this.particleSourceModel.reset();
+    this.expectedPercentageVisibleProperty.reset();
+    this.alphaSquaredProperty.reset();
+    this.betaSquaredProperty.reset();
+    this.blochSphere.reset();
   }
 
 }

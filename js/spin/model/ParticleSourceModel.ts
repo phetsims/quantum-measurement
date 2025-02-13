@@ -93,6 +93,7 @@ export default class ParticleSourceModel {
     this.currentlyShootingParticlesProperty.reset();
     this.particleAmountProperty.reset();
     this.spinStateProperty.reset();
+    this.customSpinStateProperty.reset();
   }
 }
 

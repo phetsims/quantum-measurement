@@ -76,10 +76,10 @@ export default abstract class AbstractBlochSphere extends PhetioObject {
   public abstract step( dt: number ): void;
 
   protected reset(): void {
-    this.azimuthalAngleProperty.reset();
-    this.polarAngleProperty.reset();
     this.alphaProperty.reset();
     this.betaProperty.reset();
+    this.azimuthalAngleProperty.reset();
+    this.polarAngleProperty.reset();
   }
 }
 

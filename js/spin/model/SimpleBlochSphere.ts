@@ -62,6 +62,8 @@ export default class SimpleBlochSphere extends AbstractBlochSphere {
 
   public override reset(): void {
     super.reset();
+    this.showZProjectionProperty.reset();
+    this.showXProjectionProperty.reset();
   }
 
 }
