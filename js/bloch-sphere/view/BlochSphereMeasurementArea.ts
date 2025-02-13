@@ -68,7 +68,15 @@ export default class BlochSphereMeasurementArea extends Node {
       children: [
         new Text( QuantumMeasurementStrings.basisColonStringProperty, { font: new PhetFont( 16 ), maxWidth: 100 } ),
         new AquaRadioButtonGroup( model.equationBasisProperty, aquaRadioButtonGroupItems, {
-          orientation: 'horizontal', margin: 5, tandem: equationPanelTandem.createTandem( 'equationBasisRadioButtonGroup' )
+          orientation: 'horizontal',
+          margin: 5,
+          radioButtonOptions: {
+            mouseAreaXDilation: 4,
+            mouseAreaYDilation: 6,
+            touchAreaXDilation: 4,
+            touchAreaYDilation: 6
+          },
+          tandem: equationPanelTandem.createTandem( 'equationBasisRadioButtonGroup' )
         } )
       ]
     } );
@@ -211,12 +219,22 @@ export default class BlochSphereMeasurementArea extends Node {
       };
     } );
 
-    const measurementAxisRadioButtonGroup = new AquaRadioButtonGroup( model.measurementAxisProperty, measurementAxisRadioGroupItems, {
-      orientation: 'horizontal',
-      margin: 5,
-      tandem: measurementAxisControlTandem.createTandem( 'measurementAxisRadioButtonGroup' ),
-      phetioVisiblePropertyInstrumented: false // Visibility controlled by parent node
-    } );
+    const measurementAxisRadioButtonGroup = new AquaRadioButtonGroup(
+      model.measurementAxisProperty,
+      measurementAxisRadioGroupItems,
+      {
+        orientation: 'horizontal',
+        margin: 5,
+        radioButtonOptions: {
+          mouseAreaXDilation: 4,
+          mouseAreaYDilation: 6,
+          touchAreaXDilation: 4,
+          touchAreaYDilation: 6
+        },
+        tandem: measurementAxisControlTandem.createTandem( 'measurementAxisRadioButtonGroup' ),
+        phetioVisiblePropertyInstrumented: false // Visibility controlled by parent node
+      }
+    );
 
     const measurementTimerControl = new MeasurementTimerControl( model.timeToMeasurementProperty, model.measurementTimeProperty, {
       tandem: measurementDelayControlTandem.createTandem( 'measurementTimerControl' ),
