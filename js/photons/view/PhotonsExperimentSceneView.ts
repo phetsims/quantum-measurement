@@ -43,6 +43,8 @@ type PhotonsExperimentSceneViewOptions = SelfOptions & WithRequired<NodeOptions,
 const X_INSET = QuantumMeasurementConstants.SCREEN_VIEW_X_MARGIN;
 const STEP_FORWARD_TIME = 2 / 60; // empirically determined, in seconds, adjust as desired
 const CHECKBOX_TEXT_FONT = new PhetFont( 18 );
+const CHECKBOX_GROUP_SPACING = 10;
+const CHECKBOX_GROUP_POINTER_DILATION = CHECKBOX_GROUP_SPACING / 2;
 
 class PhotonsExperimentSceneView extends Node {
 
@@ -199,7 +201,15 @@ class PhotonsExperimentSceneView extends Node {
 
     const showOutcomeVectorControl = new ExpectationValueVectorControl(
       normalizedOutcomeVectorGraph.showVectorProperty,
-      { tandem: providedOptions.tandem.createTandem( 'showOutcomeVectorControl' ) }
+      {
+        checkboxOptions: {
+          mouseAreaXDilation: CHECKBOX_GROUP_POINTER_DILATION,
+          mouseAreaYDilation: CHECKBOX_GROUP_POINTER_DILATION,
+          touchAreaXDilation: CHECKBOX_GROUP_POINTER_DILATION,
+          touchAreaYDilation: CHECKBOX_GROUP_POINTER_DILATION
+        },
+        tandem: providedOptions.tandem.createTandem( 'showOutcomeVectorControl' )
+      }
     );
 
     const expectationValueControlTandem = providedOptions.tandem.createTandem( 'expectationValueControl' );
@@ -212,7 +222,13 @@ class PhotonsExperimentSceneView extends Node {
         visibleProperty: new GatedVisibleProperty( new DerivedProperty(
           [ model.normalizedExpectationValueProperty ],
           expectationValue => expectationValue !== null
-        ), expectationValueControlTandem )
+        ), expectationValueControlTandem ),
+        checkboxOptions: {
+          mouseAreaXDilation: CHECKBOX_GROUP_POINTER_DILATION,
+          mouseAreaYDilation: CHECKBOX_GROUP_POINTER_DILATION,
+          touchAreaXDilation: CHECKBOX_GROUP_POINTER_DILATION,
+          touchAreaYDilation: CHECKBOX_GROUP_POINTER_DILATION
+        }
       }
     );
 
@@ -221,7 +237,12 @@ class PhotonsExperimentSceneView extends Node {
       new Text( QuantumMeasurementStrings.decimalValuesStringProperty, {
         font: CHECKBOX_TEXT_FONT,
         maxWidth: 200
-      } ), {
+      } ),
+      {
+        mouseAreaXDilation: CHECKBOX_GROUP_POINTER_DILATION,
+        mouseAreaYDilation: CHECKBOX_GROUP_POINTER_DILATION,
+        touchAreaXDilation: CHECKBOX_GROUP_POINTER_DILATION,
+        touchAreaYDilation: CHECKBOX_GROUP_POINTER_DILATION,
         tandem: providedOptions.tandem.createTandem( 'decimalValuesCheckbox' )
       }
     );
@@ -229,7 +250,7 @@ class PhotonsExperimentSceneView extends Node {
     // Assemble the controls that allow the users to set what is and isn't shown in the "average polarization" area.
     const averagePolarizationDisplayControls = new VBox( {
       children: [ showOutcomeVectorControl, expectationValueControl, decimalValuesCheckbox ],
-      spacing: 10,
+      spacing: CHECKBOX_GROUP_SPACING,
       align: 'left',
       left: titleAndEquationsBox.left,
       top: dynamicDataDisplayBox.bottom + 30

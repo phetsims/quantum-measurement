@@ -8,18 +8,18 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox, { HBoxOptions } from '../../../../scenery/js/layout/nodes/HBox.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
-import Checkbox from '../../../../sun/js/Checkbox.js';
+import Checkbox, { CheckboxOptions } from '../../../../sun/js/Checkbox.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 
-type SelfOptions = EmptySelfOptions;
+type SelfOptions = { checkboxOptions?: CheckboxOptions };
 type ExpectationValueVectorControlOptions = SelfOptions & WithRequired<HBoxOptions, 'tandem'>;
 
 export default class ExpectationValueVectorControl extends HBox {
@@ -27,16 +27,21 @@ export default class ExpectationValueVectorControl extends HBox {
   public constructor( vectorVisibleProperty: BooleanProperty,
                       providedOptions: ExpectationValueVectorControlOptions ) {
 
+    const options = optionize<ExpectationValueVectorControlOptions, SelfOptions, HBoxOptions>()( {
+      spacing: 10,
+      checkboxOptions: {
+        tandem: providedOptions.tandem.createTandem( 'expectationValueCheckbox' ),
+        phetioVisiblePropertyInstrumented: false // Remove the whole control if checkbox isn't desired.
+      }
+    }, providedOptions );
+
     const expectationValueCheckbox = new Checkbox(
       vectorVisibleProperty,
       new Text( QuantumMeasurementStrings.vectorRepresentationStringProperty, {
         font: new PhetFont( 18 ),
         maxWidth: 250
       } ),
-      {
-        tandem: providedOptions.tandem.createTandem( 'expectationValueCheckbox' ),
-        phetioVisiblePropertyInstrumented: false // Remove the whole control if checkbox isn't desired.
-      }
+      options.checkboxOptions
     );
     const vectorIcon = new ArrowNode( 0, 0, 26, 0, {
       fill: Color.BLACK,
@@ -44,10 +49,7 @@ export default class ExpectationValueVectorControl extends HBox {
       headWidth: 12
     } );
 
-    const options = optionize<ExpectationValueVectorControlOptions, SelfOptions, HBoxOptions>()( {
-      children: [ expectationValueCheckbox, vectorIcon ],
-      spacing: 10
-    }, providedOptions );
+    options.children = [ expectationValueCheckbox, vectorIcon ];
 
     super( options );
   }

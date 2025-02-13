@@ -11,19 +11,19 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Range from '../../../../dot/js/Range.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import NumberDisplay from '../../../../scenery-phet/js/NumberDisplay.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox, { HBoxOptions } from '../../../../scenery/js/layout/nodes/HBox.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
-import Checkbox from '../../../../sun/js/Checkbox.js';
+import Checkbox, { CheckboxOptions } from '../../../../sun/js/Checkbox.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 
-type SelfOptions = EmptySelfOptions;
+type SelfOptions = { checkboxOptions?: CheckboxOptions };
 type ExpectationValueControlOptions = SelfOptions & WithRequired<HBoxOptions, 'tandem'>;
 
 export default class ExpectationValueControl extends HBox {
@@ -33,16 +33,21 @@ export default class ExpectationValueControl extends HBox {
                       showDecimalValuesProperty: TReadOnlyProperty<boolean>,
                       providedOptions: ExpectationValueControlOptions ) {
 
+    const options = optionize<ExpectationValueControlOptions, SelfOptions, HBoxOptions>()( {
+      spacing: 8,
+      checkboxOptions: {
+        tandem: providedOptions.tandem.createTandem( 'expectationValueCheckbox' ),
+        phetioVisiblePropertyInstrumented: false // Remove the whole control if checkbox isn't desired.
+      }
+    }, providedOptions );
+
     const expectationValueCheckbox = new Checkbox(
       expectationValueLineVisibleProperty,
       new Text( QuantumMeasurementStrings.expectationValueStringProperty, {
         font: new PhetFont( 18 ),
         maxWidth: 250
       } ),
-      {
-        tandem: providedOptions.tandem.createTandem( 'expectationValueCheckbox' ),
-        phetioVisiblePropertyInstrumented: false // Remove the whole control if checkbox isn't desired.
-      }
+      options.checkboxOptions
     );
 
     const expectationValueLineIcon = new Line( 0, 0, 30, 0, {
@@ -63,10 +68,7 @@ export default class ExpectationValueControl extends HBox {
       }
     );
 
-    const options = optionize<ExpectationValueControlOptions, SelfOptions, HBoxOptions>()( {
-      children: [ expectationValueCheckbox, expectationValueLineIcon, expectationValueNumberDisplay ],
-      spacing: 8
-    }, providedOptions );
+    options.children = [ expectationValueCheckbox, expectationValueLineIcon, expectationValueNumberDisplay ];
 
     super( options );
   }
