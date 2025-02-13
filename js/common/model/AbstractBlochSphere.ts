@@ -22,9 +22,10 @@ export type AbstractBlochSphereOptions = SelfOptions & PickRequired<PhetioObject
 
 export default abstract class AbstractBlochSphere extends PhetioObject {
 
-  // Angles that determine the direction the vector representation is pointing at
-  // azimuthal angle, measured along the XY plane from the +X axis, goes from 0 to 2*PI in radians
+  // Angles that determine the direction the vector representation is pointing at azimuthal angle, measured along the XY
+  // plane from the +X axis, goes from 0 to 2*PI in radians.
   public readonly azimuthalAngleProperty: NumberProperty;
+
   // Polar angle, measured from the +Z axis, goes from 0 to PI in radians
   public readonly polarAngleProperty: NumberProperty;
 
@@ -68,7 +69,6 @@ export default abstract class AbstractBlochSphere extends PhetioObject {
       phetioReadOnly: true
     } );
   }
-
 
   /**
    * Abstract method that should run calculations to update the Bloch Sphere representation.

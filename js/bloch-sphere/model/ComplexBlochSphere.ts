@@ -1,10 +1,11 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
 /**
- * ComplexBlochSphere is a Quantum State representation that supports more sophisticated angles and equation coefficients,
- * such as complex numbers and euler representations.
+ * ComplexBlochSphere is a Quantum State representation that supports more sophisticated angles and equation
+ * coefficients, such as complex numbers and euler representations.
  *
  * @author Agustín Vallejo
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
@@ -27,6 +28,8 @@ export type ComplexBlochSphereOptions = SelfOptions & AbstractBlochSphereOptions
 
 export default class ComplexBlochSphere extends AbstractBlochSphere {
 
+  // The rate, in radians per second, at which the unit vector representing the state will rotate, or "precess", around
+  // the Z axis.
   public readonly rotatingSpeedProperty: NumberProperty;
 
   public constructor( providedOptions?: ComplexBlochSphereOptions ) {
@@ -44,7 +47,6 @@ export default class ComplexBlochSphere extends AbstractBlochSphere {
     } );
   }
 
-
   /**
    * Calculate precession and add it to azimuthal angle, constrained from 0 to 2 PI.
    */
@@ -55,16 +57,16 @@ export default class ComplexBlochSphere extends AbstractBlochSphere {
     );
   }
 
+  /**
+   * Set the direction of the unit vector representing the state using a polar and an azimuthal angle.
+   */
   public setDirection( polarAngle: number, azimuthalAngle: number ): void {
     this.polarAngleProperty.value = polarAngle;
     this.azimuthalAngleProperty.value = azimuthalAngle;
   }
 
   /**
-   * Given a measurement basis, measures along that axis and updates the counters accordingly.
-   * @param measurementAxis
-   * @param upCounterProperty
-   * @param downCounterProperty
+   * Given a measurement basis, measure along that axis and update the counters accordingly.
    */
   public measure( measurementAxis: MeasurementAxis, upCounterProperty: NumberProperty, downCounterProperty: NumberProperty ): void {
     const measurementVector = StateDirection.directionToVector( measurementAxis );
@@ -94,9 +96,9 @@ export default class ComplexBlochSphere extends AbstractBlochSphere {
   }
 
   public override reset(): void {
+    this.rotatingSpeedProperty.reset();
     super.reset();
   }
-
 }
 
 quantumMeasurement.register( 'ComplexBlochSphere', ComplexBlochSphere );

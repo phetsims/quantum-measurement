@@ -1,7 +1,7 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
 /**
- * Main model for the Bloch Sphere screen that contains the Bloch Sphere representation and the logic for
+ * Main model for the Bloch Sphere screen.  This contains the Bloch Sphere representation and the logic for
  * measurements, equations and rotation under magnetic field.
  *
  * @author Agustín Vallejo
@@ -40,13 +40,16 @@ class BlochSphereModel implements TModel {
   public readonly singleMeasurementBlochSphere: ComplexBlochSphere;
   public readonly multiMeasurementBlochSpheres: ComplexBlochSphere[] = [];
 
-  // Preparation area related properties
+  // Preparation-area-related properties
+
   // Selected State Direction
   public selectedStateDirectionProperty: Property<StateDirection>;
 
   // Measurement area related properties
-  // A flag that indicates whether the model is ready to observe or needs the state to be prepared.  This should not be
-  // modified directly by client code, but rather by the model's observe() and reprepare() methods.
+
+  // A state variable that indicates whether the model is ready to observe, needs the state to be prepared, or is
+  // timing the next measurement.  This should not be modified directly by client code, but rather by the model's
+  // observe() and reprepare() methods.
   public readonly measurementStateProperty: Property<SpinMeasurementState>;
 
   // Selected Equation Basis
@@ -190,7 +193,7 @@ class BlochSphereModel implements TModel {
     selectingStateDirection = true;
     Multilink.multilink(
       [ this.preparationBlochSphere.polarAngleProperty, this.preparationBlochSphere.azimuthalAngleProperty ],
-      ( polarAngle, azimuthalAngle ) => {
+      () => {
         // Clear the accumulated counts.
         this.resetCounts();
 

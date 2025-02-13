@@ -13,6 +13,7 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import { MeasurementAxis } from './MeasurementAxis.js';
 
 export class StateDirection extends EnumerationValue {
+
   public static readonly X_PLUS = new StateDirection( '+X', Math.PI / 2, 0, 'XPlus' );
   public static readonly X_MINUS = new StateDirection( '-X', Math.PI / 2, Math.PI, 'XMinus' );
   public static readonly Y_PLUS = new StateDirection( '+Y', Math.PI / 2, Math.PI / 2, 'YPlus' );
@@ -35,13 +36,16 @@ export class StateDirection extends EnumerationValue {
   }
 
   public static directionToVector( direction: StateDirection | MeasurementAxis ): Vector3 {
-    return new Vector3( Math.sin( direction.polarAngle ) * Math.cos( direction.azimuthalAngle ),
+    return new Vector3(
+      Math.sin( direction.polarAngle ) * Math.cos( direction.azimuthalAngle ),
       Math.sin( direction.polarAngle ) * Math.sin( direction.azimuthalAngle ),
-      Math.cos( direction.polarAngle ) );
+      Math.cos( direction.polarAngle )
+    );
   }
 
   public static anglesToVector( polarAngle: number, azimuthalAngle: number ): Vector3 {
-    return new Vector3( Math.sin( polarAngle ) * Math.cos( azimuthalAngle ),
+    return new Vector3(
+      Math.sin( polarAngle ) * Math.cos( azimuthalAngle ),
       Math.sin( polarAngle ) * Math.sin( azimuthalAngle ),
       Math.cos( polarAngle ) );
   }

@@ -1,7 +1,7 @@
 // Copyright 2025, University of Colorado Boulder
 
 /**
- * Contains the three posible directions the measurements can be performed in
+ * Contains the three possible directions the measurements can be performed in.
  *
  * @author Agustín Vallejo
  */

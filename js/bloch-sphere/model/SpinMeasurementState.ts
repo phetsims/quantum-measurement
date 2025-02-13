@@ -15,7 +15,7 @@ export const SpinMeasurementStateValues = [
   // be made.
   'timingObservation',
 
-  // The spin of the system has been observed.
+  // The spin of the system has been measured (aka observed).
   'observed'
 
 ] as const;
