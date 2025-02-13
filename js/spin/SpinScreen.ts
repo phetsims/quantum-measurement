@@ -1,22 +1,20 @@
 // Copyright 2024, University of Colorado Boulder
 
 /**
- * TODO Describe this class and its responsibilities, see https://github.com/phetsims/quantum-measurement/issues/1.
+ * Screen for the Spin representation of a Quantum system.
  *
- * @author John Blanco, PhET Interactive Simulations
+ * @author Agustín Vallejo
  */
 
 import Screen, { ScreenOptions } from '../../../joist/js/Screen.js';
-import optionize from '../../../phet-core/js/optionize.js';
+import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
 import QuantumMeasurementColors from '../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../QuantumMeasurementStrings.js';
 import SpinModel from './model/SpinModel.js';
 import SpinScreenView from './view/SpinScreenView.js';
 
-type SelfOptions = {
-  //TODO add options that are specific to QuantumMeasurementScreen here, see https://github.com/phetsims/quantum-measurement/issues/1.
-};
+type SelfOptions = EmptySelfOptions;
 
 type QuantumMeasurementScreenOptions = SelfOptions & ScreenOptions;
 
