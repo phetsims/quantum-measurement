@@ -178,6 +178,9 @@ export default class BlochSphereNumericalEquationNode extends HBox {
 
     // Add the RichText equation node to this container
     this.addChild( equationNode );
+
+    // This prevents the equation from resizing vertically on simplification
+    this.minContentHeight = this.height;
   }
 }
 
