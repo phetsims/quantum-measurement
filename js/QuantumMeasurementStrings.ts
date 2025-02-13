@@ -29,14 +29,12 @@ type StringsType = {
   'coinBiasStringProperty': LocalizedStringProperty;
   'customStringProperty': LocalizedStringProperty;
   'decimalValuesStringProperty': LocalizedStringProperty;
-  'downStringProperty': LocalizedStringProperty;
   'enableMagneticFieldStringProperty': LocalizedStringProperty;
   'eventsPerSecondPatternStringProperty': LocalizedStringProperty;
   'expectationValueStringProperty': LocalizedStringProperty;
   'flipStringProperty': LocalizedStringProperty;
   'flipAndRevealStringProperty': LocalizedStringProperty;
   'fortyFiveDegreesStringProperty': LocalizedStringProperty;
-  'headsStringProperty': LocalizedStringProperty;
   'hideStringProperty': LocalizedStringProperty;
   'horizontalStringProperty': LocalizedStringProperty;
   'identicalCoinsStringProperty': LocalizedStringProperty;
@@ -53,7 +51,6 @@ type StringsType = {
   'observeStringProperty': LocalizedStringProperty;
   'startStringProperty': LocalizedStringProperty;
   'photonPolarizationAngleStringProperty': LocalizedStringProperty;
-  'polarizationStringProperty': LocalizedStringProperty;
   'polarizationDetectorLabelPatternStringProperty': LocalizedStringProperty;
   'polarizingBeamSplitterStringProperty': LocalizedStringProperty;
   'propagationStringProperty': LocalizedStringProperty;
@@ -74,8 +71,6 @@ type StringsType = {
   'singleCoinMeasurementsStringProperty': LocalizedStringProperty;
   'singlePhotonStringProperty': LocalizedStringProperty;
   'spinStateToPrepareStringProperty': LocalizedStringProperty;
-  'tailsStringProperty': LocalizedStringProperty;
-  'upStringProperty': LocalizedStringProperty;
   'VStringProperty': LocalizedStringProperty;
   'NStringProperty': LocalizedStringProperty;
   'vectorRepresentationStringProperty': LocalizedStringProperty;
@@ -84,7 +79,6 @@ type StringsType = {
   'sourceModeStringProperty': LocalizedStringProperty;
   'spinSourceStringProperty': LocalizedStringProperty;
   'blochSphereStringProperty': LocalizedStringProperty;
-  'representationStringProperty': LocalizedStringProperty;
   'unpolarizedStringProperty': LocalizedStringProperty;
   'unknownProbabilitySymbolStringProperty': LocalizedStringProperty;
   'projectionStringProperty': LocalizedStringProperty;
@@ -126,14 +120,10 @@ type StringsType = {
         'probabilityOfDownStringProperty': LocalizedStringProperty;
         'probabilityOfDownHelpTextStringProperty': LocalizedStringProperty;
       };
-      'initialOrientationStringProperty': LocalizedStringProperty;
       'initialOrientationHelpTextStringProperty': LocalizedStringProperty;
       'startMeasurementStringProperty': LocalizedStringProperty;
       'startMeasurementHelpTextStringProperty': LocalizedStringProperty;
       'prepareNewCoinHelpTextStringProperty': LocalizedStringProperty;
-      'coinToPrepareStringProperty': LocalizedStringProperty;
-      'singleCoinMeasurementsStringProperty': LocalizedStringProperty;
-      'multipleCoinMeasurementsStringProperty': LocalizedStringProperty;
       'identicalCoinsStringProperty': LocalizedStringProperty;
       'identicalCoinsHelpTextStringProperty': LocalizedStringProperty;
     }

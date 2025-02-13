@@ -38,9 +38,6 @@
   "decimalValues": {
     "value": "Decimal Values"
   },
-  "down": {
-    "value": "Down"
-  },
   "enableMagneticField": {
     "value": "Enable Magnetic Field"
   },
@@ -58,9 +55,6 @@
   },
   "fortyFiveDegrees": {
     "value": "45\u00B0"
-  },
-  "heads": {
-    "value": "Heads"
   },
   "hide": {
     "value": "Hide"
@@ -109,9 +103,6 @@
   },
   "photonPolarizationAngle": {
     "value": "Photon Polarization Angle"
-  },
-  "polarization": {
-    "value": "Polarization"
   },
   "polarizationDetectorLabelPattern": {
     "value": "{{orientation}} Polarization<br>Detector"
@@ -173,12 +164,6 @@
   "spinStateToPrepare": {
     "value": "Spin State to Prepare"
   },
-  "tails": {
-    "value": "Tails"
-  },
-  "up": {
-    "value": "Up"
-  },
   "V": {
     "value": "V"
   },
@@ -202,9 +187,6 @@
   },
   "blochSphere": {
     "value": "Bloch Sphere"
-  },
-  "representation": {
-    "value": "Representation"
   },
   "unpolarized": {
     "value": "Unpolarized"
@@ -305,9 +287,6 @@
           "value": "Probability of flipped coin landing on down state"
         }
       },
-      "initialOrientation": {
-        "value": "Initial Orientation Group"
-      },
       "initialOrientationHelpText": {
         "value": "Coin orientation before flipping"
       },
@@ -319,15 +298,6 @@
       },
       "prepareNewCoinHelpText": {
         "value": "Button to prepare a new coin"
-      },
-      "coinToPrepare": {
-        "value": "Coin to Prepare"
-      },
-      "singleCoinMeasurements": {
-        "value": "Single Coin Measurements"
-      },
-      "multipleCoinMeasurements": {
-        "value": "Multiple Coin Measurements"
       },
       "identicalCoins": {
         "value": "Identical Coins"
