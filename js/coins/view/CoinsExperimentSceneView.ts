@@ -117,6 +117,8 @@ class CoinsExperimentSceneView extends Node {
       listener: () => { sceneModel.preparingExperimentProperty.value = false; },
       visibleProperty: new GatedVisibleProperty( sceneModel.preparingExperimentProperty, startMeasurementButtonTandem ),
       centerY: 245, // empirically determined
+      touchAreaXDilation: 5,
+      touchAreaYDilation: 5,
       tandem: startMeasurementButtonTandem,
       accessibleName: QuantumMeasurementStrings.a11y.coinsScreen.startMeasurementStringProperty,
       helpText: QuantumMeasurementStrings.a11y.coinsScreen.startMeasurementHelpTextStringProperty

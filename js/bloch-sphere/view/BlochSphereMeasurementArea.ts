@@ -324,6 +324,8 @@ export default class BlochSphereMeasurementArea extends Node {
         xMargin: 20,
         yMargin: 6,
         maxWidth: measurementControlPanel.width,
+        touchAreaXDilation: 5,
+        touchAreaYDilation: 5,
         tandem: providedOptions.tandem.createTandem( 'experimentControlButton' ),
         textNodeOptions: {
           maxWidth: 150
