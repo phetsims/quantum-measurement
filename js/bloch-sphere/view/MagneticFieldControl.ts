@@ -111,7 +111,6 @@ export default class MagneticFieldControl extends Panel {
       } ),
       options
     );
-
   }
 }
 

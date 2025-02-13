@@ -1,8 +1,8 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
 /**
- * Zone where the Bloch Sphere direction is set by the user,
- * it includdes sliders for the polar and azimuthal angles and a ComboBox to select the direction.
+ * Zone where the Bloch Sphere direction is set by the user.  It includes sliders for the polar and azimuthal angles and
+ * a ComboBox to select the direction.
  *
  * @author Agustín Vallejo
  */
@@ -50,7 +50,8 @@ export default class BlochSpherePreparationArea extends VBox {
         majorTickLength: 10,
         constrainValue: value => Utils.roundToInterval( value, 5 / 180 * Math.PI ), // 5 degree intervals
         shiftKeyboardStep: 5 / 180 * Math.PI
-      } );
+      }
+    );
     const azimuthSlider = new Slider(
       model.preparationBlochSphere.azimuthalAngleProperty,
       model.preparationBlochSphere.azimuthalAngleProperty.range,
@@ -62,7 +63,8 @@ export default class BlochSpherePreparationArea extends VBox {
         majorTickLength: 10,
         constrainValue: value => Utils.roundToInterval( value, 5 / 360 * Math.PI * 2 ), // 5 degree intervals
         shiftKeyboardStep: 5 / 360 * Math.PI * 2
-      } );
+      }
+    );
 
     polarSlider.addMajorTick( 0, new Text( '0', { font: new PhetFont( 15 ) } ) );
     polarSlider.addMajorTick( Math.PI, new Text( `${MathSymbols.PI}`, { font: new PhetFont( 15 ) } ) );

@@ -1,8 +1,8 @@
 // Copyright 2025, University of Colorado Boulder
 
 /**
- * MeasurementTimerControl is the node that contains the UI elements for controlling the time at which the
- * Bloch Sphere is measured.
+ * MeasurementTimerControl is the node that contains the UI elements for controlling the time at which the Bloch Sphere
+ * is measured.
  *
  * @author Agustín Vallejo
  * @author John Blanco (PhET Interactive Simulations)
@@ -135,7 +135,6 @@ export default class MeasurementTimerControl extends Node {
     }, providedOptions );
 
     super( options );
-
   }
 }
 

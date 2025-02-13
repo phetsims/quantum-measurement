@@ -1,8 +1,8 @@
 // Copyright 2025, University of Colorado Boulder
 
 /**
- * BlochSphereMeasurementArea is the node that contains the measurement area for the Bloch Sphere screen. It contains
- * the UI elements for controlling various aspects of the measurement that is to be performed.
+ * BlochSphereMeasurementArea is the Scenery Node that contains the measurement area for the Bloch Sphere screen. It
+ * contains the UI elements for controlling various aspects of the measurement that is to be performed.
  *
  * @author Agustín Vallejo
  * @author John Blanco (PhET Interactive Simulations)
@@ -46,7 +46,7 @@ type BlochSphereMeasurementAreaOptions = SelfOptions & WithRequired<NodeOptions,
 // constants
 const TIMES = MathSymbols.TIMES;
 
-// Nominal max width of texts, empirically determined
+// nominal max width of text elements, empirically determined
 const MAX_WIDTH = 200;
 
 export default class BlochSphereMeasurementArea extends Node {

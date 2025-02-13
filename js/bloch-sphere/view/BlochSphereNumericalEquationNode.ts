@@ -154,13 +154,13 @@ export default class BlochSphereNumericalEquationNode extends HBox {
           }
         }
 
-        // If showGlobalPhaseProperty is true and basis is X or Y,
-        // Show the factored out global phase e^{i phiPlus pi} over the entire state.
+        // If showGlobalPhaseProperty is true and basis is X or Y, show the factored out global phase e^{i phiPlus pi}
+        // over the entire state.
         let globalPhasePart = '';
         let finalEquation = `|${PSI}⟩ = ${upComponent}${plus}${downComponent}`;
         if ( showGlobalPhase && ( basis === StateDirection.X_PLUS || basis === StateDirection.Y_PLUS ) ) {
 
-          // Format the global phase as e^{i phiPlus pi} (factored out in front)
+          // Format the global phase as e^{i phiPlus pi} (factored out in front).
           phiPlus < 0 ? phiPlus += 2 : phiPlus;
           const globalPhaseString = Utils.toFixed( phiPlus, 2 );
           globalPhasePart = `e<sup>i${globalPhaseString}${PI}</sup> `;
@@ -176,10 +176,10 @@ export default class BlochSphereNumericalEquationNode extends HBox {
 
     super( options );
 
-    // Add the RichText equation node to this container
+    // Add the RichText equation node to this container.
     this.addChild( equationNode );
 
-    // This prevents the equation from resizing vertically on simplification
+    // This prevents the equation from resizing vertically on simplification.
     this.minContentHeight = this.height;
   }
 }

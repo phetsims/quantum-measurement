@@ -18,7 +18,7 @@ export default class MagneticFieldArrowNode extends ArrowNode {
       stroke: 'black',
       fill: QuantumMeasurementColors.magneticFieldColorProperty,
 
-      // empirically determined values
+      // empirically determined values that define the shape of the arrow
       headHeight: 0.3 * maximumLength,
       headWidth: 0.4 * maximumLength,
       tailWidth: 0.15 * maximumLength
