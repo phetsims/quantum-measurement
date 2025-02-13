@@ -113,29 +113,35 @@ class SystemUnderTestNode extends Panel {
     } );
 
     // Combine the title and the other elements into a single node for the content.
-    const content = new VBox( {
+    const titledTestArea = new VBox( {
       children: [ titleNode, fieldAndAtomsNode ],
       spacing: 5
     } );
 
     // Create an icon that will be used to indicate that a measurement has been made.
-    const measurementIconBackground = new Path( new Shape(
-      quantumMeasurementConstants.CAMERA_SOLID_SHAPE_SVG
-    ).makeImmutable(), {
-      fill: QuantumMeasurementColors.particleColorProperty,
-      scale: 0.1,
-      center: Vector2.ZERO
-    } );
+    const measurementIconBackground = new Path(
+      new Shape(
+        quantumMeasurementConstants.CAMERA_SOLID_SHAPE_SVG
+      ).makeImmutable(),
+      {
+        fill: QuantumMeasurementColors.particleColorProperty,
+        scale: 0.1,
+        center: Vector2.ZERO
+      }
+    );
     const measurementSymbol = new MeasurementSymbolNode();
     const measurementIconNode = new Node( {
       children: [ measurementIconBackground, measurementSymbol ],
-      scale: 0.5,
-      right: content.width - 3,
-      bottom: content.height - 3
+      scale: 0.5, // empirically determined
+      right: titledTestArea.width - 3,
+      bottom: titledTestArea.height - 3
     } );
 
-    // Add the measurement icon to the content node on top of the other nodes.
-    content.addChild( measurementIconNode );
+    // Assemble the content node, which will have the title and the atoms on the back layer and the measurement icon
+    // on the front layer.
+    const content = new Node( {
+      children: [ titledTestArea, measurementIconNode ]
+    } );
 
     // Control the visibility of the measurement icon based on the state of the measurement.  It will be shown briefly
     // when a measurement is made, then faded out.
@@ -164,7 +170,7 @@ class SystemUnderTestNode extends Panel {
       }
       else if ( state === 'prepared' ) {
 
-        // If the state transitions to 'prepared' whilst an animation is in progress, that animation should be finished.
+        // If the state transitions to 'prepared' whilst an animation is in progress, that animation should be stopped.
         if ( iconFadeAnimation !== null ) {
           iconFadeAnimation.stop();
         }
