@@ -157,7 +157,7 @@ class CoinExperimentMeasurementArea extends VBox {
         tandem: numberOfCoinsRadioButtonGroupTandem.createTandem( 'radioButtonGroup' ),
         phetioVisiblePropertyInstrumented: false,
         accessibleName: QuantumMeasurementStrings.a11y.coinsScreen.identicalCoinsStringProperty,
-        helpText: QuantumMeasurementStrings.a11y.coinsScreen.identicalCoinsHelpTextStringProperty,
+        accessibleHelpText: QuantumMeasurementStrings.a11y.coinsScreen.identicalCoinsHelpTextStringProperty,
         labelTagName: 'h4'
       }
     );

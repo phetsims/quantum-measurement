@@ -94,7 +94,7 @@ export default class CoinExperimentButtonSet extends VBox {
         },
         tandem: providedOptions.tandem.createTandem( 'revealHideButton' ),
         accessibleName: revealHideButtonTextProperty,
-        helpText: coinSet.coinType === 'classical' ?
+        accessibleHelpText: coinSet.coinType === 'classical' ?
                   `Show or hide the ${coinOrCoins}` : `Observe or hide the ${coinOrCoins}`
 
       } )
@@ -110,7 +110,7 @@ export default class CoinExperimentButtonSet extends VBox {
         accessibleName: coinSet.coinType === 'classical' ?
                         QuantumMeasurementStrings.flipStringProperty :
                         QuantumMeasurementStrings.reprepareStringProperty,
-        helpText: coinSet.coinType === 'classical' ?
+        accessibleHelpText: coinSet.coinType === 'classical' ?
                   `Flip the ${coinOrCoins} and hide the result` : `Prepare a new ${coinOrSetOfCoins} for observation`
       } )
     );
@@ -125,7 +125,7 @@ export default class CoinExperimentButtonSet extends VBox {
         accessibleName: coinSet.coinType === 'classical' ?
                         QuantumMeasurementStrings.flipAndRevealStringProperty :
                         QuantumMeasurementStrings.reprepareAndRevealStringProperty,
-        helpText: coinSet.coinType === 'classical' ?
+        accessibleHelpText: coinSet.coinType === 'classical' ?
                   `Flip the ${coinOrCoins} and reveal the result` : `Reprepare a new ${coinOrSetOfCoins} and observe it`
       } )
     );

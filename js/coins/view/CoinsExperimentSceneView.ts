@@ -121,7 +121,7 @@ class CoinsExperimentSceneView extends Node {
       touchAreaYDilation: 5,
       tandem: startMeasurementButtonTandem,
       accessibleName: QuantumMeasurementStrings.a11y.coinsScreen.startMeasurementStringProperty,
-      helpText: QuantumMeasurementStrings.a11y.coinsScreen.startMeasurementHelpTextStringProperty
+      accessibleHelpText: QuantumMeasurementStrings.a11y.coinsScreen.startMeasurementHelpTextStringProperty
     } );
 
     // Position the dividing line and the two areas of activity.
@@ -193,7 +193,7 @@ class CoinsExperimentSceneView extends Node {
       },
       tandem: newCoinButtonTandem,
       accessibleName: QuantumMeasurementStrings.newCoinStringProperty,
-      helpText: QuantumMeasurementStrings.a11y.coinsScreen.prepareNewCoinHelpTextStringProperty
+      accessibleHelpText: QuantumMeasurementStrings.a11y.coinsScreen.prepareNewCoinHelpTextStringProperty
     } );
 
     // Position the "New Coin" button below the preparation area.

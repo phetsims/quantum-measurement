@@ -168,7 +168,7 @@ export default class OutcomeProbabilityControl extends VBox {
         providedOptions.tandem.createTandem( 'classicalUpProbabilityControl' ),
         {
           accessibleName: QuantumMeasurementStrings.a11y.coinsScreen.probabilityNumberControls.probabilityOfHeadsStringProperty,
-          helpText: QuantumMeasurementStrings.a11y.coinsScreen.probabilityNumberControls.probabilityOfHeadsHelpTextStringProperty
+          accessibleHelpText: QuantumMeasurementStrings.a11y.coinsScreen.probabilityNumberControls.probabilityOfHeadsHelpTextStringProperty
         }
       );
 
@@ -178,7 +178,7 @@ export default class OutcomeProbabilityControl extends VBox {
         providedOptions.tandem.createTandem( 'classicalDownProbabilityControl' ),
         {
           accessibleName: QuantumMeasurementStrings.a11y.coinsScreen.probabilityNumberControls.probabilityOfTailsStringProperty,
-          helpText: QuantumMeasurementStrings.a11y.coinsScreen.probabilityNumberControls.probabilityOfTailsHelpTextStringProperty
+          accessibleHelpText: QuantumMeasurementStrings.a11y.coinsScreen.probabilityNumberControls.probabilityOfTailsHelpTextStringProperty
         }
       );
 
@@ -226,7 +226,7 @@ export default class OutcomeProbabilityControl extends VBox {
         providedOptions.tandem.createTandem( 'quantumUpProbabilityControl' ),
         {
           accessibleName: QuantumMeasurementStrings.a11y.coinsScreen.probabilityNumberControls.probabilityOfUpStringProperty,
-          helpText: QuantumMeasurementStrings.a11y.coinsScreen.probabilityNumberControls.probabilityOfUpHelpTextStringProperty
+          accessibleHelpText: QuantumMeasurementStrings.a11y.coinsScreen.probabilityNumberControls.probabilityOfUpHelpTextStringProperty
         }
       );
       downProbabilityValueControl = new ProbabilityValueControl(
@@ -235,7 +235,7 @@ export default class OutcomeProbabilityControl extends VBox {
         providedOptions.tandem.createTandem( 'quantumDownProbabilityControl' ),
         {
           accessibleName: QuantumMeasurementStrings.a11y.coinsScreen.probabilityNumberControls.probabilityOfDownStringProperty,
-          helpText: QuantumMeasurementStrings.a11y.coinsScreen.probabilityNumberControls.probabilityOfDownHelpTextStringProperty
+          accessibleHelpText: QuantumMeasurementStrings.a11y.coinsScreen.probabilityNumberControls.probabilityOfDownHelpTextStringProperty
         }
       );
 
