@@ -263,8 +263,23 @@
         "value": "Spin State to Prepare (alpha times up state plus beta times down state)"
       },
       "preparationAreaHeader": {
-        "accessibleName": {
+        "classicalCoinToPrepare": {
           "value": "Classical Coin to Prepare"
+        },
+        "classicalCoin": {
+          "value": "Classical Coin"
+        },
+        "quantumCoinToPrepare": {
+            "value": "Quantum \"Coin\" to Prepare"
+        },
+        "preparedState": {
+          "value": "Prepared State"
+        },
+        "classicalAccessibleParagraphPattern": {
+          "value": "Initial orientation: {{initialCoinFaceState}}. Probability of heads: {{upProbability}}. Probability of tails: {{downProbability}}"
+        },
+        "quantumAccessibleParagraphPattern": {
+          "value": "Initial orientation: {{initialCoinFaceState}}. Probability of up state: {{upProbability}}. Probability of down state: {{downProbability}}"
         }
       }
     },

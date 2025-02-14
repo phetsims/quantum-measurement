@@ -9,7 +9,9 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Multilink from '../../../../axon/js/Multilink.js';
+import StringProperty from '../../../../axon/js/StringProperty.js';
+import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
@@ -32,38 +34,82 @@ class CoinExperimentPreparationArea extends VBox {
     const textColorProperty = sceneModel.systemType === 'quantum' ?
                               QuantumMeasurementColors.quantumSceneTextColorProperty : QuantumMeasurementColors.classicalSceneTextColorProperty;
 
+    const preparationAreaHeadingTextProperty = new StringProperty( '' );
+
+    const preparationAreaAccessibleNameStringProperty = new StringProperty( '' );
+
+    // TODO: For consistency and symetry, should we add redundant translatable strings??? https://github.com/phetsims/quantum-measurement/issues/92
     // Create the header. It is somewhat different depending on whether this is for a classical or quantum system.
-    const prepAreaHeadingTextProperty: TReadOnlyProperty<string> = new DerivedProperty(
+    Multilink.multilink(
       [
+        sceneModel.preparingExperimentProperty,
         QuantumMeasurementStrings.coinStringProperty,
         QuantumMeasurementStrings.quantumCoinQuotedStringProperty,
         QuantumMeasurementStrings.itemToPreparePatternStringProperty,
         QuantumMeasurementStrings.preparedStateStringProperty,
-        sceneModel.preparingExperimentProperty
+        QuantumMeasurementStrings.a11y.translatable.preparationAreaHeader.classicalCoinToPrepareStringProperty,
+        QuantumMeasurementStrings.a11y.translatable.preparationAreaHeader.classicalCoinStringProperty,
+        QuantumMeasurementStrings.a11y.translatable.preparationAreaHeader.quantumCoinToPrepareStringProperty,
+        QuantumMeasurementStrings.a11y.translatable.preparationAreaHeader.preparedStateStringProperty
       ],
-      ( coinString, quantumCoinString, itemToPreparePattern, preparedStateString, preparingExperiment ) => {
-        let returnText;
+      (
+        preparingExperiment,
+        coinString,
+        quantumCoinString,
+        itemToPreparePattern,
+        preparedStateString,
+        a11yClassicalCoinToPrepareString,
+        a11yClassicalCoinString,
+        a11yQuantumCoinToPrepareString,
+        a11yPreparedStateString
+      ) => {
         if ( preparingExperiment ) {
-          returnText = StringUtils.fillIn( itemToPreparePattern, {
+          preparationAreaHeadingTextProperty.value = StringUtils.fillIn( itemToPreparePattern, {
             item: sceneModel.systemType === 'classical' ? coinString : quantumCoinString
           } );
+          preparationAreaAccessibleNameStringProperty.value = sceneModel.systemType === 'classical' ?
+                                                              a11yClassicalCoinToPrepareString : a11yQuantumCoinToPrepareString;
+
         }
         else {
-          returnText = sceneModel.systemType === 'classical' ? coinString : preparedStateString;
+          preparationAreaHeadingTextProperty.value = sceneModel.systemType === 'classical' ? coinString : preparedStateString;
+          preparationAreaAccessibleNameStringProperty.value = sceneModel.systemType === 'classical' ?
+                                                              a11yClassicalCoinString : a11yPreparedStateString;
         }
-        return returnText;
       }
     );
 
-    const preparationAreaHeader = new SceneSectionHeader(
-      prepAreaHeadingTextProperty,
-      {
-        textColor: textColorProperty,
-        maxWidth: 200,
+    const preparationAreaAccessibleParagraphStringProperty = new DerivedProperty(
+      [
+        sceneModel.initialCoinFaceStateProperty,
+        sceneModel.upProbabilityProperty,
+        QuantumMeasurementStrings.a11y.translatable.preparationAreaHeader.classicalAccessibleParagraphPatternStringProperty,
+        QuantumMeasurementStrings.a11y.translatable.preparationAreaHeader.quantumAccessibleParagraphPatternStringProperty
+      ],
+      (
+        initialCoinFaceState,
+        upProbability,
+        a11yClassicalAccessibleParagraphPatternString,
+        a11yQuantumAccessibleParagraphPatternString
+      ) => {
+        const pattern = sceneModel.systemType === 'classical' ?
+                        a11yClassicalAccessibleParagraphPatternString :
+                        a11yQuantumAccessibleParagraphPatternString;
+        const downProbability = 1 - upProbability;
+        return StringUtils.fillIn( pattern, {
+          initialCoinFaceState: initialCoinFaceState,
+          upProbability: Utils.toFixed( upProbability, 3 ),
+          downProbability: Utils.toFixed( downProbability, 3 )
+        } );
+      } );
 
-        // Custom accessible name for the 'classical' system, otherwise it uses the same as the visual text.
-        accessibleName: sceneModel.systemType === 'classical' ?
-                        QuantumMeasurementStrings.a11y.translatable.preparationAreaHeader.accessibleNameStringProperty : null
+    const preparationAreaHeader = new SceneSectionHeader(
+      preparationAreaHeadingTextProperty,
+      {
+        accessibleName: preparationAreaAccessibleNameStringProperty,
+        accessibleParagraph: preparationAreaAccessibleParagraphStringProperty,
+        textColor: textColorProperty,
+        maxWidth: 200
       }
     );
 

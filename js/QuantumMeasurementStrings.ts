@@ -110,7 +110,12 @@ type StringsType = {
       'singleCoinStatePatternStringProperty': LocalizedStringProperty;
       'quantumCoinsAccessibleParagraphStringProperty': LocalizedStringProperty;
       'preparationAreaHeader': {
-        'accessibleNameStringProperty': LocalizedStringProperty;
+        'classicalCoinToPrepareStringProperty': LocalizedStringProperty;
+        'classicalCoinStringProperty': LocalizedStringProperty;
+        'quantumCoinToPrepareStringProperty': LocalizedStringProperty;
+        'preparedStateStringProperty': LocalizedStringProperty;
+        'classicalAccessibleParagraphPatternStringProperty': LocalizedStringProperty;
+        'quantumAccessibleParagraphPatternStringProperty': LocalizedStringProperty;
       }
     };
     'coinsScreen': {
