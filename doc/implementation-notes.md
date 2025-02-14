@@ -86,43 +86,68 @@ This works better for phet-io.
 
 ### Coins Screen
 
+The "Coins" screen is a simple demonstration of the probabilistic nature of measuring systems with two possible
+outcomes, as well as some of the differences between classical and quantum systems. The user can prepare both a single
+and a set of coins to have either classical or quantum behavior, then make measurements to see the results.
 
-TODO - Notes made during the implementation of the "Coins" screen. These should eventually be rolled into a cohesive
-narrative.
+#### Model
 
-Terms:
+The most central class in the model is `CoinSet`, which represents a set of coins.  This class models both classical
+and quantum coins, and tracks the state of the experiment as well as the measurements that have been made.  The
+`CoinExperimentSceneModel` class interacts with the `CoinSet` to manage the state of the experiment and the user
+interaction.  It has two "test boxes" that are used to hide and show the results of the measurements, one for a single
+coin and one for the set of coins.  The model moves back and forth between preparation and measurement mode, starting in
+preparation.
 
-classical coin - A coin the acts like what we typically think of as a "real" coin, where it is either in the heads or
-tails state and is never in a superposed state.
-quantum coin - A coin that behaves like a quantum particle in the sense that it is in a superposition of states until
-it is measured.
+The random values used to decide the outcome of the measurements are generated using a `dotRandom` object that is seeded
+with a value that is tracked in an axon Property.  This allows the state information to be conveyed for phet-io
+purposes without having to send 10000+ pieces of data.
 
-Notes:
+#### View
 
-- Term to mention - "test box"
-- The term "measure" is used in the code a lot for looking at the state of the coin(s).  The terms used in the UI are
-  "reveal" for the classical coin and "observe" for the quantum coin, but "observe" carries its own meaning in the world
-  of CS, and reveal is non-quantum, so "measure" seemed like a reasonable choice.
-- The main model has two experiment types - classical and quantum.  There is a type called `SystemType` that is used
-to parameterize the model and view in quite a number of places.  This idea of both classical and quantum systems being
-present is a theme throughout the sim.
-- Each of these experiments - i.e. the classical and quantum ones - moves back and forth between preparation and
-measurement mode, starting in preparation.  The general idea is that the user prepares the system, then makes me
-measurements on it.
-- We should note the parallel between flipping the coin in the classical scene and re-preparing it in the quantum 
-  scene.
-- Describe how the "seed" is used in CoinSet to avoid having to send 10000 pieces of data.
+The view is responsible for animating the transitions between preparation and measurement, for hiding and showing the
+results of the measurements, and for animating the re-preparation of experiments.  The `CoinExperimentSceneView` class
+is the main view class for each of the two scenes, and it contains view representations for the coins and the coin sets.
+The creation and animation of the coin nodes are handled by `SingleCoinViewManager`, `MultipleCoinViewManager`, and
+`ManyCoinViewManager`.  Each of these creates nodes used to represent the coins and animates their movement, including
+flipping the coins.  `ManyCoinViewManager` is used for the 10k coin set, and it uses canvas to represent each coin
+essentially as a pixel.
 
 ### Photons Screen
 
-* Classical vs Quantum photon behavior
-* Sprites
+The "Photons" screen demonstrates how photons with a given polarization angle behavior when passing through a beam
+splitter.  The user can prepare a photon with a given polarization angle, then view the path that it travels towards
+a detector.  The user can choose either classical or quantum behavior, and in the quantum case, the photon is in a
+superposition of states until measured.
+
+#### Model
+
+The model for the "Photons" consists of a laser that produces polarized photons, a beam splitter that can change the
+path of the photons, and two detectors that can measure the photons.  The `Photon` class represents a single photon, and
+can be in a superposition of states.  The `PhotonExperimentSceneModel` class manages the state of the experiment and
+the user interaction.  There is a control that allows the user to set the polarization angle of the photon or to have
+them be unpolarized.  The model decides probabilistically the path that the photon will take.
+
+#### View
+
+The view has representations for the laser, the beam splitter, the detectors, and the photons. It also includes a
+control that allows the user to set the polarization angle of the photon. There are also a number of nodes that are used
+to represent the outcomes of the measurements, either as an individual count or as a moving average. There is an area
+that displays information about the expectation value and measurement counts/rates.
 
 ### Spin Screen
+
+#### Model
 
 * SG measurement calculation
 * particles path logic
 
+#### View
+
 ### Bloch Sphere Screen
 
+#### Model
+
 * Change of basis
+
+#### View
