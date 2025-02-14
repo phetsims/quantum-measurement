@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * Controls whether Stern Gerlach apparatus is blocked and which exit would be blocked
