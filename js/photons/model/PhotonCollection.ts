@@ -39,12 +39,13 @@ export class PhotonCollection extends PhetioObject {
   }
 
   /**
-   * For serialization, the PhotonCollectionIO uses reference type serialization. That is, each PhotonCollection exists for the life of the
-   * simulation, and when we save the state of the simulation, we save the current state of the PhotonCollection.
+   * For serialization, the PhotonCollectionIO uses reference type serialization. That is, each PhotonCollection exists
+   * for the life of the simulation, and when we save the state of the simulation, we save the current state of the
+   * PhotonCollection.
    *
-   * The PhotonCollection serves as a composite container of PhotonIO instances. The Photons are serialized using data-type serialization.
-   * For deserialization, the Photons are deserialized (again, using data-type serialization) and applied to the
-   * PhotonCollection in its applyState method.
+   * The PhotonCollection serves as a composite container of PhotonIO instances. The Photons are serialized using
+   * data-type serialization. For deserialization, the Photons are deserialized (again, using data-type serialization)
+   * and applied to the PhotonCollection in its applyState method.
    *
    * Please see https://github.com/phetsims/phet-io/blob/main/doc/phet-io-instrumentation-technical-guide.md#serialization
    * for more information on the different serialization types.

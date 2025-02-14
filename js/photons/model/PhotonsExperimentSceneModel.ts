@@ -1,8 +1,8 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
 /**
- * PhotonsExperimentSceneModel is the class that defines the model for each of the two scenes in the "Photons" screen, one for the
- * single-photon experiment and one for the multi-photon experiment.
+ * PhotonsExperimentSceneModel is the class that defines the model for each of the two scenes in the "Photons" screen,
+ * one for the single-photon experiment and one for the multi-photon experiment.
  *
  * @author John Blanco, PhET Interactive Simulations
  */
