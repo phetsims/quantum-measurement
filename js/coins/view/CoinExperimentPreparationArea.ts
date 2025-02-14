@@ -60,7 +60,10 @@ class CoinExperimentPreparationArea extends VBox {
       {
         textColor: textColorProperty,
         maxWidth: 200,
-        accessibleName: sceneModel.systemType === 'classical' ? 'Classical Coin to Prepare' : null
+
+        // Custom accessible name for the 'classical' system, otherwise it uses the same as the visual text.
+        accessibleName: sceneModel.systemType === 'classical' ?
+                        QuantumMeasurementStrings.a11y.translatable.preparationAreaHeader.accessibleNameStringProperty : null
       }
     );
 

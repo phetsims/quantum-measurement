@@ -9,7 +9,6 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import EnabledProperty from '../../../../axon/js/EnabledProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';

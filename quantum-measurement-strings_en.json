@@ -261,6 +261,11 @@
       },
       "quantumCoinsAccessibleParagraph": {
         "value": "Spin State to Prepare (alpha times up state plus beta times down state)"
+      },
+      "preparationAreaHeader": {
+        "accessibleName": {
+          "value": "Classical Coin to Prepare"
+        }
       }
     },
     "coinsScreen": {

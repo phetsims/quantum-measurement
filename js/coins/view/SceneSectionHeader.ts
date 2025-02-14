@@ -15,7 +15,6 @@ import optionize from '../../../../phet-core/js/optionize.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import VBox, { VBoxOptions } from '../../../../scenery/js/layout/nodes/VBox.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import TPaint from '../../../../scenery/js/util/TPaint.js';
@@ -57,18 +56,13 @@ export default class SceneSectionHeader extends VBox {
     super( {
       children: [ heading, line ],
       accessibleName: options.accessibleName ? options.accessibleName : textProperty,
+      accessibleParagraph: options.accessibleParagraph,
+
       // TODO: Implement accessible header https://github.com/phetsims/scenery/issues/1689
+      // TODO: The header API should make tagName unnecessary too, https://github.com/phetsims/scenery/issues/1689
       labelTagName: 'h3',
       tagName: 'div'
     } );
-
-    if ( options.accessibleParagraph ) {
-      // TODO: This is super broken iugh, accessible paragraph should come AFTER the title!! https://github.com/phetsims/scenery/issues/1673
-      this.addChild( new Node( {
-        tagName: 'div',
-        accessibleParagraph: options.accessibleParagraph
-      } ) );
-    }
   }
 }
 

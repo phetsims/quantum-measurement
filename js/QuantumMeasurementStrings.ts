@@ -109,6 +109,9 @@ type StringsType = {
       'equationAccessibleParagraphPatternStringProperty': LocalizedStringProperty;
       'singleCoinStatePatternStringProperty': LocalizedStringProperty;
       'quantumCoinsAccessibleParagraphStringProperty': LocalizedStringProperty;
+      'preparationAreaHeader': {
+        'accessibleNameStringProperty': LocalizedStringProperty;
+      }
     };
     'coinsScreen': {
       'probabilityNumberControls': {
