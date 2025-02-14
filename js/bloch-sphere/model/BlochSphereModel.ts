@@ -165,7 +165,7 @@ class BlochSphereModel implements TModel {
     } );
 
     // Magnetic Field Controls
-    this.magneticFieldEnabledProperty = new EnabledProperty( false, {
+    this.magneticFieldEnabledProperty = new BooleanProperty( false, {
       tandem: magneticFieldControlsTandem.createTandem( 'magneticFieldEnabledProperty' ),
       phetioFeatured: true
     } );
