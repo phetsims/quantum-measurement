@@ -39,26 +39,28 @@ type SelfOptions = EmptySelfOptions;
 
 type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
-// Constants
-// Blocker in front of Stern Gerlach (SG) exits
-export const BLOCKER_OFFSET = new Vector2( 0.1, 0 );
+// constants
+
 const MAX_NUMBER_OF_SINGLE_PARTICLES = 50;
 const MAX_NUMBER_OF_MULTIPLE_PARTICLES = 1250;
 
+// blocker in front of Stern Gerlach (SG) exits
+export const BLOCKER_OFFSET = new Vector2( 0.1, 0 );
+
 export default class SpinModel implements TModel {
 
-  // Bloch Sphere that represents the current spin state
+  // bloch Sphere that represents the current spin state
   public readonly blochSphere: SimpleBlochSphere;
 
-  // Alpha and Beta squared values of the prepared state.
-  // Alpha^2 translates to the P(up) in a SG_Z
+  // alpha and beta squared values of the prepared state.
+  // alpha^2 translates to the P(up) in a SG_Z
   public readonly alphaSquaredProperty: NumberProperty;
   public readonly betaSquaredProperty: NumberProperty;
 
-  // Spin property that is controlled by the buttons or sliders
+  // spin property that is controlled by the buttons or sliders
   public readonly derivedSpinStateProperty: TReadOnlyProperty<Vector2>;
 
-  // Current experiment selected by the user
+  // current experiment selected by the user
   public readonly currentExperimentProperty: Property<SpinExperiment>;
   public readonly isCustomExperimentProperty: TReadOnlyProperty<boolean>;
 
@@ -66,19 +68,19 @@ export default class SpinModel implements TModel {
   public readonly singleParticlesCollection: SingleParticleCollection;
   public readonly multipleParticlesCollection: MultipleParticleCollection;
 
-  // Model for the particle shooting apparatus
+  // model for the particle shooting apparatus
   public readonly particleSourceModel: ParticleSourceModel;
 
   // Models for the three available Stern-Gerlach experiments. Second and Third are counted top to bottom.
   public readonly sternGerlachs: SternGerlach[];
 
-  // Invisible lines that trigger measurement of the particles when they fly through them
+  // invisible lines that trigger measurement of the particles when they fly through them
   public readonly measurementDevices: MeasurementDevice[];
 
-  // Expected percentage of particles that should be visible in the histogram
+  // expected percentage of particles that should be visible in the histogram
   public readonly expectedPercentageVisibleProperty: BooleanProperty;
 
-  // Boolean to control what exit to block in continuous mode
+  // boolean to control what exit to block in continuous mode
   public readonly isBlockingProperty: TReadOnlyProperty<boolean>;
   public readonly exitBlockerPositionProperty: TReadOnlyProperty<Vector2 | null>;
 
