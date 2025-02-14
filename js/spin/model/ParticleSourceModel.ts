@@ -54,7 +54,10 @@ export default class ParticleSourceModel {
       phetioFeatured: true
     } );
 
-    this.isContinuousModeProperty = new DerivedProperty( [ this.sourceModeProperty ], sourceMode => sourceMode === SourceMode.CONTINUOUS );
+    this.isContinuousModeProperty = new DerivedProperty(
+      [ this.sourceModeProperty ],
+      sourceMode => sourceMode === SourceMode.CONTINUOUS
+    );
 
     this.particleAmountProperty = new NumberProperty( 0.1, {
       tandem: tandem.createTandem( 'particleAmountProperty' ),

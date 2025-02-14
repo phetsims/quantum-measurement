@@ -49,7 +49,7 @@ export const BLOCKER_OFFSET = new Vector2( 0.1, 0 );
 
 export default class SpinModel implements TModel {
 
-  // bloch Sphere that represents the current spin state
+  // Bloch sphere that represents the current spin state
   public readonly blochSphere: SimpleBlochSphere;
 
   // alpha and beta squared values of the prepared state.
@@ -106,7 +106,10 @@ export default class SpinModel implements TModel {
       ( experiment: SpinExperiment ) => experiment === SpinExperiment.CUSTOM
     );
 
-    this.particleSourceModel = new ParticleSourceModel( new Vector2( -0.5, 0 ), providedOptions.tandem.createTandem( 'particleSourceModel' ) );
+    this.particleSourceModel = new ParticleSourceModel(
+      new Vector2( -0.5, 0 ),
+      providedOptions.tandem.createTandem( 'particleSourceModel' )
+    );
 
     this.singleParticlesCollection = new SingleParticleCollection(
       this, MAX_NUMBER_OF_SINGLE_PARTICLES, providedOptions.tandem.createTandem( 'singleParticlesCollection' ) );
@@ -124,9 +127,9 @@ export default class SpinModel implements TModel {
       }
     );
 
-    this.blochSphere = new SimpleBlochSphere(
-      this.derivedSpinStateProperty, { tandem: providedOptions.tandem.createTandem( 'blochSphere' ) }
-    );
+    this.blochSphere = new SimpleBlochSphere( this.derivedSpinStateProperty, {
+      tandem: providedOptions.tandem.createTandem( 'blochSphere' )
+    } );
 
     const sternGerlachsTandem = providedOptions.tandem.createTandem( 'sternGerlachs' );
     this.sternGerlachs = [
@@ -302,13 +305,11 @@ export default class SpinModel implements TModel {
 
       // Measure on the second SG according to the orientation of the first one.
       this.sternGerlachs[ 1 ].updateProbability(
-
         // SG0 passes the up-spin particles to SG1.
         SpinDirection.spinToVector( this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_PLUS : SpinDirection.X_PLUS )
       );
 
       this.sternGerlachs[ 2 ].updateProbability(
-
         // SG0 passes the down-spin particles to SG2, and because X- is not in the initial spin values, we pass null.
         SpinDirection.spinToVector( this.sternGerlachs[ 0 ].isZOrientedProperty.value ? SpinDirection.Z_MINUS : null )
       );

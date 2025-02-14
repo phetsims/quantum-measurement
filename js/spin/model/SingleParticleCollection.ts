@@ -30,19 +30,18 @@ export class SingleParticleCollection extends ParticleCollection {
   public override step( dt: number ): void {
     super.step( dt );
 
-    // Moves single particles and triggers measurements when they pass through Measuring Lines
+    // Moves single particles and triggers measurements when they pass through Measuring Lines.
     this.particles.forEach( particle => {
       const behindMeasurementDevice: boolean[] = this.model.measurementDevices.map( device => device.isParticleBehind( particle.position ) );
 
       particle.step( dt );
       this.decideParticleDestiny( particle );
 
-      // If the particle crosses a measurement device, we update the device
+      // If the particle crosses a measurement device, we update the device.
       this.model.measurementDevices.forEach( ( device, index ) => {
         if ( behindMeasurementDevice[ index ] && !device.isParticleBehind( particle.position ) ) {
           device.measurementEmitter.emit();
           device.spinStateProperty.value = particle.spinVectors[ index ];
-          // particle.stageCompleted[ index ] = true;
         }
       } );
     } );
