@@ -1,6 +1,6 @@
 // Copyright 2024-2025, University of Colorado Boulder
 /**
- * Visual representation of the Bloch Sphere, meaning an orb with axis and the state vector.
+ * Visual representation of the Bloch Sphere, meaning an orb with X, Y, and Z axes and a state vector.
  *
  * @author Agustín Vallejo
  * @author John Blanco (PhET Interactive Simulations)

@@ -1,7 +1,8 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
 /**
- * AbstractBlochSphere is a simple model for a sphere representation of a Quantum system.
+ * AbstractBlochSphere is a base class that represents in geometrical terms the pure state space of a two-level quantum
+ * mechanical system.
  *
  * @author Agustín Vallejo
  */
@@ -26,10 +27,10 @@ export default abstract class AbstractBlochSphere extends PhetioObject {
   // plane from the +X axis, goes from 0 to 2*PI in radians.
   public readonly azimuthalAngleProperty: NumberProperty;
 
-  // Polar angle, measured from the +Z axis, goes from 0 to PI in radians
+  // Polar angle, measured from the +Z axis, goes from 0 to PI in radians.
   public readonly polarAngleProperty: NumberProperty;
 
-  // Coefficients of the vector representation
+  // Coefficients of the vector representation.
   public readonly alphaProperty: NumberProperty;
   public readonly betaProperty: NumberProperty;
 

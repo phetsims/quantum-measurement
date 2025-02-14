@@ -1,10 +1,10 @@
 // Copyright 2025, University of Colorado Boulder
 /**
- * QuantumMeasurementPreferencesNode is the user interface for sim-specific preferences, accessed via the Preferences dialog.
- * These preferences are global, and affect all screens.
+ * QuantumMeasurementPreferencesNode is the user interface for sim-specific preferences, accessed via the Preferences
+ * dialog. These preferences are global, and can potentially affect all screens.
  *
- * The Preferences dialog is created on demand by joist, using a PhetioCapsule. So QuantumMeasurementPreferencesNode must
- * implement dispose, and all elements of QuantumMeasurementPreferencesNode that have tandems must be disposed.
+ * The Preferences dialog is created on demand by joist, using a PhetioCapsule. So QuantumMeasurementPreferencesNode
+ * must implement dispose, and all elements of QuantumMeasurementPreferencesNode that have tandems must be disposed.
  *
  * @author Agustín Vallejo
  */

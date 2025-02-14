@@ -1,6 +1,7 @@
 // Copyright 2024-2025, University of Colorado Boulder
+
 /**
- * Node that displays a fraction that grows dynamically based on the contents.
+ * A Node that displays a dashed line with an arrow head at the tip.
  *
  * @author Agustín Vallejo
  */
@@ -51,7 +52,7 @@ export default class DashedArrowNode extends Node {
   public setTailAndTip( tailX: number, tailY: number, tipX: number, tipY: number ): void {
     const tip = new Vector2( tipX, tipY );
 
-    // Substract the arrow head height to the tip for the tail position
+    // Subtract the arrow head height to the tip for the tail position
     const tail = tip.minus( tip.normalized().times( this.arrowHeadHeight ) );
 
     this.arrowHead.setTailAndTip( tail.x, tail.y, tipX, tipY );

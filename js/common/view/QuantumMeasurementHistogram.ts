@@ -4,6 +4,7 @@
  * outcomes for an experiment where multiple classical or quantum coins are flipped.
  *
  * @author John Blanco, PhET Interactive Simulations
+ * @author Agustín Vallejo
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
