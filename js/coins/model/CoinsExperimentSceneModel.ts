@@ -22,6 +22,8 @@ import Coin from './Coin.js';
 import { CoinStates } from './CoinStates.js';
 import CoinSet from './CoinSet.js';
 import { QuantumCoinStateValues } from './QuantumCoinStates.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 
 type SelfOptions = {
   initiallyActive?: boolean;
@@ -62,6 +64,9 @@ class CoinsExperimentSceneModel extends PhetioObject {
   // The probability of the 'up' state. The 'down' probability will be (1 - thisValue).
   public readonly upProbabilityProperty: NumberProperty;
 
+  // The probability of the 'down' state. 1 - "up" probability.
+  public readonly downProbabilityProperty: TReadOnlyProperty<number>;
+
   public constructor( providedOptions: CoinExperimentSceneModelOptions ) {
 
     const options = optionize<CoinExperimentSceneModelOptions, SelfOptions, PhetioObjectOptions>()( {
@@ -88,6 +93,8 @@ class CoinsExperimentSceneModel extends PhetioObject {
       phetioFeatured: true,
       phetioDocumentation: 'The probability of the "up" state for the coin(s) in this scene.'
     } );
+
+    this.downProbabilityProperty = new DerivedProperty( [ this.upProbabilityProperty ], upProbability => 1 - upProbability );
 
     // Create the coins that will be used in the experiment, as well as the Property that will track the user's choice
     // of the initial state for the coins.  This is done a little differently for classical versus quantum systems.

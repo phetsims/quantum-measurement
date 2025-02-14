@@ -270,7 +270,7 @@
           "value": "Classical Coin"
         },
         "quantumCoinToPrepare": {
-            "value": "Quantum \"Coin\" to Prepare"
+          "value": "Quantum \"Coin\" to Prepare"
         },
         "preparedState": {
           "value": "Prepared State"
@@ -280,6 +280,25 @@
         },
         "quantumAccessibleParagraphPattern": {
           "value": "Initial orientation: {{initialCoinFaceState}}. Probability of up state: {{upProbability}}. Probability of down state: {{downProbability}}"
+        }
+      },
+      "coinsScreen": {
+        "coinStates": {
+          "heads": {
+            "value": "Heads"
+          },
+          "tails": {
+            "value": "Tails"
+          },
+          "superposed": {
+            "value": "Superposed"
+          },
+          "up": {
+            "value": "Up"
+          },
+          "down": {
+            "value": "Down"
+          }
         }
       }
     },

@@ -116,6 +116,15 @@ type StringsType = {
         'preparedStateStringProperty': LocalizedStringProperty;
         'classicalAccessibleParagraphPatternStringProperty': LocalizedStringProperty;
         'quantumAccessibleParagraphPatternStringProperty': LocalizedStringProperty;
+      };
+      'coinsScreen': {
+        'coinStates': {
+          'headsStringProperty': LocalizedStringProperty;
+          'tailsStringProperty': LocalizedStringProperty;
+          'superposedStringProperty': LocalizedStringProperty;
+          'upStringProperty': LocalizedStringProperty;
+          'downStringProperty': LocalizedStringProperty;
+        }
       }
     };
     'coinsScreen': {
