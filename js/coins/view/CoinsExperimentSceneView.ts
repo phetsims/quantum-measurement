@@ -66,7 +66,7 @@ class CoinsExperimentSceneView extends Node {
   // will be null when no animation is in progress.
   private dividerMovementAnimation: Animation | null = null;
 
-  // Track the location where animations of coins from the preparation area to the measurement area should start.  This
+  // Track the position where animations of coins from the preparation area to the measurement area should start.  This
   // is updated as the size and layout of the preparation area changes.
   private travelingCoinsOrigin: Vector2;
 
@@ -168,7 +168,7 @@ class CoinsExperimentSceneView extends Node {
                                               DIVIDER_X_POSITION_DURING_MEASUREMENT;
         this.dividerMovementAnimation = null;
 
-        // Update the location where the coins should come from during animations.
+        // Update the position where the coins should come from during animations.
         this.travelingCoinsOrigin = this.globalToLocalPoint( this.preparationArea.getIndicatorCoinGlobalCenter() );
       } );
 

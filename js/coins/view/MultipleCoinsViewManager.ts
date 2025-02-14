@@ -100,7 +100,7 @@ class MultipleCoinsViewManager {
 
       // Add the coins to our parent node. This is done so that we don't change the local bounds of the measurement
       // area, since this would break the layout.  These will be added back to the measurement area when they reach the
-      // desired location and are thus withing the bounds of the measurement area.
+      // desired position and are thus withing the bounds of the measurement area.
       sceneGraphParent.addCoinNodeSet( coinsToAnimate! );
 
       const multipleCoinTestBoxBounds = sceneGraphParent.globalToLocalBounds( multipleCoinTestBox.getGlobalBounds() );
