@@ -1,11 +1,29 @@
 # Quantum Measurement - Implementation Notes
 
 @author Agustin Vallejo (PhET Interactive Simulations)
+
 @author John Blanco (PhET Interactive Simulations)
 
 ## Table of Contents
 
-TODO - Add a table of contents when doc is complete.
+* [Introduction](#introduction)
+* [General Considerations](#general-considerations)
+  * [Common Terminology](#common-terminology)
+  * [Common Model and View Patterns](#common-model-and-view-patterns)
+  * [Memory Management](#memory-management)
+* [Screens](#screens)
+  * [Coins Screen](#coins-screen)
+    + [Model](#model)
+    + [View](#view)
+  * [Photons Screen](#photons-screen)
+    + [Model](#model-1)
+    + [View](#view-1)
+  * [Spin Screen](#spin-screen)
+    + [Model](#model-2)
+    + [View](#view-2)
+  * [Bloch Sphere Screen](#bloch-sphere-screen)
+    + [Model](#model-3)
+    + [View](#view-3)
 
 ## Introduction
 
@@ -27,6 +45,8 @@ You are also encouraged to read:
 * [PhET Software Design Patterns](https://github.com/phetsims/phet-info/blob/main/doc/phet-software-design-patterns.md)
 * [Models of the Hydrogen Atom HTML5](https://docs.google.com/document/d/1fZT_vDD8sX8nkSpTxHOyoP6-XrAIJYo44dacLIbZO14/edit?pli=1&tab=t.0) (Parts of this are likely to be stale.)
 
+## General Considerations
+
 ## Common Terminology
 
 There are a number of terms that are used throughout the simulation that are specific to quantum mechanics.  Here are
@@ -44,8 +64,6 @@ some of the most important ones:
   after measurement and is in a superposition of states until measured.
 - **Superposition** - The state of a quantum system before it is measured. It is a combination of all possible states
   that the system can be in.
-
-## General Considerations
 
 ### Common Model and View Patterns
 
