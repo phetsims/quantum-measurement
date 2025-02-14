@@ -25,6 +25,8 @@ export const CoinStatesAccessibleNameMap = {
   superposed: QuantumMeasurementStrings.a11y.translatable.coinsScreen.coinStates.superposedStringProperty
 };
 
+// TODO: Wondering about a better pattern for this, see https://github.com/phetsims/quantum-measurement/issues/92
+// TODO: This will be leaking memory, see https://github.com/phetsims/quantum-measurement/issues/92
 export const getCoinAccessibleName = ( property: Property<CoinStates> ): TReadOnlyProperty<string> => {
   return DerivedProperty.deriveAny( [ property, ..._.values( CoinStatesAccessibleNameMap ) ], () => CoinStatesAccessibleNameMap[ property.value ].value );
 };
