@@ -35,7 +35,7 @@ const MODEL_TO_VIEW_TIME = 1 / MAX_OBSERVATION_TIME;
 
 class BlochSphereModel implements TModel {
 
-  // Bloch Spheres shown in the screen
+  // Bloch spheres for preparing the spin state and displaying the results of measurements.
   public readonly preparationBlochSphere: ComplexBlochSphere;
   public readonly singleMeasurementBlochSphere: ComplexBlochSphere;
   public readonly multiMeasurementBlochSpheres: ComplexBlochSphere[] = [];

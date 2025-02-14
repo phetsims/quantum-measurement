@@ -184,8 +184,25 @@ continuous mode are drawn using canvas in `ManyParticlesCanvasNode` for optimal 
 
 ### Bloch Sphere Screen
 
+The "Bloch Sphere" screen allows users to prepare a spin state by manipulating a unit vector in a Bloch sphere by
+changing the azimuthal and polar angles.  The user can then measure the spin state along a given basis in the
+measurement area by pressing the "Observe" button.  The user can also enable a magnetic field that causes the spin state
+to precess around the Z axis prior to measurement.
+
 #### Model
+
+The main model class - `BlochSphereModel` - contains a number of Bloch sphere models, one that represents the prepared
+state and others for tracking the results of the measurements.  It also contains a number of Properties that keep track
+of that nature and state of the experiment, such as the prepared state, the measured state, the basis along which the
+measurement is made, and the magnetic field strength.
 
 <!-- Agustin - please add information about the change of basis -->
 
 #### View
+
+The main view class - `BlochSphereScreenView` - is similar to the other screens in that it contains a preparation area
+and a measurement area.  The preparation area contains the Bloch sphere that represents the prepared state and the
+controls for manipulating the state.  The measurement area contains a system-under-test representation, controls for
+changing the basis of the measurement, and a button to make the measurement.  A single Bloch sphere is used to represent
+the results of a measurement for a single atom, and a set of Bloch spheres is used to represent the results of a
+measurement for a set of atoms.  The visibility is controlled based on the selected mode.
