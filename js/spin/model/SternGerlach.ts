@@ -190,6 +190,7 @@ export default class SternGerlach extends PhetioObject {
   public reset(): void {
     this.isZOrientedProperty.reset();
     this.upProbabilityProperty.reset();
+    this.blockingModeProperty.reset();
     this.resetCounts();
   }
 
