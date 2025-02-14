@@ -25,7 +25,7 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 const TITLE_FONT = new PhetFont( 16 );
 const TICK_MARK_FONT = new PhetFont( 14 );
 const RANGE = new Range( 0, 1 );
-const BUTTON_CHANGE_AMOUNT = 0.1;
+const BUTTON_CHANGE_AMOUNT = 0.05;
 
 type SelfOptions = EmptySelfOptions;
 type ProbabilityValueControlOptions = SelfOptions & NumberControlOptions;
@@ -66,8 +66,8 @@ export default class ProbabilityValueControl extends NumberControl {
         majorTickLength: 10,
         tickLabelSpacing: 4,
         keyboardStep: BUTTON_CHANGE_AMOUNT,
-        shiftKeyboardStep: BUTTON_CHANGE_AMOUNT / 10,
-        pageKeyboardStep: BUTTON_CHANGE_AMOUNT * 2,
+        shiftKeyboardStep: BUTTON_CHANGE_AMOUNT / 5,
+        pageKeyboardStep: BUTTON_CHANGE_AMOUNT * 4,
         constrainValue: ( number: number ) => Utils.toFixedNumber( number, 2 ),
         majorTicks: [
           { value: RANGE.min, label: new Text( RANGE.min.toString(), { font: TICK_MARK_FONT } ) },
