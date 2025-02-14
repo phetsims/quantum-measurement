@@ -20,6 +20,7 @@ import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
+import { getCoinAccessibleName } from '../model/CoinStates.js';
 import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
 import OutcomeProbabilityControl from './OutcomeProbabilityControl.js';
 import ProbabilityEquationsNode from './ProbabilityEquationsNode.js';
@@ -88,45 +89,7 @@ class CoinExperimentPreparationArea extends VBox {
       return Utils.toFixed( downProbability, 3 );
     } );
 
-    const coinStateStringProperty = new DerivedProperty( [
-      sceneModel.initialCoinFaceStateProperty,
-      QuantumMeasurementStrings.a11y.translatable.coinsScreen.coinStates.upStringProperty,
-      QuantumMeasurementStrings.a11y.translatable.coinsScreen.coinStates.downStringProperty,
-      QuantumMeasurementStrings.a11y.translatable.coinsScreen.coinStates.headsStringProperty,
-      QuantumMeasurementStrings.a11y.translatable.coinsScreen.coinStates.tailsStringProperty,
-      QuantumMeasurementStrings.a11y.translatable.coinsScreen.coinStates.superposedStringProperty
-    ], (
-      initialCoinFaceState,
-      upString,
-      downString,
-      headsString,
-      tailsString,
-      superposedString
-    ) => {
-      let returnString: string;
-      switch( initialCoinFaceState ) {
-        case 'up':
-          returnString = upString;
-          break;
-        case 'down':
-          returnString = downString;
-          break;
-        case 'heads':
-          returnString = headsString;
-          break;
-        case 'tails':
-          returnString = tailsString;
-          break;
-        case 'superposed':
-          returnString = superposedString;
-          break;
-        default:
-          returnString = '';
-      }
-
-      assert && assert( !!returnString, `Invalid initial coin face state: ${initialCoinFaceState}` );
-      return returnString;
-    } );
+    const coinStateStringProperty = getCoinAccessibleName( sceneModel.initialCoinFaceStateProperty );
 
     const patternStringProperty = sceneModel.systemType === 'classical' ?
                                   QuantumMeasurementStrings.a11y.translatable.preparationAreaHeader.classicalAccessibleParagraphPatternStringProperty :
