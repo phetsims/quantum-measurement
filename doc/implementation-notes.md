@@ -155,17 +155,37 @@ that displays information about the expectation value and measurement counts/rat
 
 ### Spin Screen
 
+The "Spin" screen is the first one that displays the Bloch sphere.  The user configures the spin of the particles that
+emit from the source, and can select from a set of experiments that consist of potentially chained Stern-Gerlach
+measurements, which have different outcomes depending on the measured spin of the particles.  Particles can be
+emitted one at a time or in a continuous stream.
+
 #### Model
 
-* SG measurement calculation
-* particles path logic
+The main model class is `SpinModel`. and it contains two particle collections - one for the one-particle-at-a-time mode
+and another for the particle stream mode - that consist of `ParticleWithSpin` instances.  These collections are fully
+populated at startup because this works better for phet-io.  The model also contains a set of Stern-Gerlach measuring
+devices that can be used to measure the spin of the particles.  The model turns on and off the various measuring devices
+based on the selected experiment.  The model also contains a `BlochSphereModel` that is used to represent the initial
+spin state of the particles.
+
+For phet-io, the particles are serialized as a collection instead of individually.
+
+<!-- Agustin - please add information about the particle path logic and SG measurement calculations -->
 
 #### View
+
+The `SpinScreenView` class is the main view class for the "Spin" screen, and it contains the `SpinStatePreparationArea`
+and the `SpinMeasurementArea`.  The `SpinStatePreparationArea` contains the Bloch sphere that represents the
+initially prepared spin state and radio buttons to select the prepared state.  The `SpinMeasurementArea` contains the
+particle source, the Stern-Gerlach measuring devices, the Bloch spheres that represent the measured spin states, the
+histograms that shows the results of the measurements, and particle nodes.  The particles that are displayed in the
+continuous mode are drawn using canvas in `ManyParticlesCanvasNode` for optimal performance.
 
 ### Bloch Sphere Screen
 
 #### Model
 
-* Change of basis
+<!-- Agustin - please add information about the change of basis -->
 
 #### View
