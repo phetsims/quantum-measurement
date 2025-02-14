@@ -52,8 +52,8 @@ You are also encouraged to read:
 There are a number of terms that are used throughout the simulation that are specific to quantum mechanics.  Here are
 some of the most important ones:
 
-- **Classical System** - A system that behaves in a deterministic way, where the state of the system can be known with
-  certainty and is always in a specific state.
+- **Bloch Sphere** -Named after the physicist Felix Bloch, the Bloch sphere is a geometrical representation of the pure
+  state space of a two-level quantum mechanical system.
 - **Measurement** - The act of observing a quantum system, which causes it to collapse into a single state. In some
   places in the code, the term "observe" is used instead of "measure".
 - **Measurement Area** - Several of the screens have an area where the user can measure the state of the system. This is
@@ -78,15 +78,15 @@ some of the most important ones:
 - **Bloch Sphere** - Since we have a screen with that name, and it's also a component used in two screens, here are the
   different flavors of Bloch spheres:
   - Component related:
-    - AbstractBlochSphere: abstract class which contains the very fundamentals of a bloch sphere state representation:
+    - `AbstractBlochSphere`: abstract class which contains the very fundamentals of a bloch sphere state representation:
       azimuthal and polar angles, and the equation coefficients. They are related but will be linked in the
       implementations.
-    - SimpleBlochSphere: Implementation of the abstract class which links a spin state into spherical coordinates.
-    - ComplexBlochSphere: Implementation of the abstract class which supports rotation around the Z axis, as well as
+    - `SimpleBlochSphere`: Implementation of the abstract class which links a spin state into spherical coordinates.
+    - `ComplexBlochSphere`: Implementation of the abstract class which supports rotation around the Z axis, as well as
       measurement along a basis.
-    - BlochSphereNode: Node which displays any implementation of the abstract base class. It's quite a big file because
+    - `BlochSphereNode`: Node which displays any implementation of the abstract base class. It's quite a big file because
       it has to support all the custom options and design quirks added to the sphere.
-    - BlochSphereWithProjectionNode: Same as above but supports extra projection vectors on Z and X axis.
+    - `BlochSphereWithProjectionNode`: Same as above but supports extra projection vectors on Z and X axis.
   - Screen related:
     - BlochSphereModel: This is the actual TModel for the Bloch Sphere Screen, with all the properties and main
       functionality of that screen.
