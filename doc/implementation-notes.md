@@ -43,11 +43,11 @@ You are also encouraged to read:
 
 * [PhET Development Overview](https://github.com/phetsims/phet-info/blob/main/doc/phet-development-overview.md)
 * [PhET Software Design Patterns](https://github.com/phetsims/phet-info/blob/main/doc/phet-software-design-patterns.md)
-* [Models of the Hydrogen Atom HTML5](https://docs.google.com/document/d/1fZT_vDD8sX8nkSpTxHOyoP6-XrAIJYo44dacLIbZO14/edit?pli=1&tab=t.0) (Parts of this are likely to be stale.)
+* [Quantum Measurement HTML5](https://docs.google.com/document/d/1RRVAM0oqUhmORINl2s9Uyp_7tE7FAxunmZ_qMx7cv5c/edit?usp=sharing) (Parts of this are likely to be stale.)
 
 ## General Considerations
 
-## Common Terminology
+### Common Terminology
 
 There are a number of terms that are used throughout the simulation that are specific to quantum mechanics.  Here are
 some of the most important ones:
@@ -72,7 +72,7 @@ some of the most important ones:
   Scenery nodes in charge of the layout and interaction of the preparation and measurement areas.  The models have
   Properties that represent the state of the system in the preparation and measurement areas.
 - **Histograms** - All screens have a variation of the measurement histogram, and also sometimes variation within the
-  very same screen depending on mode selection (single vs. continuous for example). So the class had to be furnished
+  very same screen depending on mode selection (single vs. continuous for example). Thus, the class had to be furnished
   with all the possible options, and in fact, the biggest part of that file is code controlling the different ways to
   display a number (number, rate, fraction, percentage, etc).
 - **Bloch Sphere** - Since we have a screen with that name, and it's also a component used in two screens, here are the
