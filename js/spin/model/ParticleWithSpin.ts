@@ -2,7 +2,10 @@
 
 /**
  * ParticleWithSpin is the model for a particle with a predetermined spin. It has a lifetime, which will determine its
- * position in the Ray Path, and a spin value, which will be modified as it passes through the SG apparatuses.
+ * position, and a spin value, which will be modified as it passes through the SG apparatuses.
+ *
+ * Particles advance from their startPosition to their endPositions, which will be assigned by the Collection they
+ * belong to.
  *
  * @author Agustín Vallejo
  */
@@ -81,9 +84,9 @@ export class ParticleWithSpin {
   }
 
   /**
-   * Individual Particle instances are not PhET-iO Instrumented. Instead, the ParticleCollection that contains the
-   * Particle instances calls ParticleWithSpinIO.toStateObject to serialize the Particle instances. ParticleCollectionIO
-   * uses reference type serialization as a composite of the Particles, which use data type serialization.
+   * Individual particle instances are not PhET-iO instrumented. Instead, the ParticleCollection that contains the
+   * particle instances calls ParticleWithSpinIO.toStateObject to serialize the particle instances. ParticleCollectionIO
+   * uses reference type serialization as a composite of the particles, which use data type serialization.
    *
    * Please see https://github.com/phetsims/phet-io/blob/main/doc/phet-io-instrumentation-technical-guide.md#serialization
    * for more information on the different serialization types.

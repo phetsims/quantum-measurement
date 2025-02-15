@@ -24,6 +24,8 @@ const PARTICLE_RAY_WIDTH = 0.02;
 
 const HORIZONTAL_ENDPOINT = new Vector2( 10, 0 );
 
+const MAXIMUM_PARTICLE_LIFETIME = 4; // seconds, empirically determined. At this point they are out of the screen
+
 export class ParticleCollection extends PhetioObject {
 
   protected readonly maxParticles: number;
@@ -45,8 +47,10 @@ export class ParticleCollection extends PhetioObject {
 
   protected createParticle(): void {
 
+    // Particles are created with three spin states, one for each stage of the experiment.
+    // First one comes from the preparation area and the rest will be determined by the SG apparatuses.
     const spinVectors = [ this.model.derivedSpinStateProperty.value.copy(), new Vector2( 0, 0 ), new Vector2( 0, 0 ) ];
-    const isSpinUp = [ false, false, false ];
+    const isSpinUp = [ false, false, false ]; // TBD by the experiment
     const stageCompleted = [ false, false, false ];
 
     const particleStartPosition = this.model.particleSourceModel.exitPositionProperty.value;
@@ -61,6 +65,7 @@ export class ParticleCollection extends PhetioObject {
 
     const position = particleStartPosition.plus( randomParticleOffset );
 
+    // All these parameters have to be provided like this for later setting PhET-io State of particles
     const particle = new ParticleWithSpin(
       0, // Lifetime starts at 0
       position,
@@ -84,15 +89,11 @@ export class ParticleCollection extends PhetioObject {
     this.particles.length = 0;
   }
 
-  /**
-   * Steps the model.
-   * @param dt - time step, in seconds
-   */
   public step( dt: number ): void {
 
     // Remove old particles
     this.particles.forEach( particle => {
-      if ( particle.lifetime > 4 ) {
+      if ( particle.lifetime > MAXIMUM_PARTICLE_LIFETIME ) {
         this.removeParticle( particle );
       }
     } );
@@ -133,6 +134,7 @@ export class ParticleCollection extends PhetioObject {
       return;
     }
 
+    // Threshold to consider the particle has reached its end position
     const threshold = 0.03;
 
     // If the particle were to reach its end position, measure it and decide on a new path
@@ -198,7 +200,7 @@ export class ParticleCollection extends PhetioObject {
   protected measureParticle(
     particle: ParticleWithSpin,
     sternGerlach: SternGerlach,
-    experimentStageIndex: number,
+    experimentStageIndex: number, // 0: Launch, 1: SG0, 2: SG1/SG2
     incomingState: Vector2 ): boolean {
 
     const upProbability = sternGerlach.calculateProbability( incomingState );
