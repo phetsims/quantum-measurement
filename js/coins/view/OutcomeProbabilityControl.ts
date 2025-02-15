@@ -81,7 +81,7 @@ export default class OutcomeProbabilityControl extends VBox {
     else {
       const titleStringProperty = new DerivedStringProperty(
         [
-          QuantumMeasurementStrings.spinStateToPrepareStringProperty,
+          QuantumMeasurementStrings.stateToPrepareStringProperty,
           QuantumMeasurementColors.tailsColorProperty,
           QuantumMeasurementColors.downColorProperty
         ],

@@ -71,6 +71,7 @@ type StringsType = {
   'singleCoinMeasurementsStringProperty': LocalizedStringProperty;
   'singlePhotonStringProperty': LocalizedStringProperty;
   'spinStateToPrepareStringProperty': LocalizedStringProperty;
+  'stateToPrepareStringProperty': LocalizedStringProperty;
   'VStringProperty': LocalizedStringProperty;
   'NStringProperty': LocalizedStringProperty;
   'vectorRepresentationStringProperty': LocalizedStringProperty;
