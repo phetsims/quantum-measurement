@@ -87,6 +87,11 @@ export default class SpinExperiment extends EnumerationValue {
 
     this.blockingModeProperty = new Property<BlockingMode>( BlockingMode.BLOCK_UP );
   }
+
+  public static reset(): void {
+    // Since each value has an associated property, which gets altered by the model, we have to manually reset them here
+    SpinExperiment.enumeration.values.forEach( experiment => { experiment.blockingModeProperty.reset(); } );
+  }
 }
 
 quantumMeasurement.register( 'SpinExperiment', SpinExperiment );

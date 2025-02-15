@@ -252,9 +252,6 @@ export default class SpinModel implements TModel {
       ],
       ( experiment, sourceMode, spinState, blockingMode ) => {
 
-        // Clearing the particle system and Stern-Gerlachs for a new experiment
-        this.sternGerlachs.forEach( sternGerlach => sternGerlach.reset() );
-
         if ( !isSettingPhetioStateProperty.value ) {
           this.singleParticlesCollection.clear();
           this.multipleParticlesCollection.clear();
@@ -340,6 +337,9 @@ export default class SpinModel implements TModel {
     this.alphaSquaredProperty.reset();
     this.betaSquaredProperty.reset();
     this.blochSphere.reset();
+
+    // Reset the blocking mode for all experiments
+    SpinExperiment.reset();
   }
 
 }
