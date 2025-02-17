@@ -1,4 +1,5 @@
 // Copyright 2025, University of Colorado Boulder
+
 /**
  * Arrow node that listens to the magnetic field strength.
  *

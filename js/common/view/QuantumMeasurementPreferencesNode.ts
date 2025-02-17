@@ -1,4 +1,5 @@
 // Copyright 2025, University of Colorado Boulder
+
 /**
  * QuantumMeasurementPreferencesNode is the user interface for sim-specific preferences, accessed via the Preferences
  * dialog. These preferences are global, and can potentially affect all screens.

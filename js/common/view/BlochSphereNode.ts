@@ -1,4 +1,5 @@
 // Copyright 2024-2025, University of Colorado Boulder
+
 /**
  * Visual representation of the Bloch Sphere, meaning an orb with X, Y, and Z axes and a state vector.
  *
