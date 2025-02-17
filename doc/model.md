@@ -7,7 +7,8 @@ e.g., Schrödinger’s cat being alive AND dead), polarization, spin, and the Bl
 
 ## Quantum State and Superposition
 
-A fundamental concept in quantum mechanics is the state of a system, which this simulation represents in multiple ways.
+A fundamental concept in quantum mechanics is the state of a system. This simulation represents the state of a 2-level
+system in multiple ways., which this simulation represents in multiple ways.
 Quantum systems can exist in multiple possible states simultaneously, a phenomenon known as superposition. You may have
 heard of Schrödinger’s cat, a thought experiment where the cat is both alive AND dead until a measurement is made by
 opening the box. Measurement collapses the quantum state into one of the possible outcomes. In this simulation, we
@@ -15,19 +16,26 @@ illustrate this behavior in various ways, depending on the screen and the intend
 
 ### Coins Screen
 
-In this screen, we introduce quantum coins to demonstrate how, in the quantum world, coins would not exist in a
-definite "heads" or "tails" state like in classical physics. Instead, the quantum state consists of both possibilities
-simultaneously. A quantum coin that has not been measured yet will visually display both outcomes with varying
-transparency levels corresponding to their probabilities. However, in reality, such superpositions are not directly
-observable, as any measurement collapses the wave function into a single outcome.
+In this screen, we introduce the idea of a quantum coin representation. This representation is meant to demonstrate a
+familiar 2-level system, but now with quantum properties. These quantum coins do not necessarily need to exist in a
+definite "heads" or "tails" state like in classical physics, but can consist of a superposition of both possibilities
+simultaneously. We have chosen to represent this superposition visually by displaying both the "up" and "down" state of
+the coin simultaneously and varying the transparency levels of these states corresponding to their probabilities. The
+quantum coins are considered to be in an unobserved state during preparation and their injection into the measurement
+area.
 
 ### Photons Screen
 
-This screen features a Photon Beam Splitter, a device that redirects a photon’s trajectory based on its polarization. In
-classical physics, the explanation is straightforward: photons are either transmitted or reflected (upwards in this
-case). However, in the quantum realm, a single photon is considered to take both paths simultaneously until measured.
-Even if there is a low probability of a photon taking a certain path, it still has a nonzero chance of being detected
-there.
+This screen features a polarizing beam splitter, a device that redirects a photon’s trajectory based on its
+polarization. Depending on which underlying physical model we're considering, photon behavior through this device can be
+interpreted in a couple of ways. Particularly, the sim has a "Behavior" selector:
+When it is chosen as Classical, the photons will individually reflect or transmit through the beam splitter.
+When the Behavior selection is chosen as Quantum, the individual photons will transform to a representation of the
+photon taking both optical paths after the beam splitter with the opacity of the representation correlating to the
+probability of taking a particular path. During the Quantum behavior the photon will be considered to
+be measured until it enters the cylindrical portion in front of each detector. Note that the path lengths of each arm of
+the experiment have been equalized so that once in the measurement has taken place, only a single full opacity photon
+will be seen entering any detector at a given time.
 
 ## Equation Representation
 
