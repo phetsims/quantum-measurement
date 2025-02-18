@@ -72,6 +72,8 @@ export default class MeasurementTimerControl extends Node {
           stroke: 'black'
         } )
       ],
+      touchArea: thumbNodeRect.bounds.dilated( 10 ),
+      mouseArea: thumbNodeRect.bounds,
       tandem: sliderTandem.createTandem( 'thumbNode' )
     } );
 

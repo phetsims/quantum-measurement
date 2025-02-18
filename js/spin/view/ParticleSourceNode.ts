@@ -87,12 +87,15 @@ export default class ParticleSourceNode extends Node {
 
     // button for 'single' mode
     const shootParticleButtonTandem = tandem.createTandem( 'shootParticleButton' );
-    const shootParticleButton = new RoundMomentaryButton<boolean>(
-      currentlyShootingParticlesProperty, false, true, {
+    const shootParticleButton = new RoundMomentaryButton<boolean>( currentlyShootingParticlesProperty, false, true, {
         scale: 0.7,
         baseColor: QuantumMeasurementColors.downColorProperty,
-        visibleProperty: new GatedVisibleProperty( DerivedProperty.not( particleSourceModel.isContinuousModeProperty ), shootParticleButtonTandem ),
+        visibleProperty: new GatedVisibleProperty(
+          DerivedProperty.not( particleSourceModel.isContinuousModeProperty ),
+          shootParticleButtonTandem
+        ),
         center: particleSourceRectangle.center,
+        touchAreaDilation: 20,
         tandem: shootParticleButtonTandem
       }
     );
