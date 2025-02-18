@@ -32,6 +32,9 @@ export default class SpinScreenView extends QuantumMeasurementScreenView {
     this.addChild( spinStatePreparationArea );
 
     // Add the vertical line that will sit between the preparation and measurement areas.
+    // REVIEW: You create the same dividing line in the Bloch Sphere screen. Can you create a common class for it?
+    //   I'm assuming you want them to retain the same look in case of future maintenance. Or perhaps have what is
+    //  currently hard coded in constants.
     const dividingLineX = 300; // empirically determined
     const dividingLine = new Line( dividingLineX, 90, dividingLineX, 600, {
       stroke: Color.LIGHT_GRAY,

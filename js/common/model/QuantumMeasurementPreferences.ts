@@ -14,7 +14,7 @@ import QuantumMeasurementQueryParameters from '../QuantumMeasurementQueryParamet
 
 const QuantumMeasurementPreferences = {
 
-  // Toggles whether Global Phase will be shown in the Bloch Sphere Sceen.
+  // Toggles whether Global Phase will be shown in the Bloch Sphere Screen.
   showGlobalPhaseProperty: new BooleanProperty( QuantumMeasurementQueryParameters.showGlobalPhase, {
     tandem: Tandem.PREFERENCES.createTandem( 'showGlobalPhaseProperty' ),
     phetioFeatured: true
