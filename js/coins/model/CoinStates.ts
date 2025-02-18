@@ -13,6 +13,10 @@ import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { ClassicalCoinStateValues } from './ClassicalCoinStates.js';
 import { QuantumCoinStateValues } from './QuantumCoinStates.js';
 
+// REVIEW: I'm curious why this isn't an enumeration with the stringProperties as members of the enum?
+  // You could then have a dynamic Property track the accessibleNameProperty in EnumerationProperty.
+  // See https://github.com/phetsims/number-pairs/blob/d3bb1f40c827e4031eb09e2ca2e224ecc630e4c9/js/common/model/RepresentationType.ts#L97 &
+  // https://github.com/phetsims/number-pairs/blob/483b2f0d24a3ece6361c3b518b168a8771b82321/js/common/view/NumberPairsScreenView.ts#L165-L177
 export const CoinStateValues = [ ...ClassicalCoinStateValues, ...QuantumCoinStateValues ] as const;
 export type CoinStates = ( typeof CoinStateValues )[number];
 
