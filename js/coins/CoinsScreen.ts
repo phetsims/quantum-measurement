@@ -23,6 +23,7 @@ export default class CoinsScreen extends QuantumMeasurementScreen<CoinsModel, Co
     const options = {
       name: QuantumMeasurementStrings.screen.coinsStringProperty,
       homeScreenIcon: createScreenIcon(),
+      includeTimeControlsKeyboardHelp: false,
       tandem: tandem
     };
 

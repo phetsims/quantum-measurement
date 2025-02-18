@@ -23,6 +23,7 @@ export default class PhotonsScreen extends QuantumMeasurementScreen<PhotonsModel
     const options = {
         name: QuantumMeasurementStrings.screen.photonsStringProperty,
       homeScreenIcon: createScreenIcon(),
+      includeTimeControlsKeyboardHelp: true,
 
       // Limit the max time step to 2x the nominal value.  This helps prevent add photon movements after screen changes.
       maxDT: 1 / 30,

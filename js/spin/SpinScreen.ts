@@ -23,6 +23,7 @@ export default class SpinScreen extends QuantumMeasurementScreen<SpinModel, Spin
     const options = {
       name: QuantumMeasurementStrings.screen.spinStringProperty,
       homeScreenIcon: createScreenIcon(),
+      includeTimeControlsKeyboardHelp: false,
 
       // Limit the max time step to 2x the nominal value.  This helps prevent add photon movements after screen changes.
       maxDT: 1 / 30,
