@@ -6,28 +6,29 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import Screen, { ScreenOptions } from '../../../joist/js/Screen.js';
-import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
+import ScreenIcon from '../../../joist/js/ScreenIcon.js';
+import Rectangle from '../../../scenery/js/nodes/Rectangle.js';
+import Tandem from '../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../common/QuantumMeasurementColors.js';
+import QuantumMeasurementScreen from '../common/view/QuantumMeasurementScreen.js';
 import quantumMeasurement from '../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../QuantumMeasurementStrings.js';
 import PhotonsModel from './model/PhotonsModel.js';
 import PhotonsScreenView from './view/PhotonsScreenView.js';
 
-type SelfOptions = EmptySelfOptions;
-type QuantumMeasurementScreenOptions = SelfOptions & ScreenOptions;
+export default class PhotonsScreen extends QuantumMeasurementScreen<PhotonsModel, PhotonsScreenView> {
 
-export default class PhotonsScreen extends Screen<PhotonsModel, PhotonsScreenView> {
+  public constructor( tandem: Tandem ) {
 
-  public constructor( providedOptions: QuantumMeasurementScreenOptions ) {
-
-    const options = optionize<QuantumMeasurementScreenOptions, SelfOptions, ScreenOptions>()( {
-      name: QuantumMeasurementStrings.screen.photonsStringProperty,
-      backgroundColorProperty: QuantumMeasurementColors.screenBackgroundColorProperty,
+    const options = {
+        name: QuantumMeasurementStrings.screen.photonsStringProperty,
+      homeScreenIcon: createScreenIcon(),
 
       // Limit the max time step to 2x the nominal value.  This helps prevent add photon movements after screen changes.
-      maxDT: 1 / 30
-    }, providedOptions );
+      maxDT: 1 / 30,
+
+      tandem: tandem
+    };
 
     super(
       () => new PhotonsModel( { tandem: options.tandem.createTandem( 'model' ) } ),
@@ -36,5 +37,16 @@ export default class PhotonsScreen extends Screen<PhotonsModel, PhotonsScreenVie
     );
   }
 }
+
+const createScreenIcon = (): ScreenIcon => {
+
+  // TODO: Fill this in with the real deal, see https://github.com/phetsims/quantum-measurement/issues/88.
+  const iconNode = new Rectangle( 1, 1, 100, 100, { fill: QuantumMeasurementColors.photonBaseColorProperty } );
+  return new ScreenIcon( iconNode, {
+    maxIconWidthProportion: 1,
+    maxIconHeightProportion: 0.85,
+    fill: QuantumMeasurementColors.quantumBackgroundColorProperty
+  } );
+};
 
 quantumMeasurement.register( 'PhotonsScreen', PhotonsScreen );

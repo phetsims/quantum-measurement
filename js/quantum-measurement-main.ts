@@ -25,10 +25,10 @@ simLauncher.launch( () => {
   const titleStringProperty = QuantumMeasurementStrings[ 'quantum-measurement' ].titleStringProperty;
 
   const screens = [
-    new CoinsScreen( { tandem: Tandem.ROOT.createTandem( 'coinsScreen' ) } ),
-    new PhotonsScreen( { tandem: Tandem.ROOT.createTandem( 'photonsScreen' ) } ),
-    new SpinScreen( { tandem: Tandem.ROOT.createTandem( 'spinScreen' ) } ),
-    new BlochSphereScreen( { tandem: Tandem.ROOT.createTandem( 'blochSphereScreen' ) } )
+    new CoinsScreen( Tandem.ROOT.createTandem( 'coinsScreen' ) ),
+    new PhotonsScreen( Tandem.ROOT.createTandem( 'photonsScreen' ) ),
+    new SpinScreen( Tandem.ROOT.createTandem( 'spinScreen' ) ),
+    new BlochSphereScreen( Tandem.ROOT.createTandem( 'blochSphereScreen' ) )
   ];
 
   const options: SimOptions = {

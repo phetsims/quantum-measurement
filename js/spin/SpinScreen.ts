@@ -6,31 +6,29 @@
  * @author Agustín Vallejo
  */
 
-import Screen, { ScreenOptions } from '../../../joist/js/Screen.js';
-import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
+import ScreenIcon from '../../../joist/js/ScreenIcon.js';
+import Rectangle from '../../../scenery/js/nodes/Rectangle.js';
+import Tandem from '../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../common/QuantumMeasurementColors.js';
+import QuantumMeasurementScreen from '../common/view/QuantumMeasurementScreen.js';
 import quantumMeasurement from '../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../QuantumMeasurementStrings.js';
 import SpinModel from './model/SpinModel.js';
 import SpinScreenView from './view/SpinScreenView.js';
 
-type SelfOptions = EmptySelfOptions;
+export default class SpinScreen extends QuantumMeasurementScreen<SpinModel, SpinScreenView> {
 
-type QuantumMeasurementScreenOptions = SelfOptions & ScreenOptions;
+  public constructor( tandem: Tandem ) {
 
-export default class SpinScreen extends Screen<SpinModel, SpinScreenView> {
-
-  public constructor( providedOptions: QuantumMeasurementScreenOptions ) {
-
-    const options = optionize<QuantumMeasurementScreenOptions, SelfOptions, ScreenOptions>()( {
+    const options = {
       name: QuantumMeasurementStrings.screen.spinStringProperty,
-      backgroundColorProperty: QuantumMeasurementColors.screenBackgroundColorProperty,
+      homeScreenIcon: createScreenIcon(),
 
-      // Limit the max time step to 2x the expected nominal value.  This helps prevent odd particle movement on long dt
-      // values.
-      maxDT: 1 / 30
+      // Limit the max time step to 2x the nominal value.  This helps prevent add photon movements after screen changes.
+      maxDT: 1 / 30,
 
-    }, providedOptions );
+      tandem: tandem
+    };
 
     super(
       () => new SpinModel( { tandem: options.tandem.createTandem( 'model' ) } ),
@@ -39,5 +37,16 @@ export default class SpinScreen extends Screen<SpinModel, SpinScreenView> {
     );
   }
 }
+
+const createScreenIcon = (): ScreenIcon => {
+
+  // TODO: Fill this in with the real deal, see https://github.com/phetsims/quantum-measurement/issues/88.
+  const iconNode = new Rectangle( 1, 1, 100, 100, { fill: QuantumMeasurementColors.particleColorProperty } );
+  return new ScreenIcon( iconNode, {
+    maxIconWidthProportion: 1,
+    maxIconHeightProportion: 0.85,
+    fill: QuantumMeasurementColors.quantumBackgroundColorProperty
+  } );
+};
 
 quantumMeasurement.register( 'SpinScreen', SpinScreen );

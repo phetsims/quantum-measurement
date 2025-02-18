@@ -6,25 +6,25 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import Screen, { ScreenOptions } from '../../../joist/js/Screen.js';
-import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
+import ScreenIcon from '../../../joist/js/ScreenIcon.js';
+import Rectangle from '../../../scenery/js/nodes/Rectangle.js';
+import Tandem from '../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../common/QuantumMeasurementColors.js';
+import QuantumMeasurementScreen from '../common/view/QuantumMeasurementScreen.js';
 import quantumMeasurement from '../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../QuantumMeasurementStrings.js';
 import CoinsModel from './model/CoinsModel.js';
 import CoinsScreenView from './view/CoinsScreenView.js';
 
-type SelfOptions = EmptySelfOptions;
-type QuantumMeasurementScreenOptions = SelfOptions & ScreenOptions;
+export default class CoinsScreen extends QuantumMeasurementScreen<CoinsModel, CoinsScreenView> {
 
-export default class CoinsScreen extends Screen<CoinsModel, CoinsScreenView> {
+  public constructor( tandem: Tandem ) {
 
-  public constructor( providedOptions: QuantumMeasurementScreenOptions ) {
-
-    const options = optionize<QuantumMeasurementScreenOptions, SelfOptions, ScreenOptions>()( {
+    const options = {
       name: QuantumMeasurementStrings.screen.coinsStringProperty,
-      backgroundColorProperty: QuantumMeasurementColors.screenBackgroundColorProperty
-    }, providedOptions );
+      homeScreenIcon: createScreenIcon(),
+      tandem: tandem
+    };
 
     super(
       () => new CoinsModel( { tandem: options.tandem.createTandem( 'model' ) } ),
@@ -33,5 +33,16 @@ export default class CoinsScreen extends Screen<CoinsModel, CoinsScreenView> {
     );
   }
 }
+
+const createScreenIcon = (): ScreenIcon => {
+
+  // TODO: Fill this in with the real deal, see https://github.com/phetsims/quantum-measurement/issues/88.
+  const iconNode = new Rectangle( 1, 1, 100, 100, { fill: QuantumMeasurementColors.headsFillColorProperty } );
+  return new ScreenIcon( iconNode, {
+    maxIconWidthProportion: 1,
+    maxIconHeightProportion: 0.85,
+    fill: QuantumMeasurementColors.quantumBackgroundColorProperty
+  } );
+};
 
 quantumMeasurement.register( 'CoinsScreen', CoinsScreen );
