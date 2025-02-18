@@ -9,15 +9,13 @@
 import Screen, { ScreenOptions } from '../../../../joist/js/Screen.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
 import TModel from '../../../../joist/js/TModel.js';
-import optionize from '../../../../phet-core/js/optionize.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementColors from '../QuantumMeasurementColors.js';
 import QuantumMeasurementKeyboardHelpContent from './QuantumMeasurementKeyboardHelpContent.js';
 
-type SelfOptions = {
-  includeTimeControlsKeyboardHelp: boolean;
-};
+type SelfOptions = EmptySelfOptions;
 export type QuantumMeasurementScreenOptions = SelfOptions & PickRequired<ScreenOptions, 'name' | 'homeScreenIcon' | 'tandem'>;
 
 export default class QuantumMeasurementScreen<M extends TModel, V extends ScreenView> extends Screen<M, V> {
@@ -31,9 +29,7 @@ export default class QuantumMeasurementScreen<M extends TModel, V extends Screen
       backgroundColorProperty: QuantumMeasurementColors.screenBackgroundColorProperty,
       showUnselectedHomeScreenIconFrame: true,
       showScreenIconFrameForNavigationBarFill: 'black',
-      createKeyboardHelpNode: () => new QuantumMeasurementKeyboardHelpContent( {
-        includeTimeControlsKeyboardHelp: providedOptions.includeTimeControlsKeyboardHelp
-      } )
+      createKeyboardHelpNode: () => new QuantumMeasurementKeyboardHelpContent()
     }, providedOptions );
 
     super( createModel, createView, options );

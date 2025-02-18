@@ -24,7 +24,6 @@ export default class BlochSphereScreen extends QuantumMeasurementScreen<BlochSph
     const options = {
       name: QuantumMeasurementStrings.screen.blochSphereStringProperty,
       homeScreenIcon: createScreenIcon(),
-      includeTimeControlsKeyboardHelp: false,
       tandem: tandem
     };
 

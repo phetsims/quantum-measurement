@@ -10,6 +10,7 @@ import ScreenIcon from '../../../joist/js/ScreenIcon.js';
 import Rectangle from '../../../scenery/js/nodes/Rectangle.js';
 import Tandem from '../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../common/QuantumMeasurementColors.js';
+import QuantumMeasurementKeyboardHelpContent from '../common/view/QuantumMeasurementKeyboardHelpContent.js';
 import QuantumMeasurementScreen from '../common/view/QuantumMeasurementScreen.js';
 import quantumMeasurement from '../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../QuantumMeasurementStrings.js';
@@ -23,7 +24,7 @@ export default class PhotonsScreen extends QuantumMeasurementScreen<PhotonsModel
     const options = {
         name: QuantumMeasurementStrings.screen.photonsStringProperty,
       homeScreenIcon: createScreenIcon(),
-      includeTimeControlsKeyboardHelp: true,
+      createKeyboardHelpNode: () => new QuantumMeasurementKeyboardHelpContent( { includeTimeControlsKeyboardHelp: true } ),
 
       // Limit the max time step to 2x the nominal value.  This helps prevent add photon movements after screen changes.
       maxDT: 1 / 30,
