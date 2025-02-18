@@ -62,6 +62,9 @@ export default class InitialCoinStateSelectorNode extends VBox {
 
     const radioButtonGroupTandem = tandem.createTandem( 'radioButtonGroup' );
 
+    // REVIEW: This violates the following item in the code review checklist:
+      // Make sure accessibility strings aren't being adjusted with ascii specific javascript methods like toUpperCase().
+    // Remember that one day these strings will be translatable
     const toTitleCase = ( str: string ) => {
       return str.charAt( 0 ).toUpperCase() + str.slice( 1 );
     };
