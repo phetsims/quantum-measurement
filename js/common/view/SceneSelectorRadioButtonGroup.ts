@@ -56,7 +56,7 @@ class SceneSelectorRadioButtonGroup<T extends string> extends RectangularRadioBu
       items.push( {
         createNode: () => {
           return new Text(
-            stringProperty.value,
+            stringProperty,
             {
               font: new PhetFont( { size: 26, weight: 'bold' } ),
               fill: value === 'quantum' ?
