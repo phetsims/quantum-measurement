@@ -25,6 +25,8 @@ export default class PhotonsScreen extends QuantumMeasurementScreen<PhotonsModel
         name: QuantumMeasurementStrings.screen.photonsStringProperty,
       homeScreenIcon: createScreenIcon(),
       createKeyboardHelpNode: () => new QuantumMeasurementKeyboardHelpContent( { includeTimeControlsKeyboardHelp: true } ),
+      // TODO: Fill this in with the real help text, see https://github.com/phetsims/quantum-measurement/issues/124
+      screenButtonsHelpText: 'fill me in',
 
       // Limit the max time step to 2x the nominal value.  This helps prevent add photon movements after screen changes.
       maxDT: 1 / 30,

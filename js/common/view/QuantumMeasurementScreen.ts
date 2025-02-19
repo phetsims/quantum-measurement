@@ -16,7 +16,7 @@ import QuantumMeasurementColors from '../QuantumMeasurementColors.js';
 import QuantumMeasurementKeyboardHelpContent from './QuantumMeasurementKeyboardHelpContent.js';
 
 type SelfOptions = EmptySelfOptions;
-export type QuantumMeasurementScreenOptions = SelfOptions & PickRequired<ScreenOptions, 'name' | 'homeScreenIcon' | 'tandem'>;
+export type QuantumMeasurementScreenOptions = SelfOptions & PickRequired<ScreenOptions, 'name' | 'homeScreenIcon' | 'screenButtonsHelpText' | 'tandem'>;
 
 export default class QuantumMeasurementScreen<M extends TModel, V extends ScreenView> extends Screen<M, V> {
 

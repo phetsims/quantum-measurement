@@ -23,6 +23,8 @@ export default class CoinsScreen extends QuantumMeasurementScreen<CoinsModel, Co
     const options = {
       name: QuantumMeasurementStrings.screen.coinsStringProperty,
       homeScreenIcon: createScreenIcon(),
+      // TODO: Fill this in with the real help text, see https://github.com/phetsims/quantum-measurement/issues/92
+      screenButtonsHelpText: 'fill me in',
       tandem: tandem
     };
 

@@ -24,6 +24,8 @@ export default class BlochSphereScreen extends QuantumMeasurementScreen<BlochSph
     const options = {
       name: QuantumMeasurementStrings.screen.blochSphereStringProperty,
       homeScreenIcon: createScreenIcon(),
+      // TODO: Fill this in with the real help text, see https://github.com/phetsims/quantum-measurement/issues/126
+      screenButtonsHelpText: 'fill me in',
       tandem: tandem
     };
 
