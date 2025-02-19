@@ -5,7 +5,7 @@
  * position, direction, and the probability of the photon being in that state.
  *
  * @author Agustín Vallejo
- * * @author John Blanco (PhET Interactive Simulations)
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import Utils from '../../../../dot/js/Utils.js';
@@ -19,6 +19,8 @@ export class PhotonMotionState {
   public constructor( public position: Vector2,
                       public direction: Vector2,
                       public probability: number ) {
+    // REVIEW: Is this actually a no-op? It does create a class instance right? I might not understand the full
+    // behavior of an empty constructor.
     // no-op
   }
 

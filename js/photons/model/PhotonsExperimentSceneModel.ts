@@ -57,13 +57,13 @@ class PhotonsExperimentSceneModel {
   public readonly verticalPolarizationDetector: PhotonDetector;
   public readonly horizontalPolarizationDetector: PhotonDetector;
 
-  // The normalized expectation value for the experiment.  This is essentially an average of all the possible outcomes
-  // of the experiment weighted by their likelihoods, normalized to a range of -1 to 1.  The value can also be null,
+  // The normalized expectation value for the experiment. This is essentially an average of all the possible outcomes
+  // of the experiment weighted by their likelihoods, normalized to a range of -1 to 1. The value can also be null,
   // which means the expectation value is not defined, which occurs when the photons are unpolarized.
   public readonly normalizedExpectationValueProperty: TReadOnlyProperty<number | null>;
 
-  // The normalized outcome value for the experiment.  This is the difference between the two measurements divided by
-  // the sum of the two measurements.  Its values range from -1 to 1.
+  // The normalized outcome value for the experiment. This is the difference between the two measurements divided by
+  // the sum of the two measurements. Its values range from -1 to 1.
   public readonly normalizedOutcomeValueProperty: TReadOnlyProperty<number>;
 
   // The photons that will be emitted and reflected in the experiment.
@@ -72,16 +72,16 @@ class PhotonsExperimentSceneModel {
   // Whether the simulation is currently playing, which in this case means whether the photons are moving.
   public readonly isPlayingProperty: BooleanProperty;
 
-  // Whether the photons behave as classical or quantum particles.  When they are classical, they will choose a path
-  // at the beam splitter.  When they are quantum, they will be in a superposition of states.
+  // Whether the photons behave as classical or quantum particles. When they are classical, they will choose a path
+  // at the beam splitter. When they are quantum, they will be in a superposition of states.
   public readonly particleBehaviorModeProperty: Property<SystemType>;
 
-  // Wether the probability accordion box is expanded
+  // Whether the probability accordion box is expanded
   public readonly isProbabilityAccordionExpandedProperty: BooleanProperty;
 
   public constructor( providedOptions: PhotonsExperimentSceneModelOptions ) {
 
-    // Create all photons that will be used in the experiment.  It works better for phet-io if these are created at
+    // Create all photons that will be used in the experiment. It works better for phet-io if these are created at
     // construction time and activated and deactivated as needed, rather than creating and destroying them.
     this.photonCollection = new PhotonCollection( providedOptions.tandem.createTandem( 'photonCollection' ) );
 

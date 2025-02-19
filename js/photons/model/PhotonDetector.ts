@@ -40,7 +40,7 @@ export const RATE_RANGE = new Range( 0, 999 ); // in events per second
 
 class PhotonDetector extends PhetioObject implements TPhotonInteraction {
 
-  // The position of the detector in two-dimensional space.  Units are in meters.
+  // The position of the detector in two-dimensional space. Units are in meters.
   public readonly position: Vector2;
 
   // The direction in which the detector is looking for photons.
@@ -52,11 +52,11 @@ class PhotonDetector extends PhetioObject implements TPhotonInteraction {
   // detection aperture height, in meters
   public readonly apertureHeight = 0.05;
 
-  // A line in model space that represents the position of the detection aperture.  If a photon crosses this line, it
+  // A line in model space that represents the position of the detection aperture. If a photon crosses this line, it
   // will be detected but not absorbed.
   public readonly detectionLine: Line;
 
-  // The line in model space that represents the absorption line of the detector.  This is the line that the photon
+  // The line in model space that represents the absorption line of the detector. This is the line that the photon
   // must cross to be absorbed, at which point it disappears from the sim.
   public readonly absorptionLine: Line;
 
@@ -132,18 +132,18 @@ class PhotonDetector extends PhetioObject implements TPhotonInteraction {
         dt
       );
 
-      // Make sure the photon didn't cross both the detection and the absorption lines.  If this starts happening, the
+      // Make sure the photon won't cross both the detection and the absorption lines. If this starts happening, the
       // model may need to be extended to handle this case.
       assert && assert(
         !( detectionIntersectionPoint && absorptionIntersectionPoint ),
         'detection and absorption lines both crossed'
       );
 
-      // If the photon would cross the detection line, but not the absorption line, we'll consider it to be detected.
+      // If the photon will cross the detection line, but not the absorption line, we'll consider it to be detected.
       if ( detectionIntersectionPoint ) {
         mapOfStatesToInteractions.set( photonState, { interactionType: 'detectorReached', detectionInfo: { detector: this } } );
       }
-      // If the photon would cross the absorption line, but not the detection line, we'll consider it to be absorbed.
+      // If the photon will cross the absorption line, but not the detection line, we'll consider it to be absorbed.
       else if ( absorptionIntersectionPoint ) {
         mapOfStatesToInteractions.set( photonState, { interactionType: 'absorbed' } );
       }

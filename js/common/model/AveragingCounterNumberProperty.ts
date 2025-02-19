@@ -26,6 +26,7 @@ type DetectionCountSample = {
 
 class AveragingCounterNumberProperty extends NumberProperty {
 
+  // REVIEW: Some documentation for `totalAveragingPeriod` and `countSamplePeriod` would be helpful.
   private readonly totalAveragingPeriod: number;
   private readonly countSamplePeriod: number;
 
@@ -74,7 +75,7 @@ class AveragingCounterNumberProperty extends NumberProperty {
         count: this.currentDetectionCount
       } );
 
-      // Count the number of samples needed to reach the averaging period and total the counts that they contain.  Since
+      // Count the number of samples needed to reach the averaging period and total the counts that they contain. Since
       // the new samples are added to the end of the array, we need to start at the end and work backwards.
       let accumulatedSampleTime = 0;
       let accumulatedEventCount = 0;

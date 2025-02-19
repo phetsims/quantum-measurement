@@ -31,10 +31,10 @@ export const PhotonInteractionTypeValues = [
   // The photon was reflected by something, such as a mirror.
   'reflected',
 
-  // The photon was split into two possible state.
+  // The photon was split into two possible states.
   'split',
 
-  // The photon reached a detector.  If the photon is in a superposed state, it may or may not be detected, and the
+  // The photon reached a detector. If the photon is in a superposed state, it may or may not be detected, and the
   // client code will need to decide what to do.
   'detectorReached',
 
@@ -60,6 +60,7 @@ export type PhotonInteractionTestResult = {
   };
 };
 
+// REVIEW this is duplicated in Laser.ts
 export const ExperimentModeTypeValues = [ 'singlePhoton', 'manyPhotons' ] as const;
 export type ExperimentModeType = ( typeof ExperimentModeTypeValues )[number];
 

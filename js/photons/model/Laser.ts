@@ -67,11 +67,11 @@ class Laser extends PhetioObject {
   // The preset values of polarization direction that are available for the photons that are emitted.
   public readonly presetPolarizationDirectionProperty: Property<PolarizationPresets>;
 
-  // The custom polarization angle for the emitted photons.  This is only used when the preset direction is "custom".
+  // The custom polarization angle for the emitted photons. This is only used when the preset direction is "custom".
   public readonly customPolarizationAngleProperty: NumberProperty;
 
-  // The polarization angle of the emitted photons.  This is a derived - and thus read-only - property that is
-  // derived from the preset polarization direction and the custom polarization angle.  A value of null indicates that
+  // The polarization angle of the emitted photons. This is a derived - and thus read-only - Property that is
+  // derived from the preset polarization direction and the custom polarization angle. A value of null indicates that
   // the emitted photons are unpolarized, meaning that their individual polarization angles are random.
   public readonly polarizationAngleProperty: TReadOnlyProperty<number | null>;
 

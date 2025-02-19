@@ -24,6 +24,7 @@ export const RIGHT = new Vector2( 1, 0 );
 
 // Due to the experiment's nature, when photons are split,
 // the resulting states will either be measured as vertical or horizontal.
+// REVIEW: Unused
 export type PossiblePolarizationResult = 'vertical' | 'horizontal';
 
 class Photon {
