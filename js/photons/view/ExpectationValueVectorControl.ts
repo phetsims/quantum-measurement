@@ -30,7 +30,7 @@ export default class ExpectationValueVectorControl extends HBox {
     const options = optionize<ExpectationValueVectorControlOptions, SelfOptions, HBoxOptions>()( {
       spacing: 10,
       checkboxOptions: {
-        tandem: providedOptions.tandem.createTandem( 'expectationValueCheckbox' ),
+        tandem: providedOptions.tandem.createTandem( 'vectorRepresentationCheckbox' ),
         phetioVisiblePropertyInstrumented: false // Remove the whole control if checkbox isn't desired.
       }
     }, providedOptions );

@@ -199,7 +199,7 @@ class PhotonsExperimentSceneView extends Node {
       centerY: photonTestingArea.y
     } );
 
-    const showOutcomeVectorControl = new ExpectationValueVectorControl(
+    const vectorRepresentationControl = new ExpectationValueVectorControl(
       normalizedOutcomeVectorGraph.showVectorProperty,
       {
         checkboxOptions: {
@@ -208,7 +208,7 @@ class PhotonsExperimentSceneView extends Node {
           touchAreaXDilation: CHECKBOX_GROUP_POINTER_DILATION,
           touchAreaYDilation: CHECKBOX_GROUP_POINTER_DILATION
         },
-        tandem: providedOptions.tandem.createTandem( 'showOutcomeVectorControl' )
+        tandem: providedOptions.tandem.createTandem( 'vectorRepresentationControl' )
       }
     );
 
@@ -249,7 +249,7 @@ class PhotonsExperimentSceneView extends Node {
 
     // Assemble the controls that allow the users to set what is and isn't shown in the "average polarization" area.
     const averagePolarizationDisplayControls = new VBox( {
-      children: [ showOutcomeVectorControl, expectationValueControl, decimalValuesCheckbox ],
+      children: [ vectorRepresentationControl, expectationValueControl, decimalValuesCheckbox ],
       spacing: CHECKBOX_GROUP_SPACING,
       align: 'left',
       left: titleAndEquationsBox.left,
