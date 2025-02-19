@@ -92,41 +92,48 @@ export default class CoinExperimentButtonSet extends VBox {
             coinSet.hide();
           }
         },
-        tandem: providedOptions.tandem.createTandem( 'revealHideButton' ),
+        tandem: providedOptions.tandem.createTandem(
+          coinSet.coinType === 'classical' ? 'revealHideButton' : 'observeHideButton'
+        ),
         accessibleName: revealHideButtonTextProperty,
         accessibleHelpText: coinSet.coinType === 'classical' ?
-                  `Show or hide the ${coinOrCoins}` : `Observe or hide the ${coinOrCoins}`
+                            `Show or hide the ${coinOrCoins}` :
+                            `Observe or hide the ${coinOrCoins}`
 
       } )
     );
 
-    const flipOrReprepareButton = new TextPushButton(
+    const flipButton = new TextPushButton(
       coinSet.coinType === 'classical' ?
       QuantumMeasurementStrings.flipStringProperty :
       QuantumMeasurementStrings.reprepareStringProperty,
       combineOptions<TextPushButtonOptions>( commonButtonOptions, {
         listener: () => coinSet.prepare(),
-        tandem: providedOptions.tandem.createTandem( 'flipOrReprepareButton' ),
+        tandem: providedOptions.tandem.createTandem(
+          coinSet.coinType === 'classical' ? 'flipButton' : 'reprepareButton'
+        ),
         accessibleName: coinSet.coinType === 'classical' ?
                         QuantumMeasurementStrings.flipStringProperty :
                         QuantumMeasurementStrings.reprepareStringProperty,
         accessibleHelpText: coinSet.coinType === 'classical' ?
-                  `Flip the ${coinOrCoins} and hide the result` : `Prepare a new ${coinOrSetOfCoins} for observation`
+                            `Flip the ${coinOrCoins} and hide the result` : `Prepare a new ${coinOrSetOfCoins} for observation`
       } )
     );
 
-    const flipOrReprepareAndRevealButton = new TextPushButton(
+    const flipAndRevealButton = new TextPushButton(
       coinSet.coinType === 'classical' ?
       QuantumMeasurementStrings.flipAndRevealStringProperty :
       QuantumMeasurementStrings.reprepareAndRevealStringProperty,
       combineOptions<TextPushButtonOptions>( commonButtonOptions, {
         listener: () => coinSet.prepare( true ),
-        tandem: providedOptions.tandem.createTandem( 'flipOrReprepareAndRevealButton' ),
+        tandem: providedOptions.tandem.createTandem(
+          coinSet.coinType === 'classical' ? 'flipAndRevealButton' : 'reprepareAndObserveButton'
+        ),
         accessibleName: coinSet.coinType === 'classical' ?
                         QuantumMeasurementStrings.flipAndRevealStringProperty :
                         QuantumMeasurementStrings.reprepareAndRevealStringProperty,
         accessibleHelpText: coinSet.coinType === 'classical' ?
-                  `Flip the ${coinOrCoins} and reveal the result` : `Reprepare a new ${coinOrSetOfCoins} and observe it`
+                            `Flip the ${coinOrCoins} and reveal the result` : `Reprepare a new ${coinOrSetOfCoins} and observe it`
       } )
     );
 
@@ -134,8 +141,8 @@ export default class CoinExperimentButtonSet extends VBox {
       spacing: 10,
       children: [
         revealHideButton,
-        flipOrReprepareButton,
-        flipOrReprepareAndRevealButton
+        flipButton,
+        flipAndRevealButton
       ]
     }, providedOptions );
 
