@@ -73,9 +73,14 @@ export default class BlochSpherePreparationArea extends VBox {
     azimuthSlider.addMajorTick( 2 * Math.PI, new Text( `2${MathSymbols.PI}`, { font: new PhetFont( 15 ) } ) );
 
     const comboBoxItems: ComboBoxItem<StateDirection>[] = StateDirection.enumeration.values.map( direction => {
+
+      // Most of these use the description as the value, and they are not translatable, but the custom one is.
+      const itemText = direction === StateDirection.CUSTOM ?
+                       QuantumMeasurementStrings.customStringProperty :
+                       direction.description;
       return {
         value: direction,
-        createNode: () => new Text( direction.description, { font: new PhetFont( 16 ) } )
+        createNode: () => new Text( itemText, { font: new PhetFont( 16 ) } )
       };
     } );
 
