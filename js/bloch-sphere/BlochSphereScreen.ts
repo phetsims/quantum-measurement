@@ -8,7 +8,6 @@
 
 import ScreenIcon from '../../../joist/js/ScreenIcon.js';
 import Rectangle from '../../../scenery/js/nodes/Rectangle.js';
-import Color from '../../../scenery/js/util/Color.js';
 import Tandem from '../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../common/QuantumMeasurementColors.js';
 import QuantumMeasurementScreen from '../common/view/QuantumMeasurementScreen.js';
@@ -40,7 +39,7 @@ export default class BlochSphereScreen extends QuantumMeasurementScreen<BlochSph
 const createScreenIcon = (): ScreenIcon => {
 
   // TODO: Fill this in with the real deal, see https://github.com/phetsims/quantum-measurement/issues/88.
-  const iconNode = new Rectangle( 1, 1, 100, 100, { fill: Color.CYAN } );
+  const iconNode = new Rectangle( 1, 1, 100, 100, { fill: QuantumMeasurementColors.blockSphereMainColorProperty } );
   return new ScreenIcon( iconNode, {
     maxIconWidthProportion: 1,
     maxIconHeightProportion: 0.85,

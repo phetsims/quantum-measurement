@@ -135,7 +135,10 @@ export default class BlochSpherePreparationArea extends VBox {
         new BlochSphereSymbolicEquationNode(),
         new Panel(
           new BlochSphereNumericalEquationNode( model.preparationBlochSphere ), {
-            fill: '#aff',
+            fill: new DerivedProperty(
+              [ QuantumMeasurementColors.blockSphereMainColorProperty ],
+              color => color.colorUtilsBrighter( 0.5 )
+            ),
             cornerRadius: 5,
             stroke: null,
             xMargin: 10

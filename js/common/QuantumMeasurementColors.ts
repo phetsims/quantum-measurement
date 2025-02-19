@@ -19,11 +19,12 @@ import quantumMeasurement from '../quantumMeasurement.js';
 
 const QuantumMeasurementColors = {
 
-  // Background color for screens in this sim
+  // background color for screens in this sim
   screenBackgroundColorProperty: new ProfileColorProperty( quantumMeasurement, 'background', {
     default: 'white'
   } ),
 
+  // colors for selector button
   selectorButtonSelectedColorProperty: new ProfileColorProperty( quantumMeasurement, 'selectorButtonSelected', {
     default: '#0FF'
   } ),
@@ -37,7 +38,7 @@ const QuantumMeasurementColors = {
     default: '#000'
   } ),
 
-  // Separate background colors for classical & quantum
+  // separate background colors for classical & quantum
   classicalBackgroundColorProperty: new ProfileColorProperty( quantumMeasurement, 'classicalBackground', {
     default: '#fff' // Placeholder color
   } ),
@@ -45,7 +46,7 @@ const QuantumMeasurementColors = {
     default: '#fff' // Placeholder color
   } ),
 
-  // Text color for the quantum scene (for the currently blue text)
+  // text color for the quantum scene (for the currently blue text)
   classicalSceneTextColorProperty: new ProfileColorProperty( quantumMeasurement, 'classicalSceneText', {
     default: '#000'
   } ),
@@ -53,7 +54,7 @@ const QuantumMeasurementColors = {
     default: '#0000FF'
   } ),
 
-  // Color representation of the possible states of the coins
+  // color representation of the possible states of the coins
   headsColorProperty: new ProfileColorProperty( quantumMeasurement, 'heads', {
     default: '#000'
   } ),
@@ -67,7 +68,7 @@ const QuantumMeasurementColors = {
     default: '#F0F'
   } ),
 
-  // Coin fills
+  // coin fills
   maskedFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'maskedFill', {
     default: '#CCC'
   } ),
@@ -84,7 +85,7 @@ const QuantumMeasurementColors = {
     default: '#FF0'
   } ),
 
-  // Coin stroke color
+  // coin stroke color
   coinStrokeColorProperty: new ProfileColorProperty( quantumMeasurement, 'coinStroke', {
     default: '#888'
   } ),
@@ -104,16 +105,15 @@ const QuantumMeasurementColors = {
     default: '#0ffdfd'
   } ),
 
-  // control panel stroke
+  // control panels
   controlPanelStrokeColorProperty: new ProfileColorProperty( quantumMeasurement, 'basisStatesPanelStroke', {
     default: 'transparent'
   } ),
-
-  // control panel fill
   controlPanelFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'basisStatesPanelFill', {
     default: '#EEE'
   } ),
 
+  // colors used in the test boxes on the Coins screen
   multiCoinFirstGradientColorProperty: new ProfileColorProperty( quantumMeasurement, 'multiCoinFirstGradient', {
     default: '#EEE'
   } ),
@@ -122,9 +122,6 @@ const QuantumMeasurementColors = {
   } ),
   testBoxContentsRevealedFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'testBoxContentsRevealedFill', {
     default: 'rgba( 255, 255, 255, 0 )'
-  } ),
-  landingZoneFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'landingZoneFill', {
-    default: 'rgba( 255, 192, 203, 0.5 )'
   } ),
 
   // Colors for the photon polarization
@@ -138,24 +135,34 @@ const QuantumMeasurementColors = {
     default: '#0F0'
   } ),
 
-  // Colors for elements on the "Photons" screen
+  // colors for elements on the "Photons" screen
   photonDetectorBodyColorProperty: new ProfileColorProperty( quantumMeasurement, 'photonDetectorBody', {
     default: '#D1E2FA'
   } ),
 
-  // Color for particles on the "Spin" screen particles.
+  // color for particles on the "Spin" screen particles.
   particleColorProperty: new ProfileColorProperty( quantumMeasurement, 'particleColor', {
     default: '#F0F'
   } ),
 
-  // Color for the arrows that depict that magnetic field and the elements that control it.
+  // color for the arrows that depict that magnetic field and the elements that control it
   magneticFieldColorProperty: new ProfileColorProperty( quantumMeasurement, 'magneticFieldColor', {
     default: '#FF0'
   } ),
 
+  // background for the box that contains the atoms on the Bloch Sphere screen
   systemUnderTestBackgroundColorProperty: new ProfileColorProperty( quantumMeasurement, 'systemUnderTestBackgroundColorProperty', {
     default: '#FFF'
+  } ),
+
+  // Bloch sphere colors
+  blockSphereMainColorProperty: new ProfileColorProperty( quantumMeasurement, 'blockSphereMainColorProperty', {
+    default: '#0FF'
+  } ),
+  blockSphereHighlightColorProperty: new ProfileColorProperty( quantumMeasurement, 'blockSphereHighlightColorProperty', {
+    default: '#FFF'
   } )
+
 };
 
 quantumMeasurement.register( 'QuantumMeasurementColors', QuantumMeasurementColors );

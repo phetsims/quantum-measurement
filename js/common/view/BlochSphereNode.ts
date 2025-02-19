@@ -28,6 +28,7 @@ import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import AbstractBlochSphere from '../model/AbstractBlochSphere.js';
+import QuantumMeasurementColors from '../QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../QuantumMeasurementConstants.js';
 import DashedArrowNode, { DashedArrowNodeOptions } from './DashedArrowNode.js';
 
@@ -80,8 +81,8 @@ export default class BlochSphereNode extends Node {
     const sphereRadius = 100;
 
     const sphereNode = new ShadedSphereNode( 2 * sphereRadius, {
-      mainColor: 'cyan',
-      highlightColor: 'white',
+      mainColor: QuantumMeasurementColors.blockSphereMainColorProperty,
+      highlightColor: QuantumMeasurementColors.blockSphereHighlightColorProperty,
       highlightDiameterRatio: 0.9
     } );
 

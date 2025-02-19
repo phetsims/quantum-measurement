@@ -66,11 +66,10 @@ export default class SpinExperiment extends EnumerationValue {
   // whether the blocker is blocking the up or down exit, if applicable
   public readonly blockingModeProperty: Property<BlockingMode>;
 
-  public constructor(
-    index: string | TReadOnlyProperty<string>,
-    experimentOrder: string | TReadOnlyProperty<string>, // Like '[SGz, SGx]'
-    experimentSetting: SternGerlachExperimentSetting[]
-  ) {
+  public constructor( index: string | TReadOnlyProperty<string>,
+                      experimentOrder: string | TReadOnlyProperty<string>, // Like '[SGz, SGx]'
+                      experimentSetting: SternGerlachExperimentSetting[] ) {
+
     super();
     this.experimentName = index === 'Custom' ?
                           QuantumMeasurementStrings.customStringProperty :
