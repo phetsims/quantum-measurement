@@ -157,7 +157,7 @@ class QuantumMeasurementHistogram extends Node {
 
       const fractionFont = new PhetFont( { size: 15, weight: 'bold' } );
 
-      // Assume no one will every have the patience to shoot more than 1000 photons.
+      // Assume no one will ever have the patience to shoot more than 1000 photons.
       const fractionTermsRange = new Range( 0, 999 );
 
       leftNumberDisplay = new NumberDisplay(

@@ -30,6 +30,7 @@ class SceneSelectorRadioButtonGroup<T extends string> extends RectangularRadioBu
                       valueToStringMap: Map<T, LocalizedStringProperty>,
                       providedOptions: SceneSelectorRadioButtonGroupOptions ) {
 
+    // REVIEW: This assertion is odd... why are you not able to have multiple radio buttons if the Property supports it?
     assert && assert( valueToStringMap.size === 2, 'SceneSelectorRadioButtonGroup requires exactly two items' );
 
     const options = optionize<SceneSelectorRadioButtonGroupOptions, SelfOptions, RectangularRadioButtonGroupOptions>()( {

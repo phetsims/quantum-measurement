@@ -49,14 +49,14 @@ export default class PhotonDetectionProbabilityPanel extends AccordionBox {
       expandedProperty: expandedProperty
     }, providedOptions );
 
-    // Calculate the probability of a photon being detected as horizontally polarized.  A null value indicates that the
+    // Calculate the probability of a photon being detected as horizontally polarized. A null value indicates that the
     // probability is unknown.
     const probabilityOfHorizontalProperty = new DerivedProperty(
       [ polarizationAngleProperty ],
       polarizationAngle => polarizationAngle === null ? null : Math.cos( Utils.toRadians( polarizationAngle ) ) ** 2
     );
 
-    // Calculate the probability of a photon being detected as vertically polarized.  A null value indicates that the
+    // Calculate the probability of a photon being detected as vertically polarized. A null value indicates that the
     // probability is unknown.
     const probabilityOfVerticalProperty = new DerivedProperty(
       [ probabilityOfHorizontalProperty ],

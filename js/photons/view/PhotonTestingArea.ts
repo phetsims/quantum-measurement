@@ -51,6 +51,8 @@ class PhotonTestingArea extends Node {
 
     const particleBehaviorModeRadioButtonGroupTandem = providedOptions.tandem.createTandem( 'particleBehaviorModeRadioButtonGroup' );
     const particleBehaviorModeRadioButtonGroup = new AquaRadioButtonGroup<SystemType>(
+
+      // REVIEW: Why do you need this type assertion?
       model.particleBehaviorModeProperty as PhetioProperty<SystemType>,
       SystemTypeValues.map( behaviorMode => {
 

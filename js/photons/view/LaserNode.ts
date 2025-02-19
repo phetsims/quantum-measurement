@@ -1,7 +1,7 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
 /**
- * LaserNode represents the laser, which emits photons, in the view.  It allows the user to set the rate at which
+ * LaserNode represents the laser, which emits photons, in the view. It allows the user to set the rate at which
  * photons are produced, or to produce them one at a time.
  *
  * @author John Blanco, PhET Interactive Simulations
@@ -75,7 +75,7 @@ export default class LaserNode extends Node {
 
     const nodeChildren: Node[] = [ laserPointerNode, caption ];
 
-    // If the laser is in many-photon mode, we need a slider to control the rate of photon emission.  And a label for
+    // If the laser is in many-photon mode, we need a slider to control the rate of photon emission. And a label for
     // the rate.
     if ( model.emissionMode === 'manyPhotons' ) {
       const emissionRateSlider = new HSlider( model.emissionRateProperty, model.emissionRateProperty.range, {

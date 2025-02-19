@@ -2,7 +2,7 @@
 
 /**
  * ExpectationValueControl is a view element that allows the user to control the visibility of the expectation value
- * line in the normalized outcome vector graph.  It also displays, under the right conditions, the expectation value.
+ * line in the normalized outcome vector graph. It also displays, under the right conditions, the expectation value.
  *
  * @author John Blanco, PhET Interactive Simulations
  */

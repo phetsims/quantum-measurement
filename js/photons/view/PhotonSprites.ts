@@ -1,16 +1,16 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
 /**
- * PhotonSprites is a class that can be used to perform high-performance rendering of a set of photons.  It uses
- * scenery's Sprites feature, which uses renderer:'webgl', with a fallback of 'canvas'.  The photons support multiple
- * position states to allow for rendering the probability of a photon being in different positions.  To support this,
+ * PhotonSprites is a class that can be used to perform high-performance rendering of a set of photons. It uses
+ * scenery's Sprites feature, which uses renderer:'webgl', with a fallback of 'canvas'. The photons support multiple
+ * position states to allow for rendering the probability of a photon being in different positions. To support this,
  * the photons are rendered with a solid exterior and an interior that varies in opacity based on the probability of the
  * photon being in that position.
  *  *
  * Understanding this implementation requires an understanding of the scenery Sprites API. In a nutshell: Sprites has an
  * array of Sprite and an array of SpriteInstance. The array of Sprite is the complete unique set of images used to
  * render all SpriteInstances. Each SpriteInstance has a reference to a Sprite (which determines what it looks like) and
- * a Matrix3 (which determines how it's transformed).  At each model step, the positions of the PhotonInstance instances
+ * a Matrix3 (which determines how it's transformed). At each model step, the positions of the PhotonInstance instances
  * are updated by adjusting their matrix, and then invalidatePaint is called to re-render the sprites.
  *
  * @author John Blanco (PhET Interactive Simulations)
@@ -50,7 +50,7 @@ class PhotonSprites extends Sprites {
     const spriteInstances: SpriteInstance[] = [];
 
     // Invoke the superclass constructor with no sprites because creating some of the sprites is an asynchronous
-    // process.  The sprites are added below.
+    // process. The sprites are added below.
     super( {
       sprites: [],
       spriteInstances: spriteInstances,

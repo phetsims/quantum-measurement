@@ -123,6 +123,8 @@ export default class FlatPolarizationAngleIndicator extends Node {
       children: [ thetaNode, angleReadoutText ],
       centerX: horizontalAxis.centerX + 40,
       centerY: verticalAxis.top,
+
+      // REVIEW: use DerivedProperty.valueNotEqualsConstant
       visibleProperty: new DerivedProperty( [ polarizationAngleProperty ], angle => angle !== null )
     } );
 

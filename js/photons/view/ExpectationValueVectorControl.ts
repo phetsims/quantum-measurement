@@ -2,7 +2,7 @@
 
 /**
  * ExpectationValueVectorControl is a view element that allows the user to control the visibility of the expectation
- * value vector in another view component.  It is basically just a checkbox with an arrow that represents the vector.
+ * value vector in another view component. It is basically just a checkbox with an arrow that represents the vector.
  *
  * @author John Blanco, PhET Interactive Simulations
  */

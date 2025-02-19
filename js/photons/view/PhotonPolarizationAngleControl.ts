@@ -135,6 +135,8 @@ export default class PhotonPolarizationAngleControl extends Panel {
     // Create a slider to control the custom angle of polarization.  It is only visible when the custom preset value
     // is selected.
     const customAngleSlider = new HSlider( photonSource.customPolarizationAngleProperty, new Range( 0, 90 ), {
+
+      // REVIEW: Use DerivedProperty.valueEqualsConstant
       visibleProperty: new DerivedProperty(
         [ photonSource.presetPolarizationDirectionProperty ],
         value => value === 'custom'
@@ -184,7 +186,7 @@ export default class PhotonPolarizationAngleControl extends Panel {
       tandem: providedOptions.tandem.createTandem( 'polarizationIndicator' )
     } );
 
-    // Put the left portion of the panel into and HBox with the polarization indicator.
+    // Put the left portion of the panel into an HBox with the polarization indicator.
     const content = new HBox( {
       children: [ leftPortionOfPanel, polarizationIndicator ]
     } );

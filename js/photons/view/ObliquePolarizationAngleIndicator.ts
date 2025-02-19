@@ -63,7 +63,7 @@ const UNIT_LENGTH = AXIS_LENGTH * 0.75;
 const PROJECTION_ANGLE_IN_DEGREES = 45;
 const PROJECTION_ANGLE_IN_RADIANS = Utils.toRadians( PROJECTION_ANGLE_IN_DEGREES );
 
-// Define a function that projects a 3D point into the 2D plane of the screen.  This uses what is called a "cabinet
+// Define a function that projects a 3D point into the 2D plane of the screen. This uses what is called a "cabinet
 // projection" in engineering drawing, which is a specific type of oblique projection.
 const project3Dto2D = ( x: number, y: number, z: number ): Vector2 => {
   return new Vector2(
@@ -77,7 +77,7 @@ export default class ObliquePolarizationAngleIndicator extends Node {
   public constructor( polarizationAngleProperty: TReadOnlyProperty<number | null>,
                       providedOptions?: PolarizationPlaneRepresentationOptions ) {
 
-    // Create the Y axis line with an arrow head.  This is pointing directly to the right.  We have to do this as a
+    // Create the Y axis line with an arrow head. This is pointing directly to the right.  We have to do this as a
     // separate arrow head and line because the line has a dashed pattern, which doesn't work with ArrowNode.
     const yAxisArrowHead = new ArrowNode( 0.9 * AXIS_LENGTH, 0, AXIS_LENGTH, 0, AXIS_OPTIONS );
     const yAxisLine = new Line( 0, 0, AXIS_LENGTH, 0, {
@@ -128,6 +128,9 @@ export default class ObliquePolarizationAngleIndicator extends Node {
     } );
 
     // Create a Property for the fill used for the unit circle, since it changes when the photons are unpolarized.
+    //REVIEW: Technically `QuantumMeasurementColors.photonBaseColorProperty` should be part of what the DerivedProperty
+    // is listening to. I think the only scenario where this would be buggy is in the Color Editor, but could also cause
+    // a bug in PhET-iO if we gave clients the option to adjust colorProperties.
     const unitCircleFillProperty = new DerivedProperty(
       [ polarizationAngleProperty ],
       polarizationAngle => polarizationAngle === null ?

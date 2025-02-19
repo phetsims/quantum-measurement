@@ -29,6 +29,8 @@ export default class MirrorNode extends Node {
                       modelViewTransform: ModelViewTransform2,
                       providedOptions?: MirrorNodeOptions ) {
 
+    // REVIEW: This seems like it could break if the photons change size at all. Is there any way to calculate this offset
+    // based on your photon dimensions?
     // Define an offset for positioning the mirror.  This is needed because the photons reflect based on their center
     // positions, and if the mirror isn't offset a bit, the photons can appear to go partially through the mirror.
     // The value is in screen coordinates and is empirically determined.  This only works for a mirror that is oriented

@@ -104,6 +104,8 @@ export default class NormalizedOutcomeVectorGraph extends Node {
       [ normalizedOutcomeValueProperty ],
       value => -value
     );
+
+    // REVIEW: Suggested to rename showNumericValueProperty to numericValueVisibleProperty
     const showNumericValueProperty = DerivedProperty.and( [ showVectorProperty, displayNumericValueProperty ] );
     const normalizedOutcomeValueDisplay = new NumberDisplay(
       invertedNormalizedOutcomeValueProperty,
