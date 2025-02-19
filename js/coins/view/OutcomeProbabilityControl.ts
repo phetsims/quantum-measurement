@@ -34,6 +34,7 @@ import ProbabilityValueControl from './ProbabilityValueControl.js';
 type SelfOptions = EmptySelfOptions;
 type OutcomeProbabilityControlOptions = SelfOptions & PickRequired<VBox, 'tandem' | 'visibleProperty'>;
 
+// REVIEW: Not sure what it means to not "rely on systemType for the color"
 // constants that don't rely on systemType for the color
 const TITLE_AND_LABEL_FONT = new PhetFont( 16 );
 const ALPHA = MathSymbols.ALPHA;
@@ -204,6 +205,8 @@ export default class OutcomeProbabilityControl extends VBox {
           const alphaValue = Utils.toFixed( Math.sqrt( outcomeProbability ), 3 );
           const betaValue = Utils.toFixed( Math.sqrt( 1 - outcomeProbability ), 3 );
 
+          // REVIEW: This StringUtils.fillIn feels particularly alarming. This feels like a classic case where
+          // PatternStringProperty will do what you need. If not, very clearly document.
           equationAccessibleParagraphStringProperty.value = StringUtils.fillIn( equationPattern, {
             alpha: alphaValue,
             beta: betaValue

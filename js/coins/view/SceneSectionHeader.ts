@@ -1,6 +1,8 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
 /**
+ * REVIEW: The code doesn't indicate that the line is wider than the text. The code indicates that it is the same width as the text.
+ *
  * SceneSectionHeader is a composite Scenery Node that consists of a textual header and a line below it, where the line
  * is generally wider than text. It looks something like this:
  *

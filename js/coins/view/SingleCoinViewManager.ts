@@ -1,8 +1,8 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
 /**
- * SingleCoinViewManager is responsible for creating an animating the motion of the single coin that is used in the
- * experiment.  This includes the animation of the coin moving from the preparation area to the measurement area, as
+ * SingleCoinViewManager is responsible for creating and animating the motion of the single coin that is used in the
+ * experiment. This includes the animation of the coin moving from the preparation area to the measurement area, as
  * well as providing support for the coin flipping animation.
  *
  * @author John Blanco, PhET Interactive Simulations
@@ -78,6 +78,7 @@ class SingleCoinViewManager {
     this.abortIngressAnimationForSingleCoin = () => {
 
       // Create a typed reference to the parent node, since we'll need to invoke some methods on it.
+      // REVIEW: Might be helpful to add a specific message for this assertion.
       assert && assert( measurementArea.getParent() instanceof CoinsExperimentSceneView );
       const sceneGraphParent = measurementArea.getParent() as CoinsExperimentSceneView;
 
@@ -155,7 +156,7 @@ class SingleCoinViewManager {
 
         assert && assert( singleCoinNode, 'There should be a singleCoinNode instance at the end of this animation.' );
 
-        // Get a reference to the coin Node that allows the code to omit all the exclamation points and such.
+        // Get a reference to the coin Node that allows the code to omit all the non-null assertions.
         const assuredSingleCoinNode = singleCoinNode!;
         assuredSingleCoinNode.moveToBack();
 

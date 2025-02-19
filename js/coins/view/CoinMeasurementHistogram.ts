@@ -102,6 +102,7 @@ export default class CoinMeasurementHistogram extends QuantumMeasurementHistogra
       providedOptions
     );
 
+    // REVIEW: This is another example where you should probably use PatternStringProperty instead of StringUtils.fillIn
     const numberOfCoinsStringProperty = new DerivedStringProperty(
       [ coinSet.numberOfActiveCoinsProperty ],
       numberOfCoins => StringUtils.fillIn(

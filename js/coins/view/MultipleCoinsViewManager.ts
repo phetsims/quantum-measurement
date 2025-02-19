@@ -41,8 +41,8 @@ class MultipleCoinsViewManager {
     // map of the size of the coin set to the nodes used for that set
     const coinNodeSets = new Map<number, SmallCoinNode[]>();
 
-    // Set up the coin nodes for each of the quantities that can be selected by the user.  As of Jan 2025, this includes
-    // 10 and 100 coins.  The 10k case is handled differently and is not included here.
+    // Set up the coin nodes for each of the quantities that can be selected by the user. As of Jan 2025, this includes
+    // 10 and 100 coins. The 10k case is handled differently and is not included here.
     MULTI_COIN_ANIMATION_QUANTITIES.forEach( quantity => {
       const radius = MultiCoinTestBox.getRadiusFromCoinQuantity( quantity );
       const coinNodes: SmallCoinNode[] = [];
@@ -99,14 +99,14 @@ class MultipleCoinsViewManager {
       const coinsToAnimate = coinNodeSets.get( sceneModel.coinSet.numberOfActiveCoinsProperty.value );
 
       // Add the coins to our parent node. This is done so that we don't change the local bounds of the measurement
-      // area, since this would break the layout.  These will be added back to the measurement area when they reach the
-      // desired position and are thus withing the bounds of the measurement area.
+      // area, since this would break the layout. These will be added back to the measurement area when they reach the
+      // desired position and are thus within the bounds of the measurement area.
       sceneGraphParent.addCoinNodeSet( coinsToAnimate! );
 
       const multipleCoinTestBoxBounds = sceneGraphParent.globalToLocalBounds( multipleCoinTestBox.getGlobalBounds() );
 
       // The tricky bit about this animation is that the test box where these coins are headed could itself be moving
-      // due to the way the measurement area works.  This unfortunately means we need to have a bit of the "tweak
+      // due to the way the measurement area works. This unfortunately means we need to have a bit of the "tweak
       // factor" to get the destination right.
       const testAreaXOffset = forReprepare ? 0 : -92; // empirically determined
       const destinationCenter = multipleCoinTestBoxBounds.center.plusXY( testAreaXOffset, 0 );
@@ -124,6 +124,8 @@ class MultipleCoinsViewManager {
         // Get the final destination for this coin node in terms of its offset from the center of the test box.
         const finalDestinationOffset = multipleCoinTestBox.getOffsetFromCenter( index );
 
+        // REVIEW: Is this a typo? This seems like it's the 1st portion of the animation, or at least I don't see another animation
+        // defined before this.
         // Start the 2nd portion of the animation, which moves the coin into the test box.
         const animationToTestBox = new Animation( {
           setValue: value => { coinNode.center = value; },
@@ -164,6 +166,7 @@ class MultipleCoinsViewManager {
           );
         } );
 
+        // REVIEW: Yeah I'm confused maybe it's late and I'm tired, but I can't find the first animation...
         // Kick off the 2nd animation, which moves the coin from the edge of the test box to inside.
         animationToTestBox.start();
       } );

@@ -30,6 +30,8 @@ import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
 type SelfOptions = EmptySelfOptions;
 export type SmallCoinNodeOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
 
+// REVIEW: What does it mean for a coin to be "masked"? Oh... I think I get it. It's masked when it's hidden? Maybe
+// just switch that to "hidden" since that's terminology you're already using elsewhere.
 // Define a type for the display mode that composes all possible coin values plus one for when the coin is masked.
 export type SmallCoinDisplayMode = ClassicalCoinStates | QuantumCoinStates | 'masked';
 
@@ -122,6 +124,9 @@ class SmallCoinNode extends Node {
 
   public get isFlipping(): boolean { return this.flippingAnimation !== null; }
 
+  // REVIEW: I would recommend documenting this a bit more especially to describe the flipPhase, previousXScale,
+  //  destinationPhaseMultiplier, and rotationalAxis. That will help future maintainers from having to re-read multiple
+  // times or visit the sim to understand what is going on.
   public startFlipping(): void {
     let flipPhase = 0;
     let previousXScale = 0;

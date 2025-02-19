@@ -155,7 +155,7 @@ class CoinExperimentPreparationArea extends VBox {
 
   /**
    * Get the position of the coin that indicates the initial orientation or prepared state in the global coordinate
-   * frame.  This is generally used when trying to animate the movement of coin between parent nodes.
+   * frame. This is generally used when trying to animate the movement of coin between parent nodes.
    */
   public getIndicatorCoinGlobalCenter(): Vector2 {
     const orientationIndicatorGlobalBounds = this.initialCoinStateSelectorNode.orientationIndicatorCoinNode.getGlobalBounds();

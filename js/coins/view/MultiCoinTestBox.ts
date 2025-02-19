@@ -87,7 +87,7 @@ class MultiCoinTestBox extends Node {
     coinSet.measuredDataChangedEmitter.addListener( () => {
 
       // When phet-io state is being set, the measured data can change without any change to the measurement state of
-      // the coin set.  This makes sure that the coin nodes are updated in that situation.
+      // the coin set. This makes sure that the coin nodes are updated in that situation.
       if ( isSettingPhetioStateProperty.value ) {
         this.updateCoinNodes( coinSet, coinSet.measurementStateProperty.value );
       }
