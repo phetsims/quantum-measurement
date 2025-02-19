@@ -25,6 +25,7 @@ type StringsType = {
   'atomsStringProperty': LocalizedStringProperty;
   'averagePolarizationStringProperty': LocalizedStringProperty;
   'averagePolarizationRateStringProperty': LocalizedStringProperty;
+  'averagePolarizationRepresentationStringProperty': LocalizedStringProperty;
   'coinStringProperty': LocalizedStringProperty;
   'coinBiasStringProperty': LocalizedStringProperty;
   'customStringProperty': LocalizedStringProperty;

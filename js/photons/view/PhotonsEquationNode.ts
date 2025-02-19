@@ -19,15 +19,13 @@ import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
 import MathSymbolFont from '../../../../scenery-phet/js/MathSymbolFont.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox, { HBoxOptions } from '../../../../scenery/js/layout/nodes/HBox.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
 import RichText, { RichTextOptions } from '../../../../scenery/js/nodes/RichText.js';
-import Text from '../../../../scenery/js/nodes/Text.js';
-import Dialog from '../../../../sun/js/Dialog.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import FractionNode from '../../common/view/FractionNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
+import AveragePolarizationInfoDialog from './AveragePolarizationInfoDialog.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhotonsEquationNodeOptions = SelfOptions & WithRequired<HBoxOptions, 'tandem'>;
@@ -46,9 +44,8 @@ export default class PhotonsEquationNode extends HBox {
       ( VValue, HValue ) => VValue + HValue
     );
 
-    const equationsInfoDialog = new Dialog(
-      new Node( { children: [ new Text( 'FILL THIS IN PLEASE', { font: new PhetFont( 18 ) } ) ] } ),
-      { tandem: providedOptions.tandem.createTandem( 'equationsInfoDialog' ) }
+    const equationsInfoDialog = new AveragePolarizationInfoDialog(
+      providedOptions.tandem.createTandem( 'equationsInfoDialog' )
     );
 
     // Create and add the info button.
