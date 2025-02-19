@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * ExperimentMeasurementState is a string union that functions as an enumeration of the possible states for a basic
