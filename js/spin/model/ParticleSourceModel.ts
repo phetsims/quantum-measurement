@@ -34,7 +34,7 @@ export default class ParticleSourceModel {
   public readonly exitLocalPosition: Vector2;
   public readonly exitPositionProperty: TReadOnlyProperty<Vector2>;
 
-  // Wether the source is currently shooting particles
+  // Whether the source is currently shooting particles
   public readonly currentlyShootingParticlesProperty: BooleanProperty;
 
   // Mapped from [0, 1] to control the Continuous mode, 0 is 'None' and 1 is 'Lots'
@@ -47,6 +47,7 @@ export default class ParticleSourceModel {
 
   public constructor( position: Vector2, tandem: Tandem ) {
 
+    // REVIEW: Recommend using EnumerationProperty instead of Property<EnumerationValue>
     this.sourceModeProperty = new Property<SourceMode>( SourceMode.SINGLE, {
       tandem: tandem.createTandem( 'sourceModeProperty' ),
       phetioValueType: EnumerationIO( SourceMode ),
@@ -54,6 +55,7 @@ export default class ParticleSourceModel {
       phetioFeatured: true
     } );
 
+    // REVIEW: Consider using DerivedProperty.valueEqualsConstant
     this.isContinuousModeProperty = new DerivedProperty(
       [ this.sourceModeProperty ],
       sourceMode => sourceMode === SourceMode.CONTINUOUS
@@ -74,6 +76,8 @@ export default class ParticleSourceModel {
     } );
 
     const initialSpinState = SpinDirection.Z_PLUS;
+
+    // REVIEW: Recommend using EnumerationProperty instead of Property<EnumerationValue>
     this.spinStateProperty = new Property<SpinDirection>( initialSpinState, {
       tandem: tandem.createTandem( 'spinStateProperty' ),
       phetioValueType: EnumerationIO( SpinDirection ),

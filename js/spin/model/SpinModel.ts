@@ -101,6 +101,7 @@ export default class SpinModel implements TModel {
       phetioFeatured: true
     } );
 
+    // REVIEW: Consider using DerivedProperty.valueEqualsConstant
     this.isCustomExperimentProperty = new DerivedProperty(
       [ this.currentExperimentProperty ],
       ( experiment: SpinExperiment ) => experiment === SpinExperiment.CUSTOM
@@ -260,6 +261,8 @@ export default class SpinModel implements TModel {
         // Conditions that determine visibility and state of the experiment components
         const customExperiment = experiment === SpinExperiment.CUSTOM;
         const singleParticle = sourceMode === SourceMode.SINGLE;
+
+        // REVIEW: Recommend documenting how `usingSingleApparatus` translates to a variable name of `longExperiment`
         const longExperiment = !experiment.usingSingleApparatus;
 
         this.measurementDevices[ 0 ].isActiveProperty.value = singleParticle;

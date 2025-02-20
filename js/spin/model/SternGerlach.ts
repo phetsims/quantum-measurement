@@ -161,7 +161,6 @@ export default class SternGerlach extends PhetioObject {
     // Using a XZ vector to calculate the projected probability.
     // The experiment has a measurement vector and the incoming state has a spin vector
     // Based on the dot product we'll obtain the probability
-
     const experimentMeasurementVector = this.isZOrientedProperty.value ? new Vector2( 0, 1 ) : new Vector2( 1, 0 );
 
     // <Z|Z> = 1, <Z|X> = 0, <-Z|Z> = -1 so we need to re-scale into the [0, 1] range

@@ -27,8 +27,9 @@ export class MultipleParticleCollection extends ParticleCollection {
   }
 
   private shootMultipleParticles(): void {
+
     // Calculate the number of particles to produce in this time step based on the particle amount property, the max
-    // creation rate, and the time step.  This could include a fractional amount.
+    // creation rate, and the time step. This could include a fractional amount.
     const particlesToCreate = this.model.particleSourceModel.particleAmountProperty.value * MAX_PARTICLE_CREATION_RATE;
 
     // Calculate the whole number to actually activate, and use the fractional accumlator in the process.

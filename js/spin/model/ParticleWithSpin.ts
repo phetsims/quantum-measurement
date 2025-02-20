@@ -34,6 +34,7 @@ export class ParticleWithSpin {
   // spin values of the particle in the XZ plane along its lifetime
   public spinVectors = [ new Vector2( 0, 0 ), new Vector2( 0, 0 ), new Vector2( 0, 0 ) ];
 
+  // REVIEW: Same as what?
   // same but simplified to spinUp booleans
   public isSpinUp = [ false, false, false ];
 

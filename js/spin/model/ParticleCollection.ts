@@ -1,7 +1,7 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
 /**
- * ParticleCollection is the model for a set of particles where each has a predetermined spin. It provides and API that
+ * ParticleCollection is the model for a set of particles where each has a predetermined spin. It provides an API that
  * allows clients to create, remove, and measure particles.
  *
  * @author Agustín Vallejo
@@ -195,7 +195,7 @@ export class ParticleCollection extends PhetioObject {
   }
 
   /**
-   * Given the incoming state of a particle, calculate the result of a SG measurement on a particle and set its spin
+   * Given the incoming state of a particle, calculate the result of an SG measurement on a particle and set its spin
    */
   protected measureParticle(
     particle: ParticleWithSpin,
