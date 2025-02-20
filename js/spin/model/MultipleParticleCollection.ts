@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * MultipleParticleCollection handles the nuances of the continuous mode, where particles are created at a certain rate.

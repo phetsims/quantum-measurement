@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * PhotonsModel is the primary model class for the Photons screen.  It manages the general model state and behavior for

@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * Photon is a model element that represents a single photon.  It supports the needs of the Quantum Measurement sim,

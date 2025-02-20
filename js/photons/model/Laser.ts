@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * Laser is the model element that produces photons and sends them toward the polarizing beam splitter.  It can
