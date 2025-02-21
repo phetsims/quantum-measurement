@@ -1,7 +1,7 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
 /**
- * Zone where the Bloch Sphere direction is set by the user.  It includes sliders for the polar and azimuthal angles and
+ * Zone where the Bloch Sphere direction is set by the user. It includes sliders for the polar and azimuthal angles and
  * a ComboBox to select the direction.
  *
  * @author Agustín Vallejo
@@ -94,12 +94,14 @@ export default class BlochSpherePreparationArea extends VBox {
         children: [
           directionComboBox,
           new Text(
+            //REVIEW: Use PatternStringProperty
             new DerivedProperty(
               [ QuantumMeasurementStrings.polarAngleParenthesesSymbolPatternStringProperty ],
               stringPattern => StringUtils.fillIn( stringPattern, { symbol: MathSymbols.THETA } )
             ), { font: new PhetFont( 15 ), maxWidth: 200 } ), // Theta symbol: θ
           polarSlider,
           new Text(
+            //REVIEW: Use PatternStringProperty
             new DerivedProperty(
               [ QuantumMeasurementStrings.azimuthalAngleParenthesesSymbolPatternStringProperty ],
               stringPattern => StringUtils.fillIn( stringPattern, { symbol: MathSymbols.PHI } )

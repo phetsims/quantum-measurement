@@ -1,7 +1,7 @@
 // Copyright 2025, University of Colorado Boulder
 
 /**
- * SpinMeasurementStates is a union type the represents the possible states for the measurement of a quantum spin system.
+ * SpinMeasurementStates is a union type that represents the possible states for the measurement of a quantum spin system.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */

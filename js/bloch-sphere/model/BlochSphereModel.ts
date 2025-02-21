@@ -1,7 +1,7 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
 /**
- * Main model for the Bloch Sphere screen.  This contains the Bloch Sphere representation and the logic for
+ * Main model for the Bloch Sphere screen. This contains the Bloch Sphere representation and the logic for
  * measurements, equations and rotation under magnetic field.
  *
  * @author Agustín Vallejo
@@ -48,7 +48,7 @@ class BlochSphereModel implements TModel {
   // Measurement area related properties
 
   // A state variable that indicates whether the model is ready to observe, needs the state to be prepared, or is
-  // timing the next measurement.  This should not be modified directly by client code, but rather by the model's
+  // timing the next measurement. This should not be modified directly by client code, but rather by the model's
   // observe() and reprepare() methods.
   public readonly measurementStateProperty: Property<SpinMeasurementState>;
 
@@ -268,8 +268,8 @@ class BlochSphereModel implements TModel {
   }
 
   /**
-   * Initiates an observation, aka a measurement, of the spin value or values.  If the model is in the state where
-   * precession is occurring, this starts a timer that will trigger the measurement when it expires.  If precession is
+   * Initiates an observation, aka a measurement, of the spin value or values. If the model is in the state where
+   * precession is occurring, this starts a timer that will trigger the measurement when it expires. If precession is
    * not occurring, the measurement is made immediately.
    */
   public initiateObservation(): void {

@@ -2,7 +2,7 @@
 
 /**
  * SystemUnderTestNode is a node that show a single atom or multiple atoms in a box where a magnetic field may or may
- * not be present.  The node is used to represent the system under test in the quantum measurement simulation.
+ * not be present. The node is used to represent the system under test in the quantum measurement simulation.
  *
  * @author John Blanco, PhET Interactive Simulations
  */
@@ -82,7 +82,9 @@ class SystemUnderTestNode extends Panel {
       )
     );
 
-    // Create the set of atom nodes for the multiple measurement mode.  The layout used here is quite specific to the
+    // REVIEW: Maybe make the desired number of atoms a constant so that you don't have to worry about visiting this
+    // spot if that changes.
+    // Create the set of atom nodes for the multiple measurement mode. The layout used here is quite specific to the
     // desired number of atoms and will need to be adjusted if that number ever changes.
     const atomRowHBoxes: HBox[] = [];
     _.times( 4, i => {
@@ -144,7 +146,7 @@ class SystemUnderTestNode extends Panel {
       children: [ titledTestArea, measurementIconNode ]
     } );
 
-    // Control the visibility of the measurement icon based on the state of the measurement.  It will be shown briefly
+    // Control the visibility of the measurement icon based on the state of the measurement. It will be shown briefly
     // when a measurement is made, then faded out.
     let iconFadeAnimation: Animation | null = null;
     measurementStateProperty.link( state => {

@@ -292,7 +292,7 @@ export default class BlochSphereNode extends Node {
           equatorSemiMajorAxis / 2 * rotationFactor, // Ellipse width goes to half the state vector
           equatorSemiMajorAxis / 2,
           0,
-          // Begins at -PI/2; Ends at the polar angle with an adjustement due to the sphere perspective
+          // Begins at -PI/2; Ends at the polar angle with an adjustment due to the sphere perspective
           -Math.PI / 2,
           rotationFactor !== 0 ? Math.atan2( tip.y, tip.x / rotationFactor ) : -Math.PI / 2,
           false
@@ -305,7 +305,7 @@ export default class BlochSphereNode extends Node {
             equatorSemiMajorAxis / 2,
             equatorSemiMinorAxis / 2,
             0,
-            // Begins with offset; Ends at the azimuthal angle with an adjustement due to the sphere perspective
+            // Begins with offset; Ends at the azimuthal angle with an adjustment due to the sphere perspective
             -xAxisOffsetAngle + Math.PI / 2,
             -( azimuthalAngle + xAxisOffsetAngle - Math.PI / 2 ) % ( 2 * Math.PI ),
             true
