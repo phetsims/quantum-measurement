@@ -335,11 +335,16 @@ export default class BlochSphereMeasurementArea extends Node {
 
     const measurementControls = new VBox( {
       left: singleMeasurementBlochSphereNode.right + 20,
+      align: 'left',
       top: 10,
       spacing: 10,
       children: [
-        measurementResultHistogram,
-        resetCountsButton,
+        new VBox( {
+          children: [
+            measurementResultHistogram,
+            resetCountsButton
+          ]
+        } ),
         measurementControlPanel,
         experimentControlButton
       ]
