@@ -8,6 +8,7 @@
 
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
+import MathSymbolFont from '../../../../scenery-phet/js/MathSymbolFont.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
@@ -32,11 +33,11 @@ export default class AveragePolarizationInfoDialog extends Dialog {
       maxWidth: MAX_WIDTH
     } );
 
-    const textOptions = {
+    const richTextOptions = {
       font: ITEM_FONT,
       maxWidth: MAX_WIDTH
     };
-    const subtitle = new Text( QuantumMeasurementStrings.averagePolarizationDialog.subTitleStringProperty, textOptions );
+    const subtitle = new Text( QuantumMeasurementStrings.averagePolarizationDialog.subTitleStringProperty, richTextOptions );
     const numberOfVerticalExplanationStringProperty = new DerivedStringProperty(
       [
         QuantumMeasurementStrings.NStringProperty,
@@ -45,7 +46,7 @@ export default class AveragePolarizationInfoDialog extends Dialog {
         QuantumMeasurementStrings.averagePolarizationDialog.numberOfPhotonsPatternPhraseStringProperty
       ],
       ( nString, vString, verticalString, numberOfPhotonsPatternString ) => {
-        const functionString = `${nString}(${vString})`;
+        const functionString = MathSymbolFont.getRichTextMarkup( `${nString}(${vString})` );
         return StringUtils.fillIn( numberOfPhotonsPatternString, {
           function: functionString,
           direction: verticalString
@@ -60,7 +61,7 @@ export default class AveragePolarizationInfoDialog extends Dialog {
         QuantumMeasurementStrings.averagePolarizationDialog.numberOfPhotonsPatternPhraseStringProperty
       ],
       ( nString, hString, horizontalString, numberOfPhotonsPatternString ) => {
-        const functionString = `${nString}(${hString})`;
+        const functionString = MathSymbolFont.getRichTextMarkup( `${nString}(${hString})` );
         return StringUtils.fillIn( numberOfPhotonsPatternString, {
           function: functionString,
           direction: horizontalString
@@ -74,7 +75,7 @@ export default class AveragePolarizationInfoDialog extends Dialog {
         QuantumMeasurementStrings.averagePolarizationDialog.totalNumberOfPhotonsPatternPhraseStringProperty
       ],
       ( nString, totalString, totalPhotonsPatternString ) => {
-        const functionString = `${nString}(${totalString})`;
+        const functionString = MathSymbolFont.getRichTextMarkup( `${nString}(${totalString})` );
         return StringUtils.fillIn( totalPhotonsPatternString, {
           function: functionString
         } );
@@ -87,14 +88,14 @@ export default class AveragePolarizationInfoDialog extends Dialog {
       totalExplanationStringProperty
     ];
     const functionElementWithExplanationNodes = equationExplanationStringProperties.map(
-      stringProperty => new Text( stringProperty, textOptions )
+      stringProperty => new RichText( stringProperty, richTextOptions )
     );
 
     const explanatoryParagraphProperty = new RichText(
       QuantumMeasurementStrings.averagePolarizationDialog.explanatoryParagraphStringProperty,
       {
         font: ITEM_FONT,
-        lineWrap: MAX_WIDTH * 0.8
+        lineWrap: MAX_WIDTH * 0.9
       }
     );
 
@@ -102,8 +103,9 @@ export default class AveragePolarizationInfoDialog extends Dialog {
       children: [
         new Spacer( 0, 5 ),
         subtitle,
+        new Spacer( 0, 3 ),
         ...functionElementWithExplanationNodes,
-        new Spacer( 0, 10 ),
+        new Spacer( 0, 5 ),
         explanatoryParagraphProperty
       ],
       align: 'left',
