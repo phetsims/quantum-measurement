@@ -49,7 +49,7 @@ export default class MagneticFieldControl extends Panel {
     const magneticFieldIndicator = new Node( {
       children: [
         new Path( new Shape().moveTo( 0, -SLIDER_TRACK_SIZE.height / 2 ).lineTo( 0, SLIDER_TRACK_SIZE.height / 2 ), {
-          stroke: 'grey',
+          stroke: 'gray',
           lineWidth: 1,
           lineDash: [ 2, 2 ]
         } ),

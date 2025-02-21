@@ -58,7 +58,7 @@ export default class SternGerlachNode extends Node {
       const path = new Path( new Shape().rect( 0, 0, PARTICLE_HOLE_WIDTH, PARTICLE_HOLE_HEIGHT ),
         {
           fill: new LinearGradient( 0, 0, 0, PARTICLE_HOLE_HEIGHT )
-            .addColorStop( 0, 'grey' )
+            .addColorStop( 0, 'gray' )
             .addColorStop( 1, 'black' )
         } );
       path.center = modelViewTransform.modelToViewDelta( center );
