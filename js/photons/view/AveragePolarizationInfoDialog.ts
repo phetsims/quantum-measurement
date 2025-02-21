@@ -1,7 +1,8 @@
 // Copyright 2025, University of Colorado Boulder
 
 /**
- * AveragePolarizationInfoDialog is a dialog that shows a key to the math symbols used in the 'Discrete' screen.
+ * AveragePolarizationInfoDialog is a dialog that provides information about the average polarization equation shown in
+ * the 'Photons' screen.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
@@ -37,7 +38,12 @@ export default class AveragePolarizationInfoDialog extends Dialog {
       font: ITEM_FONT,
       maxWidth: MAX_WIDTH
     };
-    const subtitle = new Text( QuantumMeasurementStrings.averagePolarizationDialog.subTitleStringProperty, richTextOptions );
+    const subtitle = new Text(
+      QuantumMeasurementStrings.averagePolarizationDialog.subTitleStringProperty,
+      richTextOptions
+    );
+
+    // Create derived properties for the strings that explain the equation elements.
     const numberOfVerticalExplanationStringProperty = new DerivedStringProperty(
       [
         QuantumMeasurementStrings.NStringProperty,
@@ -82,6 +88,7 @@ export default class AveragePolarizationInfoDialog extends Dialog {
       }
     );
 
+    // Create the RichText nodes for the equation explanation strings.
     const equationExplanationStringProperties = [
       numberOfVerticalExplanationStringProperty,
       numberOfHorizontalExplanationStringProperty,
@@ -91,6 +98,7 @@ export default class AveragePolarizationInfoDialog extends Dialog {
       stringProperty => new RichText( stringProperty, richTextOptions )
     );
 
+    // Create the explanatory paragraph that sits at the bottom of the dialog.
     const explanatoryParagraphProperty = new RichText(
       QuantumMeasurementStrings.averagePolarizationDialog.explanatoryParagraphStringProperty,
       {
@@ -99,6 +107,7 @@ export default class AveragePolarizationInfoDialog extends Dialog {
       }
     );
 
+    // Put it all together with spacing in a vertical box.
     const content = new VBox( {
       children: [
         new Spacer( 0, 5 ),
