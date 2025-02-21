@@ -25,6 +25,13 @@ type StringsType = {
   'atomsStringProperty': LocalizedStringProperty;
   'averagePolarizationStringProperty': LocalizedStringProperty;
   'averagePolarizationRateStringProperty': LocalizedStringProperty;
+  'averagePolarizationDialog': {
+    'titleStringProperty': LocalizedStringProperty;
+    'subTitleStringProperty': LocalizedStringProperty;
+    'numberOfPhotonsPatternPhraseStringProperty': LocalizedStringProperty;
+    'totalNumberOfPhotonsPatternPhraseStringProperty': LocalizedStringProperty;
+    'explanatoryParagraphStringProperty': LocalizedStringProperty;
+  };
   'averagePolarizationRepresentationStringProperty': LocalizedStringProperty;
   'coinStringProperty': LocalizedStringProperty;
   'coinBiasStringProperty': LocalizedStringProperty;
