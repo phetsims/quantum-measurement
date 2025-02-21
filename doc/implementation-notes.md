@@ -60,11 +60,11 @@ some of the most important ones:
   in contrast to the preparation area, where the user can prepare the system.
 - **Preparation Area** - Several of the screens have an area where the user can prepare the state of the system. This is
   in contrast to the measurement area, where the user can measure the state of the system.
-- **Quantum System** - - A system that behaves in a probabilistic way, where the state of the system can only be known
+- **Quantum System** - A system that behaves in a probabilistic way, where the state of the system can only be known
   after measurement and is in a superposition of states until measured.
 - **Superposition** - The state of a quantum system before it is measured. It is a combination of all possible states
   that the system can be in.
-- **Bloch Sphere** -Named after the physicist Felix Bloch, the Bloch sphere is a geometrical representation of the pure
+- **Bloch Sphere** - Named after the physicist Felix Bloch, the Bloch sphere is a geometrical representation of the pure
   state space of a two-level quantum mechanical system.
 
 ### Common Model and View Patterns
@@ -79,7 +79,7 @@ some of the most important ones:
   display a number (number, rate, fraction, percentage, etc).
 - **Bloch Sphere** - Both the third and fourth screens (Spin and Bloch Sphere) display a SphereNode which is the visual
   representation of a Bloch Sphere. This view component appears multiple times across the two screens. However, since
-  the fourth screen focuses specifically on explaining that same concept, you might find many files associated to that
+  the fourth screen focuses specifically on explaining that same concept, you might find many files associated with that
   name.
   Here we list which ones are related to the view component (the blue sphere), and which are top level screen files:
     - Component related:
@@ -140,12 +140,12 @@ results of the measurements, and for animating the re-preparation of experiments
 is the main view class for each of the two scenes, and it contains view representations for the coins and the coin sets.
 The creation and animation of the coin nodes are handled by `SingleCoinViewManager`, `MultipleCoinViewManager`, and
 `ManyCoinViewManager`. Each of these creates nodes used to represent the coins and animates their movement, including
-flipping the coins.  `ManyCoinViewManager` is used for the 10k coin set, and it uses canvas to represent each coin
+flipping the coins. `ManyCoinViewManager` is used for the 10k coin set, and it uses canvas to represent each coin
 essentially as a pixel.
 
 ### Photons Screen
 
-The "Photons" screen demonstrates how photons with a given polarization angle behavior when passing through a beam
+The "Photons" screen demonstrates how photons with a given polarization angle behave when passing through a beam
 splitter. The user can prepare a photon with a given polarization angle, then view the path that it travels towards
 a detector. The user can choose either classical or quantum behavior, and in the quantum case, the photon is in a
 superposition of states until measured.
@@ -185,10 +185,10 @@ at startup but populated and decimated during the sim, which helps with phet-io 
 
 The particles in this screen are simple: they go from a starting to an end position set by the `ParticleCollection`
 class. On it, the function `decideParticleDestiny()` checks if the particle reached its current destination, and decides
-if it has to be measured by a SG, given a new starting and ending position, or if it has to be removed from the
+if it has to be measured by a Stern-Gerlach apparatus, given a new starting and ending position, or has to be removed from the
 collection. Particles also store information of their past measured states (spin up or down) and lifetime, which helps
 with the serialization. Since the paths the particles can take are many, we use the spin information to assign a
-position to the particle, based on the Stern Gerlachs position information.
+position to the particle, based on the Stern-Gerlach's position information.
 
 ##### View
 
@@ -212,7 +212,7 @@ The main model class - `BlochSphereModel` - contains a number of Bloch sphere mo
 state and others for tracking the results of the measurements. It also contains a number of Properties that keep track
 of that nature and state of the experiment, such as the prepared state, the measured state, the basis along which the
 measurement is made, and the magnetic field strength. When the magnetic field is activated, measurements have to be
-timed to better analize the phase of the precession. That's why in the model there are some controls for the timing and
+timed to better analyze the phase of the precession. That's why in the model there are some controls for the timing and
 delay of the measurements.
 
 The class `BlochSphereNumericalEquationNode` not only shows the numeric values of the state equation, but also handles
