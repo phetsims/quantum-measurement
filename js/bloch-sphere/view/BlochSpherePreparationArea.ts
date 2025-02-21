@@ -45,7 +45,7 @@ export default class BlochSpherePreparationArea extends VBox {
       {
         center: new Vector2( 100, 200 ),
         tandem: providedOptions.tandem.createTandem( 'polarSlider' ),
-        thumbFill: '#444',
+        thumbFill: QuantumMeasurementColors.preparationSlidersThumbFillColorProperty,
         trackSize: new Dimension2( 150, 0.5 ),
         majorTickLength: 10,
         constrainValue: value => Utils.roundToInterval( value, 5 / 180 * Math.PI ), // 5 degree intervals
@@ -58,7 +58,7 @@ export default class BlochSpherePreparationArea extends VBox {
       {
         center: new Vector2( 100, 100 ),
         tandem: providedOptions.tandem.createTandem( 'azimuthSlider' ),
-        thumbFill: '#444',
+        thumbFill: QuantumMeasurementColors.preparationSlidersThumbFillColorProperty,
         trackSize: new Dimension2( 150, 0.5 ),
         majorTickLength: 10,
         constrainValue: value => Utils.roundToInterval( value, 5 / 360 * Math.PI * 2 ), // 5 degree intervals

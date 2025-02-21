@@ -24,6 +24,10 @@ const QuantumMeasurementColors = {
     default: 'white'
   } ),
 
+  /**
+   * COINS SCREEN COLORS --------------------------------------------------------
+   */
+
   // colors for selector button
   selectorButtonSelectedColorProperty: new ProfileColorProperty( quantumMeasurement, 'selectorButtonSelected', {
     default: '#0FF'
@@ -66,6 +70,17 @@ const QuantumMeasurementColors = {
   } ),
   downColorProperty: new ProfileColorProperty( quantumMeasurement, 'down', {
     default: '#F0F'
+  } ),
+
+  // test boxes
+  testBoxRectangleStroke: new ProfileColorProperty( quantumMeasurement, 'testBoxRectangleFill', {
+    default: '#777'
+  } ),
+  testBoxLinearGradientColor1: new ProfileColorProperty( quantumMeasurement, 'testBoxLinearGradientColor1', {
+    default: '#EEE'
+  } ),
+  testBoxLinearGradientColor2: new ProfileColorProperty( quantumMeasurement, 'testBoxLinearGradientColor2', {
+    default: '#bae3e0'
   } ),
 
   // coin fills
@@ -124,6 +139,10 @@ const QuantumMeasurementColors = {
     default: 'rgba( 255, 255, 255, 0 )'
   } ),
 
+  /**
+   * PHOTON SCREEN COLORS --------------------------------------------------------
+   */
+
   // Colors for the photon polarization
   horizontalPolarizationColorProperty: new ProfileColorProperty( quantumMeasurement, 'horizontalPolarization', {
     default: '#F0F'
@@ -140,6 +159,17 @@ const QuantumMeasurementColors = {
     default: '#D1E2FA'
   } ),
 
+  splitterEnclosureNodeFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'splitterEnclosureNodeFill', {
+    default: '#A3FFFF'
+  } ),
+  splitterLineNodeFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'splitterLineNodeFill', {
+    default: '#50FFFF'
+  } ),
+
+  /**
+   * SPIN SCREEN COLORS --------------------------------------------------------
+   */
+
   // color for particles on the "Spin" screen particles.
   particleColorProperty: new ProfileColorProperty( quantumMeasurement, 'particleColor', {
     default: '#F0F'
@@ -150,17 +180,42 @@ const QuantumMeasurementColors = {
     default: '#FF0'
   } ),
 
+  magneticFieldThumbFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'magneticFieldThumbFill', {
+    default: '#EE0'
+  } ),
+
   // background for the box that contains the atoms on the Bloch Sphere screen
-  systemUnderTestBackgroundColorProperty: new ProfileColorProperty( quantumMeasurement, 'systemUnderTestBackgroundColorProperty', {
+  systemUnderTestBackgroundColorProperty: new ProfileColorProperty( quantumMeasurement, 'systemUnderTestBackground', {
     default: '#FFF'
   } ),
 
+  expectedPercentageFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'expectedPercentageFill', {
+    default: '#0a0'
+  } ),
+
+  sternGerlachCurveColorProperty: new ProfileColorProperty( quantumMeasurement, 'sternGerlachCurve', {
+    default: '#aff'
+  } ),
+
+  /**
+   * BLOCH SCREEN COLORS --------------------------------------------------------
+   */
+
   // Bloch sphere colors
-  blockSphereMainColorProperty: new ProfileColorProperty( quantumMeasurement, 'blockSphereMainColorProperty', {
+  blockSphereMainColorProperty: new ProfileColorProperty( quantumMeasurement, 'blockSphereMain', {
     default: '#0FF'
   } ),
-  blockSphereHighlightColorProperty: new ProfileColorProperty( quantumMeasurement, 'blockSphereHighlightColorProperty', {
+  blockSphereHighlightColorProperty: new ProfileColorProperty( quantumMeasurement, 'blockSphereHighlight', {
     default: '#FFF'
+  } ),
+  preparationSlidersThumbFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'preparationSlidersThumbFill', {
+    default: '#444'
+  } ),
+  measurementTimerFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'measurementTimerFill', {
+    default: '#aaa'
+  } ),
+  measurementTimerFillHighlightedColorProperty: new ProfileColorProperty( quantumMeasurement, 'measurementTimerFillHighlighted', {
+    default: '#fff'
   } )
 
 };

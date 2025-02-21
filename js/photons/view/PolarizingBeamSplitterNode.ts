@@ -17,6 +17,7 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Rectangle, { RectangleOptions } from '../../../../scenery/js/nodes/Rectangle.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import Color from '../../../../scenery/js/util/Color.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import PolarizingBeamSplitter from '../model/PolarizingBeamSplitter.js';
@@ -36,13 +37,13 @@ export default class PolarizingBeamSplitterNode extends Node {
     );
 
     const enclosureNode = new Rectangle( 0, 0, nodeSize.width, nodeSize.height, {
-      fill: new Color( '#A3FFFF' ),
+      fill: QuantumMeasurementColors.splitterEnclosureNodeFillColorProperty,
       opacity: 0.5,
       center: modelViewTransform.modelToViewPosition( model.centerPosition )
     } );
 
     const lineNode = new Line( 0, nodeSize.height, nodeSize.width, 0, {
-      stroke: new Color( '#50FFFF' ),
+      stroke: QuantumMeasurementColors.splitterLineNodeFillColorProperty,
       lineWidth: 2,
       lineCap: 'butt',
       center: modelViewTransform.modelToViewPosition( model.centerPosition )

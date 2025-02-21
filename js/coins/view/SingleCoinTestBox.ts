@@ -16,6 +16,7 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { ExperimentMeasurementState } from '../model/ExperimentMeasurementState.js';
 
@@ -44,7 +45,7 @@ export default class SingleCoinTestBox extends Node {
     // Add the main rectangular area that will define the test box.
     const testBoxRectangle = new Rectangle( testBoxBounds, {
         lineWidth: SINGLE_COIN_AREA_RECT_LINE_WIDTH,
-        stroke: new Color( '#777777' )
+        stroke: QuantumMeasurementColors.testBoxRectangleStroke
       }
     );
 

@@ -26,6 +26,7 @@ import Color from '../../../../scenery/js/util/Color.js';
 import { PanelOptions } from '../../../../sun/js/Panel.js';
 import Slider from '../../../../sun/js/Slider.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import MeasurementSymbolNode from '../../common/view/MeasurementSymbolNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
@@ -49,8 +50,8 @@ export default class MeasurementTimerControl extends Node {
     const thumbOffset = 30;
     const thumbDimensions = new Dimension2( 30, 30 );
     const thumbPathOptions = {
-      fill: '#aaa',
-      fillHighlighted: '#fff',
+      fill: QuantumMeasurementColors.measurementTimerFillColorProperty,
+      fillHighlighted: QuantumMeasurementColors.measurementTimerFillHighlightedColorProperty,
       stroke: 'black',
       lineWidth: 2
     };

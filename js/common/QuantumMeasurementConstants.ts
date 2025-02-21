@@ -27,7 +27,7 @@ const QuantumMeasurementConstants = {
   MAX_PRECESSION_RATE: Math.PI / 2, // in radians per second
 
   expectedPercentagePathOptions: {
-    stroke: '#0a0',
+    stroke: QuantumMeasurementColors.expectedPercentageFillColorProperty,
     lineWidth: 5
   },
 

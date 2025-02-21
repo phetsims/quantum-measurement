@@ -17,6 +17,7 @@ import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import CoinSet from '../model/CoinSet.js';
@@ -55,7 +56,7 @@ class MultiCoinTestBox extends Node {
         fill: TEST_BOX_CONTENTS_HIDDEN_FILL,
         opacity: 0.5,
         lineWidth: 2,
-        stroke: new Color( '#666666' )
+        stroke: QuantumMeasurementColors.testBoxRectangleStroke
       }
     );
 
