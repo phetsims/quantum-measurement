@@ -9,12 +9,12 @@
 
 import BlochSphereModel from 'model/BlochSphereModel.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
-import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import VBox, { VBoxOptions } from '../../../../scenery/js/layout/nodes/VBox.js';
@@ -94,17 +94,15 @@ export default class BlochSpherePreparationArea extends VBox {
         children: [
           directionComboBox,
           new Text(
-            //REVIEW: Use PatternStringProperty
-            new DerivedProperty(
-              [ QuantumMeasurementStrings.polarAngleParenthesesSymbolPatternStringProperty ],
-              stringPattern => StringUtils.fillIn( stringPattern, { symbol: MathSymbols.THETA } )
+            new PatternStringProperty(
+              QuantumMeasurementStrings.polarAngleParenthesesSymbolPatternStringProperty,
+              { symbol: MathSymbols.THETA }
             ), { font: new PhetFont( 15 ), maxWidth: 200 } ), // Theta symbol: θ
           polarSlider,
           new Text(
-            //REVIEW: Use PatternStringProperty
-            new DerivedProperty(
-              [ QuantumMeasurementStrings.azimuthalAngleParenthesesSymbolPatternStringProperty ],
-              stringPattern => StringUtils.fillIn( stringPattern, { symbol: MathSymbols.PHI } )
+            new PatternStringProperty(
+              QuantumMeasurementStrings.azimuthalAngleParenthesesSymbolPatternStringProperty,
+              { symbol: MathSymbols.PHI }
             ), { font: new PhetFont( 15 ), maxWidth: 200 } ), // Phi symbol: φ
           azimuthSlider
         ]

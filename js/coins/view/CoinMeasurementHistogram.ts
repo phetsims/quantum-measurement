@@ -7,11 +7,10 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
@@ -102,13 +101,9 @@ export default class CoinMeasurementHistogram extends QuantumMeasurementHistogra
       providedOptions
     );
 
-    // REVIEW: This is another example where you should probably use PatternStringProperty instead of StringUtils.fillIn
-    const numberOfCoinsStringProperty = new DerivedStringProperty(
-      [ coinSet.numberOfActiveCoinsProperty ],
-      numberOfCoins => StringUtils.fillIn(
-        QuantumMeasurementStrings.numberOfCoinsPatternStringProperty,
-        { number: numberOfCoins }
-      )
+    const numberOfCoinsStringProperty = new PatternStringProperty(
+      QuantumMeasurementStrings.numberOfCoinsPatternStringProperty,
+      { number: coinSet.numberOfActiveCoinsProperty }
     );
 
     const numberOfSystemsText = new Text( numberOfCoinsStringProperty, {

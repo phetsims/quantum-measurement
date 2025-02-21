@@ -7,12 +7,11 @@
  * @author Agustín Vallejo
  */
 
-import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
+import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
-import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { BlockingMode } from './BlockingMode.js';
@@ -73,12 +72,12 @@ export default class SpinExperiment extends EnumerationValue {
     super();
     this.experimentName = index === 'Custom' ?
                           QuantumMeasurementStrings.customStringProperty :
-                          new DerivedStringProperty(
-                            [ QuantumMeasurementStrings.experimentNPatternStringProperty ],
-                            ( experimentNPattern: string ) => StringUtils.fillIn( experimentNPattern, {
+                          new PatternStringProperty(
+                            QuantumMeasurementStrings.experimentNPatternStringProperty,
+                            {
                               number: index,
                               order: experimentOrder
-                            } )
+                            }
                           );
     this.experimentSetting = experimentSetting;
 

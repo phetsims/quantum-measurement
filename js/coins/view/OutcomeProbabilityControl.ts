@@ -13,7 +13,7 @@ import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js'
 import Multilink from '../../../../axon/js/Multilink.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { toFixed } from '../../../../dot/js/util/toFixed.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
@@ -202,8 +202,8 @@ export default class OutcomeProbabilityControl extends VBox {
           QuantumMeasurementStrings.a11y.translatable.equationAccessibleParagraphPatternStringProperty
         ],
         ( outcomeProbability, tailsColor, downColor, equationPattern ) => {
-          const alphaValue = Utils.toFixed( Math.sqrt( outcomeProbability ), 3 );
-          const betaValue = Utils.toFixed( Math.sqrt( 1 - outcomeProbability ), 3 );
+          const alphaValue = toFixed( Math.sqrt( outcomeProbability ), 3 );
+          const betaValue = toFixed( Math.sqrt( 1 - outcomeProbability ), 3 );
 
           // REVIEW: This StringUtils.fillIn feels particularly alarming. This feels like a classic case where
           // PatternStringProperty will do what you need. If not, very clearly document.
