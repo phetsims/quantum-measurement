@@ -34,9 +34,9 @@ simLauncher.launch( () => {
   const options: SimOptions = {
 
     credits: {
-      leadDesign: '',
-      softwareDevelopment: '',
-      team: '',
+      leadDesign: 'Ariel Paul, Amy Rouinfar',
+      softwareDevelopment: 'John Blanco, Agust\u00edn Vallejo',
+      team: 'Mike Bennet, Josh Combes, Aiko Kyle, Phil Makotyn, Kathy Perkins, Ana Maria Rey, Martin Veillette',
       contributors: '',
       qualityAssurance: '',
       graphicArts: '',
