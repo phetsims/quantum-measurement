@@ -64,6 +64,7 @@ export default class SpinMeasurementArea extends VBox {
       tandem: tandem.createTandem( 'experimentComboBox' )
     } );
 
+    // REVIEW: Add documentation for this modelViewTransform. How/why is it used?
     const modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       Vector2.ZERO,
       new Vector2( 0, 0 ),
@@ -262,7 +263,7 @@ export default class SpinMeasurementArea extends VBox {
       yMargin: 10
     } );
 
-    // Add the sprites for the photons after calling the super constructor so that we can use the bounds to set the
+    // Add the sprites for the particles after calling the super constructor so that we can use the bounds to set the
     // canvas size.
     this.particleSprites = new ParticleSprites(
       model.singleParticlesCollection.particles,
