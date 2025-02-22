@@ -256,7 +256,8 @@ class CoinSet extends PhetioObject {
     // state checking
     assert && assert(
       this.measurementStateProperty.value === 'measuredAndHidden' ||
-      this.measurementStateProperty.value === 'readyToBeMeasured',
+      this.measurementStateProperty.value === 'readyToBeMeasured' ||
+      ( this.measurementStateProperty.value === 'revealed' && isSettingPhetioStateProperty.value ),
       'This system is not in an appropriate state to be revealed'
     );
 
