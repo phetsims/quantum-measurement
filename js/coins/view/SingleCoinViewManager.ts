@@ -39,10 +39,15 @@ const COIN_TRAVEL_ANIMATION_DURATION = MEASUREMENT_PREPARATION_TIME * 0.95;
 
 class SingleCoinViewManager {
 
-  public readonly abortIngressAnimationForSingleCoin: () => void;
+  // methods to start and abort the animation of the single coin moving from the preparation area to the test box
   public readonly startIngressAnimationForSingleCoin: ( forReprepare: boolean ) => void;
+  public readonly abortIngressAnimationForSingleCoin: () => void;
+
+  // method to update the flipping animation of the single coin
+  public readonly updateFlipping: ( singleCoinMeasurementState: ExperimentMeasurementState ) => void;
+
+  // method to clear the single coin test box
   public readonly clearSingleCoinTestBox: () => void;
-  public readonly flipCoin: ( singleCoinMeasurementState: ExperimentMeasurementState ) => void;
 
   public constructor( sceneModel: CoinsExperimentSceneModel,
                       measurementArea: CoinExperimentMeasurementArea,
@@ -205,7 +210,7 @@ class SingleCoinViewManager {
         singleCoinAnimationFromEdgeOfTestBoxToInside.start();
       } );
 
-      // Regardless of how the animation terminated its reference needs to be cleared when it is done.
+      // Regardless of how the animation terminated, its reference needs to be cleared when it is done.
       singleCoinAnimationFromPrepAreaToEdgeOfTestBox.endedEmitter.addListener( () => {
         singleCoinAnimationFromPrepAreaToEdgeOfTestBox = null;
       } );
@@ -214,7 +219,7 @@ class SingleCoinViewManager {
       singleCoinAnimationFromPrepAreaToEdgeOfTestBox.start();
     };
 
-    this.flipCoin = ( singleCoinMeasurementState: ExperimentMeasurementState ) => {
+    this.updateFlipping = ( singleCoinMeasurementState: ExperimentMeasurementState ) => {
       if ( sceneModel.systemType === 'classical' ) {
 
         if ( singleCoinMeasurementState === 'preparingToBeMeasured' ) {
@@ -235,12 +240,12 @@ class SingleCoinViewManager {
             flippingAnimationPhase += 2 * Math.PI * COIN_FLIP_RATE * dt;
             let xScale = Math.sin( flippingAnimationPhase );
 
-            // Handle the case where we hit zero, since the scale can't be set to that value.
+            // Handle the case where the scale hits zero, since it can't be set to that value.
             if ( xScale === 0 ) {
               xScale = previousXScale < 0 ? 0.01 : -0.01;
             }
 
-            // Scale the coin on the x-axis to make it look like they are rotating.
+            // Scale the coin on the x-axis to make it look like it is rotating relative to the plane of view.
             coinMask.setScaleMagnitude( xScale, 1 );
             singleCoinNode!.setScaleMagnitude( xScale, 1 );
 

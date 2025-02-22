@@ -18,6 +18,7 @@ import Circle from '../../../../scenery/js/nodes/Circle.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import { MEASUREMENT_PREPARATION_TIME } from '../model/CoinSet.js';
@@ -148,7 +149,7 @@ class SmallCoinNode extends Node {
       },
       getValue: () => flipPhase,
       to: Math.PI * destinationPhaseMultiplier,
-      duration: MEASUREMENT_PREPARATION_TIME,
+      duration: isSettingPhetioStateProperty.value ? 0 : MEASUREMENT_PREPARATION_TIME,
       easing: Easing.LINEAR
     } );
     this.flippingAnimation.endedEmitter.addListener( () => {

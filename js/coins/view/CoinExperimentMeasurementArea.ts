@@ -278,7 +278,7 @@ class CoinExperimentMeasurementArea extends VBox {
 
     // Listen to the state of the coin and animate a flipping motion for the classical coin or a travel-from-the-prep-
     // area animation for the quantum coin.
-    sceneModel.singleCoin.measurementStateProperty.lazyLink( singleCoinViewManager.flipCoin );
+    sceneModel.singleCoin.measurementStateProperty.lazyLink( singleCoinViewManager.updateFlipping );
 
     sceneModel.coinSet.measurementStateProperty.link( measurementState => {
 

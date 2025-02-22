@@ -19,6 +19,7 @@ import Random from '../../../../dot/js/Random.js';
 import Range from '../../../../dot/js/Range.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
@@ -177,6 +178,33 @@ class CoinSet extends PhetioObject {
 
       // Fire the emitter that signals a change to the data.
       this.measuredDataChangedEmitter.emit();
+    } );
+
+    // The following listener handles a phet-io-specific edge case.  If state happened to be captured while this coin
+    // set was in the process of being prepared for measurement, the state will need to automatically transition to
+    // another state at the end of the phet-io state setting process.  This is because the 'preparingToBeMeasured' state
+    // is transitional in the model, and we don't want that to be stateful, since it is essentially for supporting
+    // animations (e.g. coin flipping).  See https://github.com/phetsims/quantum-measurement/issues/111.
+    isSettingPhetioStateProperty.lazyLink( isSettingPhetioState => {
+      if ( isSettingPhetioState ) {
+
+        // If there is a timeout running, cancel it, because it was started by previous interaction by the user and
+        // would cause state problems if it went off after phet-io state was set.
+        if ( this.preparingToBeMeasuredTimeoutListener ) {
+          stepTimer.clearTimeout( this.preparingToBeMeasuredTimeoutListener );
+          this.preparingToBeMeasuredTimeoutListener = null;
+        }
+      }
+      else {
+
+        // PhET-iO state just finished being set.  If this coin set is in the `preparingToBeMeasured` state, it should
+        // automatically move to the next state, since we won't have a timer running to make the transition.
+        if ( this.measurementStateProperty.value === 'preparingToBeMeasured' ) {
+          this.measurementStateProperty.value = this.coinType === 'classical' ?
+                                                'measuredAndHidden' :
+                                                'readyToBeMeasured';
+        }
+      }
     } );
   }
 
