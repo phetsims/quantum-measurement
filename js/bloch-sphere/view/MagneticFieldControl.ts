@@ -9,7 +9,7 @@
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { roundToInterval } from '../../../../dot/js/util/roundToInterval.js';
 import Shape from '../../../../kite/js/Shape.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Orientation from '../../../../phet-core/js/Orientation.js';
@@ -86,7 +86,7 @@ export default class MagneticFieldControl extends Panel {
       thumbCenterLineStroke: Color.BLACK,
       trackSize: SLIDER_TRACK_SIZE,
       trackFillEnabled: Color.BLACK,
-      constrainValue: value => Utils.roundToInterval( value, 0.25 ),
+      constrainValue: value => roundToInterval( value, 0.25 ),
       orientation: Orientation.VERTICAL,
       majorTickLength: 20
     } );

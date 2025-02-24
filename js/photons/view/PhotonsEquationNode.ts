@@ -12,6 +12,7 @@ import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js'
 import Multilink from '../../../../axon/js/Multilink.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import { toFixed } from '../../../../dot/js/util/toFixed.js';
 import Utils from '../../../../dot/js/Utils.js';
 import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
@@ -96,14 +97,14 @@ export default class PhotonsEquationNode extends HBox {
       ],
       ( VValue, HValue, TotalValue ) => {
         numericalEquationNumeratorProperty.value = `${QuantumMeasurementConstants.CREATE_COLOR_SPAN(
-          Utils.toFixed( VValue, 0 ), QuantumMeasurementColors.verticalPolarizationColorProperty.value
+          toFixed( VValue, 0 ), QuantumMeasurementColors.verticalPolarizationColorProperty.value
         )} - ${QuantumMeasurementConstants.CREATE_COLOR_SPAN(
-          Utils.toFixed( HValue, 0 ), QuantumMeasurementColors.horizontalPolarizationColorProperty.value
+          toFixed( HValue, 0 ), QuantumMeasurementColors.horizontalPolarizationColorProperty.value
         )}`;
 
         numericalEquationDenominatorProperty.value = `${Utils.toFixed( TotalValue, 0 )}`;
 
-        numericalResultProperty.value = Utils.toFixed( ( VValue - HValue ) / TotalValue, 3 );
+        numericalResultProperty.value = toFixed( ( VValue - HValue ) / TotalValue, 3 );
       }
     );
 

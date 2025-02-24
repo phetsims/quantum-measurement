@@ -12,7 +12,7 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { toFixedNumber } from '../../../../dot/js/util/toFixedNumber.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import NumberControl, { NumberControlOptions } from '../../../../scenery-phet/js/NumberControl.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -70,7 +70,7 @@ export default class ProbabilityValueControl extends NumberControl {
         keyboardStep: BUTTON_CHANGE_AMOUNT,
         shiftKeyboardStep: BUTTON_CHANGE_AMOUNT / 5,
         pageKeyboardStep: BUTTON_CHANGE_AMOUNT * 4,
-        constrainValue: ( number: number ) => Utils.toFixedNumber( number, 2 ),
+        constrainValue: ( number: number ) => toFixedNumber( number, 2 ),
         majorTicks: [
           { value: RANGE.min, label: new Text( RANGE.min.toString(), { font: TICK_MARK_FONT } ) },
           { value: RANGE.max, label: new Text( RANGE.max.toString(), { font: TICK_MARK_FONT } ) }

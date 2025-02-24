@@ -12,7 +12,7 @@ import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js'
 import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { toRadians } from '../../../../dot/js/util/toRadians.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
@@ -230,8 +230,8 @@ export default class SpinMeasurementArea extends VBox {
       if ( position !== null ) {
         exitBlockerNode.visible = true;
         exitBlockerNode.rotation = model.sternGerlachs[ 0 ].blockingModeProperty.value === BlockingMode.BLOCK_UP ?
-                                   Utils.toRadians( -10 ) :
-                                   Utils.toRadians( 10 );
+                                   toRadians( -10 ) :
+                                   toRadians( 10 );
         exitBlockerNode.center = modelViewTransform.modelToViewPosition( position );
       }
       else {

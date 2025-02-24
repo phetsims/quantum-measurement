@@ -16,6 +16,8 @@ import StringProperty from '../../../../axon/js/StringProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
+import { clamp } from '../../../../dot/js/util/clamp.js';
+import { toFixed } from '../../../../dot/js/util/toFixed.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Shape from '../../../../kite/js/Shape.js';
 import optionize, { combineOptions } from '../../../../phet-core/js/optionize.js';
@@ -288,7 +290,7 @@ class QuantumMeasurementHistogram extends Node {
               backgroundFill: new Color( 255, 255, 255, 0.8 ),
               backgroundStroke: null,
               centerY: 0,
-              numberFormatter: value => Utils.toFixed( value, 3 )
+              numberFormatter: value => toFixed( value, 3 )
             }
           )
         ]
@@ -328,11 +330,11 @@ class QuantumMeasurementHistogram extends Node {
       ],
       ( leftNumber, rightNumber ) => {
         const leftProportion = totalNumberProperty.value ? leftNumber / totalNumberProperty.value : 0;
-        leftPercentageProperty.value = Utils.clamp( leftProportion * 100, 0, 100 );
+        leftPercentageProperty.value = clamp( leftProportion * 100, 0, 100 );
         leftHistogramBar.setRect( 0, 0, options.barWidth, leftProportion * maxBarHeight );
         leftHistogramBar.bottom = xAxis.centerY;
         const rightProportion = totalNumberProperty.value ? rightNumber / totalNumberProperty.value : 0;
-        rightPercentageProperty.value = Utils.clamp( rightProportion * 100, 0, 100 );
+        rightPercentageProperty.value = clamp( rightProportion * 100, 0, 100 );
         rightHistogramBar.setRect( 0, 0, options.barWidth, rightProportion * maxBarHeight );
         rightHistogramBar.bottom = xAxis.centerY;
 

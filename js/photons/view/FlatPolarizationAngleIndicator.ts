@@ -10,6 +10,7 @@
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import { toRadians } from '../../../../dot/js/util/toRadians.js';
 import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
@@ -187,7 +188,7 @@ export default class FlatPolarizationAngleIndicator extends Node {
           UNIT_LENGTH / 2,
           0,
           0,
-          Utils.toRadians( -polarizationAngle ),
+          toRadians( -polarizationAngle ),
           true
         );
         if ( polarizationAngle > 30 ) {

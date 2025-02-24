@@ -10,7 +10,7 @@
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { toFixed } from '../../../../dot/js/util/toFixed.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
@@ -113,9 +113,9 @@ export default class BlochSphereNumericalEquationNode extends HBox {
         }
 
         // Convert numbers to strings
-        const upCoefficientString = Utils.toFixed( upCoefficientValue, 2 );
-        const downCoefficientString = Utils.toFixed( downCoefficientValue, 2 );
-        const azimuthalCoefficientString = Utils.toFixed( azimuthalCoefficientValue, 2 );
+        const upCoefficientString = toFixed( upCoefficientValue, 2 );
+        const downCoefficientString = toFixed( downCoefficientValue, 2 );
+        const azimuthalCoefficientString = toFixed( azimuthalCoefficientValue, 2 );
 
         // Basis letter: e.g. "X_PLUS" => 'X', "Z_PLUS" => 'Z', etc.
         const direction = basis.description.split( '' )[ 1 ];
@@ -162,7 +162,7 @@ export default class BlochSphereNumericalEquationNode extends HBox {
 
           // Format the global phase as e^{i phiPlus pi} (factored out in front).
           phiPlus < 0 ? phiPlus += 2 : phiPlus;
-          const globalPhaseString = Utils.toFixed( phiPlus, 2 );
+          const globalPhaseString = toFixed( phiPlus, 2 );
           globalPhasePart = `e<sup>i${globalPhaseString}${PI}</sup> `;
 
           finalEquation = `|${PSI}⟩ = (${upComponent}${plus}${downComponent})${globalPhasePart}`;

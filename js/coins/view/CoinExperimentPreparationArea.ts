@@ -10,8 +10,9 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
+import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { toFixed } from '../../../../dot/js/util/toFixed.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
@@ -25,7 +26,6 @@ import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
 import OutcomeProbabilityControl from './OutcomeProbabilityControl.js';
 import ProbabilityEquationsNode from './ProbabilityEquationsNode.js';
 import SceneSectionHeader from './SceneSectionHeader.js';
-import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
 
 class CoinExperimentPreparationArea extends VBox {
 
@@ -82,11 +82,11 @@ class CoinExperimentPreparationArea extends VBox {
     );
 
     const formattedUpProbabilityProperty = new DerivedProperty( [ sceneModel.upProbabilityProperty ], upProbability => {
-      return Utils.toFixed( upProbability, 3 );
+      return toFixed( upProbability, 3 );
     } );
 
     const formattedDownProbabilityProperty = new DerivedProperty( [ sceneModel.downProbabilityProperty ], downProbability => {
-      return Utils.toFixed( downProbability, 3 );
+      return toFixed( downProbability, 3 );
     } );
 
     const coinStateStringProperty = getCoinAccessibleName( sceneModel.initialCoinFaceStateProperty );

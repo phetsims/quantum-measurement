@@ -11,7 +11,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { roundSymmetric } from '../../../../dot/js/util/roundSymmetric.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
@@ -86,7 +86,7 @@ export default class LaserNode extends Node {
         thumbFill: QuantumMeasurementColors.photonBaseColorProperty,
         thumbFillHighlighted: 'rgb( 0, 200, 0)',
         center: laserPointerNode.bounds.center.plusXY( -nozzleSize.width / 2, 0 ),
-        constrainValue: value => Utils.roundSymmetric( value ),
+        constrainValue: value => roundSymmetric( value ),
         tandem: providedOptions.tandem.createTandem( 'emissionRateSlider' )
       } );
       nodeChildren.push( emissionRateSlider );

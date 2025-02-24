@@ -9,7 +9,7 @@
  */
 
 import NumberProperty, { NumberPropertyOptions } from '../../../../axon/js/NumberProperty.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { toFixedNumber } from '../../../../dot/js/util/toFixedNumber.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
@@ -93,7 +93,7 @@ class AveragingCounterNumberProperty extends NumberProperty {
       if ( accumulatedSampleTime > 0 ) {
 
         // Calculate the average value.  This is rounded to 12 decimal places to avoid floating point errors.
-        this.value = Utils.toFixedNumber( accumulatedEventCount / accumulatedSampleTime, 12 );
+        this.value = toFixedNumber( accumulatedEventCount / accumulatedSampleTime, 12 );
       }
       else {
         this.value = 0;

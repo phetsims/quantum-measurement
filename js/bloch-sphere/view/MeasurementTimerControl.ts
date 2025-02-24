@@ -10,7 +10,7 @@
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { roundToInterval } from '../../../../dot/js/util/roundToInterval.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
@@ -98,7 +98,7 @@ export default class MeasurementTimerControl extends Node {
       trackSize: SLIDER_TRACK_SIZE,
       trackFillEnabled: Color.BLACK,
       constrainValue: value => {
-        const roundedValue = Utils.roundToInterval(
+        const roundedValue = roundToInterval(
           value,
           timeToMeasurementProperty.rangeProperty.value.max / ( NUMBER_OF_MINOR_TICKS + 1 )
         );

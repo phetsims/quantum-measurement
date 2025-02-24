@@ -11,7 +11,7 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { roundToInterval } from '../../../../dot/js/util/roundToInterval.js';
 import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
@@ -147,7 +147,7 @@ export default class PhotonPolarizationAngleControl extends Panel {
       trackFillEnabled: Color.BLACK,
       majorTickLength: 10,
       majorTickLineWidth: 1.5,
-      constrainValue: value => Utils.roundToInterval( value, 5 ),
+      constrainValue: value => roundToInterval( value, 5 ),
       tandem: providedOptions.tandem.createTandem( 'customAngleSlider' )
     } );
 

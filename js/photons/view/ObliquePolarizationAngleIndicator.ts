@@ -23,7 +23,7 @@
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { toRadians } from '../../../../dot/js/util/toRadians.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
@@ -61,7 +61,7 @@ const UNIT_LENGTH = AXIS_LENGTH * 0.75;
 
 // Define the angle of projection for the oblique drawing.
 const PROJECTION_ANGLE_IN_DEGREES = 45;
-const PROJECTION_ANGLE_IN_RADIANS = Utils.toRadians( PROJECTION_ANGLE_IN_DEGREES );
+const PROJECTION_ANGLE_IN_RADIANS = toRadians( PROJECTION_ANGLE_IN_DEGREES );
 
 // Define a function that projects a 3D point into the 2D plane of the screen. This uses what is called a "cabinet
 // projection" in engineering drawing, which is a specific type of oblique projection.
@@ -198,8 +198,8 @@ export default class ObliquePolarizationAngleIndicator extends Node {
 
         // Calculate the position of the polarization unit vector in the x-z plane.
         const polarizationVectorPlusInXZPlane = new Vector2(
-          Math.cos( Utils.toRadians( polarizationAngle ) ),
-          Math.sin( Utils.toRadians( polarizationAngle ) )
+          Math.cos( toRadians( polarizationAngle ) ),
+          Math.sin( toRadians( polarizationAngle ) )
         ).times( UNIT_LENGTH );
         const polarizationVectorMinusInXZPlane = polarizationVectorPlusInXZPlane.times( -1 );
 

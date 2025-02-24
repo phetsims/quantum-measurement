@@ -11,7 +11,7 @@ import BlochSphereModel from 'model/BlochSphereModel.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { roundToInterval } from '../../../../dot/js/util/roundToInterval.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
@@ -48,7 +48,7 @@ export default class BlochSpherePreparationArea extends VBox {
         thumbFill: QuantumMeasurementColors.preparationSlidersThumbFillColorProperty,
         trackSize: new Dimension2( 150, 0.5 ),
         majorTickLength: 10,
-        constrainValue: value => Utils.roundToInterval( value, 5 / 180 * Math.PI ), // 5 degree intervals
+        constrainValue: value => roundToInterval( value, 5 / 180 * Math.PI ), // 5 degree intervals
         shiftKeyboardStep: 5 / 180 * Math.PI
       }
     );
@@ -61,7 +61,7 @@ export default class BlochSpherePreparationArea extends VBox {
         thumbFill: QuantumMeasurementColors.preparationSlidersThumbFillColorProperty,
         trackSize: new Dimension2( 150, 0.5 ),
         majorTickLength: 10,
-        constrainValue: value => Utils.roundToInterval( value, 5 / 360 * Math.PI * 2 ), // 5 degree intervals
+        constrainValue: value => roundToInterval( value, 5 / 360 * Math.PI * 2 ), // 5 degree intervals
         shiftKeyboardStep: 5 / 360 * Math.PI * 2
       }
     );

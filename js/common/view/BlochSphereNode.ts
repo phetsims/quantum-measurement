@@ -11,7 +11,8 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { toFixedNumber } from '../../../../dot/js/util/toFixedNumber.js';
+import { toRadians } from '../../../../dot/js/util/toRadians.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector3 from '../../../../dot/js/Vector3.js';
 import Shape from '../../../../kite/js/Shape.js';
@@ -87,14 +88,14 @@ export default class BlochSphereNode extends Node {
     } );
 
     const equatorSemiMajorAxis = sphereRadius;
-    const equatorInclinationAngle = Utils.toRadians( 10 );
+    const equatorInclinationAngle = toRadians( 10 );
     const equatorSemiMinorAxis = Math.sin( equatorInclinationAngle ) * equatorSemiMajorAxis;
     const equatorLine = new Path(
       new Shape().ellipse( 0, 0, equatorSemiMajorAxis, equatorSemiMinorAxis, 0 ),
       AXES_OPTIONS
     );
 
-    const xAxisOffsetAngleProperty = new NumberProperty( Utils.toRadians( 20 ) );
+    const xAxisOffsetAngleProperty = new NumberProperty( toRadians( 20 ) );
 
     const pointOnTheEquator = ( azimuth: number, xAxisOffsetAngle = 0 ) => {
       return new Vector2(
@@ -256,7 +257,7 @@ export default class BlochSphereNode extends Node {
           Math.cos( polarAngle )
         );
         const distanceFromMiddleBack = tipPositionCartesian.distanceXYZ( -1, 0, 0 );
-        const stateVectorTipOpacity = Utils.toFixedNumber( Math.pow( distanceFromMiddleBack / 2, 2 ), 3 );
+        const stateVectorTipOpacity = toFixedNumber( Math.pow( distanceFromMiddleBack / 2, 2 ), 3 );
         const stateVectorGradient = new LinearGradient(
           stateVector.tailX,
           stateVector.tailY,

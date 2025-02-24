@@ -11,7 +11,7 @@
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Range from '../../../../dot/js/Range.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { moduloBetweenDown } from '../../../../dot/js/util/moduloBetweenDown.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import AbstractBlochSphere, { AbstractBlochSphereOptions } from '../../common/model/AbstractBlochSphere.js';
@@ -52,7 +52,7 @@ export default class ComplexBlochSphere extends AbstractBlochSphere {
    */
   public override step( dt: number ): void {
     const precession = this.rotatingSpeedProperty.value * QuantumMeasurementConstants.MAX_PRECESSION_RATE * dt;
-    this.azimuthalAngleProperty.value = Utils.moduloBetweenDown(
+    this.azimuthalAngleProperty.value = moduloBetweenDown(
       this.azimuthalAngleProperty.value + precession, 0, 2 * Math.PI
     );
   }

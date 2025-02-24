@@ -10,7 +10,7 @@
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { toFixed } from '../../../../dot/js/util/toFixed.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -102,8 +102,8 @@ export default class SpinStatePreparationArea extends VBox {
 
         const upProbability = ( spinState.dot( new Vector2( 0, 1 ) ) + 1 ) / 2;
         const downProbability = 1 - upProbability;
-        const alphaValue = Utils.toFixed( Math.sqrt( upProbability ), 3 );
-        const betaValue = Utils.toFixed( Math.sqrt( downProbability ), 3 );
+        const alphaValue = toFixed( Math.sqrt( upProbability ), 3 );
+        const betaValue = toFixed( Math.sqrt( downProbability ), 3 );
         return `${alphaValue}|${UP}${KET} + ${betaValue}|${DOWN}${KET}`;
       } );
 

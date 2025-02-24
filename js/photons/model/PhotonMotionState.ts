@@ -8,7 +8,7 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import Utils from '../../../../dot/js/Utils.js';
+import { lineSegmentIntersection } from '../../../../dot/js/util/lineSegmentIntersection.js';
 import Vector2, { Vector2StateObject } from '../../../../dot/js/Vector2.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
@@ -37,7 +37,7 @@ export class PhotonMotionState {
     const photonPathEndPoint = this.position.plus( this.direction.timesScalar( PHOTON_SPEED * dt ) );
 
     // Return the intersection point if there is one, null if not.
-    return Utils.lineSegmentIntersection(
+    return lineSegmentIntersection(
       this.position.x,
       this.position.y,
       photonPathEndPoint.x,

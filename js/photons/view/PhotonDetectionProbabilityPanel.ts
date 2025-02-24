@@ -10,7 +10,8 @@
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import Utils from '../../../../dot/js/Utils.js';
+import { toFixed } from '../../../../dot/js/util/toFixed.js';
+import { toRadians } from '../../../../dot/js/util/toRadians.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -53,7 +54,7 @@ export default class PhotonDetectionProbabilityPanel extends AccordionBox {
     // probability is unknown.
     const probabilityOfHorizontalProperty = new DerivedProperty(
       [ polarizationAngleProperty ],
-      polarizationAngle => polarizationAngle === null ? null : Math.cos( Utils.toRadians( polarizationAngle ) ) ** 2
+      polarizationAngle => polarizationAngle === null ? null : Math.cos( toRadians( polarizationAngle ) ) ** 2
     );
 
     // Calculate the probability of a photon being detected as vertically polarized. A null value indicates that the
@@ -76,7 +77,7 @@ export default class PhotonDetectionProbabilityPanel extends AccordionBox {
         const leftSide = `${pString}(${getColoredString( hString, horizontalColor )})`;
         const rightSide = probabilityOfHorizontal === null ?
                           unknownProbabilitySymbol :
-                          Utils.toFixed( probabilityOfHorizontal, 2 );
+                          toFixed( probabilityOfHorizontal, 2 );
         return `${leftSide} = ${rightSide}`;
       }
     );
@@ -92,7 +93,7 @@ export default class PhotonDetectionProbabilityPanel extends AccordionBox {
         const leftSide = `${pString}(${getColoredString( vString, verticalColor )})`;
         const rightSide = probabilityOfVertical === null ?
                           unknownProbabilitySymbol :
-                          Utils.toFixed( probabilityOfVertical, 2 );
+                          toFixed( probabilityOfVertical, 2 );
         return `${leftSide} = ${rightSide}`;
       }
     );
