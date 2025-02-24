@@ -48,8 +48,9 @@ const CHECKBOX_GROUP_POINTER_DILATION = CHECKBOX_GROUP_SPACING / 2;
 
 class PhotonsExperimentSceneView extends Node {
 
-  // The photon testing area is the part of the scene where photons are produced, reflected, and detected.
-  private readonly photonTestingArea: PhotonTestingArea;
+  // The area on the screen where the actual experiment is conducted, which shows the photons, beam splitters, mirror,
+  // and detectors.
+  private readonly experimentArea: PhotonTestingArea;
 
   // The normalized outcome vector graph shows the relative proportions of vertical and horizontal detections.
   private readonly normalizedOutcomeVectorGraph: NormalizedOutcomeVectorGraph;
@@ -77,18 +78,18 @@ class PhotonsExperimentSceneView extends Node {
       }
     );
 
-    const photonTestingArea = new PhotonTestingArea( model, {
+    const experimentArea = new PhotonTestingArea( model, {
 
       // center position empirically determined to match design doc
       center: new Vector2( 420, 225 ),
       phetioVisiblePropertyInstrumented: false,
-      tandem: providedOptions.tandem.createTandem( 'photonTestingArea' )
+      tandem: providedOptions.tandem.createTandem( 'experimentArea' )
     } );
 
     const polarizationIndicator = new ObliquePolarizationAngleIndicator( model.laser.polarizationAngleProperty, {
       scale: 1.5,
       centerX: photonDetectionProbabilityAccordionBox.centerX,
-      y: photonTestingArea.y,
+      y: experimentArea.y,
       tandem: providedOptions.tandem.createTandem( 'polarizationIndicator' )
     } );
 
@@ -196,7 +197,7 @@ class PhotonsExperimentSceneView extends Node {
       align: 'center',
       resize: false,
       left: titleAndEquationsBox.left - 20,
-      centerY: photonTestingArea.y
+      centerY: experimentArea.y
     } );
 
     const vectorRepresentationControl = new ExpectationValueVectorControl(
@@ -264,7 +265,7 @@ class PhotonsExperimentSceneView extends Node {
       playPauseButtonOptions: {
         radius: 25
       },
-      centerX: photonTestingArea.x + 20, // centered beneath the beam splitter
+      centerX: experimentArea.x + 20, // centered beneath the beam splitter
       bottom: photonPolarizationAngleControl.bottom - 6, // vertically aligned with reset all button
       tandem: providedOptions.tandem.createTandem( 'playPauseStepButtonGroup' )
     } );
@@ -274,7 +275,7 @@ class PhotonsExperimentSceneView extends Node {
         photonDetectionProbabilityAccordionBox,
         polarizationIndicator,
         photonPolarizationAngleControl,
-        photonTestingArea,
+        experimentArea,
         titleAndEquationsBox,
         dynamicDataDisplayBox,
         averagePolarizationDisplayControls,
@@ -284,13 +285,13 @@ class PhotonsExperimentSceneView extends Node {
 
     super( options );
 
-    this.photonTestingArea = photonTestingArea;
+    this.experimentArea = experimentArea;
     this.normalizedOutcomeVectorGraph = normalizedOutcomeVectorGraph;
     this.showDecimalValuesProperty = showDecimalValuesProperty;
   }
 
   public update(): void {
-    this.photonTestingArea.update();
+    this.experimentArea.update();
   }
 
   public reset(): void {

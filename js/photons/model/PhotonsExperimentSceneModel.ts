@@ -73,7 +73,8 @@ class PhotonsExperimentSceneModel {
   public readonly isPlayingProperty: BooleanProperty;
 
   // Whether the photons behave as classical or quantum particles. When they are classical, they will choose a path
-  // at the beam splitter. When they are quantum, they will be in a superposition of states.
+  // at the beam splitter. When they are quantum, they will be in a superposition of states after the beam splitter and
+  // will collapse to a specific location at the detectors.
   public readonly particleBehaviorModeProperty: Property<SystemType>;
 
   // Whether the probability accordion box is expanded
@@ -81,12 +82,16 @@ class PhotonsExperimentSceneModel {
 
   public constructor( providedOptions: PhotonsExperimentSceneModelOptions ) {
 
+    // Create a parent tandem for the experiment that is conducted on the photons so that the model elements that
+    // comprise the experiment can be grouped together within it.
+    const experimentTandem = providedOptions.tandem.createTandem( 'experiment' );
+
     // Create all photons that will be used in the experiment. It works better for phet-io if these are created at
     // construction time and activated and deactivated as needed, rather than creating and destroying them.
-    this.photonCollection = new PhotonCollection( providedOptions.tandem.createTandem( 'photonCollection' ) );
+    this.photonCollection = new PhotonCollection( experimentTandem.createTandem( 'photonCollection' ) );
 
     this.particleBehaviorModeProperty = new Property( 'classical', {
-      tandem: providedOptions.tandem.createTandem( 'particleBehaviorModeProperty' ),
+      tandem: experimentTandem.createTandem( 'particleBehaviorModeProperty' ),
       phetioValueType: StringUnionIO( SystemTypeValues ),
       validValues: SystemTypeValues,
       phetioFeatured: true
@@ -101,19 +106,19 @@ class PhotonsExperimentSceneModel {
     // The polarizing beam splitter that the photons will encounter.  This is in the middle of the model, everything
     // else is positioned around it.
     this.polarizingBeamSplitter = new PolarizingBeamSplitter( Vector2.ZERO, {
-      tandem: providedOptions.tandem.createTandem( 'polarizingBeamSplitter' ),
-      particleBehaviorModeProperty: this.particleBehaviorModeProperty
+      particleBehaviorModeProperty: this.particleBehaviorModeProperty,
+      tandem: experimentTandem.createTandem( 'polarizingBeamSplitter' )
     } );
 
     // Create the laser that will emit the photons that will be sent toward the polarizing beam splitter.
     this.laser = new Laser( new Vector2( -LASER_TO_BEAM_SPLITTER_DISTANCE, 0 ), this.photonCollection, {
       emissionMode: providedOptions.photonEmissionMode,
-      tandem: providedOptions.tandem.createTandem( 'laser' )
+      tandem: experimentTandem.createTandem( 'laser' )
     } );
 
     // The mirror that reflects the photons that pass through the beam splitter downward to the detector.
     this.mirror = new Mirror( new Vector2( BEAM_SPLITTER_TO_MIRROR_DISTANCE, 0 ), {
-      tandem: providedOptions.tandem.createTandem( 'mirror' )
+      tandem: experimentTandem.createTandem( 'mirror' )
     } );
 
     // Create the photon detectors that will measure the rate at which photons are arriving after being either reflected
@@ -123,7 +128,7 @@ class PhotonsExperimentSceneModel {
       'up',
       {
         displayMode: this.laser.emissionMode === 'singlePhoton' ? 'count' : 'rate',
-        tandem: providedOptions.tandem.createTandem( 'verticalPolarizationDetector' )
+        tandem: experimentTandem.createTandem( 'verticalPolarizationDetector' )
       }
     );
     this.horizontalPolarizationDetector = new PhotonDetector(
@@ -134,7 +139,7 @@ class PhotonsExperimentSceneModel {
       'down',
       {
         displayMode: this.laser.emissionMode === 'singlePhoton' ? 'count' : 'rate',
-        tandem: providedOptions.tandem.createTandem( 'horizontalPolarizationDetector' )
+        tandem: experimentTandem.createTandem( 'horizontalPolarizationDetector' )
       }
     );
 
