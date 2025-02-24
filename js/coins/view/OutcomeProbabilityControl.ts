@@ -26,10 +26,10 @@ import Text from '../../../../scenery/js/nodes/Text.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
+import ProbabilityValueControl from '../../common/view/ProbabilityValueControl.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import ProbabilityEquationsNode from './ProbabilityEquationsNode.js';
-import ProbabilityValueControl from './ProbabilityValueControl.js';
 
 type SelfOptions = EmptySelfOptions;
 type OutcomeProbabilityControlOptions = SelfOptions & PickRequired<VBox, 'tandem' | 'visibleProperty'>;
