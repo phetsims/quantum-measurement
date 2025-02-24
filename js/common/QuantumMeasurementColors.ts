@@ -73,13 +73,13 @@ const QuantumMeasurementColors = {
   } ),
 
   // test boxes
-  testBoxRectangleStroke: new ProfileColorProperty( quantumMeasurement, 'testBoxRectangleFill', {
+  testBoxRectangleStrokeColorProperty: new ProfileColorProperty( quantumMeasurement, 'testBoxRectangleFill', {
     default: '#777'
   } ),
-  testBoxLinearGradientColor1: new ProfileColorProperty( quantumMeasurement, 'testBoxLinearGradientColor1', {
+  testBoxLinearGradient1ColorProperty: new ProfileColorProperty( quantumMeasurement, 'testBoxLinearGradient1Color', {
     default: '#EEE'
   } ),
-  testBoxLinearGradientColor2: new ProfileColorProperty( quantumMeasurement, 'testBoxLinearGradientColor2', {
+  testBoxLinearGradient2ColorProperty: new ProfileColorProperty( quantumMeasurement, 'testBoxLinearGradient2Color', {
     default: '#bae3e0'
   } ),
 
@@ -164,6 +164,16 @@ const QuantumMeasurementColors = {
   } ),
   splitterLineNodeFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'splitterLineNodeFill', {
     default: '#50FFFF'
+  } ),
+
+  particleSourceGradient1ColorProperty: new ProfileColorProperty( quantumMeasurement, 'particleSourceGradient1', {
+    default: '#88f'
+  } ),
+  particleSourceGradient2ColorProperty: new ProfileColorProperty( quantumMeasurement, 'particleSourceGradient2', {
+    default: 'white'
+  } ),
+  particleSourceGradient3ColorProperty: new ProfileColorProperty( quantumMeasurement, 'particleSourceGradient3', {
+    default: 'blue'
   } ),
 
   /**

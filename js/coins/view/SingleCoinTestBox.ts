@@ -24,8 +24,8 @@ import { ExperimentMeasurementState } from '../model/ExperimentMeasurementState.
 const SINGLE_COIN_AREA_RECT_LINE_WIDTH = 18;
 const SINGLE_COIN_TEST_BOX_SIZE = new Dimension2( 165, 145 );
 const SINGLE_COIN_TEST_BOX_UNREVEALED_FILL = new LinearGradient( 0, 0, SINGLE_COIN_TEST_BOX_SIZE.width, 0 )
-  .addColorStop( 0, new Color( '#eeeeee' ).withAlpha( 0.8 ) )
-  .addColorStop( 0.9, new Color( '#bae3e0' ).withAlpha( 0.8 ) );
+  .addColorStop( 0, QuantumMeasurementColors.testBoxLinearGradient1ColorProperty.value.withAlpha( 0.8 ) )
+  .addColorStop( 0.9, QuantumMeasurementColors.testBoxLinearGradient2ColorProperty.value.withAlpha( 0.8 ) );
 
 export default class SingleCoinTestBox extends Node {
 
@@ -45,7 +45,7 @@ export default class SingleCoinTestBox extends Node {
     // Add the main rectangular area that will define the test box.
     const testBoxRectangle = new Rectangle( testBoxBounds, {
         lineWidth: SINGLE_COIN_AREA_RECT_LINE_WIDTH,
-        stroke: QuantumMeasurementColors.testBoxRectangleStroke
+        stroke: QuantumMeasurementColors.testBoxRectangleStrokeColorProperty
       }
     );
 

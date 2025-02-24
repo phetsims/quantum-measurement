@@ -55,9 +55,9 @@ export default class ParticleSourceNode extends Node {
         stroke: 'black',
         lineWidth: 0.5,
         fill: new LinearGradient( 0, 0, 0, 100 )
-          .addColorStop( 0, '#88f' )
-          .addColorStop( 0.2, 'white' )
-          .addColorStop( 1, 'blue' )
+          .addColorStop( 0, QuantumMeasurementColors.particleSourceGradient1ColorProperty )
+          .addColorStop( 0.2, QuantumMeasurementColors.particleSourceGradient2ColorProperty )
+          .addColorStop( 1, QuantumMeasurementColors.particleSourceGradient3ColorProperty )
       }
     );
 
@@ -75,9 +75,9 @@ export default class ParticleSourceNode extends Node {
         stroke: 'black',
         lineWidth: 0.5,
         fill: new LinearGradient( 0, 0, 0, PARTICLE_SOURCE_WIDTH / 10 )
-          .addColorStop( 0, '#88f' )
-          .addColorStop( 0.2, 'white' )
-          .addColorStop( 1, 'blue' )
+          .addColorStop( 0, QuantumMeasurementColors.particleSourceGradient1ColorProperty )
+          .addColorStop( 0.2, QuantumMeasurementColors.particleSourceGradient2ColorProperty )
+          .addColorStop( 1, QuantumMeasurementColors.particleSourceGradient3ColorProperty )
       }
     );
     particleSourceBarrel.rotateAround( particleSourceBarrel.center, Math.PI / 4 );

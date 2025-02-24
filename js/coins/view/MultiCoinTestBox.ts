@@ -55,7 +55,7 @@ class MultiCoinTestBox extends Node {
         fill: TEST_BOX_CONTENTS_HIDDEN_FILL,
         opacity: 0.5,
         lineWidth: 2,
-        stroke: QuantumMeasurementColors.testBoxRectangleStroke
+        stroke: QuantumMeasurementColors.testBoxRectangleStrokeColorProperty
       }
     );
 
