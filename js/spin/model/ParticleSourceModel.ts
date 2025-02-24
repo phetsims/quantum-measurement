@@ -9,6 +9,7 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
@@ -48,9 +49,8 @@ export default class ParticleSourceModel {
   public constructor( position: Vector2, tandem: Tandem ) {
 
     // REVIEW: Recommend using EnumerationProperty instead of Property<EnumerationValue>
-    this.sourceModeProperty = new Property<SourceMode>( SourceMode.SINGLE, {
+    this.sourceModeProperty = new EnumerationProperty( SourceMode.SINGLE, {
       tandem: tandem.createTandem( 'sourceModeProperty' ),
-      phetioValueType: EnumerationIO( SourceMode ),
       validValues: SourceMode.enumeration.values,
       phetioFeatured: true
     } );

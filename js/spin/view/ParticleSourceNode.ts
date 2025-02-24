@@ -61,13 +61,13 @@ export default class ParticleSourceNode extends Node {
       }
     );
 
-    const particleSourceBarrelWidth = PARTICLE_SOURCE_WIDTH / 5;
+    const particleSourceBarrelDimension = PARTICLE_SOURCE_WIDTH / 5;
     const particleSourceBarrel = new Path(
       new Shape().roundRect(
-        PARTICLE_SOURCE_WIDTH - particleSourceBarrelWidth / 2,
-        PARTICLE_SOURCE_HEIGHT / 2 - particleSourceBarrelWidth / 2,
-        particleSourceBarrelWidth,
-        particleSourceBarrelWidth,
+        PARTICLE_SOURCE_WIDTH - particleSourceBarrelDimension / 2,
+        PARTICLE_SOURCE_HEIGHT / 2 - particleSourceBarrelDimension / 2,
+        particleSourceBarrelDimension,
+        particleSourceBarrelDimension,
         4,
         4
       ),

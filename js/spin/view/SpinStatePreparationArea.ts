@@ -183,7 +183,7 @@ export default class SpinStatePreparationArea extends VBox {
     } );
 
     // Reposition for a wider layout
-    model.currentExperimentProperty.link( () => {
+    this.boundsProperty.link( () => {
       this.centerY = layoutBounds.centerY;
     } );
   }

@@ -11,6 +11,7 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
@@ -18,7 +19,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
 import AveragingCounterNumberProperty from '../../common/model/AveragingCounterNumberProperty.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { BlockingMode } from './BlockingMode.js';
@@ -94,11 +94,10 @@ export default class SternGerlach extends PhetioObject {
       return position.plus( this.bottomExitLocalPosition );
     } );
 
-    this.blockingModeProperty = new Property<BlockingMode>( BlockingMode.NO_BLOCKER, {
+    this.blockingModeProperty = new EnumerationProperty( BlockingMode.NO_BLOCKER, {
       tandem: tandem.createTandem( 'blockingModeProperty' ),
       phetioReadOnly: true,
       phetioFeatured: true,
-      phetioValueType: EnumerationIO( BlockingMode ),
       validValues: BlockingMode.enumeration.values
     } );
 

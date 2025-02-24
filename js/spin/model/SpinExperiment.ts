@@ -7,6 +7,7 @@
  * @author Agustín Vallejo
  */
 
+import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
@@ -83,7 +84,7 @@ export default class SpinExperiment extends EnumerationValue {
 
     this.usingSingleApparatus = this.experimentSetting.length === 1;
 
-    this.blockingModeProperty = new Property<BlockingMode>( BlockingMode.BLOCK_UP );
+    this.blockingModeProperty = new EnumerationProperty( BlockingMode.BLOCK_UP );
   }
 
   public static reset(): void {
