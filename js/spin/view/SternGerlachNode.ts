@@ -18,6 +18,7 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
+import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import RichText, { RichTextOptions } from '../../../../scenery/js/nodes/RichText.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
@@ -55,7 +56,7 @@ export default class SternGerlachNode extends Node {
 
     // component for the entry and exit points of the SG sternGerlach
     const createParticleHole = ( center: Vector2 ) => {
-      const path = new Path( new Shape().rect( 0, 0, PARTICLE_HOLE_WIDTH, PARTICLE_HOLE_HEIGHT ),
+      const path = new Rectangle( 0, 0, PARTICLE_HOLE_WIDTH, PARTICLE_HOLE_HEIGHT,
         {
           fill: new LinearGradient( 0, 0, 0, PARTICLE_HOLE_HEIGHT )
             .addColorStop( 0, 'gray' )
@@ -85,7 +86,7 @@ export default class SternGerlachNode extends Node {
     const topParticleExit = createParticleHole( sternGerlach.topExitLocalPosition );
     const bottomParticleExit = createParticleHole( sternGerlach.bottomExitLocalPosition );
 
-    const mainApparatus = new Path( new Shape().rect( -STERN_GERLACH_WIDTH / 2, -STERN_GERLACH_HEIGHT / 2, STERN_GERLACH_WIDTH, STERN_GERLACH_HEIGHT ),
+    const mainApparatus = new Rectangle( -STERN_GERLACH_WIDTH / 2, -STERN_GERLACH_HEIGHT / 2, STERN_GERLACH_WIDTH, STERN_GERLACH_HEIGHT,
       { fill: 'black' } );
 
     const experimentLabel = new RichText( new DerivedProperty(
