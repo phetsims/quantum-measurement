@@ -160,7 +160,7 @@ export default class BlochSphereNode extends Node {
       bottom: upStateLabel.top - 10,
       centerX: upStateLabel.centerX
     } );
-    QuantumMeasurementStrings.blochSphereStringProperty.link( () => {
+    title.boundsProperty.link( () => {
       title.centerX = upStateLabel.centerX;
     } );
 

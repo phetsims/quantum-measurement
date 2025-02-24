@@ -247,6 +247,7 @@ export default class BlochSphereMeasurementArea extends Node {
       align: 'left',
       tandem: measurementControlsTandem,
       children: [
+        // The panel contains multiple sections for a specific control and smaller spacing. Title and component
         new VBox( {
           spacing: boxSpacing,
           children: [
@@ -255,6 +256,7 @@ export default class BlochSphereMeasurementArea extends Node {
           ],
           tandem: numberOfAtomsControlTandem
         } ),
+
         new VBox( {
           spacing: boxSpacing,
           children: [
@@ -263,6 +265,7 @@ export default class BlochSphereMeasurementArea extends Node {
           ],
           tandem: measurementAxisControlTandem
         } ),
+
         new VBox( {
           spacing: boxSpacing,
           children: [

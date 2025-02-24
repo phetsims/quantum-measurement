@@ -9,6 +9,7 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
@@ -91,9 +92,8 @@ class BlochSphereModel implements TModel {
       tandem: preparationAreaTandem.createTandem( 'preparationBlochSphere' )
     } );
 
-    this.selectedStateDirectionProperty = new Property( StateDirection.X_PLUS, {
+    this.selectedStateDirectionProperty = new EnumerationProperty( StateDirection.X_PLUS, {
       tandem: preparationAreaTandem.createTandem( 'selectedStateDirectionProperty' ),
-      phetioValueType: EnumerationIO( StateDirection ),
       phetioFeatured: true
     } );
 
@@ -118,9 +118,8 @@ class BlochSphereModel implements TModel {
     } );
 
     // Selected Equation Basis
-    this.equationBasisProperty = new Property( StateDirection.Z_PLUS, {
+    this.equationBasisProperty = new EnumerationProperty( StateDirection.Z_PLUS, {
       tandem: measurementAreaTandem.createTandem( 'equationBasisProperty' ),
-      phetioValueType: EnumerationIO( StateDirection ),
       phetioFeatured: true,
       validValues: QuantumMeasurementConstants.plusDirections
     } );
