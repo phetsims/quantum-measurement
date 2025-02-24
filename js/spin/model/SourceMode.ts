@@ -19,8 +19,12 @@ export class SourceMode extends EnumerationValue {
 
   public static readonly enumeration = new Enumeration( SourceMode );
 
+  public readonly isSingleParticleMode: boolean;
+
   public constructor( public readonly sourceName: string | TReadOnlyProperty<string>, public readonly tandemName: string ) {
     super();
+
+    this.isSingleParticleMode = this === SourceMode.SINGLE;
   }
 }
 quantumMeasurement.register( 'SourceMode', SourceMode );

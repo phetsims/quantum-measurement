@@ -123,8 +123,8 @@ export default class SpinModel implements TModel {
         this.particleSourceModel.customSpinStateProperty,
         this.isCustomExperimentProperty
       ],
-      ( spinState, customSpinState, customExperiment ) => {
-        return customExperiment ? customSpinState : SpinDirection.spinToVector( spinState );
+      ( spinState, customSpinState, custom ) => {
+        return custom ? customSpinState : SpinDirection.spinToVector( spinState );
       }
     );
 
@@ -243,7 +243,22 @@ export default class SpinModel implements TModel {
       }
     );
 
-    // Multilink for changes in the experiment either via source mode or experiment selection
+    // Multilink for changes in the experiment either via source mode or experiment selection.
+    // The design rules for what'll happen to SGs is tricky, so buckle up and pay attention.
+    // The following is a table between single and multi particle mode, vs single or multi apparatus mode:
+    //
+    // SG: Stern-Gerlach Apparatus: SG0 is the first one, SG1 is the second top, SG2 is the second bottom.
+    //     They also can have a histogram (+H) in multi-particle mode, controlled elsewhere.
+    // MD: Measurement Device (the camera with Bloch Sphere) in front of each SG phase.
+    //
+    //                        | Single Particle             | Multi Particle                     |
+    //    | Single Apparatus | MD0, SG0, MD1                | SG0+H                              |
+    //    | Multi Apparatus  | MD0, SG0, MD1, SG1, SG2, MD2 | SG0+H (blockable), SG1+H*, SG2+H*  |
+    //
+    //    *: Conditionally visible based on SG0 blocking mode (up, down).
+    //
+    //    Aditionally, on custom mode, the SGs will have their Z orientation controlled by the user.
+    //
     Multilink.multilink(
       [
         this.currentExperimentProperty,
@@ -259,26 +274,32 @@ export default class SpinModel implements TModel {
         }
 
         // Conditions that determine visibility and state of the experiment components
-        const customExperiment = experiment === SpinExperiment.CUSTOM;
-        const singleParticle = sourceMode === SourceMode.SINGLE;
+        // Declared into variables for better readability
+        const singleParticle = sourceMode.isSingleParticleMode;
+        const multiApparatus = !experiment.usingSingleApparatus;
+        const custom = experiment.isCustom;
 
-        // REVIEW: Recommend documenting how `usingSingleApparatus` translates to a variable name of `longExperiment`
-        const longExperiment = !experiment.usingSingleApparatus;
+        // Visibility of measurement devices: Only show on single particle mode, and the third one only if using many SGs
+        this.measurementDevices[ 0 ].isActiveProperty.value = singleParticle; // Exiting the particle source
+        this.measurementDevices[ 1 ].isActiveProperty.value = singleParticle; // Exiting the first SG
+        this.measurementDevices[ 2 ].isActiveProperty.value = singleParticle && multiApparatus; // Exiting the second SG
 
-        this.measurementDevices[ 0 ].isActiveProperty.value = singleParticle;
-        this.measurementDevices[ 1 ].isActiveProperty.value = singleParticle;
-        this.measurementDevices[ 2 ].isActiveProperty.value = singleParticle && longExperiment;
+        // Wether SGs will let themselves change their spin-measurement direction (Z or X): only in custom mode.
+        // And for SG1, only in multi-particle, because in single-particle mode, both SG1 and SG2 are visible
+        // and the direction is controlled by the buttons under SG2.
+        this.sternGerlachs[ 0 ].isDirectionControllableProperty.value = custom;
+        this.sternGerlachs[ 1 ].isDirectionControllableProperty.value = custom && !singleParticle;
+        this.sternGerlachs[ 2 ].isDirectionControllableProperty.value = custom;
 
-        this.sternGerlachs[ 0 ].isDirectionControllableProperty.value = customExperiment;
-        this.sternGerlachs[ 1 ].isDirectionControllableProperty.value = customExperiment && !singleParticle;
-        this.sternGerlachs[ 2 ].isDirectionControllableProperty.value = customExperiment;
-
-        this.sternGerlachs[ 1 ].isVisibleProperty.value = longExperiment &&
+        // Multi-particle and multi-apparatus mode will allow for blocking of a side of the SG.
+        // Here, we hide the SGs that are blocked.
+        this.sternGerlachs[ 1 ].isVisibleProperty.value = multiApparatus &&
                                                           blockingMode !== BlockingMode.BLOCK_UP;
 
-        this.sternGerlachs[ 2 ].isVisibleProperty.value = longExperiment &&
+        this.sternGerlachs[ 2 ].isVisibleProperty.value = multiApparatus &&
                                                           blockingMode !== BlockingMode.BLOCK_DOWN;
 
+        // Load the experiment settings into the Stern Gerlach devices
         experiment.experimentSetting.forEach( ( setting, index ) => {
           this.sternGerlachs[ index ].isZOrientedProperty.value = setting.isZOriented;
         } );

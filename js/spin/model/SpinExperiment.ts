@@ -63,6 +63,8 @@ export default class SpinExperiment extends EnumerationValue {
 
   public readonly usingSingleApparatus: boolean;
 
+  public readonly isCustom: boolean = this === SpinExperiment.CUSTOM;
+
   // whether the blocker is blocking the up or down exit, if applicable
   public readonly blockingModeProperty: Property<BlockingMode>;
 
