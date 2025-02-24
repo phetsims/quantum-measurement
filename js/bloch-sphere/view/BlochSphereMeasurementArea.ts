@@ -49,6 +49,10 @@ const TIMES = MathSymbols.TIMES;
 // nominal max width of text elements, empirically determined
 const MAX_WIDTH = 200;
 
+const UP = QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
+const DOWN = QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER;
+const KET = QuantumMeasurementConstants.KET;
+
 export default class BlochSphereMeasurementArea extends Node {
 
   public constructor( model: BlochSphereModel, providedOptions: BlochSphereMeasurementAreaOptions ) {
@@ -145,15 +149,13 @@ export default class BlochSphereMeasurementArea extends Node {
       visibleProperty: DerivedProperty.not( model.isSingleMeasurementModeProperty )
     } );
 
-    const KET = QuantumMeasurementConstants.KET;
-
     const spinUpLabelStringProperty = new DerivedStringProperty(
       [ model.measurementAxisProperty ],
-      measurementAxis => `|${QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER}<sub>${measurementAxis.label}</sub>${KET}`
+      measurementAxis => `|${UP}<sub>${measurementAxis.label}</sub>${KET}`
     );
     const spinDownLabelStringProperty = new DerivedStringProperty(
       [ model.measurementAxisProperty ],
-      measurementAxis => `|${QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER}<sub>${measurementAxis.label}</sub>${KET}`
+      measurementAxis => `|${DOWN}<sub>${measurementAxis.label}</sub>${KET}`
     );
 
     const measurementResultHistogramTandem = providedOptions.tandem.createTandem( 'measurementResultHistogram' );

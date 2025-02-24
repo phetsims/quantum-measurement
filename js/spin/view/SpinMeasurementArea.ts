@@ -43,6 +43,10 @@ import ParticleSourceNode from './ParticleSourceNode.js';
 import ParticleSprites from './ParticleSprites.js';
 import SternGerlachNode from './SternGerlachNode.js';
 
+const UP = QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
+const DOWN = QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER;
+const KET = QuantumMeasurementConstants.KET;
+
 export default class SpinMeasurementArea extends VBox {
 
   private manyParticlesCanvasNode: ManyParticlesCanvasNode;
@@ -106,15 +110,15 @@ export default class SpinMeasurementArea extends VBox {
         [
           sternGerlach.isZOrientedProperty
         ], isZOriented => isZOriented ?
-                          `|${QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER}<sub>Z</sub>${QuantumMeasurementConstants.KET}` :
-                          `|${QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER}<sub>X</sub>${QuantumMeasurementConstants.KET}`
+                          `|${UP}<sub>Z</sub>${KET}` :
+                          `|${UP}<sub>X</sub>${KET}`
       );
       const spinDownLabelStringProperty = new DerivedStringProperty(
         [
           sternGerlach.isZOrientedProperty
         ], isZOriented => isZOriented ?
-                          `|${QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER}<sub>Z</sub>${QuantumMeasurementConstants.KET}` :
-                          `|${QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER}<sub>X</sub>${QuantumMeasurementConstants.KET}`
+                          `|${DOWN}<sub>Z</sub>${KET}` :
+                          `|${DOWN}<sub>X</sub>${KET}`
       );
 
       const tandemName = `histogram${histogramCounter++}`;
