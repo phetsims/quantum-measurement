@@ -9,7 +9,6 @@
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { toFixed } from '../../../../dot/js/util/toFixed.js';
-import Utils from '../../../../dot/js/Utils.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -47,7 +46,7 @@ export default class ProbabilityEquationsNode extends RichText {
         QuantumMeasurementColors.downColorProperty
       ],
       ( bias, pString, tailsColor, downColor ) => {
-        const upperEquation = `${pString}(<b>${upperFunctionParameter}</b>) = ${Utils.toFixed( bias, 2 )}`;
+        const upperEquation = `${pString}(<b>${upperFunctionParameter}</b>) = ${toFixed( bias, 2 )}`;
         const COLOR_SPAN = ( text: string ) =>
           ProbabilityEquationsNode.COLOR_SPAN( text, systemType === 'classical' ? tailsColor : downColor );
         const lowerEquation = `${pString}(<b>${COLOR_SPAN( lowerFunctionParameter )}</b>) = ${COLOR_SPAN( toFixed( 1 - bias, 2 ) )}`;

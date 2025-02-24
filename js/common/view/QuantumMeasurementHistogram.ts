@@ -18,7 +18,6 @@ import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
 import { clamp } from '../../../../dot/js/util/clamp.js';
 import { toFixed } from '../../../../dot/js/util/toFixed.js';
-import Utils from '../../../../dot/js/Utils.js';
 import Shape from '../../../../kite/js/Shape.js';
 import optionize, { combineOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
@@ -198,7 +197,7 @@ class QuantumMeasurementHistogram extends Node {
     }
     else if ( options.displayMode === 'percent' ) {
       const percentDisplayOptions: NumberDisplayOptions = {
-        numberFormatter: value => `${Utils.toFixed( value * 100, 1 )}%`
+        numberFormatter: value => `${toFixed( value * 100, 1 )}%`
       };
       leftNumberDisplay = new NumberDisplay(
         relativeLeftNumberProperty,

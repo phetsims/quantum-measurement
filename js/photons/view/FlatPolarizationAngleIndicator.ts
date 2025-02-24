@@ -11,7 +11,6 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { toRadians } from '../../../../dot/js/util/toRadians.js';
-import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
@@ -195,19 +194,19 @@ export default class FlatPolarizationAngleIndicator extends Node {
           angleArcArrowHead.visible = true;
           angleArcArrowHead.x = angleArc.shape.bounds.minX;
           angleArcArrowHead.y = angleArc.shape.bounds.minY;
-          angleArcArrowHead.rotation = -Utils.toRadians( polarizationAngle - 12 );
+          angleArcArrowHead.rotation = -toRadians( polarizationAngle - 12 );
         }
         else {
           angleArcArrowHead.visible = false;
         }
 
-        angleIndicatorSymbol.center = new Vector2( 1.5 * UNIT_LENGTH / 2, 0 ).rotated( -Utils.toRadians( polarizationAngle / 2 ) );
+        angleIndicatorSymbol.center = new Vector2( 1.5 * UNIT_LENGTH / 2, 0 ).rotated( -toRadians( polarizationAngle / 2 ) );
         angleIndicatorSymbol.visible = polarizationAngle > 30;
 
         // Calculate the positions for the two ends of the polarization vector.
         const polarizationVectorTipPosition = new Vector2(
-          Math.cos( -Utils.toRadians( polarizationAngle ) ),
-          Math.sin( -Utils.toRadians( polarizationAngle ) )
+          Math.cos( -toRadians( polarizationAngle ) ),
+          Math.sin( -toRadians( polarizationAngle ) )
         ).times( UNIT_LENGTH );
         const polarizationVectorTailPosition = polarizationVectorTipPosition.times( -1 );
 
