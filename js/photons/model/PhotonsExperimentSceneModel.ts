@@ -9,12 +9,14 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import TimeSpeed from '../../../../scenery-phet/js/TimeSpeed.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
@@ -79,6 +81,9 @@ class PhotonsExperimentSceneModel {
 
   // Whether the probability accordion box is expanded
   public readonly isProbabilityAccordionExpandedProperty: BooleanProperty;
+
+  // the clock speed of the sim
+  public readonly timeSpeedProperty: EnumerationProperty<TimeSpeed>;
 
   public constructor( providedOptions: PhotonsExperimentSceneModelOptions ) {
 
@@ -217,6 +222,13 @@ class PhotonsExperimentSceneModel {
     this.isProbabilityAccordionExpandedProperty = new BooleanProperty( true, {
       tandem: providedOptions.tandem.createTandem( 'isProbabilityAccordionExpandedProperty' ),
       phetioFeatured: true
+    } );
+
+    this.timeSpeedProperty = new EnumerationProperty( TimeSpeed.NORMAL, {
+      validValues: [ TimeSpeed.NORMAL, TimeSpeed.SLOW ],
+      tandem: providedOptions.tandem.createTandem( 'timeSpeedProperty' ),
+      phetioFeatured: true,
+      phetioDocumentation: 'The speed that at which the simulation is running.'
     } );
   }
 
@@ -369,7 +381,8 @@ class PhotonsExperimentSceneModel {
 
   public step( dt: number ): void {
     if ( this.isPlayingProperty.value ) {
-      this.stepForwardInTime( dt );
+      const timeScale = this.timeSpeedProperty.value === TimeSpeed.SLOW ? 0.4 : 1;
+      this.stepForwardInTime( dt * timeScale );
     }
   }
 }

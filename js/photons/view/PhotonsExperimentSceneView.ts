@@ -13,8 +13,8 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
-import PlayPauseStepButtonGroup from '../../../../scenery-phet/js/buttons/PlayPauseStepButtonGroup.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import TimeControlNode from '../../../../scenery-phet/js/TimeControlNode.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
@@ -238,16 +238,21 @@ class PhotonsExperimentSceneView extends Node {
     );
 
     // Create a play/pause/step time control.
-    const playPauseStepButtonGroup = new PlayPauseStepButtonGroup( model.isPlayingProperty, {
-      stepForwardButtonOptions: {
-        listener: () => { model.stepForwardInTime( STEP_FORWARD_TIME ); }
+    const timeControlNode = new TimeControlNode( model.isPlayingProperty, {
+      // optional Normal/Slow radio buttons
+      timeSpeedProperty: model.timeSpeedProperty,
+      flowBoxSpacing: 15,
+      playPauseStepButtonOptions: {
+        stepForwardButtonOptions: {
+          listener: () => { model.stepForwardInTime( STEP_FORWARD_TIME ); }
+        },
+        playPauseButtonOptions: {
+          radius: 25
+        }
       },
-      playPauseButtonOptions: {
-        radius: 25
-      },
-      centerX: experimentArea.x + 20, // centered beneath the beam splitter
+      centerX: experimentArea.x + 70,
       bottom: photonPolarizationAngleControl.bottom - 6, // vertically aligned with reset all button
-      tandem: providedOptions.tandem.createTandem( 'playPauseStepButtonGroup' )
+      tandem: providedOptions.tandem.createTandem( 'timeControlNode' )
     } );
 
     const options = optionize<PhotonsExperimentSceneViewOptions, SelfOptions, NodeOptions>()( {
@@ -259,7 +264,7 @@ class PhotonsExperimentSceneView extends Node {
         titleAndEquationsBox,
         dynamicDataDisplayBox,
         averagePolarizationCheckboxGroup,
-        playPauseStepButtonGroup
+        timeControlNode
       ]
     }, providedOptions );
 
