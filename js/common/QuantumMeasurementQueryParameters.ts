@@ -5,6 +5,7 @@
  * Run with ?log to print query parameters and their values to the browser console at startup.
  *
  * @author John Blanco, PhET Interactive Simulations
+ * @author Agustín Vallejo
  */
 
 import logGlobal from '../../../phet-core/js/logGlobal.js';
@@ -13,7 +14,8 @@ import quantumMeasurement from '../quantumMeasurement.js';
 const QuantumMeasurementQueryParameters = QueryStringMachine.getAll( {
   showGlobalPhase: {
     type: 'boolean',
-    defaultValue: false
+    defaultValue: false,
+    public: true
   }
 } );
 
