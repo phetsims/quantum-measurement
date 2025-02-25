@@ -254,7 +254,7 @@ export default class SpinModel implements TModel {
     //    MD: Measurement Device (the camera with Bloch Sphere) in front of each SG phase.
     //    SG: Stern-Gerlach Apparatus: SG0 is the first one, SG1 is the second top, SG2 is the second bottom.
     //    +H: additional histogram on top of SGs in multi-particle mode.
-    //    +H* histogram conditionally visible based on SG0 blocking mode (up, down)
+    //    *: apparatus conditionally visible based on SG0 blocking mode (up, down)
     //
     //    Aditionally, on custom mode, the SGs will have their Z orientation controlled by the user.
     //
