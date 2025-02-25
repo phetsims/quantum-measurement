@@ -218,14 +218,8 @@ const QuantumMeasurementColors = {
   blockSphereHighlightColorProperty: new ProfileColorProperty( quantumMeasurement, 'blockSphereHighlight', {
     default: '#FFF'
   } ),
-  preparationSlidersThumbFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'preparationSlidersThumbFill', {
-    default: '#444'
-  } ),
   measurementTimerFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'measurementTimerFill', {
-    default: '#aaa'
-  } ),
-  measurementTimerFillHighlightedColorProperty: new ProfileColorProperty( quantumMeasurement, 'measurementTimerFillHighlighted', {
-    default: '#fff'
+    default: '#f0f'
   } )
 
 };

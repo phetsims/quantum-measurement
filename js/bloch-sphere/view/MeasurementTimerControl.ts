@@ -51,7 +51,7 @@ export default class MeasurementTimerControl extends Node {
     const thumbDimensions = new Dimension2( 30, 30 );
     const thumbPathOptions = {
       fill: QuantumMeasurementColors.measurementTimerFillColorProperty,
-      fillHighlighted: QuantumMeasurementColors.measurementTimerFillHighlightedColorProperty,
+      fillHighlighted: QuantumMeasurementColors.measurementTimerFillColorProperty.value.colorUtilsBrighter( 0.5 ),
       stroke: 'black',
       lineWidth: 2
     };
