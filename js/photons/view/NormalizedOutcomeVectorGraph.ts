@@ -32,22 +32,22 @@ const LABEL_SPACING = 7;
 export default class NormalizedOutcomeVectorGraph extends Node {
 
   // Property that controls whether the expectation value line is visible when there is a valid expectation value.
-  public readonly showExpectationLineProperty: BooleanProperty;
+  public readonly showExpectationValueProperty: BooleanProperty;
 
   // Property the controls whether the vector is shown on the number line.
-  public readonly showVectorProperty: BooleanProperty;
+  public readonly showVectorRepresentationProperty: BooleanProperty;
 
   public constructor( normalizedOutcomeValueProperty: TReadOnlyProperty<number>,
                       normalizedExpectationValueProperty: TReadOnlyProperty<number | null>,
                       displayNumericValueProperty: TReadOnlyProperty<boolean>,
                       tandem: Tandem ) {
 
-    const showExpectationLineProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'showExpectationLineProperty' ),
+    const showExpectationValueProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'showExpectationValueProperty' ),
       phetioFeatured: true
     } );
-    const showVectorProperty = new BooleanProperty( true, {
-      tandem: tandem.createTandem( 'showVectorProperty' ),
+    const showVectorRepresentationProperty = new BooleanProperty( true, {
+      tandem: tandem.createTandem( 'showVectorRepresentationProperty' ),
       phetioFeatured: true
     } );
 
@@ -96,7 +96,7 @@ export default class NormalizedOutcomeVectorGraph extends Node {
       headWidth: 15,
       headHeight: 12,
       tailWidth: 4,
-      visibleProperty: showVectorProperty
+      visibleProperty: showVectorRepresentationProperty
     } );
 
     // Create a numeric display of the value of the normalized outcome value.
@@ -106,7 +106,7 @@ export default class NormalizedOutcomeVectorGraph extends Node {
     );
 
     // REVIEW: Suggested to rename showNumericValueProperty to numericValueVisibleProperty
-    const showNumericValueProperty = DerivedProperty.and( [ showVectorProperty, displayNumericValueProperty ] );
+    const showNumericValueProperty = DerivedProperty.and( [ showVectorRepresentationProperty, displayNumericValueProperty ] );
     const normalizedOutcomeValueDisplay = new NumberDisplay(
       invertedNormalizedOutcomeValueProperty,
       new Range( -1, 1 ),
@@ -142,7 +142,7 @@ export default class NormalizedOutcomeVectorGraph extends Node {
     // The expectation value line can only be shown when there is a valid expectation value, so we need a derived
     // property that takes the value and the user setting into account.
     const expectationValueLineVisibleProperty = new DerivedProperty(
-      [ normalizedExpectationValueProperty, showExpectationLineProperty ],
+      [ normalizedExpectationValueProperty, showExpectationValueProperty ],
       ( normalizedExpectationValue, showExpectationLine ) => normalizedExpectationValue !== null && showExpectationLine
     );
 
@@ -175,16 +175,17 @@ export default class NormalizedOutcomeVectorGraph extends Node {
         normalizedOutcomeVector,
         lineToValueDisplay,
         normalizedOutcomeValueDisplay
-      ]
+      ],
+      tandem: tandem
     } );
 
-    this.showExpectationLineProperty = showExpectationLineProperty;
-    this.showVectorProperty = showVectorProperty;
+    this.showExpectationValueProperty = showExpectationValueProperty;
+    this.showVectorRepresentationProperty = showVectorRepresentationProperty;
   }
 
   public reset(): void {
-    this.showExpectationLineProperty.reset();
-    this.showVectorProperty.reset();
+    this.showExpectationValueProperty.reset();
+    this.showVectorRepresentationProperty.reset();
   }
 }
 

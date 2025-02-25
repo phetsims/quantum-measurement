@@ -8,19 +8,20 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
+import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import PlayPauseStepButtonGroup from '../../../../scenery-phet/js/buttons/PlayPauseStepButtonGroup.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
+import Line from '../../../../scenery/js/nodes/Line.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
-import Checkbox from '../../../../sun/js/Checkbox.js';
+import Color from '../../../../scenery/js/util/Color.js';
 import Panel from '../../../../sun/js/Panel.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
@@ -28,8 +29,7 @@ import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHis
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import PhotonsExperimentSceneModel from '../model/PhotonsExperimentSceneModel.js';
-import ExpectationValueControl from './ExpectationValueControl.js';
-import ExpectationValueVectorControl from './ExpectationValueVectorControl.js';
+import AveragePolarizationCheckboxGroup from './AveragePolarizationCheckboxGroup.js';
 import NormalizedOutcomeVectorGraph from './NormalizedOutcomeVectorGraph.js';
 import ObliquePolarizationAngleIndicator from './ObliquePolarizationAngleIndicator.js';
 import PhotonDetectionProbabilityPanel from './PhotonDetectionProbabilityPanel.js';
@@ -42,9 +42,6 @@ type PhotonsExperimentSceneViewOptions = SelfOptions & WithRequired<NodeOptions,
 
 const X_INSET = QuantumMeasurementConstants.SCREEN_VIEW_X_MARGIN;
 const STEP_FORWARD_TIME = 2 / 60; // empirically determined, in seconds, adjust as desired
-const CHECKBOX_TEXT_FONT = new PhetFont( 18 );
-const CHECKBOX_GROUP_SPACING = 10;
-const CHECKBOX_GROUP_POINTER_DILATION = CHECKBOX_GROUP_SPACING / 2;
 
 class PhotonsExperimentSceneView extends Node {
 
@@ -200,62 +197,45 @@ class PhotonsExperimentSceneView extends Node {
       centerY: experimentArea.y
     } );
 
-    const vectorRepresentationControl = new ExpectationValueVectorControl(
-      normalizedOutcomeVectorGraph.showVectorProperty,
-      {
-        checkboxOptions: {
-          mouseAreaXDilation: CHECKBOX_GROUP_POINTER_DILATION,
-          mouseAreaYDilation: CHECKBOX_GROUP_POINTER_DILATION,
-          touchAreaXDilation: CHECKBOX_GROUP_POINTER_DILATION,
-          touchAreaYDilation: CHECKBOX_GROUP_POINTER_DILATION
+    // Create the checkbox group that allows the user to control some aspects of what is shown in the average
+    // polarization area.
+    const averagePolarizationCheckboxGroup = new AveragePolarizationCheckboxGroup(
+      [
+        {
+          labelStringProperty: QuantumMeasurementStrings.vectorRepresentationStringProperty,
+          property: normalizedOutcomeVectorGraph.showVectorRepresentationProperty,
+          decorationNode: new ArrowNode( 0, 0, 26, 0, {
+            fill: Color.BLACK,
+            tailWidth: 3,
+            headWidth: 12
+          } ),
+          tandemControlName: 'vectorRepresentationControl'
         },
-        tandem: providedOptions.tandem.createTandem( 'vectorRepresentationControl' )
-      }
-    );
-
-    const expectationValueControlTandem = providedOptions.tandem.createTandem( 'expectationValueControl' );
-    const expectationValueControl = new ExpectationValueControl(
-      normalizedOutcomeVectorGraph.showExpectationLineProperty,
-      model.normalizedExpectationValueProperty,
-      showDecimalValuesProperty,
-      {
-        tandem: expectationValueControlTandem,
-        visibleProperty: new GatedVisibleProperty( new DerivedProperty(
-          [ model.normalizedExpectationValueProperty ],
-          expectationValue => expectationValue !== null
-        ), expectationValueControlTandem ),
-        checkboxOptions: {
-          mouseAreaXDilation: CHECKBOX_GROUP_POINTER_DILATION,
-          mouseAreaYDilation: CHECKBOX_GROUP_POINTER_DILATION,
-          touchAreaXDilation: CHECKBOX_GROUP_POINTER_DILATION,
-          touchAreaYDilation: CHECKBOX_GROUP_POINTER_DILATION
+        {
+          labelStringProperty: QuantumMeasurementStrings.expectationValueStringProperty,
+          property: normalizedOutcomeVectorGraph.showExpectationValueProperty,
+          decorationNode: new Line( 0, 0, 30, 0, {
+            stroke: QuantumMeasurementColors.photonBaseColorProperty,
+            lineWidth: 3
+          } ),
+          visibleProperty: new DerivedProperty(
+            [ model.normalizedExpectationValueProperty ],
+            expectationValue => expectationValue !== null
+          ),
+          tandemControlName: 'expectationValueControl'
+        },
+        {
+          labelStringProperty: QuantumMeasurementStrings.decimalValuesStringProperty,
+          property: showDecimalValuesProperty,
+          tandemControlName: 'decimalValuesControl'
         }
-      }
-    );
-
-    const decimalValuesCheckbox = new Checkbox(
-      showDecimalValuesProperty,
-      new Text( QuantumMeasurementStrings.decimalValuesStringProperty, {
-        font: CHECKBOX_TEXT_FONT,
-        maxWidth: 200
-      } ),
+      ],
       {
-        mouseAreaXDilation: CHECKBOX_GROUP_POINTER_DILATION,
-        mouseAreaYDilation: CHECKBOX_GROUP_POINTER_DILATION,
-        touchAreaXDilation: CHECKBOX_GROUP_POINTER_DILATION,
-        touchAreaYDilation: CHECKBOX_GROUP_POINTER_DILATION,
-        tandem: providedOptions.tandem.createTandem( 'decimalValuesCheckbox' )
+        left: titleAndEquationsBox.left,
+        top: dynamicDataDisplayBox.bottom + 30,
+        tandem: providedOptions.tandem.createTandem( 'averagePolarizationCheckboxGroup' )
       }
     );
-
-    // Assemble the controls that allow the users to set what is and isn't shown in the "average polarization" area.
-    const averagePolarizationDisplayControls = new VBox( {
-      children: [ vectorRepresentationControl, expectationValueControl, decimalValuesCheckbox ],
-      spacing: CHECKBOX_GROUP_SPACING,
-      align: 'left',
-      left: titleAndEquationsBox.left,
-      top: dynamicDataDisplayBox.bottom + 30
-    } );
 
     // Create a play/pause/step time control.
     const playPauseStepButtonGroup = new PlayPauseStepButtonGroup( model.isPlayingProperty, {
@@ -278,7 +258,7 @@ class PhotonsExperimentSceneView extends Node {
         experimentArea,
         titleAndEquationsBox,
         dynamicDataDisplayBox,
-        averagePolarizationDisplayControls,
+        averagePolarizationCheckboxGroup,
         playPauseStepButtonGroup
       ]
     }, providedOptions );
