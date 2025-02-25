@@ -153,9 +153,9 @@ class CoinSet extends PhetioObject {
     } );
 
     this.measurementStateProperty.link( measurementState => {
-      if ( measurementState === 'measuredAndHidden' ) {
+      if ( ( measurementState === 'readyToBeMeasured' ) && ( coinType === 'quantum' ) ) {
         alternativeDisplayCounter++;
-        this.validateAlternativeDisplay = alternativeDisplayCounter === 4;
+        this.validateAlternativeDisplay = alternativeDisplayCounter === 8;
       }
     } );
 

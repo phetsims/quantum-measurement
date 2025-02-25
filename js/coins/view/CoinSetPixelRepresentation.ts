@@ -193,7 +193,7 @@ class CoinSetPixelRepresentation extends CanvasNode {
       // Happy Easter.
       return alternativeData[ index ] ?
              'black' :
-             'wheat';
+             'magenta';
     }
     else {
       return COIN_STATE_TO_COLOR_MAP.get( this.coinSet.measuredValues[ index ] )!.value.toCSS();
