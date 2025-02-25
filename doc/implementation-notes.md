@@ -8,22 +8,22 @@
 
 * [Introduction](#introduction)
 * [General Considerations](#general-considerations)
-    * [Common Terminology](#common-terminology)
-    * [Common Model and View Patterns](#common-model-and-view-patterns)
-    * [Memory Management](#memory-management)
+  * [Common Terminology](#common-terminology)
+  * [Common Model and View Patterns](#common-model-and-view-patterns)
+  * [Memory Management](#memory-management)
 * [Screens](#screens)
-    * [Coins Screen](#coins-screen)
-        + [Model](#model)
-        + [View](#view)
-    * [Photons Screen](#photons-screen)
-        + [Model](#model-1)
-        + [View](#view-1)
-    * [Spin Screen](#spin-screen)
-        + [Model](#model-2)
-        + [View](#view-2)
-    * [Bloch Sphere Screen](#bloch-sphere-screen)
-        + [Model](#model-3)
-        + [View](#view-3)
+  * [Coins Screen](#coins-screen)
+    + [Model](#model)
+    + [View](#view)
+  * [Photons Screen](#photons-screen)
+    + [Model](#model-1)
+    + [View](#view-1)
+  * [Spin Screen](#spin-screen)
+    + [Model](#model-2)
+    + [View](#view-2)
+  * [Bloch Sphere Screen](#bloch-sphere-screen)
+    + [Model](#model-3)
+    + [View](#view-3)
 * [PhET-iO Serialization](#phet-io-serialization)
 
 ## Introduction
@@ -80,29 +80,24 @@ some of the most important ones:
 - **Bloch Sphere** - Both the third and fourth screens (Spin and Bloch Sphere) display a SphereNode which is the visual
   representation of a Bloch Sphere. This view component appears multiple times across the two screens. However, since
   the fourth screen focuses specifically on explaining that same concept, you might find many files associated with that
-  name.
-  Here we list which ones are related to the view component (the blue sphere), and which are top level screen files:
-    - Component related:
-        - `AbstractBlochSphere`: abstract class which contains the fundamentals of a bloch sphere:
-          azimuthal and polar angles, and the associated equation coefficients. The angles and the coefficients are
-          related,
-          but the specific link is done in the implementation of this abstract class.
-        - `SimpleBlochSphere`: Implementation of the abstract class which links a spin state into spherical coordinates.
-          Used in the Spin screen, where you only control the polar angle via sliders.
-        - `ComplexBlochSphere`: Implementation of the abstract class which supports rotation around the Z axis, as well
-          as
-          measurement along a basis.
-        - `BlochSphereNode`: Node which displays any implementation of the abstract base class. It's quite a big file
-          because
-          it has to support all the custom options and design quirks added to the sphere.
-        - `BlochSphereWithProjectionNode`: Extension of BlochSphereNode with added projections of the state vector along
-          the
-          X and Z directions.
-    - Screen related:
-        - BlochSphereModel: This is the actual TModel for the Bloch Sphere Screen, with all the properties and main
-          functionality of that screen.
-        - BlochSphere*: All remaining files with the BlochSphere prefix are simply alluding to the screen with that
-          name.
+  name. Here we list which ones are related to the view component (the blue sphere), and which are top level screen
+  files:
+  - Component related:
+    - `AbstractBlochSphere`: abstract class which contains the fundamentals of a bloch sphere:
+      azimuthal and polar angles, and the associated equation coefficients. The angles and the coefficients are related,
+      but the specific link is done in the implementation of this abstract class.
+    - `SimpleBlochSphere`: Implementation of the abstract class which links a spin state into spherical coordinates.
+      Used in the Spin screen, where you only control the polar angle via sliders.
+    - `ComplexBlochSphere`: Implementation of the abstract class which supports rotation around the Z axis, as well as
+      measurement along a basis.
+    - `BlochSphereNode`: Node which displays any implementation of the abstract base class. It's quite a big file
+      because it has to support all the custom options and design quirks added to the sphere.
+    - `BlochSphereWithProjectionNode`: Extension of BlochSphereNode with added projections of the state vector along the
+      X and Z directions.
+  - Screen related:
+    - BlochSphereModel: This is the actual TModel for the Bloch Sphere Screen, with all the properties and main
+      functionality of that screen.
+    - BlochSphere*: All remaining files with the BlochSphere prefix are simply alluding to the screen with that name.
 
 ### Memory Management
 
@@ -122,22 +117,22 @@ and a set of coins to have either classical or quantum behavior, then make measu
 
 #### Model
 
-The most central class in the model is `CoinSet`, which represents a set of coins. This class models both classical
-and quantum coins, and tracks the state of the experiment as well as the measurements that have been made. The
+The most central class in the model is `CoinSet`, which represents a set of coins. This class models both classical and
+quantum coins, and tracks the state of the experiment as well as the measurements that have been made. The
 `CoinExperimentSceneModel` class interacts with the `CoinSet` to manage the state of the experiment and the user
 interaction. It has two "test boxes" that are used to hide and show the results of the measurements, one for a single
 coin and one for the set of coins. The model moves back and forth between preparation and measurement mode, starting in
 preparation.
 
 The random values used to decide the outcome of the measurements are generated using a `dotRandom` object that is seeded
-with a value that is tracked in an axon Property. This allows the state information to be conveyed for phet-io
-purposes without having to send 10000+ pieces of data.
+with a value that is tracked in an axon Property. This allows the state information to be conveyed for phet-io purposes
+without having to send 10000+ pieces of data.
 
 #### View
 
 The view is responsible for animating the transitions between preparation and measurement, for hiding and showing the
-results of the measurements, and for animating the re-preparation of experiments. The `CoinExperimentSceneView` class
-is the main view class for each of the two scenes, and it contains view representations for the coins and the coin sets.
+results of the measurements, and for animating the re-preparation of experiments. The `CoinExperimentSceneView` class is
+the main view class for each of the two scenes, and it contains view representations for the coins and the coin sets.
 The creation and animation of the coin nodes are handled by `SingleCoinViewManager`, `MultipleCoinViewManager`, and
 `ManyCoinViewManager`. Each of these creates nodes used to represent the coins and animates their movement, including
 flipping the coins. `ManyCoinViewManager` is used for the 10k coin set, and it uses canvas to represent each coin
@@ -146,17 +141,17 @@ essentially as a pixel.
 ### Photons Screen
 
 The "Photons" screen demonstrates how photons with a given polarization angle behave when passing through a beam
-splitter. The user can prepare a photon with a given polarization angle, then view the path that it travels towards
-a detector. The user can choose either classical or quantum behavior, and in the quantum case, the photon is in a
+splitter. The user can prepare a photon with a given polarization angle, then view the path that it travels towards a
+detector. The user can choose either classical or quantum behavior, and in the quantum case, the photon is in a
 superposition of states until measured.
 
 #### Model
 
 The model for the "Photons" consists of a laser that produces polarized photons, a beam splitter that can change the
 path of the photons, and two detectors that can measure the photons. The `Photon` class represents a single photon, and
-can be in a superposition of states. The `PhotonExperimentSceneModel` class manages the state of the experiment and
-the user interaction. There is a control that allows the user to set the polarization angle of the photon or to have
-them be unpolarized. The model decides probabilistically the path that the photon will take.
+can be in a superposition of states. The `PhotonExperimentSceneModel` class manages the state of the experiment and the
+user interaction. There is a control that allows the user to set the polarization angle of the photon or to have them be
+unpolarized. The model decides probabilistically the path that the photon will take.
 
 #### View
 
@@ -169,8 +164,8 @@ that displays information about the expectation value and measurement counts/rat
 
 The "Spin" screen is the first one that displays the Bloch sphere. The user configures the spin of the particles that
 emit from the source, and can select from a set of experiments that consist of potentially chained Stern-Gerlach
-measurements, which have different outcomes depending on the measured spin of the particles. Particles can be
-emitted one at a time or in a continuous stream.
+measurements, which have different outcomes depending on the measured spin of the particles. Particles can be emitted
+one at a time or in a continuous stream.
 
 #### Model
 
@@ -179,32 +174,51 @@ as well as measurement devices that can be used to measure said spin. The model 
 devices based on the selected experiment. The model also contains a `BlochSphereModel` that is used to represent the
 initial spin state of the particles.
 
-The model also contains two particle collections - one for the one-particle-at-a-time mode
-and another for the particle stream mode - that consist of `ParticleWithSpin` instances. These collections are created
-at startup but populated and decimated during the sim, which helps with phet-io serialization.
+The model also contains two particle collections - one for the one-particle-at-a-time mode and another for the particle
+stream mode - that consist of `ParticleWithSpin` instances. These collections are created at startup but populated and
+decimated during the sim, which helps with phet-io serialization.
 
 The particles in this screen are simple: they go from a starting to an end position set by the `ParticleCollection`
 class. On it, the function `decideParticleDestiny()` checks if the particle reached its current destination, and decides
-if it has to be measured by a Stern-Gerlach apparatus, given a new starting and ending position, or has to be removed from the
-collection. Particles also store information of their past measured states (spin up or down) and lifetime, which helps
-with the serialization. Since the paths the particles can take are many, we use the spin information to assign a
-position to the particle, based on the Stern-Gerlach's position information.
+if it has to be measured by a Stern-Gerlach apparatus, given a new starting and ending position, or has to be removed
+from the collection. Particles also store information of their past measured states (spin up or down) and lifetime,
+which helps with the serialization. Since the paths the particles can take are many, we use the spin information to
+assign a position to the particle, based on the Stern-Gerlach's position information.
+
+Since there's many concurring modes that could be selected in this screen (single/multiple particles, single/multiple SG
+apparatuses, and custom mode) the following is a table of the experiment configuration on each combination of modes:
+
+| Mode             | Single Particle              | Multi Particle                    |
+|------------------|------------------------------|-----------------------------------|
+| Single Apparatus | MD0, SG0, MD1                | SG0+H                             |
+| Multi Apparatus  | MD0, SG0, MD1, SG1, SG2, MD2 | SG0+H (blockable), SG1+H*, SG2+H* |
+
+- SG: Stern-Gerlach Apparatus: SG0 is the first one, SG1 is the second top, SG2 is the second bottom. They also can have
+  a histogram (+H) in multi-particle mode, controlled elsewhere.
+- MD: Measurement Device (the camera with Bloch Sphere) in front of each SG phase.
+
+Also, the experiment ocurrs in stages to better keep track of the state of the particles. The stages are:
+- Stage 0: From particle source, across possibly MD0 and into SG0.
+- Stage 1: From SG0, across possibly MD1 and possibly into SG1 or SG2.
+- Stage 2: From SG1 or SG2, across possibly MD2 and shot into infinity.
+
+"Possibly" meaning that it depends on the selected mode based on the table above. Each stage of the experiment is related to properties of the particles that are stored as 3-tuples for state handling: `spinVectors: Vector2[]`, `isSpinUp: boolean[]` and `stageCompleted: boolean[]`.
 
 ##### View
 
 The `SpinScreenView` class is the main view class for the "Spin" screen, and it contains the `SpinStatePreparationArea`
-and the `SpinMeasurementArea`. The `SpinStatePreparationArea` contains the Bloch sphere that represents the
-initially prepared spin state and radio buttons to select the prepared state. The `SpinMeasurementArea` contains the
-particle source, the Stern-Gerlach measuring devices, the Bloch spheres that represent the measured spin states, the
-histograms that shows the results of the measurements, and particle nodes. The particles that are displayed in the
-continuous mode are drawn using canvas in `ManyParticlesCanvasNode` for optimal performance.
+and the `SpinMeasurementArea`. The `SpinStatePreparationArea` contains the Bloch sphere that represents the initially
+prepared spin state and radio buttons to select the prepared state. The `SpinMeasurementArea` contains the particle
+source, the Stern-Gerlach measuring devices, the Bloch spheres that represent the measured spin states, the histograms
+that shows the results of the measurements, and particle nodes. The particles that are displayed in the continuous mode
+are drawn using canvas in `ManyParticlesCanvasNode` for optimal performance.
 
 ### Bloch Sphere Screen
 
 The "Bloch Sphere" screen allows users to prepare a spin state by manipulating a unit vector in a Bloch sphere by
-changing the azimuthal and polar angles. The user can then measure the spin state along a given basis in the
-measurement area by pressing the "Observe" button. The user can also enable a magnetic field that causes the spin state
-to precess around the Z axis prior to measurement.
+changing the azimuthal and polar angles. The user can then measure the spin state along a given basis in the measurement
+area by pressing the "Observe" button. The user can also enable a magnetic field that causes the spin state to precess
+around the Z axis prior to measurement.
 
 #### Model
 
@@ -217,8 +231,7 @@ delay of the measurements.
 
 The class `BlochSphereNumericalEquationNode` not only shows the numeric values of the state equation, but also handles
 changes in the basis of the equation (X instead of Z for example). The entire derivation of the basis change
-calculations
-are found in this [GitHub discussion](https://github.com/phetsims/quantum-measurement/issues/82).
+calculations are found in this [GitHub discussion](https://github.com/phetsims/quantum-measurement/issues/82).
 
 #### View
 
