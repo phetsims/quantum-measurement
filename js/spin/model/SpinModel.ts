@@ -272,6 +272,8 @@ export default class SpinModel implements TModel {
           this.multipleParticlesCollection.clear();
         }
 
+        this.measurementDevices.forEach( device => device.reset() );
+
         // Conditions that determine visibility and state of the experiment components
         // Declared into variables for better readability
         const singleParticle = sourceMode === SourceMode.SINGLE;

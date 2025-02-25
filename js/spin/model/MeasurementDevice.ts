@@ -34,6 +34,9 @@ export default class MeasurementDevice {
   // emitter that fires when a measurement is made
   public readonly measurementEmitter: Emitter;
 
+  // If this is reset via the model, alert the view
+  public readonly resetEmitter: Emitter;
+
   // flag to indicate if the line is active
   public readonly isActiveProperty: BooleanProperty;
 
@@ -45,6 +48,8 @@ export default class MeasurementDevice {
     } );
 
     this.measurementEmitter = new Emitter();
+
+    this.resetEmitter = new Emitter();
 
     this.isActiveProperty = new BooleanProperty( originallyActive, {
       tandem: providedOptions.tandem.createTandem( 'isActiveProperty' )
@@ -67,6 +72,7 @@ export default class MeasurementDevice {
   public reset(): void {
     this.spinStateProperty.reset();
     this.isActiveProperty.reset();
+    this.resetEmitter.emit();
   }
 }
 

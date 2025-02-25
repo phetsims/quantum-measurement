@@ -33,11 +33,11 @@ export default class MeasurementDeviceNode extends VBox {
 
   private readonly simpleBlochSphereNode: BlochSphereNode;
 
-  public constructor( measurementLine: MeasurementDevice,
+  public constructor( measurementDevice: MeasurementDevice,
                       modelViewTransform: ModelViewTransform2,
                       providedOptions: MeasurementDeviceNodeOptions ) {
 
-    const simpleBlochSphereNode = new BlochSphereNode( measurementLine.simpleBlochSphere, {
+    const simpleBlochSphereNode = new BlochSphereNode( measurementDevice.simpleBlochSphere, {
       tandem: Tandem.OPT_OUT,
       drawKets: false,
       drawTitle: false,
@@ -60,7 +60,7 @@ export default class MeasurementDeviceNode extends VBox {
 
     simpleBlochSphereNode.stateVectorVisibleProperty.value = false;
 
-    measurementLine.measurementEmitter.addListener( () => {
+    measurementDevice.measurementEmitter.addListener( () => {
       simpleBlochSphereNode.stateVectorVisibleProperty.value = false;
       cameraPath.fill = QuantumMeasurementColors.particleColorProperty;
 
@@ -73,20 +73,24 @@ export default class MeasurementDeviceNode extends VBox {
       }, 500 );
     } );
 
+    measurementDevice.resetEmitter.addListener( () => {
+      this.reset();
+    } );
+
     const options = optionize<MeasurementDeviceNodeOptions, SelfOptions, VBoxOptions>()( {
       children: [
         simpleBlochSphereNode,
         cameraNode
       ],
       spacing: 30,
-      visibleProperty: new GatedVisibleProperty( measurementLine.isActiveProperty, providedOptions.tandem )
+      visibleProperty: new GatedVisibleProperty( measurementDevice.isActiveProperty, providedOptions.tandem )
     }, providedOptions );
 
     super( options );
 
     this.simpleBlochSphereNode = simpleBlochSphereNode;
 
-    measurementLine.positionProperty.link( position => {
+    measurementDevice.positionProperty.link( position => {
       this.center = modelViewTransform.modelToViewPosition( position );
     } );
   }
