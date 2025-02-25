@@ -52,8 +52,8 @@ export default class OutcomeProbabilityControl extends VBox {
 
     let COLOR_SPAN: ( text: string ) => string = text => text;
 
-    let BRA_KET_TITLE_STRING = `( ${ALPHA}|${UP}${KET} + ${COLOR_SPAN( BETA )}|${COLOR_SPAN( DOWN )}${KET} )`;
-    let MAGNITUDE_OF_BETA_SQUARED = COLOR_SPAN( `|${BETA}|<sup>2` );
+    let ketTitleString = `( ${ALPHA}|${UP}${KET} + ${COLOR_SPAN( BETA )}|${COLOR_SPAN( DOWN )}${KET} )`;
+    let magnitudeOfBetaSquared = COLOR_SPAN( `|${BETA}|<sup>2` );
 
     Multilink.multilink(
       [
@@ -64,8 +64,8 @@ export default class OutcomeProbabilityControl extends VBox {
         COLOR_SPAN = ( text: string ) => {
           return ProbabilityEquationsNode.COLOR_SPAN( text, systemType === 'classical' ? tailsColor : downColor );
         };
-        BRA_KET_TITLE_STRING = `( ${ALPHA}|${UP}${KET} + ${COLOR_SPAN( BETA )}|${COLOR_SPAN( DOWN )}${KET} )`;
-        MAGNITUDE_OF_BETA_SQUARED = COLOR_SPAN( `|${BETA}|<sup>2` );
+        ketTitleString = `( ${ALPHA}|${UP}${KET} + ${COLOR_SPAN( BETA )}|${COLOR_SPAN( DOWN )}${KET} )`;
+        magnitudeOfBetaSquared = COLOR_SPAN( `|${BETA}|<sup>2` );
       }
     );
 
@@ -86,7 +86,7 @@ export default class OutcomeProbabilityControl extends VBox {
           QuantumMeasurementColors.tailsColorProperty,
           QuantumMeasurementColors.downColorProperty
         ],
-        stateToPrepareString => `<b>${stateToPrepareString}</b> ${BRA_KET_TITLE_STRING}`
+        stateToPrepareString => `<b>${stateToPrepareString}</b> ${ketTitleString}`
       );
       title = new RichText( titleStringProperty, {
         font: TITLE_AND_LABEL_FONT,
@@ -150,7 +150,7 @@ export default class OutcomeProbabilityControl extends VBox {
         QuantumMeasurementColors.downColorProperty
       ], ( probabilityString, probabilityOfValuePatternString ) => {
         const POfV = StringUtils.fillIn( probabilityOfValuePatternString, { value: COLOR_SPAN( `<b>${QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER}</b>` ) } );
-        return `${probabilityString} ${POfV} = ${MAGNITUDE_OF_BETA_SQUARED}`;
+        return `${probabilityString} ${POfV} = ${magnitudeOfBetaSquared}`;
       }
     );
 
