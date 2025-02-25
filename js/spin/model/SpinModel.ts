@@ -274,7 +274,7 @@ export default class SpinModel implements TModel {
 
         // Conditions that determine visibility and state of the experiment components
         // Declared into variables for better readability
-        const singleParticle = sourceMode.isSingleParticleMode;
+        const singleParticle = sourceMode === SourceMode.SINGLE;
         const multiApparatus = !experiment.usingSingleApparatus;
         const custom = experiment.isCustom;
 
