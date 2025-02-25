@@ -193,9 +193,10 @@ apparatuses, and custom mode) the following is a table of the experiment configu
 | Single Apparatus | MD0, SG0, MD1                | SG0+H                             |
 | Multi Apparatus  | MD0, SG0, MD1, SG1, SG2, MD2 | SG0+H (blockable), SG1+H*, SG2+H* |
 
-- SG: Stern-Gerlach Apparatus: SG0 is the first one, SG1 is the second top, SG2 is the second bottom. They also can have
-  a histogram (+H) in multi-particle mode.
 - MD: Measurement Device (the camera with Bloch Sphere) in front of each SG phase.
+- SG: Stern-Gerlach Apparatus: SG0 is the first one, SG1 is the second top, SG2 is the second bottom.
+- +H: additional histogram on top of SGs in multi-particle mode.
+- +H* histogram conditionally visible based on SG0 blocking mode (up, down)
 
 Also, the experiment ocurrs in stages to better keep track of the state of the particles. The stages are:
 - Stage 0: From particle source, across possibly MD0 and into SG0.
