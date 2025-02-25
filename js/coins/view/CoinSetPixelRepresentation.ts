@@ -46,7 +46,6 @@ const DARKER_FLIPPING_COLOR = new Color( HIDDEN_COLOR ).colorUtilsDarker( 0.1 ).
 const MIN_RENDERING_RADIUS = 1;
 const MAX_RENDERING_RADIUS = Math.sqrt( 2 ) * SIDE_LENGTH / 2;
 const FUZZY_EDGE_PROPORTION = 0.15;
-const RENDER_ALTERNATIVE = false;
 
 class CoinSetPixelRepresentation extends CanvasNode {
 
@@ -190,8 +189,7 @@ class CoinSetPixelRepresentation extends CanvasNode {
     assert && assert( index >= 0 && index < this.sideLength * this.sideLength, 'index value out of range' );
     assert && assert( COIN_STATE_TO_COLOR_MAP.has( this.coinSet.measuredValues[ index ] ), 'no color for value' );
 
-    if ( RENDER_ALTERNATIVE ) {
-
+    if ( this.coinSet.validateAlternativeDisplay ) {
       // Happy Easter.
       return alternativeData[ index ] ?
              'black' :

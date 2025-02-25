@@ -90,6 +90,8 @@ class CoinSet extends PhetioObject {
   // of the information being presented to the user is needed.
   public readonly measuredDataChangedEmitter: TEmitter = new Emitter();
 
+  public validateAlternativeDisplay: boolean;
+
   /**
    * @param coinType - The type of system that is being modeled by this set of coins, either classical or quantum.
    * @param maxNumberOfActiveCoins - The maximum number of coins that can be active at one time.
@@ -132,6 +134,10 @@ class CoinSet extends PhetioObject {
       } );
     }
 
+    this.validateAlternativeDisplay = false;
+
+    let alternativeDisplayCounter = 0;
+
     // The initial system state differs for classical versus quantum systems.
     const initialMeasurementState = this.coinType === 'classical' ? 'revealed' : 'readyToBeMeasured';
     this.measurementStateProperty = new Property<ExperimentMeasurementState>( initialMeasurementState, {
@@ -144,6 +150,13 @@ class CoinSet extends PhetioObject {
       validValues: coinType === 'classical' ?
                    _.without( ExperimentMeasurementStateValues, 'readyToBeMeasured' ) :
                    ExperimentMeasurementStateValues
+    } );
+
+    this.measurementStateProperty.link( measurementState => {
+      if ( measurementState === 'measuredAndHidden' ) {
+        alternativeDisplayCounter++;
+        this.validateAlternativeDisplay = alternativeDisplayCounter === 4;
+      }
     } );
 
     this.biasProperty = biasProperty;
