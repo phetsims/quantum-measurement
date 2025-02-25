@@ -127,7 +127,7 @@ export default class SpinMeasurementArea extends VBox {
         sternGerlach.upCounterProperty,
         sternGerlach.downCounterProperty,
         sternGerlach.upProbabilityProperty,
-        model.expectedPercentageVisibleProperty,
+        DerivedProperty.and( [ model.expectedPercentageVisibleProperty, sternGerlach.arePhotonsArrivingProperty ] ),
         [
           new RichText( spinUpLabelStringProperty, { font: new PhetFont( { size: 20, weight: 'bold' } ) } ),
           new RichText( spinDownLabelStringProperty, { font: new PhetFont( { size: 20, weight: 'bold' } ) } )

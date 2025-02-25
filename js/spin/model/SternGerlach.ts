@@ -48,6 +48,9 @@ export default class SternGerlach extends PhetioObject {
   public readonly upCounterProperty: AveragingCounterNumberProperty;
   public readonly downCounterProperty: AveragingCounterNumberProperty;
 
+  // Wether photons would be arriving to the apparatus
+  public readonly arePhotonsArrivingProperty: TReadOnlyProperty<boolean>;
+
   // Local position vectors
   public entranceLocalPosition: Vector2;
   public topExitLocalPosition: Vector2;
@@ -137,6 +140,16 @@ export default class SternGerlach extends PhetioObject {
       totalAveragingPeriod: totalAveragingPeriod,
       countSamplePeriod: countSamplePeriod
     } );
+
+    this.arePhotonsArrivingProperty = new DerivedProperty(
+      [
+        this.upCounterProperty,
+        this.downCounterProperty
+      ],
+      ( upCounter: number, downCounter: number ) => {
+        return upCounter + downCounter > 0;
+      }
+    );
 
     this.isZOrientedProperty.link( () => {
       this.resetCounts();

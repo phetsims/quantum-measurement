@@ -78,7 +78,7 @@ export default class SpinModel implements TModel {
   public readonly measurementDevices: MeasurementDevice[];
 
   // expected percentage of particles that should be visible in the histogram
-  public readonly expectedPercentageVisibleProperty: BooleanProperty;
+  public readonly expectedPercentageVisibleProperty: Property<boolean>;
 
   // boolean to control what exit to block in continuous mode
   public readonly isBlockingProperty: TReadOnlyProperty<boolean>;
