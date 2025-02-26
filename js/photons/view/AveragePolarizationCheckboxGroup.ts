@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2025, University of Colorado Boulder
 
 /**
  * AveragePolarizationCheckboxGroup is a group of checkboxes that have strings to define their labels and an optional
