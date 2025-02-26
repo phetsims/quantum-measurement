@@ -127,7 +127,8 @@ class CoinExperimentPreparationArea extends VBox {
       sceneModel.systemType,
       {
         maxWidth: 150, // empirically determined to work well with layout
-        tandem: tandem.createTandem( 'probabilityEquationsText' )
+        tandem: tandem.createTandem( 'probabilityEquationsText' ),
+        phetioVisiblePropertyInstrumented: true
       }
     );
 
