@@ -6,13 +6,13 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
+import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import TModel from '../../../../joist/js/TModel.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
-import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
-import { SystemType, SystemTypeValues } from '../../common/model/SystemType.js';
+import { SystemType } from '../../common/model/SystemType.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import CoinsExperimentSceneModel from './CoinsExperimentSceneModel.js';
 
@@ -34,21 +34,19 @@ export default class CoinsModel implements TModel {
       tandem: providedOptions.tandem.createTandem( 'classicalCoinExperimentSceneModel' )
     } );
     this.quantumCoinExperimentSceneModel = new CoinsExperimentSceneModel( {
-      systemType: 'quantum',
+      systemType: SystemType.QUANTUM,
       tandem: providedOptions.tandem.createTandem( 'quantumCoinExperimentSceneModel' )
     } );
 
-    this.experimentTypeProperty = new Property<SystemType>( 'classical', {
+    this.experimentTypeProperty = new EnumerationProperty( SystemType.CLASSICAL, {
       tandem: providedOptions.tandem.createTandem( 'experimentTypeProperty' ),
-      phetioValueType: StringUnionIO( SystemTypeValues ),
-      validValues: SystemTypeValues,
       phetioFeatured: true
     } );
 
     // Update the active scene model based on the experiment type.
     this.experimentTypeProperty.link( experimentType => {
-      this.classicalCoinExperimentSceneModel.activeProperty.value = experimentType === 'classical';
-      this.quantumCoinExperimentSceneModel.activeProperty.value = experimentType === 'quantum';
+      this.classicalCoinExperimentSceneModel.activeProperty.value = experimentType === SystemType.CLASSICAL;
+      this.quantumCoinExperimentSceneModel.activeProperty.value = experimentType === SystemType.QUANTUM;
     } );
   }
 

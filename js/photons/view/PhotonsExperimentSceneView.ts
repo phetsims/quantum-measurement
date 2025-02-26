@@ -28,6 +28,7 @@ import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstant
 import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHistogram.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
+import ExperimentModeValues from '../model/ExperimentModeValues.js';
 import PhotonsExperimentSceneModel from '../model/PhotonsExperimentSceneModel.js';
 import AveragePolarizationCheckboxGroup from './AveragePolarizationCheckboxGroup.js';
 import NormalizedOutcomeVectorGraph from './NormalizedOutcomeVectorGraph.js';
@@ -101,7 +102,7 @@ class PhotonsExperimentSceneView extends Node {
     );
 
     // Create a sort of "title panel" for the area on the right that shows information about the detection statistics.
-    const titleTextProperty = model.laser.emissionMode === 'singlePhoton' ?
+    const titleTextProperty = model.laser.emissionMode === ExperimentModeValues.SINGLE_PHOTON ?
                               QuantumMeasurementStrings.averagePolarizationStringProperty :
                               QuantumMeasurementStrings.averagePolarizationRateStringProperty;
     const averagePolarizationTitlePanel = new Panel(
@@ -118,10 +119,10 @@ class PhotonsExperimentSceneView extends Node {
     );
 
     // Create the equation representation that shows the detection counts for the vertical and horizontal detectors.
-    const verticalValueProperty = model.laser.emissionMode === 'singlePhoton' ?
+    const verticalValueProperty = model.laser.emissionMode === ExperimentModeValues.SINGLE_PHOTON ?
                                   model.verticalPolarizationDetector.detectionCountProperty :
                                   model.verticalPolarizationDetector.detectionRateProperty;
-    const horizontalValueProperty = model.laser.emissionMode === 'singlePhoton' ?
+    const horizontalValueProperty = model.laser.emissionMode === ExperimentModeValues.SINGLE_PHOTON ?
                                     model.horizontalPolarizationDetector.detectionCountProperty :
                                     model.horizontalPolarizationDetector.detectionRateProperty;
 
@@ -147,7 +148,7 @@ class PhotonsExperimentSceneView extends Node {
       providedOptions.tandem.createTandem( 'normalizedOutcomeVectorGraph' )
     );
 
-    const histogramTickMarkLabelProperty = model.laser.emissionMode === 'singlePhoton' ?
+    const histogramTickMarkLabelProperty = model.laser.emissionMode === ExperimentModeValues.SINGLE_PHOTON ?
                                            new StringProperty( '1.0' ) :
                                            new StringProperty( '' );
 
@@ -173,7 +174,7 @@ class PhotonsExperimentSceneView extends Node {
           } )
       ],
       {
-        displayMode: model.laser.emissionMode === 'singlePhoton' ? 'fraction' : 'rate',
+        displayMode: model.laser.emissionMode === ExperimentModeValues.SINGLE_PHOTON ? 'fraction' : 'rate',
         orientation: 'horizontal',
         floatingLabels: true,
         matchLabelColors: true,

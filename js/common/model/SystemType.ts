@@ -8,5 +8,30 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-export const SystemTypeValues = [ 'classical', 'quantum' ] as const;
-export type SystemType = ( typeof SystemTypeValues )[number];
+
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
+import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
+
+export class SystemType extends EnumerationValue {
+
+  public static readonly CLASSICAL = new SystemType(
+    QuantumMeasurementStrings.classicalCoinStringProperty,
+    QuantumMeasurementStrings.classicalStringProperty,
+    'classical' );
+
+  public static readonly QUANTUM = new SystemType(
+    QuantumMeasurementStrings.quantumCoinQuotedStringProperty,
+    QuantumMeasurementStrings.quantumStringProperty,
+    'quantum' );
+
+  public static readonly enumeration = new Enumeration( SystemType );
+
+  public constructor(
+    public readonly title: TReadOnlyProperty<string>,
+    public readonly testingName: TReadOnlyProperty<string>,
+    public readonly tandemName: string ) {
+    super();
+  }
+}

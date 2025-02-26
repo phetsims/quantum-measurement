@@ -12,6 +12,7 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
+import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import TModel from '../../../../joist/js/TModel.js';
@@ -19,8 +20,8 @@ import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
-import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import ExperimentModeValues from './ExperimentModeValues.js';
 import PhotonDetector from './PhotonDetector.js';
 import PhotonsExperimentSceneModel from './PhotonsExperimentSceneModel.js';
 
@@ -56,14 +57,10 @@ export type PhotonInteractionTestResult = {
   };
 };
 
-// REVIEW this is duplicated in Laser.ts
-export const ExperimentModeTypeValues = [ 'singlePhoton', 'manyPhotons' ] as const;
-export type ExperimentModeType = ( typeof ExperimentModeTypeValues )[number];
-
 export default class PhotonsModel implements TModel {
 
   // The experiment mode, either single-photon or multiple-photon.
-  public readonly experimentModeProperty: Property<ExperimentModeType>;
+  public readonly experimentModeProperty: Property<ExperimentModeValues>;
 
   // The two scene models for the Photons screen.
   public readonly singlePhotonSceneModel: PhotonsExperimentSceneModel;
@@ -71,18 +68,16 @@ export default class PhotonsModel implements TModel {
 
   public constructor( providedOptions: PhotonsModelOptions ) {
 
-    this.experimentModeProperty = new Property<ExperimentModeType>( 'singlePhoton', {
+    this.experimentModeProperty = new EnumerationProperty( ExperimentModeValues.SINGLE_PHOTON, {
       tandem: providedOptions.tandem.createTandem( 'experimentModeProperty' ),
-      phetioValueType: StringUnionIO( ExperimentModeTypeValues ),
-      validValues: ExperimentModeTypeValues,
       phetioFeatured: true
     } );
     this.singlePhotonSceneModel = new PhotonsExperimentSceneModel( {
-      photonEmissionMode: 'singlePhoton',
+      photonEmissionMode: ExperimentModeValues.SINGLE_PHOTON,
       tandem: providedOptions.tandem.createTandem( 'singlePhotonSceneModel' )
     } );
     this.manyPhotonsExperimentSceneModel = new PhotonsExperimentSceneModel( {
-      photonEmissionMode: 'manyPhotons',
+      photonEmissionMode: ExperimentModeValues.MANY_PHOTONS,
       tandem: providedOptions.tandem.createTandem( 'manyPhotonsExperimentSceneModel' )
     } );
   }
@@ -101,7 +96,7 @@ export default class PhotonsModel implements TModel {
    * @param dt - time step, in seconds
    */
   public step( dt: number ): void {
-    if ( this.experimentModeProperty.value === 'singlePhoton' ) {
+    if ( this.experimentModeProperty.value === ExperimentModeValues.SINGLE_PHOTON ) {
       this.singlePhotonSceneModel.step( dt );
     }
     else {

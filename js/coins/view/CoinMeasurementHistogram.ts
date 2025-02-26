@@ -36,21 +36,21 @@ export default class CoinMeasurementHistogram extends QuantumMeasurementHistogra
     // Create the labels for the X axis.
     const xAxisLabels = [
       new RichText(
-        systemType === 'classical' ?
+        systemType === SystemType.CLASSICAL ?
         QuantumMeasurementConstants.CLASSICAL_UP_SYMBOL :
         QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER,
         {
           font: LABEL_FONT,
-          fill: systemType === 'classical' ? QuantumMeasurementColors.headsColorProperty : QuantumMeasurementColors.upColorProperty
+          fill: systemType === SystemType.CLASSICAL ? QuantumMeasurementColors.headsColorProperty : QuantumMeasurementColors.upColorProperty
         }
       ),
       new RichText(
-        systemType === 'classical' ?
+        systemType === SystemType.CLASSICAL ?
         QuantumMeasurementConstants.CLASSICAL_DOWN_SYMBOL :
         QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER,
         {
           font: LABEL_FONT,
-          fill: systemType === 'classical' ? QuantumMeasurementColors.tailsColorProperty : QuantumMeasurementColors.downColorProperty
+          fill: systemType === SystemType.CLASSICAL ? QuantumMeasurementColors.tailsColorProperty : QuantumMeasurementColors.downColorProperty
         }
       )
     ];
@@ -68,8 +68,8 @@ export default class CoinMeasurementHistogram extends QuantumMeasurementHistogra
     // Define a function to update the left and right number Properties.
     const updateNumberProperties = () => {
 
-      const leftTestValue = systemType === 'classical' ? 'heads' : 'up';
-      const rightTestValue = systemType === 'classical' ? 'tails' : 'down';
+      const leftTestValue = systemType === SystemType.CLASSICAL ? 'heads' : 'up';
+      const rightTestValue = systemType === SystemType.CLASSICAL ? 'tails' : 'down';
       let leftTotal = 0;
       let rightTotal = 0;
 

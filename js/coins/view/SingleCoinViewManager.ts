@@ -20,9 +20,10 @@ import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioS
 import Tandem from '../../../../tandem/js/Tandem.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
-import { MEASUREMENT_PREPARATION_TIME } from '../model/CoinSet.js';
+import { SystemType } from '../../common/model/SystemType.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
+import { MEASUREMENT_PREPARATION_TIME } from '../model/CoinSet.js';
 import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
 import { ExperimentMeasurementState } from '../model/ExperimentMeasurementState.js';
 import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
@@ -115,7 +116,7 @@ class SingleCoinViewManager {
       this.clearSingleCoinTestBox();
 
       // Create the coin that will travel from the preparation area into this measurement area.
-      if ( sceneModel.systemType === 'classical' ) {
+      if ( sceneModel.systemType === SystemType.CLASSICAL ) {
         singleCoinNode = new ClassicalCoinNode(
           sceneModel.singleCoin.measuredValueProperty as TReadOnlyProperty<ClassicalCoinStates>,
           InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS,
@@ -189,7 +190,7 @@ class SingleCoinViewManager {
           assuredSingleCoinNode.center = singleCoinTestBox.center;
           coinMask.center = singleCoinTestBox.center;
 
-          if ( sceneModel.systemType === 'quantum' ) {
+          if ( sceneModel.systemType === SystemType.QUANTUM ) {
 
             // "Collapse" the state of the coin node so that it shows a single state, not a superposed one.
             const quantumCoinNode = singleCoinNode as QuantumCoinNode;
@@ -220,7 +221,7 @@ class SingleCoinViewManager {
     };
 
     this.updateFlipping = ( singleCoinMeasurementState: ExperimentMeasurementState ) => {
-      if ( sceneModel.systemType === 'classical' ) {
+      if ( sceneModel.systemType === SystemType.CLASSICAL ) {
 
         if ( singleCoinMeasurementState === 'preparingToBeMeasured' ) {
 
@@ -271,7 +272,7 @@ class SingleCoinViewManager {
           flippingAnimationStepListener = null;
         }
       }
-      else if ( sceneModel.systemType === 'quantum' ) {
+      else if ( sceneModel.systemType === SystemType.QUANTUM ) {
 
         if ( singleCoinMeasurementState === 'preparingToBeMeasured' ) {
 

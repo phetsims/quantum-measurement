@@ -62,7 +62,7 @@ export default class OutcomeProbabilityControl extends VBox {
       ],
       ( tailsColor, downColor ) => {
         COLOR_SPAN = ( text: string ) => {
-          return ProbabilityEquationsNode.COLOR_SPAN( text, systemType === 'classical' ? tailsColor : downColor );
+          return ProbabilityEquationsNode.COLOR_SPAN( text, systemType === SystemType.CLASSICAL ? tailsColor : downColor );
         };
         ketTitleString = `( ${ALPHA}|${UP}${KET} + ${COLOR_SPAN( BETA )}|${COLOR_SPAN( DOWN )}${KET} )`;
         magnitudeOfBetaSquared = COLOR_SPAN( `|${BETA}|<sup>2` );
@@ -71,7 +71,7 @@ export default class OutcomeProbabilityControl extends VBox {
 
 
     let title: Node;
-    if ( systemType === 'classical' ) {
+    if ( systemType === SystemType.CLASSICAL ) {
       title = new Text( QuantumMeasurementStrings.coinBiasStringProperty, {
         font: TITLE_AND_LABEL_FONT,
         fontWeight: 'bold',
@@ -159,7 +159,7 @@ export default class OutcomeProbabilityControl extends VBox {
     let quantumReadout: RichText;
 
     let children: Node[];
-    if ( systemType === 'classical' ) {
+    if ( systemType === SystemType.CLASSICAL ) {
 
       upProbabilityValueControl = new ProbabilityValueControl(
         classicalUpTitleProperty,

@@ -44,14 +44,14 @@ export default class InitialCoinStateSelectorNode extends VBox {
                       tandem: Tandem ) {
 
     assert && assert(
-      coinType === 'classical' &&
+      coinType === SystemType.CLASSICAL &&
       ClassicalCoinStateValues.includes( initialCoinStateProperty.value as ClassicalCoinStates ) ||
-      coinType === 'quantum' &&
+      coinType === SystemType.QUANTUM &&
       QuantumCoinStateValues.includes( initialCoinStateProperty.value as QuantumCoinStates ),
       'the specified coinType does not match with initialCoinStateProperty'
     );
 
-    const titleStringProperty = coinType === 'classical' ?
+    const titleStringProperty = coinType === SystemType.CLASSICAL ?
                                 QuantumMeasurementStrings.initialOrientationStringProperty :
                                 QuantumMeasurementStrings.basisStateStringProperty;
 
@@ -69,7 +69,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
       return str.charAt( 0 ).toUpperCase() + str.slice( 1 );
     };
     let initialCoinStateItems; //: RectangularRadioButtonGroupItem[];
-    if ( coinType === 'classical' ) {
+    if ( coinType === SystemType.CLASSICAL ) {
       initialCoinStateItems = ClassicalCoinStateValues.map( stateValue => {
         return {
           value: stateValue,
@@ -143,7 +143,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
 
     // Add the Node that will indicate the initial orientation of the coin.
     let orientationIndicatorCoinNode;
-    if ( coinType === 'classical' ) {
+    if ( coinType === SystemType.CLASSICAL ) {
       orientationIndicatorCoinNode = new ClassicalCoinNode(
         initialCoinStateProperty as Property<ClassicalCoinStates>,
         INDICATOR_COIN_NODE_RADIUS,

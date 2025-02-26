@@ -74,7 +74,7 @@ class PolarizingBeamSplitter implements TPhotonInteraction {
         const angleInRadians = toRadians( photon.polarizationAngle );
         const probabilityOfReflection = 1 - Math.pow( Math.cos( angleInRadians ), 2 );
 
-        if ( this.particleBehaviorModeProperty.value === 'classical' ) {
+        if ( this.particleBehaviorModeProperty.value === SystemType.CLASSICAL ) {
 
           // This is the classical case, where photons "choose" a path at the beam splitter.
           if ( dotRandom.nextDouble() <= probabilityOfReflection ) {

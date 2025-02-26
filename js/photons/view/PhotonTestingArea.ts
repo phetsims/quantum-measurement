@@ -17,7 +17,7 @@ import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
-import { SystemType, SystemTypeValues } from '../../common/model/SystemType.js';
+import { SystemType } from '../../common/model/SystemType.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import PhotonsExperimentSceneModel from '../model/PhotonsExperimentSceneModel.js';
@@ -54,22 +54,14 @@ class PhotonTestingArea extends Node {
 
       // REVIEW: Why do you need this type assertion?
       model.particleBehaviorModeProperty as PhetioProperty<SystemType>,
-      SystemTypeValues.map( behaviorMode => {
-
-          const nameProperty = behaviorMode === 'classical' ?
-                               QuantumMeasurementStrings.classicalStringProperty :
-                               QuantumMeasurementStrings.quantumStringProperty;
-
-          const tandemRootName = behaviorMode === 'classical' ? 'classical' : 'quantum';
-          const tandemName = `${tandemRootName}RadioButton`;
-
+      SystemType.enumeration.values.map( behaviorMode => {
           return {
             value: behaviorMode,
             createNode: () => new Text(
-              nameProperty,
+              behaviorMode.testingName,
               { font: new PhetFont( 15 ), maxWidth: 100 }
             ),
-            tandemName: tandemName,
+            tandemName: `${behaviorMode.tandemName}RadioButton`,
             phetioVisiblePropertyInstrumented: false
           };
         }

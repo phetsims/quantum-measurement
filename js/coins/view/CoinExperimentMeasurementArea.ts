@@ -23,6 +23,7 @@ import Text from '../../../../scenery/js/nodes/Text.js';
 import VerticalAquaRadioButtonGroup from '../../../../sun/js/VerticalAquaRadioButtonGroup.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import { SystemType } from '../../common/model/SystemType.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
@@ -50,7 +51,7 @@ class CoinExperimentMeasurementArea extends VBox {
 
   public constructor( sceneModel: CoinsExperimentSceneModel, tandem: Tandem ) {
 
-    const textColorProperty = sceneModel.systemType === 'quantum' ?
+    const textColorProperty = sceneModel.systemType === SystemType.QUANTUM ?
                               QuantumMeasurementColors.quantumSceneTextColorProperty :
                               QuantumMeasurementColors.classicalSceneTextColorProperty;
     const singleCoinInTestBoxProperty = new BooleanProperty( false );
@@ -116,8 +117,8 @@ class CoinExperimentMeasurementArea extends VBox {
         multiCoinExperimentHistogramTandem
       ),
       tandem: multiCoinExperimentHistogramTandem,
-      leftFillColorProperty: sceneModel.systemType === 'classical' ? QuantumMeasurementColors.headsColorProperty : QuantumMeasurementColors.upColorProperty,
-      rightFillColorProperty: sceneModel.systemType === 'classical' ? QuantumMeasurementColors.tailsColorProperty : QuantumMeasurementColors.downColorProperty
+      leftFillColorProperty: sceneModel.systemType === SystemType.CLASSICAL ? QuantumMeasurementColors.headsColorProperty : QuantumMeasurementColors.upColorProperty,
+      rightFillColorProperty: sceneModel.systemType === SystemType.CLASSICAL ? QuantumMeasurementColors.tailsColorProperty : QuantumMeasurementColors.downColorProperty
     } );
     const multipleCoinExperimentButtonSet = new CoinExperimentButtonSet(
       sceneModel.coinSet,
@@ -283,7 +284,7 @@ class CoinExperimentMeasurementArea extends VBox {
     sceneModel.coinSet.measurementStateProperty.link( measurementState => {
 
       if ( measurementState === 'preparingToBeMeasured' ) {
-        if ( sceneModel.systemType === 'quantum' ) {
+        if ( sceneModel.systemType === SystemType.QUANTUM ) {
 
           // Abort any previous animations and clear out the test box.
           multipleCoinsViewManager.abortIngressAnimationForCoinSet();

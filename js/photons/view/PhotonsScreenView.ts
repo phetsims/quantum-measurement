@@ -7,23 +7,15 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import LocalizedStringProperty from '../../../../chipper/js/browser/LocalizedStringProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
 import SceneSelectorRadioButtonGroup from '../../common/view/SceneSelectorRadioButtonGroup.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
-import PhotonsModel, { ExperimentModeType } from '../model/PhotonsModel.js';
+import ExperimentModeValues from '../model/ExperimentModeValues.js';
+import PhotonsModel from '../model/PhotonsModel.js';
 import PhotonsExperimentSceneView from './PhotonsExperimentSceneView.js';
-
-const EXPERIMENT_MODE_TO_STRING_MAP = new Map<ExperimentModeType, LocalizedStringProperty>(
-  [
-    [ 'singlePhoton', QuantumMeasurementStrings.singlePhotonStringProperty ],
-    [ 'manyPhotons', QuantumMeasurementStrings.manyPhotonsStringProperty ]
-  ]
-);
 
 class PhotonsScreenView extends QuantumMeasurementScreenView {
 
@@ -35,9 +27,8 @@ class PhotonsScreenView extends QuantumMeasurementScreenView {
 
     // Create the radio buttons that will sit at the top of the screen and will allow users to pick between the single-
     // photon and many-photons experiment modes.
-    const experimentModeRadioButtonGroup = new SceneSelectorRadioButtonGroup<ExperimentModeType>(
+    const experimentModeRadioButtonGroup = new SceneSelectorRadioButtonGroup<ExperimentModeValues>(
       model.experimentModeProperty,
-      EXPERIMENT_MODE_TO_STRING_MAP,
       {
         centerX: QuantumMeasurementConstants.LAYOUT_BOUNDS.centerX,
         top: QuantumMeasurementConstants.SCREEN_VIEW_Y_MARGIN,
@@ -53,7 +44,7 @@ class PhotonsScreenView extends QuantumMeasurementScreenView {
     const singlePhotonExperimentSceneView = new PhotonsExperimentSceneView( model.singlePhotonSceneModel, {
       visibleProperty: new DerivedProperty(
         [ model.experimentModeProperty ],
-        experimentMode => experimentMode === 'singlePhoton'
+        experimentMode => experimentMode === ExperimentModeValues.SINGLE_PHOTON
       ),
       translation: sceneTranslation,
       tandem: tandem.createTandem( 'singlePhotonExperimentSceneView' )
@@ -61,7 +52,7 @@ class PhotonsScreenView extends QuantumMeasurementScreenView {
     const manyPhotonsExperimentSceneView = new PhotonsExperimentSceneView( model.manyPhotonsExperimentSceneModel, {
       visibleProperty: new DerivedProperty(
         [ model.experimentModeProperty ],
-        experimentMode => experimentMode === 'manyPhotons'
+        experimentMode => experimentMode === ExperimentModeValues.MANY_PHOTONS
       ),
       translation: sceneTranslation,
       tandem: tandem.createTandem( 'manyPhotonsExperimentSceneView' )

@@ -30,10 +30,10 @@ export default class ProbabilityEquationsNode extends RichText {
                       providedOptions: ProbabilityEquationsNodeOptions ) {
 
     // Set up the parameters that will be used in the equations.
-    const upperFunctionParameter = systemType === 'classical' ?
+    const upperFunctionParameter = systemType === SystemType.CLASSICAL ?
                                    QuantumMeasurementConstants.CLASSICAL_UP_SYMBOL :
                                    QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
-    const lowerFunctionParameter = systemType === 'classical' ?
+    const lowerFunctionParameter = systemType === SystemType.CLASSICAL ?
                                    QuantumMeasurementConstants.CLASSICAL_DOWN_SYMBOL :
                                    QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER;
 
@@ -48,7 +48,7 @@ export default class ProbabilityEquationsNode extends RichText {
       ( bias, pString, tailsColor, downColor ) => {
         const upperEquation = `${pString}(<b>${upperFunctionParameter}</b>) = ${toFixed( bias, 2 )}`;
         const COLOR_SPAN = ( text: string ) =>
-          ProbabilityEquationsNode.COLOR_SPAN( text, systemType === 'classical' ? tailsColor : downColor );
+          ProbabilityEquationsNode.COLOR_SPAN( text, systemType === SystemType.CLASSICAL ? tailsColor : downColor );
         const lowerEquation = `${pString}(<b>${COLOR_SPAN( lowerFunctionParameter )}</b>) = ${COLOR_SPAN( toFixed( 1 - bias, 2 ) )}`;
         return `${upperEquation}<br>${lowerEquation}`;
       }

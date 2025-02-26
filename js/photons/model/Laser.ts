@@ -20,13 +20,12 @@ import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioO
 import Tandem from '../../../../tandem/js/Tandem.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import ExperimentModeValues from './ExperimentModeValues.js';
 import Photon, { PHOTON_SPEED, RIGHT } from './Photon.js';
 import { PhotonCollection } from './PhotonCollection.js';
 
-export type PhotonEmissionMode = 'singlePhoton' | 'manyPhotons';
-
 type SelfOptions = {
-  emissionMode: PhotonEmissionMode;
+  emissionMode: ExperimentModeValues;
 };
 type LaserOptions = SelfOptions & WithRequired<PhetioObjectOptions, 'tandem'>;
 
@@ -56,7 +55,7 @@ class Laser extends PhetioObject {
   private readonly emissionDirection = RIGHT;
 
   // A flag that indicates whether photons should be emitted one at a time or in a continuous stream.
-  public readonly emissionMode: PhotonEmissionMode;
+  public readonly emissionMode: ExperimentModeValues;
 
   // The width of the emitted photon beam, in meters.
   private readonly emittedBeamWidth = PHOTON_BEAM_WIDTH;
@@ -99,10 +98,10 @@ class Laser extends PhetioObject {
       range: new Range( 0, MAX_PHOTON_EMISSION_RATE ),
 
       // Only instrument this in the manyPhotons mode, since it's not relevant in the singlePhoton mode.
-      tandem: providedOptions.emissionMode === 'manyPhotons' ?
+      tandem: providedOptions.emissionMode === ExperimentModeValues.MANY_PHOTONS ?
               providedOptions.tandem.createTandem( 'emissionRateProperty' ) :
               Tandem.OPT_OUT,
-      phetioFeatured: providedOptions.emissionMode === 'manyPhotons'
+      phetioFeatured: providedOptions.emissionMode === ExperimentModeValues.MANY_PHOTONS
     } );
 
     this.presetPolarizationDirectionProperty = new Property<PolarizationPresets>( 'fortyFiveDegrees', {

@@ -8,7 +8,6 @@
 
 import CoinsModel from 'model/CoinsModel.js';
 import Multilink from '../../../../axon/js/Multilink.js';
-import LocalizedStringProperty from '../../../../chipper/js/browser/LocalizedStringProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import { SystemType } from '../../common/model/SystemType.js';
@@ -17,16 +16,9 @@ import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstant
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
 import SceneSelectorRadioButtonGroup from '../../common/view/SceneSelectorRadioButtonGroup.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
 
 const SCENE_POSITION = new Vector2( 0, 90 ); // empirically determined to look decent
-const SYSTEM_TYPE_TO_STRING_MAP = new Map<SystemType, LocalizedStringProperty>(
-  [
-    [ 'classical', QuantumMeasurementStrings.classicalCoinStringProperty ],
-    [ 'quantum', QuantumMeasurementStrings.quantumCoinQuotedStringProperty ]
-  ]
-);
 
 export default class CoinsScreenView extends QuantumMeasurementScreenView {
 
@@ -41,7 +33,6 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
     // Add the radio buttons at the top of the screen that will allow users to pick between classical and quantum coins.
     const experimentTypeRadioButtonGroup = new SceneSelectorRadioButtonGroup<SystemType>(
       model.experimentTypeProperty,
-      SYSTEM_TYPE_TO_STRING_MAP,
       {
         centerX: QuantumMeasurementConstants.LAYOUT_BOUNDS.centerX,
         top: QuantumMeasurementConstants.SCREEN_VIEW_Y_MARGIN,
@@ -86,7 +77,7 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
         QuantumMeasurementColors.quantumBackgroundColorProperty
       ],
       ( experimentType, classicalBackgroundColor, quantumBackgroundColor ) => {
-        QuantumMeasurementColors.screenBackgroundColorProperty.value = experimentType === 'classical' ? classicalBackgroundColor : quantumBackgroundColor;
+        QuantumMeasurementColors.screenBackgroundColorProperty.value = experimentType === SystemType.CLASSICAL ? classicalBackgroundColor : quantumBackgroundColor;
       } );
   }
 

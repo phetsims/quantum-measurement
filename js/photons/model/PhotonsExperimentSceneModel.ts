@@ -21,10 +21,10 @@ import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioS
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
-import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
-import { SystemType, SystemTypeValues } from '../../common/model/SystemType.js';
+import { SystemType } from '../../common/model/SystemType.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import Laser, { PhotonEmissionMode } from './Laser.js';
+import ExperimentModeValues from './ExperimentModeValues.js';
+import Laser from './Laser.js';
 import Mirror from './Mirror.js';
 import Photon, { PHOTON_SPEED } from './Photon.js';
 import { PhotonCollection } from './PhotonCollection.js';
@@ -35,7 +35,7 @@ import PolarizingBeamSplitter from './PolarizingBeamSplitter.js';
 import { TPhotonInteraction } from './TPhotonInteraction.js';
 
 type SelfOptions = {
-  photonEmissionMode: PhotonEmissionMode;
+  photonEmissionMode: ExperimentModeValues;
 };
 type PhotonsExperimentSceneModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
@@ -95,10 +95,8 @@ class PhotonsExperimentSceneModel {
     // construction time and activated and deactivated as needed, rather than creating and destroying them.
     this.photonCollection = new PhotonCollection( experimentTandem.createTandem( 'photonCollection' ) );
 
-    this.particleBehaviorModeProperty = new Property( 'classical', {
+    this.particleBehaviorModeProperty = new EnumerationProperty( SystemType.CLASSICAL, {
       tandem: experimentTandem.createTandem( 'particleBehaviorModeProperty' ),
-      phetioValueType: StringUnionIO( SystemTypeValues ),
-      validValues: SystemTypeValues,
       phetioFeatured: true
     } );
 
@@ -132,7 +130,7 @@ class PhotonsExperimentSceneModel {
       new Vector2( 0, TOTAL_PHOTON_PATH_LENGTH - LASER_TO_BEAM_SPLITTER_DISTANCE ),
       'up',
       {
-        displayMode: this.laser.emissionMode === 'singlePhoton' ? 'count' : 'rate',
+        displayMode: this.laser.emissionMode === ExperimentModeValues.SINGLE_PHOTON ? 'count' : 'rate',
         tandem: experimentTandem.createTandem( 'verticalPolarizationDetector' )
       }
     );
@@ -143,7 +141,7 @@ class PhotonsExperimentSceneModel {
       ),
       'down',
       {
-        displayMode: this.laser.emissionMode === 'singlePhoton' ? 'count' : 'rate',
+        displayMode: this.laser.emissionMode === ExperimentModeValues.SINGLE_PHOTON ? 'count' : 'rate',
         tandem: experimentTandem.createTandem( 'horizontalPolarizationDetector' )
       }
     );
@@ -182,10 +180,10 @@ class PhotonsExperimentSceneModel {
     // Create a derived Property for the normalized outcome value.  This is a little different depending on the
     // experiment mode, but the general idea is that it's the difference between the two measurements divided by the sum
     // of the two measurements.
-    const verticalMeasurementProperty = this.laser.emissionMode === 'singlePhoton' ?
+    const verticalMeasurementProperty = this.laser.emissionMode === ExperimentModeValues.SINGLE_PHOTON ?
                                         this.verticalPolarizationDetector.detectionCountProperty :
                                         this.verticalPolarizationDetector.detectionRateProperty;
-    const horizontalMeasurementProperty = this.laser.emissionMode === 'singlePhoton' ?
+    const horizontalMeasurementProperty = this.laser.emissionMode === ExperimentModeValues.SINGLE_PHOTON ?
                                           this.horizontalPolarizationDetector.detectionCountProperty :
                                           this.horizontalPolarizationDetector.detectionRateProperty;
     this.normalizedOutcomeValueProperty = new DerivedProperty(
@@ -202,7 +200,7 @@ class PhotonsExperimentSceneModel {
 
     // In the single photon mode, we want to reset the detection counts and remove all photons when the polarization
     // direction changes.
-    if ( this.laser.emissionMode === 'singlePhoton' ) {
+    if ( this.laser.emissionMode === ExperimentModeValues.SINGLE_PHOTON ) {
       Multilink.multilink(
         [ this.laser.presetPolarizationDirectionProperty, this.laser.customPolarizationAngleProperty ],
         () => {

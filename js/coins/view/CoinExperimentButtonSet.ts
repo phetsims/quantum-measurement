@@ -17,10 +17,11 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import VBox, { VBoxOptions } from '../../../../scenery/js/layout/nodes/VBox.js';
 import { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import TextPushButton, { TextPushButtonOptions } from '../../../../sun/js/buttons/TextPushButton.js';
-import CoinSet from '../model/CoinSet.js';
+import { SystemType } from '../../common/model/SystemType.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
+import CoinSet from '../model/CoinSet.js';
 
 type SelfOptions = {
   singleCoin: boolean;
@@ -65,7 +66,7 @@ export default class CoinExperimentButtonSet extends VBox {
         if ( experimentState === 'revealed' ) {
           labelString = hideString;
         }
-        else if ( coinSet.coinType === 'classical' ) {
+        else if ( coinSet.coinType === SystemType.CLASSICAL ) {
           labelString = revealString;
         }
         else {
@@ -93,10 +94,10 @@ export default class CoinExperimentButtonSet extends VBox {
           }
         },
         tandem: providedOptions.tandem.createTandem(
-          coinSet.coinType === 'classical' ? 'revealHideButton' : 'observeHideButton'
+          coinSet.coinType === SystemType.CLASSICAL ? 'revealHideButton' : 'observeHideButton'
         ),
         accessibleName: revealHideButtonTextProperty,
-        accessibleHelpText: coinSet.coinType === 'classical' ?
+        accessibleHelpText: coinSet.coinType === SystemType.CLASSICAL ?
                             `Show or hide the ${coinOrCoins}` :
                             `Observe or hide the ${coinOrCoins}`
 
@@ -104,35 +105,35 @@ export default class CoinExperimentButtonSet extends VBox {
     );
 
     const flipButton = new TextPushButton(
-      coinSet.coinType === 'classical' ?
+      coinSet.coinType === SystemType.CLASSICAL ?
       QuantumMeasurementStrings.flipStringProperty :
       QuantumMeasurementStrings.reprepareStringProperty,
       combineOptions<TextPushButtonOptions>( commonButtonOptions, {
         listener: () => coinSet.prepare(),
         tandem: providedOptions.tandem.createTandem(
-          coinSet.coinType === 'classical' ? 'flipButton' : 'reprepareButton'
+          coinSet.coinType === SystemType.CLASSICAL ? 'flipButton' : 'reprepareButton'
         ),
-        accessibleName: coinSet.coinType === 'classical' ?
+        accessibleName: coinSet.coinType === SystemType.CLASSICAL ?
                         QuantumMeasurementStrings.flipStringProperty :
                         QuantumMeasurementStrings.reprepareStringProperty,
-        accessibleHelpText: coinSet.coinType === 'classical' ?
+        accessibleHelpText: coinSet.coinType === SystemType.CLASSICAL ?
                             `Flip the ${coinOrCoins} and hide the result` : `Prepare a new ${coinOrSetOfCoins} for observation`
       } )
     );
 
     const flipAndRevealButton = new TextPushButton(
-      coinSet.coinType === 'classical' ?
+      coinSet.coinType === SystemType.CLASSICAL ?
       QuantumMeasurementStrings.flipAndRevealStringProperty :
       QuantumMeasurementStrings.reprepareAndRevealStringProperty,
       combineOptions<TextPushButtonOptions>( commonButtonOptions, {
         listener: () => coinSet.prepare( true ),
         tandem: providedOptions.tandem.createTandem(
-          coinSet.coinType === 'classical' ? 'flipAndRevealButton' : 'reprepareAndObserveButton'
+          coinSet.coinType === SystemType.CLASSICAL ? 'flipAndRevealButton' : 'reprepareAndObserveButton'
         ),
-        accessibleName: coinSet.coinType === 'classical' ?
+        accessibleName: coinSet.coinType === SystemType.CLASSICAL ?
                         QuantumMeasurementStrings.flipAndRevealStringProperty :
                         QuantumMeasurementStrings.reprepareAndRevealStringProperty,
-        accessibleHelpText: coinSet.coinType === 'classical' ?
+        accessibleHelpText: coinSet.coinType === SystemType.CLASSICAL ?
                             `Flip the ${coinOrCoins} and reveal the result` : `Reprepare a new ${coinOrSetOfCoins} and observe it`
       } )
     );

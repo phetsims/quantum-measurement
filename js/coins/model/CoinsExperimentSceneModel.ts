@@ -8,8 +8,10 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
@@ -19,11 +21,9 @@ import { SystemType } from '../../common/model/SystemType.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { ClassicalCoinStateValues } from './ClassicalCoinStates.js';
 import Coin from './Coin.js';
-import { CoinStates } from './CoinStates.js';
 import CoinSet from './CoinSet.js';
+import { CoinStates } from './CoinStates.js';
 import { QuantumCoinStateValues } from './QuantumCoinStates.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 
 type SelfOptions = {
   initiallyActive?: boolean;
@@ -70,7 +70,7 @@ class CoinsExperimentSceneModel extends PhetioObject {
   public constructor( providedOptions: CoinExperimentSceneModelOptions ) {
 
     const options = optionize<CoinExperimentSceneModelOptions, SelfOptions, PhetioObjectOptions>()( {
-      systemType: 'classical',
+      systemType: SystemType.CLASSICAL,
       initiallyActive: false,
       initialBias: 0.5,
       phetioState: false
@@ -100,7 +100,7 @@ class CoinsExperimentSceneModel extends PhetioObject {
     // of the initial state for the coins.  This is done a little differently for classical versus quantum systems.
     const singleCoinTandem = options.tandem.createTandem( 'singleCoin' );
     const coinSetTandem = options.tandem.createTandem( 'coinSet' );
-    if ( options.systemType === 'classical' ) {
+    if ( options.systemType === SystemType.CLASSICAL ) {
       this.initialCoinFaceStateProperty = new Property<CoinStates>( 'heads', {
         tandem: options.tandem.createTandem( 'initialCoinFaceStateProperty' ),
         phetioDocumentation: 'This is the initial orientation of the classical coin',
@@ -109,13 +109,13 @@ class CoinsExperimentSceneModel extends PhetioObject {
         phetioFeatured: true
       } );
       this.singleCoin = new Coin(
-        'classical',
+        SystemType.CLASSICAL,
         'heads',
         this.upProbabilityProperty,
         { tandem: singleCoinTandem }
       );
       this.coinSet = new CoinSet(
-        'classical',
+        SystemType.CLASSICAL,
         MAX_COINS,
         MULTI_COIN_EXPERIMENT_QUANTITIES[ 1 ], // use the middle value as the default
         'heads',
@@ -124,7 +124,7 @@ class CoinsExperimentSceneModel extends PhetioObject {
       );
     }
     else {
-      assert && assert( options.systemType === 'quantum', 'unhandled system type' );
+      assert && assert( options.systemType === SystemType.QUANTUM, 'unhandled system type' );
       this.initialCoinFaceStateProperty = new Property<CoinStates>( 'up', {
         tandem: options.tandem.createTandem( 'initialCoinFaceStateProperty' ),
         phetioValueType: StringUnionIO( QuantumCoinStateValues ),
@@ -134,13 +134,13 @@ class CoinsExperimentSceneModel extends PhetioObject {
         phetioFeatured: true
       } );
       this.singleCoin = new Coin(
-        'quantum',
+        SystemType.QUANTUM,
         'up',
         this.upProbabilityProperty,
         { tandem: singleCoinTandem }
       );
       this.coinSet = new CoinSet(
-        'quantum',
+        SystemType.QUANTUM,
         MAX_COINS,
         MULTI_COIN_EXPERIMENT_QUANTITIES[ 1 ], // use the middle value as the default
         'up',
@@ -160,7 +160,7 @@ class CoinsExperimentSceneModel extends PhetioObject {
 
         // If this is a classical system, reveal the coins after preparing them.  This is a design choice that was made
         // to make the classical behavior more distinct from the quantum behavior.
-        if ( this.systemType === 'classical' ) {
+        if ( this.systemType === SystemType.CLASSICAL ) {
           this.singleCoin.reveal();
           this.coinSet.reveal();
         }
@@ -180,7 +180,7 @@ class CoinsExperimentSceneModel extends PhetioObject {
 
     // If this is a quantum system, changing the initial state of the coin sets the bias to match that coin.  This code
     // sets up the listeners that will make this happen.
-    if ( this.systemType === 'quantum' ) {
+    if ( this.systemType === SystemType.QUANTUM ) {
       this.initialCoinFaceStateProperty.lazyLink( initialCoinState => {
         if ( initialCoinState !== 'superposed' ) {
           this.upProbabilityProperty.value = initialCoinState === 'up' ? 1 : 0;

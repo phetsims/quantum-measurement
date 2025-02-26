@@ -16,6 +16,7 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
+import { SystemType } from '../../common/model/SystemType.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
@@ -119,7 +120,7 @@ class MultiCoinTestBox extends Node {
         // Hide the faces of the coin.
         coinNode.displayModeProperty.value = 'masked';
 
-        if ( coinSet.coinType === 'classical' ) {
+        if ( coinSet.coinType === SystemType.CLASSICAL ) {
           coinNode.startFlipping();
         }
       }

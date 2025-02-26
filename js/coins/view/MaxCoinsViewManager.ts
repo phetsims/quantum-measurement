@@ -12,8 +12,9 @@ import TProperty from '../../../../axon/js/TProperty.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
-import { MEASUREMENT_PREPARATION_TIME } from '../model/CoinSet.js';
+import { SystemType } from '../../common/model/SystemType.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import { MEASUREMENT_PREPARATION_TIME } from '../model/CoinSet.js';
 import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
 import CoinExperimentMeasurementArea from './CoinExperimentMeasurementArea.js';
 import CoinSetPixelRepresentation from './CoinSetPixelRepresentation.js';
@@ -105,7 +106,7 @@ class MaxCoinsViewManager {
         sceneGraphParent.removeChild( pixelRepresentation );
         multipleCoinTestBox.addPixelRepresentationToBox( pixelRepresentation );
 
-        if ( sceneModel.systemType === 'quantum' ) {
+        if ( sceneModel.systemType === SystemType.QUANTUM ) {
           sceneModel.coinSet.prepareNow();
         }
 

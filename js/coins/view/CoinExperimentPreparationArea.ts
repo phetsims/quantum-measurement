@@ -17,6 +17,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import { SystemType } from '../../common/model/SystemType.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
@@ -33,7 +34,7 @@ class CoinExperimentPreparationArea extends VBox {
 
   public constructor( sceneModel: CoinsExperimentSceneModel, tandem: Tandem ) {
 
-    const textColorProperty = sceneModel.systemType === 'quantum' ?
+    const textColorProperty = sceneModel.systemType === SystemType.QUANTUM ?
                               QuantumMeasurementColors.quantumSceneTextColorProperty : QuantumMeasurementColors.classicalSceneTextColorProperty;
 
     const preparationAreaHeadingTextProperty = new StringProperty( '' );
@@ -67,15 +68,15 @@ class CoinExperimentPreparationArea extends VBox {
       ) => {
         if ( preparingExperiment ) {
           preparationAreaHeadingTextProperty.value = StringUtils.fillIn( itemToPreparePattern, {
-            item: sceneModel.systemType === 'classical' ? coinString : quantumCoinString
+            item: sceneModel.systemType === SystemType.CLASSICAL ? coinString : quantumCoinString
           } );
-          preparationAreaAccessibleNameStringProperty.value = sceneModel.systemType === 'classical' ?
+          preparationAreaAccessibleNameStringProperty.value = sceneModel.systemType === SystemType.CLASSICAL ?
                                                               a11yClassicalCoinToPrepareString : a11yQuantumCoinToPrepareString;
 
         }
         else {
-          preparationAreaHeadingTextProperty.value = sceneModel.systemType === 'classical' ? coinString : preparedStateString;
-          preparationAreaAccessibleNameStringProperty.value = sceneModel.systemType === 'classical' ?
+          preparationAreaHeadingTextProperty.value = sceneModel.systemType === SystemType.CLASSICAL ? coinString : preparedStateString;
+          preparationAreaAccessibleNameStringProperty.value = sceneModel.systemType === SystemType.CLASSICAL ?
                                                               a11yClassicalCoinString : a11yPreparedStateString;
         }
       }
@@ -91,7 +92,7 @@ class CoinExperimentPreparationArea extends VBox {
 
     const coinStateStringProperty = getCoinAccessibleName( sceneModel.initialCoinFaceStateProperty );
 
-    const patternStringProperty = sceneModel.systemType === 'classical' ?
+    const patternStringProperty = sceneModel.systemType === SystemType.CLASSICAL ?
                                   QuantumMeasurementStrings.a11y.translatable.preparationAreaHeader.classicalAccessibleParagraphPatternStringProperty :
                                   QuantumMeasurementStrings.a11y.translatable.preparationAreaHeader.quantumAccessibleParagraphPatternStringProperty;
 

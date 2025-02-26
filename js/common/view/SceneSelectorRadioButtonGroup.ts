@@ -9,7 +9,8 @@
  */
 
 import PhetioProperty from '../../../../axon/js/PhetioProperty.js';
-import LocalizedStringProperty from '../../../../chipper/js/browser/LocalizedStringProperty.js';
+import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -24,14 +25,22 @@ export type SceneSelectorRadioButtonGroupOptions = SelfOptions & WithRequired<Re
 // constants
 const DESELECTED_RADIO_BUTTON_OPACITY = 0.3;
 
-class SceneSelectorRadioButtonGroup<T extends string> extends RectangularRadioButtonGroup<T> {
+// Type constraint for EnumerationValue with title
+type EnumerationValueWithTitle = EnumerationValue & {
+  readonly title: TReadOnlyProperty<string>;
+  readonly tandemName: string;
+};
+
+class SceneSelectorRadioButtonGroup<T extends EnumerationValueWithTitle> extends RectangularRadioButtonGroup<T> {
 
   public constructor( property: PhetioProperty<T>,
-                      valueToStringMap: Map<T, LocalizedStringProperty>,
                       providedOptions: SceneSelectorRadioButtonGroupOptions ) {
 
-    // REVIEW: This assertion is odd... why are you not able to have multiple radio buttons if the Property supports it?
-    assert && assert( valueToStringMap.size === 2, 'SceneSelectorRadioButtonGroup requires exactly two items' );
+    // Get the enumeration values from the property's current value
+    const enumValues = property.value.enumeration.values;
+
+    // Assert that there are exactly two values
+    assert && assert( enumValues.length === 2, 'SceneSelectorRadioButtonGroup requires exactly two items' );
 
     const options = optionize<SceneSelectorRadioButtonGroupOptions, SelfOptions, RectangularRadioButtonGroupOptions>()( {
       orientation: 'horizontal',
@@ -53,14 +62,17 @@ class SceneSelectorRadioButtonGroup<T extends string> extends RectangularRadioBu
     }, providedOptions );
 
     const items: RectangularRadioButtonGroupItem<T>[] = [];
-    valueToStringMap.forEach( ( stringProperty, value ) => {
+
+    // Create radio buttons for each enumeration value
+    enumValues.forEach( value => {
       items.push( {
         createNode: () => {
           return new Text(
-            stringProperty,
+            value.title,
             {
               font: new PhetFont( { size: 26, weight: 'bold' } ),
-              fill: value === 'quantum' ?
+              // Determine fill color based on value name
+              fill: value.name === 'SINGLE_PHOTON' ?
                     QuantumMeasurementColors.quantumSceneTextColorProperty :
                     QuantumMeasurementColors.classicalSceneTextColorProperty,
               maxWidth: 300
@@ -68,7 +80,7 @@ class SceneSelectorRadioButtonGroup<T extends string> extends RectangularRadioBu
           );
         },
         value: value,
-        tandemName: `${value}RadioButton`,
+        tandemName: `${value.tandemName}RadioButton`,
         options: { minWidth: 80 }
       } );
     } );

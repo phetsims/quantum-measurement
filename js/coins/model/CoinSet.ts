@@ -47,8 +47,8 @@ export const MEASUREMENT_PREPARATION_TIME = 1;
 
 // Valid values for the coin faces for each system type.
 const MAP_OF_VALID_VALUES_FOR_COIN_TYPE = new Map<SystemType, CoinStates[]>( [
-  [ 'classical', [ ...ClassicalCoinStateValues ] ],
-  [ 'quantum', QuantumCoinStateValues.filter( stateValue => stateValue !== 'superposed' ) ]
+  [ SystemType.CLASSICAL, [ ...ClassicalCoinStateValues ] ],
+  [ SystemType.QUANTUM, QuantumCoinStateValues.filter( stateValue => stateValue !== 'superposed' ) ]
 ] );
 
 class CoinSet extends PhetioObject {
@@ -139,7 +139,7 @@ class CoinSet extends PhetioObject {
     let alternativeDisplayCounter = 0;
 
     // The initial system state differs for classical versus quantum systems.
-    const initialMeasurementState = this.coinType === 'classical' ? 'revealed' : 'readyToBeMeasured';
+    const initialMeasurementState = this.coinType === SystemType.CLASSICAL ? 'revealed' : 'readyToBeMeasured';
     this.measurementStateProperty = new Property<ExperimentMeasurementState>( initialMeasurementState, {
       tandem: options.tandem.createTandem( 'measurementStateProperty' ),
       phetioValueType: StringUnionIO( ExperimentMeasurementStateValues ),
@@ -147,13 +147,13 @@ class CoinSet extends PhetioObject {
 
       // Set the valid values for the measurement state.  Note that there is one value that is only used in the quantum
       // case.
-      validValues: coinType === 'classical' ?
+      validValues: coinType === SystemType.CLASSICAL ?
                    _.without( ExperimentMeasurementStateValues, 'readyToBeMeasured' ) :
                    ExperimentMeasurementStateValues
     } );
 
     this.measurementStateProperty.link( measurementState => {
-      if ( ( measurementState === 'readyToBeMeasured' ) && ( coinType === 'quantum' ) ) {
+      if ( ( measurementState === 'readyToBeMeasured' ) && ( coinType === SystemType.QUANTUM ) ) {
         alternativeDisplayCounter++;
         this.validateAlternativeDisplay = alternativeDisplayCounter === 8;
       }
@@ -213,7 +213,7 @@ class CoinSet extends PhetioObject {
         // PhET-iO state just finished being set.  If this coin set is in the `preparingToBeMeasured` state, it should
         // automatically move to the next state, since we won't have a timer running to make the transition.
         if ( this.measurementStateProperty.value === 'preparingToBeMeasured' ) {
-          this.measurementStateProperty.value = this.coinType === 'classical' ?
+          this.measurementStateProperty.value = this.coinType === SystemType.CLASSICAL ?
                                                 'measuredAndHidden' :
                                                 'readyToBeMeasured';
         }
@@ -247,7 +247,7 @@ class CoinSet extends PhetioObject {
    */
   public prepareNow(): void {
 
-    if ( this.coinType === 'classical' ) {
+    if ( this.coinType === SystemType.CLASSICAL ) {
 
       // Classical systems have deterministic values when measured.
       this.generateNewRandomMeasurementValues();
@@ -275,7 +275,7 @@ class CoinSet extends PhetioObject {
     );
 
     if ( this.measurementStateProperty.value === 'readyToBeMeasured' ) {
-      assert && assert( this.coinType === 'quantum', 'This point should only be reached for quantum systems' );
+      assert && assert( this.coinType === SystemType.QUANTUM, 'This point should only be reached for quantum systems' );
       this.generateNewRandomMeasurementValues();
     }
 
@@ -361,7 +361,7 @@ class CoinSet extends PhetioObject {
     this.seedProperty.value = valueIndex;
 
     // Update the measurement state.
-    this.measurementStateProperty.value = this.coinType === 'classical' ? 'revealed' : 'readyToBeMeasured';
+    this.measurementStateProperty.value = this.coinType === SystemType.CLASSICAL ? 'revealed' : 'readyToBeMeasured';
   }
 
   public reset(): void {

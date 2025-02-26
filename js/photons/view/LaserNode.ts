@@ -26,6 +26,7 @@ import HSlider from '../../../../sun/js/HSlider.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
+import ExperimentModeValues from '../model/ExperimentModeValues.js';
 import Laser from '../model/Laser.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -44,7 +45,7 @@ export default class LaserNode extends Node {
     // Create the control for emitting photons.  For single-photon mode, this is a button.  For many-photon mode, it's
     // a slider.
     const laserPointerNodeChildren: Node[] = [];
-    if ( model.emissionMode === 'singlePhoton' ) {
+    if ( model.emissionMode === ExperimentModeValues.SINGLE_PHOTON ) {
       laserPointerNodeChildren.push( new RoundPushButton( {
         baseColor: 'red',
         radius: 18,
@@ -95,7 +96,7 @@ export default class LaserNode extends Node {
     const nodeChildren: Node[] = [ laserPointerNode, caption ];
 
     // If the laser is in many-photon mode, we need a label that will show the number of photons emitted per second.
-    if ( model.emissionMode === 'manyPhotons' ) {
+    if ( model.emissionMode === ExperimentModeValues.MANY_PHOTONS ) {
       const emissionRateLabel = new Text(
         new PatternStringProperty( QuantumMeasurementStrings.eventsPerSecondPatternStringProperty, {
           value: model.emissionRateProperty
