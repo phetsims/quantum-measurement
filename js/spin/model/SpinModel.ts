@@ -226,22 +226,15 @@ export default class SpinModel implements TModel {
       if ( blockingMode !== BlockingMode.NO_BLOCKER ) {
         this.currentExperimentProperty.value.blockingModeProperty.value = blockingMode;
       }
+      this.sternGerlachs[ 1 ].resetCounts();
+      this.sternGerlachs[ 2 ].resetCounts();
     } );
 
-    Multilink.multilink(
-      [
-        this.currentExperimentProperty,
-        this.particleSourceModel.sourceModeProperty
-      ],
-      ( experiment, sourceMode ) => {
-        if ( sourceMode === SourceMode.CONTINUOUS && !experiment.usingSingleApparatus ) {
-          this.sternGerlachs[ 0 ].blockingModeProperty.value = experiment.blockingModeProperty.value;
-        }
-        else {
-          this.sternGerlachs[ 0 ].blockingModeProperty.value = BlockingMode.NO_BLOCKER;
-        }
-      }
-    );
+    this.sternGerlachs.forEach( sternGerlach => {
+      sternGerlach.isZOrientedProperty.link( () => {
+        this.prepare();
+      } );
+    } );
 
     // Multilink for changes in the experiment either via source mode or experiment selection.
     // The design rules for what'll happen to SGs is tricky, so buckle up and pay attention.
@@ -280,11 +273,6 @@ export default class SpinModel implements TModel {
         const multiApparatus = !experiment.usingSingleApparatus;
         const custom = experiment === SpinExperiment.CUSTOM;
 
-        // Visibility of measurement devices: Only show on single particle mode, and the third one only if using many SGs
-        this.measurementDevices[ 0 ].isActiveProperty.value = singleParticle; // Exiting the particle source
-        this.measurementDevices[ 1 ].isActiveProperty.value = singleParticle; // Exiting the first SG
-        this.measurementDevices[ 2 ].isActiveProperty.value = singleParticle && multiApparatus; // Exiting the second SG
-
         // Wether SGs will let themselves change their spin-measurement direction (Z or X): only in custom mode.
         // And for SG1, only in multi-particle, because in single-particle mode, both SG1 and SG2 are visible
         // and the direction is controlled by the buttons under SG2.
@@ -305,20 +293,30 @@ export default class SpinModel implements TModel {
           this.sternGerlachs[ index ].isZOrientedProperty.value = setting.isZOriented;
         } );
 
+        if ( !singleParticle && multiApparatus ) {
+          this.sternGerlachs[ 0 ].blockingModeProperty.value = experiment.blockingModeProperty.value;
+        }
+        else {
+          this.sternGerlachs[ 0 ].blockingModeProperty.value = BlockingMode.NO_BLOCKER;
+        }
+
         // Set the probabilities of the experiment. In the continuous case, this immediately alters the shown rays
         // In the single case, this prepares the probabilities for the particle that will be shot
         this.prepare();
+
+        // Visibility of measurement devices: Only show on single particle mode, and the third one only if using many SGs
+        this.measurementDevices[ 0 ].isActiveProperty.value = singleParticle; // Exiting the particle source
+        this.measurementDevices[ 1 ].isActiveProperty.value = singleParticle; // Exiting the first SG
+        this.measurementDevices[ 2 ].isActiveProperty.value = singleParticle && multiApparatus; // Exiting the second SG
       }
     );
 
-    this.sternGerlachs.forEach( sternGerlach => {
-      sternGerlach.isZOrientedProperty.link( () => {
-        this.prepare();
-      } );
-    } );
   }
 
   public prepare(): void {
+
+    // Clear data on the measuring devices
+    this.measurementDevices.forEach( device => device.clearData() );
 
     // Measure on the first SG, this will change its upProbabilityProperty.
     this.sternGerlachs[ 0 ].updateProbability( this.derivedSpinStateProperty.value );

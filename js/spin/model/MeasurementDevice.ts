@@ -74,6 +74,11 @@ export default class MeasurementDevice {
     this.isActiveProperty.reset();
     this.resetEmitter.emit();
   }
+
+  // Only clear the data, not the position or active state
+  public clearData(): void {
+    this.resetEmitter.emit();
+  }
 }
 
 quantumMeasurement.register( 'MeasurementDevice', MeasurementDevice );
