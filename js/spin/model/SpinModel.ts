@@ -278,7 +278,7 @@ export default class SpinModel implements TModel {
         // Declared into variables for better readability
         const singleParticle = sourceMode === SourceMode.SINGLE;
         const multiApparatus = !experiment.usingSingleApparatus;
-        const custom = experiment.isCustom;
+        const custom = experiment === SpinExperiment.CUSTOM;
 
         // Visibility of measurement devices: Only show on single particle mode, and the third one only if using many SGs
         this.measurementDevices[ 0 ].isActiveProperty.value = singleParticle; // Exiting the particle source
