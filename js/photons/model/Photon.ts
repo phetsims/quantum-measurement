@@ -22,11 +22,6 @@ export const DOWN = new Vector2( 0, -1 );
 export const LEFT = new Vector2( -1, 0 );
 export const RIGHT = new Vector2( 1, 0 );
 
-// Due to the experiment's nature, when photons are split,
-// the resulting states will either be measured as vertical or horizontal.
-// REVIEW: Unused
-export type PossiblePolarizationResult = 'vertical' | 'horizontal';
-
 class Photon {
 
   // the angle of polarization for this photon, in degrees
