@@ -12,7 +12,9 @@
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
+import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
+import QuantumMeasurementColors from '../QuantumMeasurementColors.js';
 
 export class SystemType extends EnumerationValue {
 
@@ -28,10 +30,18 @@ export class SystemType extends EnumerationValue {
 
   public static readonly enumeration = new Enumeration( SystemType );
 
+  public colorProperty = QuantumMeasurementColors.classicalSceneTextColorProperty;
+
   public constructor(
     public readonly title: TReadOnlyProperty<string>,
     public readonly testingName: TReadOnlyProperty<string>,
     public readonly tandemName: string ) {
     super();
+
+    if ( this.tandemName === 'quantum' ) {
+      this.colorProperty = QuantumMeasurementColors.quantumSceneTextColorProperty;
+    }
   }
 }
+
+quantumMeasurement.register( 'SystemType', SystemType );

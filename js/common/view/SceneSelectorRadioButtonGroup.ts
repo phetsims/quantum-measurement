@@ -15,6 +15,7 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
+import ProfileColorProperty from '../../../../scenery/js/util/ProfileColorProperty.js';
 import RectangularRadioButtonGroup, { RectangularRadioButtonGroupItem, RectangularRadioButtonGroupOptions } from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementColors from '../QuantumMeasurementColors.js';
@@ -29,6 +30,7 @@ const DESELECTED_RADIO_BUTTON_OPACITY = 0.3;
 type EnumerationValueWithTitle = EnumerationValue & {
   readonly title: TReadOnlyProperty<string>;
   readonly tandemName: string;
+  readonly colorProperty: ProfileColorProperty;
 };
 
 class SceneSelectorRadioButtonGroup<T extends EnumerationValueWithTitle> extends RectangularRadioButtonGroup<T> {
@@ -72,9 +74,7 @@ class SceneSelectorRadioButtonGroup<T extends EnumerationValueWithTitle> extends
             {
               font: new PhetFont( { size: 26, weight: 'bold' } ),
               // Determine fill color based on value name
-              fill: value.name === 'SINGLE_PHOTON' ?
-                    QuantumMeasurementColors.quantumSceneTextColorProperty :
-                    QuantumMeasurementColors.classicalSceneTextColorProperty,
+              fill: value.colorProperty,
               maxWidth: 300
             }
           );
