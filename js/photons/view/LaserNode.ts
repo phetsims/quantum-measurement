@@ -50,7 +50,8 @@ export default class LaserNode extends Node {
         fireOnDown: true,
         listener: () => model.emitAPhoton(),
         centerX: -( NOZZLE_SIZE.width + LASER_BODY_SIZE.width / 2 ),
-        touchAreaDilation: 15
+        touchAreaDilation: 15,
+        tandem: providedOptions.tandem.createTandem( 'emitPhotonButton' )
       } ) );
     }
 
@@ -63,8 +64,8 @@ export default class LaserNode extends Node {
       children: laserPointerNodeChildren,
       right: modelViewTransform.modelToViewX( model.position.x ) + NOZZLE_SIZE.width,
       centerY: modelViewTransform.modelToViewY( model.position.y ),
-      tandem: providedOptions.tandem.createTandem( 'laserPointerNode' ),
-      phetioVisiblePropertyInstrumented: false
+      phetioVisiblePropertyInstrumented: false,
+      tandem: providedOptions.tandem.createTandem( 'laserPointerNode' )
     } );
     const caption = new Text( QuantumMeasurementStrings.photonSourceStringProperty, {
       font: new PhetFont( 12 ),
