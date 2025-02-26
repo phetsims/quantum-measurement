@@ -27,8 +27,6 @@ class BlochSphereScreenView extends QuantumMeasurementScreenView {
     this.model = model;
 
     const preparationArea = new BlochSpherePreparationArea( model, this, {
-      left: this.layoutBounds.left + QuantumMeasurementConstants.SCREEN_VIEW_X_MARGIN,
-      top: this.layoutBounds.top + QuantumMeasurementConstants.SCREEN_VIEW_Y_MARGIN,
       tandem: tandem.createTandem( 'preparationArea' )
     } );
     this.addChild( preparationArea );
@@ -41,6 +39,11 @@ class BlochSphereScreenView extends QuantumMeasurementScreenView {
       lineDash: [ 6, 5 ]
     } );
     this.addChild( dividingLine );
+
+    preparationArea.localBoundsProperty.link( () => {
+      preparationArea.centerX = this.layoutBounds.left + ( dividingLine.left - this.layoutBounds.left ) / 2;
+      preparationArea.top = this.layoutBounds.top + QuantumMeasurementConstants.SCREEN_VIEW_Y_MARGIN;
+    } );
 
     const measurementArea = new BlochSphereMeasurementArea( model, {
       tandem: tandem.createTandem( 'measurementArea' ),
