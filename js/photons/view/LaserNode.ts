@@ -41,7 +41,8 @@ export default class LaserNode extends Node {
                       modelViewTransform: ModelViewTransform2,
                       providedOptions: LaserNodeOptions ) {
 
-    // If in single-photon mode, we need a button to emit a photon.
+    // Create the control for emitting photons.  For single-photon mode, this is a button.  For many-photon mode, it's
+    // a slider.
     const laserPointerNodeChildren: Node[] = [];
     if ( model.emissionMode === 'singlePhoton' ) {
       laserPointerNodeChildren.push( new RoundPushButton( {
@@ -50,8 +51,23 @@ export default class LaserNode extends Node {
         fireOnDown: true,
         listener: () => model.emitAPhoton(),
         centerX: -( NOZZLE_SIZE.width + LASER_BODY_SIZE.width / 2 ),
-        touchAreaDilation: 15
+        touchAreaDilation: 15,
+        tandem: providedOptions.tandem.createTandem( 'emitPhotonButton' )
       } ) );
+    }
+    else {
+      const emissionRateSlider = new HSlider( model.emissionRateProperty, model.emissionRateProperty.range, {
+        trackSize: new Dimension2( LASER_BODY_SIZE.width * 0.67, 2 ),
+        trackStroke: Color.DARK_GRAY,
+        trackFillEnabled: Color.BLACK,
+        thumbSize: new Dimension2( LASER_BODY_SIZE.height * 0.25, LASER_BODY_SIZE.height * 0.5 ),
+        thumbFill: QuantumMeasurementColors.photonBaseColorProperty,
+        thumbFillHighlighted: 'rgb( 0, 200, 0)',
+        centerX: -( NOZZLE_SIZE.width + LASER_BODY_SIZE.width / 2 ),
+        constrainValue: value => roundSymmetric( value ),
+        tandem: providedOptions.tandem.createTandem( 'emissionRateSlider' )
+      } );
+      laserPointerNodeChildren.push( emissionRateSlider );
     }
 
     // Create the laser pointer node.
@@ -63,8 +79,8 @@ export default class LaserNode extends Node {
       children: laserPointerNodeChildren,
       right: modelViewTransform.modelToViewX( model.position.x ) + NOZZLE_SIZE.width,
       centerY: modelViewTransform.modelToViewY( model.position.y ),
-      tandem: providedOptions.tandem.createTandem( 'laserPointerNode' ),
-      phetioVisiblePropertyInstrumented: false
+      phetioVisiblePropertyInstrumented: false,
+      tandem: providedOptions.tandem.createTandem( 'laserPointerNode' )
     } );
     const caption = new Text( QuantumMeasurementStrings.photonSourceStringProperty, {
       font: new PhetFont( 12 ),
@@ -78,23 +94,9 @@ export default class LaserNode extends Node {
 
     const nodeChildren: Node[] = [ laserPointerNode, caption ];
 
-    // If the laser is in many-photon mode, we need a slider to control the rate of photon emission. And a label for
-    // the rate.
+    // If the laser is in many-photon mode, we need a label that will show the number of photons emitted per second.
     if ( model.emissionMode === 'manyPhotons' ) {
-      const emissionRateSlider = new HSlider( model.emissionRateProperty, model.emissionRateProperty.range, {
-        trackSize: new Dimension2( LASER_BODY_SIZE.width * 0.67, 2 ),
-        trackStroke: Color.DARK_GRAY,
-        trackFillEnabled: Color.BLACK,
-        thumbSize: new Dimension2( LASER_BODY_SIZE.height * 0.25, LASER_BODY_SIZE.height * 0.5 ),
-        thumbFill: QuantumMeasurementColors.photonBaseColorProperty,
-        thumbFillHighlighted: 'rgb( 0, 200, 0)',
-        center: laserPointerNode.bounds.center.plusXY( -NOZZLE_SIZE.width / 2, 0 ),
-        constrainValue: value => roundSymmetric( value ),
-        tandem: providedOptions.tandem.createTandem( 'emissionRateSlider' )
-      } );
-      nodeChildren.push( emissionRateSlider );
-
-      const label = new Text(
+      const emissionRateLabel = new Text(
         new PatternStringProperty( QuantumMeasurementStrings.eventsPerSecondPatternStringProperty, {
           value: model.emissionRateProperty
         } ),
@@ -103,10 +105,10 @@ export default class LaserNode extends Node {
           maxWidth: 100
         }
       );
-      const labelAlignBox = new AlignBox( label, {
+      const labelAlignBox = new AlignBox( emissionRateLabel, {
         alignBounds: new Bounds2(
           laserPointerNode.bounds.x,
-          laserPointerNode.bounds.y - label.height * 1.5,
+          laserPointerNode.bounds.y - emissionRateLabel.height * 1.5,
           laserPointerNode.bounds.maxX,
           laserPointerNode.bounds.y
         ),
