@@ -130,7 +130,8 @@ class CoinSet extends PhetioObject {
       this.numberOfActiveCoinsProperty = new NumberProperty( initialNumberOfActiveCoins, {
         tandem: options.tandem.createTandem( 'numberOfActiveCoinsProperty' ),
         phetioFeatured: true,
-        validValues: MULTI_COIN_EXPERIMENT_QUANTITIES
+        validValues: MULTI_COIN_EXPERIMENT_QUANTITIES,
+        phetioReadOnly: true
       } );
     }
 
