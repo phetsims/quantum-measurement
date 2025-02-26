@@ -1,22 +1,23 @@
 // Copyright 2025, University of Colorado Boulder
 
 /**
- * SpinMeasurementStates is a union type that represents the possible states for the measurement of a quantum spin system.
+ * SpinMeasurementStates is an enumearion of possible spin measurement states.
  *
+ * @author Agustín Vallejo
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-export const SpinMeasurementStateValues = [
+import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 
-  // The system is prepared for a measurement.
-  'prepared',
+export class SpinMeasurementState extends EnumerationValue {
+  public static readonly PREPARED = new SpinMeasurementState();
+  public static readonly TIMING_OBSERVATION = new SpinMeasurementState();
+  public static readonly OBSERVED = new SpinMeasurementState();
 
-  // The system is prepared for a measurement and a timer is running, and when the timer expires, the measurement will
-  // be made.
-  'timingObservation',
+  public static readonly enumeration = new Enumeration( SpinMeasurementState );
 
-  // The spin of the system has been measured (aka observed).
-  'observed'
-
-] as const;
-export type SpinMeasurementState = ( typeof SpinMeasurementStateValues )[number];
+  public constructor() {
+    super();
+  }
+}

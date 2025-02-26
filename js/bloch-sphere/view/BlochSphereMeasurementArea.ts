@@ -34,6 +34,7 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import BlochSphereModel from '../model/BlochSphereModel.js';
 import { MeasurementAxis } from '../model/MeasurementAxis.js';
+import { SpinMeasurementState } from '../model/SpinMeasurementState.js';
 import { StateDirection } from '../model/StateDirection.js';
 import BlochSphereNumericalEquationNode from './BlochSphereNumericalEquationNode.js';
 import MagneticFieldControl from './MagneticFieldControl.js';
@@ -291,7 +292,7 @@ export default class BlochSphereMeasurementArea extends Node {
       ],
       ( measurementState, magneticFieldEnabled, startString, observeString, reprepareString ) => {
         let buttonText;
-        if ( measurementState === 'observed' ) {
+        if ( measurementState === SpinMeasurementState.OBSERVED ) {
           buttonText = reprepareString;
         }
         else if ( magneticFieldEnabled ) {
@@ -307,7 +308,7 @@ export default class BlochSphereMeasurementArea extends Node {
     // Define a derived Property for the color of the button, which changes based on the measurement state.
     const experimentControlButtonColorProperty = new DerivedProperty(
       [ model.measurementStateProperty ],
-      measurementState => measurementState === 'observed' ?
+      measurementState => measurementState === SpinMeasurementState.OBSERVED ?
                           QuantumMeasurementColors.experimentButtonColorProperty.value :
                           QuantumMeasurementColors.startMeasurementButtonColorProperty.value
     );
@@ -316,7 +317,7 @@ export default class BlochSphereMeasurementArea extends Node {
       experimentControlButtonTextProperty,
       {
         listener: () => {
-          if ( model.measurementStateProperty.value === 'prepared' ) {
+          if ( model.measurementStateProperty.value === SpinMeasurementState.PREPARED ) {
             model.initiateObservation();
           }
           else {
@@ -325,7 +326,7 @@ export default class BlochSphereMeasurementArea extends Node {
         },
         baseColor: experimentControlButtonColorProperty,
         font: new PhetFont( 18 ),
-        enabledProperty: DerivedProperty.valueNotEqualsConstant( model.measurementStateProperty, 'timingObservation' ),
+        enabledProperty: DerivedProperty.valueNotEqualsConstant( model.measurementStateProperty, SpinMeasurementState.TIMING_OBSERVATION ),
         xMargin: 20,
         yMargin: 6,
         maxWidth: measurementControlPanel.width,

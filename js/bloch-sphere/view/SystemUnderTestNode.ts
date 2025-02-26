@@ -150,8 +150,8 @@ class SystemUnderTestNode extends Panel {
     // when a measurement is made, then faded out.
     let iconFadeAnimation: Animation | null = null;
     measurementStateProperty.link( state => {
-      measurementIconNode.visible = state === 'observed';
-      if ( state === 'observed' ) {
+      measurementIconNode.visible = state === SpinMeasurementState.OBSERVED;
+      if ( state === SpinMeasurementState.OBSERVED ) {
 
         // Finish any existing animation.
         if ( iconFadeAnimation !== null ) {
@@ -171,7 +171,7 @@ class SystemUnderTestNode extends Panel {
         iconFadeAnimation.start();
         iconFadeAnimation.endedEmitter.addListener( () => { iconFadeAnimation = null; } );
       }
-      else if ( state === 'prepared' ) {
+      else if ( state === SpinMeasurementState.PREPARED ) {
 
         // If the state transitions to 'prepared' whilst an animation is in progress, that animation should be stopped.
         if ( iconFadeAnimation !== null ) {

@@ -19,12 +19,11 @@ import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
-import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import ComplexBlochSphere from './ComplexBlochSphere.js';
 import { MeasurementAxis } from './MeasurementAxis.js';
-import { SpinMeasurementState, SpinMeasurementStateValues } from './SpinMeasurementState.js';
+import { SpinMeasurementState } from './SpinMeasurementState.js';
 import { StateDirection } from './StateDirection.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -109,11 +108,9 @@ class BlochSphereModel implements TModel {
       } ) );
     } );
 
-    this.measurementStateProperty = new Property<SpinMeasurementState>( 'prepared', {
+    this.measurementStateProperty = new EnumerationProperty( SpinMeasurementState.PREPARED, {
       phetioReadOnly: true,
       phetioDocumentation: 'For internal use only.',
-      phetioValueType: StringUnionIO( SpinMeasurementStateValues ),
-      validValues: SpinMeasurementStateValues,
       tandem: measurementAreaTandem.createTandem( 'measurementStateProperty' )
     } );
 
@@ -124,8 +121,8 @@ class BlochSphereModel implements TModel {
       validValues: QuantumMeasurementConstants.plusDirections
     } );
 
-    // Measurement controls
-    this.timeToMeasurementProperty = new NumberProperty( MODEL_TO_VIEW_TIME * MAX_OBSERVATION_TIME / 2, {
+    // Measurement controls. Starting time to measurement at 75% so there's more subliminal reason to move it
+    this.timeToMeasurementProperty = new NumberProperty( MODEL_TO_VIEW_TIME * 0.75 * MAX_OBSERVATION_TIME, {
       tandem: measurementControlsTandem.createTandem( 'timeToMeasurementProperty' ),
       range: new Range( 0, MODEL_TO_VIEW_TIME * MAX_OBSERVATION_TIME ),
       phetioDocumentation: 'Time at which the measurement will be made after the start of the experiment.',
@@ -221,7 +218,7 @@ class BlochSphereModel implements TModel {
 
         // Set the precession rate of the Bloch sphere based on the measurement state and the state of the magnetic
         // field.
-        const rotationRate = measurementState === 'timingObservation' && showMagneticField ? magneticFieldStrength : 0;
+        const rotationRate = measurementState === SpinMeasurementState.TIMING_OBSERVATION && showMagneticField ? magneticFieldStrength : 0;
         this.singleMeasurementBlochSphere.rotatingSpeedProperty.value = rotationRate;
         this.multiMeasurementBlochSpheres.forEach( blochSphere => {
           blochSphere.rotatingSpeedProperty.value = rotationRate;
@@ -241,7 +238,7 @@ class BlochSphereModel implements TModel {
   private observe(): void {
 
     assert && assert(
-      this.measurementStateProperty.value === 'prepared' || this.measurementStateProperty.value === 'timingObservation',
+      this.measurementStateProperty.value === SpinMeasurementState.PREPARED || this.measurementStateProperty.value === SpinMeasurementState.TIMING_OBSERVATION,
       'The model is not in state where a new observation can be made.'
     );
 
@@ -263,7 +260,7 @@ class BlochSphereModel implements TModel {
     }
 
     // Update the measurement state.
-    this.measurementStateProperty.value = 'observed';
+    this.measurementStateProperty.value = SpinMeasurementState.OBSERVED;
   }
 
   /**
@@ -274,14 +271,14 @@ class BlochSphereModel implements TModel {
   public initiateObservation(): void {
 
     assert && assert(
-      this.measurementStateProperty.value === 'prepared',
+      this.measurementStateProperty.value === SpinMeasurementState.PREPARED,
       'The model should be prepared for measurement prior to calling this method.'
     );
 
     if ( this.magneticFieldEnabledProperty.value ) {
 
       // Transition to the state where the model is waiting to take a measurement.
-      this.measurementStateProperty.value = 'timingObservation';
+      this.measurementStateProperty.value = SpinMeasurementState.TIMING_OBSERVATION;
       this.measurementTimeProperty.value = 0;
     }
     else {
@@ -310,7 +307,7 @@ class BlochSphereModel implements TModel {
     } );
 
     this.measurementTimeProperty.value = 0;
-    this.measurementStateProperty.value = 'prepared';
+    this.measurementStateProperty.value = SpinMeasurementState.PREPARED;
   }
 
   /**
@@ -348,7 +345,7 @@ class BlochSphereModel implements TModel {
       blochSphere.step( dt );
     } );
 
-    if ( this.measurementStateProperty.value === 'timingObservation' ) {
+    if ( this.measurementStateProperty.value === SpinMeasurementState.TIMING_OBSERVATION ) {
       this.measurementTimeProperty.value = Math.min(
         this.measurementTimeProperty.value + dt * MODEL_TO_VIEW_TIME,
         this.timeToMeasurementProperty.value
