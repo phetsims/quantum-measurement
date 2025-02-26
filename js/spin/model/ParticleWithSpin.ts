@@ -47,17 +47,16 @@ export class ParticleWithSpin {
 
   public speed = 1;
 
-  public constructor(
-    lifetime: number,
-    position: Vector2,
-    velocity: Vector2,
-    spinVectors: Vector2[],
-    isSpinUp: boolean[],
-    stageCompleted: boolean[],
-    startPosition: Vector2,
-    endPosition: Vector2,
-    offset: Vector2
-    ) {
+  public constructor( lifetime: number,
+                      position: Vector2,
+                      velocity: Vector2,
+                      spinVectors: Vector2[],
+                      isSpinUp: boolean[],
+                      stageCompleted: boolean[],
+                      startPosition: Vector2,
+                      endPosition: Vector2,
+                      offset: Vector2 ) {
+
     this.lifetime = lifetime;
     this.velocity = velocity;
     this.spinVectors = spinVectors;
