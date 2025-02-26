@@ -21,7 +21,7 @@ import RichText from '../../../../scenery/js/nodes/RichText.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
 import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
-import RoundMomentaryButton from '../../../../sun/js/buttons/RoundMomentaryButton.js';
+import RoundPushButton from '../../../../sun/js/buttons/RoundPushButton.js';
 import HSlider from '../../../../sun/js/HSlider.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
@@ -87,9 +87,16 @@ export default class ParticleSourceNode extends Node {
 
     // button for 'single' mode
     const shootParticleButtonTandem = tandem.createTandem( 'shootParticleButton' );
-    const shootParticleButton = new RoundMomentaryButton<boolean>( currentlyShootingParticlesProperty, false, true, {
-        scale: 0.7,
+    const shootParticleButton = new RoundPushButton( {
+        radius: 21,
         baseColor: QuantumMeasurementColors.downColorProperty,
+        listener: () => {
+
+          // Toggle the property value in order to shoot a single particle.
+          currentlyShootingParticlesProperty.value = true;
+          currentlyShootingParticlesProperty.value = false;
+        },
+        fireOnDown: true,
         visibleProperty: new GatedVisibleProperty(
           DerivedProperty.not( particleSourceModel.isContinuousModeProperty ),
           shootParticleButtonTandem
