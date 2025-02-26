@@ -60,7 +60,8 @@ export default class ProbabilityValueControl extends NumberControl {
       useRichText: true,
       titleNodeOptions: {
         font: TITLE_FONT,
-        maxWidth: 250 // empirically determined to work well with layout
+        maxWidth: 250, // empirically determined to work well with layout
+        tandem: Tandem.OPT_OUT
       },
       sliderOptions: {
         trackSize: new Dimension2( 150, 1 ),
