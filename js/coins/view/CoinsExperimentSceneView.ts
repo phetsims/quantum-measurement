@@ -124,6 +124,9 @@ class CoinsExperimentSceneView extends Node {
       accessibleHelpText: QuantumMeasurementStrings.a11y.coinsScreen.startMeasurementHelpTextStringProperty
     } );
 
+    // Link the start measurement button to the preparingExperimentProperty for easy reference in phet-io Studio.
+    startMeasurementButton.addLinkedElement( sceneModel.preparingExperimentProperty );
+
     // Position the dividing line and the two areas of activity.
     this.dividerXPositionProperty.link( dividerPositionX => {
       dividingLine.centerX = dividerPositionX;
@@ -195,6 +198,9 @@ class CoinsExperimentSceneView extends Node {
       accessibleName: QuantumMeasurementStrings.newCoinStringProperty,
       accessibleHelpText: QuantumMeasurementStrings.a11y.coinsScreen.prepareNewCoinHelpTextStringProperty
     } );
+
+    // Link the new coin button to the preparingExperimentProperty for easy reference in phet-io Studio.
+    this.newCoinButton.addLinkedElement( sceneModel.preparingExperimentProperty );
 
     // Position the "New Coin" button below the preparation area.
     this.preparationArea.boundsProperty.link( prepAreaBounds => {
