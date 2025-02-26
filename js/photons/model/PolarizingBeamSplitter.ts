@@ -19,7 +19,7 @@ import { SystemType } from '../../common/model/SystemType.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import Photon, { RIGHT, UP } from './Photon.js';
 import { PhotonMotionState } from './PhotonMotionState.js';
-import { PhotonInteractionTestResult } from './PhotonsModel.js';
+import { PhotonInteractionTestResult, PhotonInteractionValues } from './PhotonsModel.js';
 import { TPhotonInteraction } from './TPhotonInteraction.js';
 
 type SelfOptions = {
@@ -81,7 +81,7 @@ class PolarizingBeamSplitter implements TPhotonInteraction {
 
             // The photon is being reflected by the beam splitter.  The only direction supported currently is up.
             mapOfStatesToInteractions.set( photonState, {
-              interactionType: 'reflected',
+              interactionType: PhotonInteractionValues.REFLECTED,
               reflectionInfo: {
                 reflectionPoint: photonIntersectionPoint,
                 reflectionDirection: UP
@@ -94,7 +94,7 @@ class PolarizingBeamSplitter implements TPhotonInteraction {
           // This is the quantum case where the photon is split into a superposition of states until observed by one of
           // the detectors.
           mapOfStatesToInteractions.set( photonState, {
-            interactionType: 'split',
+            interactionType: PhotonInteractionValues.SPLIT,
             splitInfo: {
               splitPoint: photonIntersectionPoint,
               splitStates: [

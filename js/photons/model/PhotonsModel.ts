@@ -15,6 +15,7 @@
 import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import TModel from '../../../../joist/js/TModel.js';
+import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
@@ -26,24 +27,19 @@ import PhotonsExperimentSceneModel from './PhotonsExperimentSceneModel.js';
 type SelfOptions = EmptySelfOptions;
 type PhotonsModelOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
-export const PhotonInteractionTypeValues = [
+export class PhotonInteractionValues extends EnumerationValue {
+  public static readonly REFLECTED = new PhotonInteractionValues();
+  public static readonly SPLIT = new PhotonInteractionValues();
+  public static readonly DETECTOR_REACHED = new PhotonInteractionValues();
+  public static readonly ABSORBED = new PhotonInteractionValues();
 
-  // The photon was reflected by something, such as a mirror.
-  'reflected',
+  public constructor() {
+    super();
+  }
+}
 
-  // The photon was split into two possible states.
-  'split',
-
-  // The photon reached a detector. If the photon is in a superposed state, it may or may not be detected, and the
-  // client code will need to decide what to do.
-  'detectorReached',
-
-  // The photon was absorbed by something, such as a detector.
-  'absorbed'
-] as const;
-export type PhotonInteractionTypes = ( typeof PhotonInteractionTypeValues )[number];
 export type PhotonInteractionTestResult = {
-  interactionType: PhotonInteractionTypes;
+  interactionType: PhotonInteractionValues;
   detectionInfo?: {
     detector: PhotonDetector;
   };

@@ -20,7 +20,7 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import { PHOTON_BEAM_WIDTH } from './Laser.js';
 import Photon from './Photon.js';
 import { PhotonMotionState } from './PhotonMotionState.js';
-import { PhotonInteractionTestResult } from './PhotonsModel.js';
+import { PhotonInteractionTestResult, PhotonInteractionValues } from './PhotonsModel.js';
 import { TPhotonInteraction } from './TPhotonInteraction.js';
 
 type SelfOptions = {
@@ -141,11 +141,11 @@ class PhotonDetector extends PhetioObject implements TPhotonInteraction {
 
       // If the photon will cross the detection line, but not the absorption line, we'll consider it to be detected.
       if ( detectionIntersectionPoint ) {
-        mapOfStatesToInteractions.set( photonState, { interactionType: 'detectorReached', detectionInfo: { detector: this } } );
+        mapOfStatesToInteractions.set( photonState, { interactionType: PhotonInteractionValues.DETECTOR_REACHED, detectionInfo: { detector: this } } );
       }
       // If the photon will cross the absorption line, but not the detection line, we'll consider it to be absorbed.
       else if ( absorptionIntersectionPoint ) {
-        mapOfStatesToInteractions.set( photonState, { interactionType: 'absorbed' } );
+        mapOfStatesToInteractions.set( photonState, { interactionType: PhotonInteractionValues.ABSORBED } );
       }
     } );
 

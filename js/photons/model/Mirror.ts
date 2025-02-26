@@ -15,7 +15,7 @@ import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import Photon, { DOWN } from './Photon.js';
 import { PhotonMotionState } from './PhotonMotionState.js';
-import { PhotonInteractionTestResult } from './PhotonsModel.js';
+import { PhotonInteractionTestResult, PhotonInteractionValues } from './PhotonsModel.js';
 import { TPhotonInteraction } from './TPhotonInteraction.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -62,7 +62,7 @@ export default class Mirror implements TPhotonInteraction {
 
         // The photon is being reflected by this mirror.  The only direction supported currently is down.
         mapOfStatesToInteractions.set( photonState, {
-          interactionType: 'reflected',
+          interactionType: PhotonInteractionValues.REFLECTED,
           reflectionInfo: {
             reflectionPoint: photonIntersectionPoint,
             reflectionDirection: DOWN

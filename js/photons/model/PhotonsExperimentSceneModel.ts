@@ -30,7 +30,7 @@ import Photon, { PHOTON_SPEED } from './Photon.js';
 import { PhotonCollection } from './PhotonCollection.js';
 import PhotonDetector, { COUNT_RANGE } from './PhotonDetector.js';
 import { PhotonMotionState } from './PhotonMotionState.js';
-import { PhotonInteractionTestResult } from './PhotonsModel.js';
+import { PhotonInteractionTestResult, PhotonInteractionValues } from './PhotonsModel.js';
 import PolarizingBeamSplitter from './PolarizingBeamSplitter.js';
 import { TPhotonInteraction } from './TPhotonInteraction.js';
 
@@ -292,7 +292,7 @@ class PhotonsExperimentSceneModel {
           if ( !photonsToRemove.includes( photon ) ) {
             const interaction = photonStateToInteractionMap.get( photonMotionState )!;
 
-            if ( interaction.interactionType === 'reflected' ) {
+            if ( interaction.interactionType === PhotonInteractionValues.REFLECTED ) {
 
               assert && assert( interaction.reflectionInfo, 'reflection info missing' );
 
@@ -308,7 +308,7 @@ class PhotonsExperimentSceneModel {
               // Step the photon the remaining time.
               photonMotionState.step( dt - dtToReflectionPoint );
             }
-            else if ( interaction.interactionType === 'split' ) {
+            else if ( interaction.interactionType === PhotonInteractionValues.SPLIT ) {
 
               assert && assert( interaction.splitInfo, 'split info missing' );
               assert && assert( photon.possibleMotionStates.length === 1, 'there should be 1 motion state' );
@@ -332,7 +332,7 @@ class PhotonsExperimentSceneModel {
               // Step the motion states the remaining time.
               photon.possibleMotionStates.forEach( state => state.step( dt - dtToSplitPoint ) );
             }
-            else if ( interaction.interactionType === 'detectorReached' ) {
+            else if ( interaction.interactionType === PhotonInteractionValues.DETECTOR_REACHED ) {
 
               const detector = interaction.detectionInfo!.detector;
 
@@ -353,7 +353,7 @@ class PhotonsExperimentSceneModel {
 
               photonMotionState.step( dt );
             }
-            else if ( interaction.interactionType === 'absorbed' ) {
+            else if ( interaction.interactionType === PhotonInteractionValues.ABSORBED ) {
 
               // This interaction indicates that the photon was absorbed, so it should be removed from the photon
               // collection.
