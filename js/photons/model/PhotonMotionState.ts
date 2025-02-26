@@ -16,11 +16,9 @@ import { PHOTON_SPEED } from './Photon.js';
 
 export class PhotonMotionState {
 
-  public constructor( public position: Vector2,
-                      public direction: Vector2,
-                      public probability: number ) {
+  public constructor( public position: Vector2, public direction: Vector2, public probability: number ) {
 
-    // no additional initialization is required
+    // no additional initialization needed
   }
 
   /**
