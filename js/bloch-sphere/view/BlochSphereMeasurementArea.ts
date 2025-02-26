@@ -26,7 +26,6 @@ import AquaRadioButtonGroup, { AquaRadioButtonGroupItem } from '../../../../sun/
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import Panel from '../../../../sun/js/Panel.js';
-import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
 import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHistogram.js';
@@ -308,9 +307,7 @@ export default class BlochSphereMeasurementArea extends Node {
     // Define a derived Property for the color of the button, which changes based on the measurement state.
     const experimentControlButtonColorProperty = new DerivedProperty(
       [ model.measurementStateProperty ],
-      measurementState => measurementState === SpinMeasurementState.OBSERVED ?
-                          QuantumMeasurementColors.experimentButtonColorProperty.value :
-                          QuantumMeasurementColors.startMeasurementButtonColorProperty.value
+      measurementState => measurementState.colorProperty.value
     );
 
     const experimentControlButton = new TextPushButton(
