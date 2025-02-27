@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2025, University of Colorado Boulder
 
 /**
  * SystemType is used to distinguish between the two types of systems that are modeled in the sim: classical systems,
