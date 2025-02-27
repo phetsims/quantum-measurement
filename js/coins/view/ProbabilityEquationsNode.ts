@@ -56,6 +56,7 @@ export default class ProbabilityEquationsNode extends RichText {
 
     const options = optionize<ProbabilityEquationsNodeOptions, SelfOptions, RichTextOptions>()( {
       font: new PhetFont( 18 ),
+      align: 'center',
       leading: 7
     }, providedOptions );
 
