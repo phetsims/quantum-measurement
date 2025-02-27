@@ -172,7 +172,6 @@ class PhotonsExperimentSceneModel {
       },
       {
         tandem: providedOptions.tandem.createTandem( 'normalizedExpectationValueProperty' ),
-        phetioReadOnly: true,
         phetioValueType: NullableIO( NumberIO )
       }
     );
@@ -193,7 +192,6 @@ class PhotonsExperimentSceneModel {
                                             ( horizontalValue - verticalValue ) / ( horizontalValue + verticalValue ),
       {
         tandem: providedOptions.tandem.createTandem( 'normalizedOutcomeValueProperty' ),
-        phetioReadOnly: true,
         phetioValueType: NumberIO
       }
     );
