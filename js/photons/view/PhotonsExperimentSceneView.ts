@@ -17,7 +17,6 @@ import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import TimeControlNode from '../../../../scenery-phet/js/TimeControlNode.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
-import Line from '../../../../scenery/js/nodes/Line.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
@@ -31,6 +30,7 @@ import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import ExperimentModeValues from '../model/ExperimentModeValues.js';
 import PhotonsExperimentSceneModel from '../model/PhotonsExperimentSceneModel.js';
 import AveragePolarizationCheckboxGroup from './AveragePolarizationCheckboxGroup.js';
+import ExpectationValueCheckboxDecorationNode from './ExpectationValueCheckboxDecorationNode.js';
 import NormalizedOutcomeVectorGraph from './NormalizedOutcomeVectorGraph.js';
 import ObliquePolarizationAngleIndicator from './ObliquePolarizationAngleIndicator.js';
 import PhotonDetectionProbabilityPanel from './PhotonDetectionProbabilityPanel.js';
@@ -215,10 +215,11 @@ class PhotonsExperimentSceneView extends Node {
         {
           labelStringProperty: QuantumMeasurementStrings.expectationValueStringProperty,
           property: normalizedOutcomeVectorGraph.showExpectationValueProperty,
-          decorationNode: new Line( 0, 0, 30, 0, {
-            stroke: QuantumMeasurementColors.photonBaseColorProperty,
-            lineWidth: 3
-          } ),
+          decorationNode: new ExpectationValueCheckboxDecorationNode(
+            model.normalizedExpectationValueProperty,
+            normalizedOutcomeVectorGraph.showExpectationValueProperty,
+            showDecimalValuesProperty
+          ),
           visibleProperty: new DerivedProperty(
             [ model.normalizedExpectationValueProperty ],
             expectationValue => expectationValue !== null
