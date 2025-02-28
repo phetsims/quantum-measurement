@@ -10,7 +10,7 @@ import Line from '../../../../scenery/js/nodes/Line.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
-const DIVIDER_HEIGHT = 500; // empirically determined
+const DIVIDER_HEIGHT = 525; // empirically determined
 
 export default class ExperimentDividingLine extends Line {
   public constructor( x: number ) {

@@ -18,7 +18,7 @@ import SceneSelectorRadioButtonGroup from '../../common/view/SceneSelectorRadioB
 import quantumMeasurement from '../../quantumMeasurement.js';
 import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
 
-const SCENE_POSITION = new Vector2( 0, 90 ); // empirically determined to look decent
+const SCENE_POSITION = new Vector2( 0, 75 ); // empirically determined to look decent
 
 export default class CoinsScreenView extends QuantumMeasurementScreenView {
 
