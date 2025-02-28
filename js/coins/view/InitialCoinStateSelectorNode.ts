@@ -32,6 +32,7 @@ import QuantumCoinNode from './QuantumCoinNode.js';
 
 const RADIO_BUTTON_COIN_NODE_RADIUS = 16;
 const INDICATOR_COIN_NODE_RADIUS = 36;
+const WIDTH = 260;
 
 export default class InitialCoinStateSelectorNode extends VBox {
 
@@ -57,7 +58,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
 
     const selectionPanelTitle = new Text( titleStringProperty, {
       font: new PhetFont( { size: 18, weight: 'bold' } ),
-      maxWidth: 250
+      maxWidth: WIDTH * 0.95
     } );
 
     const radioButtonGroupTandem = tandem.createTandem( 'radioButtonGroup' );
@@ -134,7 +135,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
       fill: QuantumMeasurementColors.controlPanelFillColorProperty,
       stroke: QuantumMeasurementColors.controlPanelStrokeColorProperty,
       yMargin: 10,
-      minWidth: 270,
+      minWidth: WIDTH,
       visibleProperty: new GatedVisibleProperty( preparingExperimentProperty, radioButtonGroupTandem ),
       tandem: radioButtonGroupTandem
     } );
