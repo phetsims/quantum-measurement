@@ -41,7 +41,9 @@ export default class MeasurementDeviceNode extends VBox {
       tandem: Tandem.OPT_OUT,
       drawKets: false,
       drawTitle: false,
-      scale: 0.5
+      scale: 0.5,
+      stateVectorScale: 2,
+      axesLabelsScale: 1.5
     } );
 
     const cameraPath = new Path( new Shape(

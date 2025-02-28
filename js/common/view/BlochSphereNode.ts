@@ -38,6 +38,7 @@ type SelfOptions = {
   drawTitle?: boolean;
   drawAngleIndicators?: boolean;
   drawAxesLabels?: boolean;
+  axesLabelsScale?: number;
   stateVectorScale?: number; // Scale for the vector's widths (head, body, etc)
   expandBounds?: boolean;
 };
@@ -76,7 +77,8 @@ export default class BlochSphereNode extends Node {
       drawAxesLabels: true,
       expandBounds: true,
       excludeInvisibleChildrenFromBounds: true,
-      stateVectorScale: 1
+      stateVectorScale: 1,
+      axesLabelsScale: 1
     }, providedOptions );
 
     const sphereRadius = 100;
@@ -119,18 +121,21 @@ export default class BlochSphereNode extends Node {
     const xAxisLabel = new Text( '+X', {
       fill: 'black',
       font: LABELS_FONT,
+      scale: options.axesLabelsScale,
       visible: options.drawAxesLabels
     } );
     const yAxisLabel = new Text( '+Y', {
       fill: 'black',
       font: LABELS_FONT,
+      scale: options.axesLabelsScale,
       visible: options.drawAxesLabels
     } );
     const zAxisLabel = new Text( '+Z', {
-      centerX: -3 * LABELS_OFFSET,
+      centerX: -3 * LABELS_OFFSET * options.axesLabelsScale,
       centerY: -sphereRadius + LABELS_OFFSET,
       fill: 'black',
       font: LABELS_FONT,
+      scale: options.axesLabelsScale,
       visible: options.drawAxesLabels
     } );
 

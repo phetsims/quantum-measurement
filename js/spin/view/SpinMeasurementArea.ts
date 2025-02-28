@@ -210,7 +210,6 @@ export default class SpinMeasurementArea extends VBox {
         spacing: 5
       } ),
       {
-        scale: 0.9,
         left: particleSourceNode.left,
         top: particleSourceNode.bottom + 30,
         visibleProperty: new GatedVisibleProperty( new DerivedProperty(

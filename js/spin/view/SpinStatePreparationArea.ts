@@ -137,7 +137,8 @@ export default class SpinStatePreparationArea extends VBox {
       } ),
       {
         tandem: projectionsCheckboxesTandem.createTandem( 'zProjectionCheckbox' ),
-        boxWidth: 18
+        boxWidth: 18,
+        visibleProperty: model.isCustomExperimentProperty
       }
     );
 
@@ -152,18 +153,20 @@ export default class SpinStatePreparationArea extends VBox {
       } ),
       {
         tandem: projectionsCheckboxesTandem.createTandem( 'xProjectionCheckbox' ),
-        boxWidth: 18
+        boxWidth: 18,
+        visibleProperty: model.isCustomExperimentProperty
       }
     );
 
     const projectionCheckboxes = new HBox( {
       spacing: 20,
       tandem: projectionsCheckboxesTandem,
-      visibleProperty: model.isCustomExperimentProperty,
+      excludeInvisibleChildrenFromBounds: false,
       children: [
         new Text( QuantumMeasurementStrings.projectionStringProperty, {
           font: new PhetFont( 15 ),
-          maxWidth: 100
+          maxWidth: 100,
+          visibleProperty: model.isCustomExperimentProperty
         } ),
         zProjectionCheckbox,
         xProjectionCheckbox
@@ -184,7 +187,7 @@ export default class SpinStatePreparationArea extends VBox {
 
     // Reposition for a wider layout
     this.boundsProperty.link( () => {
-      this.centerY = layoutBounds.centerY;
+      this.top = layoutBounds.top + 50;
     } );
   }
 }
