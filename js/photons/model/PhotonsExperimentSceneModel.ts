@@ -237,6 +237,7 @@ class PhotonsExperimentSceneModel {
     this.verticalPolarizationDetector.reset();
     this.horizontalPolarizationDetector.reset();
     this.isPlayingProperty.reset();
+    this.timeSpeedProperty.reset();
     this.particleBehaviorModeProperty.reset();
     this.isProbabilityAccordionExpandedProperty.reset();
   }
