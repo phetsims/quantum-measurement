@@ -248,6 +248,7 @@ export default class BlochSphereMeasurementArea extends Node {
       spacing: 10,
       align: 'left',
       tandem: measurementControlsTandem,
+      minContentWidth: MAX_WIDTH,
       children: [
         // The panel contains multiple sections for a specific control and smaller spacing. Title and component
         new VBox( {
