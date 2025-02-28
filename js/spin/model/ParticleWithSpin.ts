@@ -32,10 +32,10 @@ export class ParticleWithSpin {
   public velocity: Vector2;
 
   // spin values of the particle in the XZ plane along its lifetime
+  // First one is initial spin after being emitted, second is exiting SG0, third is exiting SG1/SG2.
   public spinVectors = [ new Vector2( 0, 0 ), new Vector2( 0, 0 ), new Vector2( 0, 0 ) ];
 
-  // REVIEW: Same as what?
-  // same but simplified to spinUp booleans
+  // same as the spinVectors but simplified to spinUp booleans
   public isSpinUp = [ false, false, false ];
 
   // whether the particle spin was already counted for the histograms or detectors

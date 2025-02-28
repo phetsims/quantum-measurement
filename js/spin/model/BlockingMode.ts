@@ -1,8 +1,8 @@
 // Copyright 2024-2025, University of Colorado Boulder
 
 /**
- * REVIEW: What does it mean for a Stern Gerlach apparatus to be blocked?
- * Controls whether Stern Gerlach apparatus is blocked and which exit would be blocked
+ * Controls whether Stern Gerlach (SG) apparatus is blocked and which exit would be blocked.
+ * When a SG is blocked, one of its exits will display a wall that will prevent particles from exiting through it.
  *
  * @author Agustín Vallejo
  */

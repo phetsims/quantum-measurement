@@ -101,11 +101,7 @@ export default class SpinModel implements TModel {
       phetioFeatured: true
     } );
 
-    // REVIEW: Consider using DerivedProperty.valueEqualsConstant
-    this.isCustomExperimentProperty = new DerivedProperty(
-      [ this.currentExperimentProperty ],
-      ( experiment: SpinExperiment ) => experiment === SpinExperiment.CUSTOM
-    );
+    this.isCustomExperimentProperty = DerivedProperty.valueEqualsConstant( this.currentExperimentProperty, SpinExperiment.CUSTOM );
 
     this.particleSourceModel = new ParticleSourceModel(
       new Vector2( -0.5, 0 ),

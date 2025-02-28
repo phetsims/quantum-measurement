@@ -17,7 +17,6 @@ import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { SourceMode } from './SourceMode.js';
 import { SpinDirection } from './SpinDirection.js';
@@ -55,11 +54,7 @@ export default class ParticleSourceModel {
       phetioFeatured: true
     } );
 
-    // REVIEW: Consider using DerivedProperty.valueEqualsConstant
-    this.isContinuousModeProperty = new DerivedProperty(
-      [ this.sourceModeProperty ],
-      sourceMode => sourceMode === SourceMode.CONTINUOUS
-    );
+    this.isContinuousModeProperty = DerivedProperty.valueEqualsConstant( this.sourceModeProperty, SourceMode.CONTINUOUS );
 
     this.particleAmountProperty = new NumberProperty( 0.1, {
       tandem: tandem.createTandem( 'particleAmountProperty' ),
@@ -77,10 +72,8 @@ export default class ParticleSourceModel {
 
     const initialSpinState = SpinDirection.Z_PLUS;
 
-    // REVIEW: Recommend using EnumerationProperty instead of Property<EnumerationValue>
-    this.spinStateProperty = new Property<SpinDirection>( initialSpinState, {
+    this.spinStateProperty = new EnumerationProperty( initialSpinState, {
       tandem: tandem.createTandem( 'spinStateProperty' ),
-      phetioValueType: EnumerationIO( SpinDirection ),
       validValues: SpinDirection.enumeration.values,
       phetioFeatured: true
     } );

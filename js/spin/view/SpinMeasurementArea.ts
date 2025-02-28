@@ -68,7 +68,7 @@ export default class SpinMeasurementArea extends VBox {
       tandem: tandem.createTandem( 'experimentComboBox' )
     } );
 
-    // REVIEW: Add documentation for this modelViewTransform. How/why is it used?
+    // Model View Transform to translate from model coordinates to view coordinates
     const modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       Vector2.ZERO,
       new Vector2( 0, 0 ),

@@ -32,9 +32,9 @@ export default class HistogramWithExpectedValue extends QuantumMeasurementHistog
       visibleProperty: expectedValueVisibleProperty
     }, QuantumMeasurementConstants.expectedPercentagePathOptions );
 
-    // REVIEW: do you  need to create the same shape twice or can you create it once and pass to a new Path?
-    const leftExpectedValueLine = new Path( new Shape().moveTo( 0, 0 ).lineTo( HISTOGRAM_SIZE.width / 3, 0 ), expectedValueOptions );
-    const rightExpectedValueLine = new Path( new Shape().moveTo( 0, 0 ).lineTo( HISTOGRAM_SIZE.width / 3, 0 ), expectedValueOptions );
+    const expectedValueShape = new Shape().moveTo( 0, 0 ).lineTo( HISTOGRAM_SIZE.width / 3, 0 );
+    const leftExpectedValueLine = new Path( expectedValueShape, expectedValueOptions );
+    const rightExpectedValueLine = new Path( expectedValueShape, expectedValueOptions );
 
     this.addChild( leftExpectedValueLine );
     this.addChild( rightExpectedValueLine );
