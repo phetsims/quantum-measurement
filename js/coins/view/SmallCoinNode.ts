@@ -98,13 +98,13 @@ class SmallCoinNode extends Node {
         upArrow.visible = false;
         downArrow.visible = false;
         coinCircle.fill = HEADS_FILL_COLOR_PROPERTY;
-        coinCircle.stroke = HEADS_FILL_COLOR_PROPERTY.value.colorUtilsBrighter( 0.5 );
+        coinCircle.stroke = HEADS_FILL_COLOR_PROPERTY;
       }
       else if ( displayMode === 'tails' ) {
         upArrow.visible = false;
         downArrow.visible = false;
         coinCircle.fill = TAILS_FILL_COLOR_PROPERTY;
-        coinCircle.stroke = TAILS_FILL_COLOR_PROPERTY.value.colorUtilsDarker( 0.5 );
+        coinCircle.stroke = TAILS_FILL_COLOR_PROPERTY;
       }
       else if ( displayMode === 'up' ) {
         upArrow.visible = true;
