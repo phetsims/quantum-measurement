@@ -44,6 +44,7 @@ export default class AveragePolarizationInfoDialog extends Dialog {
     );
 
     // Create derived properties for the strings that explain the equation elements.
+    // Does not use a PatternStringProperty because of the string composition of N and V
     const numberOfVerticalExplanationStringProperty = new DerivedStringProperty(
       [
         QuantumMeasurementStrings.NStringProperty,
@@ -52,13 +53,13 @@ export default class AveragePolarizationInfoDialog extends Dialog {
         QuantumMeasurementStrings.averagePolarizationDialog.numberOfPhotonsPatternPhraseStringProperty
       ],
       ( nString, vString, verticalString, numberOfPhotonsPatternString ) => {
-        const functionString = MathSymbolFont.getRichTextMarkup( `${nString}(${vString})` );
         return StringUtils.fillIn( numberOfPhotonsPatternString, {
-          function: functionString,
+          function: MathSymbolFont.getRichTextMarkup( `${nString}(${vString})` ),
           direction: verticalString
         } );
       }
     );
+
     const numberOfHorizontalExplanationStringProperty = new DerivedStringProperty(
       [
         QuantumMeasurementStrings.NStringProperty,

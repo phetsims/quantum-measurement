@@ -114,6 +114,8 @@ export default class OutcomeProbabilityControl extends VBox {
       }
     } );
 
+    // These strings do not use PatternStringProperty because they use multiple string compositions
+    // As well as formatting within the derived property
     const classicalUpTitleProperty = new DerivedProperty( [
         QuantumMeasurementStrings.probabilityStringProperty,
         QuantumMeasurementStrings.probabilityOfValuePatternStringProperty
@@ -202,11 +204,12 @@ export default class OutcomeProbabilityControl extends VBox {
           QuantumMeasurementStrings.a11y.translatable.equationAccessibleParagraphPatternStringProperty
         ],
         ( outcomeProbability, tailsColor, downColor, equationPattern ) => {
+
+          // Since these values will go into multiple string Properties, we opt to fill them here
+          // instead of a PatternStringProperty
           const alphaValue = toFixed( Math.sqrt( outcomeProbability ), 3 );
           const betaValue = toFixed( Math.sqrt( 1 - outcomeProbability ), 3 );
 
-          // REVIEW: This StringUtils.fillIn feels particularly alarming. This feels like a classic case where
-          // PatternStringProperty will do what you need. If not, very clearly document.
           equationAccessibleParagraphStringProperty.value = StringUtils.fillIn( equationPattern, {
             alpha: alphaValue,
             beta: betaValue
