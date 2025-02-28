@@ -39,7 +39,9 @@ export default class ProbabilityValueControl extends NumberControl {
 
     super( titleStringProperty, probabilityProperty, RANGE, optionize<ProbabilityValueControlOptions, SelfOptions, NumberControlOptions>()( {
 
-      // REVIEW: Add documentation describing why you need to create provide your own layoutFunction.
+      // Creating our own layout function because NumberControl doesn't have a native support for
+      //        title
+      //  < ------|------ >
       layoutFunction: ( titleNode, numberDisplay, slider, leftArrowButton, rightArrowButton ) => {
         assert && assert( leftArrowButton && rightArrowButton );
         return new VBox( {

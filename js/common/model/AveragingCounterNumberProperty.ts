@@ -26,9 +26,11 @@ type DetectionCountSample = {
 
 class AveragingCounterNumberProperty extends NumberProperty {
 
-  // REVIEW: Some documentation for `totalAveragingPeriod` and `countSamplePeriod` would be helpful.
-  private readonly totalAveragingPeriod: number;
+  // Every countSamplePeriod we store a group of counts for that period
+  // Then, groups within a totalAveragingPeriod are averaged to get the final value
+  // So the displayed value updates every countSamplePeriod with the average of the last totalAveragingPeriod
   private readonly countSamplePeriod: number;
+  private readonly totalAveragingPeriod: number;
 
   // variables used in the detection rate calculation
   private currentDetectionCount = 0;

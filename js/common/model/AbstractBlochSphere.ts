@@ -23,12 +23,7 @@ export type AbstractBlochSphereOptions = SelfOptions & PickRequired<PhetioObject
 
 export default abstract class AbstractBlochSphere extends PhetioObject {
 
-  // REVIEW: Perhaps this is my lack of content understanding, but this documentation seems confusing. The sentence
-  // starts with "Angles" yet this is not an array. Do multiple angles determine the calculation of the azimuthal angle?
-  // Maybe clarify what knowledge a developer needs to have about azimuthal angles in implementation-notes.md and keep this
-  // documentation specific to the Property itself.
-  // Angles that determine the direction the vector representation is pointing at azimuthal angle, measured along the XY
-  // plane from the +X axis, goes from 0 to 2*PI in radians.
+  // Azimuthal angle, measured along the XY plane from the +X axis, goes from 0 to 2*PI in radians.
   public readonly azimuthalAngleProperty: NumberProperty;
 
   // Polar angle, measured from the +Z axis, goes from 0 to PI in radians.
@@ -48,19 +43,16 @@ export default abstract class AbstractBlochSphere extends PhetioObject {
 
     super( options );
 
-    // REVIEW: Document why the azimuthal and polar angles are reentrant and how we know that they will not hit an infinite loop
     this.azimuthalAngleProperty = new NumberProperty( options.initialAzimuthalAngle, {
       range: new Range( 0, 2 * Math.PI ),
       tandem: options.tandem.createTandem( 'azimuthalAngleProperty' ),
-      phetioReadOnly: true,
-      reentrant: true
+      phetioReadOnly: true
     } );
 
     this.polarAngleProperty = new NumberProperty( options.initialPolarAngle, {
       range: new Range( 0, Math.PI ),
       tandem: options.tandem.createTandem( 'polarAngleProperty' ),
-      phetioReadOnly: true,
-      reentrant: true
+      phetioReadOnly: true
     } );
 
     this.alphaProperty = new NumberProperty( 1, {
