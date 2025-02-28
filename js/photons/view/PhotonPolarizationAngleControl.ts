@@ -8,13 +8,12 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
+import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
 import { roundToInterval } from '../../../../dot/js/util/roundToInterval.js';
 import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
-import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
@@ -56,23 +55,20 @@ export default class PhotonPolarizationAngleControl extends Panel {
       maxWidth: 200
     } );
 
-    const verticalRadioButtonLabelTextProperty = new DerivedStringProperty(
-      [
-        QuantumMeasurementStrings.verticalStringProperty,
-        QuantumMeasurementStrings.VStringProperty,
-        QuantumMeasurementStrings.nameAndAbbreviationPatternStringProperty
-      ],
-      ( verticalString, vString, nameAndAbbreviationPatternString ) =>
-        StringUtils.fillIn( nameAndAbbreviationPatternString, { name: verticalString, abbreviation: vString } )
+    const verticalRadioButtonLabelTextProperty = new PatternStringProperty(
+      QuantumMeasurementStrings.nameAndAbbreviationPatternStringProperty,
+      {
+        name: QuantumMeasurementStrings.verticalStringProperty,
+        abbreviation: QuantumMeasurementStrings.VStringProperty
+      }
     );
-    const horizontalRadioButtonLabelTextProperty = new DerivedStringProperty(
-      [
-        QuantumMeasurementStrings.horizontalStringProperty,
-        QuantumMeasurementStrings.HStringProperty,
-        QuantumMeasurementStrings.nameAndAbbreviationPatternStringProperty
-      ],
-      ( horizontalString, hString, nameAndAbbreviationPatternString ) =>
-        StringUtils.fillIn( nameAndAbbreviationPatternString, { name: horizontalString, abbreviation: hString } )
+
+    const horizontalRadioButtonLabelTextProperty = new PatternStringProperty(
+      QuantumMeasurementStrings.nameAndAbbreviationPatternStringProperty,
+      {
+        name: QuantumMeasurementStrings.horizontalStringProperty,
+        abbreviation: QuantumMeasurementStrings.HStringProperty
+      }
     );
 
     const radioButtonTextOptions: TextOptions = {
