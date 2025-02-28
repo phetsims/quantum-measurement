@@ -7,10 +7,9 @@
  */
 
 import BlochSphereModel from 'model/BlochSphereModel.js';
-import Line from '../../../../scenery/js/nodes/Line.js';
-import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
+import ExperimentDividingLine from '../../common/view/ExperimentDividingLine.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import BlochSphereMeasurementArea from './BlochSphereMeasurementArea.js';
@@ -33,11 +32,8 @@ class BlochSphereScreenView extends QuantumMeasurementScreenView {
 
     // Add the vertical line that will sit between the preparation and measurement areas.
     const dividingLineX = 350; // empirically determined
-    const dividingLine = new Line( dividingLineX, 90, dividingLineX, 600, {
-      stroke: Color.LIGHT_GRAY,
-      lineWidth: 2,
-      lineDash: [ 6, 5 ]
-    } );
+    const dividingLine = new ExperimentDividingLine( dividingLineX );
+    dividingLine.top = 70;
     this.addChild( dividingLine );
 
     preparationArea.localBoundsProperty.link( () => {

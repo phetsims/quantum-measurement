@@ -47,7 +47,6 @@ export default class ParticleSourceModel {
 
   public constructor( position: Vector2, tandem: Tandem ) {
 
-    // REVIEW: Recommend using EnumerationProperty instead of Property<EnumerationValue>
     this.sourceModeProperty = new EnumerationProperty( SourceMode.SINGLE, {
       tandem: tandem.createTandem( 'sourceModeProperty' ),
       validValues: SourceMode.enumeration.values,

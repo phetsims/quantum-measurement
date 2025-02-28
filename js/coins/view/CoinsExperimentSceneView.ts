@@ -19,9 +19,7 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import Line from '../../../../scenery/js/nodes/Line.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
-import Color from '../../../../scenery/js/util/Color.js';
 import ButtonNode from '../../../../sun/js/buttons/ButtonNode.js';
 import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushButton.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
@@ -30,6 +28,7 @@ import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
+import ExperimentDividingLine from '../../common/view/ExperimentDividingLine.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
@@ -46,7 +45,6 @@ export type CoinsExperimentSceneViewOptions = SelfOptions & WithRequired<NodeOpt
 const SCENE_WIDTH = QuantumMeasurementConstants.LAYOUT_BOUNDS.width;
 const DIVIDER_X_POSITION_DURING_PREPARATION = Math.floor( ScreenView.DEFAULT_LAYOUT_BOUNDS.width * 0.38 );
 const DIVIDER_X_POSITION_DURING_MEASUREMENT = Math.ceil( ScreenView.DEFAULT_LAYOUT_BOUNDS.width * 0.2 );
-const DIVIDER_HEIGHT = 500; // empirically determined
 
 class CoinsExperimentSceneView extends Node {
 
@@ -100,11 +98,7 @@ class CoinsExperimentSceneView extends Node {
     );
 
     // Add the vertical line that will sit between the preparation and measurement areas.
-    const dividingLine = new Line( 0, 0, 0, DIVIDER_HEIGHT, {
-      stroke: Color.LIGHT_GRAY,
-      lineWidth: 2,
-      lineDash: [ 6, 5 ]
-    } );
+    const dividingLine = new ExperimentDividingLine( 0 );
 
     // Add the button for switching from preparation mode to measurement mode.
     const startMeasurementButtonTandem = options.tandem.createTandem( 'startMeasurementButton' );
