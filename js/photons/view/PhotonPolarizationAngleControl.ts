@@ -130,7 +130,9 @@ export default class PhotonPolarizationAngleControl extends Panel {
 
     // Create a slider to control the custom angle of polarization.  It is only visible when the custom preset value
     // is selected.
-    const customAngleSlider = new HSlider( photonSource.customPolarizationAngleProperty, new Range( 0, 90 ), {
+    const basicStepSize = 5;
+    const sliderRange = new Range( 0, 90 );
+    const customAngleSlider = new HSlider( photonSource.customPolarizationAngleProperty, sliderRange, {
       visibleProperty: DerivedProperty.valueEqualsConstant( photonSource.presetPolarizationDirectionProperty, 'custom' ),
       trackSize: new Dimension2( 140, 1.5 ),
       thumbSize: new Dimension2( 13, 26 ),
@@ -138,7 +140,13 @@ export default class PhotonPolarizationAngleControl extends Panel {
       trackFillEnabled: Color.BLACK,
       majorTickLength: 10,
       majorTickLineWidth: 1.5,
-      constrainValue: value => roundToInterval( value, 5 ),
+      constrainValue: value => roundToInterval( value, basicStepSize ),
+      keyboardStep: basicStepSize,
+      shiftKeyboardStep: 1,
+      pageKeyboardStep: 15,
+      valueChangeSoundGeneratorOptions: {
+        numberOfMiddleThresholds: sliderRange.getLength() / basicStepSize - 1
+      },
       tandem: providedOptions.tandem.createTandem( 'customAngleSlider' )
     } );
 
