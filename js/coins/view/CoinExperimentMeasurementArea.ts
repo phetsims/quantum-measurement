@@ -39,6 +39,7 @@ import SingleCoinTestBox from './SingleCoinTestBox.js';
 import SingleCoinViewManager from './SingleCoinViewManager.js';
 
 const RADIO_BUTTON_FONT = new PhetFont( 12 );
+const HEADER_MAX_WIDTH = 400; // empirically determined using Scenery helper measuring tape
 
 class CoinExperimentMeasurementArea extends VBox {
 
@@ -77,6 +78,7 @@ class CoinExperimentMeasurementArea extends VBox {
       QuantumMeasurementStrings.singleCoinMeasurementsStringProperty,
       {
         textColor: textColorProperty,
+        maxWidth: HEADER_MAX_WIDTH,
         accessibleParagraph: coinStateStringProperty
       }
     );
@@ -105,7 +107,10 @@ class CoinExperimentMeasurementArea extends VBox {
     // Add the lower heading for the measurement area.
     const multiCoinSectionHeader = new SceneSectionHeader(
       QuantumMeasurementStrings.multipleCoinMeasurementsStringProperty,
-      { textColor: textColorProperty }
+      {
+        textColor: textColorProperty,
+        maxWidth: HEADER_MAX_WIDTH
+      }
     );
 
     // Add the area where the multiple coins will be hidden and revealed.

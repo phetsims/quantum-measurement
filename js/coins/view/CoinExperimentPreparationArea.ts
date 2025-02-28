@@ -108,7 +108,7 @@ class CoinExperimentPreparationArea extends VBox {
         accessibleName: preparationAreaAccessibleNameStringProperty,
         accessibleParagraph: classicalAccessibleParagraphPatternStringProperty,
         textColor: textColorProperty,
-        maxWidth: 200
+        maxWidth: 250
       }
     );
 
