@@ -83,6 +83,7 @@ export default class BlochSpherePreparationArea extends VBox {
     } );
 
     const directionComboBox = new ComboBox( model.selectedStateDirectionProperty, comboBoxItems, parentNode, {
+      yMargin: 6,
       tandem: providedOptions.tandem.createTandem( 'directionComboBox' )
     } );
 
