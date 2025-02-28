@@ -35,8 +35,7 @@ export default class ProbabilityValueControl extends NumberControl {
   public constructor( titleStringProperty: TReadOnlyProperty<string> | string,
                       probabilityProperty: NumberProperty,
                       tandem: Tandem,
-                      providedOptions?: ProbabilityValueControlOptions
-                      ) {
+                      providedOptions?: ProbabilityValueControlOptions ) {
 
     super( titleStringProperty, probabilityProperty, RANGE, optionize<ProbabilityValueControlOptions, SelfOptions, NumberControlOptions>()( {
 
