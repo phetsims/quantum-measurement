@@ -51,9 +51,11 @@ export default class MagneticFieldNode extends Node {
     measurementStateProperty.link( ( measurementState: SpinMeasurementState ) => {
       const lineDash = measurementState === SpinMeasurementState.TIMING_OBSERVATION ? [ 1, 0 ] : DASH_PATTERN_FOR_GHOST_FIELD;
       const opacity = measurementState === SpinMeasurementState.TIMING_OBSERVATION ? 1 : 0.75;
+      const fill = measurementState === SpinMeasurementState.TIMING_OBSERVATION ? 'yellow' : 'transparent';
       arrowNodes.forEach( arrowNode => {
         arrowNode.lineDash = lineDash;
         arrowNode.opacity = opacity;
+        arrowNode.fill = fill;
       } );
     } );
   }

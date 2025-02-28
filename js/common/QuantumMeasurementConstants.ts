@@ -28,7 +28,7 @@ const QuantumMeasurementConstants = {
 
   expectedPercentagePathOptions: {
     stroke: QuantumMeasurementColors.expectedPercentageFillColorProperty,
-    lineWidth: 5
+    lineWidth: 3
   },
 
   panelOptions: {
