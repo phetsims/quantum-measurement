@@ -69,7 +69,6 @@ export default class OutcomeProbabilityControl extends VBox {
       }
     );
 
-
     let title: Node;
     if ( systemType === SystemType.CLASSICAL ) {
       title = new Text( QuantumMeasurementStrings.coinBiasStringProperty, {
@@ -156,8 +155,8 @@ export default class OutcomeProbabilityControl extends VBox {
       }
     );
 
-    let upProbabilityValueControl: Node;
-    let downProbabilityValueControl: Node;
+    let upProbabilityValueControl: ProbabilityValueControl;
+    let downProbabilityValueControl: ProbabilityValueControl;
     let quantumReadout: RichText;
 
     let children: Node[];
