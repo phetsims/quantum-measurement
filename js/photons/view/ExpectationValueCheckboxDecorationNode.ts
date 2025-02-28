@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2025, University of Colorado Boulder
 
 /**
  * ExpectationValueCheckboxDecorationNode is the node that is used to display the expectation value icon (basically a
