@@ -82,8 +82,6 @@ class SystemUnderTestNode extends Panel {
       )
     );
 
-    // REVIEW: Maybe make the desired number of atoms a constant so that you don't have to worry about visiting this
-    // spot if that changes.
     // Create the set of atom nodes for the multiple measurement mode. The layout used here is quite specific to the
     // desired number of atoms and will need to be adjusted if that number ever changes.
     const atomRowHBoxes: HBox[] = [];
