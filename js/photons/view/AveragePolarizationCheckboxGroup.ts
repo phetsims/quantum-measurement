@@ -35,7 +35,7 @@ export type AveragePolarizationCheckboxGroupItem = {
 };
 
 // constants
-const CHECKBOX_GROUP_SPACING = 10;
+const CHECKBOX_GROUP_SPACING = 8;
 const CHECKBOX_GROUP_POINTER_DILATION = CHECKBOX_GROUP_SPACING / 2;
 const COMMON_CHECKBOX_OPTIONS = {
   phetioVisiblePropertyInstrumented: false, // The enclosing control should be removed if the checkbox isn't desired.
@@ -45,7 +45,7 @@ const COMMON_CHECKBOX_OPTIONS = {
   touchAreaYDilation: CHECKBOX_GROUP_POINTER_DILATION
 };
 const CHECKBOX_LABEL_OPTIONS = {
-  font: new PhetFont( 18 ),
+  font: new PhetFont( 14 ),
   maxWidth: 200
 };
 const ALWAYS_TRUE_PROPERTY = new BooleanProperty( true );
@@ -68,7 +68,7 @@ class AveragePolarizationCheckboxGroup extends VBox {
       if ( checkboxGroupItem.decorationNode ) {
         checkboxContent = new HBox( {
           children: [ checkboxLabel, checkboxGroupItem.decorationNode ],
-          spacing: 10
+          spacing: 8
         } );
       }
       else {
@@ -82,6 +82,7 @@ class AveragePolarizationCheckboxGroup extends VBox {
         checkboxContent,
         combineOptions<CheckboxOptions>(
           {
+            boxWidth: 16,
             visibleProperty: checkboxGroupItem.visibleProperty ?
                              new GatedVisibleProperty( checkboxGroupItem.visibleProperty, checkboxTandem ) :
                              ALWAYS_TRUE_PROPERTY,
