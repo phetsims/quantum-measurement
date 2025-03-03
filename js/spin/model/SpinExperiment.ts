@@ -7,15 +7,12 @@
  * @author Agustín Vallejo
  */
 
-import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
-import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
-import { BlockingMode } from './BlockingMode.js';
 
 type SternGerlachExperimentSetting = {
   isZOriented: boolean;
@@ -63,9 +60,6 @@ export default class SpinExperiment extends EnumerationValue {
 
   public readonly usingSingleApparatus: boolean;
 
-  // whether the blocker is blocking the up or down exit, if applicable
-  public readonly blockingModeProperty: Property<BlockingMode>;
-
   public constructor( index: string | TReadOnlyProperty<string>,
                       experimentOrder: string | TReadOnlyProperty<string>, // Like '[SGz, SGx]'
                       experimentSetting: SternGerlachExperimentSetting[] ) {
@@ -83,13 +77,6 @@ export default class SpinExperiment extends EnumerationValue {
     this.experimentSetting = experimentSetting;
 
     this.usingSingleApparatus = this.experimentSetting.length === 1;
-
-    this.blockingModeProperty = new EnumerationProperty( BlockingMode.BLOCK_UP );
-  }
-
-  public static reset(): void {
-    // Since each value has an associated property, which gets altered by the model, we have to manually reset them here
-    SpinExperiment.enumeration.values.forEach( experiment => { experiment.blockingModeProperty.reset(); } );
   }
 }
 

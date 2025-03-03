@@ -12,6 +12,7 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
@@ -47,7 +48,7 @@ const MAX_NUMBER_OF_MULTIPLE_PARTICLES = 1250;
 // blocker in front of Stern Gerlach (SG) exits
 export const BLOCKER_OFFSET = new Vector2( 0.1, 0 );
 
-export default class SpinModel implements TModel {
+class SpinModel implements TModel {
 
   // Bloch sphere that represents the current spin state
   public readonly blochSphere: SimpleBlochSphere;
@@ -83,6 +84,9 @@ export default class SpinModel implements TModel {
   // boolean to control what exit to block in continuous mode
   public readonly isBlockingProperty: TReadOnlyProperty<boolean>;
   public readonly exitBlockerPositionProperty: TReadOnlyProperty<Vector2 | null>;
+
+  // map to store the blocking mode of each experiment
+  private readonly blockingModeMap: Map<SpinExperiment, Property<BlockingMode>>;
 
   public constructor( providedOptions: QuantumMeasurementModelOptions ) {
 
@@ -157,6 +161,13 @@ export default class SpinModel implements TModel {
       )
     ];
 
+    this.blockingModeMap = new Map();
+
+    SpinExperiment.enumeration.values.forEach( experiment => {
+      this.blockingModeMap.set( experiment, new EnumerationProperty( BlockingMode.BLOCK_UP ) );
+    } );
+
+
     this.expectedPercentageVisibleProperty = new BooleanProperty( false, {
       tandem: providedOptions.tandem.createTandem( 'expectedPercentageVisibleProperty' ),
       phetioFeatured: true,
@@ -220,7 +231,8 @@ export default class SpinModel implements TModel {
     // Saving the blocking mode into the experiment
     this.sternGerlachs[ 0 ].blockingModeProperty.link( blockingMode => {
       if ( blockingMode !== BlockingMode.NO_BLOCKER ) {
-        this.currentExperimentProperty.value.blockingModeProperty.value = blockingMode;
+        assert && assert( this.blockingModeMap.has( this.currentExperimentProperty.value ), 'Experiment not found in map' );
+        this.blockingModeMap.get( this.currentExperimentProperty.value )!.value = blockingMode;
       }
       this.sternGerlachs[ 1 ].resetCounts();
       this.sternGerlachs[ 2 ].resetCounts();
@@ -263,6 +275,8 @@ export default class SpinModel implements TModel {
 
         this.measurementDevices.forEach( device => device.reset() );
 
+        this.sternGerlachs.forEach( sternGerlach => sternGerlach.resetCounts() );
+
         // Conditions that determine visibility and state of the experiment components
         // Declared into variables for better readability
         const singleParticle = sourceMode === SourceMode.SINGLE;
@@ -290,7 +304,8 @@ export default class SpinModel implements TModel {
         } );
 
         if ( !singleParticle && multiApparatus ) {
-          this.sternGerlachs[ 0 ].blockingModeProperty.value = experiment.blockingModeProperty.value;
+          assert && assert( this.blockingModeMap.has( experiment ), 'Experiment not found in map' );
+          this.sternGerlachs[ 0 ].blockingModeProperty.value = this.blockingModeMap.get( experiment )!.value;
         }
         else {
           this.sternGerlachs[ 0 ].blockingModeProperty.value = BlockingMode.NO_BLOCKER;
@@ -346,21 +361,22 @@ export default class SpinModel implements TModel {
    * Reset the model.
    */
   public reset(): void {
+    this.blockingModeMap.forEach( ( blockingMode, experiment ) => {
+      this.blockingModeMap.get( experiment )!.reset();
+    } );
+
+    this.currentExperimentProperty.reset();
     this.measurementDevices.forEach( device => device.reset() );
-    this.sternGerlachs.forEach( sternGerlach => sternGerlach.reset() );
     this.singleParticlesCollection.clear();
     this.multipleParticlesCollection.clear();
-    this.currentExperimentProperty.reset();
     this.particleSourceModel.reset();
     this.expectedPercentageVisibleProperty.reset();
     this.alphaSquaredProperty.reset();
     this.betaSquaredProperty.reset();
     this.blochSphere.reset();
-
-    // Reset the blocking mode for all experiments
-    SpinExperiment.reset();
   }
 
 }
 
 quantumMeasurement.register( 'SpinModel', SpinModel );
+export default SpinModel;

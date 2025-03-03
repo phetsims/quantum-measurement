@@ -197,13 +197,6 @@ export default class SternGerlach extends PhetioObject {
     this.downCounterProperty.reset();
   }
 
-  public reset(): void {
-    this.isZOrientedProperty.reset();
-    this.upProbabilityProperty.reset();
-    this.blockingModeProperty.reset();
-    this.resetCounts();
-  }
-
 }
 
 quantumMeasurement.register( 'SternGerlach', SternGerlach );
