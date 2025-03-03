@@ -19,6 +19,7 @@ import Color from '../../../../scenery/js/util/Color.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import Mirror from '../model/Mirror.js';
+import { TARGET_PHOTON_VIEW_WIDTH } from './PhotonSprites.js';
 
 type SelfOptions = EmptySelfOptions;
 type MirrorNodeOptions = SelfOptions & PickRequired<NodeOptions, 'tandem'>;
@@ -29,13 +30,12 @@ export default class MirrorNode extends Node {
                       modelViewTransform: ModelViewTransform2,
                       providedOptions?: MirrorNodeOptions ) {
 
-    // REVIEW: This seems like it could break if the photons change size at all. Is there any way to calculate this offset
-    // based on your photon dimensions?
     // Define an offset for positioning the mirror.  This is needed because the photons reflect based on their center
     // positions, and if the mirror isn't offset a bit, the photons can appear to go partially through the mirror.
-    // The value is in screen coordinates and is empirically determined.  This only works for a mirror that is oriented
-    // the way this one is, and isn't a general solution.
-    const mirrorPositionOffset = new Vector2( 2, -2 );
+    // The value is in screen coordinates. This only works for a mirror that is oriented the way this one is,
+    // and isn't a general solution.
+    const mirrorPositionOffsetValue = TARGET_PHOTON_VIEW_WIDTH / 5;
+    const mirrorPositionOffset = new Vector2( mirrorPositionOffsetValue, -mirrorPositionOffsetValue );
 
     const mirrorLine = new Line(
       modelViewTransform.modelToViewPosition( model.mirrorSurfaceLine.start ).plus( mirrorPositionOffset ),

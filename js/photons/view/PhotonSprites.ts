@@ -29,7 +29,7 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import Photon from '../model/Photon.js';
 
 // constants
-const TARGET_PHOTON_VIEW_WIDTH = 10; // in screen coords, empirically determined to match the design
+export const TARGET_PHOTON_VIEW_WIDTH = 10; // in screen coords, empirically determined to match the design
 
 class PhotonSprites extends Sprites {
 

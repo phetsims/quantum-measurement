@@ -105,8 +105,7 @@ export default class NormalizedOutcomeVectorGraph extends Node {
       value => -value
     );
 
-    // REVIEW: Suggested to rename showNumericValueProperty to numericValueVisibleProperty
-    const showNumericValueProperty = DerivedProperty.and( [ showVectorRepresentationProperty, displayNumericValueProperty ] );
+    const numericValueVisibleProperty = DerivedProperty.and( [ showVectorRepresentationProperty, displayNumericValueProperty ] );
     const normalizedOutcomeValueDisplay = new NumberDisplay(
       invertedNormalizedOutcomeValueProperty,
       new Range( -1, 1 ),
@@ -118,7 +117,7 @@ export default class NormalizedOutcomeVectorGraph extends Node {
         backgroundStroke: null,
         backgroundFill: Color.WHITE.withAlpha( 0.8 ),
         xMargin: 2,
-        visibleProperty: showNumericValueProperty
+        visibleProperty: numericValueVisibleProperty
       }
     );
 
@@ -127,7 +126,7 @@ export default class NormalizedOutcomeVectorGraph extends Node {
       stroke: Color.BLACK,
       lineWidth: 1,
       right: 0,
-      visibleProperty: showNumericValueProperty
+      visibleProperty: numericValueVisibleProperty
     } );
 
     // Monitor the normalized outcome value and update the position of the arrow and the numeric display as it changes.

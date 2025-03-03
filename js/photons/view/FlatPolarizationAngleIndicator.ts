@@ -123,9 +123,7 @@ export default class FlatPolarizationAngleIndicator extends Node {
       children: [ thetaNode, angleReadoutText ],
       centerX: horizontalAxis.centerX + 40,
       centerY: verticalAxis.top,
-
-      // REVIEW: use DerivedProperty.valueNotEqualsConstant
-      visibleProperty: new DerivedProperty( [ polarizationAngleProperty ], angle => angle !== null )
+      visibleProperty: DerivedProperty.valueNotEqualsConstant( polarizationAngleProperty, null )
     } );
 
     // Create the angle indicator, which is the curved line between the horizontal axis and the polarization vector.

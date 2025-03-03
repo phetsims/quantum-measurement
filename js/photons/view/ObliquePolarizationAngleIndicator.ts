@@ -128,14 +128,14 @@ export default class ObliquePolarizationAngleIndicator extends Node {
     } );
 
     // Create a Property for the fill used for the unit circle, since it changes when the photons are unpolarized.
-    //REVIEW: Technically `QuantumMeasurementColors.photonBaseColorProperty` should be part of what the DerivedProperty
-    // is listening to. I think the only scenario where this would be buggy is in the Color Editor, but could also cause
-    // a bug in PhET-iO if we gave clients the option to adjust colorProperties.
     const unitCircleFillProperty = new DerivedProperty(
-      [ polarizationAngleProperty ],
-      polarizationAngle => polarizationAngle === null ?
-                           QuantumMeasurementColors.photonBaseColorProperty.value :
-                           Color.LIGHT_GRAY
+      [
+        polarizationAngleProperty,
+        QuantumMeasurementColors.photonBaseColorProperty
+      ],
+      ( polarizationAngle, photonBaseColor ) => polarizationAngle === null ?
+                                                photonBaseColor :
+                                                Color.LIGHT_GRAY
     );
 
     // Create a unit circle that is projected into the x-z plane.

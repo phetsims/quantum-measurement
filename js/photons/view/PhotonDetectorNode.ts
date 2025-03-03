@@ -151,7 +151,6 @@ export default class PhotonDetectorNode extends Node {
       } );
     }
     else {
-      //REVIEW: Can this if/elseif/else block be reduced to just an if/else? Why do you need to handle an unsupported detection direction?
       assert && assert( false, `unsupported detection direction: ${model.detectionDirection}` );
       label = new RichText( '' );
     }
