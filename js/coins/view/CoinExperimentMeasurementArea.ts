@@ -216,7 +216,7 @@ class CoinExperimentMeasurementArea extends VBox {
           spacing: headerSpacing
         } )
       ],
-      spacing: 36
+      spacing: 44
     } );
 
     this.singleCoinInTestBoxProperty = singleCoinInTestBoxProperty;
