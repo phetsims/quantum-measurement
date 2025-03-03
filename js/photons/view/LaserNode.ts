@@ -11,7 +11,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
-import { roundSymmetric } from '../../../../dot/js/util/roundSymmetric.js';
+import { roundToInterval } from '../../../../dot/js/util/roundToInterval.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
@@ -57,6 +57,7 @@ export default class LaserNode extends Node {
       } ) );
     }
     else {
+      const sliderDelta = 10;
       const emissionRateSlider = new HSlider( model.emissionRateProperty, model.emissionRateProperty.range, {
         trackSize: new Dimension2( LASER_BODY_SIZE.width * 0.67, 2 ),
         trackStroke: Color.DARK_GRAY,
@@ -65,7 +66,11 @@ export default class LaserNode extends Node {
         thumbFill: QuantumMeasurementColors.photonBaseColorProperty,
         thumbFillHighlighted: 'rgb( 0, 200, 0)',
         centerX: -( NOZZLE_SIZE.width + LASER_BODY_SIZE.width / 2 ),
-        constrainValue: value => roundSymmetric( value ),
+        keyboardStep: sliderDelta,
+        shiftKeyboardStep: sliderDelta / 10,
+        pageKeyboardStep: sliderDelta * 5,
+        roundToStepSize: true,
+        constrainValue: value => roundToInterval( value, sliderDelta ),
         tandem: providedOptions.tandem.createTandem( 'emissionRateSlider' )
       } );
       laserPointerNodeChildren.push( emissionRateSlider );
