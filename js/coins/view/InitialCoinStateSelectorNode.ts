@@ -169,7 +169,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
 
     super( {
       children: [ selectorPanel, orientationIndicatorCoinNode ],
-      spacing: 20
+      spacing: 25
     } );
 
     this.orientationIndicatorCoinNode = orientationIndicatorCoinNode;

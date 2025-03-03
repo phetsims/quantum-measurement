@@ -16,6 +16,7 @@ import { toFixed } from '../../../../dot/js/util/toFixed.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
+import Spacer from '../../../../scenery/js/nodes/Spacer.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
@@ -142,11 +143,18 @@ class CoinExperimentPreparationArea extends VBox {
       }
     );
 
+    // For the layout, adjust the spacing between the probability indicators and the bias controls based on the type of
+    // system being modeled.  This is necessary because the quantum system has an additional line of text that is
+    // displayed.
+    const spacerHeight = sceneModel.systemType === SystemType.CLASSICAL ? 8 : 0;
+
+    console.log( `outcomeProbabilityControl.height = ${outcomeProbabilityControl.height}` );
     super( {
       children: [
         preparationAreaHeader,
         initialCoinStateSelectorNode,
         probabilityEquationsText,
+        new Spacer( 0, spacerHeight ),
         outcomeProbabilityControl
       ],
       spacing: 15
