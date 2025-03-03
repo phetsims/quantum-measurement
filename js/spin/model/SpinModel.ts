@@ -81,8 +81,7 @@ class SpinModel implements TModel {
   // expected percentage of particles that should be visible in the histogram
   public readonly expectedPercentageVisibleProperty: Property<boolean>;
 
-  // boolean to control what exit to block in continuous mode
-  public readonly isBlockingProperty: TReadOnlyProperty<boolean>;
+  // position of the exit blocker
   public readonly exitBlockerPositionProperty: TReadOnlyProperty<Vector2 | null>;
 
   // map to store the blocking mode of each experiment
@@ -173,17 +172,6 @@ class SpinModel implements TModel {
       phetioFeatured: true,
       phetioDocumentation: 'Expected percentage of particles that would be counted in the histogram. Only for continuous mode.'
     } );
-
-    // SGs are blocked for multi-SG experiments and continuous mode
-    this.isBlockingProperty = new DerivedProperty(
-      [
-        this.particleSourceModel.sourceModeProperty,
-        this.currentExperimentProperty
-      ],
-      ( sourceMode, currentExperiment ) => {
-        return sourceMode === SourceMode.CONTINUOUS && !currentExperiment.usingSingleApparatus;
-      }
-    );
 
     this.exitBlockerPositionProperty = new DerivedProperty(
       [
