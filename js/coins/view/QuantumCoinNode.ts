@@ -11,7 +11,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import Text from '../../../../scenery/js/nodes/Text.js';
+import RichText from '../../../../scenery/js/nodes/RichText.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
@@ -33,7 +33,7 @@ export default class QuantumCoinNode extends CoinNode {
     const upFaceOptions: CoinFaceParameters = {
       fill: QuantumMeasurementColors.upFillColorProperty,
       stroke: QuantumMeasurementColors.upColorProperty,
-      content: new Text( QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER, {
+      content: new RichText( QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER, {
         font: FONT,
         fill: QuantumMeasurementColors.upColorProperty
       } )
@@ -42,7 +42,7 @@ export default class QuantumCoinNode extends CoinNode {
     const downFaceOptions: CoinFaceParameters = {
       fill: QuantumMeasurementColors.downFillColorProperty,
       stroke: QuantumMeasurementColors.downColorProperty,
-      content: new Text( QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER, {
+      content: new RichText( QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER, {
         font: FONT,
         fill: QuantumMeasurementColors.downColorProperty
       } )
