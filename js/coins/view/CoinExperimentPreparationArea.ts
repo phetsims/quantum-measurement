@@ -148,7 +148,6 @@ class CoinExperimentPreparationArea extends VBox {
     // displayed.
     const spacerHeight = sceneModel.systemType === SystemType.CLASSICAL ? 8 : 0;
 
-    console.log( `outcomeProbabilityControl.height = ${outcomeProbabilityControl.height}` );
     super( {
       children: [
         preparationAreaHeader,

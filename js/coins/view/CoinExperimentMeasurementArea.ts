@@ -122,8 +122,12 @@ class CoinExperimentMeasurementArea extends VBox {
         multiCoinExperimentHistogramTandem
       ),
       tandem: multiCoinExperimentHistogramTandem,
-      leftFillColorProperty: sceneModel.systemType === SystemType.CLASSICAL ? QuantumMeasurementColors.headsColorProperty : QuantumMeasurementColors.upColorProperty,
-      rightFillColorProperty: sceneModel.systemType === SystemType.CLASSICAL ? QuantumMeasurementColors.tailsColorProperty : QuantumMeasurementColors.downColorProperty
+      leftFillColorProperty: sceneModel.systemType === SystemType.CLASSICAL ?
+                             QuantumMeasurementColors.headsColorProperty :
+                             QuantumMeasurementColors.upColorProperty,
+      rightFillColorProperty: sceneModel.systemType === SystemType.CLASSICAL ?
+                              QuantumMeasurementColors.tailsColorProperty :
+                              QuantumMeasurementColors.downColorProperty
     } );
     const multipleCoinExperimentButtonSet = new CoinExperimentButtonSet(
       sceneModel.coinSet,
@@ -193,14 +197,26 @@ class CoinExperimentMeasurementArea extends VBox {
       spacing: 30
     } );
 
+    const headerSpacing = 20;
+
     super( {
       children: [
-        singleCoinSectionHeader,
-        singleCoinMeasurementArea,
-        multiCoinSectionHeader,
-        multipleCoinMeasurementArea
+        new VBox( {
+          children: [
+            singleCoinSectionHeader,
+            singleCoinMeasurementArea
+          ],
+          spacing: headerSpacing
+        } ),
+        new VBox( {
+          children: [
+            multiCoinSectionHeader,
+            multipleCoinMeasurementArea
+          ],
+          spacing: headerSpacing
+        } )
       ],
-      spacing: 20
+      spacing: 36
     } );
 
     this.singleCoinInTestBoxProperty = singleCoinInTestBoxProperty;

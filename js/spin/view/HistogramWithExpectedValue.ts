@@ -14,7 +14,7 @@ import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import Path, { PathOptions } from '../../../../scenery/js/nodes/Path.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import QuantumMeasurementHistogram, { HISTOGRAM_SIZE, QuantumMeasurementHistogramOptions } from '../../common/view/QuantumMeasurementHistogram.js';
+import QuantumMeasurementHistogram, { DEFAULT_HISTOGRAM_SIZE, QuantumMeasurementHistogramOptions } from '../../common/view/QuantumMeasurementHistogram.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
 export default class HistogramWithExpectedValue extends QuantumMeasurementHistogram {
@@ -32,7 +32,7 @@ export default class HistogramWithExpectedValue extends QuantumMeasurementHistog
       visibleProperty: expectedValueVisibleProperty
     }, QuantumMeasurementConstants.expectedPercentagePathOptions );
 
-    const expectedValueShape = new Shape().moveTo( 0, 0 ).lineTo( HISTOGRAM_SIZE.width / 3, 0 );
+    const expectedValueShape = new Shape().moveTo( 0, 0 ).lineTo( DEFAULT_HISTOGRAM_SIZE.width / 3, 0 );
     const leftExpectedValueLine = new Path( expectedValueShape, expectedValueOptions );
     const rightExpectedValueLine = new Path( expectedValueShape, expectedValueOptions );
 
@@ -40,7 +40,7 @@ export default class HistogramWithExpectedValue extends QuantumMeasurementHistog
     this.addChild( rightExpectedValueLine );
 
     leftProbabilityProperty.link( probability => {
-      const xPosition = HISTOGRAM_SIZE.width / 4;
+      const xPosition = DEFAULT_HISTOGRAM_SIZE.width / 4;
       leftExpectedValueLine.center = new Vector2( -xPosition, -this.maxBarHeight * probability );
       rightExpectedValueLine.center = new Vector2( xPosition, -this.maxBarHeight * ( 1 - probability ) );
     } );

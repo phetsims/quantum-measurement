@@ -10,7 +10,9 @@
 import Multilink from '../../../../axon/js/Multilink.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
-import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import Dimension2 from '../../../../dot/js/Dimension2.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
@@ -23,15 +25,20 @@ import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import CoinSet from '../model/CoinSet.js';
 
 type SelfOptions = EmptySelfOptions;
-export type CoinMeasurementHistogramOptions = SelfOptions & QuantumMeasurementHistogramOptions;
+export type CoinMeasurementHistogramOptions = SelfOptions & WithRequired<QuantumMeasurementHistogramOptions, 'tandem'>;
 
 const LABEL_FONT = new PhetFont( { size: 20, weight: 'bold' } );
+const SIZE = new Dimension2( 200, 120 );
 
 export default class CoinMeasurementHistogram extends QuantumMeasurementHistogram {
 
   public constructor( coinSet: CoinSet,
                       systemType: SystemType,
                       providedOptions: CoinMeasurementHistogramOptions ) {
+
+    const options = optionize<CoinMeasurementHistogramOptions, SelfOptions, QuantumMeasurementHistogramOptions>()( {
+      size: SIZE
+    }, providedOptions );
 
     // Create the labels for the X axis.
     const xAxisLabels = [
@@ -41,7 +48,9 @@ export default class CoinMeasurementHistogram extends QuantumMeasurementHistogra
         QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER,
         {
           font: LABEL_FONT,
-          fill: systemType === SystemType.CLASSICAL ? QuantumMeasurementColors.headsColorProperty : QuantumMeasurementColors.upColorProperty
+          fill: systemType === SystemType.CLASSICAL ?
+                QuantumMeasurementColors.headsColorProperty :
+                QuantumMeasurementColors.upColorProperty
         }
       ),
       new RichText(
@@ -50,7 +59,9 @@ export default class CoinMeasurementHistogram extends QuantumMeasurementHistogra
         QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER,
         {
           font: LABEL_FONT,
-          fill: systemType === SystemType.CLASSICAL ? QuantumMeasurementColors.tailsColorProperty : QuantumMeasurementColors.downColorProperty
+          fill: systemType === SystemType.CLASSICAL ?
+                QuantumMeasurementColors.tailsColorProperty :
+                QuantumMeasurementColors.downColorProperty
         }
       )
     ];
@@ -58,11 +69,11 @@ export default class CoinMeasurementHistogram extends QuantumMeasurementHistogra
     // Create the number Properties for the left and right histogram bars.
     const leftNumberProperty = new NumberProperty( 0, {
       phetioReadOnly: true,
-      tandem: providedOptions.tandem.createTandem( 'leftNumberProperty' )
+      tandem: options.tandem.createTandem( 'leftNumberProperty' )
     } );
     const rightNumberProperty = new NumberProperty( 0, {
       phetioReadOnly: true,
-      tandem: providedOptions.tandem.createTandem( 'rightNumberProperty' )
+      tandem: options.tandem.createTandem( 'rightNumberProperty' )
     } );
 
     // Define a function to update the left and right number Properties.
@@ -97,8 +108,8 @@ export default class CoinMeasurementHistogram extends QuantumMeasurementHistogra
     super(
       leftNumberProperty,
       rightNumberProperty,
-      xAxisLabels as [RichText, RichText],
-      providedOptions
+      xAxisLabels as [ RichText, RichText ],
+      options
     );
 
     const numberOfCoinsStringProperty = new PatternStringProperty(

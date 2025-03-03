@@ -36,6 +36,8 @@ import QuantumMeasurementColors from '../QuantumMeasurementColors.js';
 import FractionNode from './FractionNode.js';
 
 type SelfOptions = {
+
+  size?: Dimension2; // size excluding labels at bottom, in screen coordinates
   orientation?: 'horizontal' | 'vertical'; // If the histogram is pointing up or sideways
   displayMode?: 'number' | 'fraction' | 'percent' | 'rate';
   matchLabelColors?: boolean; // If the labels should match the colors of the bars
@@ -63,16 +65,16 @@ type SelfOptions = {
 };
 export type QuantumMeasurementHistogramOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
 
-export const HISTOGRAM_SIZE = new Dimension2( 200, 160 ); // size excluding labels at bottom, in screen coordinates
+export const DEFAULT_HISTOGRAM_SIZE = new Dimension2( 200, 160 );
 const AXIS_STROKE = Color.BLACK;
 const AXIS_LINE_WIDTH = 2;
 const LABEL_FONT = new PhetFont( { size: 20, weight: 'bold' } );
 const TICK_MARK_LENGTH = 20;
 const TICK_MARK_FONT = new PhetFont( 14 );
 const NUMBER_DISPLAY_RANGE = new Range( 0, MAX_COINS );
-const NUMBER_DISPLAY_MAX_WIDTH = HISTOGRAM_SIZE.width / 2 * 0.85;
+const NUMBER_DISPLAY_MAX_WIDTH = DEFAULT_HISTOGRAM_SIZE.width / 2 * 0.85;
 const FLOATING_LABEL_MARGIN = 5;
-const HISTOGRAM_BAR_WIDTH = HISTOGRAM_SIZE.width / 6;
+const DEFAULT_HISTOGRAM_BAR_WIDTH = DEFAULT_HISTOGRAM_SIZE.width / 6;
 
 class QuantumMeasurementHistogram extends Node {
 
@@ -108,10 +110,11 @@ class QuantumMeasurementHistogram extends Node {
     const numberDisplaysVisibleProperty = new DerivedProperty( [ totalNumberProperty ], totalNumber => totalNumber > 0 );
 
     const options = optionize<QuantumMeasurementHistogramOptions, SelfOptions, NodeOptions>()( {
+      size: DEFAULT_HISTOGRAM_SIZE,
       orientation: 'vertical',
       displayMode: 'number',
       matchLabelColors: false,
-      barWidth: HISTOGRAM_BAR_WIDTH,
+      barWidth: DEFAULT_HISTOGRAM_BAR_WIDTH,
       barPositionProportion: 0.5,
       leftFillColorProperty: QuantumMeasurementColors.headsColorProperty,
       rightFillColorProperty: QuantumMeasurementColors.tailsColorProperty,
@@ -136,14 +139,14 @@ class QuantumMeasurementHistogram extends Node {
     const textRotation = options.orientation === 'vertical' ? 0 : -Math.PI / 2;
 
     // Create the X and Y axes.
-    const xAxis = new Line( 0, 0, HISTOGRAM_SIZE.width, 0, {
+    const xAxis = new Line( 0, 0, options.size.width, 0, {
       stroke: AXIS_STROKE,
       lineWidth: AXIS_LINE_WIDTH,
-      x: -HISTOGRAM_SIZE.width / 2,
+      x: -options.size.width / 2,
       centerY: 0
     } );
 
-    const yAxis = new Line( 0, 0, 0, HISTOGRAM_SIZE.height, {
+    const yAxis = new Line( 0, 0, 0, options.size.height, {
       stroke: AXIS_STROKE,
       lineWidth: AXIS_LINE_WIDTH,
       centerX: 0,
@@ -250,8 +253,8 @@ class QuantumMeasurementHistogram extends Node {
       );
     }
 
-    const leftHistogramBarCenterX = -options.barPositionProportion * HISTOGRAM_SIZE.width / 2;
-    const rightHistogramBarCenterX = options.barPositionProportion * HISTOGRAM_SIZE.width / 2;
+    const leftHistogramBarCenterX = -options.barPositionProportion * options.size.width / 2;
+    const rightHistogramBarCenterX = options.barPositionProportion * options.size.width / 2;
 
     // Create the histogram bars for the right and left sides.
     const maxBarHeight = yAxis.height;
