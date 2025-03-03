@@ -7,7 +7,6 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import PhetioProperty from '../../../../axon/js/PhetioProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
@@ -51,9 +50,7 @@ class PhotonTestingArea extends Node {
 
     const particleBehaviorModeRadioButtonGroupTandem = providedOptions.tandem.createTandem( 'particleBehaviorModeRadioButtonGroup' );
     const particleBehaviorModeRadioButtonGroup = new AquaRadioButtonGroup<SystemType>(
-
-      // REVIEW: Why do you need this type assertion?
-      model.particleBehaviorModeProperty as PhetioProperty<SystemType>,
+      model.particleBehaviorModeProperty,
       SystemType.enumeration.values.map( behaviorMode => {
           return {
             value: behaviorMode,
