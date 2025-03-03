@@ -12,7 +12,7 @@ import { lineSegmentIntersection } from '../../../../dot/js/util/lineSegmentInte
 import Vector2, { Vector2StateObject } from '../../../../dot/js/Vector2.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
-import { PHOTON_SPEED } from './Photon.js';
+import Photon from './Photon.js';
 
 export class PhotonMotionState {
 
@@ -31,7 +31,7 @@ export class PhotonMotionState {
   public getTravelPathIntersectionPoint( lineStart: Vector2, lineEnd: Vector2, dt: number ): Vector2 | null {
 
     // Create a line that represents the path of the photon.
-    const photonPathEndPoint = this.position.plus( this.direction.timesScalar( PHOTON_SPEED * dt ) );
+    const photonPathEndPoint = this.position.plus( this.direction.timesScalar( Photon.PHOTON_SPEED * dt ) );
 
     // Return the intersection point if there is one, null if not.
     return lineSegmentIntersection(
@@ -47,7 +47,7 @@ export class PhotonMotionState {
   }
 
   public step( dt: number ): void {
-    this.position = this.position.plus( this.direction.timesScalar( PHOTON_SPEED * dt ) );
+    this.position = this.position.plus( this.direction.timesScalar( Photon.PHOTON_SPEED * dt ) );
   }
 
   public static readonly PhotonMotionStateIO = new IOType<PhotonMotionState, PhotonMotionStateStateObject>( 'PhotonMotionStateIO', {

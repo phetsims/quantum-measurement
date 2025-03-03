@@ -17,7 +17,7 @@ import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioO
 import Tandem from '../../../../tandem/js/Tandem.js';
 import AveragingCounterNumberProperty from '../../common/model/AveragingCounterNumberProperty.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { PHOTON_BEAM_WIDTH } from './Laser.js';
+import Laser from './Laser.js';
 import Photon from './Photon.js';
 import { PhotonMotionState } from './PhotonMotionState.js';
 import { PhotonInteractionTestResult, PhotonInteractionValues } from './PhotonsModel.js';
@@ -35,9 +35,6 @@ export type DetectionDirection = ( [ 'up', 'down' ] )[number];
 // detection.
 export type DisplayMode = ( [ 'count', 'rate' ] )[number];
 
-export const COUNT_RANGE = new Range( 0, 999 );
-export const RATE_RANGE = new Range( 0, 999 ); // in events per second
-
 class PhotonDetector extends PhetioObject implements TPhotonInteraction {
 
   // The position of the detector in two-dimensional space. Units are in meters.
@@ -47,7 +44,7 @@ class PhotonDetector extends PhetioObject implements TPhotonInteraction {
   public readonly detectionDirection: DetectionDirection;
 
   // detection aperture width, in meters
-  public readonly apertureDiameter = PHOTON_BEAM_WIDTH * 1.75;
+  public readonly apertureDiameter = Laser.PHOTON_BEAM_WIDTH * 1.75;
 
   // detection aperture height, in meters
   public readonly apertureHeight = 0.05;
@@ -68,6 +65,10 @@ class PhotonDetector extends PhetioObject implements TPhotonInteraction {
 
   // The display mode defines the information that should be displayed by this detector in the view.
   public readonly displayMode: DisplayMode;
+
+  // The range of values that the detection count can take on.
+  public static readonly COUNT_RANGE = new Range( 0, 999 );
+  public static readonly RATE_RANGE = new Range( 0, 999 ); // in events per second
 
   public constructor( position: Vector2, detectionDirection: DetectionDirection, providedOptions: PhotonDetectorOptions ) {
 
@@ -92,7 +93,7 @@ class PhotonDetector extends PhetioObject implements TPhotonInteraction {
     );
 
     this.detectionRateProperty = new AveragingCounterNumberProperty( {
-      range: RATE_RANGE,
+      range: PhotonDetector.RATE_RANGE,
       tandem: options.displayMode === 'rate' ?
               options.tandem.createTandem( 'detectionRateProperty' ) :
               Tandem.OPT_OUT,
@@ -100,7 +101,7 @@ class PhotonDetector extends PhetioObject implements TPhotonInteraction {
     } );
 
     this.detectionCountProperty = new NumberProperty( 0, {
-      range: COUNT_RANGE,
+      range: PhotonDetector.COUNT_RANGE,
       tandem: options.displayMode === 'count' ?
               options.tandem.createTandem( 'detectionCountProperty' ) :
               Tandem.OPT_OUT,

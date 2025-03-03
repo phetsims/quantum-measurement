@@ -31,7 +31,7 @@ import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioS
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
-import PhotonDetector, { COUNT_RANGE, DetectionDirection, RATE_RANGE } from '../model/PhotonDetector.js';
+import PhotonDetector, { DetectionDirection } from '../model/PhotonDetector.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhotonDetectorNodeOptions = SelfOptions & PickRequired<NodeOptions, 'tandem'>;
@@ -233,7 +233,7 @@ class PhotonCountDisplay extends HBox {
     } );
 
     // Create a NumberDisplay that will show the count.
-    const numberDisplay = new NumberDisplay( photonCountProperty, COUNT_RANGE, {
+    const numberDisplay = new NumberDisplay( photonCountProperty, PhotonDetector.COUNT_RANGE, {
       align: 'center',
       backgroundFill: QuantumMeasurementColors.photonDetectorBodyColorProperty.value.withAlpha( 0.1 ),
       backgroundStroke: null,
@@ -281,7 +281,7 @@ class PhotonRateDisplay extends NumberDisplay {
                       maxWidth: number,
                       center: Vector2 ) {
 
-    super( photonRateProperty, RATE_RANGE, {
+    super( photonRateProperty, PhotonDetector.RATE_RANGE, {
       valuePattern: QuantumMeasurementStrings.eventsPerSecondPatternStringProperty,
       align: 'center',
       center: center,

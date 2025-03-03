@@ -26,9 +26,9 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import ExperimentModeValues from './ExperimentModeValues.js';
 import Laser from './Laser.js';
 import Mirror from './Mirror.js';
-import Photon, { PHOTON_SPEED } from './Photon.js';
+import Photon from './Photon.js';
 import { PhotonCollection } from './PhotonCollection.js';
-import PhotonDetector, { COUNT_RANGE } from './PhotonDetector.js';
+import PhotonDetector from './PhotonDetector.js';
 import { PhotonMotionState } from './PhotonMotionState.js';
 import { PhotonInteractionTestResult, PhotonInteractionValues } from './PhotonsModel.js';
 import PolarizingBeamSplitter from './PolarizingBeamSplitter.js';
@@ -295,7 +295,7 @@ class PhotonsExperimentSceneModel {
 
               // This photon state was reflected.  First step it to the reflection point.
               const dtToReflectionPoint =
-                photonMotionState.position.distance( interaction.reflectionInfo!.reflectionPoint ) / PHOTON_SPEED;
+                photonMotionState.position.distance( interaction.reflectionInfo!.reflectionPoint ) / Photon.PHOTON_SPEED;
               assert && assert( dtToReflectionPoint <= dt );
               photonMotionState.step( dtToReflectionPoint );
 
@@ -311,7 +311,7 @@ class PhotonsExperimentSceneModel {
               assert && assert( photon.possibleMotionStates.length === 1, 'there should be 1 motion state' );
 
               // The resulting interaction was a split of the photon state.  First, step the state to the split point.
-              const dtToSplitPoint = photonMotionState.position.distance( interaction.splitInfo!.splitPoint ) / PHOTON_SPEED;
+              const dtToSplitPoint = photonMotionState.position.distance( interaction.splitInfo!.splitPoint ) / Photon.PHOTON_SPEED;
               assert && assert( dtToSplitPoint <= dt );
               photonMotionState.step( dtToSplitPoint );
 
@@ -338,7 +338,7 @@ class PhotonsExperimentSceneModel {
 
                 // The photon is being detected by this detector.
                 photon.setMotionStateProbability( photonMotionState, 1 );
-                detector.detectionCountProperty.value = Math.min( detector.detectionCountProperty.value + 1, COUNT_RANGE.max );
+                detector.detectionCountProperty.value = Math.min( detector.detectionCountProperty.value + 1, PhotonDetector.COUNT_RANGE.max );
                 detector.detectionRateProperty.countEvent();
               }
               else {

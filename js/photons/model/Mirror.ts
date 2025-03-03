@@ -13,7 +13,7 @@ import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import Photon, { DOWN } from './Photon.js';
+import Photon from './Photon.js';
 import { PhotonMotionState } from './PhotonMotionState.js';
 import { PhotonInteractionTestResult, PhotonInteractionValues } from './PhotonsModel.js';
 import { TPhotonInteraction } from './TPhotonInteraction.js';
@@ -65,7 +65,7 @@ export default class Mirror implements TPhotonInteraction {
           interactionType: PhotonInteractionValues.REFLECTED,
           reflectionInfo: {
             reflectionPoint: photonIntersectionPoint,
-            reflectionDirection: DOWN
+            reflectionDirection: Photon.DOWN
           }
         } );
       }

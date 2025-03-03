@@ -17,7 +17,7 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import Photon, { RIGHT, UP } from './Photon.js';
+import Photon from './Photon.js';
 import { PhotonMotionState } from './PhotonMotionState.js';
 import { PhotonInteractionTestResult, PhotonInteractionValues } from './PhotonsModel.js';
 import { TPhotonInteraction } from './TPhotonInteraction.js';
@@ -84,7 +84,7 @@ class PolarizingBeamSplitter implements TPhotonInteraction {
               interactionType: PhotonInteractionValues.REFLECTED,
               reflectionInfo: {
                 reflectionPoint: photonIntersectionPoint,
-                reflectionDirection: UP
+                reflectionDirection: Photon.UP
               }
             } );
           }
@@ -99,11 +99,11 @@ class PolarizingBeamSplitter implements TPhotonInteraction {
               splitPoint: photonIntersectionPoint,
               splitStates: [
                 {
-                  direction: UP,
+                  direction: Photon.UP,
                   probability: probabilityOfReflection
                 },
                 {
-                  direction: RIGHT,
+                  direction: Photon.RIGHT,
                   probability: 1 - probabilityOfReflection
                 }
               ]

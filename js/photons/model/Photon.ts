@@ -14,14 +14,6 @@ import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { PhotonMotionState } from './PhotonMotionState.js';
 
-export const PHOTON_SPEED = 0.3; // meters per second
-
-// pre-fab unit vectors for the four cardinal directions
-export const UP = new Vector2( 0, 1 );
-export const DOWN = new Vector2( 0, -1 );
-export const LEFT = new Vector2( -1, 0 );
-export const RIGHT = new Vector2( 1, 0 );
-
 class Photon {
 
   // the angle of polarization for this photon, in degrees
@@ -31,6 +23,14 @@ class Photon {
   // can have more than one if it is in a superposition of states.  The probabilities of these states should always add
   // up to 1.  This array can be monitored outside of this class, but should only be modified through the methods.
   public readonly possibleMotionStates: PhotonMotionState[];
+
+  public static readonly PHOTON_SPEED = 0.3; // meters per second
+
+  // pre-fab unit vectors for the four cardinal directions
+  public static readonly UP = new Vector2( 0, 1 );
+  public static readonly DOWN = new Vector2( 0, -1 );
+  public static readonly LEFT = new Vector2( -1, 0 );
+  public static readonly RIGHT = new Vector2( 1, 0 );
 
   public constructor( polarizationAngle: number,
                       initialPosition: Vector2,

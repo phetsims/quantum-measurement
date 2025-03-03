@@ -21,7 +21,7 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import ExperimentModeValues from './ExperimentModeValues.js';
-import Photon, { PHOTON_SPEED, RIGHT } from './Photon.js';
+import Photon from './Photon.js';
 import { PhotonCollection } from './PhotonCollection.js';
 
 type SelfOptions = {
@@ -33,9 +33,6 @@ const PolarizationPresetValues = [ 'vertical', 'horizontal', 'fortyFiveDegrees',
 export type PolarizationPresets = ( typeof PolarizationPresetValues )[number];
 
 // constants
-
-// The width of the emitted photon beam, in meters, empirically determined.
-export const PHOTON_BEAM_WIDTH = 0.04;
 
 const MAX_PHOTON_EMISSION_RATE = 200; // photons per second
 const MAP_OF_PRESET_POLARIZATION_ANGLES = new Map<PolarizationPresets, number>(
@@ -52,13 +49,16 @@ class Laser extends PhetioObject {
   public readonly position: Vector2;
 
   // The direction in which the photons should be emitted, as a unit vector.
-  private readonly emissionDirection = RIGHT;
+  private readonly emissionDirection = Photon.RIGHT;
 
   // A flag that indicates whether photons should be emitted one at a time or in a continuous stream.
   public readonly emissionMode: ExperimentModeValues;
 
+  // The width of the emitted photon beam, in meters, empirically determined.
+  public static readonly PHOTON_BEAM_WIDTH = 0.04;
+
   // The width of the emitted photon beam, in meters.
-  private readonly emittedBeamWidth = PHOTON_BEAM_WIDTH;
+  private readonly emittedBeamWidth = Laser.PHOTON_BEAM_WIDTH;
 
   // The rate at which photons are emitted, in photons per second.
   public readonly emissionRateProperty: NumberProperty;
@@ -145,7 +145,7 @@ class Laser extends PhetioObject {
 
     // Randomize the x position of the emitted photon so that we don't have big clumps of photons when large dt values
     // occur.
-    const xOffset = dt * dotRandom.nextDouble() * PHOTON_SPEED;
+    const xOffset = dt * dotRandom.nextDouble() * Photon.PHOTON_SPEED;
 
     // Determine the polarization angle for the emitted photon.
     let polarizationAngle;

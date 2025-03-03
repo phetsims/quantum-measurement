@@ -28,9 +28,6 @@ import greenPhotonOutline_png from '../../../images/greenPhotonOutline_png.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import Photon from '../model/Photon.js';
 
-// constants
-export const TARGET_PHOTON_VIEW_WIDTH = 10; // in screen coords, empirically determined to match the design
-
 class PhotonSprites extends Sprites {
 
   private readonly spriteInstances: SpriteInstance[];
@@ -43,6 +40,8 @@ class PhotonSprites extends Sprites {
   // The sprites used to render the photons.
   private readonly photonInteriorSprite: Sprite | null = null;
   private photonOutlineSprite: Sprite | null = null;
+
+  public static readonly TARGET_PHOTON_VIEW_WIDTH = 10; // in screen coords, empirically determined to match the design
 
   public constructor( photons: Photon[], modelViewTransform: ModelViewTransform2, canvasBounds: Bounds2 ) {
 
@@ -73,7 +72,7 @@ class PhotonSprites extends Sprites {
     this.mutate( { sprites: [ this.photonInteriorSprite, this.photonOutlineSprite ] } );
 
     // Calculate the scale that will be used to render the photon interior.
-    this.photonScale = TARGET_PHOTON_VIEW_WIDTH / greenPhoton_png.width;
+    this.photonScale = PhotonSprites.TARGET_PHOTON_VIEW_WIDTH / greenPhoton_png.width;
 
     assert && assert(
     this.photonScale > 0 && this.photonScale < 100,
