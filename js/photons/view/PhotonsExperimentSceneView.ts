@@ -220,10 +220,7 @@ class PhotonsExperimentSceneView extends Node {
             normalizedOutcomeVectorGraph.showExpectationValueProperty,
             showDecimalValuesProperty
           ),
-          visibleProperty: new DerivedProperty(
-            [ model.normalizedExpectationValueProperty ],
-            expectationValue => expectationValue !== null
-          ),
+          visibleProperty: DerivedProperty.valueNotEqualsConstant( model.normalizedExpectationValueProperty, null ),
           tandemControlName: 'expectationValueControl'
         },
         {

@@ -110,7 +110,8 @@ export default class SpinStatePreparationArea extends VBox {
     const stateReadout = new RichText( stateReadoutStringProperty, { font: new PhetFont( 18 ) } );
 
     const probabilityControlBox = new VBox( {
-      visibleProperty: new DerivedProperty( [ model.currentExperimentProperty ], currentExperiment => currentExperiment === SpinExperiment.CUSTOM ),
+      visibleProperty: DerivedProperty.valueEqualsConstant(
+        model.currentExperimentProperty, SpinExperiment.CUSTOM ),
       children: [
         new ProbabilityValueControl(
           `|${MathSymbols.ALPHA}|<sup>2`,

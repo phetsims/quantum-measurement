@@ -42,18 +42,14 @@ class PhotonsScreenView extends QuantumMeasurementScreenView {
 
     // Create the views for the two scenes that can be shown on this screen.
     const singlePhotonExperimentSceneView = new PhotonsExperimentSceneView( model.singlePhotonSceneModel, {
-      visibleProperty: new DerivedProperty(
-        [ model.experimentModeProperty ],
-        experimentMode => experimentMode === ExperimentModeValues.SINGLE_PHOTON
-      ),
+      visibleProperty: DerivedProperty.valueEqualsConstant(
+        model.experimentModeProperty, ExperimentModeValues.SINGLE_PHOTON ),
       translation: sceneTranslation,
       tandem: tandem.createTandem( 'singlePhotonExperimentSceneView' )
     } );
     const manyPhotonsExperimentSceneView = new PhotonsExperimentSceneView( model.manyPhotonsExperimentSceneModel, {
-      visibleProperty: new DerivedProperty(
-        [ model.experimentModeProperty ],
-        experimentMode => experimentMode === ExperimentModeValues.MANY_PHOTONS
-      ),
+      visibleProperty: DerivedProperty.valueEqualsConstant(
+        model.experimentModeProperty, ExperimentModeValues.MANY_PHOTONS ),
       translation: sceneTranslation,
       tandem: tandem.createTandem( 'manyPhotonsExperimentSceneView' )
     } );

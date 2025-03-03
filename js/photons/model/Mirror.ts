@@ -9,9 +9,9 @@
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Line } from '../../../../kite/js/segments/Segment.js';
-import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
+import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import Photon from './Photon.js';
 import { PhotonMotionState } from './PhotonMotionState.js';
@@ -24,7 +24,7 @@ type MirrorOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 // constants
 const MIRROR_LENGTH = 0.095; // meters
 
-export default class Mirror implements TPhotonInteraction {
+export default class Mirror extends PhetioObject implements TPhotonInteraction {
 
   // The position of the center of the mirror in 2D space.  Units are in meters.
   public readonly centerPosition: Vector2;
@@ -33,6 +33,13 @@ export default class Mirror implements TPhotonInteraction {
   public readonly mirrorSurfaceLine: Line;
 
   public constructor( centerPosition: Vector2, providedOptions: MirrorOptions ) {
+
+    const options = optionize<MirrorOptions, SelfOptions, PhetioObjectOptions>()( {
+      phetioState: false
+    }, providedOptions );
+
+    super( options );
+
     this.centerPosition = centerPosition;
 
     // Initialize the line that represents the position of the mirror surface in the model.
