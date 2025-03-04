@@ -15,12 +15,12 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import LocalizedStringProperty from '../../../../chipper/js/browser/LocalizedStringProperty.js';
 import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox, { VBoxOptions } from '../../../../scenery/js/layout/nodes/VBox.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Checkbox, { CheckboxOptions } from '../../../../sun/js/Checkbox.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
 // types
@@ -38,7 +38,7 @@ export type AveragePolarizationCheckboxGroupItem = {
 const CHECKBOX_GROUP_SPACING = 10;
 const CHECKBOX_GROUP_POINTER_DILATION = CHECKBOX_GROUP_SPACING / 2;
 const COMMON_CHECKBOX_OPTIONS = {
-  boxWidth: 16,
+  boxWidth: QuantumMeasurementConstants.CHECKBOX_BOX_WIDTH,
   phetioVisiblePropertyInstrumented: false, // The enclosing control should be removed if the checkbox isn't desired.
   mouseAreaXDilation: CHECKBOX_GROUP_POINTER_DILATION,
   mouseAreaYDilation: CHECKBOX_GROUP_POINTER_DILATION,
@@ -46,7 +46,7 @@ const COMMON_CHECKBOX_OPTIONS = {
   touchAreaYDilation: CHECKBOX_GROUP_POINTER_DILATION
 };
 const CHECKBOX_LABEL_OPTIONS = {
-  font: new PhetFont( 14 ),
+  font: QuantumMeasurementConstants.CHECKBOX_LABEL_FONT,
   maxWidth: 200
 };
 const ALWAYS_TRUE_PROPERTY = new BooleanProperty( true );

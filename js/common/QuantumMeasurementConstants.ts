@@ -7,6 +7,7 @@
  */
 
 import ScreenView from '../../../joist/js/ScreenView.js';
+import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 import Color from '../../../scenery/js/util/Color.js';
 import { StateDirection } from '../bloch-sphere/model/StateDirection.js';
 import quantumMeasurement from '../quantumMeasurement.js';
@@ -25,6 +26,10 @@ const QuantumMeasurementConstants = {
   HBAR: '\u210F',
 
   MAX_PRECESSION_RATE: Math.PI / 2, // in radians per second
+
+  // common options for checkboxes
+  CHECKBOX_BOX_WIDTH: 16,
+  CHECKBOX_LABEL_FONT: new PhetFont( 14 ),
 
   expectedPercentagePathOptions: {
     stroke: QuantumMeasurementColors.expectedPercentageFillColorProperty,

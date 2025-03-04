@@ -200,7 +200,7 @@ export default class SpinMeasurementArea extends VBox {
       new HBox( {
         children: [
           new Text( QuantumMeasurementStrings.expectedPercentageStringProperty, {
-            font: new PhetFont( 14 ),
+            font: QuantumMeasurementConstants.CHECKBOX_LABEL_FONT,
             maxWidth: 200
           } ),
           new Path( new Shape().moveTo( 0, 0 ).lineTo( 20, 0 ),
@@ -210,7 +210,7 @@ export default class SpinMeasurementArea extends VBox {
         spacing: 5
       } ),
       {
-        boxWidth: 16,
+        boxWidth: QuantumMeasurementConstants.CHECKBOX_BOX_WIDTH,
         left: particleSourceNode.left,
         top: particleSourceNode.bottom + 30,
         visibleProperty: new GatedVisibleProperty( new DerivedProperty(
