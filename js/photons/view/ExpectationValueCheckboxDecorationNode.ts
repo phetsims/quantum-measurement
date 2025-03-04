@@ -32,6 +32,7 @@ export default class ExpectationValueCheckboxDecorationNode extends HBox {
       normalizedExpectationValueProperty,
       new Range( -1, 1 ),
       {
+        yMargin: 0,
         decimalPlaces: 2,
         backgroundStroke: null,
         visibleProperty: DerivedProperty.and( [ expectationValueLineVisibleProperty, showReadoutProperty ] ),
@@ -43,7 +44,6 @@ export default class ExpectationValueCheckboxDecorationNode extends HBox {
 
     super( {
       children: [ lineIcon, expectationValueDisplay ],
-      excludeInvisibleChildrenFromBounds: false,
       spacing: 3
     } );
   }
