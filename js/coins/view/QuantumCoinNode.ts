@@ -18,13 +18,7 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
 import CoinNode, { CoinFaceParameters } from './CoinNode.js';
 
-const ARROW_LENGTH = 20;
-const ARROW_NODE_COMMON_OPTIONS: ArrowNodeOptions = {
-  headHeight: ARROW_LENGTH / 5,
-  headWidth: ARROW_LENGTH / 3,
-  tailWidth: ARROW_LENGTH / 18
-};
-const MIN_MARGIN_FACTOR = 0.3;
+const MIN_MARGIN_FACTOR = 0.35;
 
 export default class QuantumCoinNode extends CoinNode {
 
@@ -35,10 +29,20 @@ export default class QuantumCoinNode extends CoinNode {
                       radius: number,
                       tandem: Tandem ) {
 
+    // Calculate the attributes for the arrow that will be used to represent the coin faces based on the coin radius.
+    // The values here were empirically determined to look good.
+    const arrowLength = radius * 1.2;
+    const arrowNodeCommonOptions: ArrowNodeOptions = {
+      headHeight: arrowLength / 3.5,
+      headWidth: arrowLength / 1.75,
+      tailWidth: arrowLength / 7,
+      stroke: null
+    };
+
     const upFaceOptions: CoinFaceParameters = {
       fill: QuantumMeasurementColors.upFillColorProperty,
       stroke: QuantumMeasurementColors.upColorProperty,
-      content: new ArrowNode( 0, 0, 0, ARROW_LENGTH, combineOptions<ArrowNodeOptions>( ARROW_NODE_COMMON_OPTIONS, {
+      content: new ArrowNode( 0, arrowLength, 0, 0, combineOptions<ArrowNodeOptions>( arrowNodeCommonOptions, {
         fill: QuantumMeasurementColors.upColorProperty
       } ) ),
       minYMarginFactor: MIN_MARGIN_FACTOR
@@ -47,8 +51,8 @@ export default class QuantumCoinNode extends CoinNode {
     const downFaceOptions: CoinFaceParameters = {
       fill: QuantumMeasurementColors.downFillColorProperty,
       stroke: QuantumMeasurementColors.downColorProperty,
-      content: new ArrowNode( 0, ARROW_LENGTH, 0, 0, combineOptions<ArrowNodeOptions>( ARROW_NODE_COMMON_OPTIONS, {
-        fill: QuantumMeasurementColors.upColorProperty
+      content: new ArrowNode( 0, 0, 0, arrowLength, combineOptions<ArrowNodeOptions>( arrowNodeCommonOptions, {
+        fill: QuantumMeasurementColors.downColorProperty
       } ) ),
       minYMarginFactor: MIN_MARGIN_FACTOR
     };
