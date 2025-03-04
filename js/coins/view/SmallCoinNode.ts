@@ -16,16 +16,16 @@ import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Circle from '../../../../scenery/js/nodes/Circle.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
-import Text from '../../../../scenery/js/nodes/Text.js';
+import RichText from '../../../../scenery/js/nodes/RichText.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
-import { MEASUREMENT_PREPARATION_TIME } from '../model/CoinSet.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
+import { MEASUREMENT_PREPARATION_TIME } from '../model/CoinSet.js';
 import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -61,11 +61,11 @@ class SmallCoinNode extends Node {
     } );
 
     // Create the up and down arrows as Text nodes.
-    const upArrow = new Text( QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER, {
+    const upArrow = new RichText( QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER, {
       fill: UP_COLOR_PROPERTY,
       font: DEFAULT_ARROW_FONT
     } );
-    const downArrow = new Text( QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER, {
+    const downArrow = new RichText( QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER, {
       fill: DOWN_COLOR_PROPERTY,
       font: DEFAULT_ARROW_FONT
     } );
