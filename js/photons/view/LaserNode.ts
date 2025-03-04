@@ -58,7 +58,7 @@ export default class LaserNode extends Node {
       } ) );
     }
     else {
-      const sliderDelta = 10;
+      const sliderStep = 10;
       const emissionRateSlider = new HSlider( model.emissionRateProperty, model.emissionRateProperty.range, {
         trackSize: new Dimension2( LASER_BODY_SIZE.width * 0.67, 2 ),
         trackStroke: Color.DARK_GRAY,
@@ -67,14 +67,14 @@ export default class LaserNode extends Node {
         thumbFill: QuantumMeasurementColors.photonBaseColorProperty,
         thumbFillHighlighted: 'rgb( 0, 200, 0)',
         centerX: -( NOZZLE_SIZE.width + LASER_BODY_SIZE.width / 2 ),
-        keyboardStep: sliderDelta,
-        shiftKeyboardStep: sliderDelta / 10,
-        pageKeyboardStep: sliderDelta * 5,
-        roundToStepSize: true,
-        constrainValue: value => roundToInterval( value, sliderDelta ),
         tandem: providedOptions.tandem.createTandem( 'emissionRateSlider' ),
+
+        constrainValue: value => roundToInterval( value, sliderStep ),
+        keyboardStep: sliderStep,
+        shiftKeyboardStep: sliderStep / 10,
+        pageKeyboardStep: sliderStep * 5,
         valueChangeSoundGeneratorOptions: {
-          numberOfMiddleThresholds: model.emissionRateProperty.range.getLength() / sliderDelta - 1
+          numberOfMiddleThresholds: model.emissionRateProperty.range.getLength() / sliderStep - 1
         }
       } );
       laserPointerNodeChildren.push( emissionRateSlider );

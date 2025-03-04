@@ -125,6 +125,7 @@ export default class ParticleSourceNode extends Node {
       trackSize: new Dimension2( PARTICLE_SOURCE_WIDTH * 0.7, 1 ),
       tandem: particleAmountSliderTandem,
       majorTickLength: 15,
+
       constrainValue: value => roundToInterval( value, sliderStep ),
       keyboardStep: sliderStep,
       shiftKeyboardStep: sliderStep,

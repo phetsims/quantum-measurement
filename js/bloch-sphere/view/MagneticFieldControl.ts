@@ -78,6 +78,7 @@ export default class MagneticFieldControl extends Panel {
       resize: false
     } );
 
+    const sliderStep = 0.25;
     const magneticFieldStrengthSlider = new Slider( magneticFieldStrengthProperty, magneticFieldStrengthProperty.range, {
       tandem: providedOptions.tandem.createTandem( 'magneticFieldStrengthSlider' ),
       thumbSize: new Dimension2( 28, 14 ),
@@ -86,9 +87,16 @@ export default class MagneticFieldControl extends Panel {
       thumbCenterLineStroke: Color.BLACK,
       trackSize: SLIDER_TRACK_SIZE,
       trackFillEnabled: Color.BLACK,
-      constrainValue: value => roundToInterval( value, 0.25 ),
       orientation: Orientation.VERTICAL,
-      majorTickLength: 20
+      majorTickLength: 20,
+
+      constrainValue: value => roundToInterval( value, sliderStep ),
+      keyboardStep: sliderStep,
+      shiftKeyboardStep: sliderStep,
+      pageKeyboardStep: sliderStep * 2,
+      valueChangeSoundGeneratorOptions: {
+        numberOfMiddleThresholds: magneticFieldStrengthProperty.range.getLength() / sliderStep - 1
+      }
     } );
     magneticFieldStrengthSlider.addMajorTick( -1 );
     magneticFieldStrengthSlider.addMajorTick( 1 );

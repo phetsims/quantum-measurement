@@ -89,14 +89,19 @@ export default class MeasurementTimerControl extends Node {
     thumbNode.addInputListener( pressListener );
 
     // Create the slider that will control the time at which the system is measured.
-    const maxMeasurementTime = timeToMeasurementProperty.rangeProperty.value.max;
     const minMeasurementTime = timeToMeasurementProperty.rangeProperty.value.getLength() / ( NUMBER_OF_MINOR_TICKS + 1 );
+    const maxMeasurementTime = timeToMeasurementProperty.rangeProperty.value.max;
+    const sliderStep = timeToMeasurementProperty.range.getLength() / 8;
     const timeToMeasurementSlider = new Slider( timeToMeasurementProperty, timeToMeasurementProperty.range, {
       tandem: sliderTandem,
       thumbNode: thumbNode,
       thumbYOffset: thumbOffset - 8,
       trackSize: SLIDER_TRACK_SIZE,
       trackFillEnabled: Color.BLACK,
+      orientation: Orientation.HORIZONTAL,
+      majorTickLength: 10,
+      minorTickLength: 5,
+
       constrainValue: value => {
         const roundedValue = roundToInterval(
           value,
@@ -104,9 +109,12 @@ export default class MeasurementTimerControl extends Node {
         );
         return Math.max( minMeasurementTime, roundedValue );
       },
-      orientation: Orientation.HORIZONTAL,
-      majorTickLength: 10,
-      minorTickLength: 5
+      keyboardStep: sliderStep,
+      shiftKeyboardStep: sliderStep,
+      pageKeyboardStep: sliderStep * 2,
+      valueChangeSoundGeneratorOptions: {
+        numberOfMiddleThresholds: timeToMeasurementProperty.range.getLength() / sliderStep - 1
+      }
     } );
 
     // Add the major and minor tick marks to the slider.

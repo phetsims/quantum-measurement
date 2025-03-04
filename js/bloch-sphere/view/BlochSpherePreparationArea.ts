@@ -48,7 +48,9 @@ export default class BlochSpherePreparationArea extends VBox {
         tandem: providedOptions.tandem.createTandem( 'polarSlider' ),
         trackSize: new Dimension2( 150, 0.5 ),
         majorTickLength: 10,
+
         constrainValue: value => roundToInterval( value, sliderStep ),
+        keyboardStep: sliderStep,
         shiftKeyboardStep: sliderStep,
         pageKeyboardStep: sliderStep * 3,
         valueChangeSoundGeneratorOptions: {
@@ -64,7 +66,9 @@ export default class BlochSpherePreparationArea extends VBox {
         tandem: providedOptions.tandem.createTandem( 'azimuthSlider' ),
         trackSize: new Dimension2( 150, 0.5 ),
         majorTickLength: 10,
+
         constrainValue: value => roundToInterval( value, sliderStep ),
+        keyboardStep: sliderStep,
         shiftKeyboardStep: sliderStep,
         pageKeyboardStep: sliderStep * 3,
         valueChangeSoundGeneratorOptions: {
