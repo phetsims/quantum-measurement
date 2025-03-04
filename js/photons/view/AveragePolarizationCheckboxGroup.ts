@@ -35,7 +35,7 @@ export type AveragePolarizationCheckboxGroupItem = {
 };
 
 // constants
-const CHECKBOX_GROUP_SPACING = 8;
+const CHECKBOX_GROUP_SPACING = 10;
 const CHECKBOX_GROUP_POINTER_DILATION = CHECKBOX_GROUP_SPACING / 2;
 const COMMON_CHECKBOX_OPTIONS = {
   boxWidth: 16,
