@@ -43,6 +43,7 @@ export default class ExpectationValueCheckboxDecorationNode extends HBox {
 
     super( {
       children: [ lineIcon, expectationValueDisplay ],
+      excludeInvisibleChildrenFromBounds: false,
       spacing: 3
     } );
   }
