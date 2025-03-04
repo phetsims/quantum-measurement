@@ -130,7 +130,7 @@ type StringsType = {
         'coinStates': {
           'headsStringProperty': LocalizedStringProperty;
           'tailsStringProperty': LocalizedStringProperty;
-          'superposedStringProperty': LocalizedStringProperty;
+          'superpositionStringProperty': LocalizedStringProperty;
           'upStringProperty': LocalizedStringProperty;
           'downStringProperty': LocalizedStringProperty;
         };

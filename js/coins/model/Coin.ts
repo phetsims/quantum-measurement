@@ -2,7 +2,7 @@
 
 /**
  * The Coin class is a model for a classical or quantum coin whose face can be in one of two states or, in the quantum
- * case, also in a superposed state.  The coin can be prepared for measurement (similar to flipping a coin) and then
+ * case, also in a superposition state.  The coin can be prepared for measurement (similar to flipping a coin) and then
  * measured (similar to reading how the flip turned out).
  *
  * The Coin class is implemented as a specialization of the CoinSet class with a single coin.  This is done for
@@ -17,8 +17,8 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import { CoinStates } from './CoinStates.js';
 import CoinSet, { CoinSetOptions } from './CoinSet.js';
+import { CoinStates } from './CoinStates.js';
 
 type SelfOptions = EmptySelfOptions;
 type CoinOptions = SelfOptions & CoinSetOptions;

@@ -88,8 +88,8 @@ export default class InitialCoinStateSelectorNode extends VBox {
     }
     else {
 
-      // The user isn't allowed to directly select the 'superposed' state, so we don't include it in the list.
-      const collapsedQuantumCoinStateValues = QuantumCoinStateValues.filter( stateValue => stateValue !== 'superposed' );
+      // The user isn't allowed to directly select the 'superposition' state, so we don't include it in the list.
+      const collapsedQuantumCoinStateValues = QuantumCoinStateValues.filter( stateValue => stateValue !== 'superposition' );
       initialCoinStateItems = collapsedQuantumCoinStateValues.map( stateValue => {
         return {
           value: stateValue,
@@ -159,11 +159,11 @@ export default class InitialCoinStateSelectorNode extends VBox {
         Tandem.OPT_OUT
       );
 
-      // Setting the quantum coin initial state to superposed if the probability is not deterministic
+      // Setting the quantum coin initial state to superposition if the probability is not deterministic
       // This has to be done AFTER the creation of radio buttons because they need to be associated to a
       // valid value
       if ( ( upProbabilityProperty.value !== 1 ) && ( upProbabilityProperty.value !== 0 ) ) {
-        initialCoinStateProperty.value = 'superposed';
+        initialCoinStateProperty.value = 'superposition';
       }
     }
 

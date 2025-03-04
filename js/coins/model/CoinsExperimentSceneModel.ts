@@ -168,9 +168,9 @@ class CoinsExperimentSceneModel extends PhetioObject {
       else {
 
         // The scene is moving from preparation mode to measurement mode. Set the coins to be in the initial state
-        // chosen by the user.  If these are quantum coins and the initial state is set to superposed, set an arbitrary
+        // chosen by the user.  If these are quantum coins and the initial state is set to superposition, set an arbitrary
         // initial state.  This is okay because the values won't be shown to the user.
-        const initialState: CoinStates = this.initialCoinFaceStateProperty.value === 'superposed' ?
+        const initialState: CoinStates = this.initialCoinFaceStateProperty.value === 'superposition' ?
                                          'up' :
                                          this.initialCoinFaceStateProperty.value;
         this.singleCoin.setMeasurementValuesImmediate( initialState );
@@ -182,14 +182,14 @@ class CoinsExperimentSceneModel extends PhetioObject {
     // sets up the listeners that will make this happen.
     if ( this.systemType === SystemType.QUANTUM ) {
       this.initialCoinFaceStateProperty.lazyLink( initialCoinState => {
-        if ( initialCoinState !== 'superposed' ) {
+        if ( initialCoinState !== 'superposition' ) {
           this.upProbabilityProperty.value = initialCoinState === 'up' ? 1 : 0;
         }
       } );
 
       this.upProbabilityProperty.lazyLink( bias => {
         if ( bias !== 0 && bias !== 1 ) {
-          this.initialCoinFaceStateProperty.value = 'superposed';
+          this.initialCoinFaceStateProperty.value = 'superposition';
         }
         else {
           this.initialCoinFaceStateProperty.value = bias === 1 ? 'up' : 'down';

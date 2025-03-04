@@ -2,7 +2,7 @@
 
 /**
  * CoinSet models a set of classical or quantum coins.  The face of each of these coins can be in one of two states or,
- * in the quantum case, in a superposed state.  The coin set can be prepared for measurement (similar to flipping all
+ * in the quantum case, in a superposition state.  The coin set can be prepared for measurement (similar to flipping all
  * the coins at once) and subsequently measured (similar to reading how the flips turned out).
  *
  * @author John Blanco (PhET Interactive Simulations)
@@ -48,7 +48,7 @@ export const MEASUREMENT_PREPARATION_TIME = 1;
 // Valid values for the coin faces for each system type.
 const MAP_OF_VALID_VALUES_FOR_COIN_TYPE = new Map<SystemType, CoinStates[]>( [
   [ SystemType.CLASSICAL, [ ...ClassicalCoinStateValues ] ],
-  [ SystemType.QUANTUM, QuantumCoinStateValues.filter( stateValue => stateValue !== 'superposed' ) ]
+  [ SystemType.QUANTUM, QuantumCoinStateValues.filter( stateValue => stateValue !== 'superposition' ) ]
 ] );
 
 class CoinSet extends PhetioObject {
@@ -224,7 +224,7 @@ class CoinSet extends PhetioObject {
 
   /**
    * Prepare this system to be measured. This is analogous to initiating the flipping of a classical coin or setting up
-   * a quantum system into a superposed state. After a timeout, this system will transition to a state where it is
+   * a quantum system into a superposition state. After a timeout, this system will transition to a state where it is
    * ready to be measured.
    */
   public prepare( revealWhenPrepared = false ): void {

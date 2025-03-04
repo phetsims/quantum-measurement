@@ -192,7 +192,7 @@ class SingleCoinViewManager {
 
           if ( sceneModel.systemType === SystemType.QUANTUM ) {
 
-            // "Collapse" the state of the coin node so that it shows a single state, not a superposed one.
+            // "Collapse" the state of the coin node so that it shows a single state, not a superposition one.
             const quantumCoinNode = singleCoinNode as QuantumCoinNode;
             quantumCoinNode.showSuperpositionProperty.value = false;
             sceneModel.singleCoin.prepareNow();

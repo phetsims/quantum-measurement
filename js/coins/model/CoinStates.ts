@@ -26,7 +26,7 @@ export const CoinStatesAccessibleNameMap = {
   tails: QuantumMeasurementStrings.a11y.translatable.coinsScreen.coinStates.tailsStringProperty,
   up: QuantumMeasurementStrings.a11y.translatable.coinsScreen.coinStates.upStringProperty,
   down: QuantumMeasurementStrings.a11y.translatable.coinsScreen.coinStates.downStringProperty,
-  superposed: QuantumMeasurementStrings.a11y.translatable.coinsScreen.coinStates.superposedStringProperty
+  superposition: QuantumMeasurementStrings.a11y.translatable.coinsScreen.coinStates.superpositionStringProperty
 };
 
 // TODO: Wondering about a better pattern for this, see https://github.com/phetsims/quantum-measurement/issues/92
