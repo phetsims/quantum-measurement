@@ -77,7 +77,7 @@ class PhotonsExperimentSceneModel {
   // Whether the photons behave as classical or quantum particles. When they are classical, they will choose a path
   // at the beam splitter. When they are quantum, they will be in a superposition of states after the beam splitter and
   // will collapse to a specific location at the detectors.
-  public readonly particleBehaviorModeProperty: Property<SystemType>;
+  public readonly photonBehaviorModeProperty: Property<SystemType>;
 
   // Whether the probability accordion box is expanded
   public readonly isProbabilityAccordionExpandedProperty: BooleanProperty;
@@ -95,12 +95,12 @@ class PhotonsExperimentSceneModel {
     // construction time and activated and deactivated as needed, rather than creating and destroying them.
     this.photonCollection = new PhotonCollection( experimentTandem.createTandem( 'photonCollection' ) );
 
-    this.particleBehaviorModeProperty = new EnumerationProperty( SystemType.CLASSICAL, {
-      tandem: experimentTandem.createTandem( 'particleBehaviorModeProperty' ),
+    this.photonBehaviorModeProperty = new EnumerationProperty( SystemType.CLASSICAL, {
+      tandem: experimentTandem.createTandem( 'photonBehaviorModeProperty' ),
       phetioFeatured: true
     } );
 
-    this.particleBehaviorModeProperty.link( () => {
+    this.photonBehaviorModeProperty.link( () => {
       if ( !isSettingPhetioStateProperty.value ) {
         this.photonCollection.clear();
       }
@@ -109,7 +109,7 @@ class PhotonsExperimentSceneModel {
     // The polarizing beam splitter that the photons will encounter.  This is in the middle of the model, everything
     // else is positioned around it.
     this.polarizingBeamSplitter = new PolarizingBeamSplitter( Vector2.ZERO, {
-      particleBehaviorModeProperty: this.particleBehaviorModeProperty,
+      photonBehaviorModeProperty: this.photonBehaviorModeProperty,
       tandem: experimentTandem.createTandem( 'polarizingBeamSplitter' )
     } );
 
@@ -238,7 +238,7 @@ class PhotonsExperimentSceneModel {
     this.horizontalPolarizationDetector.reset();
     this.isPlayingProperty.reset();
     this.timeSpeedProperty.reset();
-    this.particleBehaviorModeProperty.reset();
+    this.photonBehaviorModeProperty.reset();
     this.isProbabilityAccordionExpandedProperty.reset();
   }
 

@@ -86,7 +86,8 @@ class AveragePolarizationCheckboxGroup extends VBox {
             visibleProperty: checkboxGroupItem.visibleProperty ?
                              new GatedVisibleProperty( checkboxGroupItem.visibleProperty, checkboxTandem ) :
                              ALWAYS_TRUE_PROPERTY,
-            tandem: checkboxTandem
+            tandem: checkboxTandem,
+            containerTagName: 'li'
           },
           COMMON_CHECKBOX_OPTIONS
         )
@@ -100,7 +101,8 @@ class AveragePolarizationCheckboxGroup extends VBox {
       children: checkboxes,
       align: 'left',
       spacing: CHECKBOX_GROUP_SPACING,
-      tandem: providedOptions.tandem
+      tandem: providedOptions.tandem,
+      tagName: 'ul'
     }, providedOptions );
 
     super( options );

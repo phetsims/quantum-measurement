@@ -23,7 +23,7 @@ import { PhotonInteractionTestResult, PhotonInteractionValues } from './PhotonsM
 import { TPhotonInteraction } from './TPhotonInteraction.js';
 
 type SelfOptions = {
-  particleBehaviorModeProperty: TReadOnlyProperty<SystemType>;
+  photonBehaviorModeProperty: TReadOnlyProperty<SystemType>;
 };
 type PolarizingBeamSplitterOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
@@ -39,11 +39,11 @@ class PolarizingBeamSplitter implements TPhotonInteraction {
   public readonly polarizingSurfaceLine: Line;
 
   // A flag that indicates whether to collapse the interacting photons, which represents the classical case.
-  public readonly particleBehaviorModeProperty: TReadOnlyProperty<SystemType>;
+  public readonly photonBehaviorModeProperty: TReadOnlyProperty<SystemType>;
 
   public constructor( centerPosition: Vector2, providedOptions: PolarizingBeamSplitterOptions ) {
     this.centerPosition = centerPosition;
-    this.particleBehaviorModeProperty = providedOptions.particleBehaviorModeProperty;
+    this.photonBehaviorModeProperty = providedOptions.photonBehaviorModeProperty;
 
     // Initialize the line that represents the position of the beam splitter in the model.
     const endpoint1 = new Vector2( centerPosition.x - this.size.width / 2, centerPosition.y - this.size.height / 2 );
@@ -74,7 +74,7 @@ class PolarizingBeamSplitter implements TPhotonInteraction {
         const angleInRadians = toRadians( photon.polarizationAngle );
         const probabilityOfReflection = 1 - Math.pow( Math.cos( angleInRadians ), 2 );
 
-        if ( this.particleBehaviorModeProperty.value === SystemType.CLASSICAL ) {
+        if ( this.photonBehaviorModeProperty.value === SystemType.CLASSICAL ) {
 
           // This is the classical case, where photons "choose" a path at the beam splitter.
           if ( dotRandom.nextDouble() <= probabilityOfReflection ) {

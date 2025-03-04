@@ -321,6 +321,14 @@
             "value": "Down"
           }
         }
+      },
+      "photonsScreen": {
+        "photonBehaviorMode": {
+          "value": "Behavior of Photons"
+        },
+        "emitPhotonButton": {
+          "value": "Photon Source"
+        }
       }
     },
     "coinsScreen": {

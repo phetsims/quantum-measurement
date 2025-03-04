@@ -48,9 +48,9 @@ class PhotonTestingArea extends Node {
       tandem: providedOptions.tandem.createTandem( 'laserNode' )
     } );
 
-    const particleBehaviorModeRadioButtonGroupTandem = providedOptions.tandem.createTandem( 'particleBehaviorModeRadioButtonGroup' );
-    const particleBehaviorModeRadioButtonGroup = new AquaRadioButtonGroup<SystemType>(
-      model.particleBehaviorModeProperty,
+    const photonBehaviorModeTandem = providedOptions.tandem.createTandem( 'photonBehaviorMode' );
+    const photonBehaviorModeRadioButtonGroup = new AquaRadioButtonGroup<SystemType>(
+      model.photonBehaviorModeProperty,
       SystemType.enumeration.values.map( behaviorMode => {
           return {
             value: behaviorMode,
@@ -65,21 +65,25 @@ class PhotonTestingArea extends Node {
       ),
       {
         spacing: 10,
-        tandem: particleBehaviorModeRadioButtonGroupTandem
+        tandem: photonBehaviorModeTandem.createTandem( 'photonBehaviorModeRadioButtonGroup' ),
+        phetioVisiblePropertyInstrumented: false
       }
     );
-    const particleBehaviorModeBox = new VBox( {
+    const photonBehaviorModeBox = new VBox( {
       spacing: 10,
       align: 'left',
       left: laserNode.left,
       bottom: laserNode.top - 15,
       phetioFeatured: true,
+      tandem: photonBehaviorModeTandem,
+      accessibleName: QuantumMeasurementStrings.a11y.translatable.photonsScreen.photonBehaviorModeStringProperty,
+      tagName: 'div',
       children: [
         new Text( QuantumMeasurementStrings.behaviorStringProperty, {
           font: new PhetFont( { size: 15, weight: 'bold' } ),
           maxWidth: 150
         } ),
-        particleBehaviorModeRadioButtonGroup
+        photonBehaviorModeRadioButtonGroup
       ]
     } );
 
@@ -105,7 +109,7 @@ class PhotonTestingArea extends Node {
 
     const options = optionize<PhotonTestingAreaOptions, SelfOptions, NodeOptions>()( {
       children: [
-        particleBehaviorModeBox,
+        photonBehaviorModeBox,
         laserNode,
         polarizingBeamSplitterNode,
         verticalPolarizationDetector,
@@ -125,6 +129,11 @@ class PhotonTestingArea extends Node {
     );
     this.addChild( this.photonSprites );
     this.photonSprites.moveToBack();
+
+    this.pdomOrder = [
+      laserNode,
+      photonBehaviorModeBox
+    ];
   }
 
   /**

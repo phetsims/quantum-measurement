@@ -134,6 +134,10 @@ type StringsType = {
           'upStringProperty': LocalizedStringProperty;
           'downStringProperty': LocalizedStringProperty;
         }
+      };
+      'photonsScreen': {
+        'photonBehaviorModeStringProperty': LocalizedStringProperty;
+        'emitPhotonButtonStringProperty': LocalizedStringProperty;
       }
     };
     'coinsScreen': {

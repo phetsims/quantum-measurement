@@ -272,6 +272,17 @@ class PhotonsExperimentSceneView extends Node {
     this.experimentArea = experimentArea;
     this.normalizedOutcomeVectorGraph = normalizedOutcomeVectorGraph;
     this.showDecimalValuesProperty = showDecimalValuesProperty;
+
+    this.pdomOrder = [
+      photonPolarizationAngleControl,
+      photonDetectionProbabilityAccordionBox,
+      experimentArea,
+      polarizationIndicator,
+      titleAndEquationsBox,
+      dynamicDataDisplayBox,
+      averagePolarizationCheckboxGroup,
+      timeControlNode
+    ];
   }
 
   public update(): void {
