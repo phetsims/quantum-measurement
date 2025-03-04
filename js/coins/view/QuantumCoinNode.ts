@@ -10,16 +10,21 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import RichText from '../../../../scenery/js/nodes/RichText.js';
+import { combineOptions } from '../../../../phet-core/js/optionize.js';
+import ArrowNode, { ArrowNodeOptions } from '../../../../scenery-phet/js/ArrowNode.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
-import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
 import CoinNode, { CoinFaceParameters } from './CoinNode.js';
 
-const FONT = new PhetFont( { size: 40, weight: 'bold' } );
+const ARROW_LENGTH = 20;
+const ARROW_NODE_COMMON_OPTIONS: ArrowNodeOptions = {
+  headHeight: ARROW_LENGTH / 5,
+  headWidth: ARROW_LENGTH / 3,
+  tailWidth: ARROW_LENGTH / 18
+};
+const MIN_MARGIN_FACTOR = 0.3;
 
 export default class QuantumCoinNode extends CoinNode {
 
@@ -33,19 +38,19 @@ export default class QuantumCoinNode extends CoinNode {
     const upFaceOptions: CoinFaceParameters = {
       fill: QuantumMeasurementColors.upFillColorProperty,
       stroke: QuantumMeasurementColors.upColorProperty,
-      content: new RichText( QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER, {
-        font: FONT,
+      content: new ArrowNode( 0, 0, 0, ARROW_LENGTH, combineOptions<ArrowNodeOptions>( ARROW_NODE_COMMON_OPTIONS, {
         fill: QuantumMeasurementColors.upColorProperty
-      } )
+      } ) ),
+      minYMarginFactor: MIN_MARGIN_FACTOR
     };
 
     const downFaceOptions: CoinFaceParameters = {
       fill: QuantumMeasurementColors.downFillColorProperty,
       stroke: QuantumMeasurementColors.downColorProperty,
-      content: new RichText( QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER, {
-        font: FONT,
-        fill: QuantumMeasurementColors.downColorProperty
-      } )
+      content: new ArrowNode( 0, ARROW_LENGTH, 0, 0, combineOptions<ArrowNodeOptions>( ARROW_NODE_COMMON_OPTIONS, {
+        fill: QuantumMeasurementColors.upColorProperty
+      } ) ),
+      minYMarginFactor: MIN_MARGIN_FACTOR
     };
 
     const showSuperpositionProperty = new BooleanProperty( true );

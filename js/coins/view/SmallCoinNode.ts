@@ -11,18 +11,16 @@ import Property from '../../../../axon/js/Property.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import ArrowNode, { ArrowNodeOptions } from '../../../../scenery-phet/js/ArrowNode.js';
 import Circle from '../../../../scenery/js/nodes/Circle.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
-import RichText from '../../../../scenery/js/nodes/RichText.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
-import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
 import { MEASUREMENT_PREPARATION_TIME } from '../model/CoinSet.js';
@@ -37,7 +35,6 @@ export type SmallCoinNodeOptions = SelfOptions & WithRequired<NodeOptions, 'tand
 export type SmallCoinDisplayMode = ClassicalCoinStates | QuantumCoinStates | 'masked';
 
 // constants
-const DEFAULT_ARROW_FONT = new PhetFont( { size: 8, weight: 'bold' } );
 const COIN_STROKE_COLOR_PROPERTY = QuantumMeasurementColors.coinStrokeColorProperty;
 const MASKED_FILL_COLOR_PROPERTY = QuantumMeasurementColors.maskedFillColorProperty;
 const HEADS_FILL_COLOR_PROPERTY = QuantumMeasurementColors.headsColorProperty;
@@ -60,22 +57,23 @@ class SmallCoinNode extends Node {
       lineWidth: Math.max( Math.floor( radius / 4 ), 1.5 )
     } );
 
-    // Create the up and down arrows as Text nodes.
-    const upArrow = new RichText( QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER, {
+    // Create the up and down arrows as ArrowNode instances.
+    const arrowLength = radius * 1.25;
+    const commonArrowOptions: ArrowNodeOptions = {
+      headHeight: arrowLength / 2,
+      headWidth: arrowLength / 1.5,
+      tailWidth: arrowLength / 5
+    };
+    const upArrow = new ArrowNode( 0, 0, 0, arrowLength, combineOptions<ArrowNodeOptions>( commonArrowOptions, {
+      stroke: null,
       fill: UP_COLOR_PROPERTY,
-      font: DEFAULT_ARROW_FONT
-    } );
-    const downArrow = new RichText( QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER, {
+      center: Vector2.ZERO
+    } ) );
+    const downArrow = new ArrowNode( 0, arrowLength, 0, 0, combineOptions<ArrowNodeOptions>( commonArrowOptions, {
+      stroke: null,
       fill: DOWN_COLOR_PROPERTY,
-      font: DEFAULT_ARROW_FONT
-    } );
-
-    // Scale the arrows to fit within the coin circle.
-    const arrowNodeScale = ( radius * 2 ) / upArrow.height;
-    upArrow.scale( arrowNodeScale );
-    upArrow.center = Vector2.ZERO;
-    downArrow.scale( arrowNodeScale );
-    downArrow.center = Vector2.ZERO;
+      center: Vector2.ZERO
+    } ) );
 
     const options = optionize<SmallCoinNodeOptions, SelfOptions, NodeOptions>()( {
       children: [ coinCircle, upArrow, downArrow ]
