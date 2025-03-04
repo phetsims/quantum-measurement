@@ -64,12 +64,12 @@ class SmallCoinNode extends Node {
       headWidth: arrowLength / 1.5,
       tailWidth: arrowLength / 5
     };
-    const upArrow = new ArrowNode( 0, 0, 0, arrowLength, combineOptions<ArrowNodeOptions>( commonArrowOptions, {
+    const upArrow = new ArrowNode( 0, arrowLength, 0, 0, combineOptions<ArrowNodeOptions>( commonArrowOptions, {
       stroke: null,
       fill: UP_COLOR_PROPERTY,
       center: Vector2.ZERO
     } ) );
-    const downArrow = new ArrowNode( 0, arrowLength, 0, 0, combineOptions<ArrowNodeOptions>( commonArrowOptions, {
+    const downArrow = new ArrowNode( 0, 0, 0, arrowLength, combineOptions<ArrowNodeOptions>( commonArrowOptions, {
       stroke: null,
       fill: DOWN_COLOR_PROPERTY,
       center: Vector2.ZERO
