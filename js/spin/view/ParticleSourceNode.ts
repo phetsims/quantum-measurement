@@ -120,6 +120,7 @@ export default class ParticleSourceNode extends Node {
     const particleAmountSliderTandem = tandem.createTandem( 'particleAmountSlider' );
     const particleAmountSlider = new HSlider( particleSourceModel.particleAmountProperty, sliderRange, {
       thumbFill: QuantumMeasurementColors.downColorProperty,
+      thumbFillHighlighted: QuantumMeasurementColors.downColorProperty.value.colorUtilsBrighter( 0.5 ),
       visibleProperty: new GatedVisibleProperty( particleSourceModel.isContinuousModeProperty, particleAmountSliderTandem ),
       center: particleSourceRectangle.center,
       trackSize: new Dimension2( PARTICLE_SOURCE_WIDTH * 0.7, 1 ),

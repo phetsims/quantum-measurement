@@ -143,7 +143,7 @@ export default class BlochSphereNode extends Node {
     const DOWN = QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER;
     const KET = QuantumMeasurementConstants.KET;
     const STATES_FONT = new PhetFont( { size: 18, weight: 'bold' } );
-    const upStateLabel = new RichText( `|${UP}<sub>Z</sub>${KET}`, {
+    const upStateLabel = new RichText( `|${UP}<sub>Z</sub> ${KET}`, {
       centerX: 0,
       centerY: -sphereRadius - 3 * LABELS_OFFSET,
       fill: 'black',
@@ -151,7 +151,7 @@ export default class BlochSphereNode extends Node {
       visible: options.drawKets
     } );
 
-    const downStateLabel = new RichText( `|${DOWN}<sub>Z</sub>${KET}`, {
+    const downStateLabel = new RichText( `|${DOWN}<sub>Z</sub> ${KET}`, {
       centerX: 0,
       centerY: sphereRadius + 3 * LABELS_OFFSET,
       fill: 'black',

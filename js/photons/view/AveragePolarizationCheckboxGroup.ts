@@ -38,6 +38,7 @@ export type AveragePolarizationCheckboxGroupItem = {
 const CHECKBOX_GROUP_SPACING = 8;
 const CHECKBOX_GROUP_POINTER_DILATION = CHECKBOX_GROUP_SPACING / 2;
 const COMMON_CHECKBOX_OPTIONS = {
+  boxWidth: 16,
   phetioVisiblePropertyInstrumented: false, // The enclosing control should be removed if the checkbox isn't desired.
   mouseAreaXDilation: CHECKBOX_GROUP_POINTER_DILATION,
   mouseAreaYDilation: CHECKBOX_GROUP_POINTER_DILATION,
@@ -82,7 +83,6 @@ class AveragePolarizationCheckboxGroup extends VBox {
         checkboxContent,
         combineOptions<CheckboxOptions>(
           {
-            boxWidth: 16,
             visibleProperty: checkboxGroupItem.visibleProperty ?
                              new GatedVisibleProperty( checkboxGroupItem.visibleProperty, checkboxTandem ) :
                              ALWAYS_TRUE_PROPERTY,

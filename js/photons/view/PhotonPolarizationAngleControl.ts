@@ -140,6 +140,8 @@ export default class PhotonPolarizationAngleControl extends Panel {
       trackFillEnabled: Color.BLACK,
       majorTickLength: 10,
       majorTickLineWidth: 1.5,
+      minorTickStroke: 'grey',
+      minorTickLength: 8,
       constrainValue: value => roundToInterval( value, basicStepSize ),
       keyboardStep: basicStepSize,
       shiftKeyboardStep: 1,
@@ -152,6 +154,7 @@ export default class PhotonPolarizationAngleControl extends Panel {
 
     // slider tick marks
     customAngleSlider.addMajorTick( 0, new Text( '0°', TICK_MARK_TEXT_OPTIONS ) );
+    _.times( 5, i => customAngleSlider.addMinorTick( ( i + 1 ) * 15 ) );
     customAngleSlider.addMajorTick( 90, new Text( '90°', TICK_MARK_TEXT_OPTIONS ) );
 
     // Assemble the title, radio button group, and slider into a VBox.

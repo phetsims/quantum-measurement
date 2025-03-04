@@ -151,11 +151,11 @@ export default class BlochSphereMeasurementArea extends Node {
 
     const spinUpLabelStringProperty = new DerivedStringProperty(
       [ model.measurementAxisProperty ],
-      measurementAxis => `|${UP}<sub>${measurementAxis.label}</sub>${KET}`
+      measurementAxis => `|${UP}<sub>${measurementAxis.label}</sub> ${KET}`
     );
     const spinDownLabelStringProperty = new DerivedStringProperty(
       [ model.measurementAxisProperty ],
-      measurementAxis => `|${DOWN}<sub>${measurementAxis.label}</sub>${KET}`
+      measurementAxis => `|${DOWN}<sub>${measurementAxis.label}</sub> ${KET}`
     );
 
     const measurementResultHistogramTandem = providedOptions.tandem.createTandem( 'measurementResultHistogram' );

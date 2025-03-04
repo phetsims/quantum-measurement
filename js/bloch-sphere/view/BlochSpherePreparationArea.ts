@@ -39,7 +39,7 @@ export default class BlochSpherePreparationArea extends VBox {
 
   public constructor( model: BlochSphereModel, parentNode: Node, providedOptions: BlochSpherePreparationAreaOptions ) {
 
-    const sliderStep = Math.PI / 18;
+    const sliderStep = Math.PI / 12;
     const polarSlider = new Slider(
       model.preparationBlochSphere.polarAngleProperty,
       model.preparationBlochSphere.polarAngleProperty.range,
@@ -48,6 +48,8 @@ export default class BlochSpherePreparationArea extends VBox {
         tandem: providedOptions.tandem.createTandem( 'polarSlider' ),
         trackSize: new Dimension2( 150, 0.5 ),
         majorTickLength: 10,
+        minorTickStroke: 'grey',
+        minorTickLength: 8,
 
         constrainValue: value => roundToInterval( value, sliderStep ),
         keyboardStep: sliderStep,
@@ -66,6 +68,8 @@ export default class BlochSpherePreparationArea extends VBox {
         tandem: providedOptions.tandem.createTandem( 'azimuthSlider' ),
         trackSize: new Dimension2( 150, 0.5 ),
         majorTickLength: 10,
+        minorTickStroke: 'grey',
+        minorTickLength: 8,
 
         constrainValue: value => roundToInterval( value, sliderStep ),
         keyboardStep: sliderStep,
@@ -78,9 +82,11 @@ export default class BlochSpherePreparationArea extends VBox {
     );
 
     polarSlider.addMajorTick( 0, new Text( '0', { font: new PhetFont( 15 ) } ) );
+    _.times( 3, i => polarSlider.addMinorTick( ( i + 1 ) * Math.PI / 4 ) );
     polarSlider.addMajorTick( Math.PI, new Text( `${MathSymbols.PI}`, { font: new PhetFont( 15 ) } ) );
 
     azimuthSlider.addMajorTick( 0, new Text( '0', { font: new PhetFont( 15 ) } ) );
+    _.times( 7, i => azimuthSlider.addMinorTick( ( i + 1 ) * Math.PI / 4 ) );
     azimuthSlider.addMajorTick( 2 * Math.PI, new Text( `2${MathSymbols.PI}`, { font: new PhetFont( 15 ) } ) );
 
     const comboBoxItems: ComboBoxItem<StateDirection>[] = StateDirection.enumeration.values.map( direction => {
