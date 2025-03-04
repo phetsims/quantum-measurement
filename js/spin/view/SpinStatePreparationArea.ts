@@ -190,6 +190,12 @@ export default class SpinStatePreparationArea extends VBox {
     this.boundsProperty.link( () => {
       this.top = layoutBounds.top + 50;
     } );
+
+    this.pdomOrder = [
+      spinStatePanel,
+      projectionCheckboxes,
+      probabilityControlBox
+    ];
   }
 }
 

@@ -251,6 +251,14 @@ export default class SpinMeasurementArea extends VBox {
       ]
     } );
 
+    experimentAreaNode.pdomOrder = [
+      particleSourceNode,
+      expectedPercentageCheckbox,
+      ...sternGerlachNodes,
+      ...measurementDevices,
+      ...histograms
+    ];
+
     super( {
       children: [
         experimentComboBox,
@@ -281,8 +289,8 @@ export default class SpinMeasurementArea extends VBox {
     this.manyParticlesCanvasNode = manyParticlesCanvasNode;
 
     this.pdomOrder = [
-      experimentComboBox,
-      experimentAreaNode
+      experimentAreaNode,
+      experimentComboBox
     ];
   }
 
