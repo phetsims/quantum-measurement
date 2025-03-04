@@ -88,10 +88,17 @@ export default class MeasurementTimerControl extends Node {
     } );
     thumbNode.addInputListener( pressListener );
 
+    const sliderStep = timeToMeasurementProperty.range.getLength() / 8;
+
+    // Function to constrain the value to intervals but don't allow it going under minMeasurementTime
+    const mappingValue = ( value: number ) => {
+      const roundedValue = roundToInterval( value, sliderStep );
+      return Math.max( minMeasurementTime, roundedValue );
+    };
+
     // Create the slider that will control the time at which the system is measured.
     const minMeasurementTime = timeToMeasurementProperty.rangeProperty.value.getLength() / ( NUMBER_OF_MINOR_TICKS + 1 );
     const maxMeasurementTime = timeToMeasurementProperty.rangeProperty.value.max;
-    const sliderStep = timeToMeasurementProperty.range.getLength() / 8;
     const timeToMeasurementSlider = new Slider( timeToMeasurementProperty, timeToMeasurementProperty.range, {
       tandem: sliderTandem,
       thumbNode: thumbNode,
@@ -102,13 +109,8 @@ export default class MeasurementTimerControl extends Node {
       majorTickLength: 10,
       minorTickLength: 5,
 
-      constrainValue: value => {
-        const roundedValue = roundToInterval(
-          value,
-          timeToMeasurementProperty.rangeProperty.value.max / ( NUMBER_OF_MINOR_TICKS + 1 )
-        );
-        return Math.max( minMeasurementTime, roundedValue );
-      },
+      constrainValue: mappingValue,
+      pdomMapValue: mappingValue,
       keyboardStep: sliderStep,
       shiftKeyboardStep: sliderStep,
       pageKeyboardStep: sliderStep * 2,
