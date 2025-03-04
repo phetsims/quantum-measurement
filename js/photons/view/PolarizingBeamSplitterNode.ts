@@ -56,7 +56,7 @@ export default class PolarizingBeamSplitterNode extends Node {
       maxWidth: 100,
       maxHeight: 50
     } );
-    QuantumMeasurementStrings.polarizingBeamSplitterStringProperty.link( () => {
+    label.localBoundsProperty.link( () => {
       label.centerX = lineNode.centerX;
       label.top = lineNode.bottom + 4;
     } );

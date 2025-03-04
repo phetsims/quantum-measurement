@@ -108,7 +108,7 @@ export default class ObliquePolarizationAngleIndicator extends Node {
       font: LABELS_FONT,
       maxWidth: 30
     } );
-    QuantumMeasurementStrings.VStringProperty.link( () => {
+    zAxisLabel.localBoundsProperty.link( () => {
       zAxisLabel.centerX = 0;
     } );
 
@@ -123,7 +123,7 @@ export default class ObliquePolarizationAngleIndicator extends Node {
       center: xAxisTipPosition.times( 1.4 ),
       maxWidth: 30
     } );
-    QuantumMeasurementStrings.HStringProperty.link( () => {
+    xAxisLabel.localBoundsProperty.link( () => {
       xAxisLabel.center = xAxisTipPosition.times( 1.4 );
     } );
 

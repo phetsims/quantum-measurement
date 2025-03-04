@@ -112,7 +112,7 @@ export default class PhotonDetectorNode extends Node {
       } );
 
       // Make sure the label stays centered over the body.
-      labelStringProperty.link( () => {
+      label.localBoundsProperty.link( () => {
         label.centerX = body.centerX;
         label.bottom = body.top - 5;
       } );
@@ -145,7 +145,7 @@ export default class PhotonDetectorNode extends Node {
       } );
 
       // Make sure the label stays centered over the body.
-      labelStringProperty.link( () => {
+      label.localBoundsProperty.link( () => {
         label.centerX = body.centerX;
         label.top = body.bottom + 5;
       } );
