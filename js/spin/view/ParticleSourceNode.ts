@@ -11,6 +11,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
+import { roundToInterval } from '../../../../dot/js/util/roundToInterval.js';
 import Shape from '../../../../kite/js/Shape.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -114,6 +115,7 @@ export default class ParticleSourceNode extends Node {
     } );
 
     // slider for 'continuous' mode
+    const sliderStep = 0.05;
     const sliderRange = particleSourceModel.particleAmountProperty.range;
     const particleAmountSliderTandem = tandem.createTandem( 'particleAmountSlider' );
     const particleAmountSlider = new HSlider( particleSourceModel.particleAmountProperty, sliderRange, {
@@ -122,7 +124,14 @@ export default class ParticleSourceNode extends Node {
       center: particleSourceRectangle.center,
       trackSize: new Dimension2( PARTICLE_SOURCE_WIDTH * 0.7, 1 ),
       tandem: particleAmountSliderTandem,
-      majorTickLength: 15
+      majorTickLength: 15,
+      constrainValue: value => roundToInterval( value, sliderStep ),
+      keyboardStep: sliderStep,
+      shiftKeyboardStep: sliderStep,
+      pageKeyboardStep: sliderStep * 5,
+      valueChangeSoundGeneratorOptions: {
+        numberOfMiddleThresholds: sliderRange.getLength() / sliderStep - 1
+      }
     } );
 
     // major ticks at 0%, 33%, 66%, 100%

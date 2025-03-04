@@ -72,7 +72,10 @@ export default class LaserNode extends Node {
         pageKeyboardStep: sliderDelta * 5,
         roundToStepSize: true,
         constrainValue: value => roundToInterval( value, sliderDelta ),
-        tandem: providedOptions.tandem.createTandem( 'emissionRateSlider' )
+        tandem: providedOptions.tandem.createTandem( 'emissionRateSlider' ),
+        valueChangeSoundGeneratorOptions: {
+          numberOfMiddleThresholds: model.emissionRateProperty.range.getLength() / sliderDelta - 1
+        }
       } );
       laserPointerNodeChildren.push( emissionRateSlider );
     }

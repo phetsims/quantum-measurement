@@ -39,6 +39,7 @@ export default class BlochSpherePreparationArea extends VBox {
 
   public constructor( model: BlochSphereModel, parentNode: Node, providedOptions: BlochSpherePreparationAreaOptions ) {
 
+    const sliderStep = Math.PI / 18;
     const polarSlider = new Slider(
       model.preparationBlochSphere.polarAngleProperty,
       model.preparationBlochSphere.polarAngleProperty.range,
@@ -47,8 +48,12 @@ export default class BlochSpherePreparationArea extends VBox {
         tandem: providedOptions.tandem.createTandem( 'polarSlider' ),
         trackSize: new Dimension2( 150, 0.5 ),
         majorTickLength: 10,
-        constrainValue: value => roundToInterval( value, 5 / 180 * Math.PI ), // 5 degree intervals
-        shiftKeyboardStep: 5 / 180 * Math.PI
+        constrainValue: value => roundToInterval( value, sliderStep ),
+        shiftKeyboardStep: sliderStep,
+        pageKeyboardStep: sliderStep * 3,
+        valueChangeSoundGeneratorOptions: {
+          numberOfMiddleThresholds: model.preparationBlochSphere.polarAngleProperty.range.getLength() / sliderStep - 1
+        }
       }
     );
     const azimuthSlider = new Slider(
@@ -59,8 +64,12 @@ export default class BlochSpherePreparationArea extends VBox {
         tandem: providedOptions.tandem.createTandem( 'azimuthSlider' ),
         trackSize: new Dimension2( 150, 0.5 ),
         majorTickLength: 10,
-        constrainValue: value => roundToInterval( value, 5 / 360 * Math.PI * 2 ), // 5 degree intervals
-        shiftKeyboardStep: 5 / 360 * Math.PI * 2
+        constrainValue: value => roundToInterval( value, sliderStep ),
+        shiftKeyboardStep: sliderStep,
+        pageKeyboardStep: sliderStep * 3,
+        valueChangeSoundGeneratorOptions: {
+          numberOfMiddleThresholds: model.preparationBlochSphere.azimuthalAngleProperty.range.getLength() / sliderStep - 1
+        }
       }
     );
 
