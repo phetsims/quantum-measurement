@@ -320,6 +320,50 @@
           "down": {
             "value": "Down"
           }
+        },
+        "probabilityNumberControls": {
+          "probabilityOfHeads": {
+            "value": "Probability of Heads"
+          },
+          "probabilityOfHeadsHelpText": {
+            "value": "Probability of flipped coin landing on heads"
+          },
+          "probabilityOfTails": {
+            "value": "Probability of Tails"
+          },
+          "probabilityOfTailsHelpText": {
+            "value": "Probability of flipped coin landing on tails"
+          },
+          "probabilityOfUp": {
+            "value": "Probability of Up, Alpha Squared"
+          },
+          "probabilityOfUpHelpText": {
+            "value": "Probability of flipped coin landing on up state"
+          },
+          "probabilityOfDown": {
+            "value": "Probability of Down, Beta Squared"
+          },
+          "probabilityOfDownHelpText": {
+            "value": "Probability of flipped coin landing on down state"
+          }
+        },
+        "initialOrientationHelpText": {
+          "value": "Coin orientation before flipping"
+        },
+        "startMeasurement": {
+          "value": "Start Measurement"
+        },
+        "startMeasurementHelpText": {
+          "value": "Prepare coins to be measured"
+        },
+        "prepareNewCoinHelpText": {
+          "value": "Button to prepare a new coin"
+        },
+        "identicalCoins": {
+          "value": "Identical Coins"
+        },
+        "identicalCoinsHelpText": {
+          "value": "Number of identical coins to prepare"
         }
       },
       "photonsScreen": {
@@ -329,52 +373,6 @@
         "emitPhotonButton": {
           "value": "Photon Source"
         }
-      }
-    },
-    "coinsScreen": {
-      "probabilityNumberControls": {
-        "probabilityOfHeads": {
-          "value": "Probability of Heads"
-        },
-        "probabilityOfHeadsHelpText": {
-          "value": "Probability of flipped coin landing on heads"
-        },
-        "probabilityOfTails": {
-          "value": "Probability of Tails"
-        },
-        "probabilityOfTailsHelpText": {
-          "value": "Probability of flipped coin landing on tails"
-        },
-        "probabilityOfUp": {
-          "value": "Probability of Up, Alpha Squared"
-        },
-        "probabilityOfUpHelpText": {
-          "value": "Probability of flipped coin landing on up state"
-        },
-        "probabilityOfDown": {
-          "value": "Probability of Down, Beta Squared"
-        },
-        "probabilityOfDownHelpText": {
-          "value": "Probability of flipped coin landing on down state"
-        }
-      },
-      "initialOrientationHelpText": {
-        "value": "Coin orientation before flipping"
-      },
-      "startMeasurement": {
-        "value": "Start Measurement"
-      },
-      "startMeasurementHelpText": {
-        "value": "Prepare coins to be measured"
-      },
-      "prepareNewCoinHelpText": {
-        "value": "Button to prepare a new coin"
-      },
-      "identicalCoins": {
-        "value": "Identical Coins"
-      },
-      "identicalCoinsHelpText": {
-        "value": "Number of identical coins to prepare"
       }
     }
   }

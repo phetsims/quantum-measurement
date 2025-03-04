@@ -117,7 +117,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
         phetioVisiblePropertyInstrumented: false,
         labelTagName: 'h4',
         accessibleName: titleStringProperty,
-        accessibleHelpText: QuantumMeasurementStrings.a11y.coinsScreen.initialOrientationHelpTextStringProperty,
+        accessibleHelpText: QuantumMeasurementStrings.a11y.translatable.coinsScreen.initialOrientationHelpTextStringProperty,
         radioButtonOptions: {
           xMargin: 4,
           yMargin: 4,

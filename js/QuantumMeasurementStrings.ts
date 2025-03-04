@@ -133,30 +133,28 @@ type StringsType = {
           'superposedStringProperty': LocalizedStringProperty;
           'upStringProperty': LocalizedStringProperty;
           'downStringProperty': LocalizedStringProperty;
-        }
+        };
+        'probabilityNumberControls': {
+          'probabilityOfHeadsStringProperty': LocalizedStringProperty;
+          'probabilityOfHeadsHelpTextStringProperty': LocalizedStringProperty;
+          'probabilityOfTailsStringProperty': LocalizedStringProperty;
+          'probabilityOfTailsHelpTextStringProperty': LocalizedStringProperty;
+          'probabilityOfUpStringProperty': LocalizedStringProperty;
+          'probabilityOfUpHelpTextStringProperty': LocalizedStringProperty;
+          'probabilityOfDownStringProperty': LocalizedStringProperty;
+          'probabilityOfDownHelpTextStringProperty': LocalizedStringProperty;
+        };
+        'initialOrientationHelpTextStringProperty': LocalizedStringProperty;
+        'startMeasurementStringProperty': LocalizedStringProperty;
+        'startMeasurementHelpTextStringProperty': LocalizedStringProperty;
+        'prepareNewCoinHelpTextStringProperty': LocalizedStringProperty;
+        'identicalCoinsStringProperty': LocalizedStringProperty;
+        'identicalCoinsHelpTextStringProperty': LocalizedStringProperty;
       };
       'photonsScreen': {
         'photonBehaviorModeStringProperty': LocalizedStringProperty;
         'emitPhotonButtonStringProperty': LocalizedStringProperty;
       }
-    };
-    'coinsScreen': {
-      'probabilityNumberControls': {
-        'probabilityOfHeadsStringProperty': LocalizedStringProperty;
-        'probabilityOfHeadsHelpTextStringProperty': LocalizedStringProperty;
-        'probabilityOfTailsStringProperty': LocalizedStringProperty;
-        'probabilityOfTailsHelpTextStringProperty': LocalizedStringProperty;
-        'probabilityOfUpStringProperty': LocalizedStringProperty;
-        'probabilityOfUpHelpTextStringProperty': LocalizedStringProperty;
-        'probabilityOfDownStringProperty': LocalizedStringProperty;
-        'probabilityOfDownHelpTextStringProperty': LocalizedStringProperty;
-      };
-      'initialOrientationHelpTextStringProperty': LocalizedStringProperty;
-      'startMeasurementStringProperty': LocalizedStringProperty;
-      'startMeasurementHelpTextStringProperty': LocalizedStringProperty;
-      'prepareNewCoinHelpTextStringProperty': LocalizedStringProperty;
-      'identicalCoinsStringProperty': LocalizedStringProperty;
-      'identicalCoinsHelpTextStringProperty': LocalizedStringProperty;
     }
   }
 };

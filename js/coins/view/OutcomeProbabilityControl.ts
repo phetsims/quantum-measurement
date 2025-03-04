@@ -167,8 +167,8 @@ export default class OutcomeProbabilityControl extends VBox {
         outcomeProbabilityProperty,
         providedOptions.tandem.createTandem( 'classicalUpProbabilityControl' ),
         {
-          accessibleName: QuantumMeasurementStrings.a11y.coinsScreen.probabilityNumberControls.probabilityOfHeadsStringProperty,
-          accessibleHelpText: QuantumMeasurementStrings.a11y.coinsScreen.probabilityNumberControls.probabilityOfHeadsHelpTextStringProperty
+          accessibleName: QuantumMeasurementStrings.a11y.translatable.coinsScreen.probabilityNumberControls.probabilityOfHeadsStringProperty,
+          accessibleHelpText: QuantumMeasurementStrings.a11y.translatable.coinsScreen.probabilityNumberControls.probabilityOfHeadsHelpTextStringProperty
         }
       );
 
@@ -177,8 +177,8 @@ export default class OutcomeProbabilityControl extends VBox {
         inverseOutcomeProbabilityProperty,
         providedOptions.tandem.createTandem( 'classicalDownProbabilityControl' ),
         {
-          accessibleName: QuantumMeasurementStrings.a11y.coinsScreen.probabilityNumberControls.probabilityOfTailsStringProperty,
-          accessibleHelpText: QuantumMeasurementStrings.a11y.coinsScreen.probabilityNumberControls.probabilityOfTailsHelpTextStringProperty
+          accessibleName: QuantumMeasurementStrings.a11y.translatable.coinsScreen.probabilityNumberControls.probabilityOfTailsStringProperty,
+          accessibleHelpText: QuantumMeasurementStrings.a11y.translatable.coinsScreen.probabilityNumberControls.probabilityOfTailsHelpTextStringProperty
         }
       );
 
@@ -228,8 +228,8 @@ export default class OutcomeProbabilityControl extends VBox {
         outcomeProbabilityProperty,
         providedOptions.tandem.createTandem( 'quantumUpProbabilityControl' ),
         {
-          accessibleName: QuantumMeasurementStrings.a11y.coinsScreen.probabilityNumberControls.probabilityOfUpStringProperty,
-          accessibleHelpText: QuantumMeasurementStrings.a11y.coinsScreen.probabilityNumberControls.probabilityOfUpHelpTextStringProperty
+          accessibleName: QuantumMeasurementStrings.a11y.translatable.coinsScreen.probabilityNumberControls.probabilityOfUpStringProperty,
+          accessibleHelpText: QuantumMeasurementStrings.a11y.translatable.coinsScreen.probabilityNumberControls.probabilityOfUpHelpTextStringProperty
         }
       );
       downProbabilityValueControl = new ProbabilityValueControl(
@@ -237,8 +237,8 @@ export default class OutcomeProbabilityControl extends VBox {
         inverseOutcomeProbabilityProperty,
         providedOptions.tandem.createTandem( 'quantumDownProbabilityControl' ),
         {
-          accessibleName: QuantumMeasurementStrings.a11y.coinsScreen.probabilityNumberControls.probabilityOfDownStringProperty,
-          accessibleHelpText: QuantumMeasurementStrings.a11y.coinsScreen.probabilityNumberControls.probabilityOfDownHelpTextStringProperty
+          accessibleName: QuantumMeasurementStrings.a11y.translatable.coinsScreen.probabilityNumberControls.probabilityOfDownStringProperty,
+          accessibleHelpText: QuantumMeasurementStrings.a11y.translatable.coinsScreen.probabilityNumberControls.probabilityOfDownHelpTextStringProperty
         }
       );
 
