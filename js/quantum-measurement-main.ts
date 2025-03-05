@@ -12,6 +12,7 @@ import simLauncher from '../../joist/js/simLauncher.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import BlochSphereScreen from './bloch-sphere/BlochSphereScreen.js';
 import CoinsScreen from './coins/CoinsScreen.js';
+import QuantumMeasurementConstants from './common/QuantumMeasurementConstants.js';
 import QuantumMeasurementPreferencesNode from './common/view/QuantumMeasurementPreferencesNode.js';
 import PhotonsScreen from './photons/PhotonsScreen.js';
 import QuantumMeasurementStrings from './QuantumMeasurementStrings.js';
@@ -33,16 +34,7 @@ simLauncher.launch( () => {
 
   const options: SimOptions = {
 
-    credits: {
-      leadDesign: 'Ariel Paul, Amy Rouinfar',
-      softwareDevelopment: 'John Blanco, Agust\u00edn Vallejo',
-      team: 'Mike Bennet, Josh Combes, Aiko Kyle, Phil Makotyn, Kathy Perkins, Ana Maria Rey, Martin Veillette',
-      contributors: '',
-      qualityAssurance: '',
-      graphicArts: '',
-      soundDesign: '',
-      thanks: ''
-    },
+    credits: QuantumMeasurementConstants.CREDITS,
 
     preferencesModel: new PreferencesModel( {
       simulationOptions: {

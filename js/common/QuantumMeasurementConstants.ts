@@ -6,6 +6,7 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
+import { CreditsData } from '../../../joist/js/CreditsNode.js';
 import ScreenView from '../../../joist/js/ScreenView.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 import Color from '../../../scenery/js/util/Color.js';
@@ -13,8 +14,21 @@ import { StateDirection } from '../bloch-sphere/model/StateDirection.js';
 import quantumMeasurement from '../quantumMeasurement.js';
 import QuantumMeasurementColors from './QuantumMeasurementColors.js';
 
+// credits are shared by other related sims
+const CREDITS: CreditsData = {
+  leadDesign: 'Ariel Paul, Amy Rouinfar',
+  softwareDevelopment: 'John Blanco, Agust\u00edn Vallejo',
+  team: 'Mike Bennet, Josh Combes, Aiko Kyle, Phil Makotyn, Kathy Perkins, Ana Maria Rey, Martin Veillette',
+  contributors: '',
+  qualityAssurance: '',
+  graphicArts: '',
+  soundDesign: '',
+  thanks: ''
+};
+
 const QuantumMeasurementConstants = {
   LAYOUT_BOUNDS: ScreenView.DEFAULT_LAYOUT_BOUNDS,
+  CREDITS: CREDITS,
   COIN_SET_AREA_PROPORTION: 0.9, // Side of the explicit coin area with respect to the measurement area
   SCREEN_VIEW_X_MARGIN: 10,
   SCREEN_VIEW_Y_MARGIN: 10,
