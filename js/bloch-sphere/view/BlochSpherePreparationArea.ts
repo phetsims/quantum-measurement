@@ -10,10 +10,8 @@
 import BlochSphereModel from 'model/BlochSphereModel.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
-import Dimension2 from '../../../../dot/js/Dimension2.js';
 import { roundToInterval } from '../../../../dot/js/util/roundToInterval.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -22,8 +20,9 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import ComboBox, { ComboBoxItem } from '../../../../sun/js/ComboBox.js';
 import Panel from '../../../../sun/js/Panel.js';
-import Slider from '../../../../sun/js/Slider.js';
+import Slider, { SliderOptions } from '../../../../sun/js/Slider.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
@@ -43,42 +42,30 @@ export default class BlochSpherePreparationArea extends VBox {
     const polarSlider = new Slider(
       model.preparationBlochSphere.polarAngleProperty,
       model.preparationBlochSphere.polarAngleProperty.range,
-      {
-        center: new Vector2( 100, 200 ),
+      combineOptions<SliderOptions>( {
         tandem: providedOptions.tandem.createTandem( 'polarSlider' ),
-        trackSize: new Dimension2( 150, 0.5 ),
-        majorTickLength: 10,
-        minorTickStroke: 'grey',
-        minorTickLength: 8,
-
         constrainValue: value => roundToInterval( value, sliderStep ),
         keyboardStep: sliderStep,
         shiftKeyboardStep: sliderStep,
         pageKeyboardStep: sliderStep * 3,
         valueChangeSoundGeneratorOptions: {
-          numberOfMiddleThresholds: model.preparationBlochSphere.polarAngleProperty.range.getLength() / sliderStep - 1
+          interThresholdDelta: sliderStep
         }
-      }
+      }, QuantumMeasurementConstants.DEFAULT_CONTROL_SLIDER_OPTIONS )
     );
     const azimuthSlider = new Slider(
       model.preparationBlochSphere.azimuthalAngleProperty,
       model.preparationBlochSphere.azimuthalAngleProperty.range,
-      {
-        center: new Vector2( 100, 100 ),
+      combineOptions<SliderOptions>( {
         tandem: providedOptions.tandem.createTandem( 'azimuthSlider' ),
-        trackSize: new Dimension2( 150, 0.5 ),
-        majorTickLength: 10,
-        minorTickStroke: 'grey',
-        minorTickLength: 8,
-
         constrainValue: value => roundToInterval( value, sliderStep ),
         keyboardStep: sliderStep,
         shiftKeyboardStep: sliderStep,
         pageKeyboardStep: sliderStep * 3,
         valueChangeSoundGeneratorOptions: {
-          numberOfMiddleThresholds: model.preparationBlochSphere.azimuthalAngleProperty.range.getLength() / sliderStep - 1
+          interThresholdDelta: sliderStep
         }
-      }
+      }, QuantumMeasurementConstants.DEFAULT_CONTROL_SLIDER_OPTIONS )
     );
 
     polarSlider.addMajorTick( 0, new Text( '0', { font: new PhetFont( 15 ) } ) );

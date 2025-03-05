@@ -10,17 +10,17 @@
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
 import { roundToInterval } from '../../../../dot/js/util/roundToInterval.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import NumberControl, { NumberControlOptions } from '../../../../scenery-phet/js/NumberControl.js';
+import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import NumberControl, { NumberControlOptions, NumberControlSliderOptions } from '../../../../scenery-phet/js/NumberControl.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import QuantumMeasurementConstants from '../QuantumMeasurementConstants.js';
 
 const TITLE_FONT = new PhetFont( 16 );
 const TICK_MARK_FONT = new PhetFont( 14 );
@@ -35,6 +35,8 @@ export default class ProbabilityValueControl extends NumberControl {
                       probabilityProperty: NumberProperty,
                       tandem: Tandem,
                       providedOptions?: ProbabilityValueControlOptions ) {
+
+    const sliderStep = 0.05;
 
     super( titleStringProperty, probabilityProperty, RANGE, optionize<ProbabilityValueControlOptions, SelfOptions, NumberControlOptions>()( {
 
@@ -63,22 +65,18 @@ export default class ProbabilityValueControl extends NumberControl {
         maxWidth: 250, // empirically determined to work well with layout
         tandem: Tandem.OPT_OUT
       },
-      sliderOptions: {
-        trackSize: new Dimension2( 150, 1 ),
-        thumbSize: new Dimension2( 12, 26 ),
-        majorTickLength: 10,
-        tickLabelSpacing: 4,
-        keyboardStep: 0.05,
-        shiftKeyboardStep: 0.01,
-        pageKeyboardStep: 0.2,
-        constrainValue: ( number: number ) => roundToInterval( number, 0.05 ),
+      sliderOptions: combineOptions<NumberControlSliderOptions>( {
+        constrainValue: ( number: number ) => roundToInterval( number, sliderStep ),
+        keyboardStep: sliderStep,
+        shiftKeyboardStep: sliderStep / 5,
+        pageKeyboardStep: sliderStep * 4,
         minorTickSpacing: RANGE.max * 0.25,
         majorTicks: [
           { value: RANGE.min, label: new Text( RANGE.min.toString(), { font: TICK_MARK_FONT } ) },
           { value: RANGE.max, label: new Text( RANGE.max.toString(), { font: TICK_MARK_FONT } ) }
         ]
-      },
-      delta: 0.01,
+      }, QuantumMeasurementConstants.DEFAULT_CONTROL_SLIDER_OPTIONS as NumberControlSliderOptions ),
+      delta: sliderStep / 5,
       tandem: tandem
     }, providedOptions ) );
   }

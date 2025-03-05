@@ -6,10 +6,12 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
+import Dimension2 from '../../../dot/js/Dimension2.js';
 import { CreditsData } from '../../../joist/js/CreditsNode.js';
 import ScreenView from '../../../joist/js/ScreenView.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 import Color from '../../../scenery/js/util/Color.js';
+import { SliderOptions } from '../../../sun/js/Slider.js';
 import { StateDirection } from '../bloch-sphere/model/StateDirection.js';
 import quantumMeasurement from '../quantumMeasurement.js';
 import QuantumMeasurementColors from './QuantumMeasurementColors.js';
@@ -24,6 +26,17 @@ const CREDITS: CreditsData = {
   graphicArts: '',
   soundDesign: '',
   thanks: ''
+};
+
+const DEFAULT_CONTROL_SLIDER_OPTIONS: SliderOptions = {
+  trackSize: new Dimension2( 150, 1 ),
+  thumbSize: new Dimension2( 12, 26 ),
+  majorTickLength: 10,
+  tickLabelSpacing: 4,
+  majorTickLineWidth: 1.5,
+  minorTickStroke: 'grey',
+  minorTickLength: 8,
+  trackFillEnabled: Color.BLACK
 };
 
 const QuantumMeasurementConstants = {
@@ -45,6 +58,7 @@ const QuantumMeasurementConstants = {
   CHECKBOX_BOX_WIDTH: 16,
   CHECKBOX_LABEL_FONT: new PhetFont( 14 ),
 
+  // TODO: ALL CAPS!!! https://github.com/phetsims/quantum-measurement/issues/138
   expectedPercentagePathOptions: {
     stroke: QuantumMeasurementColors.expectedPercentageFillColorProperty,
     lineWidth: 3
@@ -67,6 +81,8 @@ const QuantumMeasurementConstants = {
     const weight = bold ? 'bold' : 'normal';
     return `<span style="font-weight: ${weight}; color: ${color.toCSS()};">${text}</span>`;
   },
+
+  DEFAULT_CONTROL_SLIDER_OPTIONS: DEFAULT_CONTROL_SLIDER_OPTIONS,
 
   CAMERA_SOLID_SHAPE_SVG: 'M512 144v288c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48h88l12.3-32.9c7-18.7 24.9-31.1 44.9-31.1h125.5c20 0 37.9 12.4 44.9 31.1L376 96h88c26.5 0 48 21.5 48 48z'
 };

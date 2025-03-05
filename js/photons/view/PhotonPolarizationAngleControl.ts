@@ -9,7 +9,6 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
-import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Range from '../../../../dot/js/Range.js';
 import { roundToInterval } from '../../../../dot/js/util/roundToInterval.js';
 import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
@@ -19,11 +18,12 @@ import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import Text, { TextOptions } from '../../../../scenery/js/nodes/Text.js';
-import Color from '../../../../scenery/js/util/Color.js';
 import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
 import HSlider from '../../../../sun/js/HSlider.js';
 import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
+import { SliderOptions } from '../../../../sun/js/Slider.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import Laser from '../model/Laser.js';
@@ -130,27 +130,20 @@ export default class PhotonPolarizationAngleControl extends Panel {
 
     // Create a slider to control the custom angle of polarization.  It is only visible when the custom preset value
     // is selected.
-    const basicStepSize = 5;
+    const sliderStep = 5;
     const sliderRange = new Range( 0, 90 );
-    const customAngleSlider = new HSlider( photonSource.customPolarizationAngleProperty, sliderRange, {
-      visibleProperty: DerivedProperty.valueEqualsConstant( photonSource.presetPolarizationDirectionProperty, 'custom' ),
-      trackSize: new Dimension2( 140, 1.5 ),
-      thumbSize: new Dimension2( 13, 26 ),
-      trackStroke: null,
-      trackFillEnabled: Color.BLACK,
-      majorTickLength: 10,
-      majorTickLineWidth: 1.5,
-      minorTickStroke: 'grey',
-      minorTickLength: 8,
-      constrainValue: value => roundToInterval( value, basicStepSize ),
-      keyboardStep: basicStepSize,
-      shiftKeyboardStep: 1,
-      pageKeyboardStep: 15,
-      valueChangeSoundGeneratorOptions: {
-        numberOfMiddleThresholds: sliderRange.getLength() / basicStepSize - 1
-      },
-      tandem: providedOptions.tandem.createTandem( 'customAngleSlider' )
-    } );
+    const customAngleSlider = new HSlider( photonSource.customPolarizationAngleProperty, sliderRange,
+      combineOptions<SliderOptions>( {
+        visibleProperty: DerivedProperty.valueEqualsConstant( photonSource.presetPolarizationDirectionProperty, 'custom' ),
+        tandem: providedOptions.tandem.createTandem( 'customAngleSlider' ),
+        constrainValue: value => roundToInterval( value, sliderStep ),
+        keyboardStep: sliderStep,
+        shiftKeyboardStep: sliderStep / 5,
+        pageKeyboardStep: sliderStep * 3,
+        valueChangeSoundGeneratorOptions: {
+          interThresholdDelta: sliderStep
+        }
+      }, QuantumMeasurementConstants.DEFAULT_CONTROL_SLIDER_OPTIONS ) );
 
     // slider tick marks
     customAngleSlider.addMajorTick( 0, new Text( '0°', TICK_MARK_TEXT_OPTIONS ) );

@@ -68,13 +68,12 @@ export default class LaserNode extends Node {
         thumbFillHighlighted: 'rgb( 0, 200, 0)',
         centerX: -( NOZZLE_SIZE.width + LASER_BODY_SIZE.width / 2 ),
         tandem: providedOptions.tandem.createTandem( 'emissionRateSlider' ),
-
         constrainValue: value => roundToInterval( value, sliderStep ),
         keyboardStep: sliderStep,
         shiftKeyboardStep: sliderStep / 10,
         pageKeyboardStep: sliderStep * 5,
         valueChangeSoundGeneratorOptions: {
-          numberOfMiddleThresholds: model.emissionRateProperty.range.getLength() / sliderStep - 1
+          interThresholdDelta: sliderStep
         }
       } );
       laserPointerNodeChildren.push( emissionRateSlider );
