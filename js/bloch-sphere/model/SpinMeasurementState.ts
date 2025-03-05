@@ -1,7 +1,7 @@
 // Copyright 2025, University of Colorado Boulder
 
 /**
- * SpinMeasurementStates is an enumearion of possible spin measurement states.
+ * SpinMeasurementStates is an enumeration of possible spin measurement states.
  *
  * @author Agustín Vallejo
  * @author John Blanco (PhET Interactive Simulations)
