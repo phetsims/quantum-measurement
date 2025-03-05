@@ -93,23 +93,32 @@ export default class BlochSpherePreparationArea extends VBox {
       tandem: providedOptions.tandem.createTandem( 'directionComboBox' )
     } );
 
+    const sliderTitleOptions = { font: new PhetFont( 16 ), maxWidth: 200 };
     const slidersPanel = new Panel(
       new VBox( {
-        spacing: 10,
+        spacing: 20,
         children: [
           directionComboBox,
-          new Text(
-            new PatternStringProperty(
-              QuantumMeasurementStrings.polarAngleParenthesesSymbolPatternStringProperty,
-              { symbol: MathSymbols.THETA }
-            ), { font: new PhetFont( 15 ), maxWidth: 200 } ), // Theta symbol: θ
-          polarSlider,
-          new Text(
-            new PatternStringProperty(
-              QuantumMeasurementStrings.azimuthalAngleParenthesesSymbolPatternStringProperty,
-              { symbol: MathSymbols.PHI }
-            ), { font: new PhetFont( 15 ), maxWidth: 200 } ), // Phi symbol: φ
-          azimuthSlider
+          new VBox( {
+            children: [
+              new Text(
+                new PatternStringProperty(
+                  QuantumMeasurementStrings.polarAngleParenthesesSymbolPatternStringProperty,
+                  { symbol: MathSymbols.THETA }
+                ), sliderTitleOptions ), // Theta symbol: θ
+              polarSlider
+            ]
+          } ),
+          new VBox( {
+            children: [
+              new Text(
+                new PatternStringProperty(
+                  QuantumMeasurementStrings.azimuthalAngleParenthesesSymbolPatternStringProperty,
+                  { symbol: MathSymbols.PHI }
+                ), sliderTitleOptions ), // Phi symbol: φ
+              azimuthSlider
+            ]
+          } )
         ]
       } ),
       {
