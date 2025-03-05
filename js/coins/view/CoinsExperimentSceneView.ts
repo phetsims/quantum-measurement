@@ -23,6 +23,7 @@ import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import ButtonNode from '../../../../sun/js/buttons/ButtonNode.js';
 import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushButton.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
+import sharedSoundPlayers from '../../../../tambo/js/sharedSoundPlayers.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
@@ -188,6 +189,7 @@ class CoinsExperimentSceneView extends Node {
       listener: () => {
         sceneModel.preparingExperimentProperty.value = true;
       },
+      soundPlayer: sharedSoundPlayers.get( 'erase' ),
       tandem: newCoinButtonTandem,
       accessibleName: QuantumMeasurementStrings.newCoinStringProperty,
       accessibleHelpText: QuantumMeasurementStrings.a11y.translatable.coinsScreen.prepareNewCoinHelpTextStringProperty
