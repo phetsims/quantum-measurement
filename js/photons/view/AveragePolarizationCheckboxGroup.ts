@@ -8,7 +8,6 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
 import type PhetioProperty from '../../../../axon/js/PhetioProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
@@ -39,7 +38,6 @@ const CHECKBOX_GROUP_SPACING = 10;
 const CHECKBOX_GROUP_POINTER_DILATION = CHECKBOX_GROUP_SPACING / 2;
 const COMMON_CHECKBOX_OPTIONS = {
   boxWidth: QuantumMeasurementConstants.CHECKBOX_BOX_WIDTH,
-  phetioVisiblePropertyInstrumented: false, // The enclosing control should be removed if the checkbox isn't desired.
   mouseAreaXDilation: CHECKBOX_GROUP_POINTER_DILATION,
   mouseAreaYDilation: CHECKBOX_GROUP_POINTER_DILATION,
   touchAreaXDilation: CHECKBOX_GROUP_POINTER_DILATION,
@@ -49,7 +47,6 @@ const CHECKBOX_LABEL_OPTIONS = {
   font: QuantumMeasurementConstants.CHECKBOX_LABEL_FONT,
   maxWidth: 200
 };
-const ALWAYS_TRUE_PROPERTY = new BooleanProperty( true );
 
 class AveragePolarizationCheckboxGroup extends VBox {
 
@@ -64,7 +61,7 @@ class AveragePolarizationCheckboxGroup extends VBox {
       // Create the checkbox label.
       const checkboxLabel = new Text( checkboxGroupItem.labelStringProperty, CHECKBOX_LABEL_OPTIONS );
 
-      // If a decoration node was provided, create an HBox that contains the label and the decoration node.
+      // If a decoration node was provided, combine it with the label to create a content node for the checkbox.
       let checkboxContent: Node;
       if ( checkboxGroupItem.decorationNode ) {
         checkboxContent = new HBox( {
@@ -76,24 +73,30 @@ class AveragePolarizationCheckboxGroup extends VBox {
         checkboxContent = checkboxLabel;
       }
 
-      // Create the checkbox.
+      // Create the options for the checkbox.
       const checkboxTandem = providedOptions.tandem.createTandem( `${checkboxGroupItem.tandemControlName}Checkbox` );
+      const checkboxOptions = combineOptions<CheckboxOptions>( {
+          tandem: checkboxTandem,
+          containerTagName: 'li'
+        },
+        COMMON_CHECKBOX_OPTIONS
+      );
+
+      // If a visible property was provided for this checkbox, add it to the options.
+      if ( checkboxGroupItem.visibleProperty ) {
+
+        // This is added as a gated property so that it can be controlled via phet-io.
+        checkboxOptions.visibleProperty = new GatedVisibleProperty( checkboxGroupItem.visibleProperty, checkboxTandem );
+      }
+
+      // Create the checkbox.
       const checkbox = new Checkbox(
         checkboxGroupItem.property,
         checkboxContent,
-        combineOptions<CheckboxOptions>(
-          {
-            visibleProperty: checkboxGroupItem.visibleProperty ?
-                             new GatedVisibleProperty( checkboxGroupItem.visibleProperty, checkboxTandem ) :
-                             ALWAYS_TRUE_PROPERTY,
-            tandem: checkboxTandem,
-            containerTagName: 'li'
-          },
-          COMMON_CHECKBOX_OPTIONS
-        )
+        checkboxOptions
       );
 
-      // Add this checkbox control to the list.
+      // Add this checkbox to the list.
       checkboxes.push( checkbox );
     } );
 
