@@ -100,6 +100,7 @@ export default class BlochSpherePreparationArea extends VBox {
         children: [
           directionComboBox,
           new VBox( {
+            spacing: 5,
             children: [
               new Text(
                 new PatternStringProperty(
@@ -110,6 +111,7 @@ export default class BlochSpherePreparationArea extends VBox {
             ]
           } ),
           new VBox( {
+            spacing: 5,
             children: [
               new Text(
                 new PatternStringProperty(

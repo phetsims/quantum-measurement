@@ -91,7 +91,7 @@ export default class SpinStatePreparationArea extends VBox {
       font: new PhetFont( { size: 18, weight: 'bolder' } ),
       maxWidth: 250
     } );
-    const symbolicEquationText = new RichText( `${ALPHA}|${UP}${KET} + ${BETA}|${DOWN}${KET}`,
+    const symbolicEquationText = new RichText( `${ALPHA}|${UP} ${KET} + ${BETA}|${DOWN} ${KET}`,
       { font: new PhetFont( { size: 18, weight: 'bolder' } ) } );
 
     const stateReadoutStringProperty = new DerivedProperty(
@@ -104,7 +104,7 @@ export default class SpinStatePreparationArea extends VBox {
         const downProbability = 1 - upProbability;
         const alphaValue = toFixed( Math.sqrt( upProbability ), 3 );
         const betaValue = toFixed( Math.sqrt( downProbability ), 3 );
-        return `${alphaValue}|${UP}${KET} + ${betaValue}|${DOWN}${KET}`;
+        return `${alphaValue}|${UP} ${KET} + ${betaValue}|${DOWN} ${KET}`;
       } );
 
     const stateReadout = new RichText( stateReadoutStringProperty, { font: new PhetFont( 18 ) } );
