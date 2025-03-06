@@ -57,7 +57,7 @@ export default class BlochSphereMeasurementArea extends Node {
 
   public constructor( model: BlochSphereModel, providedOptions: BlochSphereMeasurementAreaOptions ) {
 
-    const aquaRadioButtonGroupItems: AquaRadioButtonGroupItem<StateDirection>[] = QuantumMeasurementConstants.plusDirections.map( direction => {
+    const aquaRadioButtonGroupItems: AquaRadioButtonGroupItem<StateDirection>[] = QuantumMeasurementConstants.PLUS_DIRECTIONS.map( direction => {
       return {
         value: direction,
         createNode: () => new Text( direction.shortName, { font: new PhetFont( 16 ) } ),
@@ -98,7 +98,7 @@ export default class BlochSphereMeasurementArea extends Node {
       ],
       tandem: equationPanelTandem,
       visibleProperty: model.isSingleMeasurementModeProperty
-    } ), QuantumMeasurementConstants.panelOptions );
+    } ), QuantumMeasurementConstants.PANEL_OPTIONS );
 
     // Keep the equation node panel centered based on its initial position.
     const equationNodePanelInitialCenterX = equationNodePanel.centerX;
@@ -279,7 +279,7 @@ export default class BlochSphereMeasurementArea extends Node {
           visibleProperty: new GatedVisibleProperty( model.magneticFieldEnabledProperty, measurementDelayControlTandem )
         } )
       ]
-    } ), QuantumMeasurementConstants.panelOptions );
+    } ), QuantumMeasurementConstants.PANEL_OPTIONS );
 
     // Define a DerivedStringProperty for the label that will appear on the button.
     const experimentControlButtonTextProperty = new DerivedStringProperty(

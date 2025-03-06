@@ -204,7 +204,7 @@ export default class SpinMeasurementArea extends VBox {
             maxWidth: 200
           } ),
           new Path( new Shape().moveTo( 0, 0 ).lineTo( 20, 0 ),
-            QuantumMeasurementConstants.expectedPercentagePathOptions
+            QuantumMeasurementConstants.EXPECTED_PERCENTAGE_PATH_OPTIONS
           )
         ],
         spacing: 5

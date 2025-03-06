@@ -118,7 +118,7 @@ class BlochSphereModel implements TModel {
     this.equationBasisProperty = new EnumerationProperty( StateDirection.Z_PLUS, {
       tandem: measurementAreaTandem.createTandem( 'equationBasisProperty' ),
       phetioFeatured: true,
-      validValues: QuantumMeasurementConstants.plusDirections
+      validValues: QuantumMeasurementConstants.PLUS_DIRECTIONS
     } );
 
     // Measurement controls. Starting time to measurement at 75% so there's more subliminal reason to move it

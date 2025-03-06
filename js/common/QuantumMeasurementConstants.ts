@@ -10,7 +10,9 @@ import Dimension2 from '../../../dot/js/Dimension2.js';
 import { CreditsData } from '../../../joist/js/CreditsNode.js';
 import ScreenView from '../../../joist/js/ScreenView.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
+import { PathOptions } from '../../../scenery/js/nodes/Path.js';
 import Color from '../../../scenery/js/util/Color.js';
+import { PanelOptions } from '../../../sun/js/Panel.js';
 import { SliderOptions } from '../../../sun/js/Slider.js';
 import { StateDirection } from '../bloch-sphere/model/StateDirection.js';
 import quantumMeasurement from '../quantumMeasurement.js';
@@ -39,6 +41,18 @@ const DEFAULT_CONTROL_SLIDER_OPTIONS: SliderOptions = {
   trackFillEnabled: Color.BLACK
 };
 
+const EXPECTED_PERCENTAGE_PATH_OPTIONS: PathOptions = {
+  stroke: QuantumMeasurementColors.expectedPercentageFillColorProperty,
+  lineWidth: 3
+};
+
+const PANEL_OPTIONS: PanelOptions = {
+  fill: QuantumMeasurementColors.controlPanelFillColorProperty,
+  stroke: QuantumMeasurementColors.controlPanelStrokeColorProperty,
+  yMargin: 10,
+  xMargin: 10
+};
+
 const QuantumMeasurementConstants = {
   LAYOUT_BOUNDS: ScreenView.DEFAULT_LAYOUT_BOUNDS,
   CREDITS: CREDITS,
@@ -58,20 +72,11 @@ const QuantumMeasurementConstants = {
   CHECKBOX_BOX_WIDTH: 16,
   CHECKBOX_LABEL_FONT: new PhetFont( 14 ),
 
-  // TODO: ALL CAPS!!! https://github.com/phetsims/quantum-measurement/issues/138
-  expectedPercentagePathOptions: {
-    stroke: QuantumMeasurementColors.expectedPercentageFillColorProperty,
-    lineWidth: 3
-  },
+  EXPECTED_PERCENTAGE_PATH_OPTIONS: EXPECTED_PERCENTAGE_PATH_OPTIONS,
 
-  panelOptions: {
-    fill: QuantumMeasurementColors.controlPanelFillColorProperty,
-    stroke: QuantumMeasurementColors.controlPanelStrokeColorProperty,
-    yMargin: 10,
-    xMargin: 10
-  },
+  PANEL_OPTIONS: PANEL_OPTIONS,
 
-  plusDirections: [
+  PLUS_DIRECTIONS: [
     StateDirection.X_PLUS,
     StateDirection.Y_PLUS,
     StateDirection.Z_PLUS

@@ -30,7 +30,7 @@ export default class HistogramWithExpectedValue extends QuantumMeasurementHistog
 
     const expectedValueOptions = combineOptions<PathOptions>( {
       visibleProperty: expectedValueVisibleProperty
-    }, QuantumMeasurementConstants.expectedPercentagePathOptions );
+    }, QuantumMeasurementConstants.EXPECTED_PERCENTAGE_PATH_OPTIONS );
 
     const expectedValueShape = new Shape().moveTo( 0, 0 ).lineTo( DEFAULT_HISTOGRAM_SIZE.width / 3, 0 );
     const leftExpectedValueLine = new Path( expectedValueShape, expectedValueOptions );
