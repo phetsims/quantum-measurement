@@ -33,6 +33,9 @@ const BUTTON_WIDTH = 160; // empirically determined to match spec
 
 export default class CoinExperimentButtonSet extends VBox {
 
+  // Exposing the revealHideButton to focus it.
+  public readonly focusOnRevealButton: () => void;
+
   public constructor( coinSet: CoinSet,
                       coinSetInTestBoxProperty: TProperty<boolean>,
                       providedOptions: CoinExperimentButtonSetOptions ) {
@@ -148,6 +151,11 @@ export default class CoinExperimentButtonSet extends VBox {
     }, providedOptions );
 
     super( options );
+
+    // Brings alt input focus to this button. See https://github.com/phetsims/quantum-measurement/issues/89
+    this.focusOnRevealButton = () => {
+      revealHideButton.focus();
+    };
   }
 }
 

@@ -284,6 +284,11 @@ class CoinExperimentMeasurementArea extends VBox {
       }
       else {
 
+        // Because the button tha triggers this is later in the pdom order than the experiment buttons
+        // Manually focus on the first button of this group.
+        // See https://github.com/phetsims/quantum-measurement/issues/89
+        singleCoinExperimentButtonSet.focusOnRevealButton();
+
         // The user is ready to make measurements on the coins, so animate the coins for both the single and multi-coin
         // experiments from the preparation area to the measurement area.
         singleCoinViewManager.startIngressAnimationForSingleCoin( false );
