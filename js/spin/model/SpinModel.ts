@@ -232,6 +232,23 @@ class SpinModel implements TModel {
       } );
     } );
 
+    // Similar to the multilink below (and this will actually trigger that one)
+    // but only for setting the blocking mode of the SG0 on experiment/source mode changes.
+    // The blocking mode can be directly be set via a AquaRadioButton in the SternGerlachNode
+    Multilink.multilink(
+      [
+        this.currentExperimentProperty,
+        this.particleSourceModel.sourceModeProperty
+      ], ( experiment, sourceMode ) => {
+        if ( sourceMode !== SourceMode.SINGLE && !experiment.usingSingleApparatus ) {
+          assert && assert( this.blockingModeMap.has( experiment ), 'Experiment not found in map' );
+          this.sternGerlachs[ 0 ].blockingModeProperty.value = this.blockingModeMap.get( experiment )!.value;
+        }
+        else {
+          this.sternGerlachs[ 0 ].blockingModeProperty.value = BlockingMode.NO_BLOCKER;
+        }
+      } );
+
     // Multilink for changes in the experiment either via source mode or experiment selection.
     // The design rules for what'll happen to SGs is tricky, so buckle up and pay attention.
     // The following is a table between single and multi particle mode, vs single or multi apparatus mode:
@@ -251,19 +268,11 @@ class SpinModel implements TModel {
       [
         this.currentExperimentProperty,
         this.particleSourceModel.sourceModeProperty,
-        this.particleSourceModel.spinStateProperty,
         this.sternGerlachs[ 0 ].blockingModeProperty
       ],
-      ( experiment, sourceMode, spinState, blockingMode ) => {
-
-        if ( !isSettingPhetioStateProperty.value ) {
-          this.singleParticlesCollection.clear();
-          this.multipleParticlesCollection.clear();
-        }
+      ( experiment, sourceMode, blockingMode ) => {
 
         this.measurementDevices.forEach( device => device.reset() );
-
-        this.sternGerlachs.forEach( sternGerlach => sternGerlach.resetCounts() );
 
         // Conditions that determine visibility and state of the experiment components
         // Declared into variables for better readability
@@ -291,28 +300,30 @@ class SpinModel implements TModel {
           this.sternGerlachs[ index ].isZOrientedProperty.value = setting.isZOriented;
         } );
 
-        if ( !singleParticle && multiApparatus ) {
-          assert && assert( this.blockingModeMap.has( experiment ), 'Experiment not found in map' );
-          this.sternGerlachs[ 0 ].blockingModeProperty.value = this.blockingModeMap.get( experiment )!.value;
-        }
-        else {
-          this.sternGerlachs[ 0 ].blockingModeProperty.value = BlockingMode.NO_BLOCKER;
-        }
-
-        // Set the probabilities of the experiment. In the continuous case, this immediately alters the shown rays
-        // In the single case, this prepares the probabilities for the particle that will be shot
-        this.prepare();
-
         // Visibility of measurement devices: Only show on single particle mode, and the third one only if using many SGs
         this.measurementDevices[ 0 ].isActiveProperty.value = singleParticle; // Exiting the particle source
         this.measurementDevices[ 1 ].isActiveProperty.value = singleParticle; // Exiting the first SG
         this.measurementDevices[ 2 ].isActiveProperty.value = singleParticle && multiApparatus; // Exiting the second SG
+
+        this.prepare();
       }
     );
+
+    // If there's a change in the spin state of particles, reprepare the experiment
+    this.particleSourceModel.spinStateProperty.link( () => {
+      this.prepare();
+    } );
 
   }
 
   public prepare(): void {
+
+    if ( !isSettingPhetioStateProperty.value ) {
+      this.singleParticlesCollection.clear();
+      this.multipleParticlesCollection.clear();
+    }
+
+    this.sternGerlachs.forEach( sternGerlach => sternGerlach.resetCounts() );
 
     // Clear data on the measuring devices
     this.measurementDevices.forEach( device => device.clearData() );

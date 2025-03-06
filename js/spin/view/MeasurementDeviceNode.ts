@@ -9,6 +9,7 @@
 
 import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
 import stepTimer from '../../../../axon/js/stepTimer.js';
+import { TimerListener } from '../../../../axon/js/Timer.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
@@ -62,20 +63,27 @@ export default class MeasurementDeviceNode extends VBox {
 
     simpleBlochSphereNode.stateVectorVisibleProperty.value = false;
 
+    let stateVectorVisibleTimeout: null | TimerListener = null;
+    let cameraPathFillTimeout: null | TimerListener = null;
+
     measurementDevice.measurementEmitter.addListener( () => {
       simpleBlochSphereNode.stateVectorVisibleProperty.value = false;
       cameraPath.fill = QuantumMeasurementColors.particleColorProperty;
 
-      stepTimer.setTimeout( () => {
+      stateVectorVisibleTimeout = stepTimer.setTimeout( () => {
         simpleBlochSphereNode.stateVectorVisibleProperty.value = true;
       }, 100 );
 
-      stepTimer.setTimeout( () => {
+      cameraPathFillTimeout = stepTimer.setTimeout( () => {
         cameraPath.fill = 'black';
       }, 500 );
     } );
 
     measurementDevice.resetEmitter.addListener( () => {
+      stateVectorVisibleTimeout && stepTimer.clearTimeout( stateVectorVisibleTimeout );
+      cameraPathFillTimeout && stepTimer.clearTimeout( cameraPathFillTimeout );
+      stateVectorVisibleTimeout = null;
+      cameraPathFillTimeout = null;
       this.reset();
     } );
 
