@@ -24,6 +24,7 @@ import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
 import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
 import RoundPushButton from '../../../../sun/js/buttons/RoundPushButton.js';
 import HSlider from '../../../../sun/js/HSlider.js';
+import sharedSoundPlayers from '../../../../tambo/js/sharedSoundPlayers.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
@@ -102,7 +103,8 @@ export default class ParticleSourceNode extends Node {
           DerivedProperty.not( particleSourceModel.isContinuousModeProperty ),
           shootParticleButtonTandem
         ),
-        center: particleSourceRectangle.center,
+      soundPlayer: sharedSoundPlayers.get( 'release' ),
+      center: particleSourceRectangle.center,
         touchAreaDilation: 20,
         tandem: shootParticleButtonTandem
       }

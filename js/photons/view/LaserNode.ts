@@ -23,6 +23,7 @@ import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import RoundPushButton from '../../../../sun/js/buttons/RoundPushButton.js';
 import HSlider from '../../../../sun/js/HSlider.js';
+import sharedSoundPlayers from '../../../../tambo/js/sharedSoundPlayers.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
@@ -53,6 +54,7 @@ export default class LaserNode extends Node {
         listener: () => model.emitAPhoton(),
         centerX: -( NOZZLE_SIZE.width + LASER_BODY_SIZE.width / 2 ),
         touchAreaDilation: 15,
+        soundPlayer: sharedSoundPlayers.get( 'release' ),
         tandem: providedOptions.tandem.createTandem( 'emitPhotonButton' ),
         accessibleName: QuantumMeasurementStrings.a11y.photonsScreen.emitPhotonButtonStringProperty
       } ) );
