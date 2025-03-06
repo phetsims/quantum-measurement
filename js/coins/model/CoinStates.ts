@@ -22,11 +22,11 @@ export type CoinStates = ( typeof CoinStateValues )[number];
 
 // Workaround for mapping model states to accessible names
 export const CoinStatesAccessibleNameMap = {
-  heads: QuantumMeasurementStrings.a11y.translatable.coinsScreen.coinStates.headsStringProperty,
-  tails: QuantumMeasurementStrings.a11y.translatable.coinsScreen.coinStates.tailsStringProperty,
-  up: QuantumMeasurementStrings.a11y.translatable.coinsScreen.coinStates.upStringProperty,
-  down: QuantumMeasurementStrings.a11y.translatable.coinsScreen.coinStates.downStringProperty,
-  superposition: QuantumMeasurementStrings.a11y.translatable.coinsScreen.coinStates.superpositionStringProperty
+  heads: QuantumMeasurementStrings.a11y.coinsScreen.coinStates.headsStringProperty,
+  tails: QuantumMeasurementStrings.a11y.coinsScreen.coinStates.tailsStringProperty,
+  up: QuantumMeasurementStrings.a11y.coinsScreen.coinStates.upStringProperty,
+  down: QuantumMeasurementStrings.a11y.coinsScreen.coinStates.downStringProperty,
+  superposition: QuantumMeasurementStrings.a11y.coinsScreen.coinStates.superpositionStringProperty
 };
 
 // TODO: Wondering about a better pattern for this, see https://github.com/phetsims/quantum-measurement/issues/92

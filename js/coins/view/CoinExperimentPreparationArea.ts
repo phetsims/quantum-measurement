@@ -51,10 +51,10 @@ class CoinExperimentPreparationArea extends VBox {
         QuantumMeasurementStrings.quantumCoinQuotedStringProperty,
         QuantumMeasurementStrings.itemToPreparePatternStringProperty,
         QuantumMeasurementStrings.preparedStateStringProperty,
-        QuantumMeasurementStrings.a11y.translatable.preparationAreaHeader.classicalCoinToPrepareStringProperty,
-        QuantumMeasurementStrings.a11y.translatable.preparationAreaHeader.classicalCoinStringProperty,
-        QuantumMeasurementStrings.a11y.translatable.preparationAreaHeader.quantumCoinToPrepareStringProperty,
-        QuantumMeasurementStrings.a11y.translatable.preparationAreaHeader.preparedStateStringProperty
+        QuantumMeasurementStrings.a11y.preparationAreaHeader.classicalCoinToPrepareStringProperty,
+        QuantumMeasurementStrings.a11y.preparationAreaHeader.classicalCoinStringProperty,
+        QuantumMeasurementStrings.a11y.preparationAreaHeader.quantumCoinToPrepareStringProperty,
+        QuantumMeasurementStrings.a11y.preparationAreaHeader.preparedStateStringProperty
       ],
       (
         preparingExperiment,
@@ -94,8 +94,8 @@ class CoinExperimentPreparationArea extends VBox {
     const coinStateStringProperty = getCoinAccessibleName( sceneModel.initialCoinFaceStateProperty );
 
     const patternStringProperty = sceneModel.systemType === SystemType.CLASSICAL ?
-                                  QuantumMeasurementStrings.a11y.translatable.preparationAreaHeader.classicalAccessibleParagraphPatternStringProperty :
-                                  QuantumMeasurementStrings.a11y.translatable.preparationAreaHeader.quantumAccessibleParagraphPatternStringProperty;
+                                  QuantumMeasurementStrings.a11y.preparationAreaHeader.classicalAccessibleParagraphPatternStringProperty :
+                                  QuantumMeasurementStrings.a11y.preparationAreaHeader.quantumAccessibleParagraphPatternStringProperty;
 
     const classicalAccessibleParagraphPatternStringProperty = new PatternStringProperty( patternStringProperty, {
       initialCoinFaceState: coinStateStringProperty,

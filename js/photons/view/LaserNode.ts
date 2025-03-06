@@ -54,7 +54,7 @@ export default class LaserNode extends Node {
         centerX: -( NOZZLE_SIZE.width + LASER_BODY_SIZE.width / 2 ),
         touchAreaDilation: 15,
         tandem: providedOptions.tandem.createTandem( 'emitPhotonButton' ),
-        accessibleName: QuantumMeasurementStrings.a11y.translatable.photonsScreen.emitPhotonButtonStringProperty
+        accessibleName: QuantumMeasurementStrings.a11y.photonsScreen.emitPhotonButtonStringProperty
       } ) );
     }
     else {

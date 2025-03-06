@@ -76,7 +76,7 @@ class PhotonTestingArea extends Node {
       bottom: laserNode.top - 15,
       phetioFeatured: true,
       tandem: photonBehaviorModeTandem,
-      accessibleName: QuantumMeasurementStrings.a11y.translatable.photonsScreen.photonBehaviorModeStringProperty,
+      accessibleName: QuantumMeasurementStrings.a11y.photonsScreen.photonBehaviorModeStringProperty,
       tagName: 'div',
       children: [
         new Text( QuantumMeasurementStrings.behaviorStringProperty, {

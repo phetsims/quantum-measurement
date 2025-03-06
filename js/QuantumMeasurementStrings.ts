@@ -114,47 +114,45 @@ type StringsType = {
     }
   };
   'a11y': {
-    'translatable': {
-      'equationAccessibleParagraphPatternStringProperty': LocalizedStringProperty;
-      'singleCoinStatePatternStringProperty': LocalizedStringProperty;
-      'quantumCoinsAccessibleParagraphStringProperty': LocalizedStringProperty;
-      'preparationAreaHeader': {
-        'classicalCoinToPrepareStringProperty': LocalizedStringProperty;
-        'classicalCoinStringProperty': LocalizedStringProperty;
-        'quantumCoinToPrepareStringProperty': LocalizedStringProperty;
-        'preparedStateStringProperty': LocalizedStringProperty;
-        'classicalAccessibleParagraphPatternStringProperty': LocalizedStringProperty;
-        'quantumAccessibleParagraphPatternStringProperty': LocalizedStringProperty;
+    'equationAccessibleParagraphPatternStringProperty': LocalizedStringProperty;
+    'singleCoinStatePatternStringProperty': LocalizedStringProperty;
+    'quantumCoinsAccessibleParagraphStringProperty': LocalizedStringProperty;
+    'preparationAreaHeader': {
+      'classicalCoinToPrepareStringProperty': LocalizedStringProperty;
+      'classicalCoinStringProperty': LocalizedStringProperty;
+      'quantumCoinToPrepareStringProperty': LocalizedStringProperty;
+      'preparedStateStringProperty': LocalizedStringProperty;
+      'classicalAccessibleParagraphPatternStringProperty': LocalizedStringProperty;
+      'quantumAccessibleParagraphPatternStringProperty': LocalizedStringProperty;
+    };
+    'coinsScreen': {
+      'coinStates': {
+        'headsStringProperty': LocalizedStringProperty;
+        'tailsStringProperty': LocalizedStringProperty;
+        'superpositionStringProperty': LocalizedStringProperty;
+        'upStringProperty': LocalizedStringProperty;
+        'downStringProperty': LocalizedStringProperty;
       };
-      'coinsScreen': {
-        'coinStates': {
-          'headsStringProperty': LocalizedStringProperty;
-          'tailsStringProperty': LocalizedStringProperty;
-          'superpositionStringProperty': LocalizedStringProperty;
-          'upStringProperty': LocalizedStringProperty;
-          'downStringProperty': LocalizedStringProperty;
-        };
-        'probabilityNumberControls': {
-          'probabilityOfHeadsStringProperty': LocalizedStringProperty;
-          'probabilityOfHeadsHelpTextStringProperty': LocalizedStringProperty;
-          'probabilityOfTailsStringProperty': LocalizedStringProperty;
-          'probabilityOfTailsHelpTextStringProperty': LocalizedStringProperty;
-          'probabilityOfUpStringProperty': LocalizedStringProperty;
-          'probabilityOfUpHelpTextStringProperty': LocalizedStringProperty;
-          'probabilityOfDownStringProperty': LocalizedStringProperty;
-          'probabilityOfDownHelpTextStringProperty': LocalizedStringProperty;
-        };
-        'initialOrientationHelpTextStringProperty': LocalizedStringProperty;
-        'startMeasurementStringProperty': LocalizedStringProperty;
-        'startMeasurementHelpTextStringProperty': LocalizedStringProperty;
-        'prepareNewCoinHelpTextStringProperty': LocalizedStringProperty;
-        'identicalCoinsStringProperty': LocalizedStringProperty;
-        'identicalCoinsHelpTextStringProperty': LocalizedStringProperty;
+      'probabilityNumberControls': {
+        'probabilityOfHeadsStringProperty': LocalizedStringProperty;
+        'probabilityOfHeadsHelpTextStringProperty': LocalizedStringProperty;
+        'probabilityOfTailsStringProperty': LocalizedStringProperty;
+        'probabilityOfTailsHelpTextStringProperty': LocalizedStringProperty;
+        'probabilityOfUpStringProperty': LocalizedStringProperty;
+        'probabilityOfUpHelpTextStringProperty': LocalizedStringProperty;
+        'probabilityOfDownStringProperty': LocalizedStringProperty;
+        'probabilityOfDownHelpTextStringProperty': LocalizedStringProperty;
       };
-      'photonsScreen': {
-        'photonBehaviorModeStringProperty': LocalizedStringProperty;
-        'emitPhotonButtonStringProperty': LocalizedStringProperty;
-      }
+      'initialOrientationHelpTextStringProperty': LocalizedStringProperty;
+      'startMeasurementStringProperty': LocalizedStringProperty;
+      'startMeasurementHelpTextStringProperty': LocalizedStringProperty;
+      'prepareNewCoinHelpTextStringProperty': LocalizedStringProperty;
+      'identicalCoinsStringProperty': LocalizedStringProperty;
+      'identicalCoinsHelpTextStringProperty': LocalizedStringProperty;
+    };
+    'photonsScreen': {
+      'photonBehaviorModeStringProperty': LocalizedStringProperty;
+      'emitPhotonButtonStringProperty': LocalizedStringProperty;
     }
   }
 };

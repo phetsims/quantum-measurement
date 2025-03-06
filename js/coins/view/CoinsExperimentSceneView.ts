@@ -123,8 +123,8 @@ class CoinsExperimentSceneView extends Node {
       touchAreaYDilation: 5,
       soundPlayer: startMeasurementSoundPlayer,
       tandem: startMeasurementButtonTandem,
-      accessibleName: QuantumMeasurementStrings.a11y.translatable.coinsScreen.startMeasurementStringProperty,
-      accessibleHelpText: QuantumMeasurementStrings.a11y.translatable.coinsScreen.startMeasurementHelpTextStringProperty
+      accessibleName: QuantumMeasurementStrings.a11y.coinsScreen.startMeasurementStringProperty,
+      accessibleHelpText: QuantumMeasurementStrings.a11y.coinsScreen.startMeasurementHelpTextStringProperty
     } );
 
     // Link the start measurement button to the preparingExperimentProperty for easy reference in phet-io Studio.
@@ -200,7 +200,7 @@ class CoinsExperimentSceneView extends Node {
       soundPlayer: sharedSoundPlayers.get( 'erase' ),
       tandem: newCoinButtonTandem,
       accessibleName: QuantumMeasurementStrings.newCoinStringProperty,
-      accessibleHelpText: QuantumMeasurementStrings.a11y.translatable.coinsScreen.prepareNewCoinHelpTextStringProperty
+      accessibleHelpText: QuantumMeasurementStrings.a11y.coinsScreen.prepareNewCoinHelpTextStringProperty
     } );
 
     // Link the new coin button to the preparingExperimentProperty for easy reference in phet-io Studio.
