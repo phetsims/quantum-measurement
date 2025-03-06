@@ -51,11 +51,6 @@ export default class SternGerlach extends PhetioObject {
   // Wether photons would be arriving to the apparatus
   public readonly arePhotonsArrivingProperty: TReadOnlyProperty<boolean>;
 
-  // Local position vectors
-  public entranceLocalPosition: Vector2;
-  public topExitLocalPosition: Vector2;
-  public bottomExitLocalPosition: Vector2;
-
   // Local position properties
   public entrancePositionProperty: TReadOnlyProperty<Vector2>;
   public topExitPositionProperty: TReadOnlyProperty<Vector2>;
@@ -67,6 +62,16 @@ export default class SternGerlach extends PhetioObject {
   public static readonly PARTICLE_HOLE_WIDTH = 5 / 200;
   public static readonly PARTICLE_HOLE_HEIGHT = 20 / 200;
 
+
+  // Local position vectors
+  public static readonly ENTRANCE_LOCAL_POSITION = new Vector2(
+    -SternGerlach.STERN_GERLACH_WIDTH / 2 - SternGerlach.PARTICLE_HOLE_WIDTH / 2, 0 );
+  public static readonly TOP_EXIT_LOCAL_POSITION = new Vector2(
+    SternGerlach.STERN_GERLACH_WIDTH / 2 + SternGerlach.PARTICLE_HOLE_WIDTH / 2, SternGerlach.STERN_GERLACH_HEIGHT / 4 );
+  public static readonly BOTTOM_EXIT_LOCAL_POSITION = new Vector2(
+    SternGerlach.STERN_GERLACH_WIDTH / 2 + SternGerlach.PARTICLE_HOLE_WIDTH / 2, -SternGerlach.STERN_GERLACH_HEIGHT / 4 );
+
+
   public constructor( position: Vector2, isZOriented: boolean, tandem: Tandem ) {
 
     super();
@@ -76,25 +81,16 @@ export default class SternGerlach extends PhetioObject {
       phetioReadOnly: true
     } );
 
-    this.entranceLocalPosition = new Vector2(
-      -SternGerlach.STERN_GERLACH_WIDTH / 2 - SternGerlach.PARTICLE_HOLE_WIDTH / 2, 0 );
-
-    this.topExitLocalPosition = new Vector2(
-      SternGerlach.STERN_GERLACH_WIDTH / 2 + SternGerlach.PARTICLE_HOLE_WIDTH / 2, SternGerlach.STERN_GERLACH_HEIGHT / 4 );
-
-    this.bottomExitLocalPosition = new Vector2(
-      SternGerlach.STERN_GERLACH_WIDTH / 2 + SternGerlach.PARTICLE_HOLE_WIDTH / 2, -SternGerlach.STERN_GERLACH_HEIGHT / 4 );
-
     this.entrancePositionProperty = new DerivedProperty( [ this.positionProperty ], ( position: Vector2 ) => {
-      return position.plus( this.entranceLocalPosition );
+      return position.plus( SternGerlach.ENTRANCE_LOCAL_POSITION );
     } );
 
     this.topExitPositionProperty = new DerivedProperty( [ this.positionProperty ], ( position: Vector2 ) => {
-      return position.plus( this.topExitLocalPosition );
+      return position.plus( SternGerlach.TOP_EXIT_LOCAL_POSITION );
     } );
 
     this.bottomExitPositionProperty = new DerivedProperty( [ this.positionProperty ], ( position: Vector2 ) => {
-      return position.plus( this.bottomExitLocalPosition );
+      return position.plus( SternGerlach.BOTTOM_EXIT_LOCAL_POSITION );
     } );
 
     this.blockingModeProperty = new EnumerationProperty( BlockingMode.NO_BLOCKER, {

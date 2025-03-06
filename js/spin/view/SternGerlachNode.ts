@@ -82,9 +82,9 @@ export default class SternGerlachNode extends Node {
     const curveUpPath = new Path( curveUpShape, { stroke: QuantumMeasurementColors.sternGerlachCurveColorProperty, lineWidth: 4 } );
     const curveDownPath = new Path( curveDownShape, { stroke: QuantumMeasurementColors.sternGerlachCurveColorProperty, lineWidth: 4 } );
 
-    const particleEntrance = createParticleHole( sternGerlach.entranceLocalPosition );
-    const topParticleExit = createParticleHole( sternGerlach.topExitLocalPosition );
-    const bottomParticleExit = createParticleHole( sternGerlach.bottomExitLocalPosition );
+    const particleEntrance = createParticleHole( SternGerlach.ENTRANCE_LOCAL_POSITION );
+    const topParticleExit = createParticleHole( SternGerlach.TOP_EXIT_LOCAL_POSITION );
+    const bottomParticleExit = createParticleHole( SternGerlach.BOTTOM_EXIT_LOCAL_POSITION );
 
     const mainApparatus = new Rectangle( -STERN_GERLACH_WIDTH / 2, -STERN_GERLACH_HEIGHT / 2, STERN_GERLACH_WIDTH, STERN_GERLACH_HEIGHT,
       { fill: 'black' } );
