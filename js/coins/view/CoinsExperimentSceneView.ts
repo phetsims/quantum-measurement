@@ -24,6 +24,9 @@ import ButtonNode from '../../../../sun/js/buttons/ButtonNode.js';
 import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushButton.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import sharedSoundPlayers from '../../../../tambo/js/sharedSoundPlayers.js';
+import SoundClip from '../../../../tambo/js/sound-generators/SoundClip.js';
+import soundManager from '../../../../tambo/js/soundManager.js';
+import collect_mp3 from '../../../../tambo/sounds/collect_mp3.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
@@ -101,6 +104,10 @@ class CoinsExperimentSceneView extends Node {
     // Add the vertical line that will sit between the preparation and measurement areas.
     const dividingLine = new ExperimentDividingLine( 0 );
 
+    // Create the sound player for the "start measurement" button.
+    const startMeasurementSoundPlayer = new SoundClip( collect_mp3, { initialOutputLevel: 0.2 } );
+    soundManager.addSoundGenerator( startMeasurementSoundPlayer );
+
     // Add the button for switching from preparation mode to measurement mode.
     const startMeasurementButtonTandem = options.tandem.createTandem( 'startMeasurementButton' );
     const startMeasurementButton = new RectangularPushButton( {
@@ -114,6 +121,7 @@ class CoinsExperimentSceneView extends Node {
       centerY: 245, // empirically determined
       touchAreaXDilation: 5,
       touchAreaYDilation: 5,
+      soundPlayer: startMeasurementSoundPlayer,
       tandem: startMeasurementButtonTandem,
       accessibleName: QuantumMeasurementStrings.a11y.translatable.coinsScreen.startMeasurementStringProperty,
       accessibleHelpText: QuantumMeasurementStrings.a11y.translatable.coinsScreen.startMeasurementHelpTextStringProperty
