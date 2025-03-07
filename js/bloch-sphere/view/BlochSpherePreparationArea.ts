@@ -18,7 +18,7 @@ import VBox, { VBoxOptions } from '../../../../scenery/js/layout/nodes/VBox.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import ComboBox, { ComboBoxItem } from '../../../../sun/js/ComboBox.js';
-import Panel from '../../../../sun/js/Panel.js';
+import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
 import Slider, { SliderOptions } from '../../../../sun/js/Slider.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
@@ -122,11 +122,7 @@ export default class BlochSpherePreparationArea extends VBox {
           } )
         ]
       } ),
-      {
-        fill: QuantumMeasurementColors.controlPanelFillColorProperty,
-        stroke: QuantumMeasurementColors.controlPanelStrokeColorProperty,
-        minWidth: 270
-      }
+      combineOptions<PanelOptions>( { minWidth: 270 }, QuantumMeasurementConstants.PANEL_OPTIONS )
     );
 
     const blochSphereNode = new BlochSphereNode(
@@ -140,7 +136,7 @@ export default class BlochSpherePreparationArea extends VBox {
     );
 
     const options = optionize<BlochSpherePreparationAreaOptions, SelfOptions, VBoxOptions>()( {
-      spacing: 12,
+      spacing: 14,
       align: 'center',
       children: [
         new Text( QuantumMeasurementStrings.spinStateToPrepareStringProperty, {
