@@ -249,13 +249,16 @@ export default class OutcomeProbabilityControl extends VBox {
       ];
     }
 
+    // Only show the title and subtitle (if present) if either of the probability controls are visible.  This is for
+    // phet-io support.
     Multilink.multilink(
       [
         upProbabilityValueControl.visibleProperty,
         downProbabilityValueControl.visibleProperty
-      ], ( upVisible, downVisible ) => {
+      ],
+      ( upVisible, downVisible ) => {
         title.visible = upVisible || downVisible;
-        quantumReadout && quantumReadout.setVisible( upVisible || downVisible );
+        quantumReadout && ( quantumReadout.visible = upVisible || downVisible );
       }
     );
 
