@@ -12,7 +12,6 @@ import ScreenView from '../../../joist/js/ScreenView.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
 import { PathOptions } from '../../../scenery/js/nodes/Path.js';
 import Color from '../../../scenery/js/util/Color.js';
-import { PanelOptions } from '../../../sun/js/Panel.js';
 import { SliderOptions } from '../../../sun/js/Slider.js';
 import { StateDirection } from '../bloch-sphere/model/StateDirection.js';
 import quantumMeasurement from '../quantumMeasurement.js';
@@ -46,7 +45,7 @@ const EXPECTED_PERCENTAGE_PATH_OPTIONS: PathOptions = {
   lineWidth: 3
 };
 
-const PANEL_OPTIONS: PanelOptions = {
+const PANEL_OPTIONS = {
   fill: QuantumMeasurementColors.controlPanelFillColorProperty,
   stroke: QuantumMeasurementColors.controlPanelStrokeColorProperty,
   yMargin: 10,

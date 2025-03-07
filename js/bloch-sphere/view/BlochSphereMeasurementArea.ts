@@ -47,7 +47,7 @@ type BlochSphereMeasurementAreaOptions = SelfOptions & WithRequired<NodeOptions,
 const TIMES = MathSymbols.TIMES;
 
 // nominal max width of text elements, empirically determined
-const MAX_WIDTH = 200;
+const TEXT_NODE_MAX_WIDTH = 200;
 
 const UP = QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
 const DOWN = QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER;
@@ -238,48 +238,61 @@ export default class BlochSphereMeasurementArea extends Node {
       }
     );
 
-    const measurementTimerControl = new MeasurementTimerControl( model.timeToMeasurementProperty, model.measurementTimeProperty, {
-      tandem: measurementDelayControlTandem.createTandem( 'measurementTimerControl' ),
-      phetioVisiblePropertyInstrumented: false // Visibility controlled by parent node
-    } );
+    const measurementTimerControl = new MeasurementTimerControl(
+      model.timeToMeasurementProperty,
+      model.measurementTimeProperty,
+      {
+        tandem: measurementDelayControlTandem.createTandem( 'measurementTimerControl' ),
+        phetioVisiblePropertyInstrumented: false // Visibility controlled by parent node
+      }
+    );
 
-    const boxSpacing = 5;
-    const measurementControlPanel = new Panel( new VBox( {
-      spacing: 10,
-      align: 'left',
-      tandem: measurementControlsTandem,
-      minContentWidth: MAX_WIDTH,
+    const labelTextOptions = { font: new PhetFont( 16 ), maxWidth: TEXT_NODE_MAX_WIDTH };
+    const titleToControlSpacing = 5;
+    const numberOfAtomsControl = new VBox( {
+      spacing: titleToControlSpacing,
       children: [
-        // The panel contains multiple sections for a specific control and smaller spacing. Title and component
-        new VBox( {
-          spacing: boxSpacing,
-          children: [
-            new Text( QuantumMeasurementStrings.numberOfAtomsStringProperty, { font: new PhetFont( 16 ), maxWidth: MAX_WIDTH } ),
-            numberOfAtomsRadioButtonGroup
-          ],
-          tandem: numberOfAtomsControlTandem
-        } ),
+        new Text( QuantumMeasurementStrings.numberOfAtomsStringProperty, labelTextOptions ),
+        numberOfAtomsRadioButtonGroup
+      ],
+      align: 'left',
+      tandem: numberOfAtomsControlTandem
+    } );
+    const spinMeasurementAxisControl = new VBox( {
+      spacing: titleToControlSpacing,
+      children: [
+        new Text( QuantumMeasurementStrings.spinMeasurementAxisStringProperty, labelTextOptions ),
+        measurementAxisRadioButtonGroup
+      ],
+      align: 'left',
+      tandem: measurementAxisControlTandem
+    } );
+    const measurementDelayControl = new VBox( {
+      spacing: titleToControlSpacing,
+      children: [
+        new Text( QuantumMeasurementStrings.measurementDelayStringProperty, labelTextOptions ),
+        measurementTimerControl
+      ],
+      align: 'left',
+      tandem: measurementDelayControlTandem,
+      visibleProperty: new GatedVisibleProperty( model.magneticFieldEnabledProperty, measurementDelayControlTandem )
+    } );
+    const panelWidth = Math.max(
+      numberOfAtomsControl.localBounds.width,
+      spinMeasurementAxisControl.localBounds.width,
+      measurementDelayControl.localBounds.width
+    );
 
-        new VBox( {
-          spacing: boxSpacing,
-          children: [
-            new Text( QuantumMeasurementStrings.spinMeasurementAxisStringProperty, { font: new PhetFont( 16 ), maxWidth: MAX_WIDTH } ),
-            measurementAxisRadioButtonGroup
-          ],
-          tandem: measurementAxisControlTandem
-        } ),
-
-        new VBox( {
-          spacing: boxSpacing,
-          children: [
-            new Text( QuantumMeasurementStrings.measurementDelayStringProperty, { font: new PhetFont( 16 ), maxWidth: MAX_WIDTH } ),
-            measurementTimerControl
-          ],
-          tandem: measurementDelayControlTandem,
-          visibleProperty: new GatedVisibleProperty( model.magneticFieldEnabledProperty, measurementDelayControlTandem )
-        } )
-      ]
-    } ), QuantumMeasurementConstants.PANEL_OPTIONS );
+    const measurementControlPanel = new Panel(
+      new VBox( {
+        spacing: 10,
+        align: 'left',
+        tandem: measurementControlsTandem,
+        minContentWidth: panelWidth,
+        children: [ numberOfAtomsControl, spinMeasurementAxisControl, measurementDelayControl ]
+      } ),
+      QuantumMeasurementConstants.PANEL_OPTIONS
+    );
 
     // Define a DerivedStringProperty for the label that will appear on the button.
     const experimentControlButtonTextProperty = new DerivedStringProperty(
@@ -359,7 +372,7 @@ export default class BlochSphereMeasurementArea extends Node {
     const magneticFieldCheckbox = new Checkbox(
       model.magneticFieldEnabledProperty,
       new Text( QuantumMeasurementStrings.enableMagneticFieldStringProperty, {
-        font: new PhetFont( { size: 16 } ), maxWidth: MAX_WIDTH
+        font: new PhetFont( { size: 16 } ), maxWidth: TEXT_NODE_MAX_WIDTH
       } ),
       {
         spacing: 10,
