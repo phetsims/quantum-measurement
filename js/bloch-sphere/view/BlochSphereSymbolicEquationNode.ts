@@ -39,7 +39,7 @@ export default class BlochSphereSymbolicEquationNode extends HBox {
     const downKet = newRichText( `e<sup>i${PHI}</sup>|${DOWN}<sub>Z</sub> ${KET}` );
 
     const parenthesesOptions: RichTextOptions = {
-      font: QuantumMeasurementConstants.TITLE_FONT,
+      font: QuantumMeasurementConstants.CONTROL_FONT,
       scale: new Vector2( 1, 2 )
     };
 

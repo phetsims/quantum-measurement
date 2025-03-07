@@ -59,7 +59,7 @@ export default class BlochSphereMeasurementArea extends Node {
     const aquaRadioButtonGroupItems: AquaRadioButtonGroupItem<StateDirection>[] = QuantumMeasurementConstants.PLUS_DIRECTIONS.map( direction => {
       return {
         value: direction,
-        createNode: () => new Text( direction.shortName, { font: QuantumMeasurementConstants.TITLE_FONT } ),
+        createNode: () => new Text( direction.shortName, { font: QuantumMeasurementConstants.CONTROL_FONT } ),
         tandemName: `${direction.tandemName}RadioButton`
       };
     } );
@@ -69,7 +69,7 @@ export default class BlochSphereMeasurementArea extends Node {
     const equationBasisBox = new HBox( {
       spacing: 5,
       children: [
-        new Text( QuantumMeasurementStrings.basisColonStringProperty, { font: QuantumMeasurementConstants.TITLE_FONT, maxWidth: 100 } ),
+        new Text( QuantumMeasurementStrings.basisColonStringProperty, { font: QuantumMeasurementConstants.CONTROL_FONT, maxWidth: 100 } ),
         new AquaRadioButtonGroup( model.equationBasisProperty, aquaRadioButtonGroupItems, {
           orientation: 'horizontal',
           margin: 5,
@@ -185,7 +185,7 @@ export default class BlochSphereMeasurementArea extends Node {
           createNode: () => new HBox( {
             children: [
               new ShadedSphereNode( 14, ATOM_NODE_OPTIONS ),
-              new Text( isSingleMeasurement ? `${TIMES}1` : `${TIMES}10`, { font: QuantumMeasurementConstants.SUPER_TITLE_FONT } )
+              new Text( isSingleMeasurement ? `${TIMES}1` : `${TIMES}10`, { font: QuantumMeasurementConstants.TITLE_FONT } )
             ],
             spacing: 5
           } ),
@@ -206,7 +206,7 @@ export default class BlochSphereMeasurementArea extends Node {
     );
 
     const basisRadioButtonTextOptions: RichTextOptions = {
-      font: QuantumMeasurementConstants.SUPER_TITLE_FONT,
+      font: QuantumMeasurementConstants.CONTROL_FONT,
       fill: 'black'
     };
 
@@ -246,7 +246,7 @@ export default class BlochSphereMeasurementArea extends Node {
       }
     );
 
-    const labelTextOptions = { font: QuantumMeasurementConstants.TITLE_FONT, maxWidth: TEXT_NODE_MAX_WIDTH };
+    const labelTextOptions = { font: QuantumMeasurementConstants.CONTROL_FONT, maxWidth: TEXT_NODE_MAX_WIDTH };
     const titleToControlSpacing = 5;
     const numberOfAtomsControl = new VBox( {
       spacing: titleToControlSpacing,
@@ -371,7 +371,7 @@ export default class BlochSphereMeasurementArea extends Node {
     const magneticFieldCheckbox = new Checkbox(
       model.magneticFieldEnabledProperty,
       new Text( QuantumMeasurementStrings.enableMagneticFieldStringProperty, {
-        font: QuantumMeasurementConstants.TITLE_FONT, maxWidth: TEXT_NODE_MAX_WIDTH
+        font: QuantumMeasurementConstants.CONTROL_FONT, maxWidth: TEXT_NODE_MAX_WIDTH
       } ),
       {
         spacing: 10,

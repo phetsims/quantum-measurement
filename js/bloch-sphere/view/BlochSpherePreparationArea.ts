@@ -84,7 +84,7 @@ export default class BlochSpherePreparationArea extends VBox {
                        direction.description;
       return {
         value: direction,
-        createNode: () => new Text( itemText, { font: QuantumMeasurementConstants.TITLE_FONT } )
+        createNode: () => new Text( itemText, { font: QuantumMeasurementConstants.CONTROL_FONT } )
       };
     } );
 
@@ -93,7 +93,7 @@ export default class BlochSpherePreparationArea extends VBox {
       tandem: providedOptions.tandem.createTandem( 'directionComboBox' )
     } );
 
-    const sliderTitleOptions = { font: QuantumMeasurementConstants.TITLE_FONT, maxWidth: 200 };
+    const sliderTitleOptions = { font: QuantumMeasurementConstants.CONTROL_FONT, maxWidth: 200 };
     const slidersPanel = new Panel(
       new VBox( {
         spacing: 20,
