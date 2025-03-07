@@ -43,6 +43,11 @@ export default class PhotonPolarizationAngleControl extends Panel {
 
   public constructor( photonSource: Laser, providedOptions: PhotonPolarizationAngleControlOptions ) {
 
+    providedOptions = combineOptions<PhotonPolarizationAngleControlOptions>(
+      providedOptions,
+      QuantumMeasurementConstants.PANEL_OPTIONS
+    );
+
     const options = optionize<PhotonPolarizationAngleControlOptions, SelfOptions, PanelOptions>()( {
       fill: QuantumMeasurementColors.controlPanelFillColorProperty,
       stroke: QuantumMeasurementColors.controlPanelStrokeColorProperty,

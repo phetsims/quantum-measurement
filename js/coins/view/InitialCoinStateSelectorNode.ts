@@ -12,15 +12,16 @@ import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.j
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
-import Panel from '../../../../sun/js/Panel.js';
+import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import { SystemType } from '../../common/model/SystemType.js';
-import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { ClassicalCoinStates, ClassicalCoinStateValues } from '../model/ClassicalCoinStates.js';
@@ -64,7 +65,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
     const radioButtonGroupTandem = tandem.createTandem( 'radioButtonGroup' );
 
     // REVIEW: This violates the following item in the code review checklist:
-      // Make sure accessibility strings aren't being adjusted with ascii specific javascript methods like toUpperCase().
+    // Make sure accessibility strings aren't being adjusted with ascii specific javascript methods like toUpperCase().
     // Remember that one day these strings will be translatable
     const toTitleCase = ( str: string ) => {
       return str.charAt( 0 ).toUpperCase() + str.slice( 1 );
@@ -131,14 +132,11 @@ export default class InitialCoinStateSelectorNode extends VBox {
       spacing: 10
     } );
 
-    const selectorPanel = new Panel( selectorPanelContent, {
-      fill: QuantumMeasurementColors.controlPanelFillColorProperty,
-      stroke: QuantumMeasurementColors.controlPanelStrokeColorProperty,
-      yMargin: 10,
+    const selectorPanel = new Panel( selectorPanelContent, combineOptions<PanelOptions>( {
       minWidth: WIDTH,
       visibleProperty: new GatedVisibleProperty( preparingExperimentProperty, radioButtonGroupTandem ),
       tandem: radioButtonGroupTandem
-    } );
+    }, QuantumMeasurementConstants.PANEL_OPTIONS ) );
 
     selectorPanel.addLinkedElement( initialCoinStateProperty );
 

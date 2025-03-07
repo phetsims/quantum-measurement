@@ -10,7 +10,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -21,7 +21,7 @@ import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
-import Panel from '../../../../sun/js/Panel.js';
+import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHistogram.js';
@@ -107,15 +107,14 @@ class PhotonsExperimentSceneView extends Node {
                               QuantumMeasurementStrings.averagePolarizationRateStringProperty;
     const averagePolarizationTitlePanel = new Panel(
       new Text( titleTextProperty, { font: QuantumMeasurementConstants.SUPER_TITLE_FONT, maxWidth: 250 } ),
-      {
-        fill: QuantumMeasurementColors.controlPanelFillColorProperty,
-        stroke: null,
-        minWidth: 325,
-        cornerRadius: 5,
-        xMargin: 20,
-        yMargin: 10,
-        align: 'center'
-      }
+      combineOptions<PanelOptions>(
+        {
+          minWidth: 325,
+          xMargin: 20,
+          align: 'center'
+        },
+        QuantumMeasurementConstants.PANEL_OPTIONS
+      )
     );
 
     // Create the equation representation that shows the detection counts for the vertical and horizontal detectors.

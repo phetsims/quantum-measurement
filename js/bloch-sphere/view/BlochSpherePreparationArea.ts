@@ -144,17 +144,15 @@ export default class BlochSpherePreparationArea extends VBox {
           maxWidth: 250
         } ),
         new BlochSphereSymbolicEquationNode(),
-        new Panel(
-          new BlochSphereNumericalEquationNode( model.preparationBlochSphere ), {
-            fill: new DerivedProperty(
-              [ QuantumMeasurementColors.blockSphereMainColorProperty ],
-              color => color.colorUtilsBrighter( 0.5 )
-            ),
-            cornerRadius: 5,
-            stroke: null,
-            xMargin: 10
-          }
-        ),
+        new Panel( new BlochSphereNumericalEquationNode( model.preparationBlochSphere ), {
+          fill: new DerivedProperty(
+            [ QuantumMeasurementColors.blockSphereMainColorProperty ],
+            color => color.colorUtilsBrighter( 0.5 )
+          ),
+          cornerRadius: 5,
+          stroke: null,
+          xMargin: 10
+        } ),
         blochSphereNode,
         slidersPanel
       ]
