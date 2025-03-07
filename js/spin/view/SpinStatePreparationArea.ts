@@ -88,11 +88,11 @@ export default class SpinStatePreparationArea extends VBox {
       } );
 
     const stateToPrepareText = new RichText( QuantumMeasurementStrings.spinStateToPrepareStringProperty, {
-      font: new PhetFont( { size: 18, weight: 'bolder' } ),
+      font: QuantumMeasurementConstants.BOLD_HEADER_FONT,
       maxWidth: 250
     } );
     const symbolicEquationText = new RichText( `${ALPHA}|${UP} ${KET} + ${BETA}|${DOWN} ${KET}`,
-      { font: new PhetFont( { size: 18, weight: 'bolder' } ) } );
+      { font: QuantumMeasurementConstants.BOLD_HEADER_FONT } );
 
     const stateReadoutStringProperty = new DerivedProperty(
       [

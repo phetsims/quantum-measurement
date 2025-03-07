@@ -14,7 +14,6 @@ import { roundToInterval } from '../../../../dot/js/util/roundToInterval.js';
 import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import VBox, { VBoxOptions } from '../../../../scenery/js/layout/nodes/VBox.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
@@ -145,7 +144,7 @@ export default class BlochSpherePreparationArea extends VBox {
       align: 'center',
       children: [
         new Text( QuantumMeasurementStrings.spinStateToPrepareStringProperty, {
-          font: new PhetFont( { size: 20, weight: 'bolder' } ),
+          font: QuantumMeasurementConstants.BOLD_HEADER_FONT,
           maxWidth: 250
         } ),
         new BlochSphereSymbolicEquationNode(),

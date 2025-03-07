@@ -16,7 +16,6 @@ import { toRadians } from '../../../../dot/js/util/toRadians.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ShadedSphereNode from '../../../../scenery-phet/js/ShadedSphereNode.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
@@ -264,7 +263,7 @@ export default class SpinMeasurementArea extends VBox {
       children: [
         experimentComboBox,
         new Text( QuantumMeasurementStrings.SternGerlachMeasurementsStringProperty, {
-          font: new PhetFont( { size: 20, weight: 'bolder' } ),
+          font: QuantumMeasurementConstants.BOLD_HEADER_FONT,
           maxWidth: 400
         } ),
         experimentAreaNode
