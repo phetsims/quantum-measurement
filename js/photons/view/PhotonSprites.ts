@@ -38,8 +38,8 @@ class PhotonSprites extends Sprites {
   private readonly photonScale: number;
 
   // The sprites used to render the photons.
-  private readonly photonInteriorSprite: Sprite | null = null;
-  private readonly photonOutlineSprite: Sprite | null = null;
+  private readonly photonInteriorSprite: Sprite;
+  private readonly photonOutlineSprite: Sprite;
 
   public static readonly TARGET_PHOTON_VIEW_WIDTH = 10; // in screen coords, empirically determined to match the design
 

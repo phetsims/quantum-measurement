@@ -38,13 +38,10 @@ export default class CoinNode extends Node {
 
   public constructor( radius: number,
                       crossFadeProperty: TReadOnlyProperty<number>,
-                      coinFaceParameters: CoinFaceParameters[],
+                      coinFaceParameters: [ CoinFaceParameters, CoinFaceParameters ],
                       providedOptions?: CoinNodeOptions ) {
 
     const options = optionize<CoinNodeOptions, SelfOptions, NodeOptions>()( {}, providedOptions );
-
-    // parameter checking
-    assert && assert( coinFaceParameters.length === 2, 'there should be exactly two sets of coin face parameters' );
 
     super( options );
 
