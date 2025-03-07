@@ -25,6 +25,7 @@ import AquaRadioButtonGroup, { AquaRadioButtonGroupItem } from '../../../../sun/
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import Panel from '../../../../sun/js/Panel.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
 import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHistogram.js';
@@ -397,8 +398,14 @@ export default class BlochSphereMeasurementArea extends Node {
 
     const magneticFieldControl = new MagneticFieldControl( model.magneticFieldStrengthProperty, {
       visibleProperty: model.magneticFieldEnabledProperty,
-      minHeight: systemUnderTestNode.height, // Make this the same height as the system under test node.
-      tandem: magneticFieldControlsTandem
+      tandem: magneticFieldControlsTandem,
+
+      // Put a stroke around it so that it is easier to match the size of the system under test panel.
+      stroke: QuantumMeasurementColors.controlPanelFillColorProperty,
+
+      // Make this the same height as the system under test node.
+      minHeight: systemUnderTestNode.height,
+      minWidth: systemUnderTestNode.width
     } );
 
     const magneticFieldAndStrengthControl = new HBox( {

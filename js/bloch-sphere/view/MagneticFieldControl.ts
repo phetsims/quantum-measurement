@@ -33,7 +33,7 @@ import MagneticFieldArrowNode from './MagneticFieldArrowNode.js';
 type SelfOptions = EmptySelfOptions;
 export type MagneticFieldControlOptions = SelfOptions & WithRequired<PanelOptions, 'tandem'>;
 
-const SLIDER_TRACK_SIZE = new Dimension2( 0.1, 100 );
+const SLIDER_TRACK_SIZE = new Dimension2( 0.1, 110 );
 
 export default class MagneticFieldControl extends Panel {
 
@@ -41,7 +41,8 @@ export default class MagneticFieldControl extends Panel {
                       providedOptions: MagneticFieldControlOptions ) {
 
     const options = optionize<MagneticFieldControlOptions, SelfOptions, PanelOptions>()(
-      QuantumMeasurementConstants.PANEL_OPTIONS, providedOptions
+      QuantumMeasurementConstants.PANEL_OPTIONS,
+      providedOptions
     );
 
     const magneticFieldIndicator = new Node( {
