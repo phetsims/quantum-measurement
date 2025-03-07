@@ -385,11 +385,6 @@ export default class BlochSphereMeasurementArea extends Node {
       }
     );
 
-    const magneticFieldControl = new MagneticFieldControl( model.magneticFieldStrengthProperty, {
-      visibleProperty: model.magneticFieldEnabledProperty,
-      tandem: magneticFieldControlsTandem
-    } );
-
     const systemUnderTestNode = new SystemUnderTestNode(
       model.magneticFieldEnabledProperty,
       model.magneticFieldStrengthProperty,
@@ -399,6 +394,12 @@ export default class BlochSphereMeasurementArea extends Node {
         tandem: providedOptions.tandem.createTandem( 'systemUnderTestNode' )
       }
     );
+
+    const magneticFieldControl = new MagneticFieldControl( model.magneticFieldStrengthProperty, {
+      visibleProperty: model.magneticFieldEnabledProperty,
+      minHeight: systemUnderTestNode.height, // Make this the same height as the system under test node.
+      tandem: magneticFieldControlsTandem
+    } );
 
     const magneticFieldAndStrengthControl = new HBox( {
       children: [ magneticFieldControl, systemUnderTestNode ],

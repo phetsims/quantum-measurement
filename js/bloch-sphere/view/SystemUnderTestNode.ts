@@ -37,7 +37,7 @@ export const ATOM_NODE_OPTIONS = {
   mainColor: Color.RED,
   highlightColor: Color.RED.colorUtilsBrighter( 0.7 )
 };
-const LABEL_FONT = QuantumMeasurementConstants.SUPER_TITLE_FONT;
+const TITLE_FONT = QuantumMeasurementConstants.TITLE_FONT;
 
 class SystemUnderTestNode extends Panel {
 
@@ -63,7 +63,7 @@ class SystemUnderTestNode extends Panel {
       ],
       ( ( isSingleMode, atomString, atomsString ) => isSingleMode ? atomString : atomsString )
     );
-    const titleNode = new Text( titleStringProperty, { font: LABEL_FONT, maxWidth: 70 } );
+    const titleNode = new Text( titleStringProperty, { font: TITLE_FONT, maxWidth: 70 } );
 
     // Create the magnetic field node, which is only visible when the magnetic field is enabled.
     const magneticFieldNode = new MagneticFieldNode( magneticFieldStrengthProperty, measurementStateProperty, {
@@ -178,12 +178,16 @@ class SystemUnderTestNode extends Panel {
       }
     } );
 
-    const options = combineOptions<PanelOptions>( {
-      stroke: Color.BLACK,
-      fill: QuantumMeasurementColors.systemUnderTestBackgroundColorProperty,
-      cornerRadius: 8,
-      resize: false
-    }, providedOptions );
+    const options = combineOptions<PanelOptions>(
+      {},
+      QuantumMeasurementConstants.PANEL_OPTIONS,
+      {
+        stroke: Color.BLACK,
+        fill: QuantumMeasurementColors.systemUnderTestBackgroundColorProperty,
+        resize: false
+      },
+      providedOptions
+    );
 
     super( content, options );
   }

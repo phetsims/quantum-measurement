@@ -19,6 +19,7 @@ import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
+import Spacer from '../../../../scenery/js/nodes/Spacer.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
@@ -39,12 +40,9 @@ export default class MagneticFieldControl extends Panel {
   public constructor( magneticFieldStrengthProperty: NumberProperty,
                       providedOptions: MagneticFieldControlOptions ) {
 
-    const options = optionize<MagneticFieldControlOptions, SelfOptions, PanelOptions>()( {
-      fill: QuantumMeasurementColors.controlPanelFillColorProperty,
-      stroke: null,
-      xMargin: 10,
-      yMargin: 20
-    }, providedOptions );
+    const options = optionize<MagneticFieldControlOptions, SelfOptions, PanelOptions>()(
+      QuantumMeasurementConstants.PANEL_OPTIONS, providedOptions
+    );
 
     const magneticFieldIndicator = new Node( {
       children: [
@@ -79,25 +77,28 @@ export default class MagneticFieldControl extends Panel {
     } );
 
     const sliderStep = 0.25;
-    const magneticFieldStrengthSlider = new Slider( magneticFieldStrengthProperty, magneticFieldStrengthProperty.range, {
-      tandem: providedOptions.tandem.createTandem( 'magneticFieldStrengthSlider' ),
-      thumbSize: new Dimension2( 28, 14 ),
-      thumbFill: QuantumMeasurementColors.magneticFieldThumbFillColorProperty,
-      thumbFillHighlighted: QuantumMeasurementColors.magneticFieldColorProperty,
-      thumbCenterLineStroke: Color.BLACK,
-      trackSize: SLIDER_TRACK_SIZE,
-      trackFillEnabled: Color.BLACK,
-      orientation: Orientation.VERTICAL,
-      majorTickLength: 20,
-
-      constrainValue: value => roundToInterval( value, sliderStep ),
-      keyboardStep: sliderStep,
-      shiftKeyboardStep: sliderStep,
-      pageKeyboardStep: sliderStep * 2,
-      valueChangeSoundGeneratorOptions: {
-        numberOfMiddleThresholds: magneticFieldStrengthProperty.range.getLength() / sliderStep - 1
+    const magneticFieldStrengthSlider = new Slider(
+      magneticFieldStrengthProperty,
+      magneticFieldStrengthProperty.range,
+      {
+        thumbSize: new Dimension2( 26, 12 ),
+        thumbFill: QuantumMeasurementColors.magneticFieldThumbFillColorProperty,
+        thumbFillHighlighted: QuantumMeasurementColors.magneticFieldColorProperty,
+        thumbCenterLineStroke: Color.BLACK,
+        trackSize: SLIDER_TRACK_SIZE,
+        trackFillEnabled: Color.BLACK,
+        orientation: Orientation.VERTICAL,
+        majorTickLength: 20,
+        constrainValue: value => roundToInterval( value, sliderStep ),
+        keyboardStep: sliderStep,
+        shiftKeyboardStep: sliderStep,
+        pageKeyboardStep: sliderStep * 2,
+        valueChangeSoundGeneratorOptions: {
+          numberOfMiddleThresholds: magneticFieldStrengthProperty.range.getLength() / sliderStep - 1
+        },
+        tandem: providedOptions.tandem.createTandem( 'magneticFieldStrengthSlider' )
       }
-    } );
+    );
     magneticFieldStrengthSlider.addMajorTick( -1 );
     magneticFieldStrengthSlider.addMajorTick( 1 );
 
@@ -108,17 +109,15 @@ export default class MagneticFieldControl extends Panel {
     } );
 
     const panelTitle = new Text( QuantumMeasurementStrings.magneticFieldStringProperty, {
-      font: QuantumMeasurementConstants.CONTROL_FONT,
+      font: QuantumMeasurementConstants.TITLE_FONT,
       maxWidth: 150
     } );
 
-    super(
-      new VBox( {
-        children: [ panelTitle, indicatorAndSlider ],
-        spacing: 10
-      } ),
-      options
-    );
+    // Assemble the children of the panel, and stick in a couple of spacers so that the slider and readout are
+    // vertically centered between the title and the bottom of the panel.
+    const vboxContentChildren = [ panelTitle, new Spacer( 0, 1 ), indicatorAndSlider, new Spacer( 0, 1 ) ];
+
+    super( new VBox( { children: vboxContentChildren } ), options );
   }
 }
 
