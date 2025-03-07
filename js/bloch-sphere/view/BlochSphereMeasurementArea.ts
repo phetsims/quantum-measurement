@@ -112,7 +112,7 @@ export default class BlochSphereMeasurementArea extends Node {
       drawKets: false,
       drawAngleIndicators: true,
       centerX: equationNodePanel.centerX,
-      top: equationNodePanel.bottom + 25,
+      top: equationNodePanel.bottom + 35,
       visibleProperty: model.isSingleMeasurementModeProperty
     } );
 
@@ -142,6 +142,7 @@ export default class BlochSphereMeasurementArea extends Node {
         currentRow++;
       }
     } );
+
     const multipleMeasurementBlochSpheresNode = new Node( {
       children: multipleMeasurementBlochSpheresNodes,
       centerX: equationNodePanel.centerX,
@@ -351,7 +352,7 @@ export default class BlochSphereMeasurementArea extends Node {
     );
 
     const measurementControls = new VBox( {
-      left: singleMeasurementBlochSphereNode.right + 20,
+      left: singleMeasurementBlochSphereNode.right + 60,
       align: 'center',
       top: 10,
       spacing: 10,
@@ -377,7 +378,7 @@ export default class BlochSphereMeasurementArea extends Node {
       {
         spacing: 10,
         centerX: multipleMeasurementBlochSpheresNode.centerX,
-        bottom: QuantumMeasurementConstants.LAYOUT_BOUNDS.bottom - 55,
+        bottom: QuantumMeasurementConstants.LAYOUT_BOUNDS.bottom - 30,
         mouseAreaXDilation: 5,
         mouseAreaYDilation: 5,
         touchAreaXDilation: 5,
