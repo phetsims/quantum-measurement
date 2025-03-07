@@ -46,6 +46,7 @@ export default class ProbabilityValueControl extends NumberControl {
       layoutFunction: ( titleNode, numberDisplay, slider, leftArrowButton, rightArrowButton ) => {
         assert && assert( leftArrowButton && rightArrowButton );
         return new VBox( {
+          spacing: QuantumMeasurementConstants.TITLE_AND_SLIDER_SPACING,
           children: [
             titleNode,
             new HBox( {

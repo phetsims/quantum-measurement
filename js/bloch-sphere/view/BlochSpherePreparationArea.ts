@@ -100,7 +100,7 @@ export default class BlochSpherePreparationArea extends VBox {
         children: [
           directionComboBox,
           new VBox( {
-            spacing: 5,
+            spacing: QuantumMeasurementConstants.TITLE_AND_SLIDER_SPACING,
             children: [
               new Text(
                 new PatternStringProperty(
@@ -111,7 +111,7 @@ export default class BlochSpherePreparationArea extends VBox {
             ]
           } ),
           new VBox( {
-            spacing: 5,
+            spacing: QuantumMeasurementConstants.TITLE_AND_SLIDER_SPACING,
             children: [
               new Text(
                 new PatternStringProperty(
