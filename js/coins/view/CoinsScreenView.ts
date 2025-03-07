@@ -7,11 +7,9 @@
  */
 
 import CoinsModel from 'model/CoinsModel.js';
-import Multilink from '../../../../axon/js/Multilink.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import { SystemType } from '../../common/model/SystemType.js';
-import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
 import SceneSelectorRadioButtonGroup from '../../common/view/SceneSelectorRadioButtonGroup.js';
@@ -68,17 +66,6 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
       quantumCoinsExperimentSceneView,
       experimentTypeRadioButtonGroup
     ];
-
-    // Changing the background color based on the experiment type
-    Multilink.multilink(
-      [
-        model.experimentTypeProperty,
-        QuantumMeasurementColors.classicalBackgroundColorProperty,
-        QuantumMeasurementColors.quantumBackgroundColorProperty
-      ],
-      ( experimentType, classicalBackgroundColor, quantumBackgroundColor ) => {
-        QuantumMeasurementColors.screenBackgroundColorProperty.value = experimentType === SystemType.CLASSICAL ? classicalBackgroundColor : quantumBackgroundColor;
-      } );
   }
 
   public override reset(): void {
