@@ -33,9 +33,9 @@ import VectorTailNode from './VectorTailNode.js';
 type SelfOptions = EmptySelfOptions;
 type PhotonPolarizationAngleControlOptions = SelfOptions & WithRequired<PanelOptions, 'tandem'>;
 
-const RADIO_BUTTON_TEXT_FONT = new PhetFont( 14 );
+const RADIO_BUTTON_TEXT_FONT = QuantumMeasurementConstants.CONTROL_FONT;
 const TICK_MARK_TEXT_OPTIONS: TextOptions = {
-  font: new PhetFont( 12 ),
+  font: QuantumMeasurementConstants.SMALL_LABEL_FONT,
   maxWidth: 50
 };
 
@@ -166,7 +166,7 @@ export default class PhotonPolarizationAngleControl extends Panel {
       children: [
         new VectorTailNode( 6 ),
         new Text( QuantumMeasurementStrings.propagationIntoPageStringProperty, {
-          font: new PhetFont( 14 ),
+          font: QuantumMeasurementConstants.CONTROL_FONT,
           maxWidth: 100
         } )
       ],

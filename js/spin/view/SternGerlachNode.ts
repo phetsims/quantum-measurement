@@ -14,7 +14,6 @@ import Shape from '../../../../kite/js/Shape.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
@@ -25,6 +24,7 @@ import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
 import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { BlockingMode } from '../model/BlockingMode.js';
@@ -94,7 +94,7 @@ export default class SternGerlachNode extends Node {
           sternGerlach.isZOrientedProperty
         ],
         isZOriented => isZOriented ? 'SG<sub>Z</sub>' : 'SG<sub>X</sub>' ),
-      { font: new PhetFont( 18 ), fill: 'white', center: new Vector2( -STERN_GERLACH_WIDTH / 2 + 25, -STERN_GERLACH_HEIGHT / 2 + 70 ) } );
+      { font: QuantumMeasurementConstants.SUPER_TITLE_FONT, fill: 'white', center: new Vector2( -STERN_GERLACH_WIDTH / 2 + 25, -STERN_GERLACH_HEIGHT / 2 + 70 ) } );
 
     const sternGerlachControls = new VBox( {
       align: 'left',
@@ -103,7 +103,7 @@ export default class SternGerlachNode extends Node {
     } );
 
     const radioButtonTextOptions: RichTextOptions = {
-      font: new PhetFont( 18 ),
+      font: QuantumMeasurementConstants.SUPER_TITLE_FONT,
       fill: 'black'
     };
 
@@ -145,7 +145,7 @@ export default class SternGerlachNode extends Node {
               blockingMode === BlockingMode.BLOCK_UP ?
               QuantumMeasurementStrings.blockUpStringProperty :
               QuantumMeasurementStrings.blockDownStringProperty,
-              { font: new PhetFont( 15 ), maxWidth: 150 } ),
+              { font: QuantumMeasurementConstants.CONTROL_FONT, maxWidth: 150 } ),
             tandemName: `${blockingMode.tandemName}RadioButton`,
             phetioVisiblePropertyInstrumented: false
           };

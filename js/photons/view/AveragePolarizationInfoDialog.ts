@@ -17,13 +17,14 @@ import Spacer from '../../../../scenery/js/nodes/Spacer.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Dialog from '../../../../sun/js/Dialog.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 
 // constants
 const MAX_WIDTH = 800; // determined empirically
 const TITLE_FONT = new PhetFont( { size: 18, weight: 'bold' } );
-const ITEM_FONT = new PhetFont( 18 );
+const ITEM_FONT = QuantumMeasurementConstants.SUPER_TITLE_FONT;
 
 export default class AveragePolarizationInfoDialog extends Dialog {
 

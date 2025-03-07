@@ -17,6 +17,7 @@ import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
 import { SystemType } from '../../common/model/SystemType.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import PhotonsExperimentSceneModel from '../model/PhotonsExperimentSceneModel.js';
@@ -56,7 +57,7 @@ class PhotonTestingArea extends Node {
             value: behaviorMode,
             createNode: () => new Text(
               behaviorMode.testingName,
-              { font: new PhetFont( 15 ), maxWidth: 100 }
+              { font: QuantumMeasurementConstants.CONTROL_FONT, maxWidth: 100 }
             ),
             tandemName: `${behaviorMode.tandemName}RadioButton`,
             phetioVisiblePropertyInstrumented: false

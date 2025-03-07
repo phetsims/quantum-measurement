@@ -17,7 +17,6 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import Orientation from '../../../../phet-core/js/Orientation.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import PressListener from '../../../../scenery/js/listeners/PressListener.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
@@ -27,6 +26,7 @@ import { PanelOptions } from '../../../../sun/js/Panel.js';
 import Slider from '../../../../sun/js/Slider.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import MeasurementSymbolNode from '../../common/view/MeasurementSymbolNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
@@ -120,8 +120,8 @@ export default class MeasurementTimerControl extends Node {
     } );
 
     // Add the major and minor tick marks to the slider.
-    timeToMeasurementSlider.addMajorTick( 0, new Text( '0', { font: new PhetFont( 15 ) } ) );
-    timeToMeasurementSlider.addMajorTick( maxMeasurementTime, new Text( '1', { font: new PhetFont( 15 ) } ) );
+    timeToMeasurementSlider.addMajorTick( 0, new Text( '0', { font: QuantumMeasurementConstants.CONTROL_FONT } ) );
+    timeToMeasurementSlider.addMajorTick( maxMeasurementTime, new Text( '1', { font: QuantumMeasurementConstants.CONTROL_FONT } ) );
     _.times( NUMBER_OF_MINOR_TICKS, i => {
       const fraction = ( i + 1 ) / ( NUMBER_OF_MINOR_TICKS + 1 );
       timeToMeasurementSlider.addMinorTick( fraction * maxMeasurementTime );

@@ -14,7 +14,6 @@ import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js'
 import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
 import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
 import TProperty from '../../../../axon/js/TProperty.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Circle from '../../../../scenery/js/nodes/Circle.js';
@@ -25,6 +24,7 @@ import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioS
 import Tandem from '../../../../tandem/js/Tandem.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import CoinsExperimentSceneModel, { MAX_COINS, MULTI_COIN_EXPERIMENT_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
@@ -38,7 +38,7 @@ import SceneSectionHeader from './SceneSectionHeader.js';
 import SingleCoinTestBox from './SingleCoinTestBox.js';
 import SingleCoinViewManager from './SingleCoinViewManager.js';
 
-const COIN_QUANTITY_SELECTOR_FONT = new PhetFont( 16 );
+const COIN_QUANTITY_SELECTOR_FONT = QuantumMeasurementConstants.TITLE_FONT;
 const HEADER_MAX_WIDTH = 400; // empirically determined using Scenery helper measuring tape
 
 class CoinExperimentMeasurementArea extends VBox {

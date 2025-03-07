@@ -13,7 +13,6 @@ import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js'
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import { SystemType } from '../../common/model/SystemType.js';
@@ -27,7 +26,7 @@ import CoinSet from '../model/CoinSet.js';
 type SelfOptions = EmptySelfOptions;
 export type CoinMeasurementHistogramOptions = SelfOptions & WithRequired<QuantumMeasurementHistogramOptions, 'tandem'>;
 
-const LABEL_FONT = new PhetFont( { size: 20, weight: 'bold' } );
+const LABEL_FONT = QuantumMeasurementConstants.BOLD_HEADER_FONT;
 const SIZE = new Dimension2( 200, 120 );
 
 export default class CoinMeasurementHistogram extends QuantumMeasurementHistogram {
@@ -118,7 +117,7 @@ export default class CoinMeasurementHistogram extends QuantumMeasurementHistogra
     );
 
     const numberOfSystemsText = new Text( numberOfCoinsStringProperty, {
-      font: new PhetFont( 16 ),
+      font: QuantumMeasurementConstants.TITLE_FONT,
       centerX: 0,
       centerY: this.yAxis.top - 40,
       maxWidth: 200 // empirically determined to work well with layout

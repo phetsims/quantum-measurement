@@ -25,6 +25,7 @@ import Path from '../../../../scenery/js/nodes/Path.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import VectorTailNode from './VectorTailNode.js';
@@ -117,7 +118,7 @@ export default class FlatPolarizationAngleIndicator extends Node {
         [ polarizationAngleProperty ],
         angle => angle === null ? '' : ` = ${angle}°`
       ),
-      { font: new PhetFont( 14 ) }
+      { font: QuantumMeasurementConstants.CONTROL_FONT }
     );
     const angleReadoutLabel = new HBox( {
       children: [ thetaNode, angleReadoutText ],

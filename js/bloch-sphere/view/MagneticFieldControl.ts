@@ -14,7 +14,6 @@ import Shape from '../../../../kite/js/Shape.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import Orientation from '../../../../phet-core/js/Orientation.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
@@ -25,6 +24,7 @@ import Color from '../../../../scenery/js/util/Color.js';
 import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
 import Slider from '../../../../sun/js/Slider.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import MagneticFieldArrowNode from './MagneticFieldArrowNode.js';
@@ -71,7 +71,7 @@ export default class MagneticFieldControl extends Panel {
 
     const labeledMagneticFieldIndicator = new HBox( {
       children: [
-        new Text( '0', { font: new PhetFont( 12 ) } ),
+        new Text( '0', { font: QuantumMeasurementConstants.SMALL_LABEL_FONT } ),
         magneticFieldIndicator
       ],
       spacing: 5,
@@ -108,7 +108,7 @@ export default class MagneticFieldControl extends Panel {
     } );
 
     const panelTitle = new Text( QuantumMeasurementStrings.magneticFieldStringProperty, {
-      font: new PhetFont( 18 ),
+      font: QuantumMeasurementConstants.SUPER_TITLE_FONT,
       maxWidth: 150
     } );
 

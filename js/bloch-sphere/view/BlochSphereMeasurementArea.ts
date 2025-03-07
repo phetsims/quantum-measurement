@@ -15,7 +15,6 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import EraserButton from '../../../../scenery-phet/js/buttons/EraserButton.js';
 import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ShadedSphereNode from '../../../../scenery-phet/js/ShadedSphereNode.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
@@ -60,7 +59,7 @@ export default class BlochSphereMeasurementArea extends Node {
     const aquaRadioButtonGroupItems: AquaRadioButtonGroupItem<StateDirection>[] = QuantumMeasurementConstants.PLUS_DIRECTIONS.map( direction => {
       return {
         value: direction,
-        createNode: () => new Text( direction.shortName, { font: new PhetFont( 16 ) } ),
+        createNode: () => new Text( direction.shortName, { font: QuantumMeasurementConstants.TITLE_FONT } ),
         tandemName: `${direction.tandemName}RadioButton`
       };
     } );
@@ -70,7 +69,7 @@ export default class BlochSphereMeasurementArea extends Node {
     const equationBasisBox = new HBox( {
       spacing: 5,
       children: [
-        new Text( QuantumMeasurementStrings.basisColonStringProperty, { font: new PhetFont( 16 ), maxWidth: 100 } ),
+        new Text( QuantumMeasurementStrings.basisColonStringProperty, { font: QuantumMeasurementConstants.TITLE_FONT, maxWidth: 100 } ),
         new AquaRadioButtonGroup( model.equationBasisProperty, aquaRadioButtonGroupItems, {
           orientation: 'horizontal',
           margin: 5,
@@ -186,7 +185,7 @@ export default class BlochSphereMeasurementArea extends Node {
           createNode: () => new HBox( {
             children: [
               new ShadedSphereNode( 14, ATOM_NODE_OPTIONS ),
-              new Text( isSingleMeasurement ? `${TIMES}1` : `${TIMES}10`, { font: new PhetFont( 18 ) } )
+              new Text( isSingleMeasurement ? `${TIMES}1` : `${TIMES}10`, { font: QuantumMeasurementConstants.SUPER_TITLE_FONT } )
             ],
             spacing: 5
           } ),
@@ -207,7 +206,7 @@ export default class BlochSphereMeasurementArea extends Node {
     );
 
     const basisRadioButtonTextOptions: RichTextOptions = {
-      font: new PhetFont( 18 ),
+      font: QuantumMeasurementConstants.SUPER_TITLE_FONT,
       fill: 'black'
     };
 
@@ -247,7 +246,7 @@ export default class BlochSphereMeasurementArea extends Node {
       }
     );
 
-    const labelTextOptions = { font: new PhetFont( 16 ), maxWidth: TEXT_NODE_MAX_WIDTH };
+    const labelTextOptions = { font: QuantumMeasurementConstants.TITLE_FONT, maxWidth: TEXT_NODE_MAX_WIDTH };
     const titleToControlSpacing = 5;
     const numberOfAtomsControl = new VBox( {
       spacing: titleToControlSpacing,
@@ -336,7 +335,7 @@ export default class BlochSphereMeasurementArea extends Node {
           }
         },
         baseColor: experimentControlButtonColorProperty,
-        font: new PhetFont( 18 ),
+        font: QuantumMeasurementConstants.SUPER_TITLE_FONT,
         enabledProperty: DerivedProperty.valueNotEqualsConstant( model.measurementStateProperty, SpinMeasurementState.TIMING_OBSERVATION ),
         xMargin: 20,
         yMargin: 6,
@@ -372,7 +371,7 @@ export default class BlochSphereMeasurementArea extends Node {
     const magneticFieldCheckbox = new Checkbox(
       model.magneticFieldEnabledProperty,
       new Text( QuantumMeasurementStrings.enableMagneticFieldStringProperty, {
-        font: new PhetFont( { size: 16 } ), maxWidth: TEXT_NODE_MAX_WIDTH
+        font: QuantumMeasurementConstants.TITLE_FONT, maxWidth: TEXT_NODE_MAX_WIDTH
       } ),
       {
         spacing: 10,

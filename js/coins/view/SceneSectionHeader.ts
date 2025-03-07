@@ -14,13 +14,13 @@
 
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import VBox, { VBoxOptions } from '../../../../scenery/js/layout/nodes/VBox.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import TPaint from '../../../../scenery/js/util/TPaint.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
 type SelfOptions = {
@@ -42,7 +42,7 @@ export default class SceneSectionHeader extends VBox {
 
     const heading = new Text( textProperty, {
       fill: options.textColor,
-      font: new PhetFont( 20 ),
+      font: QuantumMeasurementConstants.SECTION_HEADER_FONT,
       maxWidth: options.maxWidth
     } );
     const line = new Line( 0, 0, heading.width, 0, {

@@ -17,7 +17,6 @@ import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-co
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import InfoButton from '../../../../scenery-phet/js/buttons/InfoButton.js';
 import MathSymbolFont from '../../../../scenery-phet/js/MathSymbolFont.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox, { HBoxOptions } from '../../../../scenery/js/layout/nodes/HBox.js';
 import RichText, { RichTextOptions } from '../../../../scenery/js/nodes/RichText.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
@@ -108,11 +107,11 @@ export default class PhotonsEquationNode extends HBox {
     );
 
     const equationTextOptions = {
-      font: new PhetFont( 17 )
+      font: QuantumMeasurementConstants.TITLE_FONT
     };
     const numericalTextOptions = combineOptions<RichTextOptions>( {}, equationTextOptions, {
       visibleProperty: new DerivedProperty( [ totalNumberProperty ], totalNumber => totalNumber > 0 ),
-      font: new PhetFont( 17 )
+      font: QuantumMeasurementConstants.TITLE_FONT
     } );
 
     const numericalEquationNumerator = new RichText( numericalEquationNumeratorProperty, numericalTextOptions );

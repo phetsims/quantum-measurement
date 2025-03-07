@@ -18,7 +18,6 @@ import ScreenView from '../../../../joist/js/ScreenView.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import ButtonNode from '../../../../sun/js/buttons/ButtonNode.js';
 import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushButton.js';
@@ -193,7 +192,7 @@ class CoinsExperimentSceneView extends Node {
         maxWidth: 150
       },
       baseColor: QuantumMeasurementColors.newCoinButtonColorProperty,
-      font: new PhetFont( 14 ),
+      font: QuantumMeasurementConstants.CONTROL_FONT,
       listener: () => {
         sceneModel.preparingExperimentProperty.value = true;
       },

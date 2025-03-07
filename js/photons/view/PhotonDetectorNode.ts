@@ -18,7 +18,6 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import NumberDisplay from '../../../../scenery-phet/js/NumberDisplay.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import Circle from '../../../../scenery/js/nodes/Circle.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
@@ -29,6 +28,7 @@ import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
 import RadialGradient from '../../../../scenery/js/util/RadialGradient.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import PhotonDetector, { DetectionDirection } from '../model/PhotonDetector.js';
@@ -40,7 +40,7 @@ type PhotonDetectorNodeOptions = SelfOptions & PickRequired<NodeOptions, 'tandem
 // height (which is really more like the depth) is for the dimension parallel to the detection direction.
 const DETECTOR_BODY_SIZE = new Dimension2( 85, 50 );
 
-const DISPLAY_FONT = new PhetFont( { size: 20, weight: 'bold' } );
+const DISPLAY_FONT = QuantumMeasurementConstants.BOLD_HEADER_FONT;
 
 export default class PhotonDetectorNode extends Node {
 
@@ -103,7 +103,7 @@ export default class PhotonDetectorNode extends Node {
 
       // Create the label and position it above the detector body.
       label = new RichText( labelStringProperty, {
-        font: new PhetFont( 12 ),
+        font: QuantumMeasurementConstants.SMALL_LABEL_FONT,
         align: 'center',
         centerX: body.centerX,
         bottom: body.top - 5,
@@ -136,7 +136,7 @@ export default class PhotonDetectorNode extends Node {
 
       // Create the label and position it below the detector body.
       label = new RichText( labelStringProperty, {
-        font: new PhetFont( 12 ),
+        font: QuantumMeasurementConstants.SMALL_LABEL_FONT,
         align: 'center',
         centerX: body.centerX,
         top: body.bottom + 5,

@@ -11,11 +11,11 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import Mirror from '../model/Mirror.js';
@@ -47,7 +47,7 @@ export default class MirrorNode extends Node {
     );
 
     const label = new Text( QuantumMeasurementStrings.mirrorStringProperty, {
-      font: new PhetFont( 12 ),
+      font: QuantumMeasurementConstants.SMALL_LABEL_FONT,
       left: mirrorLine.centerX + 2,
       bottom: mirrorLine.centerY,
       maxWidth: 100

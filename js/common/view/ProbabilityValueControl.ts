@@ -14,7 +14,6 @@ import Range from '../../../../dot/js/Range.js';
 import { roundToInterval } from '../../../../dot/js/util/roundToInterval.js';
 import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import NumberControl, { NumberControlOptions, NumberControlSliderOptions } from '../../../../scenery-phet/js/NumberControl.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
@@ -22,8 +21,8 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementConstants from '../QuantumMeasurementConstants.js';
 
-const TITLE_FONT = new PhetFont( 16 );
-const TICK_MARK_FONT = new PhetFont( 14 );
+const TITLE_FONT = QuantumMeasurementConstants.TITLE_FONT;
+const TICK_MARK_FONT = QuantumMeasurementConstants.CONTROL_FONT;
 const RANGE = new Range( 0, 1 );
 
 type SelfOptions = EmptySelfOptions;

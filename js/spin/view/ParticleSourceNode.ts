@@ -14,7 +14,6 @@ import Dimension2 from '../../../../dot/js/Dimension2.js';
 import { roundToInterval } from '../../../../dot/js/util/roundToInterval.js';
 import Shape from '../../../../kite/js/Shape.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
@@ -27,6 +26,7 @@ import HSlider from '../../../../sun/js/HSlider.js';
 import sharedSoundPlayers from '../../../../tambo/js/sharedSoundPlayers.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import ParticleSourceModel from '../model/ParticleSourceModel.js';
@@ -139,7 +139,7 @@ export default class ParticleSourceNode extends Node {
     } );
 
     // major ticks at 0%, 33%, 66%, 100%
-    const tickLabelOptions = { font: new PhetFont( 12 ), maxWidth: 40 };
+    const tickLabelOptions = { font: QuantumMeasurementConstants.SMALL_LABEL_FONT, maxWidth: 40 };
     particleAmountSlider.addMajorTick( sliderRange.min, new Text( QuantumMeasurementStrings.noneStringProperty, tickLabelOptions ) );
     particleAmountSlider.addMajorTick( sliderRange.max, new Text( QuantumMeasurementStrings.lotsStringProperty, tickLabelOptions ) );
     particleAmountSlider.addMajorTick( sliderRange.min + ( sliderRange.max - sliderRange.min ) / 3 );
@@ -161,7 +161,7 @@ export default class ParticleSourceNode extends Node {
       SourceMode.enumeration.values.map( sourceMode => {
         return {
           value: sourceMode,
-          createNode: () => new Text( sourceMode.sourceName, { font: new PhetFont( 15 ), maxWidth: 150 } ),
+          createNode: () => new Text( sourceMode.sourceName, { font: QuantumMeasurementConstants.CONTROL_FONT, maxWidth: 150 } ),
           options: {
             accessibleName: sourceMode.sourceName
           },
@@ -174,7 +174,7 @@ export default class ParticleSourceNode extends Node {
       }
     );
     const sourceModeTitle = new RichText( QuantumMeasurementStrings.sourceModeStringProperty, {
-      font: new PhetFont( { size: 20, weight: 'bold' } ),
+      font: QuantumMeasurementConstants.BOLD_HEADER_FONT,
       maxWidth: 200,
       visibleProperty: sourceModeRadioButtonGroup.visibleProperty
     } );
@@ -194,7 +194,7 @@ export default class ParticleSourceNode extends Node {
       phetioVisiblePropertyInstrumented: false,
       children: [
         new RichText( QuantumMeasurementStrings.spinSourceStringProperty, {
-          font: new PhetFont( 12 ),
+          font: QuantumMeasurementConstants.SMALL_LABEL_FONT,
           bottom: particleSourceApparatus.top - SPACING,
           left: particleSourceApparatus.left + SPACING,
           maxWidth: 200

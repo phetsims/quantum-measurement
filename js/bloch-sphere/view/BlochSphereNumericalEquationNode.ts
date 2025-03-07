@@ -14,7 +14,6 @@ import { toFixed } from '../../../../dot/js/util/toFixed.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox, { HBoxOptions } from '../../../../scenery/js/layout/nodes/HBox.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import QuantumMeasurementPreferences from '../../common/model/QuantumMeasurementPreferences.js';
@@ -28,7 +27,7 @@ type SelfOptions = {
 };
 type BlochSphereNumericalEquationNodeOptions = SelfOptions & WithRequired<HBoxOptions, 'tandem'>;
 
-const EQUATION_FONT = new PhetFont( 17 );
+const EQUATION_FONT = QuantumMeasurementConstants.TITLE_FONT;
 const PI = MathSymbols.PI;
 const PSI = MathSymbols.PSI;
 const UP = QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;

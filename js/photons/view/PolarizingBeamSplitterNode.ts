@@ -11,12 +11,12 @@ import Dimension2 from '../../../../dot/js/Dimension2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Rectangle, { RectangleOptions } from '../../../../scenery/js/nodes/Rectangle.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import PolarizingBeamSplitter from '../model/PolarizingBeamSplitter.js';
@@ -49,7 +49,7 @@ export default class PolarizingBeamSplitterNode extends Node {
     } );
 
     const label = new RichText( QuantumMeasurementStrings.polarizingBeamSplitterStringProperty, {
-      font: new PhetFont( 12 ),
+      font: QuantumMeasurementConstants.SMALL_LABEL_FONT,
       centerX: lineNode.centerX,
       top: lineNode.bottom + 4,
       align: 'center',

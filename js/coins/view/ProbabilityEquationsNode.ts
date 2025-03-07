@@ -11,7 +11,6 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { toFixed } from '../../../../dot/js/util/toFixed.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import RichText, { RichTextOptions } from '../../../../scenery/js/nodes/RichText.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import { SystemType } from '../../common/model/SystemType.js';
@@ -55,7 +54,7 @@ export default class ProbabilityEquationsNode extends RichText {
     );
 
     const options = optionize<ProbabilityEquationsNodeOptions, SelfOptions, RichTextOptions>()( {
-      font: new PhetFont( 18 ),
+      font: QuantumMeasurementConstants.SUPER_TITLE_FONT,
       align: 'center',
       leading: 7
     }, providedOptions );

@@ -33,6 +33,7 @@ import { MAX_COINS } from '../../coins/model/CoinsExperimentSceneModel.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import QuantumMeasurementColors from '../QuantumMeasurementColors.js';
+import QuantumMeasurementConstants from '../QuantumMeasurementConstants.js';
 import FractionNode from './FractionNode.js';
 
 type SelfOptions = {
@@ -68,9 +69,9 @@ export type QuantumMeasurementHistogramOptions = SelfOptions & WithRequired<Node
 export const DEFAULT_HISTOGRAM_SIZE = new Dimension2( 200, 160 );
 const AXIS_STROKE = Color.BLACK;
 const AXIS_LINE_WIDTH = 2;
-const LABEL_FONT = new PhetFont( { size: 20, weight: 'bold' } );
+const LABEL_FONT = QuantumMeasurementConstants.BOLD_HEADER_FONT;
 const TICK_MARK_LENGTH = 20;
-const TICK_MARK_FONT = new PhetFont( 14 );
+const TICK_MARK_FONT = QuantumMeasurementConstants.CONTROL_FONT;
 const NUMBER_DISPLAY_RANGE = new Range( 0, MAX_COINS );
 const NUMBER_DISPLAY_MAX_WIDTH = DEFAULT_HISTOGRAM_SIZE.width / 2 * 0.85;
 const FLOATING_LABEL_MARGIN = 5;
@@ -286,7 +287,7 @@ class QuantumMeasurementHistogram extends Node {
             valueProperty,
             new Range( 0, 1 ),
             {
-              textOptions: { fill: fillColorProperty, font: new PhetFont( 14 ) },
+              textOptions: { fill: fillColorProperty, font: QuantumMeasurementConstants.CONTROL_FONT },
               centerX: left ? -centralLinesWidth : centralLinesWidth,
               rotation: textRotation,
               backgroundFill: new Color( 255, 255, 255, 0.8 ),

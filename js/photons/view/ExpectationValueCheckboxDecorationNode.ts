@@ -11,10 +11,10 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import NumberDisplay from '../../../../scenery-phet/js/NumberDisplay.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
 export default class ExpectationValueCheckboxDecorationNode extends HBox {
@@ -37,7 +37,7 @@ export default class ExpectationValueCheckboxDecorationNode extends HBox {
         backgroundStroke: null,
         visibleProperty: DerivedProperty.and( [ expectationValueLineVisibleProperty, showReadoutProperty ] ),
         textOptions: {
-          font: new PhetFont( 14 )
+          font: QuantumMeasurementConstants.CONTROL_FONT
         }
       }
     );

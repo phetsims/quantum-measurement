@@ -68,13 +68,13 @@ export default class BlochSpherePreparationArea extends VBox {
       }, QuantumMeasurementConstants.DEFAULT_CONTROL_SLIDER_OPTIONS )
     );
 
-    polarSlider.addMajorTick( 0, new Text( '0', { font: new PhetFont( 15 ) } ) );
+    polarSlider.addMajorTick( 0, new Text( '0', { font: QuantumMeasurementConstants.CONTROL_FONT } ) );
     _.times( 3, i => polarSlider.addMinorTick( ( i + 1 ) * Math.PI / 4 ) );
-    polarSlider.addMajorTick( Math.PI, new Text( `${MathSymbols.PI}`, { font: new PhetFont( 15 ) } ) );
+    polarSlider.addMajorTick( Math.PI, new Text( `${MathSymbols.PI}`, { font: QuantumMeasurementConstants.CONTROL_FONT } ) );
 
-    azimuthSlider.addMajorTick( 0, new Text( '0', { font: new PhetFont( 15 ) } ) );
+    azimuthSlider.addMajorTick( 0, new Text( '0', { font: QuantumMeasurementConstants.CONTROL_FONT } ) );
     _.times( 7, i => azimuthSlider.addMinorTick( ( i + 1 ) * Math.PI / 4 ) );
-    azimuthSlider.addMajorTick( 2 * Math.PI, new Text( `2${MathSymbols.PI}`, { font: new PhetFont( 15 ) } ) );
+    azimuthSlider.addMajorTick( 2 * Math.PI, new Text( `2${MathSymbols.PI}`, { font: QuantumMeasurementConstants.CONTROL_FONT } ) );
 
     const comboBoxItems: ComboBoxItem<StateDirection>[] = StateDirection.enumeration.values.map( direction => {
 
@@ -84,7 +84,7 @@ export default class BlochSpherePreparationArea extends VBox {
                        direction.description;
       return {
         value: direction,
-        createNode: () => new Text( itemText, { font: new PhetFont( 16 ) } )
+        createNode: () => new Text( itemText, { font: QuantumMeasurementConstants.TITLE_FONT } )
       };
     } );
 
@@ -93,7 +93,7 @@ export default class BlochSpherePreparationArea extends VBox {
       tandem: providedOptions.tandem.createTandem( 'directionComboBox' )
     } );
 
-    const sliderTitleOptions = { font: new PhetFont( 16 ), maxWidth: 200 };
+    const sliderTitleOptions = { font: QuantumMeasurementConstants.TITLE_FONT, maxWidth: 200 };
     const slidersPanel = new Panel(
       new VBox( {
         spacing: 20,

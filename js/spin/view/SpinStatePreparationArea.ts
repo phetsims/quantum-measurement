@@ -107,7 +107,7 @@ export default class SpinStatePreparationArea extends VBox {
         return `${alphaValue}|${UP} ${KET} + ${betaValue}|${DOWN} ${KET}`;
       } );
 
-    const stateReadout = new RichText( stateReadoutStringProperty, { font: new PhetFont( 18 ) } );
+    const stateReadout = new RichText( stateReadoutStringProperty, { font: QuantumMeasurementConstants.SUPER_TITLE_FONT } );
 
     const probabilityControlBox = new VBox( {
       visibleProperty: DerivedProperty.valueEqualsConstant(
@@ -132,7 +132,7 @@ export default class SpinStatePreparationArea extends VBox {
       new HBox( {
         spacing: 5,
         children: [
-          new Text( 'Z', { font: new PhetFont( 15 ) } ),
+          new Text( 'Z', { font: QuantumMeasurementConstants.CONTROL_FONT } ),
           new DashedArrowNode( 0, 0, 0, -20, { stroke: 'blue', fill: 'blue', scale: 1 } )
         ]
       } ),
@@ -148,7 +148,7 @@ export default class SpinStatePreparationArea extends VBox {
       new HBox( {
         spacing: 5,
         children: [
-          new Text( 'X', { font: new PhetFont( 15 ) } ),
+          new Text( 'X', { font: QuantumMeasurementConstants.CONTROL_FONT } ),
           new DashedArrowNode( 0, 0, 20, 0, { stroke: 'red', fill: 'red', scale: 1 } )
         ]
       } ),
@@ -165,7 +165,7 @@ export default class SpinStatePreparationArea extends VBox {
       excludeInvisibleChildrenFromBounds: false,
       children: [
         new Text( QuantumMeasurementStrings.projectionStringProperty, {
-          font: new PhetFont( 15 ),
+          font: QuantumMeasurementConstants.CONTROL_FONT,
           maxWidth: 100,
           visibleProperty: model.isCustomExperimentProperty
         } ),

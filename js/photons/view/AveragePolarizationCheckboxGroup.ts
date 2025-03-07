@@ -44,7 +44,7 @@ const COMMON_CHECKBOX_OPTIONS = {
   touchAreaYDilation: CHECKBOX_GROUP_POINTER_DILATION
 };
 const CHECKBOX_LABEL_OPTIONS = {
-  font: QuantumMeasurementConstants.CHECKBOX_LABEL_FONT,
+  font: QuantumMeasurementConstants.CONTROL_FONT,
   maxWidth: 200
 };
 

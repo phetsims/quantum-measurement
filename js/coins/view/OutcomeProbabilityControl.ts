@@ -18,7 +18,6 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import VBox, { VBoxOptions } from '../../../../scenery/js/layout/nodes/VBox.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
@@ -36,7 +35,7 @@ type OutcomeProbabilityControlOptions = SelfOptions & PickRequired<VBox, 'tandem
 
 // REVIEW: Not sure what it means to not "rely on systemType for the color"
 // constants that don't rely on systemType for the color
-const TITLE_AND_LABEL_FONT = new PhetFont( 16 );
+const TITLE_AND_LABEL_FONT = QuantumMeasurementConstants.TITLE_FONT;
 const ALPHA = MathSymbols.ALPHA;
 const BETA = MathSymbols.BETA;
 const UP = QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;

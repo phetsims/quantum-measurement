@@ -14,7 +14,6 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ShadedSphereNode, { ShadedSphereNodeOptions } from '../../../../scenery-phet/js/ShadedSphereNode.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
@@ -25,6 +24,7 @@ import Color from '../../../../scenery/js/util/Color.js';
 import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import MeasurementSymbolNode from '../../common/view/MeasurementSymbolNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
@@ -37,7 +37,7 @@ export const ATOM_NODE_OPTIONS = {
   mainColor: Color.RED,
   highlightColor: Color.RED.colorUtilsBrighter( 0.7 )
 };
-const LABEL_FONT = new PhetFont( 18 );
+const LABEL_FONT = QuantumMeasurementConstants.SUPER_TITLE_FONT;
 
 class SystemUnderTestNode extends Panel {
 

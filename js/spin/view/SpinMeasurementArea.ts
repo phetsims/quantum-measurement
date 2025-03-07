@@ -60,7 +60,7 @@ export default class SpinMeasurementArea extends VBox {
     const items: ComboBoxItem<SpinExperiment>[] = SpinExperiment.enumeration.values.map( experiment => {
       return {
         value: experiment,
-        createNode: () => new Text( experiment.experimentName, { font: new PhetFont( 16 ), maxWidth: 300 } )
+        createNode: () => new Text( experiment.experimentName, { font: QuantumMeasurementConstants.TITLE_FONT, maxWidth: 300 } )
       };
     } );
 
@@ -129,8 +129,8 @@ export default class SpinMeasurementArea extends VBox {
         sternGerlach.upProbabilityProperty,
         DerivedProperty.and( [ model.expectedPercentageVisibleProperty, sternGerlach.arePhotonsArrivingProperty ] ),
         [
-          new RichText( spinUpLabelStringProperty, { font: new PhetFont( { size: 20, weight: 'bold' } ) } ),
-          new RichText( spinDownLabelStringProperty, { font: new PhetFont( { size: 20, weight: 'bold' } ) } )
+          new RichText( spinUpLabelStringProperty, { font: QuantumMeasurementConstants.BOLD_HEADER_FONT } ),
+          new RichText( spinDownLabelStringProperty, { font: QuantumMeasurementConstants.BOLD_HEADER_FONT } )
         ],
         {
           center: modelViewTransform.modelToViewPosition( new Vector2( sternGerlach.positionProperty.value.x, 1.1 ) ),
@@ -141,7 +141,7 @@ export default class SpinMeasurementArea extends VBox {
           tandem: tandem.createTandem( tandemName ),
           numberDisplayOptions: {
             textOptions: {
-              font: new PhetFont( 17 )
+              font: QuantumMeasurementConstants.TITLE_FONT
             }
           }
         }
@@ -200,7 +200,7 @@ export default class SpinMeasurementArea extends VBox {
       new HBox( {
         children: [
           new Text( QuantumMeasurementStrings.expectedPercentageStringProperty, {
-            font: QuantumMeasurementConstants.CHECKBOX_LABEL_FONT,
+            font: QuantumMeasurementConstants.CONTROL_FONT,
             maxWidth: 200
           } ),
           new Path( new Shape().moveTo( 0, 0 ).lineTo( 20, 0 ),

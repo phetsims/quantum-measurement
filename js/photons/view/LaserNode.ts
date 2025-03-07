@@ -16,7 +16,6 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import LaserPointerNode from '../../../../scenery-phet/js/LaserPointerNode.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import AlignBox from '../../../../scenery/js/layout/nodes/AlignBox.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
@@ -25,6 +24,7 @@ import RoundPushButton from '../../../../sun/js/buttons/RoundPushButton.js';
 import HSlider from '../../../../sun/js/HSlider.js';
 import sharedSoundPlayers from '../../../../tambo/js/sharedSoundPlayers.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import ExperimentModeValues from '../model/ExperimentModeValues.js';
@@ -94,7 +94,7 @@ export default class LaserNode extends Node {
       tandem: providedOptions.tandem.createTandem( 'laserPointerNode' )
     } );
     const caption = new Text( QuantumMeasurementStrings.photonSourceStringProperty, {
-      font: new PhetFont( 12 ),
+      font: QuantumMeasurementConstants.SMALL_LABEL_FONT,
       centerX: laserPointerNode.centerX,
       top: laserPointerNode.bottom + 5,
       maxWidth: 150
@@ -112,7 +112,7 @@ export default class LaserNode extends Node {
           value: model.emissionRateProperty
         } ),
         {
-          font: new PhetFont( 16 ),
+          font: QuantumMeasurementConstants.TITLE_FONT,
           maxWidth: 100
         }
       );

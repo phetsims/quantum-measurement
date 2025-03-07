@@ -20,6 +20,7 @@ import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
 const HEIGHT = 150;
@@ -112,7 +113,7 @@ export default class NormalizedOutcomeVectorGraph extends Node {
       {
         decimalPlaces: 3,
         textOptions: {
-          font: new PhetFont( 12 )
+          font: QuantumMeasurementConstants.SMALL_LABEL_FONT
         },
         backgroundStroke: null,
         backgroundFill: Color.WHITE.withAlpha( 0.8 ),

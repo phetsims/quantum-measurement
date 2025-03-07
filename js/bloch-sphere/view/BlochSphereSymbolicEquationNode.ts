@@ -11,7 +11,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox, { HBoxOptions } from '../../../../scenery/js/layout/nodes/HBox.js';
 import RichText, { RichTextOptions } from '../../../../scenery/js/nodes/RichText.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
@@ -21,7 +20,7 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 type SelfOptions = EmptySelfOptions;
 type BlochSphereSymbolicEquationNodeOptions = SelfOptions & WithRequired<HBoxOptions, 'tandem'>;
 
-const EQUATION_FONT = new PhetFont( 17 );
+const EQUATION_FONT = QuantumMeasurementConstants.TITLE_FONT;
 const THETA = MathSymbols.THETA;
 const PHI = MathSymbols.PHI;
 const PSI = MathSymbols.PSI;
@@ -40,7 +39,7 @@ export default class BlochSphereSymbolicEquationNode extends HBox {
     const downKet = newRichText( `e<sup>i${PHI}</sup>|${DOWN}<sub>Z</sub> ${KET}` );
 
     const parenthesesOptions: RichTextOptions = {
-      font: new PhetFont( 17 ),
+      font: QuantumMeasurementConstants.TITLE_FONT,
       scale: new Vector2( 1, 2 )
     };
 
