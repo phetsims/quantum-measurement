@@ -128,9 +128,7 @@ class MultipleCoinsViewManager extends CoinViewManager {
         // Get the final destination for this coin node in terms of its offset from the center of the test box.
         const finalDestinationOffset = multipleCoinTestBox.getOffsetFromCenter( index );
 
-        // REVIEW: Is this a typo? This seems like it's the 1st portion of the animation, or at least I don't see another animation
-        // defined before this.
-        // Start the 2nd portion of the animation, which moves the coin into the test box.
+        // Create the animation that will move the coins from the preparation area to the test box.
         const animationToTestBox = new Animation( {
           setValue: value => { coinNode.center = value; },
           getValue: () => coinNode.center,
@@ -170,8 +168,7 @@ class MultipleCoinsViewManager extends CoinViewManager {
           );
         } );
 
-        // REVIEW: Yeah I'm confused maybe it's late and I'm tired, but I can't find the first animation...
-        // Kick off the 2nd animation, which moves the coin from the edge of the test box to inside.
+        // Kick off the animation.
         animationToTestBox.start();
       } );
     };
