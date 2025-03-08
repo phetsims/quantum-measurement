@@ -292,12 +292,10 @@ class CoinExperimentMeasurementArea extends VBox {
         // The user is ready to make measurements on the coins, so animate the coins for both the single and multi-coin
         // experiments from the preparation area to the measurement area.
         singleCoinViewManager.startIngressAnimation( false );
-        if ( sceneModel.coinSet.numberOfActiveCoinsProperty.value === MAX_COINS ) {
-          maxCoinsViewManager.startIngressAnimation( false );
-        }
-        else {
-          multipleCoinsViewManager.startIngressAnimation( false );
-        }
+        const multiCoinViewManager = sceneModel.coinSet.numberOfActiveCoinsProperty.value === MAX_COINS ?
+                                     maxCoinsViewManager :
+                                     multipleCoinsViewManager;
+        multiCoinViewManager.startIngressAnimation( false );
       }
     } );
 
@@ -317,12 +315,10 @@ class CoinExperimentMeasurementArea extends VBox {
 
           // Animate a coin from the prep area to the single coin test box to indicate that a new "quantum coin" is
           // being prepared for measurement.
-          if ( sceneModel.coinSet.numberOfActiveCoinsProperty.value === MAX_COINS ) {
-            maxCoinsViewManager.startIngressAnimation( true );
-          }
-          else {
-            multipleCoinsViewManager.startIngressAnimation( true );
-          }
+          const multiCoinViewManager = sceneModel.coinSet.numberOfActiveCoinsProperty.value === MAX_COINS ?
+                                       maxCoinsViewManager :
+                                       multipleCoinsViewManager;
+          multiCoinViewManager.startIngressAnimation( true );
         }
       }
     } );
@@ -330,14 +326,12 @@ class CoinExperimentMeasurementArea extends VBox {
     // During normal operation the number of active coins can't change without cycling through the preparation state,
     // but during phet-io state setting it can.  The following linkage handles this case, and makes sure that the view
     // reflects the state of the model.
-    sceneModel.coinSet.numberOfActiveCoinsProperty.lazyLink( numberOfActiveCoins => {
+    sceneModel.coinSet.numberOfActiveCoinsProperty.lazyLink( () => {
       if ( isSettingPhetioStateProperty.value ) {
-        if ( numberOfActiveCoins === MAX_COINS ) {
-          maxCoinsViewManager.startIngressAnimation( false );
-        }
-        else {
-          multipleCoinsViewManager.startIngressAnimation( false );
-        }
+        const multiCoinViewManager = sceneModel.coinSet.numberOfActiveCoinsProperty.value === MAX_COINS ?
+                                     maxCoinsViewManager :
+                                     multipleCoinsViewManager;
+        multiCoinViewManager.startIngressAnimation( false );
       }
     } );
 
