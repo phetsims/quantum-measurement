@@ -23,19 +23,22 @@ import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
 import CoinExperimentMeasurementArea from './CoinExperimentMeasurementArea.js';
 import CoinSetPixelRepresentation from './CoinSetPixelRepresentation.js';
 import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
+import CoinViewManager from './CoinViewManager.js';
 import MultiCoinTestBox from './MultiCoinTestBox.js';
 
 const COIN_TRAVEL_ANIMATION_DURATION = MEASUREMENT_PREPARATION_TIME * 0.95;
 
-class MaxCoinsViewManager {
+class MaxCoinsViewManager extends CoinViewManager {
 
-  public readonly abortIngressAnimationForCoinSet: () => void;
-  public readonly startIngressAnimationForCoinSet: ( forReprepare: boolean ) => void;
+  private readonly abortIngressAnimationForCoinSet: () => void;
+  private readonly startIngressAnimationForCoinSet: ( forReprepare: boolean ) => void;
 
   public constructor( sceneModel: CoinsExperimentSceneModel,
                       measurementArea: CoinExperimentMeasurementArea,
                       multipleCoinTestBox: MultiCoinTestBox,
                       coinSetInTestBoxProperty: TProperty<boolean> ) {
+
+    super( measurementArea );
 
     let animationToCoinBox: Animation | null = null;
 
@@ -62,13 +65,12 @@ class MaxCoinsViewManager {
       // Stop the pixel representation from doing its inflation animation.
       pixelRepresentation.abortAllAnimations();
 
-      // Create a typed reference to the parent node, since we'll need to invoke some methods on it.
-      assert && assert( measurementArea.getParent() instanceof CoinsExperimentSceneView );
-      const sceneGraphParent = measurementArea.getParent() as CoinsExperimentSceneView;
+      // Get the scene view, since we'll need to remove the many-coins node if it was previously added.
+      const coinsExperimentSceneView = this.getSceneView();
 
       // If the pixel representation is a child of the parent node, remove it.
-      if ( sceneGraphParent.hasChild( pixelRepresentation ) ) {
-        sceneGraphParent.removeChild( pixelRepresentation );
+      if ( coinsExperimentSceneView.hasChild( pixelRepresentation ) ) {
+        coinsExperimentSceneView.removeChild( pixelRepresentation );
       }
     };
 
@@ -76,20 +78,22 @@ class MaxCoinsViewManager {
 
       // Create a typed reference to the parent node, since we'll need to invoke some methods on it.
       assert && assert( measurementArea.getParent() instanceof CoinsExperimentSceneView );
-      const sceneGraphParent = measurementArea.getParent() as CoinsExperimentSceneView;
 
       // Make sure the test box is empty.
       multipleCoinTestBox.clearContents();
 
+      // Get the scene view, since we'll need to work with it to initially place the coins in the preparation area.
+      const coinsExperimentSceneView = this.getSceneView();
+
       // Add the pixel representation to the scene graph parent.
-      sceneGraphParent.addManyCoinsNode( pixelRepresentation );
+      coinsExperimentSceneView.addManyCoinsNode( pixelRepresentation );
 
       // The tricky bit about this animation is that the test box where these coins are headed could itself be moving
       // due to the way the measurement area works. This unfortunately means we need to have a bit of the "tweak
       // factor" to get the destination right.
       // REVIEW: -92 is the same "tweak" number that is used in MultipleCoinsViewManager. Coincidence or worth abstracting?
       const testAreaXOffset = forReprepare ? 0 : -92; // empirically determined
-      const multipleCoinTestBoxBounds = sceneGraphParent.globalToLocalBounds( multipleCoinTestBox.getGlobalBounds() );
+      const multipleCoinTestBoxBounds = coinsExperimentSceneView.globalToLocalBounds( multipleCoinTestBox.getGlobalBounds() );
       const destinationCenter = multipleCoinTestBoxBounds.center.plusXY( testAreaXOffset, 0 );
 
       const animationDuration = isSettingPhetioStateProperty.value ? 0 : COIN_TRAVEL_ANIMATION_DURATION;
@@ -107,7 +111,7 @@ class MaxCoinsViewManager {
 
         // The node should now be within the bounds of the multi-coin test box. Remove it from the scene graph parent
         // and add it to the test box.
-        sceneGraphParent.removeChild( pixelRepresentation );
+        coinsExperimentSceneView.removeChild( pixelRepresentation );
         multipleCoinTestBox.addPixelRepresentationToBox( pixelRepresentation );
 
         if ( sceneModel.systemType === SystemType.QUANTUM ) {
@@ -119,7 +123,7 @@ class MaxCoinsViewManager {
         animationToCoinBox = null;
       } );
 
-      // Regardless of how the animation terminated its reference needs to be removed when it is done.
+      // Regardless of how the animation terminated, its reference needs to be removed when it is done.
       animationToCoinBox.endedEmitter.addListener( () => {
         animationToCoinBox = null;
       } );
@@ -127,6 +131,14 @@ class MaxCoinsViewManager {
       animationToCoinBox.start();
       pixelRepresentation.startPopulatingAnimation();
     };
+  }
+
+  public override startIngressAnimation( forReprepare: boolean ): void {
+    this.startIngressAnimationForCoinSet( forReprepare );
+  }
+
+  public override abortIngressAnimation():void {
+    this.abortIngressAnimationForCoinSet();
   }
 }
 

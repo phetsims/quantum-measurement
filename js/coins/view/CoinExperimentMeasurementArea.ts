@@ -274,9 +274,9 @@ class CoinExperimentMeasurementArea extends VBox {
 
         // Abort any in-progress animations - the scene model is going back into the preparation mode. If there are no
         // such animations, this has no effect.
-        singleCoinViewManager.abortIngressAnimationForSingleCoin();
-        multipleCoinsViewManager.abortIngressAnimationForCoinSet();
-        maxCoinsViewManager.abortIngressAnimationForCoinSet();
+        singleCoinViewManager.abortIngressAnimation();
+        multipleCoinsViewManager.abortIngressAnimation();
+        maxCoinsViewManager.abortIngressAnimation();
 
         // Clear out the test boxes.
         singleCoinViewManager.clearSingleCoinTestBox();
@@ -291,12 +291,12 @@ class CoinExperimentMeasurementArea extends VBox {
 
         // The user is ready to make measurements on the coins, so animate the coins for both the single and multi-coin
         // experiments from the preparation area to the measurement area.
-        singleCoinViewManager.startIngressAnimationForSingleCoin( false );
+        singleCoinViewManager.startIngressAnimation( false );
         if ( sceneModel.coinSet.numberOfActiveCoinsProperty.value === MAX_COINS ) {
-          maxCoinsViewManager.startIngressAnimationForCoinSet( false );
+          maxCoinsViewManager.startIngressAnimation( false );
         }
         else {
-          multipleCoinsViewManager.startIngressAnimationForCoinSet( false );
+          multipleCoinsViewManager.startIngressAnimation( false );
         }
       }
     } );
@@ -311,17 +311,17 @@ class CoinExperimentMeasurementArea extends VBox {
         if ( sceneModel.systemType === SystemType.QUANTUM ) {
 
           // Abort any previous animations and clear out the test box.
-          multipleCoinsViewManager.abortIngressAnimationForCoinSet();
-          maxCoinsViewManager.abortIngressAnimationForCoinSet();
+          multipleCoinsViewManager.abortIngressAnimation();
+          maxCoinsViewManager.abortIngressAnimation();
           multipleCoinTestBox.clearContents();
 
           // Animate a coin from the prep area to the single coin test box to indicate that a new "quantum coin" is
           // being prepared for measurement.
           if ( sceneModel.coinSet.numberOfActiveCoinsProperty.value === MAX_COINS ) {
-            maxCoinsViewManager.startIngressAnimationForCoinSet( true );
+            maxCoinsViewManager.startIngressAnimation( true );
           }
           else {
-            multipleCoinsViewManager.startIngressAnimationForCoinSet( true );
+            multipleCoinsViewManager.startIngressAnimation( true );
           }
         }
       }
@@ -333,10 +333,10 @@ class CoinExperimentMeasurementArea extends VBox {
     sceneModel.coinSet.numberOfActiveCoinsProperty.lazyLink( numberOfActiveCoins => {
       if ( isSettingPhetioStateProperty.value ) {
         if ( numberOfActiveCoins === MAX_COINS ) {
-          maxCoinsViewManager.startIngressAnimationForCoinSet( false );
+          maxCoinsViewManager.startIngressAnimation( false );
         }
         else {
-          multipleCoinsViewManager.startIngressAnimationForCoinSet( false );
+          multipleCoinsViewManager.startIngressAnimation( false );
         }
       }
     } );

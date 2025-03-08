@@ -33,7 +33,7 @@ import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
 import ClassicalCoinNode from './ClassicalCoinNode.js';
 import CoinExperimentMeasurementArea from './CoinExperimentMeasurementArea.js';
 import CoinNode from './CoinNode.js';
-import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
+import CoinViewManager from './CoinViewManager.js';
 import InitialCoinStateSelectorNode from './InitialCoinStateSelectorNode.js';
 import QuantumCoinNode from './QuantumCoinNode.js';
 
@@ -41,11 +41,11 @@ const SINGLE_COIN_TEST_BOX_SIZE = new Dimension2( 165, 145 );
 const COIN_FLIP_RATE = 3; // full flips per second
 const COIN_TRAVEL_ANIMATION_DURATION = MEASUREMENT_PREPARATION_TIME * 0.95;
 
-class SingleCoinViewManager {
+class SingleCoinViewManager extends CoinViewManager {
 
   // methods to start and abort the animation of the single coin moving from the preparation area to the test box
-  public readonly startIngressAnimationForSingleCoin: ( forReprepare: boolean ) => void;
-  public readonly abortIngressAnimationForSingleCoin: () => void;
+  private readonly startIngressAnimationForSingleCoin: ( forReprepare: boolean ) => void;
+  private readonly abortIngressAnimationForSingleCoin: () => void;
 
   // method to update the flipping animation of the single coin
   public readonly updateFlipping: ( singleCoinMeasurementState: ExperimentMeasurementState ) => void;
@@ -58,6 +58,8 @@ class SingleCoinViewManager {
                       coinMask: Circle,
                       singleCoinTestBox: Node,
                       singleCoinInTestBoxProperty: TProperty<boolean> ) {
+
+    super( measurementArea );
 
     // variables to support the coin animations
     let singleCoinNode: CoinNode | null = null;
@@ -86,18 +88,16 @@ class SingleCoinViewManager {
     // progress, this does nothing, so it safe to call as a preventative measure.
     this.abortIngressAnimationForSingleCoin = () => {
 
-      // Create a typed reference to the parent node, since we'll need to invoke some methods on it.
-      // REVIEW: Might be helpful to add a specific message for this assertion.
-      assert && assert( measurementArea.getParent() instanceof CoinsExperimentSceneView );
-      const sceneGraphParent = measurementArea.getParent() as CoinsExperimentSceneView;
+      // Get the scene view, since we'll need to remove the coin we created if it is there.
+      const coinsExperimentSceneView = this.getSceneView();
 
-      // Stop any of the animations that exist.
+      // Stop any of the animations that are in progress.
       singleCoinAnimationFromPrepAreaToEdgeOfTestBox && singleCoinAnimationFromPrepAreaToEdgeOfTestBox.stop();
       singleCoinAnimationFromEdgeOfTestBoxToInside && singleCoinAnimationFromEdgeOfTestBoxToInside.stop();
 
       if ( singleCoinNode ) {
-        if ( sceneGraphParent.hasChild( singleCoinNode ) ) {
-          sceneGraphParent.removeChild( singleCoinNode );
+        if ( coinsExperimentSceneView.hasChild( singleCoinNode ) ) {
+          coinsExperimentSceneView.removeChild( singleCoinNode );
         }
         else if ( singleCoinTestBox.hasChild( singleCoinNode ) ) {
           singleCoinTestBox.removeChild( singleCoinNode );
@@ -111,9 +111,8 @@ class SingleCoinViewManager {
     // area into the single coin test box.
     this.startIngressAnimationForSingleCoin = ( forReprepare: boolean ) => {
 
-      // Create a typed reference to the parent node, since we'll need to invoke some methods on it.
-      assert && assert( measurementArea.getParent() instanceof CoinsExperimentSceneView );
-      const coinsExperimentSceneView = measurementArea.getParent() as CoinsExperimentSceneView;
+      // Get the scene view, since we'll need to work with it to initially place the coin in the preparation area.
+      const coinsExperimentSceneView = this.getSceneView();
 
       // Clear out the test box if there's anything in there.
       this.clearSingleCoinTestBox();
@@ -290,6 +289,15 @@ class SingleCoinViewManager {
       }
     };
   }
+
+  public override startIngressAnimation( forReprepare: boolean ): void {
+    this.startIngressAnimationForSingleCoin( forReprepare );
+  }
+
+  public override abortIngressAnimation():void {
+    this.abortIngressAnimationForSingleCoin();
+  }
+
 }
 
 quantumMeasurement.register( 'SingleCoinViewManager', SingleCoinViewManager );

@@ -21,26 +21,28 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import { MEASUREMENT_PREPARATION_TIME } from '../model/CoinSet.js';
 import CoinsExperimentSceneModel, { MULTI_COIN_ANIMATION_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
 import CoinExperimentMeasurementArea from './CoinExperimentMeasurementArea.js';
-import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
+import CoinViewManager from './CoinViewManager.js';
 import MultiCoinTestBox from './MultiCoinTestBox.js';
 import SmallCoinNode, { SmallCoinDisplayMode } from './SmallCoinNode.js';
 
 const COIN_TRAVEL_ANIMATION_DURATION = MEASUREMENT_PREPARATION_TIME * 0.95;
 
-class MultipleCoinsViewManager {
+class MultipleCoinsViewManager extends CoinViewManager {
 
   // Method for starting the animation that moves the coins from the preparation area to the test box.  It is created
   // as a closure to make things easier.
-  public readonly startIngressAnimationForCoinSet: ( forReprepare: boolean ) => void;
+  private readonly startIngressAnimationForCoinSet: ( forReprepare: boolean ) => void;
 
   // Method for aborting the animation that moves the coins from the preparation area to the test box.  It is created
   // as a closure to make things easier.
-  public readonly abortIngressAnimationForCoinSet: () => void;
+  private readonly abortIngressAnimationForCoinSet: () => void;
 
   public constructor( sceneModel: CoinsExperimentSceneModel,
                       measurementArea: CoinExperimentMeasurementArea,
                       multipleCoinTestBox: MultiCoinTestBox,
                       coinSetInTestBoxProperty: TProperty<boolean> ) {
+
+    super( measurementArea );
 
     // map of the size of the coin set to the nodes used for that set
     const coinNodeSets = new Map<number, SmallCoinNode[]>();
@@ -63,9 +65,8 @@ class MultipleCoinsViewManager {
     // so it is safe to call as a preventative measure.
     this.abortIngressAnimationForCoinSet = () => {
 
-      // Create a typed reference to the parent node, since we'll need to invoke some methods on it.
-      assert && assert( measurementArea.getParent() instanceof CoinsExperimentSceneView );
-      const sceneGraphParent = measurementArea.getParent() as CoinsExperimentSceneView;
+      // Get the scene view, since we'll need to remove any coin nodes that were previously added by this manager.
+      const coinsExperimentSceneView = this.getSceneView();
 
       // Stop any of the animations that exist.
       animations.forEach( animation => animation.stop() );
@@ -77,8 +78,8 @@ class MultipleCoinsViewManager {
       multipleCoinTestBox.clearContents();
 
       // Remove any coin nodes that are moving from the prep area out from the scene graph parent.
-      sceneGraphParent.children.filter( child => child instanceof SmallCoinNode ).forEach( smallCoinNode => {
-        sceneGraphParent.removeChild( smallCoinNode );
+      coinsExperimentSceneView.children.filter( child => child instanceof SmallCoinNode ).forEach( smallCoinNode => {
+        coinsExperimentSceneView.removeChild( smallCoinNode );
       } );
 
       // Set the flag to indicate that the coins aren't in the box.
@@ -92,9 +93,8 @@ class MultipleCoinsViewManager {
         `No coin nodes exist for the needed quantity: ${sceneModel.coinSet.numberOfActiveCoinsProperty.value}`
       );
 
-      // Create a typed reference to the parent node, since we'll need to invoke some methods on it.
-      assert && assert( measurementArea.getParent() instanceof CoinsExperimentSceneView );
-      const sceneGraphParent = measurementArea.getParent() as CoinsExperimentSceneView;
+      // Get the scene view, since we'll need to work with it to initially place the coins in the preparation area.
+      const coinsExperimentSceneView = this.getSceneView();
 
       // Make sure the test box is empty.
       multipleCoinTestBox.clearContents();
@@ -105,9 +105,9 @@ class MultipleCoinsViewManager {
       // Add the coins to our parent node. This is done so that we don't change the local bounds of the measurement
       // area, since this would break the layout. These will be added back to the measurement area when they reach the
       // desired position and are thus within the bounds of the measurement area.
-      sceneGraphParent.addCoinNodeSet( coinsToAnimate! );
+      coinsExperimentSceneView.addCoinNodeSet( coinsToAnimate! );
 
-      const multipleCoinTestBoxBounds = sceneGraphParent.globalToLocalBounds( multipleCoinTestBox.getGlobalBounds() );
+      const multipleCoinTestBoxBounds = coinsExperimentSceneView.globalToLocalBounds( multipleCoinTestBox.getGlobalBounds() );
 
       // The tricky bit about this animation is that the test box where these coins are headed could itself be moving
       // due to the way the measurement area works. This unfortunately means we need to have a bit of the "tweak
@@ -143,7 +143,7 @@ class MultipleCoinsViewManager {
 
           // The coin node should now be within the bounds of the multi-coin test box. Remove the coin node from the
           // scene graph parent and add it to the test box.
-          sceneGraphParent.removeChild( coinNode );
+          coinsExperimentSceneView.removeChild( coinNode );
           const offset = multipleCoinTestBox.getOffsetFromCenter( coinsToAnimate!.indexOf( coinNode ) );
           coinNode.center = multipleCoinTestBox.getLocalBounds().center.plus( offset );
           multipleCoinTestBox.addCoinNodeToBox( coinNode );
@@ -176,6 +176,15 @@ class MultipleCoinsViewManager {
       } );
     };
   }
+
+  public override startIngressAnimation( forReprepare: boolean ): void {
+    this.startIngressAnimationForCoinSet( forReprepare );
+  }
+
+  public override abortIngressAnimation():void {
+    this.abortIngressAnimationForCoinSet();
+  }
+
 }
 
 quantumMeasurement.register( 'MultipleCoinsViewManager', MultipleCoinsViewManager );
