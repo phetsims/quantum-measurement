@@ -91,8 +91,7 @@ class MaxCoinsViewManager extends CoinViewManager {
       // The tricky bit about this animation is that the test box where these coins are headed could itself be moving
       // due to the way the measurement area works. This unfortunately means we need to have a bit of the "tweak
       // factor" to get the destination right.
-      // REVIEW: -92 is the same "tweak" number that is used in MultipleCoinsViewManager. Coincidence or worth abstracting?
-      const testAreaXOffset = forReprepare ? 0 : -92; // empirically determined
+      const testAreaXOffset = this.getLowerTestBoxXOffset( forReprepare );
       const multipleCoinTestBoxBounds = coinsExperimentSceneView.globalToLocalBounds( multipleCoinTestBox.getGlobalBounds() );
       const destinationCenter = multipleCoinTestBoxBounds.center.plusXY( testAreaXOffset, 0 );
 

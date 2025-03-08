@@ -112,7 +112,7 @@ class MultipleCoinsViewManager extends CoinViewManager {
       // The tricky bit about this animation is that the test box where these coins are headed could itself be moving
       // due to the way the measurement area works. This unfortunately means we need to have a bit of the "tweak
       // factor" to get the destination right.
-      const testAreaXOffset = forReprepare ? 0 : -92; // empirically determined
+      const testAreaXOffset = this.getLowerTestBoxXOffset( forReprepare );
       const destinationCenter = multipleCoinTestBoxBounds.center.plusXY( testAreaXOffset, 0 );
 
       // Set up and start the animation for each of the individual coins.

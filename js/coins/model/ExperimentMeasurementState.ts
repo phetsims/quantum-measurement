@@ -9,8 +9,6 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-// REVIEW: Why did you decide to use a string union instead of an enum? Your measurementStateProperty could also be
-  // an EnumerationProperty which provides more support for valid values.
 export const ExperimentMeasurementStateValues = [
 
   // The experiment is in the process of preparing to be measured. For example, in the case of a coin flipping

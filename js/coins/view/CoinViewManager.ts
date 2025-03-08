@@ -33,6 +33,15 @@ export default abstract class CoinViewManager {
   }
 
   /**
+   * Get the x offset that is needed for the destination of the coins that are animating to the lower test box in the
+   * measurement area.  This is needed by the subclasses because they sometimes need to animate to a moving target
+   * depending on the state of the testing.  It's admittedly a bit tweaky, but there wasn't an obvious way to avoid it.
+   */
+  protected getLowerTestBoxXOffset( forReprepare: boolean ): number {
+    return forReprepare ? 0 : -92; // empirically determined
+  }
+
+  /**
    * Start the animation of a coin or set of coins moving from the preparation area to a test box in the measurement
    * area.
    */
