@@ -38,7 +38,6 @@ import SceneSectionHeader from './SceneSectionHeader.js';
 import SingleCoinTestBox from './SingleCoinTestBox.js';
 import SingleCoinViewManager from './SingleCoinViewManager.js';
 
-const COIN_QUANTITY_SELECTOR_FONT = QuantumMeasurementConstants.TITLE_FONT;
 const HEADER_MAX_WIDTH = 400; // empirically determined using Scenery helper measuring tape
 
 class CoinExperimentMeasurementArea extends VBox {
@@ -142,14 +141,14 @@ class CoinExperimentMeasurementArea extends VBox {
     // Create a control that consists of a label and a group of radio buttons for selecting the number of coins to model
     // in the multi-coin mode.
     const numberOfCoinsSelectorTitle = new Text( QuantumMeasurementStrings.identicalCoinsStringProperty, {
-      font: COIN_QUANTITY_SELECTOR_FONT,
+      font: QuantumMeasurementConstants.BOLD_CONTROL_FONT,
       maxWidth: 200 // empirically determined
     } );
 
     const createRadioButtonGroupItem = ( value: number ) => {
       const valueText = value.toString();
       return {
-        createNode: () => new Text( value, { font: COIN_QUANTITY_SELECTOR_FONT } ),
+        createNode: () => new Text( value, { font: QuantumMeasurementConstants.CONTROL_FONT } ),
         value: value,
         tandemName: `${valueText}CoinsRadioButton`,
         options: {

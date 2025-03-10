@@ -105,7 +105,7 @@ class PhotonsExperimentSceneView extends Node {
                               QuantumMeasurementStrings.averagePolarizationStringProperty :
                               QuantumMeasurementStrings.averagePolarizationRateStringProperty;
     const averagePolarizationTitlePanel = new Panel(
-      new Text( titleTextProperty, { font: QuantumMeasurementConstants.TITLE_FONT, maxWidth: 250 } ),
+      new Text( titleTextProperty, { font: QuantumMeasurementConstants.BOLD_TITLE_FONT, maxWidth: 250 } ),
       combineOptions<PanelOptions>(
         {
           minWidth: 325,

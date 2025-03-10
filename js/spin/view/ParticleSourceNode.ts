@@ -174,7 +174,7 @@ export default class ParticleSourceNode extends Node {
       }
     );
     const sourceModeTitle = new RichText( QuantumMeasurementStrings.sourceModeStringProperty, {
-      font: QuantumMeasurementConstants.BOLD_HEADER_FONT,
+      font: QuantumMeasurementConstants.BOLD_TITLE_FONT,
       maxWidth: 200,
       visibleProperty: sourceModeRadioButtonGroup.visibleProperty
     } );
