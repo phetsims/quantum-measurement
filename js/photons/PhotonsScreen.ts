@@ -54,7 +54,7 @@ export default class PhotonsScreen extends QuantumMeasurementScreen<PhotonsModel
  */
 class StandalonePhotonNode extends Node {
 
-  public static readonly RADIUS = 35;
+  public static readonly RADIUS = 30;
 
   public constructor( center: Vector2 ) {
     const interiorNode = new Image( greenPhoton_png );
@@ -91,6 +91,9 @@ class StandaloneBeamSplitterNode extends Node {
   }
 }
 
+/**
+ * Create the icons that will be used for the home screen and navigation bar.
+ */
 const createScreenIcon = (): ScreenIcon => {
 
   const size = MINIMUM_HOME_SCREEN_ICON_SIZE;
