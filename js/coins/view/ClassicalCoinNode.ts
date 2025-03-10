@@ -9,7 +9,6 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
@@ -22,7 +21,6 @@ const HEADS_FILL_COLOR_PROPERTY = QuantumMeasurementColors.headsFillColorPropert
 const HEADS_STROKE_AND_LETTER_COLOR_PROPERTY = QuantumMeasurementColors.headsColorProperty;
 const TAILS_FILL_COLOR_PROPERTY = QuantumMeasurementColors.tailsFillColorProperty;
 const TAILS_STROKE_AND_LETTER_COLOR_PROPERTY = QuantumMeasurementColors.tailsColorProperty;
-const LETTER_LABEL_FONT = new PhetFont( { size: 40, weight: 'bold' } );
 
 export default class ClassicalCoinNode extends CoinNode {
 
@@ -32,7 +30,7 @@ export default class ClassicalCoinNode extends CoinNode {
       fill: HEADS_FILL_COLOR_PROPERTY,
       stroke: HEADS_STROKE_AND_LETTER_COLOR_PROPERTY,
       content: new RichText( QuantumMeasurementConstants.CLASSICAL_UP_SYMBOL, {
-        font: LETTER_LABEL_FONT,
+        font: QuantumMeasurementConstants.BIG_LETTER_FONT,
         fill: HEADS_STROKE_AND_LETTER_COLOR_PROPERTY,
         boundsMethod: 'accurate'
       } )
@@ -42,7 +40,7 @@ export default class ClassicalCoinNode extends CoinNode {
       fill: TAILS_FILL_COLOR_PROPERTY,
       stroke: TAILS_STROKE_AND_LETTER_COLOR_PROPERTY,
       content: new RichText( QuantumMeasurementConstants.CLASSICAL_DOWN_SYMBOL, {
-        font: LETTER_LABEL_FONT,
+        font: QuantumMeasurementConstants.BIG_LETTER_FONT,
         fill: TAILS_STROKE_AND_LETTER_COLOR_PROPERTY,
         boundsMethod: 'accurate'
       } ),

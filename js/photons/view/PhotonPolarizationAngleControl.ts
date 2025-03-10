@@ -13,7 +13,6 @@ import Range from '../../../../dot/js/Range.js';
 import { roundToInterval } from '../../../../dot/js/util/roundToInterval.js';
 import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
@@ -56,7 +55,7 @@ export default class PhotonPolarizationAngleControl extends Panel {
     }, providedOptions );
 
     const titleNode = new Text( QuantumMeasurementStrings.photonPolarizationAngleStringProperty, {
-      font: new PhetFont( { size: 16, weight: 'bold' } ),
+      font: QuantumMeasurementConstants.BOLD_TITLE_FONT,
       maxWidth: 200
     } );
 

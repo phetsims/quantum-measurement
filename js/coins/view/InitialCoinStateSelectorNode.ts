@@ -13,7 +13,6 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
@@ -58,7 +57,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
                                 QuantumMeasurementStrings.basisStateStringProperty;
 
     const selectionPanelTitle = new Text( titleStringProperty, {
-      font: new PhetFont( { size: 16, weight: 'bold' } ), // TODO: Use a common font. See https://github.com/phetsims/quantum-measurement/issues/132.
+      font: QuantumMeasurementConstants.BOLD_TITLE_FONT,
       maxWidth: WIDTH * 0.95
     } );
 

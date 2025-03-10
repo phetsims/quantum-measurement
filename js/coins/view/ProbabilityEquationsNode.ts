@@ -54,7 +54,7 @@ export default class ProbabilityEquationsNode extends RichText {
     );
 
     const options = optionize<ProbabilityEquationsNodeOptions, SelfOptions, RichTextOptions>()( {
-      font: QuantumMeasurementConstants.SUPER_TITLE_FONT,
+      font: QuantumMeasurementConstants.TITLE_FONT,
       align: 'center',
       leading: 7
     }, providedOptions );

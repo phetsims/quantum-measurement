@@ -19,7 +19,6 @@ import Shape from '../../../../kite/js/Shape.js';
 import optionize, { combineOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import ShadedSphereNode from '../../../../scenery-phet/js/ShadedSphereNode.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
@@ -49,7 +48,6 @@ const AXES_STROKE = 'gray';
 const AXES_LINE_WIDTH = 0.4;
 const AXES_LINE_DASH = [ 2, 2 ];
 const LABELS_OFFSET = 5;
-const LABELS_FONT = new PhetFont( { size: 15, weight: 'bold' } );
 
 const AXES_OPTIONS = {
   stroke: AXES_STROKE,
@@ -120,13 +118,13 @@ export default class BlochSphereNode extends Node {
 
     const xAxisLabel = new Text( '+X', {
       fill: 'black',
-      font: LABELS_FONT,
+      font: QuantumMeasurementConstants.BOLD_TITLE_FONT,
       scale: options.axesLabelsScale,
       visible: options.drawAxesLabels
     } );
     const yAxisLabel = new Text( '+Y', {
       fill: 'black',
-      font: LABELS_FONT,
+      font: QuantumMeasurementConstants.BOLD_TITLE_FONT,
       scale: options.axesLabelsScale,
       visible: options.drawAxesLabels
     } );
@@ -134,7 +132,7 @@ export default class BlochSphereNode extends Node {
       centerX: -3 * LABELS_OFFSET * options.axesLabelsScale,
       centerY: -sphereRadius + LABELS_OFFSET,
       fill: 'black',
-      font: LABELS_FONT,
+      font: QuantumMeasurementConstants.BOLD_TITLE_FONT,
       scale: options.axesLabelsScale,
       visible: options.drawAxesLabels
     } );
@@ -142,12 +140,11 @@ export default class BlochSphereNode extends Node {
     const UP = QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
     const DOWN = QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER;
     const KET = QuantumMeasurementConstants.KET;
-    const STATES_FONT = new PhetFont( { size: 18, weight: 'bold' } );
     const upStateLabel = new RichText( `|${UP}<sub>Z</sub> ${KET}`, {
       centerX: 0,
       centerY: -sphereRadius - 3 * LABELS_OFFSET,
       fill: 'black',
-      font: STATES_FONT,
+      font: QuantumMeasurementConstants.BOLD_TITLE_FONT,
       visible: options.drawKets
     } );
 
@@ -155,12 +152,12 @@ export default class BlochSphereNode extends Node {
       centerX: 0,
       centerY: sphereRadius + 3 * LABELS_OFFSET,
       fill: 'black',
-      font: STATES_FONT,
+      font: QuantumMeasurementConstants.BOLD_TITLE_FONT,
       visible: options.drawKets
     } );
 
     const title = new Text( QuantumMeasurementStrings.blochSphereStringProperty, {
-      font: new PhetFont( { size: 16, weight: 'bolder' } ),
+      font: QuantumMeasurementConstants.BOLD_TITLE_FONT,
       maxWidth: 200,
       visible: options.drawTitle,
       bottom: upStateLabel.top - 10,

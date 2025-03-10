@@ -10,7 +10,6 @@
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import MathSymbolFont from '../../../../scenery-phet/js/MathSymbolFont.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import Spacer from '../../../../scenery/js/nodes/Spacer.js';
@@ -23,20 +22,18 @@ import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 
 // constants
 const MAX_WIDTH = 800; // determined empirically
-const TITLE_FONT = new PhetFont( { size: 18, weight: 'bold' } );
-const ITEM_FONT = QuantumMeasurementConstants.SUPER_TITLE_FONT;
 
 export default class AveragePolarizationInfoDialog extends Dialog {
 
   public constructor( tandem: Tandem ) {
 
     const titleText = new Text( QuantumMeasurementStrings.averagePolarizationDialog.titleStringProperty, {
-      font: TITLE_FONT,
+      font: QuantumMeasurementConstants.BOLD_TITLE_FONT,
       maxWidth: MAX_WIDTH
     } );
 
     const richTextOptions = {
-      font: ITEM_FONT,
+      font: QuantumMeasurementConstants.TITLE_FONT,
       maxWidth: MAX_WIDTH
     };
     const subtitle = new Text(
@@ -104,7 +101,7 @@ export default class AveragePolarizationInfoDialog extends Dialog {
     const explanatoryParagraphProperty = new RichText(
       QuantumMeasurementStrings.averagePolarizationDialog.explanatoryParagraphStringProperty,
       {
-        font: ITEM_FONT,
+        font: QuantumMeasurementConstants.TITLE_FONT,
         lineWrap: MAX_WIDTH * 0.9
       }
     );

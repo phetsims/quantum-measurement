@@ -13,7 +13,6 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import NumberDisplay from '../../../../scenery-phet/js/NumberDisplay.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
@@ -27,7 +26,6 @@ const HEIGHT = 150;
 const TICK_MARK_LENGTH = 20;
 const TICK_MARK_LINE_WIDTH = 1.5;
 const EXPECTATION_VALUE_LINE_LENGTH = TICK_MARK_LENGTH * 1.5;
-const LABEL_FONT = new PhetFont( { size: 16, weight: 'bold' } );
 const LABEL_SPACING = 7;
 
 export default class NormalizedOutcomeVectorGraph extends Node {
@@ -63,7 +61,7 @@ export default class NormalizedOutcomeVectorGraph extends Node {
       lineWidth: TICK_MARK_LINE_WIDTH
     } );
     const topTickMarkLabel = new Text( '+1', {
-      font: LABEL_FONT,
+      font: QuantumMeasurementConstants.BOLD_TITLE_FONT,
       right: topTickMark.left - LABEL_SPACING,
       centerY: topTickMark.centerY
     } );
@@ -74,7 +72,7 @@ export default class NormalizedOutcomeVectorGraph extends Node {
       lineWidth: TICK_MARK_LINE_WIDTH
     } );
     const middleTickMarkLabel = new Text( '0', {
-      font: LABEL_FONT,
+      font: QuantumMeasurementConstants.BOLD_TITLE_FONT,
       right: middleTickMark.left - LABEL_SPACING,
       centerY: middleTickMark.centerY
     } );
@@ -85,7 +83,7 @@ export default class NormalizedOutcomeVectorGraph extends Node {
       lineWidth: TICK_MARK_LINE_WIDTH
     } );
     const bottomTickMarkLabel = new Text( '-1', {
-      font: LABEL_FONT,
+      font: QuantumMeasurementConstants.BOLD_TITLE_FONT,
       right: bottomTickMark.left - LABEL_SPACING,
       centerY: bottomTickMark.centerY
     } );

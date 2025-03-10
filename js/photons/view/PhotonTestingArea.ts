@@ -11,7 +11,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
@@ -81,7 +80,7 @@ class PhotonTestingArea extends Node {
       tagName: 'div',
       children: [
         new Text( QuantumMeasurementStrings.behaviorStringProperty, {
-          font: new PhetFont( { size: 15, weight: 'bold' } ),
+          font: QuantumMeasurementConstants.BOLD_TITLE_FONT,
           maxWidth: 150
         } ),
         photonBehaviorModeRadioButtonGroup

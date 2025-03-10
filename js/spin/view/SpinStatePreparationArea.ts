@@ -13,7 +13,6 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import { toFixed } from '../../../../dot/js/util/toFixed.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
@@ -46,7 +45,7 @@ export default class SpinStatePreparationArea extends VBox {
 
     const spinStateRadioButtonGroupTandem = tandem.createTandem( 'spinStateRadioButtonGroup' );
 
-    const basisRadioButtonTextOptions = { font: new PhetFont( { size: 22, weight: 'bold' } ) };
+    const basisRadioButtonTextOptions = { font: QuantumMeasurementConstants.BOLD_HEADER_FONT };
     const basisRadioGroupItems = SpinDirection.enumeration.values.map( basis => {
       return {
         value: basis,
@@ -107,7 +106,7 @@ export default class SpinStatePreparationArea extends VBox {
         return `${alphaValue}|${UP} ${KET} + ${betaValue}|${DOWN} ${KET}`;
       } );
 
-    const stateReadout = new RichText( stateReadoutStringProperty, { font: QuantumMeasurementConstants.SUPER_TITLE_FONT } );
+    const stateReadout = new RichText( stateReadoutStringProperty, { font: QuantumMeasurementConstants.TITLE_FONT } );
 
     const probabilityControlBox = new VBox( {
       visibleProperty: DerivedProperty.valueEqualsConstant(

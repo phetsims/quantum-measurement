@@ -14,22 +14,18 @@ import { toFixed } from '../../../../dot/js/util/toFixed.js';
 import { toRadians } from '../../../../dot/js/util/toRadians.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import AccordionBox, { AccordionBoxOptions } from '../../../../sun/js/AccordionBox.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 
 type SelfOptions = EmptySelfOptions;
 type PhotonDetectionProbabilityAccordionBoxOptions = SelfOptions & WithRequired<AccordionBoxOptions, 'tandem'>;
-
-const FONT_SIZE = 16;
-const NORMAL_FONT = new PhetFont( FONT_SIZE );
-const BOLD_FONT = new PhetFont( { size: FONT_SIZE, weight: 'bold' } );
 
 export default class PhotonDetectionProbabilityPanel extends AccordionBox {
 
@@ -40,7 +36,7 @@ export default class PhotonDetectionProbabilityPanel extends AccordionBox {
     const options = optionize<PhotonDetectionProbabilityAccordionBoxOptions, SelfOptions, AccordionBoxOptions>()( {
       stroke: null,
       titleNode: new Text( QuantumMeasurementStrings.probabilityStringProperty, {
-        font: BOLD_FONT,
+        font: QuantumMeasurementConstants.BOLD_TITLE_FONT,
         maxWidth: 200
       } ),
       cornerRadius: 5,
@@ -100,7 +96,7 @@ export default class PhotonDetectionProbabilityPanel extends AccordionBox {
 
     // Create the textual nodes and assemble them in a VBox.
     const probabilityOfTextOptions = {
-      font: NORMAL_FONT,
+      font: QuantumMeasurementConstants.TITLE_FONT,
       maxWidth: 150
     };
     const probabilityOfVerticalText = new RichText( probabilityOfVerticalStringProperty, probabilityOfTextOptions );

@@ -337,7 +337,7 @@ export default class BlochSphereMeasurementArea extends Node {
           }
         },
         baseColor: experimentControlButtonColorProperty,
-        font: QuantumMeasurementConstants.SUPER_TITLE_FONT,
+        font: QuantumMeasurementConstants.TITLE_FONT,
         enabledProperty: DerivedProperty.valueNotEqualsConstant( model.measurementStateProperty, SpinMeasurementState.TIMING_OBSERVATION ),
         xMargin: 20,
         yMargin: 6,

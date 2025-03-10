@@ -17,7 +17,6 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import ArrowNode, { ArrowNodeOptions } from '../../../../scenery-phet/js/ArrowNode.js';
 import MathSymbolFont from '../../../../scenery-phet/js/MathSymbolFont.js';
 import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import Circle from '../../../../scenery/js/nodes/Circle.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
@@ -46,7 +45,6 @@ const AXIS_OPTIONS: ArrowNodeOptions = {
   doubleHead: true
 };
 const LABELS_OFFSET = 2;
-const LABELS_FONT = new PhetFont( { size: 14, weight: 'bold' } );
 
 // Define the unit length to use for the unit circle and the polarization vectors.
 const UNIT_LENGTH = AXIS_LENGTH * 0.75;
@@ -64,7 +62,7 @@ export default class FlatPolarizationAngleIndicator extends Node {
       centerX: 0,
       bottom: verticalAxis.top - LABELS_OFFSET,
       fill: QuantumMeasurementColors.verticalPolarizationColorProperty,
-      font: LABELS_FONT,
+      font: QuantumMeasurementConstants.BOLD_TITLE_FONT,
       maxWidth: 20
     } );
     QuantumMeasurementStrings.VStringProperty.link( () => {
@@ -77,7 +75,7 @@ export default class FlatPolarizationAngleIndicator extends Node {
     // Create and position the x-axis label.
     const horizontalAxisLabel = new Text( QuantumMeasurementStrings.HStringProperty, {
       fill: QuantumMeasurementColors.horizontalPolarizationColorProperty,
-      font: LABELS_FONT,
+      font: QuantumMeasurementConstants.BOLD_TITLE_FONT,
       left: horizontalAxis.right + LABELS_OFFSET,
       centerY: horizontalAxis.centerY,
       maxWidth: 20

@@ -22,7 +22,6 @@ import Shape from '../../../../kite/js/Shape.js';
 import optionize, { combineOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import NumberDisplay, { NumberDisplayOptions } from '../../../../scenery-phet/js/NumberDisplay.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
@@ -160,7 +159,7 @@ class QuantumMeasurementHistogram extends Node {
 
     if ( options.displayMode === 'fraction' ) {
 
-      const fractionFont = new PhetFont( { size: 15, weight: 'bold' } );
+      const fractionFont = QuantumMeasurementConstants.BOLD_TITLE_FONT;
 
       // Assume no one will ever have the patience to shoot more than 1000 photons.
       const fractionTermsRange = new Range( 0, 999 );

@@ -94,7 +94,7 @@ export default class SternGerlachNode extends Node {
           sternGerlach.isZOrientedProperty
         ],
         isZOriented => isZOriented ? 'SG<sub>Z</sub>' : 'SG<sub>X</sub>' ),
-      { font: QuantumMeasurementConstants.SUPER_TITLE_FONT, fill: 'white', center: new Vector2( -STERN_GERLACH_WIDTH / 2 + 25, -STERN_GERLACH_HEIGHT / 2 + 70 ) } );
+      { font: QuantumMeasurementConstants.TITLE_FONT, fill: 'white', center: new Vector2( -STERN_GERLACH_WIDTH / 2 + 25, -STERN_GERLACH_HEIGHT / 2 + 70 ) } );
 
     const sternGerlachControls = new VBox( {
       align: 'left',
@@ -103,7 +103,7 @@ export default class SternGerlachNode extends Node {
     } );
 
     const radioButtonTextOptions: RichTextOptions = {
-      font: QuantumMeasurementConstants.SUPER_TITLE_FONT,
+      font: QuantumMeasurementConstants.TITLE_FONT,
       fill: 'black'
     };
 

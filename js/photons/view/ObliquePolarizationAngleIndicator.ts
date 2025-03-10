@@ -28,13 +28,13 @@ import Shape from '../../../../kite/js/Shape.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ArrowNode, { ArrowNodeOptions } from '../../../../scenery-phet/js/ArrowNode.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 
@@ -53,7 +53,6 @@ const AXIS_OPTIONS: ArrowNodeOptions = {
   headHeight: 2
 };
 const LABELS_OFFSET = 10;
-const LABELS_FONT = new PhetFont( { size: 14, weight: 'bold' } );
 
 // Define the unit length to use for the unit circle and the polarization vectors.
 const UNIT_LENGTH = AXIS_LENGTH * 0.75;
@@ -88,7 +87,7 @@ export default class ObliquePolarizationAngleIndicator extends Node {
     // Add the label for the Y axis.
     const yAxisLabel = new Text( QuantumMeasurementStrings.propagationStringProperty, {
       fill: AXIS_COLOR,
-      font: new PhetFont( 8 ),
+      font: QuantumMeasurementConstants.TINY_LABEL_FONT,
       maxWidth: 50,
 
       // position empirically determined to match design doc
@@ -104,7 +103,7 @@ export default class ObliquePolarizationAngleIndicator extends Node {
       centerY: -AXIS_LENGTH - LABELS_OFFSET,
       centerX: 0,
       fill: QuantumMeasurementColors.verticalPolarizationColorProperty,
-      font: LABELS_FONT,
+      font: QuantumMeasurementConstants.BOLD_TITLE_FONT,
       maxWidth: 30
     } );
     zAxisLabel.localBoundsProperty.link( () => {
@@ -118,7 +117,7 @@ export default class ObliquePolarizationAngleIndicator extends Node {
     // Create and position the x-axis label.
     const xAxisLabel = new Text( QuantumMeasurementStrings.HStringProperty, {
       fill: QuantumMeasurementColors.horizontalPolarizationColorProperty,
-      font: LABELS_FONT,
+      font: QuantumMeasurementConstants.BOLD_TITLE_FONT,
       center: xAxisTipPosition.times( 1.4 ),
       maxWidth: 30
     } );

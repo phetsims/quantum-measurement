@@ -52,12 +52,15 @@ const PANEL_OPTIONS = {
   xMargin: 10
 };
 
+const BIG_LETTER_FONT = new PhetFont( { size: 40, weight: 'bold' } );
+const SCENE_SELECTOR_FONT = new PhetFont( { size: 26, weight: 'bold' } );
 const BOLD_HEADER_FONT = new PhetFont( { size: 20, weight: 'bold' } );
-const SECTION_HEADER_FONT = new PhetFont( 20 );
-const SUPER_TITLE_FONT = new PhetFont( 18 );
+const BOLD_TITLE_FONT = new PhetFont( { size: 16, weight: 'bold' } );
+const HEADER_FONT = new PhetFont( 20 );
 const TITLE_FONT = new PhetFont( 16 );
 const CONTROL_FONT = new PhetFont( 14 );
 const SMALL_LABEL_FONT = new PhetFont( 12 );
+const TINY_LABEL_FONT = new PhetFont( 8 );
 
 const QuantumMeasurementConstants = {
   LAYOUT_BOUNDS: ScreenView.DEFAULT_LAYOUT_BOUNDS,
@@ -96,12 +99,18 @@ const QuantumMeasurementConstants = {
 
   TITLE_AND_SLIDER_SPACING: 5,
 
-  BOLD_HEADER_FONT: BOLD_HEADER_FONT,
-  SECTION_HEADER_FONT: SECTION_HEADER_FONT,
-  SUPER_TITLE_FONT: SUPER_TITLE_FONT,
+  // Normal fonts
+  HEADER_FONT: HEADER_FONT,
   TITLE_FONT: TITLE_FONT,
   CONTROL_FONT: CONTROL_FONT,
   SMALL_LABEL_FONT: SMALL_LABEL_FONT,
+  TINY_LABEL_FONT: TINY_LABEL_FONT,
+
+  // Bold fonts
+  BIG_LETTER_FONT: BIG_LETTER_FONT,
+  SCENE_SELECTOR_FONT: SCENE_SELECTOR_FONT,
+  BOLD_HEADER_FONT: BOLD_HEADER_FONT,
+  BOLD_TITLE_FONT: BOLD_TITLE_FONT,
 
   CAMERA_SOLID_SHAPE_SVG: 'M512 144v288c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48h88l12.3-32.9c7-18.7 24.9-31.1 44.9-31.1h125.5c20 0 37.9 12.4 44.9 31.1L376 96h88c26.5 0 48 21.5 48 48z'
 };

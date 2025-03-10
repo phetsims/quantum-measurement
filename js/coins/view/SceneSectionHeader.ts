@@ -42,7 +42,7 @@ export default class SceneSectionHeader extends VBox {
 
     const heading = new Text( textProperty, {
       fill: options.textColor,
-      font: QuantumMeasurementConstants.SECTION_HEADER_FONT,
+      font: QuantumMeasurementConstants.HEADER_FONT,
       maxWidth: options.maxWidth
     } );
     const line = new Line( 0, 0, heading.width, 0, {

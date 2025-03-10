@@ -13,7 +13,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import TimeControlNode from '../../../../scenery-phet/js/TimeControlNode.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
@@ -106,7 +105,7 @@ class PhotonsExperimentSceneView extends Node {
                               QuantumMeasurementStrings.averagePolarizationStringProperty :
                               QuantumMeasurementStrings.averagePolarizationRateStringProperty;
     const averagePolarizationTitlePanel = new Panel(
-      new Text( titleTextProperty, { font: QuantumMeasurementConstants.SUPER_TITLE_FONT, maxWidth: 250 } ),
+      new Text( titleTextProperty, { font: QuantumMeasurementConstants.TITLE_FONT, maxWidth: 250 } ),
       combineOptions<PanelOptions>(
         {
           minWidth: 325,
@@ -159,7 +158,7 @@ class PhotonsExperimentSceneView extends Node {
         new RichText(
           QuantumMeasurementStrings.VStringProperty,
           {
-            font: new PhetFont( { size: 17, weight: 'bold' } ),
+            font: QuantumMeasurementConstants.BOLD_TITLE_FONT,
             fill: QuantumMeasurementColors.verticalPolarizationColorProperty,
             maxWidth: 15
           }
@@ -167,7 +166,7 @@ class PhotonsExperimentSceneView extends Node {
         new RichText(
           QuantumMeasurementStrings.HStringProperty,
           {
-            font: new PhetFont( { size: 17, weight: 'bold' } ),
+            font: QuantumMeasurementConstants.BOLD_TITLE_FONT,
             fill: QuantumMeasurementColors.horizontalPolarizationColorProperty,
             maxWidth: 15
           } )

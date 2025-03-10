@@ -13,12 +13,12 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
-import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import ProfileColorProperty from '../../../../scenery/js/util/ProfileColorProperty.js';
 import RectangularRadioButtonGroup, { RectangularRadioButtonGroupItem, RectangularRadioButtonGroupOptions } from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementColors from '../QuantumMeasurementColors.js';
+import QuantumMeasurementConstants from '../QuantumMeasurementConstants.js';
 
 type SelfOptions = EmptySelfOptions;
 export type SceneSelectorRadioButtonGroupOptions = SelfOptions & WithRequired<RectangularRadioButtonGroupOptions, 'tandem'>;
@@ -72,7 +72,7 @@ class SceneSelectorRadioButtonGroup<T extends EnumerationValueWithTitle> extends
           return new Text(
             value.title,
             {
-              font: new PhetFont( { size: 26, weight: 'bold' } ),
+              font: QuantumMeasurementConstants.SCENE_SELECTOR_FONT,
               // Determine fill color based on value name
               fill: value.colorProperty,
               maxWidth: 300
