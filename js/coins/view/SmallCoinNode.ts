@@ -121,14 +121,26 @@ class SmallCoinNode extends Node {
 
   public get isFlipping(): boolean { return this.flippingAnimation !== null; }
 
-  // REVIEW: I would recommend documenting this a bit more especially to describe the flipPhase, previousXScale,
-  //  destinationPhaseMultiplier, and rotationalAxis. That will help future maintainers from having to re-read multiple
-  // times or visit the sim to understand what is going on.
+  /**
+   * Start the flipping animation for the coin. This will cause the coin to appear to flip in place.  It does this by
+   * scaling the coin in the one direction while keeping the orthogonal scale unchanged.
+   */
   public startFlipping(): void {
+
+    // The phase of the flip animation, in radians.  A value of 0 means the coin is flat with respect to the screen.
     let flipPhase = 0;
+
+    // The scale of the coin in the x direction from the previous frame.  This is used to handle the case where the
+    // scale is zero, which can't be set directly, so we skip over it in the direction it was changing.
     let previousXScale = 0;
+
+    // The ending point of the animation.  This is randomly chosen so that a group of coins will flip and different
+    // speeds, which looks more interesting.
     const destinationPhaseMultiplier = dotRandom.nextDoubleBetween( 4, 12 );
+
+    // The axis of rotation for the flipping, which is randomly chosen.
     const rotationalAxis = dotRandom.nextIntBetween( 0, 2 ) * 2 * Math.PI / 3;
+
     this.coinCircle.setRotation( rotationalAxis );
 
     this.flippingAnimation = new Animation( {
@@ -148,13 +160,20 @@ class SmallCoinNode extends Node {
       duration: isSettingPhetioStateProperty.value ? 0 : MEASUREMENT_PREPARATION_TIME,
       easing: Easing.LINEAR
     } );
+
+    // When the animation ends, set the scale back to 1 to make the coin look flat and round.
     this.flippingAnimation.endedEmitter.addListener( () => {
       this.coinCircle.setScaleMagnitude( 1, 1 );
       this.flippingAnimation = null;
     } );
+
+    // Kick off the animation.
     this.flippingAnimation.start();
   }
 
+  /**
+   * Stop the flipping animation if it is in progress.
+   */
   public stopFlipping(): void {
     if ( this.flippingAnimation ) {
       this.flippingAnimation.stop();
