@@ -58,7 +58,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
                                 QuantumMeasurementStrings.basisStateStringProperty;
 
     const selectionPanelTitle = new Text( titleStringProperty, {
-      font: new PhetFont( { size: 18, weight: 'bold' } ),
+      font: new PhetFont( { size: 16, weight: 'bold' } ), // TODO: Use a common font. See https://github.com/phetsims/quantum-measurement/issues/132.
       maxWidth: WIDTH * 0.95
     } );
 

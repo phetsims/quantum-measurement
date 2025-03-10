@@ -52,7 +52,6 @@ const PANEL_OPTIONS = {
   xMargin: 10
 };
 
-// const TITLE_FONT = new PhetFont( { size: 16, weight: 'bold' } );
 const BOLD_HEADER_FONT = new PhetFont( { size: 20, weight: 'bold' } );
 const SECTION_HEADER_FONT = new PhetFont( 20 );
 const SUPER_TITLE_FONT = new PhetFont( 18 );

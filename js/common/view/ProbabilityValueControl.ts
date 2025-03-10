@@ -21,7 +21,6 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementConstants from '../QuantumMeasurementConstants.js';
 
-const TITLE_FONT = QuantumMeasurementConstants.TITLE_FONT;
 const TICK_MARK_FONT = QuantumMeasurementConstants.CONTROL_FONT;
 const RANGE = new Range( 0, 1 );
 
@@ -61,7 +60,7 @@ export default class ProbabilityValueControl extends NumberControl {
       },
       useRichText: true,
       titleNodeOptions: {
-        font: TITLE_FONT,
+        font: QuantumMeasurementConstants.CONTROL_FONT,
         maxWidth: 250, // empirically determined to work well with layout
         tandem: Tandem.OPT_OUT
       },

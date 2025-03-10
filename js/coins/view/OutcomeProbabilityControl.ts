@@ -33,9 +33,7 @@ import ProbabilityEquationsNode from './ProbabilityEquationsNode.js';
 type SelfOptions = EmptySelfOptions;
 type OutcomeProbabilityControlOptions = SelfOptions & PickRequired<VBox, 'tandem' | 'visibleProperty'>;
 
-// REVIEW: Not sure what it means to not "rely on systemType for the color"
-// constants that don't rely on systemType for the color
-const TITLE_AND_LABEL_FONT = QuantumMeasurementConstants.TITLE_FONT;
+// constants
 const ALPHA = MathSymbols.ALPHA;
 const BETA = MathSymbols.BETA;
 const UP = QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
@@ -71,7 +69,7 @@ export default class OutcomeProbabilityControl extends VBox {
     let title: Node;
     if ( systemType === SystemType.CLASSICAL ) {
       title = new Text( QuantumMeasurementStrings.coinBiasStringProperty, {
-        font: TITLE_AND_LABEL_FONT,
+        font: QuantumMeasurementConstants.TITLE_FONT,
         fontWeight: 'bold',
         maxWidth: 250,
         accessibleParagraph: QuantumMeasurementStrings.coinBiasStringProperty
@@ -87,7 +85,7 @@ export default class OutcomeProbabilityControl extends VBox {
         stateToPrepareString => `<b>${stateToPrepareString}</b> ${ketTitleString}`
       );
       title = new RichText( titleStringProperty, {
-        font: TITLE_AND_LABEL_FONT,
+        font: QuantumMeasurementConstants.TITLE_FONT,
         maxWidth: 250,
         accessibleParagraph: QuantumMeasurementStrings.a11y.quantumCoinsAccessibleParagraphStringProperty
       } );
@@ -218,7 +216,7 @@ export default class OutcomeProbabilityControl extends VBox {
       );
 
       quantumReadout = new RichText( quantumStateReadoutStringProperty, {
-        font: TITLE_AND_LABEL_FONT,
+        font: QuantumMeasurementConstants.TITLE_FONT,
         accessibleParagraph: equationAccessibleParagraphStringProperty
       } );
 
