@@ -376,7 +376,7 @@ export default class BlochSphereMeasurementArea extends Node {
         font: QuantumMeasurementConstants.CONTROL_FONT, maxWidth: TEXT_NODE_MAX_WIDTH
       } ),
       {
-        spacing: 10,
+        spacing: 5,
         boxWidth: QuantumMeasurementConstants.CHECKBOX_BOX_WIDTH,
         centerX: multipleMeasurementBlochSpheresNode.centerX,
         bottom: QuantumMeasurementConstants.LAYOUT_BOUNDS.bottom - 30,
