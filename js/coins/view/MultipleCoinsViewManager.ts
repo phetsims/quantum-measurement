@@ -5,7 +5,7 @@
  * thus appear to originate there, and move into the measurement area.  This is used for the 10 and 100 coin cases.  The
  * 10k case is handled differently and is not included here.
  *
- * The animations here are pretty complex due to the need to mask the coins in some cases, to handle different numbers,
+ * The animations here are pretty complex due to the need to hide the coins in some cases, to handle different numbers,
  * of coins, and to move the cains in areas outside the bounds of the node in which they originate.
  *
  * @author John Blanco, PhET Interactive Simulations
@@ -122,7 +122,7 @@ class MultipleCoinsViewManager extends CoinViewManager {
 
         // Mask or display the coin value based on the measurement state.
         coinNode.displayModeProperty.value = coinsMasked ?
-                                             'masked' :
+                                             'hidden' :
                                              sceneModel.coinSet.measuredValues[ index ] as SmallCoinDisplayMode;
 
         // Get the final destination for this coin node in terms of its offset from the center of the test box.

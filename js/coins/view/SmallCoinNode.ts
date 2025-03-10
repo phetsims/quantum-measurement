@@ -29,10 +29,8 @@ import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
 type SelfOptions = EmptySelfOptions;
 export type SmallCoinNodeOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
 
-// REVIEW: What does it mean for a coin to be "masked"? Oh... I think I get it. It's masked when it's hidden? Maybe
-// just switch that to "hidden" since that's terminology you're already using elsewhere.
-// Define a type for the display mode that composes all possible coin values plus one for when the coin is masked.
-export type SmallCoinDisplayMode = ClassicalCoinStates | QuantumCoinStates | 'masked';
+// Define a type for the display mode that composes all possible coin values plus one for when the coin is hidden.
+export type SmallCoinDisplayMode = ClassicalCoinStates | QuantumCoinStates | 'hidden';
 
 // constants
 const COIN_STROKE_COLOR_PROPERTY = QuantumMeasurementColors.coinStrokeColorProperty;
@@ -83,10 +81,10 @@ class SmallCoinNode extends Node {
 
     this.radius = radius;
     this.coinCircle = coinCircle;
-    this.displayModeProperty = new Property<SmallCoinDisplayMode>( 'masked' );
+    this.displayModeProperty = new Property<SmallCoinDisplayMode>( 'hidden' );
 
     const updateCoinAppearance = ( displayMode: SmallCoinDisplayMode ) => {
-      if ( displayMode === 'masked' ) {
+      if ( displayMode === 'hidden' ) {
         upArrow.visible = false;
         downArrow.visible = false;
         coinCircle.fill = MASKED_FILL_COLOR_PROPERTY;

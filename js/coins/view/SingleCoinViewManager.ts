@@ -5,7 +5,7 @@
  * experiment. This includes the animation of the coin moving from the preparation area to the measurement area, as
  * well as providing support for the coin flipping animation.
  *
- * The animations here are pretty complex due to the need to mask the coins in some cases, to work with clip areas, and
+ * The animations here are pretty complex due to the need to hide the coins in some cases, to work with clip areas, and
  * to move the cains in areas outside the bounds of the node in which they originate.
  *
  * @author John Blanco, PhET Interactive Simulations

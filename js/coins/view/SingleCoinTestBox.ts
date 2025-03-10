@@ -3,7 +3,7 @@
 /**
  * SingleCoinTestBox is a Scenery Node that represents a box (i.e. a rectangle) where a coin is placed for tests where
  * the coin is prepared for measurement and then measured.  This provides a child with a clip area that can be used for
- * animations where a coin slides in and becomes masked as it does.
+ * animations where a coin slides in and becomes masked (i.e. its value is hidden from the user) as it does.
  *
  * @author John Blanco, PhET Interactive Simulations
  */

@@ -221,10 +221,7 @@ class CoinExperimentMeasurementArea extends VBox {
     this.singleCoinInTestBoxProperty = singleCoinInTestBoxProperty;
     this.coinSetInTestBoxProperty = coinSetInTestBoxProperty;
 
-    // REVIEW: Hmmm I added a review comment elsewhere about the word "mask" and replacing it with "hidden" since
-    // there hadn't been much mention of "mask" when I got there... I'm a little less certain now but it still felt
-    // confusing when added to that type.
-    // Create the node that will be used to cover (aka "mask") the coin so that its state can't be seen.
+    // Create the node that will be used to cover (aka "mask") the coin so that its state is hidden from the user.
     const maskRadius = InitialCoinStateSelectorNode.INDICATOR_COIN_NODE_RADIUS * 1.02;
     const coinMask = new Circle( maskRadius, {
       fill: QuantumMeasurementColors.maskedFillColorProperty,

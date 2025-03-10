@@ -118,7 +118,7 @@ class MultiCoinTestBox extends Node {
         assert && assert( !coinNode.isFlipping, 'coin node should not already be flipping' );
 
         // Hide the faces of the coin.
-        coinNode.displayModeProperty.value = 'masked';
+        coinNode.displayModeProperty.value = 'hidden';
 
         if ( coinSet.coinType === SystemType.CLASSICAL ) {
           coinNode.startFlipping();
@@ -128,7 +128,7 @@ class MultiCoinTestBox extends Node {
         if ( coinNode.isFlipping ) {
           coinNode.stopFlipping();
         }
-        coinNode.displayModeProperty.value = 'masked';
+        coinNode.displayModeProperty.value = 'hidden';
       }
     } );
 
