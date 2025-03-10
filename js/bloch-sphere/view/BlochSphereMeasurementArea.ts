@@ -25,7 +25,6 @@ import AquaRadioButtonGroup, { AquaRadioButtonGroupItem } from '../../../../sun/
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import Panel from '../../../../sun/js/Panel.js';
-import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
 import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHistogram.js';
@@ -402,13 +401,17 @@ export default class BlochSphereMeasurementArea extends Node {
       visibleProperty: model.magneticFieldEnabledProperty,
       tandem: magneticFieldControlsTandem,
 
-      // Put a stroke around it so that it is easier to match the size of the system under test panel.
-      stroke: QuantumMeasurementColors.controlPanelFillColorProperty,
-
       // Make this the same height as the system under test node.
       minHeight: systemUnderTestNode.height,
       minWidth: systemUnderTestNode.width
     } );
+
+    // As a design aesthetic, we want the magnetic field control to be roughly the same size as the system under test
+    // node.  This assertion verifies that this is true.  If it fails, something has changed that needs to be fixed.
+    assert && assert(
+      magneticFieldControl.localBounds.equalsEpsilon( systemUnderTestNode.localBounds, 2 ),
+      'magneticFieldControl and systemUnderTestNode should be roughly the same size'
+    );
 
     const magneticFieldAndStrengthControl = new HBox( {
       children: [ magneticFieldControl, systemUnderTestNode ],
