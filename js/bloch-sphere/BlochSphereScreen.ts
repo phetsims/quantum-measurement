@@ -48,6 +48,7 @@ const createScreenIcon = (): ScreenIcon => {
     drawKets: false,
     drawTitle: false,
     drawAngleIndicators: true,
+    drawAxesLabels: false,
     tandem: Tandem.OPT_OUT
   } );
   return new ScreenIcon( iconNode, {
