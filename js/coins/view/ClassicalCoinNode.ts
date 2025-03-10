@@ -9,10 +9,11 @@
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import RichText from '../../../../scenery/js/nodes/RichText.js';
+import Image from '../../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
+import classicalCoinHeads_svg from '../../../images/classicalCoinHeads_svg.js';
+import classicalCoinTails_svg from '../../../images/classicalCoinTails_svg.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
-import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
 import CoinNode, { CoinFaceParameters } from './CoinNode.js';
@@ -29,21 +30,13 @@ export default class ClassicalCoinNode extends CoinNode {
     const headsOptions: CoinFaceParameters = {
       fill: HEADS_FILL_COLOR_PROPERTY,
       stroke: HEADS_STROKE_AND_LETTER_COLOR_PROPERTY,
-      content: new RichText( QuantumMeasurementConstants.CLASSICAL_UP_SYMBOL, {
-        font: QuantumMeasurementConstants.BIG_LETTER_FONT,
-        fill: HEADS_STROKE_AND_LETTER_COLOR_PROPERTY,
-        boundsMethod: 'accurate'
-      } )
+      content: new Image( classicalCoinHeads_svg )
     };
 
     const tailsOptions: CoinFaceParameters = {
       fill: TAILS_FILL_COLOR_PROPERTY,
       stroke: TAILS_STROKE_AND_LETTER_COLOR_PROPERTY,
-      content: new RichText( QuantumMeasurementConstants.CLASSICAL_DOWN_SYMBOL, {
-        font: QuantumMeasurementConstants.BIG_LETTER_FONT,
-        fill: TAILS_STROKE_AND_LETTER_COLOR_PROPERTY,
-        boundsMethod: 'accurate'
-      } ),
+      content: new Image( classicalCoinTails_svg ),
       minYMarginFactor: 0.3
     };
 

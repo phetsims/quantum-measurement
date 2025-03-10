@@ -63,13 +63,13 @@ const QuantumMeasurementColors = {
     default: '#000'
   } ),
   tailsColorProperty: new ProfileColorProperty( quantumMeasurement, 'tails', {
-    default: '#F0F'
+    default: '#C0C'
   } ),
   upColorProperty: new ProfileColorProperty( quantumMeasurement, 'up', {
     default: '#000'
   } ),
   downColorProperty: new ProfileColorProperty( quantumMeasurement, 'down', {
-    default: '#F0F'
+    default: '#C0C'
   } ),
 
   // test boxes
@@ -145,7 +145,7 @@ const QuantumMeasurementColors = {
 
   // Colors for the photon polarization
   horizontalPolarizationColorProperty: new ProfileColorProperty( quantumMeasurement, 'horizontalPolarization', {
-    default: '#F0F'
+    default: '#C0C'
   } ),
   verticalPolarizationColorProperty: new ProfileColorProperty( quantumMeasurement, 'verticalPolarization', {
     default: '#00F'
@@ -182,7 +182,7 @@ const QuantumMeasurementColors = {
 
   // color for particles on the "Spin" screen particles.
   particleColorProperty: new ProfileColorProperty( quantumMeasurement, 'particleColor', {
-    default: '#F0F'
+    default: '#C0C'
   } ),
 
   // color for the arrows that depict that magnetic field and the elements that control it
