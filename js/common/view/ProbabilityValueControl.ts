@@ -68,7 +68,7 @@ export default class ProbabilityValueControl extends NumberControl {
         constrainValue: ( number: number ) => roundToInterval( number, sliderStep ),
         keyboardStep: sliderStep,
         shiftKeyboardStep: sliderStep / 5,
-        pageKeyboardStep: sliderStep * 4,
+        pageKeyboardStep: sliderStep * 5,
         minorTickSpacing: RANGE.max * 0.25,
         majorTicks: [
           { value: RANGE.min, label: new Text( RANGE.min.toString(), { font: TICK_MARK_FONT } ) },
