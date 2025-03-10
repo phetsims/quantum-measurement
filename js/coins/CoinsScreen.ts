@@ -6,15 +6,17 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
+import Property from '../../../axon/js/Property.js';
 import ScreenIcon from '../../../joist/js/ScreenIcon.js';
-import Rectangle from '../../../scenery/js/nodes/Rectangle.js';
 import Tandem from '../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../common/QuantumMeasurementColors.js';
 import QuantumMeasurementScreen from '../common/view/QuantumMeasurementScreen.js';
 import quantumMeasurement from '../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../QuantumMeasurementStrings.js';
 import CoinsModel from './model/CoinsModel.js';
+import { QuantumCoinStates } from './model/QuantumCoinStates.js';
 import CoinsScreenView from './view/CoinsScreenView.js';
+import QuantumCoinNode from './view/QuantumCoinNode.js';
 
 export default class CoinsScreen extends QuantumMeasurementScreen<CoinsModel, CoinsScreenView> {
 
@@ -38,8 +40,13 @@ export default class CoinsScreen extends QuantumMeasurementScreen<CoinsModel, Co
 
 const createScreenIcon = (): ScreenIcon => {
 
-  // TODO: Fill this in with the real deal, see https://github.com/phetsims/quantum-measurement/issues/88.
-  const iconNode = new Rectangle( 1, 1, 100, 100, { fill: QuantumMeasurementColors.headsFillColorProperty } );
+  // Create a stubbed quantum coin node for the icon.
+  const iconNode = new QuantumCoinNode(
+    new Property<QuantumCoinStates>( 'superposition' ),
+    new Property<number>( 0.5 ),
+    50,
+    Tandem.OPT_OUT
+  );
   return new ScreenIcon( iconNode, {
     maxIconWidthProportion: 1,
     maxIconHeightProportion: 0.85,

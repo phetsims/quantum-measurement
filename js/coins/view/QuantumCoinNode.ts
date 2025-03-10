@@ -2,7 +2,7 @@
 
 /**
  * QuantumCoinNode portrays a single "quantum" coin in the view, allowing users to see its orientation, e.g. spin up,
- * spin down, or transposed somewhere in between.
+ * spin down, or superposed somewhere in between.
  *
  * @author John Blanco, PhET Interactive Simulations
  */
