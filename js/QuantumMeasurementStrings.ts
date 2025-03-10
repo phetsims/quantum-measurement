@@ -37,7 +37,7 @@ type StringsType = {
   'coinBiasStringProperty': LocalizedStringProperty;
   'customStringProperty': LocalizedStringProperty;
   'decimalValuesStringProperty': LocalizedStringProperty;
-  'enableMagneticFieldStringProperty': LocalizedStringProperty;
+  'magneticFieldStringProperty': LocalizedStringProperty;
   'eventsPerSecondPatternStringProperty': LocalizedStringProperty;
   'expectationValueStringProperty': LocalizedStringProperty;
   'flipStringProperty': LocalizedStringProperty;
@@ -50,7 +50,6 @@ type StringsType = {
   'basisStateStringProperty': LocalizedStringProperty;
   'HStringProperty': LocalizedStringProperty;
   'itemToPreparePatternStringProperty': LocalizedStringProperty;
-  'magneticFieldStringProperty': LocalizedStringProperty;
   'manyPhotonsStringProperty': LocalizedStringProperty;
   'mirrorStringProperty': LocalizedStringProperty;
   'multipleCoinMeasurementsStringProperty': LocalizedStringProperty;

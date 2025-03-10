@@ -56,8 +56,8 @@
   "decimalValues": {
     "value": "Decimal Values"
   },
-  "enableMagneticField": {
-    "value": "Enable Magnetic Field"
+  "magneticField": {
+    "value": "Magnetic Field"
   },
   "eventsPerSecondPattern": {
     "value": "{{value}}/s"
