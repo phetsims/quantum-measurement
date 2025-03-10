@@ -64,9 +64,8 @@ export default class BlochSphereNode extends Node {
 
   public readonly stateVectorVisibleProperty: BooleanProperty;
 
-  public constructor(
-    blochSphere: AbstractBlochSphere,
-    providedOptions?: BlochSphereNodeOptions ) {
+  public constructor( blochSphere: AbstractBlochSphere,
+                      providedOptions?: BlochSphereNodeOptions ) {
 
     const options = optionize<BlochSphereNodeOptions, SelfOptions, NodeOptions>()( {
       drawKets: true,

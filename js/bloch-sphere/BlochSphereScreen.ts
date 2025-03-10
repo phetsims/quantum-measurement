@@ -7,13 +7,14 @@
  */
 
 import ScreenIcon from '../../../joist/js/ScreenIcon.js';
-import Rectangle from '../../../scenery/js/nodes/Rectangle.js';
 import Tandem from '../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../common/QuantumMeasurementColors.js';
+import BlochSphereNode from '../common/view/BlochSphereNode.js';
 import QuantumMeasurementScreen from '../common/view/QuantumMeasurementScreen.js';
 import quantumMeasurement from '../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../QuantumMeasurementStrings.js';
 import BlochSphereModel from './model/BlochSphereModel.js';
+import ComplexBlochSphere from './model/ComplexBlochSphere.js';
 import BlochSphereScreenView from './view/BlochSphereScreenView.js';
 
 export default class BlochSphereScreen extends QuantumMeasurementScreen<BlochSphereModel, BlochSphereScreenView> {
@@ -38,8 +39,17 @@ export default class BlochSphereScreen extends QuantumMeasurementScreen<BlochSph
 
 const createScreenIcon = (): ScreenIcon => {
 
-  // TODO: Fill this in with the real deal, see https://github.com/phetsims/quantum-measurement/issues/88.
-  const iconNode = new Rectangle( 1, 1, 100, 100, { fill: QuantumMeasurementColors.blockSphereMainColorProperty } );
+  const dummyBlochSphereModel = new ComplexBlochSphere( {
+    initialPolarAngle: Math.PI / 4,
+    initialAzimuthalAngle: 0.2 * Math.PI,
+    tandem: Tandem.OPT_OUT
+  } );
+  const iconNode = new BlochSphereNode( dummyBlochSphereModel, {
+    drawKets: false,
+    drawTitle: false,
+    drawAngleIndicators: true,
+    tandem: Tandem.OPT_OUT
+  } );
   return new ScreenIcon( iconNode, {
     maxIconWidthProportion: 1,
     maxIconHeightProportion: 0.85,
