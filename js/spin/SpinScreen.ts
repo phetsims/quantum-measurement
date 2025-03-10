@@ -7,8 +7,9 @@
  */
 
 import ScreenIcon from '../../../joist/js/ScreenIcon.js';
-import Rectangle from '../../../scenery/js/nodes/Rectangle.js';
+import Image from '../../../scenery/js/nodes/Image.js';
 import Tandem from '../../../tandem/js/Tandem.js';
+import spinScreenIcon_png from '../../images/spinScreenIcon_png.js';
 import QuantumMeasurementColors from '../common/QuantumMeasurementColors.js';
 import QuantumMeasurementScreen from '../common/view/QuantumMeasurementScreen.js';
 import quantumMeasurement from '../quantumMeasurement.js';
@@ -41,12 +42,10 @@ export default class SpinScreen extends QuantumMeasurementScreen<SpinModel, Spin
 }
 
 const createScreenIcon = (): ScreenIcon => {
-
-  // TODO: Fill this in with the real deal, see https://github.com/phetsims/quantum-measurement/issues/88.
-  const iconNode = new Rectangle( 1, 1, 100, 100, { fill: QuantumMeasurementColors.particleColorProperty } );
+  const iconNode = new Image( spinScreenIcon_png );
   return new ScreenIcon( iconNode, {
     maxIconWidthProportion: 1,
-    maxIconHeightProportion: 0.85,
+    maxIconHeightProportion: 1,
     fill: QuantumMeasurementColors.quantumBackgroundColorProperty
   } );
 };
