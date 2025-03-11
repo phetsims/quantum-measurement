@@ -37,6 +37,7 @@ export default class ProbabilityOfSymbolBox extends HBox {
   }
 
   public static getFaceSymbol( coinFace: validFaces, font: PhetFont ): Node {
+    // This text is just used to scale the image to the same size as the text.
     const referenceText = new RichText( 'I <3 PhET', { font: font } );
 
     let shownNode: Node;
