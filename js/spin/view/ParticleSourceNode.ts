@@ -142,8 +142,9 @@ export default class ParticleSourceNode extends Node {
     const tickLabelOptions = { font: QuantumMeasurementConstants.SMALL_LABEL_FONT, maxWidth: 40 };
     particleAmountSlider.addMajorTick( sliderRange.min, new Text( QuantumMeasurementStrings.noneStringProperty, tickLabelOptions ) );
     particleAmountSlider.addMajorTick( sliderRange.max, new Text( QuantumMeasurementStrings.lotsStringProperty, tickLabelOptions ) );
-    particleAmountSlider.addMajorTick( sliderRange.min + ( sliderRange.max - sliderRange.min ) / 3 );
-    particleAmountSlider.addMajorTick( sliderRange.min + 2 * ( sliderRange.max - sliderRange.min ) / 3 );
+    particleAmountSlider.addMinorTick( sliderRange.min + ( sliderRange.max - sliderRange.min ) / 4 );
+    particleAmountSlider.addMinorTick( sliderRange.min + 2 * ( sliderRange.max - sliderRange.min ) / 4 );
+    particleAmountSlider.addMinorTick( sliderRange.min + 3 * ( sliderRange.max - sliderRange.min ) / 4 );
 
     const particleSourceApparatus = new Node( {
       children: [
