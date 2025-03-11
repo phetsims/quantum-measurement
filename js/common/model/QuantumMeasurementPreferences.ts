@@ -18,6 +18,11 @@ const QuantumMeasurementPreferences = {
   showGlobalPhaseProperty: new BooleanProperty( QuantumMeasurementQueryParameters.showGlobalPhase, {
     tandem: Tandem.PREFERENCES.createTandem( 'showGlobalPhaseProperty' ),
     phetioFeatured: true
+  } ),
+
+  classicalCoinsStartVisibleProperty: new BooleanProperty( QuantumMeasurementQueryParameters.classicalCoinsStartVisible, {
+    tandem: Tandem.PREFERENCES.createTandem( 'classicalCoinsStartVisibleProperty' ),
+    phetioFeatured: true
   } )
 };
 

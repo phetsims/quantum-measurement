@@ -16,6 +16,11 @@ const QuantumMeasurementQueryParameters = QueryStringMachine.getAll( {
     type: 'boolean',
     defaultValue: false,
     public: true
+  },
+  classicalCoinsStartVisible: {
+    type: 'boolean',
+    defaultValue: true,
+    public: true
   }
 } );
 

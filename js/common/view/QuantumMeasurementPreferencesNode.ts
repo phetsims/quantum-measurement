@@ -24,10 +24,12 @@ import QuantumMeasurementPreferences from '../model/QuantumMeasurementPreference
 export default class QuantumMeasurementPreferencesNode extends VBox {
   public constructor( tandem: Tandem ) {
 
-    const moreOrbitalDataControl = new ShowGlobalPhase( tandem.createTandem( 'showGlobalPhase' ) );
+    const showGlobalPhaseControl = new ShowGlobalPhase( tandem.createTandem( 'showGlobalPhase' ) );
+
+    const classicalCoinsStartVisibleControl = new ClassicalCoinsStartVisible( tandem.createTandem( 'classicalCoinsStartVisible' ) );
 
     super( {
-      children: [ moreOrbitalDataControl ],
+      children: [ showGlobalPhaseControl, classicalCoinsStartVisibleControl ],
       spacing: 20,
       tandem: tandem
     } );
@@ -42,6 +44,20 @@ class ShowGlobalPhase extends PreferencesControl {
       descriptionNode: new RichText( QuantumMeasurementStrings.preferences.showGlobalPhase.descriptionStringProperty,
         PreferencesDialogConstants.CONTROL_DESCRIPTION_OPTIONS ),
       controlNode: new ToggleSwitch( QuantumMeasurementPreferences.showGlobalPhaseProperty, false, true, PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS ),
+      tandem: tandem
+    } );
+  }
+}
+
+
+class ClassicalCoinsStartVisible extends PreferencesControl {
+  public constructor( tandem: Tandem ) {
+    super( {
+      isDisposable: false,
+      labelNode: new Text( QuantumMeasurementStrings.preferences.classicalCoinsStartVisible.titleStringProperty, PreferencesDialogConstants.CONTROL_LABEL_OPTIONS ),
+      descriptionNode: new RichText( QuantumMeasurementStrings.preferences.classicalCoinsStartVisible.descriptionStringProperty,
+        PreferencesDialogConstants.CONTROL_DESCRIPTION_OPTIONS ),
+      controlNode: new ToggleSwitch( QuantumMeasurementPreferences.classicalCoinsStartVisibleProperty, false, true, PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS ),
       tandem: tandem
     } );
   }

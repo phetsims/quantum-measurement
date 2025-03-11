@@ -110,6 +110,10 @@ type StringsType = {
     'showGlobalPhase': {
       'titleStringProperty': LocalizedStringProperty;
       'descriptionStringProperty': LocalizedStringProperty;
+    };
+    'classicalCoinsStartVisible': {
+      'titleStringProperty': LocalizedStringProperty;
+      'descriptionStringProperty': LocalizedStringProperty;
     }
   };
   'a11y': {
