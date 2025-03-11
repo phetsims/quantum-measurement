@@ -51,8 +51,8 @@ class SceneSelectorRadioButtonGroup<T extends EnumerationValueWithTitle> extends
       radioButtonOptions: {
         xMargin: 10,
         baseColor: QuantumMeasurementColors.selectorButtonSelectedColorProperty,
-        stroke: QuantumMeasurementColors.selectorButtonSelectedStrokeProperty,
         buttonAppearanceStrategyOptions: {
+          selectedStroke: QuantumMeasurementColors.selectorButtonSelectedStrokeProperty,
           deselectedButtonOpacity: DESELECTED_RADIO_BUTTON_OPACITY,
           deselectedFill: QuantumMeasurementColors.selectorButtonDeselectedColorProperty,
           deselectedStroke: QuantumMeasurementColors.selectorButtonDeselectedStrokeProperty
