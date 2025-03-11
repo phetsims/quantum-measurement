@@ -40,7 +40,7 @@ export default class CoinMeasurementHistogram extends QuantumMeasurementHistogra
     }, providedOptions );
 
     // Create the labels for the X axis.
-    const xAxisLabels = [
+    const xAxisLabels: [ Node, Node ] = [
       ProbabilityOfSymbolBox.getFaceSymbol( systemType === SystemType.CLASSICAL ? 'heads' : 'up', LABEL_FONT ),
       ProbabilityOfSymbolBox.getFaceSymbol( systemType === SystemType.CLASSICAL ? 'tails' : 'down', LABEL_FONT )
     ];
@@ -87,7 +87,7 @@ export default class CoinMeasurementHistogram extends QuantumMeasurementHistogra
     super(
       leftNumberProperty,
       rightNumberProperty,
-      xAxisLabels as [ Node, Node ],
+      xAxisLabels,
       options
     );
 
