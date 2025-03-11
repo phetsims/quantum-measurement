@@ -113,12 +113,12 @@ export default class SpinStatePreparationArea extends VBox {
         model.currentExperimentProperty, SpinExperiment.CUSTOM ),
       children: [
         new ProbabilityValueControl(
-          `|${MathSymbols.ALPHA}|<sup>2`,
+          new RichText( `|${MathSymbols.ALPHA}|<sup>2`, QuantumMeasurementConstants.NUMBER_CONTROL_TITLE_OPTIONS ),
           model.alphaSquaredProperty,
           tandem.createTandem( 'alphaSquaredControl' )
         ),
         new ProbabilityValueControl(
-          `|${MathSymbols.BETA}|<sup>2`,
+          new RichText( `|${MathSymbols.BETA}|<sup>2`, QuantumMeasurementConstants.NUMBER_CONTROL_TITLE_OPTIONS ),
           model.betaSquaredProperty,
           tandem.createTandem( 'betaSquaredControl' )
         )

@@ -18,6 +18,7 @@ import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
+import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox, { VBoxOptions } from '../../../../scenery/js/layout/nodes/VBox.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
@@ -29,6 +30,7 @@ import ProbabilityValueControl from '../../common/view/ProbabilityValueControl.j
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import ProbabilityEquationsNode from './ProbabilityEquationsNode.js';
+import ProbabilityOfSymbolBox from './ProbabilityOfSymbolBox.js';
 
 type SelfOptions = EmptySelfOptions;
 type OutcomeProbabilityControlOptions = SelfOptions & PickRequired<VBox, 'tandem' | 'visibleProperty'>;
@@ -110,28 +112,6 @@ export default class OutcomeProbabilityControl extends VBox {
       }
     } );
 
-    // These strings do not use PatternStringProperty because they use multiple string compositions
-    // As well as formatting within the derived property
-    const classicalUpTitleProperty = new DerivedProperty( [
-        QuantumMeasurementStrings.probabilityStringProperty,
-        QuantumMeasurementStrings.probabilityOfValuePatternStringProperty
-      ], ( probabilityString, probabilityOfValuePatternString ) => {
-        const POfV = StringUtils.fillIn( probabilityOfValuePatternString, { value: `<b>${QuantumMeasurementConstants.CLASSICAL_UP_SYMBOL}</b>` } );
-        return `${probabilityString} ${POfV}`;
-      }
-    );
-
-    const classicalDownTitleProperty = new DerivedProperty( [
-        QuantumMeasurementStrings.probabilityStringProperty,
-        QuantumMeasurementStrings.probabilityOfValuePatternStringProperty,
-        QuantumMeasurementColors.tailsColorProperty,
-        QuantumMeasurementColors.downColorProperty
-      ], ( probabilityString, probabilityOfValuePatternString ) => {
-        const POfV = StringUtils.fillIn( probabilityOfValuePatternString, { value: COLOR_SPAN( `<b>${QuantumMeasurementConstants.CLASSICAL_DOWN_SYMBOL}</b>` ) } );
-        return `${probabilityString} ${POfV}`;
-      }
-    );
-
     const quantumUpTitleProperty = new DerivedProperty( [
         QuantumMeasurementStrings.probabilityStringProperty,
         QuantumMeasurementStrings.probabilityOfValuePatternStringProperty
@@ -159,8 +139,24 @@ export default class OutcomeProbabilityControl extends VBox {
     let children: Node[];
     if ( systemType === SystemType.CLASSICAL ) {
 
+      const upProbabilityTitleNode = new HBox( {
+        spacing: 5,
+        children: [
+          new Text( QuantumMeasurementStrings.probabilityStringProperty, QuantumMeasurementConstants.NUMBER_CONTROL_TITLE_OPTIONS ),
+          new ProbabilityOfSymbolBox( 'heads' )
+        ]
+      } );
+
+      const downProbabilityTitleNode = new HBox( {
+        spacing: 5,
+        children: [
+          new Text( QuantumMeasurementStrings.probabilityStringProperty, QuantumMeasurementConstants.NUMBER_CONTROL_TITLE_OPTIONS ),
+          new ProbabilityOfSymbolBox( 'tails' )
+        ]
+      } );
+
       upProbabilityValueControl = new ProbabilityValueControl(
-        classicalUpTitleProperty,
+        upProbabilityTitleNode,
         outcomeProbabilityProperty,
         providedOptions.tandem.createTandem( 'classicalUpProbabilityControl' ),
         {
@@ -170,7 +166,7 @@ export default class OutcomeProbabilityControl extends VBox {
       );
 
       downProbabilityValueControl = new ProbabilityValueControl(
-        classicalDownTitleProperty,
+        downProbabilityTitleNode,
         inverseOutcomeProbabilityProperty,
         providedOptions.tandem.createTandem( 'classicalDownProbabilityControl' ),
         {
@@ -221,7 +217,7 @@ export default class OutcomeProbabilityControl extends VBox {
       } );
 
       upProbabilityValueControl = new ProbabilityValueControl(
-        quantumUpTitleProperty,
+        new RichText( quantumUpTitleProperty, QuantumMeasurementConstants.NUMBER_CONTROL_TITLE_OPTIONS ),
         outcomeProbabilityProperty,
         providedOptions.tandem.createTandem( 'quantumUpProbabilityControl' ),
         {
@@ -230,7 +226,7 @@ export default class OutcomeProbabilityControl extends VBox {
         }
       );
       downProbabilityValueControl = new ProbabilityValueControl(
-        quantumDownTitleProperty,
+        new RichText( quantumDownTitleProperty, QuantumMeasurementConstants.NUMBER_CONTROL_TITLE_OPTIONS ),
         inverseOutcomeProbabilityProperty,
         providedOptions.tandem.createTandem( 'quantumDownProbabilityControl' ),
         {
