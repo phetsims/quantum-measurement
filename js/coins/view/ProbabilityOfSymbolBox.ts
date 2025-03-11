@@ -1,4 +1,4 @@
-// Copyright 2024-2025, University of Colorado Boulder
+// Copyright 2025, University of Colorado Boulder
 
 /**
  * A class that will display P(X) where X is a provided symbol. This is used to display the probability of a coin result.
