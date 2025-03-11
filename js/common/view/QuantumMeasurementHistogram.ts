@@ -85,7 +85,7 @@ class QuantumMeasurementHistogram extends Node {
 
   public constructor( leftNumberProperty: TReadOnlyProperty<number>,
                       rightNumberProperty: TReadOnlyProperty<number>,
-                      providedXAxisLabels: [ RichText, RichText ],
+                      providedXAxisLabels: [ Node, Node ],
                       providedOptions: QuantumMeasurementHistogramOptions ) {
 
     // Create a property that represents the total of the left and right values.

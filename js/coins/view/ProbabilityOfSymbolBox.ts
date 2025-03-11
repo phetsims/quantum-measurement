@@ -6,6 +6,7 @@
  * @author Agustín Vallejo
  */
 
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
@@ -18,36 +19,47 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { CoinStates } from '../model/CoinStates.js';
 
+type validFaces = Exclude<CoinStates, 'superposition'>;
+
 export default class ProbabilityOfSymbolBox extends HBox {
 
-  public constructor( coinFace: Exclude<CoinStates, 'superposition'>, font = QuantumMeasurementConstants.CONTROL_FONT ) {
+  public constructor( coinFace: validFaces, font = QuantumMeasurementConstants.CONTROL_FONT ) {
     const equationOptions = { font: font };
     const equationProbability = new RichText( QuantumMeasurementStrings.PStringProperty, equationOptions );
     const parenthesesStart = new RichText( '(', equationOptions );
     const parenthesesEnd = new RichText( ')', equationOptions );
 
-    let shownNode = new Node();
+    const shownNode = ProbabilityOfSymbolBox.getFaceSymbol( coinFace, font );
+
+    super( {
+      children: [ equationProbability, parenthesesStart, shownNode, parenthesesEnd ]
+    } );
+  }
+
+  public static getFaceSymbol( coinFace: validFaces, font: PhetFont ): Node {
+    const referenceText = new RichText( 'I <3 PhET', { font: font } );
+
+    let shownNode: Node;
     if ( coinFace === 'heads' ) {
       shownNode = new Image( classicalCoinHeads_svg );
-      shownNode.setScaleMagnitude( equationProbability.height / shownNode.height );
+      shownNode.setScaleMagnitude( referenceText.height / shownNode.height );
     }
     else if ( coinFace === 'tails' ) {
       shownNode = new Image( classicalCoinTails_svg );
-      shownNode.setScaleMagnitude( equationProbability.height / shownNode.height );
+      shownNode.setScaleMagnitude( referenceText.height / shownNode.height );
     }
     else if ( coinFace === 'up' ) {
-      shownNode = new RichText( QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER, equationOptions );
+      shownNode = new RichText( QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER, {
+        font: font
+      } );
     }
-    else if ( coinFace === 'down' ) {
+    else { // 'down' case
       shownNode = new RichText( QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER, {
         font: font,
         fill: QuantumMeasurementColors.downColorProperty
       } );
     }
-
-    super( {
-      children: [ equationProbability, parenthesesStart, shownNode, parenthesesEnd ]
-    } );
+    return shownNode;
   }
 }
 

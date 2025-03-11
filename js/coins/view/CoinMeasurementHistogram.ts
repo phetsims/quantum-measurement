@@ -13,15 +13,15 @@ import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js'
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
-import RichText from '../../../../scenery/js/nodes/RichText.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import { SystemType } from '../../common/model/SystemType.js';
-import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import QuantumMeasurementHistogram, { QuantumMeasurementHistogramOptions } from '../../common/view/QuantumMeasurementHistogram.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import CoinSet from '../model/CoinSet.js';
+import ProbabilityOfSymbolBox from './ProbabilityOfSymbolBox.js';
 
 type SelfOptions = EmptySelfOptions;
 export type CoinMeasurementHistogramOptions = SelfOptions & WithRequired<QuantumMeasurementHistogramOptions, 'tandem'>;
@@ -41,28 +41,8 @@ export default class CoinMeasurementHistogram extends QuantumMeasurementHistogra
 
     // Create the labels for the X axis.
     const xAxisLabels = [
-      new RichText(
-        systemType === SystemType.CLASSICAL ?
-        QuantumMeasurementConstants.CLASSICAL_UP_SYMBOL :
-        QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER,
-        {
-          font: LABEL_FONT,
-          fill: systemType === SystemType.CLASSICAL ?
-                QuantumMeasurementColors.headsColorProperty :
-                QuantumMeasurementColors.upColorProperty
-        }
-      ),
-      new RichText(
-        systemType === SystemType.CLASSICAL ?
-        QuantumMeasurementConstants.CLASSICAL_DOWN_SYMBOL :
-        QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER,
-        {
-          font: LABEL_FONT,
-          fill: systemType === SystemType.CLASSICAL ?
-                QuantumMeasurementColors.tailsColorProperty :
-                QuantumMeasurementColors.downColorProperty
-        }
-      )
+      ProbabilityOfSymbolBox.getFaceSymbol( systemType === SystemType.CLASSICAL ? 'heads' : 'up', LABEL_FONT ),
+      ProbabilityOfSymbolBox.getFaceSymbol( systemType === SystemType.CLASSICAL ? 'tails' : 'down', LABEL_FONT )
     ];
 
     // Create the number Properties for the left and right histogram bars.
@@ -107,7 +87,7 @@ export default class CoinMeasurementHistogram extends QuantumMeasurementHistogra
     super(
       leftNumberProperty,
       rightNumberProperty,
-      xAxisLabels as [ RichText, RichText ],
+      xAxisLabels as [ Node, Node ],
       options
     );
 
