@@ -95,7 +95,7 @@ export default class BlochSpherePreparationArea extends VBox {
     const sliderTitleOptions = { font: QuantumMeasurementConstants.CONTROL_FONT, maxWidth: 200 };
     const slidersPanel = new Panel(
       new VBox( {
-        spacing: 20,
+        spacing: 15,
         children: [
           directionComboBox,
           new VBox( {

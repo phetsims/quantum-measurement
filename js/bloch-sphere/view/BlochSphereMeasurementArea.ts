@@ -285,7 +285,7 @@ export default class BlochSphereMeasurementArea extends Node {
 
     const measurementControlPanel = new Panel(
       new VBox( {
-        spacing: 10,
+        spacing: 15,
         align: 'left',
         tandem: measurementControlsTandem,
         minContentWidth: panelWidth,
