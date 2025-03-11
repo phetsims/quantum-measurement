@@ -63,12 +63,16 @@ export default class InitialCoinStateSelectorNode extends VBox {
 
     const radioButtonGroupTandem = tandem.createTandem( 'radioButtonGroup' );
 
-    // REVIEW: This violates the following item in the code review checklist:
-    // Make sure accessibility strings aren't being adjusted with ascii specific javascript methods like toUpperCase().
-    // Remember that one day these strings will be translatable
-    const toTitleCase = ( str: string ) => {
-      return str.charAt( 0 ).toUpperCase() + str.slice( 1 );
-    };
+    // A11y Names for each coin state
+    const coinStateToA11yNameMap = new Map<CoinStates, TReadOnlyProperty<string>>(
+      [
+        [ 'heads', QuantumMeasurementStrings.a11y.coinsScreen.coinStates.headsStringProperty ],
+        [ 'tails', QuantumMeasurementStrings.a11y.coinsScreen.coinStates.tailsStringProperty ],
+        [ 'up', QuantumMeasurementStrings.a11y.coinsScreen.coinStates.upStringProperty ],
+        [ 'down', QuantumMeasurementStrings.a11y.coinsScreen.coinStates.downStringProperty ]
+      ]
+    );
+
     let initialCoinStateItems; //: RectangularRadioButtonGroupItem[];
     if ( coinType === SystemType.CLASSICAL ) {
       initialCoinStateItems = ClassicalCoinStateValues.map( stateValue => {
@@ -81,7 +85,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
           ),
           tandemName: `${stateValue}RadioButton`,
           options: {
-            accessibleName: toTitleCase( stateValue )
+            accessibleName: coinStateToA11yNameMap.get( stateValue )
           }
         };
       } );
@@ -101,7 +105,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
           ),
           tandemName: `${stateValue}RadioButton`,
           options: {
-            accessibleName: toTitleCase( stateValue )
+            accessibleName: coinStateToA11yNameMap.get( stateValue )
           }
         };
       } );
