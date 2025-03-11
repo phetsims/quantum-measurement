@@ -8,6 +8,7 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
@@ -23,6 +24,7 @@ import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioS
 import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
+import QuantumMeasurementPreferences from '../../common/model/QuantumMeasurementPreferences.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { ClassicalCoinStateValues } from './ClassicalCoinStates.js';
@@ -55,6 +57,9 @@ class CoinSet extends PhetioObject {
 
   // the type of this coin, either classical or quantum
   public readonly coinType: SystemType;
+
+  // wether coins are naturally shown on preparation or not. False for Quantum and for Classical if the preference is set
+  public readonly initiallyRevealedProperty: Property<boolean>;
 
   // the state of the measurement for this coin set
   public readonly measurementStateProperty: Property<ExperimentMeasurementState>;
@@ -153,10 +158,32 @@ class CoinSet extends PhetioObject {
                    ExperimentMeasurementStateValues
     } );
 
+    this.initiallyRevealedProperty = new BooleanProperty(
+      this.coinType === SystemType.QUANTUM || !QuantumMeasurementPreferences.classicalCoinsStartVisibleProperty.value
+    );
+
+    // If the initial visibility of coins is changed by the preferences, update accordingly
+    QuantumMeasurementPreferences.classicalCoinsStartVisibleProperty.link( showClassicalCoins => {
+      if ( this.coinType === SystemType.CLASSICAL ) {
+        this.initiallyRevealedProperty.value = showClassicalCoins;
+
+        // Change the initial value of measurement state so coins appear hidden initially
+        this.measurementStateProperty.setInitialValue( showClassicalCoins ? 'revealed' : 'measuredAndHidden' );
+        if ( this.measurementStateProperty.value === 'revealed' ) {
+          // If the measurement state is already 'revealed', hide!
+          this.measurementStateProperty.value = showClassicalCoins ? 'revealed' : 'measuredAndHidden';
+        }
+      }
+      else {
+        this.initiallyRevealedProperty.value = false;
+      }
+    } );
+
+    const maximumAlternativeDisplayCounter = 8; // determined empirically
     this.measurementStateProperty.link( measurementState => {
       if ( ( measurementState === 'readyToBeMeasured' ) && ( coinType === SystemType.QUANTUM ) ) {
         alternativeDisplayCounter++;
-        this.validateAlternativeDisplay = alternativeDisplayCounter === 8;
+        this.validateAlternativeDisplay = alternativeDisplayCounter === maximumAlternativeDisplayCounter;
       }
     } );
 
@@ -361,7 +388,8 @@ class CoinSet extends PhetioObject {
     this.seedProperty.value = valueIndex;
 
     // Update the measurement state.
-    this.measurementStateProperty.value = this.coinType === SystemType.CLASSICAL ? 'revealed' : 'readyToBeMeasured';
+    this.measurementStateProperty.value = this.initiallyRevealedProperty.value ? 'revealed' :
+                                          this.coinType === SystemType.CLASSICAL ? 'measuredAndHidden' : 'readyToBeMeasured';
   }
 
   public reset(): void {

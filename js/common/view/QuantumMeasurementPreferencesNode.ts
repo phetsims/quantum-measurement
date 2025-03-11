@@ -29,8 +29,21 @@ export default class QuantumMeasurementPreferencesNode extends VBox {
     const classicalCoinsStartVisibleControl = new ClassicalCoinsStartVisible( tandem.createTandem( 'classicalCoinsStartVisible' ) );
 
     super( {
-      children: [ showGlobalPhaseControl, classicalCoinsStartVisibleControl ],
+      children: [ classicalCoinsStartVisibleControl, showGlobalPhaseControl ],
       spacing: 20,
+      tandem: tandem
+    } );
+  }
+}
+
+class ClassicalCoinsStartVisible extends PreferencesControl {
+  public constructor( tandem: Tandem ) {
+    super( {
+      isDisposable: false,
+      labelNode: new Text( QuantumMeasurementStrings.preferences.classicalCoinsStartVisible.titleStringProperty, PreferencesDialogConstants.CONTROL_LABEL_OPTIONS ),
+      descriptionNode: new RichText( QuantumMeasurementStrings.preferences.classicalCoinsStartVisible.descriptionStringProperty,
+        PreferencesDialogConstants.CONTROL_DESCRIPTION_OPTIONS ),
+      controlNode: new ToggleSwitch( QuantumMeasurementPreferences.classicalCoinsStartVisibleProperty, false, true, PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS ),
       tandem: tandem
     } );
   }
@@ -44,20 +57,6 @@ class ShowGlobalPhase extends PreferencesControl {
       descriptionNode: new RichText( QuantumMeasurementStrings.preferences.showGlobalPhase.descriptionStringProperty,
         PreferencesDialogConstants.CONTROL_DESCRIPTION_OPTIONS ),
       controlNode: new ToggleSwitch( QuantumMeasurementPreferences.showGlobalPhaseProperty, false, true, PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS ),
-      tandem: tandem
-    } );
-  }
-}
-
-
-class ClassicalCoinsStartVisible extends PreferencesControl {
-  public constructor( tandem: Tandem ) {
-    super( {
-      isDisposable: false,
-      labelNode: new Text( QuantumMeasurementStrings.preferences.classicalCoinsStartVisible.titleStringProperty, PreferencesDialogConstants.CONTROL_LABEL_OPTIONS ),
-      descriptionNode: new RichText( QuantumMeasurementStrings.preferences.classicalCoinsStartVisible.descriptionStringProperty,
-        PreferencesDialogConstants.CONTROL_DESCRIPTION_OPTIONS ),
-      controlNode: new ToggleSwitch( QuantumMeasurementPreferences.classicalCoinsStartVisibleProperty, false, true, PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS ),
       tandem: tandem
     } );
   }
