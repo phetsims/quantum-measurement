@@ -129,11 +129,12 @@ export default class ObliquePolarizationAngleIndicator extends Node {
     const unitCircleFillProperty = new DerivedProperty(
       [
         polarizationAngleProperty,
-        QuantumMeasurementColors.photonBaseColorProperty
+        QuantumMeasurementColors.photonBaseColorProperty,
+        QuantumMeasurementColors.angleIndicatorUnitCircleColorProperty
       ],
-      ( polarizationAngle, photonBaseColor ) => polarizationAngle === null ?
-                                                photonBaseColor :
-                                                Color.LIGHT_GRAY
+      ( polarizationAngle, photonBaseColor, angleIndicatorUnitCircleColor ) => polarizationAngle === null ?
+                                                                               photonBaseColor :
+                                                                               angleIndicatorUnitCircleColor
     );
 
     // Create a unit circle that is projected into the x-z plane.

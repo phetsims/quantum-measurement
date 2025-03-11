@@ -70,7 +70,7 @@ export default class MeasurementTimerControl extends Node {
         new MeasurementSymbolNode( {
           center: new Vector2( 0, thumbOffset ),
           scale: 0.8,
-          stroke: 'black'
+          stroke: QuantumMeasurementColors.measurementTimerIconStrokeColorProperty
         } )
       ],
       touchArea: thumbNodeRect.bounds.dilated( 10 ),

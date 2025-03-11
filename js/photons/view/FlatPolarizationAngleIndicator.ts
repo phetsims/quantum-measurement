@@ -83,10 +83,14 @@ export default class FlatPolarizationAngleIndicator extends Node {
 
     // Create a Property for the fill used for the unit circle, since it changes when the photons are unpolarized.
     const unitCircleFillProperty = new DerivedProperty(
-      [ polarizationAngleProperty ],
-      polarizationAngle => polarizationAngle === null ?
-                           QuantumMeasurementColors.photonBaseColorProperty.value :
-                           Color.LIGHT_GRAY
+      [
+        polarizationAngleProperty,
+        QuantumMeasurementColors.photonBaseColorProperty,
+        QuantumMeasurementColors.angleIndicatorUnitCircleColorProperty
+      ],
+      ( polarizationAngle, photonBaseColor, angleIndicatorUnitCircleColor ) => polarizationAngle === null ?
+                                                                               photonBaseColor :
+                                                                               angleIndicatorUnitCircleColor
     );
 
     // Create a unit circle.

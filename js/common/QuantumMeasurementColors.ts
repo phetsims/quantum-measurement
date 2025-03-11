@@ -176,6 +176,10 @@ const QuantumMeasurementColors = {
     default: 'blue'
   } ),
 
+  angleIndicatorUnitCircleColorProperty: new ProfileColorProperty( quantumMeasurement, 'angleIndicatorUnitCircle', {
+    default: '#aaa'
+  } ),
+
   /**
    * SPIN SCREEN COLORS --------------------------------------------------------
    */
@@ -220,6 +224,13 @@ const QuantumMeasurementColors = {
   } ),
   measurementTimerFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'measurementTimerFill', {
     default: '#f0f'
+  } ),
+  measurementTimerIconStrokeColorProperty: new ProfileColorProperty( quantumMeasurement, 'measurementTimerIconStroke', {
+    default: '#fff'
+  } ),
+
+  blochSphereAngleIndicatorDashedLineColorProperty: new ProfileColorProperty( quantumMeasurement, 'blochSphereAngleIndicatorDashedLine', {
+    default: '#aaa'
   } )
 
 };

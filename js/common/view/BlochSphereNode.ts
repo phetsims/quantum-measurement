@@ -44,13 +44,13 @@ type SelfOptions = {
 export type BlochSphereNodeOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
 
 // Constants
-const AXES_STROKE = 'gray';
+const AXES_STROKE_COLOR_PROPERTY = QuantumMeasurementColors.blochSphereAngleIndicatorDashedLineColorProperty;
 const AXES_LINE_WIDTH = 0.4;
 const AXES_LINE_DASH = [ 2, 2 ];
 const LABELS_OFFSET = 5;
 
 const AXES_OPTIONS = {
-  stroke: AXES_STROKE,
+  stroke: AXES_STROKE_COLOR_PROPERTY,
   lineWidth: AXES_LINE_WIDTH,
   lineDash: AXES_LINE_DASH
 };
@@ -179,7 +179,7 @@ export default class BlochSphereNode extends Node {
     } );
 
     const angleIndicatorPathOptions = {
-      stroke: 'gray',
+      stroke: AXES_STROKE_COLOR_PROPERTY,
       lineWidth: 1,
       lineDash: [ 2, 2 ],
       visible: options.drawAngleIndicators
@@ -190,7 +190,7 @@ export default class BlochSphereNode extends Node {
       headWidth: 4,
       headHeight: 4,
       tailWidth: 1,
-      fill: 'gray'
+      fill: AXES_STROKE_COLOR_PROPERTY
     }, angleIndicatorPathOptions ) );
     const zProjectionLine = new Path( null, angleIndicatorPathOptions );
 

@@ -25,8 +25,8 @@ class PhotonsScreenView extends QuantumMeasurementScreenView {
 
   public constructor( model: PhotonsModel, tandem: Tandem ) {
 
-    // Create the radio buttons that will sit at the top of the screen and will allow users to pick between the single-
-    // photon and many-photons experiment modes.
+    // Create the radio buttons that will sit at the top of the screen and will allow users to
+    // pick between the single-photon and many-photons experiment modes.
     const experimentModeRadioButtonGroup = new SceneSelectorRadioButtonGroup<ExperimentModeValues>(
       model.experimentModeProperty,
       {
