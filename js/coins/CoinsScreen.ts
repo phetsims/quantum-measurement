@@ -8,9 +8,10 @@
 
 import Property from '../../../axon/js/Property.js';
 import ScreenIcon from '../../../joist/js/ScreenIcon.js';
+import Color from '../../../scenery/js/util/Color.js';
 import Tandem from '../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../common/QuantumMeasurementColors.js';
-import QuantumMeasurementScreen from '../common/view/QuantumMeasurementScreen.js';
+import QuantumMeasurementScreen, { QuantumMeasurementScreenOptions } from '../common/view/QuantumMeasurementScreen.js';
 import quantumMeasurement from '../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../QuantumMeasurementStrings.js';
 import CoinsModel from './model/CoinsModel.js';
@@ -22,17 +23,18 @@ export default class CoinsScreen extends QuantumMeasurementScreen<CoinsModel, Co
 
   public constructor( tandem: Tandem ) {
 
-    const options = {
+    const options: QuantumMeasurementScreenOptions = {
       name: QuantumMeasurementStrings.screen.coinsStringProperty,
       homeScreenIcon: createScreenIcon(),
       // TODO: Fill this in with the real help text, see https://github.com/phetsims/quantum-measurement/issues/92
       screenButtonsHelpText: 'fill me in',
-      tandem: tandem
+      tandem: tandem,
+      backgroundColorProperty: new Property<Color>( Color.WHITE ) // Placeholder color property that will be changed by scene changes
     };
 
     super(
       () => new CoinsModel( { tandem: options.tandem.createTandem( 'model' ) } ),
-      model => new CoinsScreenView( model, options.tandem.createTandem( 'view' ) ),
+      model => new CoinsScreenView( model, this.backgroundColorProperty, options.tandem.createTandem( 'view' ) ),
       options
     );
   }

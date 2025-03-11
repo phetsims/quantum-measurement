@@ -10,13 +10,13 @@ import Screen, { ScreenOptions } from '../../../../joist/js/Screen.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
 import TModel from '../../../../joist/js/TModel.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementColors from '../QuantumMeasurementColors.js';
 import QuantumMeasurementKeyboardHelpContent from './QuantumMeasurementKeyboardHelpContent.js';
 
 type SelfOptions = EmptySelfOptions;
-export type QuantumMeasurementScreenOptions = SelfOptions & PickRequired<ScreenOptions, 'name' | 'homeScreenIcon' | 'screenButtonsHelpText' | 'tandem'>;
+export type QuantumMeasurementScreenOptions = SelfOptions & WithRequired<ScreenOptions, 'name' | 'homeScreenIcon' | 'screenButtonsHelpText' | 'tandem'>;
 
 export default class QuantumMeasurementScreen<M extends TModel, V extends ScreenView> extends Screen<M, V> {
 
