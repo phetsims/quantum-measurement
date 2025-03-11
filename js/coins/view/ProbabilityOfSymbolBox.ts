@@ -8,30 +8,45 @@
 
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import Image from '../../../../scenery/js/nodes/Image.js';
-import Text from '../../../../scenery/js/nodes/Text.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
+import RichText from '../../../../scenery/js/nodes/RichText.js';
 import classicalCoinHeads_svg from '../../../images/classicalCoinHeads_svg.js';
 import classicalCoinTails_svg from '../../../images/classicalCoinTails_svg.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
-import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
+import { CoinStates } from '../model/CoinStates.js';
 
 export default class ProbabilityOfSymbolBox extends HBox {
 
-  public constructor( coinFace: ClassicalCoinStates ) {
-    const headsImage = new Image( classicalCoinHeads_svg );
-    const tailsImage = new Image( classicalCoinTails_svg );
-    const shownImage = coinFace === 'heads' ? headsImage : tailsImage;
+  public constructor( coinFace: Exclude<CoinStates, 'superposition'>, font = QuantumMeasurementConstants.CONTROL_FONT ) {
+    const equationOptions = { font: font };
+    const equationProbability = new RichText( QuantumMeasurementStrings.PStringProperty, equationOptions );
+    const parenthesesStart = new RichText( '(', equationOptions );
+    const parenthesesEnd = new RichText( ')', equationOptions );
 
-    const equationOptions = { font: QuantumMeasurementConstants.CONTROL_FONT };
-    const equationProbability = new Text( QuantumMeasurementStrings.PStringProperty, equationOptions );
-    const parenthesesStart = new Text( '(', equationOptions );
-    const parenthesesEnd = new Text( ')', equationOptions );
-
-    shownImage.setScaleMagnitude( parenthesesStart.height / shownImage.height );
+    let shownNode = new Node();
+    if ( coinFace === 'heads' ) {
+      shownNode = new Image( classicalCoinHeads_svg );
+      shownNode.setScaleMagnitude( equationProbability.height / shownNode.height );
+    }
+    else if ( coinFace === 'tails' ) {
+      shownNode = new Image( classicalCoinTails_svg );
+      shownNode.setScaleMagnitude( equationProbability.height / shownNode.height );
+    }
+    else if ( coinFace === 'up' ) {
+      shownNode = new RichText( QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER, equationOptions );
+    }
+    else if ( coinFace === 'down' ) {
+      shownNode = new RichText( QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER, {
+        font: font,
+        fill: QuantumMeasurementColors.downColorProperty
+      } );
+    }
 
     super( {
-      children: [ equationProbability, parenthesesStart, shownImage, parenthesesEnd ]
+      children: [ equationProbability, parenthesesStart, shownNode, parenthesesEnd ]
     } );
   }
 }

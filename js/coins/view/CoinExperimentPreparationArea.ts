@@ -123,12 +123,12 @@ class CoinExperimentPreparationArea extends VBox {
     );
 
     // Create the node that will show the probabilities for the possible outcomes as equations.
-    const probabilityEquationsText = new ProbabilityEquationsNode(
+    const probabilityEquationsNode = new ProbabilityEquationsNode(
       sceneModel.upProbabilityProperty,
       sceneModel.systemType,
       {
         maxWidth: 150, // empirically determined to work well with layout
-        tandem: tandem.createTandem( 'probabilityEquationsText' ),
+        tandem: tandem.createTandem( 'probabilityEquationsNode' ),
         phetioVisiblePropertyInstrumented: true
       }
     );
@@ -146,13 +146,13 @@ class CoinExperimentPreparationArea extends VBox {
     // For the layout, adjust the spacing between the probability indicators and the bias controls based on the type of
     // system being modeled.  This is necessary because the quantum system has an additional line of text that is
     // displayed.
-    const spacerHeight = sceneModel.systemType === SystemType.CLASSICAL ? 8 : 0;
+    const spacerHeight = sceneModel.systemType === SystemType.CLASSICAL ? 5 : 0;
 
     super( {
       children: [
         preparationAreaHeader,
         initialCoinStateSelectorNode,
-        probabilityEquationsText,
+        probabilityEquationsNode,
         new Spacer( 0, spacerHeight ),
         outcomeProbabilityControl
       ],

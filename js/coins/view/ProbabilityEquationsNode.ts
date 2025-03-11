@@ -3,63 +3,76 @@
 /**
  * ProbabilityEquationsNode shows the probability settings (aka the bias) for the classical or quantum coins.
  *
+ * @author Agustín Vallejo
  * @author John Blanco, PhET Interactive Simulations
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import { toFixed } from '../../../../dot/js/util/toFixed.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
-import RichText, { RichTextOptions } from '../../../../scenery/js/nodes/RichText.js';
+import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
+import VBox, { VBoxOptions } from '../../../../scenery/js/layout/nodes/VBox.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
+import RichText from '../../../../scenery/js/nodes/RichText.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
-import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
+import ProbabilityOfSymbolBox from './ProbabilityOfSymbolBox.js';
 
 type SelfOptions = EmptySelfOptions;
-type ProbabilityEquationsNodeOptions = SelfOptions & WithRequired<RichTextOptions, 'tandem'>;
+type ProbabilityEquationsNodeOptions = SelfOptions & WithRequired<VBoxOptions, 'tandem'>;
 
-export default class ProbabilityEquationsNode extends RichText {
+export default class ProbabilityEquationsNode extends VBox {
 
   public constructor( biasProperty: TReadOnlyProperty<number>,
                       systemType: SystemType,
                       providedOptions: ProbabilityEquationsNodeOptions ) {
 
-    // Set up the parameters that will be used in the equations.
-    const upperFunctionParameter = systemType === SystemType.CLASSICAL ?
-                                   QuantumMeasurementConstants.CLASSICAL_UP_SYMBOL :
-                                   QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
-    const lowerFunctionParameter = systemType === SystemType.CLASSICAL ?
-                                   QuantumMeasurementConstants.CLASSICAL_DOWN_SYMBOL :
-                                   QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER;
+    let upProbabilityNode: Node;
+    let downProbabilityNode: Node;
+    if ( systemType === SystemType.CLASSICAL ) {
+      upProbabilityNode = new ProbabilityOfSymbolBox( 'heads', QuantumMeasurementConstants.TITLE_FONT );
+      downProbabilityNode = new ProbabilityOfSymbolBox( 'tails', QuantumMeasurementConstants.TITLE_FONT );
+    }
+    else {
+      upProbabilityNode = new ProbabilityOfSymbolBox( 'up', QuantumMeasurementConstants.TITLE_FONT );
+      downProbabilityNode = new ProbabilityOfSymbolBox( 'down', QuantumMeasurementConstants.TITLE_FONT );
+    }
 
-    // Set up the string that will be displayed in the RichText node as a Property.
-    const equationsStringProperty = new DerivedProperty(
+    const upProbabilityStringProperty = new DerivedProperty(
+      [ biasProperty ], bias => `= ${toFixed( bias, 2 )}`
+    );
+
+    const downProbabilityStringProperty = new DerivedProperty(
       [
         biasProperty,
-        QuantumMeasurementStrings.PStringProperty, // function symbol, "P" in English for probability
         QuantumMeasurementColors.tailsColorProperty,
         QuantumMeasurementColors.downColorProperty
       ],
-      ( bias, pString, tailsColor, downColor ) => {
-        const upperEquation = `${pString}(<b>${upperFunctionParameter}</b>) = ${toFixed( bias, 2 )}`;
-        const COLOR_SPAN = ( text: string ) =>
-          ProbabilityEquationsNode.COLOR_SPAN( text, systemType === SystemType.CLASSICAL ? tailsColor : downColor );
-        const lowerEquation = `${pString}(<b>${COLOR_SPAN( lowerFunctionParameter )}</b>) = ${COLOR_SPAN( toFixed( 1 - bias, 2 ) )}`;
-        return `${upperEquation}<br>${lowerEquation}`;
-      }
-    );
+      ( bias, tailsColor, downColor ) => {
+        const spanColor = systemType === SystemType.CLASSICAL ? tailsColor : downColor;
+        return `= ${ProbabilityEquationsNode.COLOR_SPAN( toFixed( 1 - bias, 2 ), spanColor )}`;
+      } );
 
-    const options = optionize<ProbabilityEquationsNodeOptions, SelfOptions, RichTextOptions>()( {
-      font: QuantumMeasurementConstants.TITLE_FONT,
-      align: 'center',
-      leading: 7
-    }, providedOptions );
+    const upProbabilityResultNode = new RichText( upProbabilityStringProperty,
+      { font: QuantumMeasurementConstants.TITLE_FONT } );
+    const downProbabilityResultNode = new RichText( downProbabilityStringProperty,
+      { font: QuantumMeasurementConstants.TITLE_FONT } );
 
-    super( equationsStringProperty, options );
+    const upEquation = new HBox( { children: [ upProbabilityNode, upProbabilityResultNode ] } );
+    const downEquation = new HBox( { children: [ downProbabilityNode, downProbabilityResultNode ] } );
+
+    super( combineOptions<VBoxOptions>( {
+      spacing: 10,
+      children: [
+        upEquation,
+        downEquation
+      ]
+    }, providedOptions ) );
   }
 
   public static COLOR_SPAN( text: string, color: Color ): string {
