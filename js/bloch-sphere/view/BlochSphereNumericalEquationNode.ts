@@ -10,7 +10,9 @@
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import { equalsEpsilon } from '../../../../dot/js/util/equalsEpsilon.js';
 import { toFixed } from '../../../../dot/js/util/toFixed.js';
+import { toFixedNumber } from '../../../../dot/js/util/toFixedNumber.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
@@ -34,6 +36,15 @@ const UP = QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
 const DOWN = QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER;
 const KET = QuantumMeasurementConstants.KET;
 
+// For threshold-based simplifications (coefficient ~ 0 or ~ 1)
+const ZERO = 1e-5;
+const ONE = 1 - ZERO;
+
+// Redefined trig functions to round the output to avoid floating point deviations, https://github.com/phetsims/quantum-measurement/issues/136
+const cos = ( x: number ) => toFixedNumber( Math.cos( x ), 4 );
+const sin = ( x: number ) => toFixedNumber( Math.sin( x ), 4 );
+const atan2 = ( y: number, x: number ) => toFixedNumber( Math.atan2( y, x ), 4 );
+
 export default class BlochSphereNumericalEquationNode extends HBox {
 
   public constructor( blochSphere: ComplexBlochSphere, providedOptions?: BlochSphereNumericalEquationNodeOptions ) {
@@ -53,6 +64,9 @@ export default class BlochSphereNumericalEquationNode extends HBox {
       ],
       ( polarAngle, azimuthalAngle, rotatingSpeed, basis, showGlobalPhase ) => {
 
+        azimuthalAngle = equalsEpsilon( azimuthalAngle, 0, ZERO ) ? 0 : azimuthalAngle;
+        polarAngle = equalsEpsilon( polarAngle, 0, ZERO ) ? 0 : polarAngle;
+
         // Helper function that maps from projection space [-1,1], temporarily to probability space [0,1],
         // and finally to coefficient space [0,1], which is the square root of the probability.
         const projectionToCoefficient = ( value: number ) => {
@@ -61,8 +75,8 @@ export default class BlochSphereNumericalEquationNode extends HBox {
         };
 
         // Equation coefficients in the Z basis
-        const a = Math.cos( polarAngle / 2 );
-        const b = Math.sin( polarAngle / 2 );
+        const a = cos( polarAngle / 2 );
+        const b = sin( polarAngle / 2 );
 
         let upCoefficientValue = 0;
         let downCoefficientValue = 0;
@@ -76,32 +90,32 @@ export default class BlochSphereNumericalEquationNode extends HBox {
         switch( basis ) {
 
           case StateDirection.X_PLUS:
-            upCoefficientValue = projectionToCoefficient( Math.cos( azimuthalAngle ) * Math.sin( polarAngle ) );
-            downCoefficientValue = projectionToCoefficient( -Math.cos( azimuthalAngle ) * Math.sin( polarAngle ) );
+            upCoefficientValue = projectionToCoefficient( cos( azimuthalAngle ) * sin( polarAngle ) );
+            downCoefficientValue = projectionToCoefficient( -cos( azimuthalAngle ) * sin( polarAngle ) );
 
             // These come from the spherical/bloch geometry for X
-            phiPlus = Math.atan2( b * Math.sin( azimuthalAngle ), a + b * Math.cos( azimuthalAngle ) ) / Math.PI;
-            phiMinus = Math.atan2( -b * Math.sin( azimuthalAngle ), a - b * Math.cos( azimuthalAngle ) ) / Math.PI;
+            phiPlus = atan2( b * sin( azimuthalAngle ), a + b * cos( azimuthalAngle ) ) / Math.PI;
+            phiMinus = atan2( -b * sin( azimuthalAngle ), a - b * cos( azimuthalAngle ) ) / Math.PI;
 
             // The relative phase used in the second ket component
             azimuthalCoefficientValue = phiMinus - phiPlus;
             break;
 
           case StateDirection.Y_PLUS:
-            upCoefficientValue = projectionToCoefficient( Math.sin( azimuthalAngle ) * Math.sin( polarAngle ) );
-            downCoefficientValue = projectionToCoefficient( -Math.sin( azimuthalAngle ) * Math.sin( polarAngle ) );
+            upCoefficientValue = projectionToCoefficient( sin( azimuthalAngle ) * sin( polarAngle ) );
+            downCoefficientValue = projectionToCoefficient( -sin( azimuthalAngle ) * sin( polarAngle ) );
 
             // These come from the spherical/bloch geometry for Y
-            phiPlus = Math.atan2( b * Math.cos( azimuthalAngle ), a + b * Math.sin( azimuthalAngle ) ) / Math.PI;
-            phiMinus = Math.atan2( -b * Math.cos( azimuthalAngle ), a - b * Math.sin( azimuthalAngle ) ) / Math.PI;
+            phiPlus = atan2( b * cos( azimuthalAngle ), a + b * sin( azimuthalAngle ) ) / Math.PI;
+            phiMinus = atan2( -b * cos( azimuthalAngle ), a - b * sin( azimuthalAngle ) ) / Math.PI;
 
             // The relative phase used in the second ket component
             azimuthalCoefficientValue = phiMinus - phiPlus;
             break;
 
           default: // StateDirection.Z_PLUS
-            upCoefficientValue = Math.abs( Math.cos( polarAngle / 2 ) );
-            downCoefficientValue = Math.abs( Math.sin( polarAngle / 2 ) );
+            upCoefficientValue = Math.abs( cos( polarAngle / 2 ) );
+            downCoefficientValue = Math.abs( sin( polarAngle / 2 ) );
             azimuthalCoefficientValue = azimuthalAngle / Math.PI;
             break;
         }
@@ -119,10 +133,6 @@ export default class BlochSphereNumericalEquationNode extends HBox {
         // Basis letter: e.g. "X_PLUS" => 'X', "Z_PLUS" => 'Z', etc.
         const direction = basis.description.split( '' )[ 1 ];
 
-        // For threshold-based simplifications (coefficient ~ 0 or ~ 1)
-        const zero = 1e-5;
-        const one = 1 - zero;
-
         // Construct the usual "up + down e^{i phase}" parts
         let upComponent = `${upCoefficientString} |${UP}<sub>${direction}</sub> ${KET}`;
         let downComponent = `${downCoefficientString}e<sup>i${azimuthalCoefficientString}${PI}</sup> |${DOWN}<sub>${direction}</sub> ${KET}`;
@@ -132,23 +142,23 @@ export default class BlochSphereNumericalEquationNode extends HBox {
         if ( rotatingSpeed === 0 ) {
 
           // Hide an entire term if its amplitude is ~ 0
-          if ( upCoefficientValue < zero ) {
+          if ( upCoefficientValue < ZERO ) {
             upComponent = '';
           }
-          if ( downCoefficientValue < zero ) {
+          if ( downCoefficientValue < ZERO ) {
             downComponent = '';
           }
 
           // Hide the plus sign if one term is omitted
-          if ( upCoefficientValue < zero || downCoefficientValue < zero ) {
+          if ( upCoefficientValue < ZERO || downCoefficientValue < ZERO ) {
             plus = '';
           }
 
           // If amplitude ~ 1, we omit the numeric coefficient
-          if ( upCoefficientValue > one ) {
+          if ( upCoefficientValue > ONE ) {
             upComponent = `|${UP}<sub>${direction}</sub> ${KET}`;
           }
-          if ( downCoefficientValue > one ) {
+          if ( downCoefficientValue > ONE ) {
             downComponent = `|${DOWN}<sub>${direction}</sub> ${KET}`;
           }
         }
