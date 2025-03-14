@@ -153,6 +153,12 @@ const QuantumMeasurementColors = {
   photonBaseColorProperty: new ProfileColorProperty( quantumMeasurement, 'photonBaseColor', {
     default: '#0F0'
   } ),
+  polarizationArrowColorProperty: new ProfileColorProperty( quantumMeasurement, 'polarizationArrowColor', {
+    default: '#0F0'
+  } ),
+  polarizationArrowStrokeColorProperty: new ProfileColorProperty( quantumMeasurement, 'polarizationArrowColor', {
+    default: '#000'
+  } ),
 
   // colors for elements on the "Photons" screen
   photonDetectorBodyColorProperty: new ProfileColorProperty( quantumMeasurement, 'photonDetectorBody', {

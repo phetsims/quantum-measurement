@@ -85,11 +85,11 @@ export default class FlatPolarizationAngleIndicator extends Node {
     const unitCircleFillProperty = new DerivedProperty(
       [
         polarizationAngleProperty,
-        QuantumMeasurementColors.photonBaseColorProperty,
+        QuantumMeasurementColors.polarizationArrowColorProperty,
         QuantumMeasurementColors.angleIndicatorUnitCircleColorProperty
       ],
-      ( polarizationAngle, photonBaseColor, angleIndicatorUnitCircleColor ) => polarizationAngle === null ?
-                                                                               photonBaseColor :
+      ( polarizationAngle, polarizationArrowColor, angleIndicatorUnitCircleColor ) => polarizationAngle === null ?
+                                                                               polarizationArrowColor :
                                                                                angleIndicatorUnitCircleColor
     );
 
@@ -107,9 +107,9 @@ export default class FlatPolarizationAngleIndicator extends Node {
       headWidth: 8,
       headHeight: 8,
       tailWidth: 2,
-      stroke: QuantumMeasurementColors.photonBaseColorProperty.value.colorUtilsDarker( 0.5 ),
+      stroke: QuantumMeasurementColors.polarizationArrowStrokeColorProperty,
       lineWidth: 0.5,
-      fill: QuantumMeasurementColors.photonBaseColorProperty
+      fill: QuantumMeasurementColors.polarizationArrowColorProperty
     } );
 
     // Create and position the angle readout label.

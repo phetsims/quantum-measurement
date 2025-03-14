@@ -24,7 +24,7 @@ export default class ExpectationValueCheckboxDecorationNode extends HBox {
                       showReadoutProperty: TReadOnlyProperty<boolean> ) {
 
     const lineIcon = new Line( 0, 0, 30, 0, {
-      stroke: QuantumMeasurementColors.photonBaseColorProperty,
+      stroke: QuantumMeasurementColors.expectedPercentageFillColorProperty,
       lineWidth: 3
     } );
 
