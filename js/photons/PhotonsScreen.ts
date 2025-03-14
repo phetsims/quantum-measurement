@@ -100,7 +100,7 @@ const createScreenIcon = (): ScreenIcon => {
 
   const background = new Rectangle( {
       rectSize: size,
-      fill: QuantumMeasurementColors.quantumBackgroundColorProperty
+      fill: QuantumMeasurementColors.screenBackgroundColorProperty
     }
   );
 
@@ -123,7 +123,7 @@ const createScreenIcon = (): ScreenIcon => {
   return new ScreenIcon( iconNode, {
     maxIconWidthProportion: 1,
     maxIconHeightProportion: 1,
-    fill: QuantumMeasurementColors.quantumBackgroundColorProperty
+    fill: QuantumMeasurementColors.screenBackgroundColorProperty
   } );
 };
 

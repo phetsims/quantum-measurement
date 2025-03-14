@@ -52,7 +52,7 @@ const createScreenIcon = (): ScreenIcon => {
   return new ScreenIcon( iconNode, {
     maxIconWidthProportion: 1,
     maxIconHeightProportion: 0.85,
-    fill: QuantumMeasurementColors.quantumBackgroundColorProperty
+    fill: QuantumMeasurementColors.screenBackgroundColorProperty
   } );
 };
 

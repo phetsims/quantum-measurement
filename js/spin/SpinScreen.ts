@@ -46,7 +46,7 @@ const createScreenIcon = (): ScreenIcon => {
   return new ScreenIcon( iconNode, {
     maxIconWidthProportion: 1,
     maxIconHeightProportion: 1,
-    fill: QuantumMeasurementColors.quantumBackgroundColorProperty
+    fill: QuantumMeasurementColors.screenBackgroundColorProperty
   } );
 };
 
