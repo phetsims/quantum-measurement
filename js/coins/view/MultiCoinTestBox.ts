@@ -18,7 +18,6 @@ import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
-import quantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import CoinSet from '../model/CoinSet.js';
 import { MULTI_COIN_ANIMATION_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
@@ -29,9 +28,9 @@ import SmallCoinNode, { SmallCoinDisplayMode } from './SmallCoinNode.js';
 // constants
 const BOX_SIZE = new Dimension2( 200, 200 );
 const TEST_BOX_CONTENTS_HIDDEN_FILL = new LinearGradient( 0, 0, BOX_SIZE.width, 0 )
-  .addColorStop( 0, quantumMeasurementColors.multiCoinFirstGradientColorProperty )
-  .addColorStop( 1, quantumMeasurementColors.multiCoinSecondGradientColorProperty );
-const TEST_BOX_CONTENTS_REVEALED_FILL_COLOR_PROPERTY = quantumMeasurementColors.testBoxContentsRevealedFillColorProperty;
+  .addColorStop( 0, QuantumMeasurementColors.multiCoinFirstGradientColorProperty )
+  .addColorStop( 1, QuantumMeasurementColors.multiCoinSecondGradientColorProperty );
+const TEST_BOX_CONTENTS_REVEALED_FILL_COLOR_PROPERTY = QuantumMeasurementColors.testBoxContentsRevealedFillColorProperty;
 
 class MultiCoinTestBox extends Node {
 

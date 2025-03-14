@@ -20,7 +20,7 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
-import quantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
+import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
 import MeasurementSymbolNode from '../../common/view/MeasurementSymbolNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
@@ -48,7 +48,7 @@ export default class MeasurementDeviceNode extends VBox {
     } );
 
     const cameraPath = new Path( new Shape(
-      quantumMeasurementConstants.CAMERA_SOLID_SHAPE_SVG
+      QuantumMeasurementConstants.CAMERA_SOLID_SHAPE_SVG
     ).makeImmutable(), {
       fill: 'black',
       scale: 0.1,

@@ -25,7 +25,6 @@ import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import MeasurementSymbolNode from '../../common/view/MeasurementSymbolNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
@@ -122,7 +121,7 @@ class SystemUnderTestNode extends Panel {
     // Create an icon that will be used to indicate that a measurement has been made.
     const measurementIconBackground = new Path(
       new Shape(
-        quantumMeasurementConstants.CAMERA_SOLID_SHAPE_SVG
+        QuantumMeasurementConstants.CAMERA_SOLID_SHAPE_SVG
       ).makeImmutable(),
       {
         fill: QuantumMeasurementColors.particleColorProperty,
