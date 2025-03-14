@@ -63,8 +63,8 @@ export default class ProbabilityEquationsNode extends VBox {
     const downProbabilityResultNode = new RichText( downProbabilityStringProperty,
       { font: QuantumMeasurementConstants.TITLE_FONT } );
 
-    const upEquation = new HBox( { children: [ upProbabilityNode, upProbabilityResultNode ] } );
-    const downEquation = new HBox( { children: [ downProbabilityNode, downProbabilityResultNode ] } );
+    const upEquation = new HBox( { children: [ upProbabilityNode, upProbabilityResultNode ], spacing: 5 } );
+    const downEquation = new HBox( { children: [ downProbabilityNode, downProbabilityResultNode ], spacing: 5 } );
 
     super( combineOptions<VBoxOptions>( {
       spacing: 10,

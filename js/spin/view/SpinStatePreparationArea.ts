@@ -137,7 +137,7 @@ export default class SpinStatePreparationArea extends VBox {
       } ),
       {
         tandem: projectionsCheckboxesTandem.createTandem( 'zProjectionCheckbox' ),
-        boxWidth: 18,
+        boxWidth: QuantumMeasurementConstants.CHECKBOX_BOX_WIDTH,
         visibleProperty: model.isCustomExperimentProperty
       }
     );
@@ -153,7 +153,7 @@ export default class SpinStatePreparationArea extends VBox {
       } ),
       {
         tandem: projectionsCheckboxesTandem.createTandem( 'xProjectionCheckbox' ),
-        boxWidth: 18,
+        boxWidth: QuantumMeasurementConstants.CHECKBOX_BOX_WIDTH,
         visibleProperty: model.isCustomExperimentProperty
       }
     );

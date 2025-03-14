@@ -61,7 +61,6 @@ const SMALL_LABEL_FONT = new PhetFont( 12 );
 const TINY_LABEL_FONT = new PhetFont( 8 );
 
 // Bold fonts
-const BIG_LETTER_FONT = new PhetFont( { size: 40, weight: 'bold' } );
 const SCENE_SELECTOR_FONT = new PhetFont( { size: 26, weight: 'bold' } );
 const BOLD_HEADER_FONT = new PhetFont( { size: 20, weight: 'bold' } );
 const BOLD_TITLE_FONT = new PhetFont( { size: 16, weight: 'bold' } );
@@ -118,7 +117,6 @@ const QuantumMeasurementConstants = {
   TINY_LABEL_FONT: TINY_LABEL_FONT,
 
   // Bold fonts
-  BIG_LETTER_FONT: BIG_LETTER_FONT,
   SCENE_SELECTOR_FONT: SCENE_SELECTOR_FONT,
   BOLD_HEADER_FONT: BOLD_HEADER_FONT,
   BOLD_TITLE_FONT: BOLD_TITLE_FONT,

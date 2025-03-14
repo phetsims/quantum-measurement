@@ -159,8 +159,12 @@ const QuantumMeasurementColors = {
     default: '#D1E2FA'
   } ),
 
+  photonDetectorNumberFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'photonDetectorNumberFill', {
+    default: 'rgba( 255, 255, 255, 0.1 )'
+  } ),
+
   splitterEnclosureNodeFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'splitterEnclosureNodeFill', {
-    default: '#A3FFFF'
+    default: 'rgba( 163, 255, 255, 0.53 )'
   } ),
   splitterLineNodeFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'splitterLineNodeFill', {
     default: '#50FFFF'

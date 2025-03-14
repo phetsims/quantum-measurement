@@ -169,9 +169,9 @@ export default class PhotonPolarizationAngleControl extends Panel {
     const polarizationIndicatorCaption = new HBox( {
       children: [
         new VectorTailNode( 6 ),
-        new Text( QuantumMeasurementStrings.propagationIntoPageStringProperty, {
-          font: QuantumMeasurementConstants.CONTROL_FONT,
-          maxWidth: 100
+        new RichText( QuantumMeasurementStrings.propagationIntoPageStringProperty, {
+          font: QuantumMeasurementConstants.SMALL_LABEL_FONT,
+          maxWidth: 150
         } )
       ],
       spacing: 5,

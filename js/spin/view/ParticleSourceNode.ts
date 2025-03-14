@@ -183,6 +183,7 @@ export default class ParticleSourceNode extends Node {
     const sourceModeBox = new VBox( {
       top: particleSourceApparatus.bottom + SPACING,
       left: particleSourceApparatus.left,
+      align: 'left',
       spacing: SPACING,
       children: [
         sourceModeTitle,

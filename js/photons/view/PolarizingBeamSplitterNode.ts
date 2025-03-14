@@ -37,7 +37,6 @@ export default class PolarizingBeamSplitterNode extends Node {
 
     const enclosureNode = new Rectangle( 0, 0, nodeSize.width, nodeSize.height, {
       fill: QuantumMeasurementColors.splitterEnclosureNodeFillColorProperty,
-      opacity: 0.5,
       center: modelViewTransform.modelToViewPosition( model.centerPosition )
     } );
 

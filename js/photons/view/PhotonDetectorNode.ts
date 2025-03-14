@@ -235,9 +235,9 @@ class PhotonCountDisplay extends HBox {
     // Create a NumberDisplay that will show the count.
     const numberDisplay = new NumberDisplay( photonCountProperty, PhotonDetector.COUNT_RANGE, {
       align: 'center',
-      backgroundFill: QuantumMeasurementColors.photonDetectorBodyColorProperty.value.withAlpha( 0.1 ),
+      backgroundFill: QuantumMeasurementColors.photonDetectorNumberFillColorProperty,
       backgroundStroke: null,
-      xMargin: 0,
+      xMargin: 2,
       textOptions: {
         font: DISPLAY_FONT,
         fill: detectionDirection === 'up' ?
@@ -248,7 +248,7 @@ class PhotonCountDisplay extends HBox {
 
     super( {
       children: [ indicator, numberDisplay ],
-      spacing: 5,
+      spacing: 8,
       center: center
     } );
   }

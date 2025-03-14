@@ -127,6 +127,7 @@ class QuantumMeasurementHistogram extends Node {
         align: 'center',
         xMargin: 0,
         backgroundStroke: null,
+        backgroundFill: null,
         textOptions: {
           maxWidth: NUMBER_DISPLAY_MAX_WIDTH,
           font: LABEL_FONT
