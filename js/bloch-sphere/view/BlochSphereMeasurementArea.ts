@@ -410,7 +410,7 @@ export default class BlochSphereMeasurementArea extends Node {
     // node.  This assertion verifies that this is true.  If it fails, something has changed that needs to be fixed.
     assert && assert(
       magneticFieldControl.localBounds.equalsEpsilon( systemUnderTestNode.localBounds, 2 ),
-      'magneticFieldControl and systemUnderTestNode should be roughly the same size'
+      `magneticFieldControl and systemUnderTestNode should be roughly the same size but are ${magneticFieldControl.localBounds} and ${systemUnderTestNode.localBounds}`
     );
 
     const magneticFieldAndStrengthControl = new HBox( {
