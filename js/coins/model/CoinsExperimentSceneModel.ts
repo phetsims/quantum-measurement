@@ -160,7 +160,7 @@ class CoinsExperimentSceneModel extends PhetioObject {
 
         // If this is a classical system, reveal the coins after preparing them.  This is a design choice that was made
         // to make the classical behavior more distinct from the quantum behavior.
-        if ( this.systemType === SystemType.CLASSICAL ) {
+        if ( this.systemType === SystemType.CLASSICAL && this.coinSet.initiallyRevealedProperty.value ) {
           this.singleCoin.reveal();
           this.coinSet.reveal();
         }

@@ -169,8 +169,8 @@ class CoinSet extends PhetioObject {
 
         // Change the initial value of measurement state so coins appear hidden initially
         this.measurementStateProperty.setInitialValue( showClassicalCoins ? 'revealed' : 'measuredAndHidden' );
-        if ( this.measurementStateProperty.value === 'revealed' ) {
-          // If the measurement state is already 'revealed', hide!
+        if ( this.measurementStateProperty.value === 'revealed' || this.measurementStateProperty.value === 'measuredAndHidden' ) {
+          // This is to hide or show the coins when the preference is changed
           this.measurementStateProperty.value = showClassicalCoins ? 'revealed' : 'measuredAndHidden';
         }
       }
