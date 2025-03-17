@@ -30,13 +30,13 @@ const QuantumMeasurementColors = {
 
   // colors for selector button
   selectorButtonSelectedColorProperty: new ProfileColorProperty( quantumMeasurement, 'selectorButtonSelected', {
-    default: '#0FF'
+    default: 'rgb(255, 255, 255)'
   } ),
   selectorButtonDeselectedColorProperty: new ProfileColorProperty( quantumMeasurement, 'selectorButtonDeselected', {
     default: '#aaa'
   } ),
   selectorButtonSelectedStrokeProperty: new ProfileColorProperty( quantumMeasurement, 'selectorButtonSelectedStroke', {
-    default: '#000'
+    default: 'rgb(0, 148, 189)'
   } ),
   selectorButtonDeselectedStrokeProperty: new ProfileColorProperty( quantumMeasurement, 'selectorButtonDeselectedStroke', {
     default: '#000'
@@ -44,10 +44,10 @@ const QuantumMeasurementColors = {
 
   // separate background colors for classical & quantum
   classicalBackgroundColorProperty: new ProfileColorProperty( quantumMeasurement, 'classicalBackground', {
-    default: '#fff' // Placeholder color
+    default: 'rgb(255, 249, 240)' // Placeholder color
   } ),
   quantumBackgroundColorProperty: new ProfileColorProperty( quantumMeasurement, 'quantumBackground', {
-    default: '#fff' // Placeholder color
+    default: 'rgb(245, 250, 254)' // Placeholder color
   } ),
 
   // text color for the quantum scene (for the currently blue text)
@@ -55,7 +55,7 @@ const QuantumMeasurementColors = {
     default: '#000'
   } ),
   quantumSceneTextColorProperty: new ProfileColorProperty( quantumMeasurement, 'quantumSceneText', {
-    default: '#0000FF'
+    default: '#000'
   } ),
 
   // color representation of the possible states of the coins
@@ -88,10 +88,10 @@ const QuantumMeasurementColors = {
     default: '#CCC'
   } ),
   headsFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'headsFill', {
-    default: '#EFE4B0'
+    default: 'rgb(240, 240, 240)'
   } ),
   tailsFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'tailsFill', {
-    default: '#EFE4B0'
+    default: 'rgb(240, 240, 240)'
   } ),
   upFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'upFill', {
     default: '#0FF'
@@ -107,25 +107,25 @@ const QuantumMeasurementColors = {
 
   // Start Measurement button
   startMeasurementButtonColorProperty: new ProfileColorProperty( quantumMeasurement, 'startMeasurementButton', {
-    default: '#0F0'
+    default: 'rgb(114, 235, 151)'
   } ),
 
   // New Coin button
   newCoinButtonColorProperty: new ProfileColorProperty( quantumMeasurement, 'newCoinButton', {
-    default: '#0F0'
+    default: 'rgb(114, 235, 151)'
   } ),
 
   // Experiment button sets
   experimentButtonColorProperty: new ProfileColorProperty( quantumMeasurement, 'experimentButton', {
-    default: '#0ffdfd'
+    default: 'rgb(153, 205, 255)'
   } ),
 
   // control panels
   controlPanelStrokeColorProperty: new ProfileColorProperty( quantumMeasurement, 'basisStatesPanelStroke', {
     default: 'transparent'
   } ),
-  controlPanelFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'basisStatesPanelFill', {
-    default: '#EEE'
+  controlPanelFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'controlPanelFillColor', {
+    default: 'rgb(240, 240, 240)'
   } ),
 
   // colors used in the test boxes on the Coins screen
@@ -160,13 +160,18 @@ const QuantumMeasurementColors = {
     default: '#000'
   } ),
 
+  // Also used in spin screen
+  expectedPercentageFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'expectedPercentageFill', {
+    default: 'rgb(0, 170, 0)'
+  } ),
+
   // colors for elements on the "Photons" screen
   photonDetectorBodyColorProperty: new ProfileColorProperty( quantumMeasurement, 'photonDetectorBody', {
     default: '#D1E2FA'
   } ),
 
   photonDetectorNumberFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'photonDetectorNumberFill', {
-    default: 'rgba( 255, 255, 255, 0.1 )'
+    default: 'rgba( 255, 255, 255, 1 )'
   } ),
 
   splitterEnclosureNodeFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'splitterEnclosureNodeFill', {
@@ -177,13 +182,13 @@ const QuantumMeasurementColors = {
   } ),
 
   particleSourceGradient1ColorProperty: new ProfileColorProperty( quantumMeasurement, 'particleSourceGradient1', {
-    default: '#88f'
+    default: 'rgb(191, 190, 190)'
   } ),
   particleSourceGradient2ColorProperty: new ProfileColorProperty( quantumMeasurement, 'particleSourceGradient2', {
     default: 'white'
   } ),
   particleSourceGradient3ColorProperty: new ProfileColorProperty( quantumMeasurement, 'particleSourceGradient3', {
-    default: 'blue'
+    default: 'rgb(135, 135, 135)'
   } ),
 
   angleIndicatorUnitCircleColorProperty: new ProfileColorProperty( quantumMeasurement, 'angleIndicatorUnitCircle', {
@@ -213,10 +218,6 @@ const QuantumMeasurementColors = {
     default: '#FFF'
   } ),
 
-  expectedPercentageFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'expectedPercentageFill', {
-    default: '#0a0'
-  } ),
-
   sternGerlachCurveColorProperty: new ProfileColorProperty( quantumMeasurement, 'sternGerlachCurve', {
     default: '#aff'
   } ),
@@ -233,14 +234,14 @@ const QuantumMeasurementColors = {
     default: '#FFF'
   } ),
   measurementTimerFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'measurementTimerFill', {
-    default: '#f0f'
+    default: 'rgb(204, 0, 204)'
   } ),
   measurementTimerIconStrokeColorProperty: new ProfileColorProperty( quantumMeasurement, 'measurementTimerIconStroke', {
     default: '#fff'
   } ),
 
   blochSphereAngleIndicatorDashedLineColorProperty: new ProfileColorProperty( quantumMeasurement, 'blochSphereAngleIndicatorDashedLine', {
-    default: '#aaa'
+    default: 'rgb( 0, 0, 0 )'
   } )
 
 };

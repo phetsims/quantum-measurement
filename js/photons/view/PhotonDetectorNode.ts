@@ -59,7 +59,7 @@ export default class PhotonDetectorNode extends Node {
       fill: new LinearGradient( 0, 0, apertureWidthInView, 0 )
         .addColorStop( 0, new Color( '#FFDDEE' ) )
         .addColorStop( 1, Color.DARK_GRAY ),
-      stroke: Color.DARK_GRAY,
+      stroke: 'black',
       lineWidth: 1,
       centerX: modelViewTransform.modelToViewX( model.position.x ),
       centerY: apertureCenterY,

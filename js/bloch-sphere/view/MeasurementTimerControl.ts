@@ -129,7 +129,7 @@ export default class MeasurementTimerControl extends Node {
 
     const timeIndicatorScale = 15;
     const timeIndicator = new ArrowNode( 0, timeIndicatorScale, 0, 0, {
-      fill: 'magenta',
+      fill: QuantumMeasurementColors.measurementTimerFillColorProperty,
       stroke: null,
       headHeight: timeIndicatorScale,
       headWidth: timeIndicatorScale,

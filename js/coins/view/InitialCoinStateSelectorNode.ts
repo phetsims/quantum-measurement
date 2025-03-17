@@ -135,11 +135,12 @@ export default class InitialCoinStateSelectorNode extends VBox {
       spacing: 10
     } );
 
-    const selectorPanel = new Panel( selectorPanelContent, combineOptions<PanelOptions>( {
+    const selectorPanel = new Panel( selectorPanelContent, combineOptions<PanelOptions>( {}, QuantumMeasurementConstants.PANEL_OPTIONS, {
       minWidth: WIDTH,
       visibleProperty: new GatedVisibleProperty( preparingExperimentProperty, radioButtonGroupTandem ),
-      tandem: radioButtonGroupTandem
-    }, QuantumMeasurementConstants.PANEL_OPTIONS ) );
+      tandem: radioButtonGroupTandem,
+      fill: 'transparent'
+    } ) );
 
     selectorPanel.addLinkedElement( initialCoinStateProperty );
 
