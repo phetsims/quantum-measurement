@@ -34,7 +34,7 @@ export default class MirrorNode extends Node {
     // positions, and if the mirror isn't offset a bit, the photons can appear to go partially through the mirror.
     // The value is in screen coordinates. This only works for a mirror that is oriented the way this one is,
     // and isn't a general solution.
-    const mirrorPositionOffsetValue = PhotonSprites.TARGET_PHOTON_VIEW_WIDTH / 5;
+    const mirrorPositionOffsetValue = ( PhotonSprites.TARGET_PHOTON_VIEW_RADIUS * 2 ) / 5;
     const mirrorPositionOffset = new Vector2( mirrorPositionOffsetValue, -mirrorPositionOffsetValue );
 
     const mirrorLine = new Line(

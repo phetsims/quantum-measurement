@@ -19,12 +19,13 @@
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
+import Circle from '../../../../scenery/js/nodes/Circle.js';
 import Sprites from '../../../../scenery/js/nodes/Sprites.js';
 import Sprite from '../../../../scenery/js/util/Sprite.js';
 import SpriteImage from '../../../../scenery/js/util/SpriteImage.js';
 import SpriteInstance, { SpriteInstanceTransformType } from '../../../../scenery/js/util/SpriteInstance.js';
 import greenPhoton_png from '../../../images/greenPhoton_png.js';
-import greenPhotonOutline_png from '../../../images/greenPhotonOutline_png.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import Photon from '../model/Photon.js';
 
@@ -39,9 +40,9 @@ class PhotonSprites extends Sprites {
 
   // The sprites used to render the photons.
   private readonly photonInteriorSprite: Sprite;
-  private readonly photonOutlineSprite: Sprite;
+  private photonOutlineSprite: Sprite | null = null;
 
-  public static readonly TARGET_PHOTON_VIEW_WIDTH = 10; // in screen coords, empirically determined to match the design
+  public static readonly TARGET_PHOTON_VIEW_RADIUS = 5; // in screen coords, empirically determined to match the design
 
   public constructor( photons: Photon[], modelViewTransform: ModelViewTransform2, canvasBounds: Bounds2 ) {
 
@@ -64,18 +65,30 @@ class PhotonSprites extends Sprites {
       new Vector2( greenPhoton_png.width / 2, greenPhoton_png.height / 2 ),
       { pickable: false }
     ) );
-    this.photonOutlineSprite = new Sprite( new SpriteImage(
-      greenPhotonOutline_png,
-      new Vector2( greenPhotonOutline_png.width / 2, greenPhotonOutline_png.height / 2 ),
-      { pickable: false }
-    ) );
-    this.mutate( { sprites: [ this.photonInteriorSprite, this.photonOutlineSprite ] } );
 
-    // Calculate the scale that will be used to render the photon interior.
-    this.photonScale = PhotonSprites.TARGET_PHOTON_VIEW_WIDTH / greenPhoton_png.width;
+    // Create the circle that will be used to render the outline of the photon.
+    const photonOutlineCircle = new Circle( greenPhoton_png.width / 2, {
+      stroke: QuantumMeasurementColors.photonBaseColorProperty.value,
+      lineWidth: greenPhoton_png.width / 10
+    } );
+
+    // Create the sprite for the photon outline by rendering the circle to a canvas and then creating a sprite from that
+    // canvas.  Since rendering the circle to a canvas is an asynchronous process, we need to wait for it to complete
+    // before adding the sprites.
+    photonOutlineCircle.toCanvas( canvas => {
+      this.photonOutlineSprite = new Sprite( new SpriteImage(
+        canvas,
+        new Vector2( canvas.width / 2, canvas.height / 2 ),
+        { pickable: false }
+      ) );
+      this.mutate( { sprites: [ this.photonInteriorSprite, this.photonOutlineSprite ] } );
+    } );
+
+    // Calculate the scale that will be used to render the photon.
+    this.photonScale = PhotonSprites.TARGET_PHOTON_VIEW_RADIUS / ( greenPhoton_png.width / 2 );
 
     assert && assert(
-    this.photonScale > 0 && this.photonScale < 100,
+      ( this.photonScale > 0 && this.photonScale < 100 ),
       `photon scale factor not reasonable: ${this.photonScale}`
     );
 
@@ -113,13 +126,13 @@ class PhotonSprites extends Sprites {
           // state, one for the interior and one for the outline.
           if ( numberOfPhotonsDisplayed * 2 > this.spriteInstances.length ) {
 
-            const newInteriorSpriteInstance = SpriteInstance.pool.fetch();
-            newInteriorSpriteInstance.transformType = SpriteInstanceTransformType.AFFINE;
-            this.spriteInstances.push( newInteriorSpriteInstance );
-
             const newOutlineSpriteInstance = SpriteInstance.pool.fetch();
             newOutlineSpriteInstance.transformType = SpriteInstanceTransformType.AFFINE;
             this.spriteInstances.push( newOutlineSpriteInstance );
+
+            const newInteriorSpriteInstance = SpriteInstance.pool.fetch();
+            newInteriorSpriteInstance.transformType = SpriteInstanceTransformType.AFFINE;
+            this.spriteInstances.push( newInteriorSpriteInstance );
           }
 
           const xPos = this.modelViewTransform.modelToViewX( photonStatePosition.x );
