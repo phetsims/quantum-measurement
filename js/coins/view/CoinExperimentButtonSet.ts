@@ -29,7 +29,7 @@ type SelfOptions = {
 export type CoinExperimentButtonSetOptions = SelfOptions & PickRequired<NodeOptions, 'tandem' | 'visibleProperty'>;
 
 const BUTTON_FONT = QuantumMeasurementConstants.CONTROL_FONT;
-const BUTTON_WIDTH = 160; // empirically determined to match spec
+const BUTTON_WIDTH = 180; // empirically determined to match spec
 
 export default class CoinExperimentButtonSet extends VBox {
 

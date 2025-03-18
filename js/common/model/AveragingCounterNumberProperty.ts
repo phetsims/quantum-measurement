@@ -40,7 +40,7 @@ class AveragingCounterNumberProperty extends NumberProperty {
   public constructor( providedOptions: AveragingCounterNumberPropertyOptions ) {
 
     const options = optionize<AveragingCounterNumberPropertyOptions, SelfOptions, NumberPropertyOptions>()( {
-      totalAveragingPeriod: 2, // in seconds
+      totalAveragingPeriod: 1, // in seconds
       countSamplePeriod: 0.5 // in seconds
     }, providedOptions );
 

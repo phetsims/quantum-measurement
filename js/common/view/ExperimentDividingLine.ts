@@ -15,7 +15,7 @@ const DIVIDER_HEIGHT = 525; // empirically determined
 export default class ExperimentDividingLine extends Line {
   public constructor( x: number ) {
     super( 0, 0, 0, DIVIDER_HEIGHT, {
-      stroke: Color.LIGHT_GRAY,
+      stroke: Color.BLACK,
       lineWidth: 2,
       lineDash: [ 6, 5 ]
     } );

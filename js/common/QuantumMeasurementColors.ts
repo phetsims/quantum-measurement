@@ -151,7 +151,7 @@ const QuantumMeasurementColors = {
     default: '#00F'
   } ),
   photonBaseColorProperty: new ProfileColorProperty( quantumMeasurement, 'photonBaseColor', {
-    default: '#0F0'
+    default: '#0A0'
   } ),
   polarizationArrowColorProperty: new ProfileColorProperty( quantumMeasurement, 'polarizationArrowColor', {
     default: '#0F0'
