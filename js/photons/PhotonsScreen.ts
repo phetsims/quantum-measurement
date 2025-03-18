@@ -9,13 +9,13 @@
 import Vector2 from '../../../dot/js/Vector2.js';
 import ScreenIcon, { MINIMUM_HOME_SCREEN_ICON_SIZE } from '../../../joist/js/ScreenIcon.js';
 import Shape from '../../../kite/js/Shape.js';
+import Circle from '../../../scenery/js/nodes/Circle.js';
 import Image from '../../../scenery/js/nodes/Image.js';
 import Line from '../../../scenery/js/nodes/Line.js';
 import Node from '../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../scenery/js/nodes/Rectangle.js';
 import Tandem from '../../../tandem/js/Tandem.js';
 import greenPhoton_png from '../../images/greenPhoton_png.js';
-import greenPhotonOutline_png from '../../images/greenPhotonOutline_png.js';
 import QuantumMeasurementColors from '../common/QuantumMeasurementColors.js';
 import QuantumMeasurementKeyboardHelpContent from '../common/view/QuantumMeasurementKeyboardHelpContent.js';
 import QuantumMeasurementScreen from '../common/view/QuantumMeasurementScreen.js';
@@ -57,10 +57,15 @@ class StandalonePhotonNode extends Node {
   public static readonly RADIUS = 30;
 
   public constructor( center: Vector2 ) {
-    const interiorNode = new Image( greenPhoton_png );
-    const exteriorNode = new Image( greenPhotonOutline_png );
+    const interiorNode = new Image( greenPhoton_png, {
+      center: Vector2.ZERO
+    } );
+    const exteriorNode = new Circle( greenPhoton_png.width / 2, {
+      stroke: QuantumMeasurementColors.photonBaseColorProperty,
+      lineWidth: 4
+    } );
     super( {
-      children: [ interiorNode, exteriorNode ],
+      children: [ exteriorNode, interiorNode ],
       scale: StandalonePhotonNode.RADIUS * 2 / interiorNode.width,
       center: center
     } );

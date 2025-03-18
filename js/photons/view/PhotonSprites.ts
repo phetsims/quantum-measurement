@@ -130,13 +130,13 @@ class PhotonSprites extends Sprites {
           // state, one for the interior and one for the outline.
           if ( numberOfPhotonsDisplayed * 2 > this.spriteInstances.length ) {
 
-            const newOutlineSpriteInstance = SpriteInstance.pool.fetch();
-            newOutlineSpriteInstance.transformType = SpriteInstanceTransformType.AFFINE;
-            this.spriteInstances.push( newOutlineSpriteInstance );
-
             const newInteriorSpriteInstance = SpriteInstance.pool.fetch();
             newInteriorSpriteInstance.transformType = SpriteInstanceTransformType.AFFINE;
             this.spriteInstances.push( newInteriorSpriteInstance );
+
+            const newOutlineSpriteInstance = SpriteInstance.pool.fetch();
+            newOutlineSpriteInstance.transformType = SpriteInstanceTransformType.AFFINE;
+            this.spriteInstances.push( newOutlineSpriteInstance );
           }
 
           const xPos = this.modelViewTransform.modelToViewX( photonStatePosition.x );
