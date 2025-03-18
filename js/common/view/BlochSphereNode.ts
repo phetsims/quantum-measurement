@@ -128,7 +128,7 @@ export default class BlochSphereNode extends Node {
       visible: options.drawAxesLabels
     } );
     const zAxisLabel = new Text( '+Z', {
-      centerX: -3 * LABELS_OFFSET * options.axesLabelsScale,
+      centerX: -4 * LABELS_OFFSET * options.axesLabelsScale,
       centerY: -sphereRadius + LABELS_OFFSET,
       fill: 'black',
       font: QuantumMeasurementConstants.BOLD_TITLE_FONT,
@@ -229,7 +229,7 @@ export default class BlochSphereNode extends Node {
     xAxisLabel.centerX = plusX.x + 3 * LABELS_OFFSET;
     xAxisLabel.centerY = plusX.y + 2 * LABELS_OFFSET;
     yAxisLabel.centerX = plusY.x;
-    yAxisLabel.centerY = plusY.y - LABELS_OFFSET;
+    yAxisLabel.centerY = plusY.y - 2 * LABELS_OFFSET;
 
     if ( options.expandBounds ) {
       this.setLocalBounds( new Bounds2( -1.5 * sphereRadius, this.bounds.minY, 1.5 * sphereRadius, this.bounds.maxY ) );
