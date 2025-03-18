@@ -66,24 +66,6 @@ class PhotonSprites extends Sprites {
       { pickable: false }
     ) );
 
-    // Create the circle that will be used to render the outline of the photon.
-    const photonOutlineCircle = new Circle( greenPhoton_png.width / 2, {
-      stroke: QuantumMeasurementColors.photonBaseColorProperty.value,
-      lineWidth: greenPhoton_png.width / 10
-    } );
-
-    // Create the sprite for the photon outline by rendering the circle to a canvas and then creating a sprite from that
-    // canvas.  Since rendering the circle to a canvas is an asynchronous process, we need to wait for it to complete
-    // before adding the sprites.
-    photonOutlineCircle.toCanvas( canvas => {
-      this.photonOutlineSprite = new Sprite( new SpriteImage(
-        canvas,
-        new Vector2( canvas.width / 2, canvas.height / 2 ),
-        { pickable: false }
-      ) );
-      this.mutate( { sprites: [ this.photonInteriorSprite, this.photonOutlineSprite ] } );
-    } );
-
     // Calculate the scale that will be used to render the photon.
     this.photonScale = PhotonSprites.TARGET_PHOTON_VIEW_RADIUS / ( greenPhoton_png.width / 2 );
 
@@ -91,6 +73,28 @@ class PhotonSprites extends Sprites {
       ( this.photonScale > 0 && this.photonScale < 100 ),
       `photon scale factor not reasonable: ${this.photonScale}`
     );
+
+    // Create the photon outline sprite based on the color in the color profile.
+    QuantumMeasurementColors.photonBaseColorProperty.link( color => {
+
+      // Create the circle that will be used to render the outline of the photon.
+      const photonOutlineCircle = new Circle( greenPhoton_png.width / 2, {
+        stroke: color,
+        lineWidth: greenPhoton_png.width / 10
+      } );
+
+      // Create the sprite for the photon outline by rendering the circle to a canvas and then creating a sprite from that
+      // canvas.  Since rendering the circle to a canvas is an asynchronous process, we need to wait for it to complete
+      // before adding the sprites.
+      photonOutlineCircle.toCanvas( canvas => {
+        this.photonOutlineSprite = new Sprite( new SpriteImage(
+          canvas,
+          new Vector2( canvas.width / 2, canvas.height / 2 ),
+          { pickable: false }
+        ) );
+        this.mutate( { sprites: [ this.photonInteriorSprite, this.photonOutlineSprite ] } );
+      } );
+    } );
 
     // local variables needed for the methods
     this.spriteInstances = spriteInstances;
