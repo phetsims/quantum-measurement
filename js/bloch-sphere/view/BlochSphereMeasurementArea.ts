@@ -377,7 +377,6 @@ export default class BlochSphereMeasurementArea extends Node {
       {
         spacing: 5,
         boxWidth: QuantumMeasurementConstants.CHECKBOX_BOX_WIDTH,
-        centerX: multipleMeasurementBlochSpheresNode.centerX,
         bottom: QuantumMeasurementConstants.LAYOUT_BOUNDS.bottom - 30,
         mouseAreaXDilation: 5,
         mouseAreaYDilation: 5,
@@ -386,6 +385,9 @@ export default class BlochSphereMeasurementArea extends Node {
         tandem: magneticFieldControlsTandem.createTandem( 'magneticFieldCheckbox' )
       }
     );
+    magneticFieldCheckbox.localBoundsProperty.link( () => {
+      magneticFieldCheckbox.centerX = multipleMeasurementBlochSpheresNode.centerX;
+    } );
 
     const systemUnderTestNode = new SystemUnderTestNode(
       model.magneticFieldEnabledProperty,
