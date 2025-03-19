@@ -23,11 +23,11 @@ const CREDITS: CreditsData = {
   leadDesign: 'Ariel Paul, Amy Rouinfar',
   softwareDevelopment: 'John Blanco, Agust\u00edn Vallejo',
   team: 'Mike Bennet, Josh Combes, Aiko Kyle, Phil Makotyn, Kathy Perkins, Ana Maria Rey, Martin Veillette',
-  contributors: '',
+  contributors: 'Virginia Lorenz (University of Illinois Urbana-Champaign), Gina Passante (California State University, Fullerton), Steven Pollock (University of Colorado Boulder)',
   qualityAssurance: '',
   graphicArts: '',
   soundDesign: '',
-  thanks: ''
+  thanks: 'We gratefully acknowledge support from NSF Quantum Leap Challenge Institute Award OMA - 2016244 through its funding of Q-SEnSE. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the authors and do not necessarily reflect the views of the National Science Foundation.'
 };
 
 const DEFAULT_CONTROL_SLIDER_OPTIONS: SliderOptions = {
