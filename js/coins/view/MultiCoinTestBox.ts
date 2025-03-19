@@ -14,6 +14,7 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
+import Color from '../../../../scenery/js/util/Color.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import { SystemType } from '../../common/model/SystemType.js';
@@ -27,10 +28,10 @@ import SmallCoinNode, { SmallCoinDisplayMode } from './SmallCoinNode.js';
 
 // constants
 const BOX_SIZE = new Dimension2( 200, 200 );
-const TEST_BOX_CONTENTS_HIDDEN_FILL = new LinearGradient( 0, 0, BOX_SIZE.width, 0 )
+const CONTENTS_HIDDEN_FILL = new LinearGradient( 0, 0, BOX_SIZE.width, 0 )
   .addColorStop( 0, QuantumMeasurementColors.multiCoinFirstGradientColorProperty )
   .addColorStop( 1, QuantumMeasurementColors.multiCoinSecondGradientColorProperty );
-const TEST_BOX_CONTENTS_REVEALED_FILL_COLOR_PROPERTY = QuantumMeasurementColors.testBoxContentsRevealedFillColorProperty;
+const INTERIOR_COLOR_PROPERTY = QuantumMeasurementColors.testBoxInteriorColorProperty;
 
 class MultiCoinTestBox extends Node {
 
@@ -52,12 +53,17 @@ class MultiCoinTestBox extends Node {
       BOX_SIZE.width,
       BOX_SIZE.height,
       {
-        fill: TEST_BOX_CONTENTS_HIDDEN_FILL,
+        fill: CONTENTS_HIDDEN_FILL,
         opacity: 0.5,
         lineWidth: 2,
         stroke: QuantumMeasurementColors.testBoxRectangleStrokeColorProperty
       }
     );
+
+    // Create the node that will be the interior of the test box.
+    const testBoxInterior = new Rectangle( 0, 0, BOX_SIZE.width, BOX_SIZE.height, {
+      fill: INTERIOR_COLOR_PROPERTY
+    } );
 
     // Create a node that includes the test box and a clip area. This is used to put masks over the tops of the coins
     // that appear as the coins slide into the box.
@@ -66,7 +72,7 @@ class MultiCoinTestBox extends Node {
       clipArea: Shape.bounds( multipleCoinTestBoxRectangle.getRectBounds() )
     } );
 
-    super( { children: [ testBoxWithClipArea ] } );
+    super( { children: [ testBoxInterior, testBoxWithClipArea ] } );
 
     this.testBoxWithClipArea = testBoxWithClipArea;
     this.numberOfActiveCoinsProperty = coinSet.numberOfActiveCoinsProperty;
@@ -76,8 +82,8 @@ class MultiCoinTestBox extends Node {
 
       // Make the box look hazy when the measurement is not revealed.
       multipleCoinTestBoxRectangle.fill = measurementState === 'revealed' ?
-                                          TEST_BOX_CONTENTS_REVEALED_FILL_COLOR_PROPERTY :
-                                          TEST_BOX_CONTENTS_HIDDEN_FILL;
+                                          Color.TRANSPARENT :
+                                          CONTENTS_HIDDEN_FILL;
 
       // Update the appearance of the coin nodes.
       this.updateCoinNodes( coinSet, measurementState );

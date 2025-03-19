@@ -21,11 +21,11 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import { ExperimentMeasurementState } from '../model/ExperimentMeasurementState.js';
 
 // constants
-const SINGLE_COIN_AREA_RECT_LINE_WIDTH = 18;
-const SINGLE_COIN_TEST_BOX_SIZE = new Dimension2( 165, 145 );
-const SINGLE_COIN_TEST_BOX_UNREVEALED_FILL = new LinearGradient( 0, 0, SINGLE_COIN_TEST_BOX_SIZE.width, 0 )
+const BOX_SIZE = new Dimension2( 165, 145 );
+const CONTENTS_HIDDEN_FILL = new LinearGradient( 0, 0, BOX_SIZE.width, 0 )
   .addColorStop( 0, QuantumMeasurementColors.testBoxLinearGradient1ColorProperty.value.withAlpha( 0.8 ) )
   .addColorStop( 0.9, QuantumMeasurementColors.testBoxLinearGradient2ColorProperty.value.withAlpha( 0.8 ) );
+const INTERIOR_COLOR_PROPERTY = QuantumMeasurementColors.testBoxInteriorColorProperty;
 
 export default class SingleCoinTestBox extends Node {
 
@@ -33,27 +33,36 @@ export default class SingleCoinTestBox extends Node {
   // advantage of the clip area.
   public readonly clippedTestBox: Node;
 
+  // Make the interior of the test box available externally since this is where children should be added if clients want
+  // them to appear as though they are between the front and back of the box.
+  public readonly testBoxInterior: Node;
+
   public constructor( measurementStateProperty: Property<ExperimentMeasurementState> ) {
 
     const testBoxBounds = new Bounds2(
       0,
       0,
-      SINGLE_COIN_TEST_BOX_SIZE.width,
-      SINGLE_COIN_TEST_BOX_SIZE.height
+      BOX_SIZE.width,
+      BOX_SIZE.height
     );
+
+    // Add the interior of the box, which is at the back of the Z-order.
+    const testBoxInterior = new Rectangle( testBoxBounds, {
+      fill: INTERIOR_COLOR_PROPERTY
+    } );
 
     // Add the main rectangular area that will define the test box.
     const testBoxRectangle = new Rectangle( testBoxBounds, {
-        lineWidth: SINGLE_COIN_AREA_RECT_LINE_WIDTH,
+        lineWidth: 18,
         stroke: QuantumMeasurementColors.testBoxRectangleStrokeColorProperty
       }
     );
 
-    // Make the box transparent when the state of the measurement indicates that the coin is revealed to the user.
+    // Make the box cover transparent when the state of the measurement indicates that the coin is revealed to the user.
     measurementStateProperty.link( singleCoinMeasurementState => {
       testBoxRectangle.fill = singleCoinMeasurementState === 'revealed' ?
                               Color.TRANSPARENT :
-                              SINGLE_COIN_TEST_BOX_UNREVEALED_FILL;
+                              CONTENTS_HIDDEN_FILL;
     } );
 
     // Add a second rectangle that is clipped.  This is where the children should go if they need to only appear when
@@ -62,10 +71,13 @@ export default class SingleCoinTestBox extends Node {
       clipArea: Shape.bounds( testBoxBounds )
     } );
 
-    super( { children: [ testBoxRectangleClipped, testBoxRectangle ] } );
+    super( { children: [ testBoxInterior, testBoxRectangleClipped, testBoxRectangle ] } );
 
     this.clippedTestBox = testBoxRectangleClipped;
+    this.testBoxInterior = testBoxInterior;
   }
+
+  public static readonly SIZE = BOX_SIZE;
 }
 
 quantumMeasurement.register( 'SingleCoinTestBox', SingleCoinTestBox );

@@ -1,0 +1,62 @@
+// Copyright 2024, University of Colorado Boulder
+
+/**
+ * SingleCoinMeasurementArea is the test box and button set where the single coin will appear in the measurement area.
+ *
+ *
+ * @author John Blanco, PhET Interactive Simulations
+ */
+
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import TProperty from '../../../../axon/js/TProperty.js';
+import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
+import quantumMeasurement from '../../quantumMeasurement.js';
+import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
+import CoinExperimentButtonSet from './CoinExperimentButtonSet.js';
+import SingleCoinTestBox from './SingleCoinTestBox.js';
+
+export default class SingleCoinMeasurementArea extends HBox {
+
+  public readonly testBox: SingleCoinTestBox;
+
+  public constructor( sceneModel: CoinsExperimentSceneModel,
+                      singleCoinInTestBoxProperty: TProperty<boolean>,
+                      tandem: Tandem ) {
+
+    // Create the box where the single coin will be placed while it is experimented with.
+    const testBox = new SingleCoinTestBox( sceneModel.singleCoin.measurementStateProperty );
+
+    // Create the buttons that will be used to control the single-coin test box.
+    const coinExperimentButtonSet = new CoinExperimentButtonSet(
+      sceneModel.singleCoin,
+      singleCoinInTestBoxProperty,
+      {
+        tandem: tandem.createTandem( 'coinExperimentButtonSet' ),
+        visibleProperty: DerivedProperty.not( sceneModel.preparingExperimentProperty ),
+        singleCoin: true
+      }
+    );
+
+    sceneModel.preparingExperimentProperty.lazyLink( preparingExperiment => {
+      if ( !preparingExperiment ) {
+
+        // Because the button that triggers this state change is later in the PDOM order than the experiment buttons,
+        // manually focus on the first button of this group when the model transitions out of the experiment preparation
+        // phase. See https://github.com/phetsims/quantum-measurement/issues/89.
+        coinExperimentButtonSet.focusOnRevealButton();
+      }
+    } );
+
+    super( {
+      children: [ testBox, coinExperimentButtonSet ],
+      spacing: 30,
+      tandem: tandem
+    } );
+
+    // Make some properties available externally.
+    this.testBox = testBox;
+  }
+}
+
+quantumMeasurement.register( 'SingleCoinMeasurementArea', SingleCoinMeasurementArea );

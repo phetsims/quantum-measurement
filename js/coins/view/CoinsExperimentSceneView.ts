@@ -266,7 +266,7 @@ class CoinsExperimentSceneView extends Node {
       offsetVector.rotate( dotRandom.nextDouble() * 2 * Math.PI );
       coinNode.center = this.travelingCoinsOrigin.plus( offsetVector );
       this.addChild( coinNode );
-      coinNode.moveToBack();
+      coinNode.moveToFront();
     } );
   }
 
@@ -276,7 +276,7 @@ class CoinsExperimentSceneView extends Node {
   public addManyCoinsNode( manyCoinNode: CoinSetPixelRepresentation ): void {
     manyCoinNode.center = this.travelingCoinsOrigin;
     this.addChild( manyCoinNode );
-    manyCoinNode.moveToBack();
+    manyCoinNode.moveToFront();
   }
 
   protected updateActivityAreaPositions(): void {

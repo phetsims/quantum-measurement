@@ -35,7 +35,7 @@ import MaxCoinsViewManager from './MaxCoinsViewManager.js';
 import MultiCoinTestBox from './MultiCoinTestBox.js';
 import MultipleCoinsViewManager from './MultipleCoinsViewManager.js';
 import SceneSectionHeader from './SceneSectionHeader.js';
-import SingleCoinTestBox from './SingleCoinTestBox.js';
+import SingleCoinMeasurementArea from './SingleCoinMeasurementArea.js';
 import SingleCoinViewManager from './SingleCoinViewManager.js';
 
 const HEADER_MAX_WIDTH = 400; // empirically determined using Scenery helper measuring tape
@@ -82,26 +82,13 @@ class CoinExperimentMeasurementArea extends VBox {
       }
     );
 
-    // Create the box where the single coin will be placed while it is experimented with.
-    const singleCoinTestBox = new SingleCoinTestBox( sceneModel.singleCoin.measurementStateProperty );
-
-    // Create the buttons that will be used to control the single-coin test box.
-    const singleCoinExperimentButtonSet = new CoinExperimentButtonSet(
-      sceneModel.singleCoin,
-      singleCoinInTestBoxProperty,
-      {
-        tandem: tandem.createTandem( 'singleCoinExperimentButtonSet' ),
-        visibleProperty: DerivedProperty.not( sceneModel.preparingExperimentProperty ),
-        singleCoin: true
-      }
-    );
-
     // Create the composite node that represents the test box and the controls where the user will experiment with a
     // single coin.
-    const singleCoinMeasurementArea = new HBox( {
-      children: [ singleCoinTestBox, singleCoinExperimentButtonSet ],
-      spacing: 30
-    } );
+    const singleCoinMeasurementArea = new SingleCoinMeasurementArea(
+      sceneModel,
+      singleCoinInTestBoxProperty,
+      tandem.createTandem( 'singleCoinMeasurementArea' )
+    );
 
     // Add the lower heading for the measurement area.
     const multiCoinSectionHeader = new SceneSectionHeader(
@@ -233,7 +220,7 @@ class CoinExperimentMeasurementArea extends VBox {
           !preparingExperiment && singleCoinExperimentState !== 'revealed'
       )
     } );
-    singleCoinTestBox.clippedTestBox.addChild( coinMask );
+    singleCoinMeasurementArea.testBox.clippedTestBox.addChild( coinMask );
     coinMask.moveToBack();
 
     // Create the view manager that will create and animate the view of the single coin as it moves from the preparation
@@ -242,7 +229,7 @@ class CoinExperimentMeasurementArea extends VBox {
       sceneModel,
       this,
       coinMask,
-      singleCoinTestBox.clippedTestBox,
+      singleCoinMeasurementArea,
       this.singleCoinInTestBoxProperty
     );
 
@@ -279,11 +266,6 @@ class CoinExperimentMeasurementArea extends VBox {
         multipleCoinTestBox.clearContents();
       }
       else {
-
-        // Because the button tha triggers this is later in the pdom order than the experiment buttons
-        // Manually focus on the first button of this group.
-        // See https://github.com/phetsims/quantum-measurement/issues/89
-        singleCoinExperimentButtonSet.focusOnRevealButton();
 
         // The user is ready to make measurements on the coins, so animate the coins for both the single and multi-coin
         // experiments from the preparation area to the measurement area.

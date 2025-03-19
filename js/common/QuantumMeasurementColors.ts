@@ -135,8 +135,8 @@ const QuantumMeasurementColors = {
   multiCoinSecondGradientColorProperty: new ProfileColorProperty( quantumMeasurement, 'multiCoinSecondGradient', {
     default: '#cceae8'
   } ),
-  testBoxContentsRevealedFillColorProperty: new ProfileColorProperty( quantumMeasurement, 'testBoxContentsRevealedFill', {
-    default: 'rgba( 255, 255, 255, 0 )'
+  testBoxInteriorColorProperty: new ProfileColorProperty( quantumMeasurement, 'testBoxInteriorColorProperty', {
+    default: '#fff'
   } ),
 
   /**
