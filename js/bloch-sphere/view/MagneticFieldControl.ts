@@ -109,9 +109,15 @@ export default class MagneticFieldControl extends Panel {
       resize: false
     } );
 
+    // Calculate a max width for the title based on the options provided or the width of the indicator and slider.
+    const maxPanelTitleWidth = options.minWidth && options.xMargin ?
+                               options.minWidth - 2 * options.xMargin :
+                               indicatorAndSlider.width;
+
+    // Create the title for the panel.
     const panelTitle = new Text( QuantumMeasurementStrings.magneticFieldStringProperty, {
       font: QuantumMeasurementConstants.TITLE_FONT,
-      maxWidth: 150
+      maxWidth: maxPanelTitleWidth
     } );
 
     // Assemble the children of the panel, and stick in a couple of spacers so that the slider and readout are
