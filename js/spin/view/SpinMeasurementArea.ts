@@ -59,7 +59,8 @@ export default class SpinMeasurementArea extends VBox {
     const items: ComboBoxItem<SpinExperiment>[] = SpinExperiment.enumeration.values.map( experiment => {
       return {
         value: experiment,
-        createNode: () => new Text( experiment.experimentName, { font: QuantumMeasurementConstants.TITLE_FONT, maxWidth: 300 } )
+        createNode: () => new Text( experiment.experimentName, { font: QuantumMeasurementConstants.TITLE_FONT, maxWidth: 300 } ),
+        tandemName: `${experiment.experimentTandemName}Item`
       };
     } );
 

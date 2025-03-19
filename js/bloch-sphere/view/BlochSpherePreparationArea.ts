@@ -83,7 +83,8 @@ export default class BlochSpherePreparationArea extends VBox {
                        direction.description;
       return {
         value: direction,
-        createNode: () => new Text( itemText, { font: QuantumMeasurementConstants.CONTROL_FONT } )
+        createNode: () => new Text( itemText, { font: QuantumMeasurementConstants.CONTROL_FONT } ),
+        tandemName: `${direction.tandemName}Item`
       };
     } );
 

@@ -56,6 +56,8 @@ export default class SpinExperiment extends EnumerationValue {
 
   public readonly experimentName: string | TReadOnlyProperty<string>;
 
+  public readonly experimentTandemName: string;
+
   public readonly experimentSetting: SternGerlachExperimentSetting[];
 
   public readonly usingSingleApparatus: boolean;
@@ -74,6 +76,8 @@ export default class SpinExperiment extends EnumerationValue {
                               order: experimentOrder
                             }
                           );
+    this.experimentTandemName = index === 'Custom' ? 'custom' : `experiment${index}`;
+
     this.experimentSetting = experimentSetting;
 
     this.usingSingleApparatus = this.experimentSetting.length === 1;
