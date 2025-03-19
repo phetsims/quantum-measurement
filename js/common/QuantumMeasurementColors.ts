@@ -20,8 +20,13 @@ import quantumMeasurement from '../quantumMeasurement.js';
 const QuantumMeasurementColors = {
 
   // background color for screens in this sim
-  screenBackgroundColorProperty: new ProfileColorProperty( quantumMeasurement, 'background', {
+  screenBackgroundColorProperty: new ProfileColorProperty( quantumMeasurement, 'screenBackgroundColor', {
     default: 'white'
+  } ),
+
+  // color for the vertical divider line that separates portions of the scenes, used on multiple screens in this sim
+  dividerLineStrokeProperty: new ProfileColorProperty( quantumMeasurement, 'dividerLineStroke', {
+    default: '#000'
   } ),
 
   /**
@@ -43,18 +48,18 @@ const QuantumMeasurementColors = {
   } ),
 
   // separate background colors for classical & quantum
-  classicalBackgroundColorProperty: new ProfileColorProperty( quantumMeasurement, 'classicalBackground', {
+  classicalBackgroundColorProperty: new ProfileColorProperty( quantumMeasurement, 'classicalBackgroundColor', {
     default: 'rgb(255, 249, 240)' // Placeholder color
   } ),
-  quantumBackgroundColorProperty: new ProfileColorProperty( quantumMeasurement, 'quantumBackground', {
+  quantumBackgroundColorProperty: new ProfileColorProperty( quantumMeasurement, 'quantumBackgroundColor', {
     default: 'rgb(245, 250, 254)' // Placeholder color
   } ),
 
   // text color for the quantum scene (for the currently blue text)
-  classicalSceneTextColorProperty: new ProfileColorProperty( quantumMeasurement, 'classicalSceneText', {
+  classicalSceneTextColorProperty: new ProfileColorProperty( quantumMeasurement, 'classicalSceneTextColor', {
     default: '#000'
   } ),
-  quantumSceneTextColorProperty: new ProfileColorProperty( quantumMeasurement, 'quantumSceneText', {
+  quantumSceneTextColorProperty: new ProfileColorProperty( quantumMeasurement, 'quantumSceneTextColor', {
     default: '#000'
   } ),
 
@@ -135,7 +140,7 @@ const QuantumMeasurementColors = {
   multiCoinSecondGradientColorProperty: new ProfileColorProperty( quantumMeasurement, 'multiCoinSecondGradient', {
     default: '#cceae8'
   } ),
-  testBoxInteriorColorProperty: new ProfileColorProperty( quantumMeasurement, 'testBoxInteriorColorProperty', {
+  testBoxInteriorColorProperty: new ProfileColorProperty( quantumMeasurement, 'testBoxInterior', {
     default: '#fff'
   } ),
 

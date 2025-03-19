@@ -7,15 +7,15 @@
  */
 
 import Line from '../../../../scenery/js/nodes/Line.js';
-import Color from '../../../../scenery/js/util/Color.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import QuantumMeasurementColors from '../QuantumMeasurementColors.js';
 
 const DIVIDER_HEIGHT = 525; // empirically determined
 
 export default class ExperimentDividingLine extends Line {
   public constructor( x: number ) {
     super( 0, 0, 0, DIVIDER_HEIGHT, {
-      stroke: Color.BLACK,
+      stroke: QuantumMeasurementColors.dividerLineStrokeProperty,
       lineWidth: 2,
       lineDash: [ 6, 5 ]
     } );
