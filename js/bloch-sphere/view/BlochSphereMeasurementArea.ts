@@ -438,11 +438,11 @@ export default class BlochSphereMeasurementArea extends Node {
     super( options );
 
     this.pdomOrder = [
-      equationNodePanel,
       measurementControlPanel,
-      magneticFieldAndStrengthControl,
-      magneticFieldCheckbox,
       experimentControlButton,
+      magneticFieldCheckbox,
+      magneticFieldAndStrengthControl,
+      equationNodePanel,
       measurementResultHistogram
     ];
   }
