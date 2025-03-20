@@ -18,9 +18,9 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
 import CoinNode, { CoinFaceParameters } from './CoinNode.js';
 
-const HEADS_FILL_COLOR_PROPERTY = QuantumMeasurementColors.headsFillColorProperty;
+const HEADS_FILL_COLOR_PROPERTY = QuantumMeasurementColors.headsFillProperty;
 const HEADS_STROKE_AND_LETTER_COLOR_PROPERTY = QuantumMeasurementColors.headsColorProperty;
-const TAILS_FILL_COLOR_PROPERTY = QuantumMeasurementColors.tailsFillColorProperty;
+const TAILS_FILL_COLOR_PROPERTY = QuantumMeasurementColors.tailsFillProperty;
 const TAILS_STROKE_AND_LETTER_COLOR_PROPERTY = QuantumMeasurementColors.tailsColorProperty;
 
 export default class ClassicalCoinNode extends CoinNode {

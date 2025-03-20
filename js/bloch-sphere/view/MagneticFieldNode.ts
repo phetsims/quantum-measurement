@@ -12,6 +12,8 @@ import Property from '../../../../axon/js/Property.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
+import Color from '../../../../scenery/js/util/Color.js';
+import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { SpinMeasurementState } from '../model/SpinMeasurementState.js';
 import MagneticFieldArrowNode from './MagneticFieldArrowNode.js';
@@ -51,7 +53,9 @@ export default class MagneticFieldNode extends Node {
     measurementStateProperty.link( ( measurementState: SpinMeasurementState ) => {
       const lineDash = measurementState === SpinMeasurementState.TIMING_OBSERVATION ? [ 1, 0 ] : DASH_PATTERN_FOR_GHOST_FIELD;
       const opacity = measurementState === SpinMeasurementState.TIMING_OBSERVATION ? 1 : 0.75;
-      const fill = measurementState === SpinMeasurementState.TIMING_OBSERVATION ? 'yellow' : 'transparent';
+      const fill = measurementState === SpinMeasurementState.TIMING_OBSERVATION ?
+                   QuantumMeasurementColors.magneticFieldArrowFillProperty :
+                   Color.TRANSPARENT;
       arrowNodes.forEach( arrowNode => {
         arrowNode.lineDash = lineDash;
         arrowNode.opacity = opacity;

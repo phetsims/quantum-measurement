@@ -40,7 +40,7 @@ export default class QuantumCoinNode extends CoinNode {
     };
 
     const upFaceOptions: CoinFaceParameters = {
-      fill: QuantumMeasurementColors.upFillColorProperty,
+      fill: QuantumMeasurementColors.upFillProperty,
       stroke: QuantumMeasurementColors.upColorProperty,
       content: new ArrowNode( 0, arrowLength, 0, 0, combineOptions<ArrowNodeOptions>( arrowNodeCommonOptions, {
         fill: QuantumMeasurementColors.upColorProperty
@@ -49,7 +49,7 @@ export default class QuantumCoinNode extends CoinNode {
     };
 
     const downFaceOptions: CoinFaceParameters = {
-      fill: QuantumMeasurementColors.downFillColorProperty,
+      fill: QuantumMeasurementColors.downFillProperty,
       stroke: QuantumMeasurementColors.downColorProperty,
       content: new ArrowNode( 0, 0, 0, arrowLength, combineOptions<ArrowNodeOptions>( arrowNodeCommonOptions, {
         fill: QuantumMeasurementColors.downColorProperty

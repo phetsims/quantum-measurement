@@ -61,7 +61,7 @@ class StandalonePhotonNode extends Node {
       center: Vector2.ZERO
     } );
     const exteriorNode = new Circle( greenPhoton_png.width / 2, {
-      stroke: QuantumMeasurementColors.photonBaseColorProperty,
+      stroke: QuantumMeasurementColors.photonStrokeProperty,
       lineWidth: 4
     } );
     super( {
@@ -81,10 +81,10 @@ class StandaloneBeamSplitterNode extends Node {
 
   public constructor( center: Vector2 ) {
     const enclosure = new Rectangle( 0, 0, StandaloneBeamSplitterNode.LENGTH, StandaloneBeamSplitterNode.LENGTH, {
-      fill: QuantumMeasurementColors.splitterEnclosureNodeFillColorProperty
+      fill: QuantumMeasurementColors.splitterEnclosureNodeFillProperty
     } );
     const splitterLine = new Line( 0, StandaloneBeamSplitterNode.LENGTH, StandaloneBeamSplitterNode.LENGTH, 0, {
-      stroke: QuantumMeasurementColors.splitterLineNodeFillColorProperty,
+      stroke: QuantumMeasurementColors.splitterLineNodeFillProperty,
       lineWidth: 10,
       lineCap: 'butt'
     } );

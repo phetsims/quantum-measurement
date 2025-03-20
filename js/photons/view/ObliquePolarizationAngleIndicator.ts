@@ -129,8 +129,8 @@ export default class ObliquePolarizationAngleIndicator extends Node {
     const unitCircleFillProperty = new DerivedProperty(
       [
         polarizationAngleProperty,
-        QuantumMeasurementColors.polarizationArrowColorProperty,
-        QuantumMeasurementColors.angleIndicatorUnitCircleColorProperty
+        QuantumMeasurementColors.polarizationArrowFillProperty,
+        QuantumMeasurementColors.angleIndicatorUnitCircleFillProperty
       ],
       ( polarizationAngle, photonArrowColor, angleIndicatorUnitCircleColor ) => polarizationAngle === null ?
                                                                                photonArrowColor :
@@ -160,9 +160,9 @@ export default class ObliquePolarizationAngleIndicator extends Node {
       headWidth: 6,
       headHeight: 6,
       tailWidth: 2,
-      stroke: QuantumMeasurementColors.polarizationArrowStrokeColorProperty,
+      stroke: QuantumMeasurementColors.polarizationArrowStrokeProperty,
       lineWidth: 0.5,
-      fill: QuantumMeasurementColors.polarizationArrowColorProperty,
+      fill: QuantumMeasurementColors.polarizationArrowFillProperty,
       doubleHead: true
     };
     const polarizationVectorNode = new ArrowNode( 0, AXIS_LENGTH, 0, -AXIS_LENGTH, polarizationVectorOptions );

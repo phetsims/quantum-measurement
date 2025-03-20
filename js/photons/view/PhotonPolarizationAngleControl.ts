@@ -48,8 +48,8 @@ export default class PhotonPolarizationAngleControl extends Panel {
     );
 
     const options = optionize<PhotonPolarizationAngleControlOptions, SelfOptions, PanelOptions>()( {
-      fill: QuantumMeasurementColors.controlPanelFillColorProperty,
-      stroke: QuantumMeasurementColors.controlPanelStrokeColorProperty,
+      fill: QuantumMeasurementColors.controlPanelFillProperty,
+      stroke: QuantumMeasurementColors.controlPanelStrokeProperty,
       cornerRadius: 5,
       xMargin: 10
     }, providedOptions );

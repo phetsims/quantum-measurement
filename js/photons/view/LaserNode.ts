@@ -66,7 +66,7 @@ export default class LaserNode extends Node {
         trackStroke: Color.DARK_GRAY,
         trackFillEnabled: Color.BLACK,
         thumbSize: new Dimension2( LASER_BODY_SIZE.height * 0.25, LASER_BODY_SIZE.height * 0.5 ),
-        thumbFill: QuantumMeasurementColors.photonBaseColorProperty,
+        thumbFill: QuantumMeasurementColors.photonStrokeProperty,
         thumbFillHighlighted: 'rgb( 0, 200, 0)',
         centerX: -( NOZZLE_SIZE.width + LASER_BODY_SIZE.width / 2 ),
         tandem: providedOptions.tandem.createTandem( 'emissionRateSlider' ),

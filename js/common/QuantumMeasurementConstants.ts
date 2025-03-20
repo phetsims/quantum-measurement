@@ -42,13 +42,13 @@ const DEFAULT_CONTROL_SLIDER_OPTIONS: SliderOptions = {
 };
 
 const EXPECTED_PERCENTAGE_PATH_OPTIONS: PathOptions = {
-  stroke: QuantumMeasurementColors.expectedPercentageFillColorProperty,
+  stroke: QuantumMeasurementColors.expectedPercentageFillProperty,
   lineWidth: 3
 };
 
 const PANEL_OPTIONS = {
-  fill: QuantumMeasurementColors.controlPanelFillColorProperty,
-  stroke: QuantumMeasurementColors.controlPanelStrokeColorProperty,
+  fill: QuantumMeasurementColors.controlPanelFillProperty,
+  stroke: QuantumMeasurementColors.controlPanelStrokeProperty,
   yMargin: 10,
   xMargin: 10
 };

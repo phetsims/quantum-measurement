@@ -75,7 +75,7 @@ class PhotonSprites extends Sprites {
     );
 
     // Create the photon outline sprite based on the color in the color profile.
-    QuantumMeasurementColors.photonBaseColorProperty.link( color => {
+    QuantumMeasurementColors.photonStrokeProperty.link( color => {
 
       // Create the circle that will be used to render the outline of the photon.
       const photonOutlineCircle = new Circle( greenPhoton_png.width / 2, {

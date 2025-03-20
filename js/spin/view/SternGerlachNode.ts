@@ -79,8 +79,8 @@ export default class SternGerlachNode extends Node {
       curveDownShape.lineTo( -STERN_GERLACH_WIDTH / 2 + i * STERN_GERLACH_WIDTH, -curveFunction( i ) * STERN_GERLACH_HEIGHT / 4 );
     }
 
-    const curveUpPath = new Path( curveUpShape, { stroke: QuantumMeasurementColors.sternGerlachCurveColorProperty, lineWidth: 4 } );
-    const curveDownPath = new Path( curveDownShape, { stroke: QuantumMeasurementColors.sternGerlachCurveColorProperty, lineWidth: 4 } );
+    const curveUpPath = new Path( curveUpShape, { stroke: QuantumMeasurementColors.sternGerlachCurveStrokeProperty, lineWidth: 4 } );
+    const curveDownPath = new Path( curveDownShape, { stroke: QuantumMeasurementColors.sternGerlachCurveStrokeProperty, lineWidth: 4 } );
 
     const particleEntrance = createParticleHole( SternGerlach.ENTRANCE_LOCAL_POSITION );
     const topParticleExit = createParticleHole( SternGerlach.TOP_EXIT_LOCAL_POSITION );
@@ -126,7 +126,7 @@ export default class SternGerlachNode extends Node {
         tandem: orientationRadioButtonGroupTandem,
         phetioFeatured: true,
         radioButtonOptions: {
-          baseColor: QuantumMeasurementColors.controlPanelFillColorProperty,
+          baseColor: QuantumMeasurementColors.controlPanelFillProperty,
           phetioVisiblePropertyInstrumented: false
         },
         visibleProperty: new GatedVisibleProperty( sternGerlach.isDirectionControllableProperty, orientationRadioButtonGroupTandem )

@@ -33,8 +33,8 @@ export type SmallCoinNodeOptions = SelfOptions & WithRequired<NodeOptions, 'tand
 export type SmallCoinDisplayMode = ClassicalCoinStates | QuantumCoinStates | 'hidden';
 
 // constants
-const COIN_STROKE_COLOR_PROPERTY = QuantumMeasurementColors.coinStrokeColorProperty;
-const MASKED_FILL_COLOR_PROPERTY = QuantumMeasurementColors.maskedFillColorProperty;
+const COIN_STROKE_COLOR_PROPERTY = QuantumMeasurementColors.coinStrokeProperty;
+const MASKED_FILL_COLOR_PROPERTY = QuantumMeasurementColors.maskedFillProperty;
 const HEADS_FILL_COLOR_PROPERTY = QuantumMeasurementColors.headsColorProperty;
 const TAILS_FILL_COLOR_PROPERTY = QuantumMeasurementColors.tailsColorProperty;
 const UP_COLOR_PROPERTY = QuantumMeasurementColors.upColorProperty;

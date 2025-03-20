@@ -48,8 +48,8 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
     // and since the Screen Background color is set outside the Screen View, we pass it here and modify it.
     Multilink.multilink( [
       model.experimentTypeProperty,
-      QuantumMeasurementColors.classicalBackgroundColorProperty,
-      QuantumMeasurementColors.quantumBackgroundColorProperty
+      QuantumMeasurementColors.classicalSceneBackgroundColorProperty,
+      QuantumMeasurementColors.quantumSceneBackgroundColorProperty
     ], ( experimentType, classicalBackgroundColor, quantumBackgroundColor ) => {
       if ( experimentType === SystemType.CLASSICAL ) {
         backgroundColorProperty.value = classicalBackgroundColor;

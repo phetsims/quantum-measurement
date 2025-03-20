@@ -50,8 +50,8 @@ export default class MeasurementTimerControl extends Node {
     const thumbOffset = 30;
     const thumbDimensions = new Dimension2( 30, 30 );
     const thumbPathOptions = {
-      fill: QuantumMeasurementColors.measurementTimerFillColorProperty,
-      fillHighlighted: QuantumMeasurementColors.measurementTimerFillColorProperty.value.colorUtilsBrighter( 0.5 ),
+      fill: QuantumMeasurementColors.measurementTimerFillProperty,
+      fillHighlighted: QuantumMeasurementColors.measurementTimerFillProperty.value.colorUtilsBrighter( 0.5 ),
       stroke: 'black',
       lineWidth: 2
     };
@@ -70,7 +70,7 @@ export default class MeasurementTimerControl extends Node {
         new MeasurementSymbolNode( {
           center: new Vector2( 0, thumbOffset ),
           scale: 0.8,
-          stroke: QuantumMeasurementColors.measurementTimerIconStrokeColorProperty
+          stroke: QuantumMeasurementColors.measurementTimerIconStrokeProperty
         } )
       ],
       touchArea: thumbNodeRect.bounds.dilated( 10 ),
@@ -129,7 +129,7 @@ export default class MeasurementTimerControl extends Node {
 
     const timeIndicatorScale = 15;
     const timeIndicator = new ArrowNode( 0, timeIndicatorScale, 0, 0, {
-      fill: QuantumMeasurementColors.measurementTimerFillColorProperty,
+      fill: QuantumMeasurementColors.measurementTimerFillProperty,
       stroke: null,
       headHeight: timeIndicatorScale,
       headWidth: timeIndicatorScale,

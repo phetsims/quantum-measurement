@@ -83,8 +83,8 @@ export default class MagneticFieldControl extends Panel {
       magneticFieldStrengthProperty.range,
       {
         thumbSize: new Dimension2( 26, 12 ),
-        thumbFill: QuantumMeasurementColors.magneticFieldThumbFillColorProperty,
-        thumbFillHighlighted: QuantumMeasurementColors.magneticFieldColorProperty,
+        thumbFill: QuantumMeasurementColors.magneticFieldThumbFillProperty,
+        thumbFillHighlighted: QuantumMeasurementColors.magneticFieldArrowFillProperty,
         thumbCenterLineStroke: Color.BLACK,
         trackSize: SLIDER_TRACK_SIZE,
         trackFillEnabled: Color.BLACK,

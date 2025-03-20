@@ -16,8 +16,8 @@ export default class MagneticFieldArrowNode extends ArrowNode {
 
   public constructor( magneticFieldStrength: NumberProperty, maximumLength: number, providedOptions?: ArrowNodeOptions ) {
     super( 0, 0, 0, 0, combineOptions<ArrowNodeOptions>( {
-      stroke: 'black',
-      fill: QuantumMeasurementColors.magneticFieldColorProperty,
+      stroke: QuantumMeasurementColors.magneticFieldArrowStrokeProperty,
+      fill: QuantumMeasurementColors.magneticFieldArrowFillProperty,
 
       // empirically determined values that define the shape of the arrow
       headHeight: 0.3 * maximumLength,

@@ -147,7 +147,7 @@ export default class NormalizedOutcomeVectorGraph extends Node {
     // Create the little line that will depict the expectation value.
     const expectationValueLine = new Line( -EXPECTATION_VALUE_LINE_LENGTH / 2, 0, EXPECTATION_VALUE_LINE_LENGTH / 2, 0, {
       centerY: verticalAxis.centerY,
-      stroke: QuantumMeasurementColors.expectedPercentageFillColorProperty,
+      stroke: QuantumMeasurementColors.expectedPercentageFillProperty,
       lineWidth: TICK_MARK_LINE_WIDTH * 2,
       visibleProperty: expectationValueLineVisibleProperty
     } );

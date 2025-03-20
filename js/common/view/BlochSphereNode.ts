@@ -44,7 +44,7 @@ type SelfOptions = {
 export type BlochSphereNodeOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
 
 // Constants
-const AXES_STROKE_COLOR_PROPERTY = QuantumMeasurementColors.blochSphereAngleIndicatorDashedLineColorProperty;
+const AXES_STROKE_COLOR_PROPERTY = QuantumMeasurementColors.blochSphereAngleIndicatorDashedLineStrokeProperty;
 const AXES_LINE_WIDTH = 0.4;
 const AXES_LINE_DASH = [ 2, 2 ];
 const LABELS_OFFSET = 5;
