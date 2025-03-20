@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2025, University of Colorado Boulder
 
 /**
  * SingleCoinMeasurementArea is the test box and button set where the single coin will appear in the measurement area.
