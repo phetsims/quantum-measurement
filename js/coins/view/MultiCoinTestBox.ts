@@ -31,7 +31,7 @@ const BOX_SIZE = new Dimension2( 200, 200 );
 const CONTENTS_HIDDEN_FILL = new LinearGradient( 0, 0, BOX_SIZE.width, 0 )
   .addColorStop( 0, QuantumMeasurementColors.multiCoinFirstGradientColorProperty )
   .addColorStop( 1, QuantumMeasurementColors.multiCoinSecondGradientColorProperty );
-const INTERIOR_COLOR_PROPERTY = QuantumMeasurementColors.testBoxInteriorColorProperty;
+const INTERIOR_COLOR_PROPERTY = QuantumMeasurementColors.testBoxBackgroundFillProperty;
 
 class MultiCoinTestBox extends Node {
 

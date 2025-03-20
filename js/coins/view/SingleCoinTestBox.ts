@@ -25,7 +25,7 @@ const BOX_SIZE = new Dimension2( 165, 145 );
 const CONTENTS_HIDDEN_FILL = new LinearGradient( 0, 0, BOX_SIZE.width, 0 )
   .addColorStop( 0, QuantumMeasurementColors.testBoxLinearGradient1ColorProperty.value.withAlpha( 0.8 ) )
   .addColorStop( 0.9, QuantumMeasurementColors.testBoxLinearGradient2ColorProperty.value.withAlpha( 0.8 ) );
-const INTERIOR_COLOR_PROPERTY = QuantumMeasurementColors.testBoxInteriorColorProperty;
+const INTERIOR_COLOR_PROPERTY = QuantumMeasurementColors.testBoxBackgroundFillProperty;
 
 export default class SingleCoinTestBox extends Node {
 
