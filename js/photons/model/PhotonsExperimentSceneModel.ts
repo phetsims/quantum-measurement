@@ -189,7 +189,7 @@ class PhotonsExperimentSceneModel {
       [ verticalMeasurementProperty, horizontalMeasurementProperty ],
       ( verticalValue, horizontalValue ) => verticalValue + horizontalValue === 0 ?
                                             0 :
-                                            ( horizontalValue - verticalValue ) / ( horizontalValue + verticalValue ),
+                                            ( verticalValue - horizontalValue ) / ( verticalValue + horizontalValue ),
       {
         tandem: providedOptions.tandem.createTandem( 'normalizedOutcomeValueProperty' ),
         phetioValueType: NumberIO

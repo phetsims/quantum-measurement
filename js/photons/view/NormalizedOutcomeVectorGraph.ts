@@ -98,15 +98,9 @@ export default class NormalizedOutcomeVectorGraph extends Node {
       visibleProperty: showVectorRepresentationProperty
     } );
 
-    // Create a numeric display of the value of the normalized outcome value.
-    const invertedNormalizedOutcomeValueProperty = new DerivedProperty(
-      [ normalizedOutcomeValueProperty ],
-      value => -value
-    );
-
     const numericValueVisibleProperty = DerivedProperty.and( [ showVectorRepresentationProperty, displayNumericValueProperty ] );
     const normalizedOutcomeValueDisplay = new NumberDisplay(
-      invertedNormalizedOutcomeValueProperty,
+      normalizedOutcomeValueProperty,
       new Range( -1, 1 ),
       {
         decimalPlaces: 3,
@@ -130,7 +124,7 @@ export default class NormalizedOutcomeVectorGraph extends Node {
 
     // Monitor the normalized outcome value and update the position of the arrow and the numeric display as it changes.
     normalizedOutcomeValueProperty.link( normalizedOutcomeValue => {
-      const arrowTipYPosition = normalizedOutcomeValue * HEIGHT / 2;
+      const arrowTipYPosition = -normalizedOutcomeValue * HEIGHT / 2;
       normalizedOutcomeVector.setTip( 0, arrowTipYPosition );
       lineToValueDisplay.centerY = arrowTipYPosition;
       normalizedOutcomeValueDisplay.right = lineToValueDisplay.left;
