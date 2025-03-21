@@ -220,7 +220,7 @@ class CoinExperimentMeasurementArea extends VBox {
           !preparingExperiment && singleCoinExperimentState !== 'revealed'
       )
     } );
-    singleCoinMeasurementArea.testBox.clippedTestBox.addChild( coinMask );
+    singleCoinMeasurementArea.addCoinMaskNodeToTestBox( coinMask );
     coinMask.moveToBack();
 
     // Create the view manager that will create and animate the view of the single coin as it moves from the preparation

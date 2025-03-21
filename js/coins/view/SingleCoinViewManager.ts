@@ -16,6 +16,7 @@ import { TEmitterListener } from '../../../../axon/js/TEmitter.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
 import Circle from '../../../../scenery/js/nodes/Circle.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
@@ -72,11 +73,9 @@ class SingleCoinViewManager extends CoinViewManager {
       !singleCoinAnimationFromPrepAreaToEdgeOfTestBox && !singleCoinAnimationFromEdgeOfTestBoxToInside,
         'this function should not be invoked while animations are in progress'
       );
-      if ( singleCoinNode && singleCoinMeasurementArea.testBox.testBoxInterior.hasChild( singleCoinNode ) ) {
-        singleCoinMeasurementArea.testBox.testBoxInterior.removeChild( singleCoinNode );
-        singleCoinNode.dispose();
-        singleCoinNode = null;
-      }
+
+      singleCoinMeasurementArea.clearCoinsFromTestBox();
+      singleCoinNode = null;
       coinMask.right = singleCoinMeasurementArea.left;
       coinMask.y = singleCoinMeasurementArea.centerY;
       singleCoinInTestBoxProperty.value = false;
@@ -98,10 +97,9 @@ class SingleCoinViewManager extends CoinViewManager {
         if ( coinsExperimentSceneView.hasChild( singleCoinNode ) ) {
           coinsExperimentSceneView.removeChild( singleCoinNode );
         }
-        else if ( singleCoinMeasurementArea.testBox.testBoxInterior.hasChild( singleCoinNode ) ) {
-          singleCoinMeasurementArea.testBox.testBoxInterior.removeChild( singleCoinNode );
+        else {
+          singleCoinMeasurementArea.clearCoinsFromTestBox();
         }
-        singleCoinNode.dispose();
         singleCoinNode = null;
       }
     };
@@ -147,7 +145,7 @@ class SingleCoinViewManager extends CoinViewManager {
       // process consists of two animations, one to move the coin to the left edge of the test box while the test box is
       // potentially also moving, then a second one to move the coin into the box. The durations must be set up such
       // that the test box is in place before the 2nd animation begins or the coin won't end up in the right place.
-      const testBoxXOffset = forReprepare ? singleCoinNode.width : 140; // empirically determined, adjust as needed
+      const testBoxXOffset = forReprepare ? 80 : 140; // empirically determined, adjust as needed
       const leftOfTestBox = singleCoinMeasurementArea.leftCenter.minusXY( testBoxXOffset, 0 );
       const leftOfTestBoxGlobal = singleCoinMeasurementArea.parentToGlobalPoint( leftOfTestBox );
       const leftOfTestBoxInParentCoords = measurementArea.globalToParentPoint( leftOfTestBoxGlobal );
@@ -171,12 +169,18 @@ class SingleCoinViewManager extends CoinViewManager {
         // back on after this phase of the animation is complete.
         singleCoinMeasurementArea.resize = false;
 
+        // The test box is designed such that its center is at (0, 0) in its own coordinate frame.  This is where the
+        // coin will end up at the end of the 2nd animation.
+        const testBoxCenter = Vector2.ZERO;
+
         // Remove the coin from the parent scene view and add it as a child of the test box.
         const coinNodePositionGlobal = assuredSingleCoinNode.parentToGlobalPoint( assuredSingleCoinNode.center );
         coinsExperimentSceneView.removeChild( assuredSingleCoinNode );
-        const testBoxCenter = singleCoinMeasurementArea.testBox.testBoxInterior.center;
-        singleCoinMeasurementArea.testBox.testBoxInterior.addChild( assuredSingleCoinNode );
-        assuredSingleCoinNode.center = singleCoinMeasurementArea.testBox.testBoxInterior.globalToParentPoint( coinNodePositionGlobal );
+        singleCoinMeasurementArea.addCoinNodeToTestBox( assuredSingleCoinNode );
+
+        // Set the position of the coin such that it will be in the same place on the screen, but now a child of the
+        // test box.
+        assuredSingleCoinNode.center = assuredSingleCoinNode.globalToParentPoint( coinNodePositionGlobal );
 
         // Start the 2nd portion of the animation, which moves the coin and the mask that covers it into the test box.
         singleCoinAnimationFromEdgeOfTestBoxToInside = new Animation( {
@@ -271,12 +275,11 @@ class SingleCoinViewManager extends CoinViewManager {
           // The coin is no longer in the flipping state, so set it to be fully round and in the center of the test box.
           // The transform is being reset here because floating point errors were piling up during the animation, and
           // this just worked better.
-          const centerOfTestBox = singleCoinMeasurementArea.testBox.testBoxInterior.center;
           coinMask.resetTransform();
-          coinMask.center = centerOfTestBox;
+          coinMask.center = Vector2.ZERO;
           if ( singleCoinNode ) {
             singleCoinNode.resetTransform();
-            singleCoinNode.center = centerOfTestBox;
+            singleCoinNode.center = Vector2.ZERO;
           }
 
           // Remove the step listener that was performing the flip animation.

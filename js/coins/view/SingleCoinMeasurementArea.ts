@@ -1,8 +1,7 @@
 // Copyright 2025, University of Colorado Boulder
 
 /**
- * SingleCoinMeasurementArea is the test box and button set where the single coin will appear in the measurement area.
- *
+ * SingleCoinMeasurementArea combines the test box and button set into a single Node.
  *
  * @author John Blanco, PhET Interactive Simulations
  */
@@ -10,15 +9,16 @@
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
 import CoinExperimentButtonSet from './CoinExperimentButtonSet.js';
 import SingleCoinTestBox from './SingleCoinTestBox.js';
 
-export default class SingleCoinMeasurementArea extends HBox {
+class SingleCoinMeasurementArea extends HBox {
 
-  public readonly testBox: SingleCoinTestBox;
+  private readonly testBox: SingleCoinTestBox;
 
   public constructor( sceneModel: CoinsExperimentSceneModel,
                       singleCoinInTestBoxProperty: TProperty<boolean>,
@@ -57,6 +57,20 @@ export default class SingleCoinMeasurementArea extends HBox {
     // Make some properties available externally.
     this.testBox = testBox;
   }
+
+  public clearCoinsFromTestBox(): void {
+    this.testBox.clearCoins();
+  }
+
+  public addCoinNodeToTestBox( coinNode: Node ): void {
+    this.testBox.addCoinNode( coinNode );
+  }
+
+  public addCoinMaskNodeToTestBox( coinNodeMask: Node ): void {
+    this.testBox.addCoinMaskNode( coinNodeMask );
+  }
 }
 
 quantumMeasurement.register( 'SingleCoinMeasurementArea', SingleCoinMeasurementArea );
+
+export default SingleCoinMeasurementArea;
