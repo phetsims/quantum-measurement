@@ -51,7 +51,8 @@ class SingleCoinMeasurementArea extends HBox {
     super( {
       children: [ testBox, coinExperimentButtonSet ],
       spacing: 30,
-      tandem: tandem
+      tandem: tandem,
+      phetioVisiblePropertyInstrumented: false
     } );
 
     // Make some properties available externally.
