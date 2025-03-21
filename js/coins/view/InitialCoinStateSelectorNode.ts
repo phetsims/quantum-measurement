@@ -61,7 +61,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
       maxWidth: WIDTH * 0.95
     } );
 
-    const radioButtonGroupTandem = tandem.createTandem( 'radioButtonGroup' );
+    const initialOrientationControlTandem = tandem.createTandem( 'initialOrientationControl' );
 
     // A11y Names for each coin state
     const coinStateToA11yNameMap = new Map<CoinStates, TReadOnlyProperty<string>>(
@@ -116,7 +116,7 @@ export default class InitialCoinStateSelectorNode extends VBox {
       initialCoinStateItems,
       {
         spacing: 22,
-        tandem: radioButtonGroupTandem.createTandem( 'initialOrientationRadioButtonGroup' ),
+        tandem: initialOrientationControlTandem.createTandem( 'initialOrientationRadioButtonGroup' ),
         orientation: 'horizontal',
         phetioVisiblePropertyInstrumented: false,
         labelTagName: 'h4',
@@ -137,8 +137,8 @@ export default class InitialCoinStateSelectorNode extends VBox {
 
     const selectorPanel = new Panel( selectorPanelContent, combineOptions<PanelOptions>( {}, QuantumMeasurementConstants.PANEL_OPTIONS, {
       minWidth: WIDTH,
-      visibleProperty: new GatedVisibleProperty( preparingExperimentProperty, radioButtonGroupTandem ),
-      tandem: radioButtonGroupTandem,
+      visibleProperty: new GatedVisibleProperty( preparingExperimentProperty, initialOrientationControlTandem ),
+      tandem: initialOrientationControlTandem,
       fill: 'transparent'
     } ) );
 
@@ -171,7 +171,9 @@ export default class InitialCoinStateSelectorNode extends VBox {
 
     super( {
       children: [ selectorPanel, orientationIndicatorCoinNode ],
-      spacing: 25
+      spacing: 25,
+      tandem: tandem,
+      phetioVisiblePropertyInstrumented: false
     } );
 
     this.orientationIndicatorCoinNode = orientationIndicatorCoinNode;

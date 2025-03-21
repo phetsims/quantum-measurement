@@ -48,7 +48,7 @@ class PhotonTestingArea extends Node {
       tandem: providedOptions.tandem.createTandem( 'laserNode' )
     } );
 
-    const photonBehaviorModeTandem = providedOptions.tandem.createTandem( 'photonBehaviorMode' );
+    const photonBehaviorControlTandem = providedOptions.tandem.createTandem( 'photonBehaviorControl' );
     const photonBehaviorModeRadioButtonGroup = new AquaRadioButtonGroup<SystemType>(
       model.photonBehaviorModeProperty,
       SystemType.enumeration.values.map( behaviorMode => {
@@ -65,7 +65,7 @@ class PhotonTestingArea extends Node {
       ),
       {
         spacing: 10,
-        tandem: photonBehaviorModeTandem.createTandem( 'photonBehaviorModeRadioButtonGroup' ),
+        tandem: photonBehaviorControlTandem.createTandem( 'photonBehaviorModeRadioButtonGroup' ),
         phetioVisiblePropertyInstrumented: false
       }
     );
@@ -75,7 +75,7 @@ class PhotonTestingArea extends Node {
       left: laserNode.left,
       bottom: laserNode.top - 15,
       phetioFeatured: true,
-      tandem: photonBehaviorModeTandem,
+      tandem: photonBehaviorControlTandem,
       accessibleName: QuantumMeasurementStrings.a11y.photonsScreen.photonBehaviorModeStringProperty,
       tagName: 'div',
       children: [

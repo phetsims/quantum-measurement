@@ -144,13 +144,13 @@ class CoinExperimentMeasurementArea extends VBox {
       };
     };
 
-    const numberOfCoinsRadioButtonGroupTandem = tandem.createTandem( 'numberOfCoinsRadioButtonGroup' );
+    const numberOfCoinsControlTandem = tandem.createTandem( 'numberOfCoinsControl' );
     const numberOfCoinsRadioButtonGroup = new VerticalAquaRadioButtonGroup(
       sceneModel.coinSet.numberOfActiveCoinsProperty,
       MULTI_COIN_EXPERIMENT_QUANTITIES.map( quantity => createRadioButtonGroupItem( quantity ) ),
       {
         spacing: 10,
-        tandem: numberOfCoinsRadioButtonGroupTandem.createTandem( 'radioButtonGroup' ),
+        tandem: numberOfCoinsControlTandem.createTandem( 'radioButtonGroup' ),
         phetioVisiblePropertyInstrumented: false,
         accessibleName: QuantumMeasurementStrings.a11y.coinsScreen.identicalCoinsStringProperty,
         accessibleHelpText: QuantumMeasurementStrings.a11y.coinsScreen.identicalCoinsHelpTextStringProperty,
@@ -161,8 +161,8 @@ class CoinExperimentMeasurementArea extends VBox {
     const numberOfCoinsSelector = new VBox( {
       children: [ numberOfCoinsSelectorTitle, numberOfCoinsRadioButtonGroup ],
       spacing: 12,
-      visibleProperty: new GatedVisibleProperty( sceneModel.preparingExperimentProperty, numberOfCoinsRadioButtonGroupTandem ),
-      tandem: numberOfCoinsRadioButtonGroupTandem
+      visibleProperty: new GatedVisibleProperty( sceneModel.preparingExperimentProperty, numberOfCoinsControlTandem ),
+      tandem: numberOfCoinsControlTandem
     } );
 
     const multipleCoinTestBoxContainer = new Node( {

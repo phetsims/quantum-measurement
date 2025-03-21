@@ -44,7 +44,7 @@ export default class MeasurementTimerControl extends Node {
                       providedOptions: MeasurementTimerControlOptions ) {
 
     // Create the tandem for the slider, since we'll need it for other things before creating the slider itself.
-    const sliderTandem = providedOptions.tandem.createTandem( 'timeToMeasurementSlider' );
+    const sliderTandem = providedOptions.tandem.createTandem( 'slider' );
 
     // Create the thumb node for the slider that will control the time at which the system is measured.
     const thumbOffset = 30;
