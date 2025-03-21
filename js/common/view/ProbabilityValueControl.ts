@@ -27,7 +27,7 @@ const RANGE = new Range( 0, 1 );
 type SelfOptions = EmptySelfOptions;
 type ProbabilityValueControlOptions = SelfOptions & NumberControlOptions;
 
-export default class ProbabilityValueControl extends VBox {
+class ProbabilityValueControl extends NumberControl {
 
   public constructor( titleNode: Node,
                       probabilityProperty: NumberProperty,
@@ -36,16 +36,21 @@ export default class ProbabilityValueControl extends VBox {
 
     const sliderStep = 0.05;
 
-    const slider = new NumberControl( '', probabilityProperty, RANGE, optionize<ProbabilityValueControlOptions, SelfOptions, NumberControlOptions>()( {
+    const options = optionize<ProbabilityValueControlOptions, SelfOptions, NumberControlOptions>()( {
 
       // Creating our own layout function because NumberControl doesn't have a native support for
-      //  < ------|------ >
-      layoutFunction: ( titleNode, numberDisplay, slider, leftArrowButton, rightArrowButton ) => {
+      //  < ------|------ >, and we want to use a Node for the title, which isn't currently supported.
+      layoutFunction: ( existingTitleNode, numberDisplay, slider, leftArrowButton, rightArrowButton ) => {
         assert && assert( leftArrowButton && rightArrowButton );
-        return new HBox( {
+        const buttonsAndSlider = new HBox( {
           spacing: 8,
           resize: false, // prevent sliders from causing a resize when thumb is at min or max
           children: [ leftArrowButton!, slider, rightArrowButton! ]
+        } );
+        return new VBox( {
+          children: [ titleNode, buttonsAndSlider ],
+          spacing: QuantumMeasurementConstants.TITLE_AND_SLIDER_SPACING,
+          align: 'center'
         } );
       },
       numberDisplayOptions: { // Although we don't use a numberDisplay, these options are for a11y
@@ -65,14 +70,12 @@ export default class ProbabilityValueControl extends VBox {
       }, QuantumMeasurementConstants.DEFAULT_CONTROL_SLIDER_OPTIONS as NumberControlSliderOptions ),
       delta: sliderStep / 5,
       tandem: tandem
-    }, providedOptions ) );
+    }, providedOptions );
 
-    super( {
-      spacing: QuantumMeasurementConstants.TITLE_AND_SLIDER_SPACING,
-      align: 'center',
-      children: [ titleNode, slider ]
-    } );
+    super( '', probabilityProperty, RANGE, options );
   }
 }
 
 quantumMeasurement.register( 'ProbabilityValueControl', ProbabilityValueControl );
+
+export default ProbabilityValueControl;
