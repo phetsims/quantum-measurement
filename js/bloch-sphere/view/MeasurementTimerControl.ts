@@ -101,6 +101,7 @@ export default class MeasurementTimerControl extends Node {
     const maxMeasurementTime = timeToMeasurementProperty.rangeProperty.value.max;
     const timeToMeasurementSlider = new Slider( timeToMeasurementProperty, timeToMeasurementProperty.range, {
       tandem: sliderTandem,
+      phetioVisiblePropertyInstrumented: false, // The parent node should be hidden if this is not desired
       thumbNode: thumbNode,
       thumbYOffset: thumbOffset - 8,
       trackSize: SLIDER_TRACK_SIZE,
