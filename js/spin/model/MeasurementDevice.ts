@@ -44,6 +44,7 @@ export default class MeasurementDevice {
 
     this.spinStateProperty = new Vector2Property( new Vector2( 0, 1 ), {
       tandem: providedOptions.tandem.createTandem( 'spinStateProperty' ),
+      phetioDocumentation: 'Indicates the axis and orientation of the spin state for the particle that last crossed the measurement line.  The y-coordinate corresponds to the z-axis',
       phetioReadOnly: true
     } );
 
