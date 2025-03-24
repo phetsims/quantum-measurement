@@ -25,6 +25,7 @@ import AquaRadioButtonGroup, { AquaRadioButtonGroupItem } from '../../../../sun/
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import Checkbox from '../../../../sun/js/Checkbox.js';
 import Panel from '../../../../sun/js/Panel.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
 import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHistogram.js';
@@ -65,8 +66,9 @@ export default class BlochSphereMeasurementArea extends Node {
     } );
 
     const equationPanelTandem = providedOptions.tandem.createTandem( 'equationPanel' );
+    const equationBasisRadioButtonControlTandem = equationPanelTandem.createTandem( 'equationBasisRadioButtonControl' );
 
-    const equationBasisBox = new HBox( {
+    const equationBasisRadioButtonControl = new HBox( {
       spacing: 5,
       children: [
         new Text( QuantumMeasurementStrings.basisColonStringProperty, { font: QuantumMeasurementConstants.CONTROL_FONT, maxWidth: 100 } ),
@@ -79,30 +81,32 @@ export default class BlochSphereMeasurementArea extends Node {
             touchAreaXDilation: 4,
             touchAreaYDilation: 6
           },
-          tandem: equationPanelTandem.createTandem( 'equationBasisRadioButtonGroup' )
+          tandem: equationBasisRadioButtonControlTandem.createTandem( 'radioButtonGroup' ),
+          phetioVisiblePropertyInstrumented: false // visibility controlled by parent node
         } )
-      ]
+      ],
+      tandem: equationBasisRadioButtonControlTandem
     } );
 
     const equationNode = new BlochSphereNumericalEquationNode( model.singleMeasurementBlochSphere, {
-      tandem: equationPanelTandem.createTandem( 'equationNode' ),
+      tandem: Tandem.OPT_OUT,
       basisProperty: model.equationBasisProperty
     } );
 
-    const equationNodePanel = new Panel( new VBox( {
+    const equationPanel = new Panel( new VBox( {
       spacing: 5,
       children: [
         equationNode,
-        equationBasisBox
+        equationBasisRadioButtonControl
       ],
       tandem: equationPanelTandem,
-      visibleProperty: model.isSingleMeasurementModeProperty
+      visibleProperty: new GatedVisibleProperty( model.isSingleMeasurementModeProperty, equationPanelTandem )
     } ), QuantumMeasurementConstants.PANEL_OPTIONS );
 
     // Keep the equation node panel centered based on its initial position.
-    const equationNodePanelInitialCenterX = equationNodePanel.centerX;
-    equationNodePanel.localBoundsProperty.link( () => {
-      equationNodePanel.centerX = equationNodePanelInitialCenterX;
+    const equationNodePanelInitialCenterX = equationPanel.centerX;
+    equationPanel.localBoundsProperty.link( () => {
+      equationPanel.centerX = equationNodePanelInitialCenterX;
     } );
 
     const singleMeasurementBlochSphereNode = new BlochSphereNode( model.singleMeasurementBlochSphere, {
@@ -110,8 +114,8 @@ export default class BlochSphereMeasurementArea extends Node {
       drawTitle: false,
       drawKets: false,
       drawAngleIndicators: true,
-      centerX: equationNodePanel.centerX,
-      top: equationNodePanel.bottom + 35,
+      centerX: equationPanel.centerX,
+      top: equationPanel.bottom + 35,
       visibleProperty: model.isSingleMeasurementModeProperty
     } );
 
@@ -144,7 +148,7 @@ export default class BlochSphereMeasurementArea extends Node {
 
     const multipleMeasurementBlochSpheresNode = new Node( {
       children: multipleMeasurementBlochSpheresNodes,
-      centerX: equationNodePanel.centerX,
+      centerX: equationPanel.centerX,
       top: 70, // empirically determined
       visibleProperty: DerivedProperty.not( model.isSingleMeasurementModeProperty )
     } );
@@ -428,7 +432,7 @@ export default class BlochSphereMeasurementArea extends Node {
 
     const options = optionize<BlochSphereMeasurementAreaOptions, SelfOptions, NodeOptions>()( {
       children: [
-        equationNodePanel,
+        equationPanel,
         singleMeasurementBlochSphereNode,
         multipleMeasurementBlochSpheresNode,
         measurementControls,
@@ -444,7 +448,7 @@ export default class BlochSphereMeasurementArea extends Node {
       experimentControlButton,
       magneticFieldCheckbox,
       magneticFieldAndStrengthControl,
-      equationNodePanel,
+      equationPanel,
       histogramNode
     ];
   }

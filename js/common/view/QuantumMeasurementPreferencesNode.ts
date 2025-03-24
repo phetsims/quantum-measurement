@@ -59,7 +59,10 @@ class ClassicalCoinsStartVisible extends PreferencesControl {
         PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS
       ),
       tandem: tandem,
-      phetioFeatured: true
+      phetioFeatured: true,
+      visiblePropertyOptions: {
+        phetioFeatured: true
+      }
     } );
 
     this.addLinkedElement( QuantumMeasurementPreferences.classicalCoinsStartVisibleProperty );
@@ -87,7 +90,10 @@ class ShowGlobalPhase extends PreferencesControl {
         PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS
       ),
       tandem: tandem,
-      phetioFeatured: true
+      phetioFeatured: true,
+      visiblePropertyOptions: {
+        phetioFeatured: true
+      }
     } );
 
     this.addLinkedElement( QuantumMeasurementPreferences.showGlobalPhaseProperty );
