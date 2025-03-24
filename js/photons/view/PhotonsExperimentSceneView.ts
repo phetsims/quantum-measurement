@@ -150,8 +150,8 @@ class PhotonsExperimentSceneView extends Node {
                                            new StringProperty( '1.0' ) :
                                            new StringProperty( '' );
 
-    // Create the histogram that shows the detection counts for the vertical and horizontal detectors.
-    const histogram = new QuantumMeasurementHistogram(
+    // Create the histogramNode that shows the detection counts for the vertical and horizontal detectors.
+    const histogramNode = new QuantumMeasurementHistogram(
       verticalValueProperty,
       horizontalValueProperty,
       [
@@ -181,14 +181,14 @@ class PhotonsExperimentSceneView extends Node {
         rightFillColorProperty: QuantumMeasurementColors.horizontalPolarizationColorProperty,
         topTickMarkTextProperty: histogramTickMarkLabelProperty,
         barPositionProportion: 0.75,
-        tandem: providedOptions.tandem.createTandem( 'histogram' )
+        tandem: providedOptions.tandem.createTandem( 'histogramNode' )
       }
     );
 
     // Put the two dynamic data display nodes together in a horizontal box.  The center of this box will be aligned
     // with the center of the emitted photon beam.
     const dynamicDataDisplayBox = new HBox( {
-      children: [ normalizedOutcomeVectorGraph, histogram ],
+      children: [ normalizedOutcomeVectorGraph, histogramNode ],
       spacing: 20,
       align: 'center',
       resize: false,

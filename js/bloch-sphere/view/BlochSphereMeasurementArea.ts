@@ -158,21 +158,21 @@ export default class BlochSphereMeasurementArea extends Node {
       measurementAxis => `|${DOWN}<sub>${measurementAxis.label}</sub> ${KET}`
     );
 
-    const measurementResultHistogramTandem = providedOptions.tandem.createTandem( 'measurementResultHistogram' );
-    const measurementResultHistogram = new QuantumMeasurementHistogram(
+    const histogramNodeTandem = providedOptions.tandem.createTandem( 'histogramNode' );
+    const histogramNode = new QuantumMeasurementHistogram(
       model.upMeasurementCountProperty,
       model.downMeasurementCountProperty,
       [
         new RichText( spinUpLabelStringProperty ),
         new RichText( spinDownLabelStringProperty ) ],
       {
-        tandem: measurementResultHistogramTandem
+        tandem: histogramNodeTandem
       }
     );
 
     const resetCountsButton = new EraserButton( {
       listener: () => model.resetCounts(),
-      tandem: measurementResultHistogramTandem.createTandem( 'resetCountsButton' )
+      tandem: histogramNodeTandem.createTandem( 'resetCountsButton' )
     } );
 
     const measurementControlsTandem = providedOptions.tandem.createTandem( 'measurementControls' );
@@ -358,7 +358,7 @@ export default class BlochSphereMeasurementArea extends Node {
       children: [
         new VBox( {
           children: [
-            measurementResultHistogram,
+            histogramNode,
             resetCountsButton
           ]
         } ),
@@ -445,7 +445,7 @@ export default class BlochSphereMeasurementArea extends Node {
       magneticFieldCheckbox,
       magneticFieldAndStrengthControl,
       equationNodePanel,
-      measurementResultHistogram
+      histogramNode
     ];
   }
 }

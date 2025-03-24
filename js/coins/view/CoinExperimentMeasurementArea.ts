@@ -101,13 +101,13 @@ class CoinExperimentMeasurementArea extends VBox {
 
     // Add the area where the multiple coins will be hidden and revealed.
     const multipleCoinTestBox = new MultiCoinTestBox( sceneModel.coinSet );
-    const multiCoinExperimentHistogramTandem = tandem.createTandem( 'multiCoinExperimentHistogram' );
-    const multiCoinExperimentHistogram = new CoinMeasurementHistogram( sceneModel.coinSet, sceneModel.systemType, {
+    const histogramNodeTandem = tandem.createTandem( 'histogramNode' );
+    const histogramNode = new CoinMeasurementHistogram( sceneModel.coinSet, sceneModel.systemType, {
       visibleProperty: new GatedVisibleProperty(
         DerivedProperty.not( sceneModel.preparingExperimentProperty ),
-        multiCoinExperimentHistogramTandem
+        histogramNodeTandem
       ),
-      tandem: multiCoinExperimentHistogramTandem,
+      tandem: histogramNodeTandem,
       leftFillColorProperty: sceneModel.systemType === SystemType.CLASSICAL ?
                              QuantumMeasurementColors.headsColorProperty :
                              QuantumMeasurementColors.upColorProperty,
@@ -177,7 +177,7 @@ class CoinExperimentMeasurementArea extends VBox {
       children: [
         multipleCoinTestBoxContainer,
         numberOfCoinsSelector,
-        multiCoinExperimentHistogram,
+        histogramNode,
         multipleCoinExperimentButtonSet
       ],
       spacing: 30

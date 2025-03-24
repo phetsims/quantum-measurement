@@ -98,9 +98,21 @@ export default class SpinMeasurementArea extends VBox {
     ];
 
     const measurementDevices = [
-      new MeasurementDeviceNode( model.measurementDevices[ 0 ], modelViewTransform, { tandem: tandem.createTandem( 'firstMeasurementDevice' ) } ),
-      new MeasurementDeviceNode( model.measurementDevices[ 1 ], modelViewTransform, { tandem: tandem.createTandem( 'secondMeasurementDevice' ) } ),
-      new MeasurementDeviceNode( model.measurementDevices[ 2 ], modelViewTransform, { tandem: tandem.createTandem( 'thirdMeasurementDevice' ) } )
+      new MeasurementDeviceNode(
+        model.measurementDevices[ 0 ],
+        modelViewTransform,
+        { tandem: tandem.createTandem( 'firstMeasurementDevice' ) }
+      ),
+      new MeasurementDeviceNode(
+        model.measurementDevices[ 1 ],
+        modelViewTransform,
+        { tandem: tandem.createTandem( 'secondMeasurementDevice' ) }
+      ),
+      new MeasurementDeviceNode(
+        model.measurementDevices[ 2 ],
+        modelViewTransform,
+        { tandem: tandem.createTandem( 'thirdMeasurementDevice' ) }
+      )
     ];
 
     let histogramCounter = 1;
@@ -121,7 +133,7 @@ export default class SpinMeasurementArea extends VBox {
                           `|${DOWN}<sub>X</sub> ${KET}`
       );
 
-      const tandemName = `histogram${histogramCounter++}`;
+      const tandemName = `histogramNode${histogramCounter++}`;
 
       return new HistogramWithExpectedValue(
         sternGerlach.upCounterProperty,
