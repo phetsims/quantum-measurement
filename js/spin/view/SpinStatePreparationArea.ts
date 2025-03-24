@@ -38,10 +38,9 @@ const KET = QuantumMeasurementConstants.KET;
 
 export default class SpinStatePreparationArea extends VBox {
 
-  public constructor(
-    model: SpinModel,
-    layoutBounds: Bounds2,
-    tandem: Tandem ) {
+  public constructor( model: SpinModel,
+                      layoutBounds: Bounds2,
+                      tandem: Tandem ) {
 
     const spinStateRadioButtonGroupTandem = tandem.createTandem( 'spinStateRadioButtonGroup' );
 
@@ -57,24 +56,26 @@ export default class SpinStatePreparationArea extends VBox {
     } );
 
     const pointerAreaDilation = 6;
-    const spinStateRadioButtonGroup = new AquaRadioButtonGroup( model.particleSourceModel.spinStateProperty, basisRadioGroupItems, {
-      orientation: 'vertical',
-      margin: 5,
-      radioButtonOptions: {
-        radius: 10,
-        mouseAreaXDilation: pointerAreaDilation,
-        mouseAreaYDilation: pointerAreaDilation,
-        touchAreaXDilation: pointerAreaDilation,
-        touchAreaYDilation: pointerAreaDilation
-      },
-      tandem: spinStateRadioButtonGroupTandem,
-      visibleProperty: new GatedVisibleProperty( new DerivedProperty( [ model.currentExperimentProperty ], currentExperiment => currentExperiment !== SpinExperiment.CUSTOM ), spinStateRadioButtonGroupTandem )
-    } );
+    const spinStateRadioButtonGroup = new AquaRadioButtonGroup(
+      model.particleSourceModel.spinStateProperty,
+      basisRadioGroupItems,
+      {
+        orientation: 'vertical',
+        margin: 5,
+        radioButtonOptions: {
+          radius: 10,
+          mouseAreaXDilation: pointerAreaDilation,
+          mouseAreaYDilation: pointerAreaDilation,
+          touchAreaXDilation: pointerAreaDilation,
+          touchAreaYDilation: pointerAreaDilation
+        },
+        tandem: spinStateRadioButtonGroupTandem,
+        visibleProperty: new GatedVisibleProperty( new DerivedProperty( [ model.currentExperimentProperty ], currentExperiment => currentExperiment !== SpinExperiment.CUSTOM ), spinStateRadioButtonGroupTandem )
+      }
+    );
 
     const spinStatePanel = new VBox( {
-      children: [
-        spinStateRadioButtonGroup
-      ]
+      children: [ spinStateRadioButtonGroup ]
     } );
 
     const blochSphereNode = new BlochSphereWithProjectionNode(
@@ -84,19 +85,20 @@ export default class SpinStatePreparationArea extends VBox {
       {
         tandem: tandem.createTandem( 'blochSphereNode' ),
         scale: 0.9
-      } );
+      }
+    );
 
     const stateToPrepareText = new RichText( QuantumMeasurementStrings.spinStateToPrepareStringProperty, {
       font: QuantumMeasurementConstants.BOLD_HEADER_FONT,
       maxWidth: 250
     } );
-    const symbolicEquationText = new RichText( `${ALPHA}|${UP} ${KET} + ${BETA}|${DOWN} ${KET}`,
-      { font: QuantumMeasurementConstants.BOLD_HEADER_FONT } );
+    const symbolicEquationText = new RichText(
+      `${ALPHA}|${UP} ${KET} + ${BETA}|${DOWN} ${KET}`,
+      { font: QuantumMeasurementConstants.BOLD_HEADER_FONT }
+    );
 
     const stateReadoutStringProperty = new DerivedProperty(
-      [
-        model.derivedSpinStateProperty
-      ],
+      [ model.derivedSpinStateProperty ],
       spinState => {
 
         const upProbability = ( spinState.dot( new Vector2( 0, 1 ) ) + 1 ) / 2;
@@ -104,13 +106,13 @@ export default class SpinStatePreparationArea extends VBox {
         const alphaValue = toFixed( Math.sqrt( upProbability ), 3 );
         const betaValue = toFixed( Math.sqrt( downProbability ), 3 );
         return `${alphaValue}|${UP} ${KET} + ${betaValue}|${DOWN} ${KET}`;
-      } );
+      }
+    );
 
     const stateReadout = new RichText( stateReadoutStringProperty, { font: QuantumMeasurementConstants.TITLE_FONT } );
 
     const probabilityControlBox = new VBox( {
-      visibleProperty: DerivedProperty.valueEqualsConstant(
-        model.currentExperimentProperty, SpinExperiment.CUSTOM ),
+      visibleProperty: DerivedProperty.valueEqualsConstant( model.currentExperimentProperty, SpinExperiment.CUSTOM ),
       children: [
         new ProbabilityValueControl(
           new RichText( `|${MathSymbols.ALPHA}|<sup>2`, QuantumMeasurementConstants.NUMBER_CONTROL_TITLE_OPTIONS ),
@@ -185,7 +187,7 @@ export default class SpinStatePreparationArea extends VBox {
       spacing: 20
     } );
 
-    // Reposition for a wider layout
+    // Reposition for a wider layout.
     this.boundsProperty.link( () => {
       this.top = layoutBounds.top + 50;
     } );
