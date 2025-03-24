@@ -29,10 +29,6 @@ export default abstract class AbstractBlochSphere extends PhetioObject {
   // Polar angle, measured from the +Z axis, goes from 0 to PI in radians.
   public readonly polarAngleProperty: NumberProperty;
 
-  // Coefficients of the vector representation.
-  public readonly alphaProperty: NumberProperty;
-  public readonly betaProperty: NumberProperty;
-
   protected constructor( providedOptions: AbstractBlochSphereOptions ) {
 
     const options = optionize<AbstractBlochSphereOptions, SelfOptions, PhetioObjectOptions>()( {
@@ -54,18 +50,6 @@ export default abstract class AbstractBlochSphere extends PhetioObject {
       tandem: options.tandem.createTandem( 'polarAngleProperty' ),
       phetioReadOnly: true
     } );
-
-    this.alphaProperty = new NumberProperty( 1, {
-      range: new Range( 0, 1 ),
-      tandem: options.tandem.createTandem( 'alphaProperty' ),
-      phetioReadOnly: true
-    } );
-
-    this.betaProperty = new NumberProperty( 0, {
-      range: new Range( 0, 1 ),
-      tandem: options.tandem.createTandem( 'betaProperty' ),
-      phetioReadOnly: true
-    } );
   }
 
   /**
@@ -74,8 +58,6 @@ export default abstract class AbstractBlochSphere extends PhetioObject {
   public abstract step( dt: number ): void;
 
   protected reset(): void {
-    this.alphaProperty.reset();
-    this.betaProperty.reset();
     this.azimuthalAngleProperty.reset();
     this.polarAngleProperty.reset();
   }
