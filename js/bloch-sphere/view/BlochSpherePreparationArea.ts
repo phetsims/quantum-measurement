@@ -38,11 +38,11 @@ export default class BlochSpherePreparationArea extends VBox {
   public constructor( model: BlochSphereModel, parentNode: Node, providedOptions: BlochSpherePreparationAreaOptions ) {
 
     const sliderStep = Math.PI / 12;
-    const polarSlider = new Slider(
+    const polarAngleSlider = new Slider(
       model.preparationBlochSphere.polarAngleProperty,
       model.preparationBlochSphere.polarAngleProperty.range,
       combineOptions<SliderOptions>( {
-        tandem: providedOptions.tandem.createTandem( 'polarSlider' ),
+        tandem: providedOptions.tandem.createTandem( 'polarAngleSlider' ),
         constrainValue: value => roundToInterval( value, sliderStep ),
         keyboardStep: sliderStep,
         shiftKeyboardStep: sliderStep,
@@ -52,11 +52,11 @@ export default class BlochSpherePreparationArea extends VBox {
         }
       }, QuantumMeasurementConstants.DEFAULT_CONTROL_SLIDER_OPTIONS )
     );
-    const azimuthSlider = new Slider(
+    const azimuthalAngleSlider = new Slider(
       model.preparationBlochSphere.azimuthalAngleProperty,
       model.preparationBlochSphere.azimuthalAngleProperty.range,
       combineOptions<SliderOptions>( {
-        tandem: providedOptions.tandem.createTandem( 'azimuthSlider' ),
+        tandem: providedOptions.tandem.createTandem( 'azimuthalAngleSlider' ),
         constrainValue: value => roundToInterval( value, sliderStep ),
         keyboardStep: sliderStep,
         shiftKeyboardStep: sliderStep,
@@ -67,13 +67,13 @@ export default class BlochSpherePreparationArea extends VBox {
       }, QuantumMeasurementConstants.DEFAULT_CONTROL_SLIDER_OPTIONS )
     );
 
-    polarSlider.addMajorTick( 0, new Text( '0', { font: QuantumMeasurementConstants.CONTROL_FONT } ) );
-    _.times( 3, i => polarSlider.addMinorTick( ( i + 1 ) * Math.PI / 4 ) );
-    polarSlider.addMajorTick( Math.PI, new Text( `${MathSymbols.PI}`, { font: QuantumMeasurementConstants.CONTROL_FONT } ) );
+    polarAngleSlider.addMajorTick( 0, new Text( '0', { font: QuantumMeasurementConstants.CONTROL_FONT } ) );
+    _.times( 3, i => polarAngleSlider.addMinorTick( ( i + 1 ) * Math.PI / 4 ) );
+    polarAngleSlider.addMajorTick( Math.PI, new Text( `${MathSymbols.PI}`, { font: QuantumMeasurementConstants.CONTROL_FONT } ) );
 
-    azimuthSlider.addMajorTick( 0, new Text( '0', { font: QuantumMeasurementConstants.CONTROL_FONT } ) );
-    _.times( 7, i => azimuthSlider.addMinorTick( ( i + 1 ) * Math.PI / 4 ) );
-    azimuthSlider.addMajorTick( 2 * Math.PI, new Text( `2${MathSymbols.PI}`, { font: QuantumMeasurementConstants.CONTROL_FONT } ) );
+    azimuthalAngleSlider.addMajorTick( 0, new Text( '0', { font: QuantumMeasurementConstants.CONTROL_FONT } ) );
+    _.times( 7, i => azimuthalAngleSlider.addMinorTick( ( i + 1 ) * Math.PI / 4 ) );
+    azimuthalAngleSlider.addMajorTick( 2 * Math.PI, new Text( `2${MathSymbols.PI}`, { font: QuantumMeasurementConstants.CONTROL_FONT } ) );
 
     const comboBoxItems: ComboBoxItem<StateDirection>[] = StateDirection.enumeration.values.map( direction => {
 
@@ -112,10 +112,10 @@ export default class BlochSpherePreparationArea extends VBox {
                 ),
                 combineOptions<TextOptions>(
                   sliderTitleOptions,
-                  { visibleProperty: polarSlider.visibleProperty }
+                  { visibleProperty: polarAngleSlider.visibleProperty }
                 )
               ),
-              polarSlider
+              polarAngleSlider
             ]
           } ),
           new VBox( {
@@ -128,10 +128,10 @@ export default class BlochSpherePreparationArea extends VBox {
                 ),
                 combineOptions<TextOptions>(
                   sliderTitleOptions,
-                  { visibleProperty: azimuthSlider.visibleProperty }
+                  { visibleProperty: azimuthalAngleSlider.visibleProperty }
                 )
               ),
-              azimuthSlider
+              azimuthalAngleSlider
             ]
           } )
         ]
