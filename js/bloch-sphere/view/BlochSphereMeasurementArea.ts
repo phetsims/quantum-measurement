@@ -421,12 +421,14 @@ export default class BlochSphereMeasurementArea extends Node {
     const magneticFieldAndStrengthControl = new HBox( {
       children: [ magneticFieldControl, systemUnderTestNode ],
       spacing: 12,
-      centerX: singleMeasurementBlochSphereNode.centerX,
       bottom: magneticFieldCheckbox.top - 20
     } );
 
-    magneticFieldAndStrengthControl.localBoundsProperty.link( () => {
-      magneticFieldAndStrengthControl.centerX = singleMeasurementBlochSphereNode.centerX;
+    // Keep the two panels for the magnetic field and strength control and the system under test node centered.
+    magneticFieldAndStrengthControl.localBoundsProperty.link( localBounds => {
+      if ( localBounds.isFinite() ) {
+        magneticFieldAndStrengthControl.left = singleMeasurementBlochSphereNode.centerX - localBounds.width / 2;
+      }
     } );
 
     const options = optionize<BlochSphereMeasurementAreaOptions, SelfOptions, NodeOptions>()( {
