@@ -168,10 +168,9 @@ export default class BlochSphereMeasurementArea extends Node {
       model.downMeasurementCountProperty,
       [
         new RichText( spinUpLabelStringProperty ),
-        new RichText( spinDownLabelStringProperty ) ],
-      {
-        tandem: histogramNodeTandem
-      }
+        new RichText( spinDownLabelStringProperty )
+      ],
+      { tandem: histogramNodeTandem }
     );
 
     const resetCountsButton = new EraserButton( {
