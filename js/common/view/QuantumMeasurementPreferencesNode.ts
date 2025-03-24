@@ -61,7 +61,8 @@ class ClassicalCoinsStartVisible extends PreferencesControl {
       tandem: tandem,
       phetioFeatured: true,
       visiblePropertyOptions: {
-        phetioFeatured: true
+        phetioFeatured: true,
+        phetioReadOnly: false
       }
     } );
 
@@ -92,7 +93,8 @@ class ShowGlobalPhase extends PreferencesControl {
       tandem: tandem,
       phetioFeatured: true,
       visiblePropertyOptions: {
-        phetioFeatured: true
+        phetioFeatured: true,
+        phetioReadOnly: false
       }
     } );
 
