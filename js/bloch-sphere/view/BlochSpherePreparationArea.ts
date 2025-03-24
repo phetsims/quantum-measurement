@@ -16,7 +16,7 @@ import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
 import VBox, { VBoxOptions } from '../../../../scenery/js/layout/nodes/VBox.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
-import Text from '../../../../scenery/js/nodes/Text.js';
+import Text, { TextOptions } from '../../../../scenery/js/nodes/Text.js';
 import ComboBox, { ComboBoxItem } from '../../../../sun/js/ComboBox.js';
 import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
 import Slider, { SliderOptions } from '../../../../sun/js/Slider.js';
@@ -109,7 +109,12 @@ export default class BlochSpherePreparationArea extends VBox {
                 new PatternStringProperty(
                   QuantumMeasurementStrings.polarAngleParenthesesSymbolPatternStringProperty,
                   { symbol: MathSymbols.THETA }
-                ), sliderTitleOptions ), // Theta symbol: θ
+                ),
+                combineOptions<TextOptions>(
+                  sliderTitleOptions,
+                  { visibleProperty: polarSlider.visibleProperty }
+                )
+              ),
               polarSlider
             ]
           } ),
@@ -120,7 +125,12 @@ export default class BlochSpherePreparationArea extends VBox {
                 new PatternStringProperty(
                   QuantumMeasurementStrings.azimuthalAngleParenthesesSymbolPatternStringProperty,
                   { symbol: MathSymbols.PHI }
-                ), sliderTitleOptions ), // Phi symbol: φ
+                ),
+                combineOptions<TextOptions>(
+                  sliderTitleOptions,
+                  { visibleProperty: azimuthSlider.visibleProperty }
+                )
+              ),
               azimuthSlider
             ]
           } )
