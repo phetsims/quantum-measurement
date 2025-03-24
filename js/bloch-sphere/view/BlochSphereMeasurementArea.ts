@@ -176,7 +176,7 @@ export default class BlochSphereMeasurementArea extends Node {
 
     const resetCountsButton = new EraserButton( {
       listener: () => model.resetCounts(),
-      tandem: histogramNodeTandem.createTandem( 'resetCountsButton' )
+      tandem: providedOptions.tandem.createTandem( 'resetCountsButton' )
     } );
 
     const measurementControlsTandem = providedOptions.tandem.createTandem( 'measurementControls' );
