@@ -26,7 +26,8 @@ class BlochSphereScreenView extends QuantumMeasurementScreenView {
     this.model = model;
 
     const preparationArea = new BlochSpherePreparationArea( model, this, {
-      tandem: tandem.createTandem( 'preparationArea' )
+      tandem: tandem.createTandem( 'preparationArea' ),
+      phetioVisiblePropertyInstrumented: false
     } );
     this.addChild( preparationArea );
 

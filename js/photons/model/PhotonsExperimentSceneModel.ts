@@ -120,9 +120,7 @@ class PhotonsExperimentSceneModel {
     } );
 
     // The mirror that reflects the photons that pass through the beam splitter downward to the detector.
-    this.mirror = new Mirror( new Vector2( BEAM_SPLITTER_TO_MIRROR_DISTANCE, 0 ), {
-      tandem: experimentTandem.createTandem( 'mirror' )
-    } );
+    this.mirror = new Mirror( new Vector2( BEAM_SPLITTER_TO_MIRROR_DISTANCE, 0 ) );
 
     // Create the photon detectors that will measure the rate at which photons are arriving after being either reflected
     // or transmitted by the polarizing beam splitter.

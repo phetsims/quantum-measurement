@@ -23,6 +23,7 @@ import Color from '../../../../scenery/js/util/Color.js';
 import RoundPushButton from '../../../../sun/js/buttons/RoundPushButton.js';
 import HSlider from '../../../../sun/js/HSlider.js';
 import sharedSoundPlayers from '../../../../tambo/js/sharedSoundPlayers.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
@@ -90,8 +91,7 @@ export default class LaserNode extends Node {
       children: laserPointerNodeChildren,
       right: modelViewTransform.modelToViewX( model.position.x ) + NOZZLE_SIZE.width,
       centerY: modelViewTransform.modelToViewY( model.position.y ),
-      phetioVisiblePropertyInstrumented: false,
-      tandem: providedOptions.tandem.createTandem( 'laserPointerNode' )
+      tandem: Tandem.OPT_OUT // There are no aspects of this node that we want users to manipulate.
     } );
     const caption = new Text( QuantumMeasurementStrings.photonSourceStringProperty, {
       font: QuantumMeasurementConstants.SMALL_LABEL_FONT,

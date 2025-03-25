@@ -9,22 +9,18 @@
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Line } from '../../../../kite/js/segments/Segment.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
+import PhetioObject from '../../../../tandem/js/PhetioObject.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import Photon from './Photon.js';
 import { PhotonMotionState } from './PhotonMotionState.js';
 import { PhotonInteractionTestResult, PhotonInteractionValues } from './PhotonsModel.js';
 import { TPhotonInteraction } from './TPhotonInteraction.js';
 
-type SelfOptions = EmptySelfOptions;
-type MirrorOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
-
 // constants
 const MIRROR_LENGTH = 0.095; // meters
 
-export default class Mirror extends PhetioObject implements TPhotonInteraction {
+class Mirror extends PhetioObject implements TPhotonInteraction {
 
   // The position of the center of the mirror in 2D space.  Units are in meters.
   public readonly centerPosition: Vector2;
@@ -32,13 +28,12 @@ export default class Mirror extends PhetioObject implements TPhotonInteraction {
   // A line in model space that represents the position of the surface of the mirror.
   public readonly mirrorSurfaceLine: Line;
 
-  public constructor( centerPosition: Vector2, providedOptions: MirrorOptions ) {
+  public constructor( centerPosition: Vector2 ) {
 
-    const options = optionize<MirrorOptions, SelfOptions, PhetioObjectOptions>()( {
-      phetioState: false
-    }, providedOptions );
-
-    super( options );
+    super( {
+      phetioState: false,
+      tandem: Tandem.OPT_OUT // No aspects of this should be alterable via phet-io.
+    } );
 
     this.centerPosition = centerPosition;
 
@@ -83,3 +78,5 @@ export default class Mirror extends PhetioObject implements TPhotonInteraction {
 }
 
 quantumMeasurement.register( 'Mirror', Mirror );
+
+export default Mirror;

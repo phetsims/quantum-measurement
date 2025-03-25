@@ -7,7 +7,6 @@
  * @author Agustín Vallejo
  */
 
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
@@ -33,9 +32,6 @@ export default class ParticleSourceModel {
   public readonly positionProperty: Vector2Property;
   public readonly exitLocalPosition: Vector2;
   public readonly exitPositionProperty: TReadOnlyProperty<Vector2>;
-
-  // Whether the source is currently shooting particles
-  public readonly currentlyShootingParticlesProperty: BooleanProperty;
 
   // Mapped from [0, 1] to control the Continuous mode, 0 is 'None' and 1 is 'Lots'
   public readonly particleAmountProperty: NumberProperty;
@@ -78,18 +74,11 @@ export default class ParticleSourceModel {
     } );
 
     this.customSpinStateProperty = new Vector2Property( SpinDirection.spinToVector( initialSpinState ) );
-
-    this.currentlyShootingParticlesProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'currentlyShootingParticlesProperty' ),
-      phetioReadOnly: true
-    } );
-
   }
 
   public reset(): void {
     this.sourceModeProperty.reset();
     this.positionProperty.reset();
-    this.currentlyShootingParticlesProperty.reset();
     this.particleAmountProperty.reset();
     this.spinStateProperty.reset();
     this.customSpinStateProperty.reset();

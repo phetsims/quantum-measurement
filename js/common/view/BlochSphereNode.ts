@@ -167,7 +167,8 @@ export default class BlochSphereNode extends Node {
     } );
 
     const stateVectorVisibleProperty = new BooleanProperty( true, {
-      tandem: options.tandem.createTandem( 'stateVectorVisibleProperty' )
+      tandem: options.tandem.createTandem( 'stateVectorVisibleProperty' ),
+      phetioReadOnly: true
     } );
     const stateVector = new ArrowNode( 0, 0, 0, -sphereRadius, {
       tandem: options.tandem.createTandem( 'stateVector' ),
@@ -175,7 +176,8 @@ export default class BlochSphereNode extends Node {
       headHeight: 10 * options.stateVectorScale,
       tailWidth: 3 * options.stateVectorScale,
       fill: 'black',
-      visibleProperty: stateVectorVisibleProperty
+      visibleProperty: stateVectorVisibleProperty,
+      phetioVisiblePropertyInstrumented: false
     } );
 
     const angleIndicatorPathOptions = {

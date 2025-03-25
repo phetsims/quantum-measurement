@@ -24,6 +24,7 @@ import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
 import Slider from '../../../../sun/js/Slider.js';
+import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
@@ -54,7 +55,7 @@ export default class MagneticFieldControl extends Panel {
         } ),
         new MagneticFieldArrowNode( magneticFieldStrengthProperty, SLIDER_TRACK_SIZE.height / 2 )
       ],
-      tandem: providedOptions.tandem.createTandem( 'magneticFieldIndicator' )
+      tandem: Tandem.OPT_OUT
     } );
 
     // Add horizontal lines to the magnetic field indicator.

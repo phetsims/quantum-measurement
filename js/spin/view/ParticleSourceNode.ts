@@ -7,7 +7,6 @@
  * @author Agustín Vallejo
  */
 
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
@@ -85,36 +84,23 @@ export default class ParticleSourceNode extends Node {
     particleSourceBarrel.rotateAround( particleSourceBarrel.center, Math.PI / 4 );
     particleSourceBarrel.center.y = particleSourceRectangle.center.y;
 
-    const currentlyShootingParticlesProperty = new BooleanProperty( false );
-
     // button for 'single' mode
     const shootParticleButtonTandem = tandem.createTandem( 'shootParticleButton' );
     const shootParticleButton = new RoundPushButton( {
         radius: 21,
         baseColor: QuantumMeasurementColors.downColorProperty,
-        listener: () => {
-
-          // Toggle the property value in order to shoot a single particle.
-          currentlyShootingParticlesProperty.value = true;
-          currentlyShootingParticlesProperty.value = false;
-        },
+        listener: () => { singleParticlesCollection.shootSingleParticle(); },
         fireOnDown: true,
         visibleProperty: new GatedVisibleProperty(
           DerivedProperty.not( particleSourceModel.isContinuousModeProperty ),
           shootParticleButtonTandem
         ),
-      soundPlayer: sharedSoundPlayers.get( 'release' ),
-      center: particleSourceRectangle.center,
+        soundPlayer: sharedSoundPlayers.get( 'release' ),
+        center: particleSourceRectangle.center,
         touchAreaDilation: 20,
         tandem: shootParticleButtonTandem
       }
     );
-
-    currentlyShootingParticlesProperty.link( shooting => {
-      if ( shooting ) {
-        singleParticlesCollection.shootSingleParticle();
-      }
-    } );
 
     // slider for 'continuous' mode
     const sliderStep = 0.05;
