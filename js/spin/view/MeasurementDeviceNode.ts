@@ -93,7 +93,8 @@ export default class MeasurementDeviceNode extends VBox {
         cameraNode
       ],
       spacing: 30,
-      visibleProperty: new GatedVisibleProperty( measurementDevice.isActiveProperty, providedOptions.tandem )
+      visibleProperty: new GatedVisibleProperty( measurementDevice.isActiveProperty, providedOptions.tandem ),
+      phetioFeatured: true
     }, providedOptions );
 
     super( options );
@@ -103,6 +104,9 @@ export default class MeasurementDeviceNode extends VBox {
     measurementDevice.positionProperty.link( position => {
       this.center = modelViewTransform.modelToViewPosition( position );
     } );
+
+    // Create phet-io link from this view node to the model.
+    this.addLinkedElement( measurementDevice );
   }
 
   public reset(): void {

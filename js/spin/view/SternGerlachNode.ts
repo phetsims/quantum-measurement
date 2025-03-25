@@ -45,7 +45,8 @@ export default class SternGerlachNode extends Node {
   ) {
 
     const options = optionize<SternGerlachNodeOptions, SelfOptions, NodeOptions>()( {
-      isBlockable: false
+      isBlockable: false,
+      phetioFeatured: true
     }, providedOptions );
 
     // Transformed constants

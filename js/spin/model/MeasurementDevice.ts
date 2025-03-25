@@ -10,17 +10,18 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
-import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
+import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import AbstractBlochSphere, { AbstractBlochSphereOptions } from '../../common/model/AbstractBlochSphere.js';
+import AbstractBlochSphere from '../../common/model/AbstractBlochSphere.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import SimpleBlochSphere from './SimpleBlochSphere.js';
 
 type SelfOptions = EmptySelfOptions;
+export type MeasurementDeviceOptions = SelfOptions & WithRequired<PhetioObjectOptions, 'tandem'>;
 
-export type MeasurementDeviceOptions = SelfOptions & AbstractBlochSphereOptions;
-
-export default class MeasurementDevice {
+export default class MeasurementDevice extends PhetioObject {
 
   // Bloch sphere representation of the spin state
   public readonly simpleBlochSphere: AbstractBlochSphere;
@@ -40,10 +41,19 @@ export default class MeasurementDevice {
   // flag to indicate if the line is active
   public readonly isActiveProperty: BooleanProperty;
 
-  public constructor( position: Vector2, originallyActive: boolean, providedOptions: MeasurementDeviceOptions ) {
+  public constructor( position: Vector2,
+                      originallyActive: boolean,
+                      providedOptions: MeasurementDeviceOptions ) {
+
+    const options = optionize<MeasurementDeviceOptions, SelfOptions, PhetioObjectOptions>()( {
+      phetioState: false,
+      phetioFeatured: true
+    }, providedOptions );
+
+    super( options );
 
     this.spinStateProperty = new Vector2Property( new Vector2( 0, 1 ), {
-      tandem: providedOptions.tandem.createTandem( 'spinStateProperty' ),
+      tandem: options.tandem.createTandem( 'spinStateProperty' ),
       phetioDocumentation: 'Indicates the axis and orientation of the spin state for the particle that last crossed' +
                            'the measurement line.  The y-coordinate corresponds to the z-axis',
       phetioReadOnly: true
@@ -54,7 +64,7 @@ export default class MeasurementDevice {
     this.resetEmitter = new Emitter();
 
     this.isActiveProperty = new BooleanProperty( originallyActive, {
-      tandem: providedOptions.tandem.createTandem( 'isActiveProperty' ),
+      tandem: options.tandem.createTandem( 'isActiveProperty' ),
       phetioReadOnly: true
     } );
 
@@ -63,7 +73,7 @@ export default class MeasurementDevice {
     } );
 
     this.positionProperty = new Vector2Property( position, {
-      tandem: providedOptions.tandem.createTandem( 'positionProperty' ),
+      tandem: options.tandem.createTandem( 'positionProperty' ),
       phetioReadOnly: true
     } );
   }

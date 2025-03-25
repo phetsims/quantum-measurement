@@ -82,36 +82,40 @@ export default class SpinMeasurementArea extends VBox {
       tandem.createTandem( 'particleSourceNode' )
     );
 
+    const sternGerlachNodesParentTandem = tandem.createTandem( 'sternGerlachs' );
+
     const sternGerlachNodes = [
       new SternGerlachNode(
         model.sternGerlachs[ 0 ],
         modelViewTransform,
-        { tandem: tandem.createTandem( 'firstSternGerlachNode' ), isBlockable: true } ),
+        { tandem: sternGerlachNodesParentTandem.createTandem( 'firstSternGerlachNode' ), isBlockable: true } ),
       new SternGerlachNode(
         model.sternGerlachs[ 1 ],
         modelViewTransform,
-        { tandem: tandem.createTandem( 'secondSternGerlachNode' ) } ),
+        { tandem: sternGerlachNodesParentTandem.createTandem( 'secondSternGerlachNode' ) } ),
       new SternGerlachNode(
         model.sternGerlachs[ 2 ],
         modelViewTransform,
-        { tandem: tandem.createTandem( 'thirdSternGerlachNode' ) } )
+        { tandem: sternGerlachNodesParentTandem.createTandem( 'thirdSternGerlachNode' ) } )
     ];
+
+    const measurementDevicesTandem = tandem.createTandem( 'measurementDevices' );
 
     const measurementDevices = [
       new MeasurementDeviceNode(
         model.measurementDevices[ 0 ],
         modelViewTransform,
-        { tandem: tandem.createTandem( 'firstMeasurementDevice' ) }
+        { tandem: measurementDevicesTandem.createTandem( 'firstMeasurementDeviceNode' ) }
       ),
       new MeasurementDeviceNode(
         model.measurementDevices[ 1 ],
         modelViewTransform,
-        { tandem: tandem.createTandem( 'secondMeasurementDevice' ) }
+        { tandem: measurementDevicesTandem.createTandem( 'secondMeasurementDeviceNode' ) }
       ),
       new MeasurementDeviceNode(
         model.measurementDevices[ 2 ],
         modelViewTransform,
-        { tandem: tandem.createTandem( 'thirdMeasurementDevice' ) }
+        { tandem: measurementDevicesTandem.createTandem( 'thirdMeasurementDeviceNode' ) }
       )
     ];
 

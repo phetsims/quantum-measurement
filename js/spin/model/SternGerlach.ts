@@ -48,7 +48,7 @@ export default class SternGerlach extends PhetioObject {
   public readonly upCounterProperty: AveragingCounterNumberProperty;
   public readonly downCounterProperty: AveragingCounterNumberProperty;
 
-  // Wether photons would be arriving to the apparatus
+  // whether photons would be arriving to the apparatus
   public readonly arePhotonsArrivingProperty: TReadOnlyProperty<boolean>;
 
   // Local position properties
@@ -56,7 +56,7 @@ export default class SternGerlach extends PhetioObject {
   public topExitPositionProperty: TReadOnlyProperty<Vector2>;
   public bottomExitPositionProperty: TReadOnlyProperty<Vector2>;
 
-  // Constants
+  // static constants
   public static readonly STERN_GERLACH_WIDTH = 150 / 200;
   public static readonly STERN_GERLACH_HEIGHT = 100 / 200;
   public static readonly PARTICLE_HOLE_WIDTH = 5 / 200;
@@ -74,7 +74,11 @@ export default class SternGerlach extends PhetioObject {
 
   public constructor( position: Vector2, isZOriented: boolean, tandem: Tandem ) {
 
-    super();
+    super( {
+      tandem: tandem,
+      phetioState: false,
+      phetioFeatured: true
+    } );
 
     this.positionProperty = new Vector2Property( position, {
       tandem: tandem.createTandem( 'positionProperty' ),

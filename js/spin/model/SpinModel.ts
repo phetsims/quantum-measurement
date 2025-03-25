@@ -150,11 +150,13 @@ class SpinModel implements TModel {
     this.measurementDevices = [
       new MeasurementDevice(
         new Vector2( ( this.particleSourceModel.exitPositionProperty.value.x + this.sternGerlachs[ 0 ].entrancePositionProperty.value.x ) / 2, 1 ),
-        true, { tandem: measurementDevicesTandem.createTandem( 'firstMeasurementDevice' ) }
+        true,
+        { tandem: measurementDevicesTandem.createTandem( 'firstMeasurementDevice' ) }
       ),
       new MeasurementDevice(
         new Vector2( ( this.sternGerlachs[ 0 ].topExitPositionProperty.value.x + this.sternGerlachs[ 1 ].entrancePositionProperty.value.x ) / 2, 1 ),
-        true, { tandem: measurementDevicesTandem.createTandem( 'secondMeasurementDevice' ) }
+        true,
+        { tandem: measurementDevicesTandem.createTandem( 'secondMeasurementDevice' ) }
       ),
       new MeasurementDevice(
         new Vector2( ( this.sternGerlachs[ 1 ].topExitPositionProperty.value.x + this.sternGerlachs[ 1 ].topExitPositionProperty.value.plusXY( 0.5, 0 ).x ) / 2, 1 ),
