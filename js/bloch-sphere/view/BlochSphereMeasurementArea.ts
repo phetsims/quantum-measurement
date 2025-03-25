@@ -123,7 +123,7 @@ export default class BlochSphereMeasurementArea extends Node {
     const multipleMeasurementBlochSpheresNodes: BlochSphereNode[] = [];
     model.multiMeasurementBlochSpheres.forEach( ( blochSphere, index ) => {
       const blochSphereNode = new BlochSphereNode( blochSphere, {
-        tandem: multipleMeasurementBlochSpheresTandem.createTandem( `blochSphere${index}` ),
+        tandem: multipleMeasurementBlochSpheresTandem.createTandem( `blochSphereNode${index}` ),
         scale: 0.3,
         drawTitle: false,
         drawKets: false,
