@@ -16,7 +16,9 @@ import quantumMeasurement from '../../quantumMeasurement.js';
 
 type SelfOptions = {
   initialPolarAngle?: number;
+  polarAnglePhetioReadOnly?: boolean;
   initialAzimuthalAngle?: number;
+  azimuthalAnglePhetioReadOnly?: boolean;
 };
 
 export type AbstractBlochSphereOptions = SelfOptions & WithRequired<PhetioObjectOptions, 'tandem'>;
@@ -34,7 +36,9 @@ export default abstract class AbstractBlochSphere extends PhetioObject {
     const options = optionize<AbstractBlochSphereOptions, SelfOptions, PhetioObjectOptions>()( {
       phetioState: false,
       initialPolarAngle: 0,
-      initialAzimuthalAngle: Math.PI / 2
+      polarAnglePhetioReadOnly: true,
+      initialAzimuthalAngle: Math.PI / 2,
+      azimuthalAnglePhetioReadOnly: true
     }, providedOptions );
 
     super( options );
@@ -42,13 +46,13 @@ export default abstract class AbstractBlochSphere extends PhetioObject {
     this.azimuthalAngleProperty = new NumberProperty( options.initialAzimuthalAngle, {
       range: new Range( 0, 2 * Math.PI ),
       tandem: options.tandem.createTandem( 'azimuthalAngleProperty' ),
-      phetioReadOnly: true
+      phetioReadOnly: options.azimuthalAnglePhetioReadOnly
     } );
 
     this.polarAngleProperty = new NumberProperty( options.initialPolarAngle, {
       range: new Range( 0, Math.PI ),
       tandem: options.tandem.createTandem( 'polarAngleProperty' ),
-      phetioReadOnly: true
+      phetioReadOnly: options.polarAnglePhetioReadOnly
     } );
   }
 

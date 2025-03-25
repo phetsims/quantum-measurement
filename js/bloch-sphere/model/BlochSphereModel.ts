@@ -88,7 +88,9 @@ class BlochSphereModel implements TModel {
     // preparation-area-related properties
     this.preparationBlochSphere = new ComplexBlochSphere( {
       tandem: preparationAreaTandem.createTandem( 'preparationBlochSphere' ),
-      phetioFeatured: true
+      phetioFeatured: true,
+      azimuthalAnglePhetioReadOnly: false,
+      polarAnglePhetioReadOnly: false
     } );
 
     this.selectedStateDirectionProperty = new EnumerationProperty( StateDirection.X_PLUS, {

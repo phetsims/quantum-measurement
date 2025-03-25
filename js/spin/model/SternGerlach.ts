@@ -101,6 +101,7 @@ export default class SternGerlach extends PhetioObject {
 
     this.isDirectionControllableProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'isDirectionControllableProperty' ),
+      phetioReadOnly: true,
       phetioFeatured: true
     } );
 

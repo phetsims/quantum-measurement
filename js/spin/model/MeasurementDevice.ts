@@ -54,7 +54,8 @@ export default class MeasurementDevice {
     this.resetEmitter = new Emitter();
 
     this.isActiveProperty = new BooleanProperty( originallyActive, {
-      tandem: providedOptions.tandem.createTandem( 'isActiveProperty' )
+      tandem: providedOptions.tandem.createTandem( 'isActiveProperty' ),
+      phetioReadOnly: true
     } );
 
     this.simpleBlochSphere = new SimpleBlochSphere( this.spinStateProperty, {
