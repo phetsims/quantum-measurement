@@ -109,7 +109,7 @@ export default class SternGerlachNode extends Node {
     };
 
     // Create and add the radio buttons that select the chart type view in the nuclideChartAccordionBox.
-    const orientationRadioButtonGroupTandem = options.tandem.createTandem( 'orientationRadioButtonGroup' );
+    const orientationRadioButtonGroupTandem = sternGerlachControls.tandem.createTandem( 'orientationRadioButtonGroup' );
     const orientationRadioButtonGroup = new RectangularRadioButtonGroup<boolean>(
       sternGerlach.isZOrientedProperty, [
         {
@@ -136,7 +136,7 @@ export default class SternGerlachNode extends Node {
     sternGerlachControls.addChild( orientationRadioButtonGroup );
 
     if ( options.isBlockable ) {
-      const blockingRadioButtonGroupTandem = options.tandem.createTandem( 'blockingRadioButtonGroup' );
+      const blockingRadioButtonGroupTandem = sternGerlachControls.tandem.createTandem( 'blockingRadioButtonGroup' );
       const blockingRadioButtonGroup = new AquaRadioButtonGroup(
         sternGerlach.blockingModeProperty,
         [ BlockingMode.BLOCK_UP, BlockingMode.BLOCK_DOWN ].map( blockingMode => {

@@ -119,22 +119,17 @@ export default class SpinMeasurementArea extends VBox {
       )
     ];
 
+    const histogramParentTandem = tandem.createTandem( 'histograms' );
     let histogramCounter = 1;
     const createPercentageHistogram = ( sternGerlach: SternGerlach, visibleProperty: TReadOnlyProperty<boolean> ) => {
 
       const spinUpLabelStringProperty = new DerivedStringProperty(
-        [
-          sternGerlach.isZOrientedProperty
-        ], isZOriented => isZOriented ?
-                          `|${UP}<sub>Z</sub> ${KET}` :
-                          `|${UP}<sub>X</sub> ${KET}`
+        [ sternGerlach.isZOrientedProperty ],
+        isZOriented => isZOriented ? `|${UP}<sub>Z</sub> ${KET}` : `|${UP}<sub>X</sub> ${KET}`
       );
       const spinDownLabelStringProperty = new DerivedStringProperty(
-        [
-          sternGerlach.isZOrientedProperty
-        ], isZOriented => isZOriented ?
-                          `|${DOWN}<sub>Z</sub> ${KET}` :
-                          `|${DOWN}<sub>X</sub> ${KET}`
+        [ sternGerlach.isZOrientedProperty ],
+        isZOriented => isZOriented ? `|${DOWN}<sub>Z</sub> ${KET}` : `|${DOWN}<sub>X</sub> ${KET}`
       );
 
       const tandemName = `histogramNode${histogramCounter++}`;
@@ -154,7 +149,7 @@ export default class SpinMeasurementArea extends VBox {
           scale: 0.8,
           leftFillColorProperty: QuantumMeasurementColors.tailsColorProperty,
           visibleProperty: visibleProperty,
-          tandem: tandem.createTandem( tandemName ),
+          tandem: histogramParentTandem.createTandem( tandemName ),
           numberDisplayOptions: {
             textOptions: {
               font: QuantumMeasurementConstants.TITLE_FONT
