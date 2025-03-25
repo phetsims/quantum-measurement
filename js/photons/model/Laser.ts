@@ -16,6 +16,7 @@ import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
+import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
 import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
@@ -113,9 +114,9 @@ class Laser extends PhetioObject {
     this.customPolarizationAngleProperty = new NumberProperty( 45, {
       range: new Range( 0, 90 ),
       tandem: providedOptions.tandem.createTandem( 'customPolarizationAngleProperty' ),
+      units: MathSymbols.DEGREES,
       phetioFeatured: true
     } );
-
 
     // Derive the polarization angle from the model Properties.
     this.polarizationAngleProperty = new DerivedProperty(

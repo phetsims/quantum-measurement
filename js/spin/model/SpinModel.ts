@@ -17,6 +17,7 @@ import Multilink from '../../../../axon/js/Multilink.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import TModel from '../../../../joist/js/TModel.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
@@ -91,7 +92,8 @@ class SpinModel implements TModel {
 
     // Preparation Area properties
     this.alphaSquaredProperty = new NumberProperty( 1, {
-      tandem: providedOptions.tandem.createTandem( 'alphaSquaredProperty' )
+      tandem: providedOptions.tandem.createTandem( 'alphaSquaredProperty' ),
+      range: new Range( 0, 1 )
     } );
 
     // Since both alpha and beta can be controlled via the slider they must be derived manually.
