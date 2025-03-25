@@ -181,7 +181,9 @@ class PhotonsExperimentSceneView extends Node {
         rightFillColorProperty: QuantumMeasurementColors.horizontalPolarizationColorProperty,
         topTickMarkTextProperty: histogramTickMarkLabelProperty,
         barPositionProportion: 0.75,
-        tandem: providedOptions.tandem.createTandem( 'histogramNode' )
+        tandem: providedOptions.tandem.createTandem( 'histogramNode' ),
+        leftPercentagePropertyPhetioDocumentation: 'The percentage of photons detected with vertical polarization.',
+        rightPercentagePropertyPhetioDocumentation: 'The percentage of photons detected with horizontal polarization.'
       }
     );
 

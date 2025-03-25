@@ -11,7 +11,7 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
+import NumberProperty, { NumberPropertyOptions } from '../../../../axon/js/NumberProperty.js';
 import StringProperty from '../../../../axon/js/StringProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
@@ -60,8 +60,12 @@ type SelfOptions = {
   // center, etc.
   barPositionProportion?: number;
 
-  // Show the bar values on top of the middle axis
+  // Show the bar values on top of the middle axis.
   showCentralNumberDisplaysProperty?: TReadOnlyProperty<boolean>;
+
+  // Phet-io documentation for the left and right percentage Properties.
+  leftPercentagePropertyPhetioDocumentation?: string;
+  rightPercentagePropertyPhetioDocumentation?: string;
 };
 export type QuantumMeasurementHistogramOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
 
@@ -75,6 +79,11 @@ const NUMBER_DISPLAY_RANGE = new Range( 0, MAX_COINS );
 const NUMBER_DISPLAY_MAX_WIDTH = DEFAULT_HISTOGRAM_SIZE.width / 2 * 0.85;
 const FLOATING_LABEL_MARGIN = 5;
 const DEFAULT_HISTOGRAM_BAR_WIDTH = DEFAULT_HISTOGRAM_SIZE.width / 6;
+const PERCENTAGE_PROPERTY_DEFAULT_OPTIONS: NumberPropertyOptions = {
+  range: new Range( 0, 100 ),
+  units: '%',
+  phetioReadOnly: true
+};
 
 class QuantumMeasurementHistogram extends Node {
 
@@ -133,7 +142,9 @@ class QuantumMeasurementHistogram extends Node {
           font: LABEL_FONT
         },
         visibleProperty: numberDisplaysVisibleProperty
-      }
+      },
+      leftPercentagePropertyPhetioDocumentation: '',
+      rightPercentagePropertyPhetioDocumentation: ''
     }, providedOptions );
 
     options.rotation = options.orientation === 'vertical' ? 0 : Math.PI / 2;
@@ -313,18 +324,15 @@ class QuantumMeasurementHistogram extends Node {
     xAxisRightLabel.centerX = rightHistogramBarCenterX;
     xAxisRightLabel.top = xAxis.centerY + axisLabelMargin;
 
-    const leftPercentageProperty = new NumberProperty( 0, {
+    const leftPercentageProperty = new NumberProperty( 0, combineOptions<NumberPropertyOptions>( {
       tandem: options.tandem.createTandem( 'leftPercentageProperty' ),
-      range: new Range( 0, 100 ),
-      units: '%',
-      phetioReadOnly: true
-    } );
-    const rightPercentageProperty = new NumberProperty( 0, {
+      phetioDocumentation: options.leftPercentagePropertyPhetioDocumentation
+    }, PERCENTAGE_PROPERTY_DEFAULT_OPTIONS ) );
+
+    const rightPercentageProperty = new NumberProperty( 0, combineOptions<NumberPropertyOptions>( {
       tandem: options.tandem.createTandem( 'rightPercentageProperty' ),
-      range: new Range( 0, 100 ),
-      units: '%',
-      phetioReadOnly: true
-    } );
+      phetioDocumentation: options.rightPercentagePropertyPhetioDocumentation
+    }, PERCENTAGE_PROPERTY_DEFAULT_OPTIONS ) );
 
     Multilink.multilink(
       [

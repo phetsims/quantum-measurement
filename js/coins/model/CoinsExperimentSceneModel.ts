@@ -91,7 +91,8 @@ class CoinsExperimentSceneModel extends PhetioObject {
       range: new Range( 0, 1 ),
       tandem: options.tandem.createTandem( 'upProbabilityProperty' ),
       phetioFeatured: true,
-      phetioDocumentation: 'The probability of the "up" state for the coin(s) in this scene.'
+      phetioDocumentation: 'The probability of the "up" state for the coins in this scene. For classical coins, this ' +
+                           'is equivalent to “heads”.'
     } );
 
     this.downProbabilityProperty = new DerivedProperty( [ this.upProbabilityProperty ], upProbability => 1 - upProbability );
