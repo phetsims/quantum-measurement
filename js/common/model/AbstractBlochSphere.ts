@@ -10,7 +10,7 @@
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
@@ -19,7 +19,7 @@ type SelfOptions = {
   initialAzimuthalAngle?: number;
 };
 
-export type AbstractBlochSphereOptions = SelfOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
+export type AbstractBlochSphereOptions = SelfOptions & WithRequired<PhetioObjectOptions, 'tandem'>;
 
 export default abstract class AbstractBlochSphere extends PhetioObject {
 

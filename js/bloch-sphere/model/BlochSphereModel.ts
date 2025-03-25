@@ -87,7 +87,8 @@ class BlochSphereModel implements TModel {
 
     // preparation-area-related properties
     this.preparationBlochSphere = new ComplexBlochSphere( {
-      tandem: preparationAreaTandem.createTandem( 'preparationBlochSphere' )
+      tandem: preparationAreaTandem.createTandem( 'preparationBlochSphere' ),
+      phetioFeatured: true
     } );
 
     this.selectedStateDirectionProperty = new EnumerationProperty( StateDirection.X_PLUS, {
@@ -97,13 +98,15 @@ class BlochSphereModel implements TModel {
 
     // measurement-area-related properties
     this.singleMeasurementBlochSphere = new ComplexBlochSphere( {
-      tandem: measurementAreaTandem.createTandem( 'singleMeasurementBlochSphere' )
+      tandem: measurementAreaTandem.createTandem( 'singleMeasurementBlochSphere' ),
+      phetioFeatured: true
     } );
 
     const multiMeasurementTandem = measurementAreaTandem.createTandem( 'multiMeasurementBlochSpheres' );
     _.times( 10, index => {
       this.multiMeasurementBlochSpheres.push( new ComplexBlochSphere( {
-        tandem: multiMeasurementTandem.createTandem( `blochSphere${index}` )
+        tandem: multiMeasurementTandem.createTandem( `blochSphere${index}` ),
+        phetioFeatured: true
       } ) );
     } );
 

@@ -106,13 +106,14 @@ export default class BlochSphereMeasurementArea extends Node {
     } );
 
     const singleMeasurementBlochSphereNode = new BlochSphereNode( model.singleMeasurementBlochSphere, {
-      tandem: providedOptions.tandem.createTandem( 'singleMeasurementBlochSphereNode' ),
       drawTitle: false,
       drawKets: false,
       drawAngleIndicators: true,
       centerX: equationPanel.centerX,
       top: equationPanel.bottom + 35,
-      visibleProperty: model.isSingleMeasurementModeProperty
+      visibleProperty: model.isSingleMeasurementModeProperty,
+      tandem: providedOptions.tandem.createTandem( 'singleMeasurementBlochSphereNode' ),
+      phetioFeatured: true
     } );
 
     const multipleMeasurementBlochSpheresTandem = providedOptions.tandem.createTandem( 'multipleMeasurementBlochSpheres' );
@@ -123,7 +124,6 @@ export default class BlochSphereMeasurementArea extends Node {
     const multipleMeasurementBlochSpheresNodes: BlochSphereNode[] = [];
     model.multiMeasurementBlochSpheres.forEach( ( blochSphere, index ) => {
       const blochSphereNode = new BlochSphereNode( blochSphere, {
-        tandem: multipleMeasurementBlochSpheresTandem.createTandem( `blochSphereNode${index}` ),
         scale: 0.3,
         drawTitle: false,
         drawKets: false,
@@ -131,7 +131,9 @@ export default class BlochSphereMeasurementArea extends Node {
         drawAxesLabels: false,
         stateVectorScale: 2,
         centerX: currentColumn * blochSpheresSpacing,
-        centerY: currentRow * blochSpheresSpacing
+        centerY: currentRow * blochSpheresSpacing,
+        tandem: multipleMeasurementBlochSpheresTandem.createTandem( `blochSphereNode${index}` ),
+        phetioFeatured: true
       } );
       multipleMeasurementBlochSpheresNodes.push( blochSphereNode );
 

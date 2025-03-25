@@ -139,15 +139,14 @@ export default class BlochSpherePreparationArea extends VBox {
       combineOptions<PanelOptions>( { minWidth: 270 }, QuantumMeasurementConstants.PANEL_OPTIONS )
     );
 
-    const blochSphereNode = new BlochSphereNode(
-      model.preparationBlochSphere, {
-        tandem: providedOptions.tandem.createTandem( 'blochSphereNode' ),
-        expandBounds: false,
-        drawTitle: false,
-        drawAngleIndicators: true,
-        scale: 0.9
-      }
-    );
+    const blochSphereNode = new BlochSphereNode( model.preparationBlochSphere, {
+      expandBounds: false,
+      drawTitle: false,
+      drawAngleIndicators: true,
+      scale: 0.9,
+      tandem: providedOptions.tandem.createTandem( 'blochSphereNode' ),
+      phetioFeatured: true
+    } );
 
     const options = optionize<BlochSpherePreparationAreaOptions, SelfOptions, VBoxOptions>()( {
       spacing: 14,

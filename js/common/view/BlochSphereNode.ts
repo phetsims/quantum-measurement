@@ -244,7 +244,8 @@ export default class BlochSphereNode extends Node {
         blochSphere.azimuthalAngleProperty,
         blochSphere.polarAngleProperty,
         xAxisOffsetAngleProperty
-      ], ( azimuthalAngle, polarAngle, xAxisOffsetAngle ) => {
+      ],
+      ( azimuthalAngle, polarAngle, xAxisOffsetAngle ) => {
 
         const tip = pointOnTheSphere( azimuthalAngle, polarAngle, xAxisOffsetAngleProperty.value );
         stateVector.setTip( tip.x, tip.y );
@@ -317,6 +318,9 @@ export default class BlochSphereNode extends Node {
         azimuthalAngleIndicator.visible = false;
       }
     );
+
+    // For phet-io, link the model to this view node.
+    this.addLinkedElement( blochSphere );
   }
 }
 
