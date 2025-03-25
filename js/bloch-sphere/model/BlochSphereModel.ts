@@ -83,7 +83,6 @@ class BlochSphereModel implements TModel {
     const preparationAreaTandem = providedOptions.tandem.createTandem( 'preparationAreaModel' );
     const measurementAreaTandem = providedOptions.tandem.createTandem( 'measurementAreaModel' );
     const measurementControlsTandem = measurementAreaTandem.createTandem( 'measurementControls' );
-    const histogramsTandem = measurementAreaTandem.createTandem( 'histograms' );
     const magneticFieldControlsTandem = measurementAreaTandem.createTandem( 'magneticFieldControls' );
 
     // preparation-area-related properties
@@ -148,15 +147,16 @@ class BlochSphereModel implements TModel {
       phetioFeatured: true
     } );
 
-    // Histograms
     this.upMeasurementCountProperty = new NumberProperty( 0, {
-      tandem: histogramsTandem.createTandem( 'upMeasurementCountProperty' ),
-      phetioReadOnly: true
+      tandem: measurementAreaTandem.createTandem( 'upMeasurementCountProperty' ),
+      phetioReadOnly: true,
+      phetioFeatured: true
     } );
 
     this.downMeasurementCountProperty = new NumberProperty( 0, {
-      tandem: histogramsTandem.createTandem( 'downMeasurementCountProperty' ),
-      phetioReadOnly: true
+      tandem: measurementAreaTandem.createTandem( 'downMeasurementCountProperty' ),
+      phetioReadOnly: true,
+      phetioFeatured: true
     } );
 
     // Magnetic Field Controls

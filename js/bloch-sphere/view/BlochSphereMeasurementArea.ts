@@ -28,13 +28,13 @@ import Panel from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
-import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHistogram.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import BlochSphereModel from '../model/BlochSphereModel.js';
 import { MeasurementAxis } from '../model/MeasurementAxis.js';
 import { SpinMeasurementState } from '../model/SpinMeasurementState.js';
 import { StateDirection } from '../model/StateDirection.js';
+import BlochSphereHistogram from './BlochSphereHistogram.js';
 import BlochSphereNumericalEquationNode from './BlochSphereNumericalEquationNode.js';
 import MagneticFieldControl from './MagneticFieldControl.js';
 import MeasurementTimerControl from './MeasurementTimerControl.js';
@@ -48,10 +48,6 @@ const TIMES = MathSymbols.TIMES;
 
 // nominal max width of text elements, empirically determined
 const TEXT_NODE_MAX_WIDTH = 200;
-
-const UP = QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
-const DOWN = QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER;
-const KET = QuantumMeasurementConstants.KET;
 
 export default class BlochSphereMeasurementArea extends Node {
 
@@ -153,24 +149,13 @@ export default class BlochSphereMeasurementArea extends Node {
       visibleProperty: DerivedProperty.not( model.isSingleMeasurementModeProperty )
     } );
 
-    const spinUpLabelStringProperty = new DerivedStringProperty(
-      [ model.measurementAxisProperty ],
-      measurementAxis => `|${UP}<sub>${measurementAxis.label}</sub> ${KET}`
-    );
-    const spinDownLabelStringProperty = new DerivedStringProperty(
-      [ model.measurementAxisProperty ],
-      measurementAxis => `|${DOWN}<sub>${measurementAxis.label}</sub> ${KET}`
-    );
-
-    const histogramNodeTandem = providedOptions.tandem.createTandem( 'histogramNode' );
-    const histogramNode = new QuantumMeasurementHistogram(
+    const histogramNode = new BlochSphereHistogram(
       model.upMeasurementCountProperty,
       model.downMeasurementCountProperty,
-      [
-        new RichText( spinUpLabelStringProperty ),
-        new RichText( spinDownLabelStringProperty )
-      ],
-      { tandem: histogramNodeTandem }
+      model.measurementAxisProperty, {
+        tandem: providedOptions.tandem.createTandem( 'histogramNode' ),
+        phetioFeatured: true
+      }
     );
 
     const resetCountsButton = new EraserButton( {
