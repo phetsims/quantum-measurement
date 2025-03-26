@@ -87,16 +87,16 @@ class PhotonTestingArea extends Node {
       ]
     } );
 
-    const verticalPolarizationDetector = new PhotonDetectorNode(
+    const verticalPolarizationDetectorNode = new PhotonDetectorNode(
       model.verticalPolarizationDetector,
       photonTestingAreaModelViewTransform, {
-        tandem: providedOptions.tandem.createTandem( 'verticalPolarizationDetector' )
+        tandem: providedOptions.tandem.createTandem( 'verticalPolarizationDetectorNode' )
       }
     );
-    const horizontalPolarizationDetector = new PhotonDetectorNode(
+    const horizontalPolarizationDetectorNode = new PhotonDetectorNode(
       model.horizontalPolarizationDetector,
       photonTestingAreaModelViewTransform, {
-        tandem: providedOptions.tandem.createTandem( 'horizontalPolarizationDetector' )
+        tandem: providedOptions.tandem.createTandem( 'horizontalPolarizationDetectorNode' )
       }
     );
 
@@ -112,8 +112,8 @@ class PhotonTestingArea extends Node {
         photonBehaviorModeBox,
         laserNode,
         polarizingBeamSplitterNode,
-        verticalPolarizationDetector,
-        horizontalPolarizationDetector,
+        verticalPolarizationDetectorNode,
+        horizontalPolarizationDetectorNode,
         mirror
       ]
     }, providedOptions );

@@ -83,11 +83,11 @@ class PhotonsExperimentSceneView extends Node {
       tandem: providedOptions.tandem.createTandem( 'experimentArea' )
     } );
 
-    const polarizationIndicator = new ObliquePolarizationAngleIndicator( model.laser.polarizationAngleProperty, {
+    const polarizationIndicatorNode = new ObliquePolarizationAngleIndicator( model.laser.polarizationAngleProperty, {
       scale: 1.5,
       centerX: probabilityAccordionBox.centerX,
       y: experimentArea.y,
-      tandem: providedOptions.tandem.createTandem( 'polarizationIndicator' )
+      tandem: providedOptions.tandem.createTandem( 'polarizationIndicatorNode' )
     } );
 
     const photonPolarizationAngleControl = new PhotonPolarizationAngleControl( model.laser, {
@@ -124,14 +124,14 @@ class PhotonsExperimentSceneView extends Node {
                                     model.horizontalPolarizationDetector.detectionCountProperty :
                                     model.horizontalPolarizationDetector.detectionRateProperty;
 
-    const equationsBox = new PhotonsEquationNode( verticalValueProperty, horizontalValueProperty, {
-      tandem: providedOptions.tandem.createTandem( 'equationsBox' ),
+    const equationsNode = new PhotonsEquationNode( verticalValueProperty, horizontalValueProperty, {
+      tandem: providedOptions.tandem.createTandem( 'equationsNode' ),
       phetioFeatured: true
     } );
 
     // Put the title and the equations together in a vertical box.
     const titleAndEquationsBox = new VBox( {
-      children: [ averagePolarizationTitlePanel, equationsBox ],
+      children: [ averagePolarizationTitlePanel, equationsNode ],
       spacing: 10,
       align: 'left',
       right: QuantumMeasurementConstants.LAYOUT_BOUNDS.width - X_INSET,
@@ -257,7 +257,7 @@ class PhotonsExperimentSceneView extends Node {
     const options = optionize<PhotonsExperimentSceneViewOptions, SelfOptions, NodeOptions>()( {
       children: [
         probabilityAccordionBox,
-        polarizationIndicator,
+        polarizationIndicatorNode,
         photonPolarizationAngleControl,
         experimentArea,
         titleAndEquationsBox,
@@ -277,7 +277,7 @@ class PhotonsExperimentSceneView extends Node {
       photonPolarizationAngleControl,
       probabilityAccordionBox,
       experimentArea,
-      polarizationIndicator,
+      polarizationIndicatorNode,
       titleAndEquationsBox,
       dynamicDataDisplayBox,
       averagePolarizationCheckboxGroup,

@@ -179,15 +179,15 @@ export default class PhotonPolarizationAngleControl extends Panel {
     } );
 
     // Put the polarization indicator and its caption into a VBox.
-    const polarizationIndicator = new VBox( {
+    const polarizationIndicatorNode = new VBox( {
       children: [ polarizationIndicatorGraphic, polarizationIndicatorCaption ],
       spacing: 5,
-      tandem: providedOptions.tandem.createTandem( 'polarizationIndicator' )
+      tandem: providedOptions.tandem.createTandem( 'polarizationIndicatorNode' )
     } );
 
     // Put the left portion of the panel into an HBox with the polarization indicator.
     const content = new HBox( {
-      children: [ leftPortionOfPanel, polarizationIndicator ]
+      children: [ leftPortionOfPanel, polarizationIndicatorNode ]
     } );
 
     super( content, options );
