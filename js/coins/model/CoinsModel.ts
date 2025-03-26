@@ -21,8 +21,8 @@ type QuantumMeasurementModelOptions = SelfOptions & PickRequired<PhetioObjectOpt
 
 export default class CoinsModel implements TModel {
 
-  // The type of experiment being prepared and measured, either classical or quantum.
-  public readonly experimentTypeProperty: Property<SystemType>;
+  // The type, or "mode", of experiment being prepared and measured, either classical or quantum.
+  public readonly experimentModeProperty: Property<SystemType>;
 
   // This screen has two scenes, the "Classical Coin" scene and the "Quantum Coin" scene. These are the models for each.
   public readonly classicalCoinExperimentSceneModel: CoinsExperimentSceneModel;
@@ -38,13 +38,13 @@ export default class CoinsModel implements TModel {
       tandem: providedOptions.tandem.createTandem( 'quantumCoinExperimentSceneModel' )
     } );
 
-    this.experimentTypeProperty = new EnumerationProperty( SystemType.CLASSICAL, {
-      tandem: providedOptions.tandem.createTandem( 'experimentTypeProperty' ),
+    this.experimentModeProperty = new EnumerationProperty( SystemType.CLASSICAL, {
+      tandem: providedOptions.tandem.createTandem( 'experimentModeProperty' ),
       phetioFeatured: true
     } );
 
     // Update the active scene model based on the experiment type.
-    this.experimentTypeProperty.link( experimentType => {
+    this.experimentModeProperty.link( experimentType => {
       this.classicalCoinExperimentSceneModel.activeProperty.value = experimentType === SystemType.CLASSICAL;
       this.quantumCoinExperimentSceneModel.activeProperty.value = experimentType === SystemType.QUANTUM;
     } );
@@ -56,7 +56,7 @@ export default class CoinsModel implements TModel {
   public reset(): void {
     this.classicalCoinExperimentSceneModel.reset();
     this.quantumCoinExperimentSceneModel.reset();
-    this.experimentTypeProperty.reset();
+    this.experimentModeProperty.reset();
   }
 }
 

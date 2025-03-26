@@ -79,10 +79,10 @@ class PhotonsExperimentSceneModel {
   // will collapse to a specific location at the detectors.
   public readonly photonBehaviorModeProperty: Property<SystemType>;
 
-  // Whether the probability accordion box is expanded
-  public readonly isProbabilityAccordionExpandedProperty: BooleanProperty;
+  // whether the probability accordion box is expanded
+  public readonly probabilityExpandedProperty: BooleanProperty;
 
-  // the clock speed of the sim
+  // clock speed of the sim
   public readonly timeSpeedProperty: EnumerationProperty<TimeSpeed>;
 
   public constructor( providedOptions: PhotonsExperimentSceneModelOptions ) {
@@ -213,8 +213,8 @@ class PhotonsExperimentSceneModel {
       phetioFeatured: true
     } );
 
-    this.isProbabilityAccordionExpandedProperty = new BooleanProperty( true, {
-      tandem: providedOptions.tandem.createTandem( 'isProbabilityAccordionExpandedProperty' ),
+    this.probabilityExpandedProperty = new BooleanProperty( true, {
+      tandem: providedOptions.tandem.createTandem( 'probabilityExpandedProperty' ),
       phetioFeatured: true
     } );
 
@@ -237,7 +237,7 @@ class PhotonsExperimentSceneModel {
     this.isPlayingProperty.reset();
     this.timeSpeedProperty.reset();
     this.photonBehaviorModeProperty.reset();
-    this.isProbabilityAccordionExpandedProperty.reset();
+    this.probabilityExpandedProperty.reset();
   }
 
   public stepForwardInTime( dt: number ): void {

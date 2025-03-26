@@ -71,7 +71,7 @@ class CoinSet extends PhetioObject {
   public readonly measuredValues: CoinStates[] = [];
 
   // the number of coins that will be measured when a measurement is made
-  public readonly numberOfActiveCoinsProperty: NumberProperty;
+  public readonly numberOfCoinsProperty: NumberProperty;
 
   // timeout listener for the preparingToBeMeasured state
   private preparingToBeMeasuredTimeoutListener: null | TimerListener = null;
@@ -127,13 +127,13 @@ class CoinSet extends PhetioObject {
     // The phet-io nature of the number of active systems Property is different for the single coin versus the
     // multi-coin case.
     if ( maxNumberOfActiveCoins === 1 ) {
-      this.numberOfActiveCoinsProperty = new NumberProperty( initialNumberOfActiveCoins, {
+      this.numberOfCoinsProperty = new NumberProperty( initialNumberOfActiveCoins, {
         tandem: Tandem.OPT_OUT
       } );
     }
     else {
-      this.numberOfActiveCoinsProperty = new NumberProperty( initialNumberOfActiveCoins, {
-        tandem: options.tandem.createTandem( 'numberOfActiveCoinsProperty' ),
+      this.numberOfCoinsProperty = new NumberProperty( initialNumberOfActiveCoins, {
+        tandem: options.tandem.createTandem( 'numberOfCoinsProperty' ),
         phetioFeatured: true,
         validValues: MULTI_COIN_EXPERIMENT_QUANTITIES,
         phetioReadOnly: true
@@ -211,7 +211,7 @@ class CoinSet extends PhetioObject {
 
         // Use the seed value to generate random values.
         const random = new Random( { seed: seed } );
-        _.times( this.numberOfActiveCoinsProperty.value, i => {
+        _.times( this.numberOfCoinsProperty.value, i => {
           const valueSetIndex = random.nextDouble() < this.biasProperty.value ? 0 : 1;
           this.measuredValues[ i ] = this.validValues[ valueSetIndex ];
         } );
@@ -347,7 +347,7 @@ class CoinSet extends PhetioObject {
     }
 
     return {
-      length: this.numberOfActiveCoinsProperty.value,
+      length: this.numberOfCoinsProperty.value,
       measuredValues: this.measuredValues
     };
   }
@@ -394,7 +394,7 @@ class CoinSet extends PhetioObject {
 
   public reset(): void {
     this.measurementStateProperty.reset();
-    this.numberOfActiveCoinsProperty.reset();
+    this.numberOfCoinsProperty.reset();
     this.seedProperty.reset();
   }
 }

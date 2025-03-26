@@ -64,7 +64,7 @@ export default class SpinMeasurementArea extends VBox {
       };
     } );
 
-    const experimentComboBox = new ComboBox( model.currentExperimentProperty, items, parentNode, {
+    const experimentComboBox = new ComboBox( model.experimentProperty, items, parentNode, {
       tandem: tandem.createTandem( 'experimentComboBox' )
     } );
 
@@ -170,7 +170,7 @@ export default class SpinMeasurementArea extends VBox {
         new DerivedProperty(
           [
             model.particleSourceModel.sourceModeProperty,
-            model.currentExperimentProperty,
+            model.experimentProperty,
             model.sternGerlachs[ 0 ].blockingModeProperty
           ],
           ( sourceMode, experiment, blockingMode ) => {
@@ -184,7 +184,7 @@ export default class SpinMeasurementArea extends VBox {
         new DerivedProperty(
           [
             model.particleSourceModel.sourceModeProperty,
-            model.currentExperimentProperty,
+            model.experimentProperty,
             model.sternGerlachs[ 0 ].blockingModeProperty
           ],
           ( sourceMode, experiment, blockingMode ) => {

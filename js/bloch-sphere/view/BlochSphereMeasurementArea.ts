@@ -122,7 +122,7 @@ export default class BlochSphereMeasurementArea extends Node {
     let currentRow = 0;
     let currentColumn = 0;
     const multipleMeasurementBlochSpheresNodes: BlochSphereNode[] = [];
-    model.multiMeasurementBlochSpheres.forEach( ( blochSphere, index ) => {
+    model.multipleMeasurementBlochSpheres.forEach( ( blochSphere, index ) => {
       const blochSphereNode = new BlochSphereNode( blochSphere, {
         scale: 0.3,
         drawTitle: false,
@@ -229,8 +229,8 @@ export default class BlochSphereMeasurementArea extends Node {
     );
 
     const measurementTimerControl = new MeasurementTimerControl(
-      model.timeToMeasurementProperty,
-      model.measurementTimeProperty,
+      model.measurementDelayProperty,
+      model.timeElapsedProperty,
       {
         tandem: measurementDelayControlTandem.createTandem( 'measurementTimerControl' ),
         phetioVisiblePropertyInstrumented: false // Visibility controlled by parent node
@@ -285,7 +285,7 @@ export default class BlochSphereMeasurementArea extends Node {
     );
 
     // Define a DerivedStringProperty for the label that will appear on the button.
-    const experimentControlButtonTextProperty = new DerivedStringProperty(
+    const observeReprepareButtonTextProperty = new DerivedStringProperty(
       [
         model.measurementStateProperty,
         model.magneticFieldEnabledProperty,
@@ -309,13 +309,13 @@ export default class BlochSphereMeasurementArea extends Node {
     );
 
     // Define a derived Property for the color of the button, which changes based on the measurement state.
-    const experimentControlButtonColorProperty = new DerivedProperty(
+    const observeReprepareButtonColorProperty = new DerivedProperty(
       [ model.measurementStateProperty ],
       measurementState => measurementState.colorProperty.value
     );
 
-    const experimentControlButton = new TextPushButton(
-      experimentControlButtonTextProperty,
+    const observeReprepareButton = new TextPushButton(
+      observeReprepareButtonTextProperty,
       {
         listener: () => {
           if ( model.measurementStateProperty.value === SpinMeasurementState.PREPARED ) {
@@ -325,7 +325,7 @@ export default class BlochSphereMeasurementArea extends Node {
             model.reprepare();
           }
         },
-        baseColor: experimentControlButtonColorProperty,
+        baseColor: observeReprepareButtonColorProperty,
         font: QuantumMeasurementConstants.TITLE_FONT,
         enabledProperty: DerivedProperty.valueNotEqualsConstant( model.measurementStateProperty, SpinMeasurementState.TIMING_OBSERVATION ),
         xMargin: 20,
@@ -333,7 +333,7 @@ export default class BlochSphereMeasurementArea extends Node {
         maxWidth: measurementControlPanel.width,
         touchAreaXDilation: 5,
         touchAreaYDilation: 5,
-        tandem: providedOptions.tandem.createTandem( 'experimentControlButton' ),
+        tandem: providedOptions.tandem.createTandem( 'observeReprepareButton' ),
         textNodeOptions: {
           maxWidth: 150
         }
@@ -353,7 +353,7 @@ export default class BlochSphereMeasurementArea extends Node {
           ]
         } ),
         measurementControlPanel,
-        experimentControlButton
+        observeReprepareButton
       ]
     } );
 
@@ -433,7 +433,7 @@ export default class BlochSphereMeasurementArea extends Node {
 
     this.pdomOrder = [
       measurementControlPanel,
-      experimentControlButton,
+      observeReprepareButton,
       magneticFieldCheckbox,
       magneticFieldAndStrengthControl,
       equationPanel,

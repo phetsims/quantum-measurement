@@ -70,7 +70,7 @@ export default class SpinStatePreparationArea extends VBox {
           touchAreaYDilation: pointerAreaDilation
         },
         tandem: spinStateRadioButtonGroupTandem,
-        visibleProperty: new GatedVisibleProperty( new DerivedProperty( [ model.currentExperimentProperty ], currentExperiment => currentExperiment !== SpinExperiment.CUSTOM ), spinStateRadioButtonGroupTandem )
+        visibleProperty: new GatedVisibleProperty( new DerivedProperty( [ model.experimentProperty ], currentExperiment => currentExperiment !== SpinExperiment.CUSTOM ), spinStateRadioButtonGroupTandem )
       }
     );
 
@@ -112,7 +112,7 @@ export default class SpinStatePreparationArea extends VBox {
     const stateReadout = new RichText( stateReadoutStringProperty, { font: QuantumMeasurementConstants.TITLE_FONT } );
 
     const probabilityControlBox = new VBox( {
-      visibleProperty: DerivedProperty.valueEqualsConstant( model.currentExperimentProperty, SpinExperiment.CUSTOM ),
+      visibleProperty: DerivedProperty.valueEqualsConstant( model.experimentProperty, SpinExperiment.CUSTOM ),
       children: [
         new ProbabilityValueControl(
           new RichText( `|${MathSymbols.ALPHA}|<sup>2`, QuantumMeasurementConstants.NUMBER_CONTROL_TITLE_OPTIONS ),

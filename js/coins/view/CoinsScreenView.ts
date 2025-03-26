@@ -35,29 +35,32 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
   public constructor( model: CoinsModel, backgroundColorProperty: ColorType, tandem: Tandem ) {
 
     // Add the radio buttons at the top of the screen that will allow users to pick between classical and quantum coins.
-    const experimentTypeRadioButtonGroup = new SceneSelectorRadioButtonGroup<SystemType>(
-      model.experimentTypeProperty,
+    const experimentModeRadioButtonGroup = new SceneSelectorRadioButtonGroup<SystemType>(
+      model.experimentModeProperty,
       {
         centerX: QuantumMeasurementConstants.LAYOUT_BOUNDS.centerX,
         top: QuantumMeasurementConstants.SCREEN_VIEW_Y_MARGIN,
-        tandem: tandem.createTandem( 'experimentTypeRadioButtonGroup' )
+        tandem: tandem.createTandem( 'experimentModeRadioButtonGroup' )
       }
     );
 
-    // Design request to change the backgruond color based on the scene selection,
-    // and since the Screen Background color is set outside the Screen View, we pass it here and modify it.
-    Multilink.multilink( [
-      model.experimentTypeProperty,
-      QuantumMeasurementColors.classicalSceneBackgroundColorProperty,
-      QuantumMeasurementColors.quantumSceneBackgroundColorProperty
-    ], ( experimentType, classicalBackgroundColor, quantumBackgroundColor ) => {
-      if ( experimentType === SystemType.CLASSICAL ) {
-        backgroundColorProperty.value = classicalBackgroundColor;
+    // Change the background color based on the experiment mode.  This was a design request to make it more obvious to
+    // the user when they are in the classical or quantum mode.
+    Multilink.multilink(
+      [
+        model.experimentModeProperty,
+        QuantumMeasurementColors.classicalSceneBackgroundColorProperty,
+        QuantumMeasurementColors.quantumSceneBackgroundColorProperty
+      ],
+      ( experimentType, classicalBackgroundColor, quantumBackgroundColor ) => {
+        if ( experimentType === SystemType.CLASSICAL ) {
+          backgroundColorProperty.value = classicalBackgroundColor;
+        }
+        else {
+          backgroundColorProperty.value = quantumBackgroundColor;
+        }
       }
-      else {
-        backgroundColorProperty.value = quantumBackgroundColor;
-      }
-    } );
+    );
 
 
     // Add the views for the two scenes that can be shown on this screen.
@@ -73,7 +76,7 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
     super( {
       tandem: tandem,
       children: [
-        experimentTypeRadioButtonGroup,
+        experimentModeRadioButtonGroup,
         classicalCoinsExperimentSceneView,
         quantumCoinsExperimentSceneView
       ]
@@ -86,7 +89,7 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
     this.pdomPlayAreaNode.pdomOrder = [
       classicalCoinsExperimentSceneView,
       quantumCoinsExperimentSceneView,
-      experimentTypeRadioButtonGroup
+      experimentModeRadioButtonGroup
     ];
   }
 

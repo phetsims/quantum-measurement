@@ -38,12 +38,12 @@ class BlochSphereModel implements TModel {
   // Bloch spheres for preparing the spin state and displaying the results of measurements.
   public readonly preparationBlochSphere: ComplexBlochSphere;
   public readonly singleMeasurementBlochSphere: ComplexBlochSphere;
-  public readonly multiMeasurementBlochSpheres: ComplexBlochSphere[] = [];
+  public readonly multipleMeasurementBlochSpheres: ComplexBlochSphere[] = [];
 
   // Preparation-area-related properties
 
-  // Selected State Direction
-  public selectedStateDirectionProperty: Property<StateDirection>;
+  // Selected spin state to prepare
+  public spinStateProperty: Property<StateDirection>;
 
   // Measurement area related properties
 
@@ -52,7 +52,7 @@ class BlochSphereModel implements TModel {
   // observe() and reprepare() methods.
   public readonly measurementStateProperty: Property<SpinMeasurementState>;
 
-  // Selected Equation Basis
+  // Selected equation basis
   public equationBasisProperty: Property<StateDirection>;
 
   // Measurement axis, whether to measure spin in X,Y, or Z axis
@@ -62,10 +62,10 @@ class BlochSphereModel implements TModel {
   public isSingleMeasurementModeProperty: BooleanProperty;
 
   // The amount of time to wait before making a measurement when the magnetic field is present.
-  public timeToMeasurementProperty: NumberProperty;
+  public measurementDelayProperty: NumberProperty;
 
   // Current measurement time.
-  public measurementTimeProperty: NumberProperty;
+  public timeElapsedProperty: NumberProperty;
 
   // Counts for the number of times the spin has been measured in the up and down states. Shown in the histograms.
   public readonly upMeasurementCountProperty: NumberProperty;
@@ -93,8 +93,8 @@ class BlochSphereModel implements TModel {
       polarAnglePhetioReadOnly: false
     } );
 
-    this.selectedStateDirectionProperty = new EnumerationProperty( StateDirection.X_PLUS, {
-      tandem: preparationAreaTandem.createTandem( 'selectedStateDirectionProperty' ),
+    this.spinStateProperty = new EnumerationProperty( StateDirection.X_PLUS, {
+      tandem: preparationAreaTandem.createTandem( 'spinStateProperty' ),
       phetioFeatured: true
     } );
 
@@ -104,9 +104,9 @@ class BlochSphereModel implements TModel {
       phetioFeatured: true
     } );
 
-    const multiMeasurementTandem = measurementAreaTandem.createTandem( 'multiMeasurementBlochSpheres' );
+    const multiMeasurementTandem = measurementAreaTandem.createTandem( 'multipleMeasurementBlochSpheres' );
     _.times( 10, index => {
-      this.multiMeasurementBlochSpheres.push( new ComplexBlochSphere( {
+      this.multipleMeasurementBlochSpheres.push( new ComplexBlochSphere( {
         tandem: multiMeasurementTandem.createTandem( `blochSphere${index}` ),
         phetioFeatured: true
       } ) );
@@ -126,16 +126,16 @@ class BlochSphereModel implements TModel {
     } );
 
     // Measurement controls. Starting time to measurement at 75% so there's more subliminal reason to move it
-    this.timeToMeasurementProperty = new NumberProperty( MODEL_TO_VIEW_TIME * 0.75 * MAX_OBSERVATION_TIME, {
-      tandem: measurementControlsTandem.createTandem( 'timeToMeasurementProperty' ),
+    this.measurementDelayProperty = new NumberProperty( MODEL_TO_VIEW_TIME * 0.75 * MAX_OBSERVATION_TIME, {
+      tandem: measurementControlsTandem.createTandem( 'measurementDelayProperty' ),
       range: new Range( 0, MODEL_TO_VIEW_TIME * MAX_OBSERVATION_TIME ),
       phetioDocumentation: 'Time at which the measurement will be made after the start of the experiment.',
       phetioFeatured: true,
       units: 'ns'
     } );
 
-    this.measurementTimeProperty = new NumberProperty( 0, {
-      tandem: measurementControlsTandem.createTandem( 'measurementTimeProperty' ),
+    this.timeElapsedProperty = new NumberProperty( 0, {
+      tandem: measurementControlsTandem.createTandem( 'timeElapsedProperty' ),
       phetioReadOnly: true,
       phetioDocumentation: 'Current time of the experiment. For internal use only.',
       units: 'ns'
@@ -176,7 +176,7 @@ class BlochSphereModel implements TModel {
     } );
 
     let selectingStateDirection = false;
-    this.selectedStateDirectionProperty.link( stateDirection => {
+    this.spinStateProperty.link( stateDirection => {
       if ( stateDirection !== StateDirection.CUSTOM ) {
         selectingStateDirection = true;
         this.preparationBlochSphere.polarAngleProperty.value = stateDirection.polarAngle;
@@ -187,7 +187,7 @@ class BlochSphereModel implements TModel {
 
     // Clear the measurement counts when the time to measurement changes, since this changes the nature of the
     // measurement that is being made.
-    this.timeToMeasurementProperty.link( () => this.resetCounts() );
+    this.measurementDelayProperty.link( () => this.resetCounts() );
 
     // Clear accumulated counts and potentially change the selected preset state direction to CUSTOM when the user
     // changes the angles of the Bloch Sphere. Lazy to not change the selected state direction on build up.
@@ -200,7 +200,7 @@ class BlochSphereModel implements TModel {
 
         if ( !selectingStateDirection ) {
           // Change the selected state to indicate that the user has moved away from the preset states.
-          this.selectedStateDirectionProperty.value = StateDirection.CUSTOM;
+          this.spinStateProperty.value = StateDirection.CUSTOM;
         }
 
         this.reprepare();
@@ -224,7 +224,7 @@ class BlochSphereModel implements TModel {
         // field.
         const rotationRate = measurementState === SpinMeasurementState.TIMING_OBSERVATION && showMagneticField ? magneticFieldStrength : 0;
         this.singleMeasurementBlochSphere.rotatingSpeedProperty.value = rotationRate;
-        this.multiMeasurementBlochSpheres.forEach( blochSphere => {
+        this.multipleMeasurementBlochSpheres.forEach( blochSphere => {
           blochSphere.rotatingSpeedProperty.value = rotationRate;
         } );
       }
@@ -254,7 +254,7 @@ class BlochSphereModel implements TModel {
       );
     }
     else {
-      this.multiMeasurementBlochSpheres.forEach( blochSphere => {
+      this.multipleMeasurementBlochSpheres.forEach( blochSphere => {
         blochSphere.measure(
           this.measurementAxisProperty.value,
           this.upMeasurementCountProperty,
@@ -283,7 +283,7 @@ class BlochSphereModel implements TModel {
 
       // Transition to the state where the model is waiting to take a measurement.
       this.measurementStateProperty.value = SpinMeasurementState.TIMING_OBSERVATION;
-      this.measurementTimeProperty.value = 0;
+      this.timeElapsedProperty.value = 0;
     }
     else {
 
@@ -303,14 +303,14 @@ class BlochSphereModel implements TModel {
       this.preparationBlochSphere.azimuthalAngleProperty.value
     );
 
-    this.multiMeasurementBlochSpheres.forEach( blochSphere => {
+    this.multipleMeasurementBlochSpheres.forEach( blochSphere => {
       blochSphere.setDirection(
         this.preparationBlochSphere.polarAngleProperty.value,
         this.preparationBlochSphere.azimuthalAngleProperty.value
       );
     } );
 
-    this.measurementTimeProperty.value = 0;
+    this.timeElapsedProperty.value = 0;
     this.measurementStateProperty.value = SpinMeasurementState.PREPARED;
   }
 
@@ -333,9 +333,9 @@ class BlochSphereModel implements TModel {
     this.magneticFieldStrengthProperty.reset();
     this.measurementAxisProperty.reset();
     this.isSingleMeasurementModeProperty.reset();
-    this.timeToMeasurementProperty.reset();
-    this.measurementTimeProperty.reset();
-    this.selectedStateDirectionProperty.reset();
+    this.measurementDelayProperty.reset();
+    this.timeElapsedProperty.reset();
+    this.spinStateProperty.reset();
     this.equationBasisProperty.reset();
   }
 
@@ -345,16 +345,16 @@ class BlochSphereModel implements TModel {
    */
   public step( dt: number ): void {
     this.singleMeasurementBlochSphere.step( dt );
-    this.multiMeasurementBlochSpheres.forEach( blochSphere => {
+    this.multipleMeasurementBlochSpheres.forEach( blochSphere => {
       blochSphere.step( dt );
     } );
 
     if ( this.measurementStateProperty.value === SpinMeasurementState.TIMING_OBSERVATION ) {
-      this.measurementTimeProperty.value = Math.min(
-        this.measurementTimeProperty.value + dt * MODEL_TO_VIEW_TIME,
-        this.timeToMeasurementProperty.value
+      this.timeElapsedProperty.value = Math.min(
+        this.timeElapsedProperty.value + dt * MODEL_TO_VIEW_TIME,
+        this.measurementDelayProperty.value
       );
-      if ( this.measurementTimeProperty.value >= this.timeToMeasurementProperty.value ) {
+      if ( this.timeElapsedProperty.value >= this.measurementDelayProperty.value ) {
 
         // The time when the observation should be made has been reached.  Make the observation.
         this.observe();

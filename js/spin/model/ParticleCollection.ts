@@ -160,7 +160,7 @@ export class ParticleCollection extends PhetioObject {
       const extraDistance = particle.position.x - particle.endPosition.x;
       const extraTime = extraDistance / particle.speed;
 
-      const usingSingleApparatus = this.model.currentExperimentProperty.value.usingSingleApparatus;
+      const usingSingleApparatus = this.model.experimentProperty.value.usingSingleApparatus;
 
       // If the first stage SOURCE-SG0 is not yet completed, mark it as completed and measure the particle
       if ( !particle.stageCompleted[ 0 ] ) {

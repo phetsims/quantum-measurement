@@ -63,7 +63,7 @@ class SpinModel implements TModel {
   public readonly derivedSpinStateProperty: TReadOnlyProperty<Vector2>;
 
   // current experiment selected by the user
-  public readonly currentExperimentProperty: Property<SpinExperiment>;
+  public readonly experimentProperty: Property<SpinExperiment>;
   public readonly isCustomExperimentProperty: TReadOnlyProperty<boolean>;
 
   // The particle collections, for single shooting mode, and continuous mode.
@@ -99,14 +99,14 @@ class SpinModel implements TModel {
     // Since both alpha and beta can be controlled via the slider they must be derived manually.
     this.betaSquaredProperty = new NumberProperty( 1 - this.alphaSquaredProperty.value );
 
-    this.currentExperimentProperty = new Property<SpinExperiment>( SpinExperiment.EXPERIMENT_1, {
-      tandem: providedOptions.tandem.createTandem( 'currentExperimentProperty' ),
+    this.experimentProperty = new Property<SpinExperiment>( SpinExperiment.EXPERIMENT_1, {
+      tandem: providedOptions.tandem.createTandem( 'experimentProperty' ),
       phetioValueType: EnumerationIO( SpinExperiment ),
       validValues: SpinExperiment.enumeration.values,
       phetioFeatured: true
     } );
 
-    this.isCustomExperimentProperty = DerivedProperty.valueEqualsConstant( this.currentExperimentProperty, SpinExperiment.CUSTOM );
+    this.isCustomExperimentProperty = DerivedProperty.valueEqualsConstant( this.experimentProperty, SpinExperiment.CUSTOM );
 
     this.particleSourceModel = new ParticleSourceModel(
       new Vector2( -0.5, 0 ),
@@ -223,8 +223,8 @@ class SpinModel implements TModel {
     // Saving the blocking mode into the experiment
     this.sternGerlachs[ 0 ].blockingModeProperty.link( blockingMode => {
       if ( blockingMode !== BlockingMode.NO_BLOCKER ) {
-        assert && assert( this.blockingModeMap.has( this.currentExperimentProperty.value ), 'Experiment not found in map' );
-        this.blockingModeMap.get( this.currentExperimentProperty.value )!.value = blockingMode;
+        assert && assert( this.blockingModeMap.has( this.experimentProperty.value ), 'Experiment not found in map' );
+        this.blockingModeMap.get( this.experimentProperty.value )!.value = blockingMode;
       }
       this.sternGerlachs[ 1 ].resetCounts();
       this.sternGerlachs[ 2 ].resetCounts();
@@ -241,7 +241,7 @@ class SpinModel implements TModel {
     // The blocking mode can be directly be set via a AquaRadioButton in the SternGerlachNode
     Multilink.multilink(
       [
-        this.currentExperimentProperty,
+        this.experimentProperty,
         this.particleSourceModel.sourceModeProperty
       ], ( experiment, sourceMode ) => {
         if ( sourceMode !== SourceMode.SINGLE && !experiment.usingSingleApparatus ) {
@@ -270,7 +270,7 @@ class SpinModel implements TModel {
     //
     Multilink.multilink(
       [
-        this.currentExperimentProperty,
+        this.experimentProperty,
         this.particleSourceModel.sourceModeProperty,
         this.sternGerlachs[ 0 ].blockingModeProperty
       ],
@@ -335,7 +335,7 @@ class SpinModel implements TModel {
     // Measure on the first SG, this will change its upProbabilityProperty.
     this.sternGerlachs[ 0 ].updateProbability( this.derivedSpinStateProperty.value );
 
-    if ( !this.currentExperimentProperty.value.usingSingleApparatus ) {
+    if ( !this.experimentProperty.value.usingSingleApparatus ) {
 
       // Measure on the second SG according to the orientation of the first one.
       this.sternGerlachs[ 1 ].updateProbability(
@@ -368,7 +368,7 @@ class SpinModel implements TModel {
       this.blockingModeMap.get( experiment )!.reset();
     } );
 
-    this.currentExperimentProperty.reset();
+    this.experimentProperty.reset();
     this.measurementDevices.forEach( device => device.reset() );
     this.singleParticlesCollection.clear();
     this.multipleParticlesCollection.clear();

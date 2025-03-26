@@ -59,7 +59,7 @@ class CoinsExperimentSceneModel extends PhetioObject {
   public readonly coinSet: CoinSet;
 
   // The initial state that all coin(s) should be in before any flipping or other experiment preparation occurs.
-  public readonly initialCoinFaceStateProperty: Property<CoinStates>;
+  public readonly initialCoinStateProperty: Property<CoinStates>;
 
   // The probability of the 'up' state. The 'down' probability will be (1 - thisValue).
   public readonly upProbabilityProperty: NumberProperty;
@@ -101,9 +101,10 @@ class CoinsExperimentSceneModel extends PhetioObject {
     // of the initial state for the coins.  This is done a little differently for classical versus quantum systems.
     const singleCoinTandem = options.tandem.createTandem( 'singleCoin' );
     const coinSetTandem = options.tandem.createTandem( 'coinSet' );
+    const initialCoinStatePropertyTandem = options.tandem.createTandem( 'initialCoinStateProperty' );
     if ( options.systemType === SystemType.CLASSICAL ) {
-      this.initialCoinFaceStateProperty = new Property<CoinStates>( 'heads', {
-        tandem: options.tandem.createTandem( 'initialCoinFaceStateProperty' ),
+      this.initialCoinStateProperty = new Property<CoinStates>( 'heads', {
+        tandem: initialCoinStatePropertyTandem,
         phetioDocumentation: 'This is the initial orientation of the classical coin',
         phetioValueType: StringUnionIO( ClassicalCoinStateValues ),
         validValues: ClassicalCoinStateValues,
@@ -126,8 +127,8 @@ class CoinsExperimentSceneModel extends PhetioObject {
     }
     else {
       assert && assert( options.systemType === SystemType.QUANTUM, 'unhandled system type' );
-      this.initialCoinFaceStateProperty = new Property<CoinStates>( 'up', {
-        tandem: options.tandem.createTandem( 'initialCoinFaceStateProperty' ),
+      this.initialCoinStateProperty = new Property<CoinStates>( 'up', {
+        tandem: initialCoinStatePropertyTandem,
         phetioValueType: StringUnionIO( QuantumCoinStateValues ),
         phetioDocumentation: 'This is the basis state of the quantum coin',
         phetioReadOnly: true,
@@ -171,9 +172,9 @@ class CoinsExperimentSceneModel extends PhetioObject {
         // The scene is moving from preparation mode to measurement mode. Set the coins to be in the initial state
         // chosen by the user.  If these are quantum coins and the initial state is set to superposition, set an arbitrary
         // initial state.  This is okay because the values won't be shown to the user.
-        const initialState: CoinStates = this.initialCoinFaceStateProperty.value === 'superposition' ?
+        const initialState: CoinStates = this.initialCoinStateProperty.value === 'superposition' ?
                                          'up' :
-                                         this.initialCoinFaceStateProperty.value;
+                                         this.initialCoinStateProperty.value;
         this.singleCoin.setMeasurementValuesImmediate( initialState );
         this.coinSet.setMeasurementValuesImmediate( initialState );
       }
@@ -182,7 +183,7 @@ class CoinsExperimentSceneModel extends PhetioObject {
     // If this is a quantum system, changing the initial state of the coin sets the bias to match that coin.  This code
     // sets up the listeners that will make this happen.
     if ( this.systemType === SystemType.QUANTUM ) {
-      this.initialCoinFaceStateProperty.lazyLink( initialCoinState => {
+      this.initialCoinStateProperty.lazyLink( initialCoinState => {
         if ( initialCoinState !== 'superposition' ) {
           this.upProbabilityProperty.value = initialCoinState === 'up' ? 1 : 0;
         }
@@ -190,10 +191,10 @@ class CoinsExperimentSceneModel extends PhetioObject {
 
       this.upProbabilityProperty.lazyLink( bias => {
         if ( bias !== 0 && bias !== 1 ) {
-          this.initialCoinFaceStateProperty.value = 'superposition';
+          this.initialCoinStateProperty.value = 'superposition';
         }
         else {
-          this.initialCoinFaceStateProperty.value = bias === 1 ? 'up' : 'down';
+          this.initialCoinStateProperty.value = bias === 1 ? 'up' : 'down';
         }
       } );
     }
@@ -201,7 +202,7 @@ class CoinsExperimentSceneModel extends PhetioObject {
 
   public reset(): void {
     this.preparingExperimentProperty.reset();
-    this.initialCoinFaceStateProperty.reset();
+    this.initialCoinStateProperty.reset();
     this.upProbabilityProperty.reset();
     this.singleCoin.reset();
     this.coinSet.reset();

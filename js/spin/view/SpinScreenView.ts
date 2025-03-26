@@ -54,7 +54,7 @@ export default class SpinScreenView extends QuantumMeasurementScreenView {
       this.resetAllButton
     ];
 
-    model.currentExperimentProperty.notifyListenersStatic();
+    model.experimentProperty.notifyListenersStatic();
   }
 
   public override reset(): void {

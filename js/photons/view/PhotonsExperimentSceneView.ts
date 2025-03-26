@@ -62,16 +62,16 @@ class PhotonsExperimentSceneView extends Node {
       phetioFeatured: true
     } );
 
-    const photonDetectionProbabilityAccordionBox = new PhotonDetectionProbabilityPanel(
+    const probabilityAccordionBox = new PhotonDetectionProbabilityPanel(
       model.laser.polarizationAngleProperty,
-      model.isProbabilityAccordionExpandedProperty,
+      model.probabilityExpandedProperty,
       {
 
         // Position empirically determined to match design doc.
         left: 55,
         top: 20,
 
-        tandem: providedOptions.tandem.createTandem( 'photonDetectionProbabilityAccordionBox' )
+        tandem: providedOptions.tandem.createTandem( 'probabilityAccordionBox' )
       }
     );
 
@@ -85,7 +85,7 @@ class PhotonsExperimentSceneView extends Node {
 
     const polarizationIndicator = new ObliquePolarizationAngleIndicator( model.laser.polarizationAngleProperty, {
       scale: 1.5,
-      centerX: photonDetectionProbabilityAccordionBox.centerX,
+      centerX: probabilityAccordionBox.centerX,
       y: experimentArea.y,
       tandem: providedOptions.tandem.createTandem( 'polarizationIndicator' )
     } );
@@ -256,7 +256,7 @@ class PhotonsExperimentSceneView extends Node {
 
     const options = optionize<PhotonsExperimentSceneViewOptions, SelfOptions, NodeOptions>()( {
       children: [
-        photonDetectionProbabilityAccordionBox,
+        probabilityAccordionBox,
         polarizationIndicator,
         photonPolarizationAngleControl,
         experimentArea,
@@ -275,7 +275,7 @@ class PhotonsExperimentSceneView extends Node {
 
     this.pdomOrder = [
       photonPolarizationAngleControl,
-      photonDetectionProbabilityAccordionBox,
+      probabilityAccordionBox,
       experimentArea,
       polarizationIndicator,
       titleAndEquationsBox,

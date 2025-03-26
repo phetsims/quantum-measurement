@@ -75,7 +75,7 @@ class MultiCoinTestBox extends Node {
     super( { children: [ testBoxInterior, testBoxWithClipArea ] } );
 
     this.testBoxWithClipArea = testBoxWithClipArea;
-    this.numberOfActiveCoinsProperty = coinSet.numberOfActiveCoinsProperty;
+    this.numberOfActiveCoinsProperty = coinSet.numberOfCoinsProperty;
 
     // Update the fill for the rectangle based on the measurement state.
     coinSet.measurementStateProperty.link( measurementState => {

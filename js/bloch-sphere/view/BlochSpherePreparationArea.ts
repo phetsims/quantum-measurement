@@ -91,9 +91,9 @@ export default class BlochSpherePreparationArea extends VBox {
       };
     } );
 
-    const directionComboBox = new ComboBox( model.selectedStateDirectionProperty, comboBoxItems, parentNode, {
+    const spinStateComboBox = new ComboBox( model.spinStateProperty, comboBoxItems, parentNode, {
       yMargin: 6,
-      tandem: providedOptions.tandem.createTandem( 'directionComboBox' )
+      tandem: providedOptions.tandem.createTandem( 'spinStateComboBox' )
     } );
 
     const sliderTitleOptions = { font: QuantumMeasurementConstants.CONTROL_FONT, maxWidth: 200 };
@@ -101,7 +101,7 @@ export default class BlochSpherePreparationArea extends VBox {
       new VBox( {
         spacing: 15,
         children: [
-          directionComboBox,
+          spinStateComboBox,
           new VBox( {
             spacing: QuantumMeasurementConstants.TITLE_AND_SLIDER_SPACING,
             children: [

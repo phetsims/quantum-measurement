@@ -91,7 +91,7 @@ class CoinExperimentPreparationArea extends VBox {
       return toFixed( downProbability, 3 );
     } );
 
-    const coinStateStringProperty = getCoinAccessibleName( sceneModel.initialCoinFaceStateProperty );
+    const coinStateStringProperty = getCoinAccessibleName( sceneModel.initialCoinStateProperty );
 
     const patternStringProperty = sceneModel.systemType === SystemType.CLASSICAL ?
                                   QuantumMeasurementStrings.a11y.preparationAreaHeader.classicalAccessibleParagraphPatternStringProperty :
@@ -115,7 +115,7 @@ class CoinExperimentPreparationArea extends VBox {
 
     // Create the UI element that will allow the user to specify the initial state of the coin.
     const initialCoinStateSelectorNode = new InitialCoinStateSelectorNode(
-      sceneModel.initialCoinFaceStateProperty,
+      sceneModel.initialCoinStateProperty,
       sceneModel.upProbabilityProperty,
       sceneModel.preparingExperimentProperty,
       sceneModel.systemType,

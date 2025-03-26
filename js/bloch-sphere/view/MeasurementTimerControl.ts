@@ -39,8 +39,8 @@ const NUMBER_OF_MINOR_TICKS = 7;
 
 export default class MeasurementTimerControl extends Node {
 
-  public constructor( timeToMeasurementProperty: NumberProperty,
-                      measurementTimeProperty: NumberProperty,
+  public constructor( measurementDelayProperty: NumberProperty,
+                      timeElapsedProperty: NumberProperty,
                       providedOptions: MeasurementTimerControlOptions ) {
 
     // Create the tandem for the slider, since we'll need it for other things before creating the slider itself.
@@ -88,7 +88,7 @@ export default class MeasurementTimerControl extends Node {
     } );
     thumbNode.addInputListener( pressListener );
 
-    const sliderStep = timeToMeasurementProperty.range.getLength() / 8;
+    const sliderStep = measurementDelayProperty.range.getLength() / 8;
 
     // Function to constrain the value to intervals but don't allow it going under minMeasurementTime
     const mappingValue = ( value: number ) => {
@@ -97,9 +97,9 @@ export default class MeasurementTimerControl extends Node {
     };
 
     // Create the slider that will control the time at which the system is measured.
-    const minMeasurementTime = timeToMeasurementProperty.rangeProperty.value.getLength() / ( NUMBER_OF_MINOR_TICKS + 1 );
-    const maxMeasurementTime = timeToMeasurementProperty.rangeProperty.value.max;
-    const timeToMeasurementSlider = new Slider( timeToMeasurementProperty, timeToMeasurementProperty.range, {
+    const minMeasurementTime = measurementDelayProperty.rangeProperty.value.getLength() / ( NUMBER_OF_MINOR_TICKS + 1 );
+    const maxMeasurementTime = measurementDelayProperty.rangeProperty.value.max;
+    const timeToMeasurementSlider = new Slider( measurementDelayProperty, measurementDelayProperty.range, {
       tandem: sliderTandem,
       phetioVisiblePropertyInstrumented: false, // The parent node should be hidden if this is not desired
       thumbNode: thumbNode,
@@ -116,7 +116,7 @@ export default class MeasurementTimerControl extends Node {
       shiftKeyboardStep: sliderStep,
       pageKeyboardStep: sliderStep * 2,
       valueChangeSoundGeneratorOptions: {
-        numberOfMiddleThresholds: timeToMeasurementProperty.range.getLength() / sliderStep - 1
+        numberOfMiddleThresholds: measurementDelayProperty.range.getLength() / sliderStep - 1
       }
     } );
 
@@ -137,8 +137,8 @@ export default class MeasurementTimerControl extends Node {
       tailWidth: 0
     } );
 
-    measurementTimeProperty.link( measurementTime => {
-      timeIndicator.centerX = measurementTime / timeToMeasurementProperty.rangeProperty.value.max * SLIDER_TRACK_SIZE.width;
+    timeElapsedProperty.link( measurementTime => {
+      timeIndicator.centerX = measurementTime / measurementDelayProperty.rangeProperty.value.max * SLIDER_TRACK_SIZE.width;
     } );
 
     const options = optionize<MeasurementTimerControlOptions, SelfOptions, PanelOptions>()( {
