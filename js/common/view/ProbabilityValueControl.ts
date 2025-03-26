@@ -57,6 +57,9 @@ class ProbabilityValueControl extends NumberControl {
         decimalPlaces: 2
       },
       useRichText: true,
+      titleNodeOptions: {
+        tandem: Tandem.OPT_OUT
+      },
       sliderOptions: combineOptions<NumberControlSliderOptions>( {
         constrainValue: ( number: number ) => roundToInterval( number, sliderStep ),
         keyboardStep: sliderStep,
