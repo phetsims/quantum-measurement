@@ -129,7 +129,7 @@ export default class SpinStatePreparationArea extends VBox {
 
     const projectionsCheckboxesTandem = tandem.createTandem( 'projectionsCheckboxes' );
     const zProjectionCheckbox = new Checkbox(
-      model.blochSphere.showZProjectionProperty,
+      model.blochSphere.zProjectionVisibleProperty,
       new HBox( {
         spacing: 5,
         children: [
@@ -145,7 +145,7 @@ export default class SpinStatePreparationArea extends VBox {
     );
 
     const xProjectionCheckbox = new Checkbox(
-      model.blochSphere.showXProjectionProperty,
+      model.blochSphere.xProjectionVisibleProperty,
       new HBox( {
         spacing: 5,
         children: [

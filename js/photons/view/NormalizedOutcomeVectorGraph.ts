@@ -31,22 +31,22 @@ const LABEL_SPACING = 7;
 export default class NormalizedOutcomeVectorGraph extends Node {
 
   // Property that controls whether the expectation value line is visible when there is a valid expectation value.
-  public readonly showExpectationValueProperty: BooleanProperty;
+  public readonly expectationValueVisibleProperty: BooleanProperty;
 
   // Property the controls whether the vector is shown on the number line.
-  public readonly showVectorRepresentationProperty: BooleanProperty;
+  public readonly vectorRepresentationVisibleProperty: BooleanProperty;
 
   public constructor( normalizedOutcomeValueProperty: TReadOnlyProperty<number>,
                       normalizedExpectationValueProperty: TReadOnlyProperty<number | null>,
                       displayNumericValueProperty: TReadOnlyProperty<boolean>,
                       tandem: Tandem ) {
 
-    const showExpectationValueProperty = new BooleanProperty( false, {
-      tandem: tandem.createTandem( 'showExpectationValueProperty' ),
+    const expectationValueVisibleProperty = new BooleanProperty( false, {
+      tandem: tandem.createTandem( 'expectationValueVisibleProperty' ),
       phetioFeatured: true
     } );
-    const showVectorRepresentationProperty = new BooleanProperty( true, {
-      tandem: tandem.createTandem( 'showVectorRepresentationProperty' ),
+    const vectorRepresentationVisibleProperty = new BooleanProperty( true, {
+      tandem: tandem.createTandem( 'vectorRepresentationVisibleProperty' ),
       phetioFeatured: true
     } );
 
@@ -95,10 +95,12 @@ export default class NormalizedOutcomeVectorGraph extends Node {
       headWidth: 15,
       headHeight: 12,
       tailWidth: 4,
-      visibleProperty: showVectorRepresentationProperty
+      visibleProperty: vectorRepresentationVisibleProperty
     } );
 
-    const numericValueVisibleProperty = DerivedProperty.and( [ showVectorRepresentationProperty, displayNumericValueProperty ] );
+    const numericValueVisibleProperty = DerivedProperty.and(
+      [ vectorRepresentationVisibleProperty, displayNumericValueProperty ]
+    );
     const normalizedOutcomeValueDisplay = new NumberDisplay(
       normalizedOutcomeValueProperty,
       new Range( -1, 1 ),
@@ -134,7 +136,7 @@ export default class NormalizedOutcomeVectorGraph extends Node {
     // The expectation value line can only be shown when there is a valid expectation value, so we need a derived
     // property that takes the value and the user setting into account.
     const expectationValueLineVisibleProperty = new DerivedProperty(
-      [ normalizedExpectationValueProperty, showExpectationValueProperty ],
+      [ normalizedExpectationValueProperty, expectationValueVisibleProperty ],
       ( normalizedExpectationValue, showExpectationLine ) => normalizedExpectationValue !== null && showExpectationLine
     );
 
@@ -171,13 +173,13 @@ export default class NormalizedOutcomeVectorGraph extends Node {
       tandem: tandem
     } );
 
-    this.showExpectationValueProperty = showExpectationValueProperty;
-    this.showVectorRepresentationProperty = showVectorRepresentationProperty;
+    this.expectationValueVisibleProperty = expectationValueVisibleProperty;
+    this.vectorRepresentationVisibleProperty = vectorRepresentationVisibleProperty;
   }
 
   public reset(): void {
-    this.showExpectationValueProperty.reset();
-    this.showVectorRepresentationProperty.reset();
+    this.expectationValueVisibleProperty.reset();
+    this.vectorRepresentationVisibleProperty.reset();
   }
 }
 

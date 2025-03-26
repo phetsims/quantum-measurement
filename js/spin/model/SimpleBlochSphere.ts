@@ -21,8 +21,8 @@ export type SimpleBlochSphereOptions = SelfOptions & AbstractBlochSphereOptions;
 
 export default class SimpleBlochSphere extends AbstractBlochSphere {
 
-  public readonly showZProjectionProperty: BooleanProperty;
-  public readonly showXProjectionProperty: BooleanProperty;
+  public readonly zProjectionVisibleProperty: BooleanProperty;
+  public readonly xProjectionVisibleProperty: BooleanProperty;
 
   // Spin state property is in XZ coordinates
   public constructor( spinStateProperty: TReadOnlyProperty<Vector2>, providedOptions?: SimpleBlochSphereOptions ) {
@@ -33,14 +33,14 @@ export default class SimpleBlochSphere extends AbstractBlochSphere {
 
     super( options );
 
-    this.showZProjectionProperty = new BooleanProperty( false, {
-      tandem: options.tandem.createTandem( 'showZProjectionProperty' ),
+    this.zProjectionVisibleProperty = new BooleanProperty( false, {
+      tandem: options.tandem.createTandem( 'zProjectionVisibleProperty' ),
       phetioDocumentation: 'Projections only visible in Custom experiment mode',
       phetioFeatured: true
     } );
 
-    this.showXProjectionProperty = new BooleanProperty( false, {
-      tandem: options.tandem.createTandem( 'showXProjectionProperty' ),
+    this.xProjectionVisibleProperty = new BooleanProperty( false, {
+      tandem: options.tandem.createTandem( 'xProjectionVisibleProperty' ),
       phetioDocumentation: 'Projections only visible in Custom experiment mode',
       phetioFeatured: true
     } );
@@ -61,8 +61,8 @@ export default class SimpleBlochSphere extends AbstractBlochSphere {
 
   public override reset(): void {
     super.reset();
-    this.showZProjectionProperty.reset();
-    this.showXProjectionProperty.reset();
+    this.zProjectionVisibleProperty.reset();
+    this.xProjectionVisibleProperty.reset();
   }
 
 }

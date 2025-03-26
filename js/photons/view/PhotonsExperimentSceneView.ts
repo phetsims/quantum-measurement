@@ -53,12 +53,12 @@ class PhotonsExperimentSceneView extends Node {
   private readonly normalizedOutcomeVectorGraph: NormalizedOutcomeVectorGraph;
 
   // Property that controls whether decimal values are shown in the average polarization area.
-  private readonly showDecimalValuesProperty: BooleanProperty;
+  private readonly decimalValuesVisibleProperty: BooleanProperty;
 
   public constructor( model: PhotonsExperimentSceneModel, providedOptions: PhotonsExperimentSceneViewOptions ) {
 
-    const showDecimalValuesProperty = new BooleanProperty( false, {
-      tandem: providedOptions.tandem.createTandem( 'showDecimalValuesProperty' ),
+    const decimalValuesVisibleProperty = new BooleanProperty( false, {
+      tandem: providedOptions.tandem.createTandem( 'decimalValuesVisibleProperty' ),
       phetioFeatured: true
     } );
 
@@ -142,7 +142,7 @@ class PhotonsExperimentSceneView extends Node {
     const normalizedOutcomeVectorGraph = new NormalizedOutcomeVectorGraph(
       model.normalizedOutcomeValueProperty,
       model.normalizedExpectationValueProperty,
-      showDecimalValuesProperty,
+      decimalValuesVisibleProperty,
       providedOptions.tandem.createTandem( 'normalizedOutcomeVectorGraph' )
     );
 
@@ -176,7 +176,7 @@ class PhotonsExperimentSceneView extends Node {
         orientation: 'horizontal',
         floatingLabels: true,
         matchLabelColors: true,
-        showCentralNumberDisplaysProperty: showDecimalValuesProperty,
+        showCentralNumberDisplaysProperty: decimalValuesVisibleProperty,
         leftFillColorProperty: QuantumMeasurementColors.verticalPolarizationColorProperty,
         rightFillColorProperty: QuantumMeasurementColors.horizontalPolarizationColorProperty,
         topTickMarkTextProperty: histogramTickMarkLabelProperty,
@@ -204,7 +204,7 @@ class PhotonsExperimentSceneView extends Node {
       [
         {
           labelStringProperty: QuantumMeasurementStrings.vectorRepresentationStringProperty,
-          property: normalizedOutcomeVectorGraph.showVectorRepresentationProperty,
+          property: normalizedOutcomeVectorGraph.vectorRepresentationVisibleProperty,
           decorationNode: new ArrowNode( 0, 0, 26, 0, {
             fill: Color.BLACK,
             tailWidth: 3,
@@ -214,18 +214,18 @@ class PhotonsExperimentSceneView extends Node {
         },
         {
           labelStringProperty: QuantumMeasurementStrings.expectationValueStringProperty,
-          property: normalizedOutcomeVectorGraph.showExpectationValueProperty,
+          property: normalizedOutcomeVectorGraph.expectationValueVisibleProperty,
           decorationNode: new ExpectationValueCheckboxDecorationNode(
             model.normalizedExpectationValueProperty,
-            normalizedOutcomeVectorGraph.showExpectationValueProperty,
-            showDecimalValuesProperty
+            normalizedOutcomeVectorGraph.expectationValueVisibleProperty,
+            decimalValuesVisibleProperty
           ),
           visibleProperty: DerivedProperty.valueNotEqualsConstant( model.normalizedExpectationValueProperty, null ),
           tandemControlName: 'expectationValueControl'
         },
         {
           labelStringProperty: QuantumMeasurementStrings.decimalValuesStringProperty,
-          property: showDecimalValuesProperty,
+          property: decimalValuesVisibleProperty,
           tandemControlName: 'decimalValuesControl'
         }
       ],
@@ -271,7 +271,7 @@ class PhotonsExperimentSceneView extends Node {
 
     this.experimentArea = experimentArea;
     this.normalizedOutcomeVectorGraph = normalizedOutcomeVectorGraph;
-    this.showDecimalValuesProperty = showDecimalValuesProperty;
+    this.decimalValuesVisibleProperty = decimalValuesVisibleProperty;
 
     this.pdomOrder = [
       photonPolarizationAngleControl,
@@ -291,7 +291,7 @@ class PhotonsExperimentSceneView extends Node {
 
   public reset(): void {
     this.normalizedOutcomeVectorGraph.reset();
-    this.showDecimalValuesProperty.reset();
+    this.decimalValuesVisibleProperty.reset();
   }
 }
 

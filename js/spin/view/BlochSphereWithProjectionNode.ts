@@ -30,12 +30,12 @@ export default class BlochSphereWithProjectionNode extends BlochSphereNode {
 
     const xProjectionColor = 'red';
     const xProjectionArrowNode = new DashedArrowNode( 0.9 * axisLength, 0, axisLength, 0,
-      { stroke: xProjectionColor, fill: xProjectionColor, visibleProperty: DerivedProperty.and( [ blochSphere.showXProjectionProperty, isCustomExperiment ] ) }
+      { stroke: xProjectionColor, fill: xProjectionColor, visibleProperty: DerivedProperty.and( [ blochSphere.xProjectionVisibleProperty, isCustomExperiment ] ) }
     );
 
     const zProjectionColor = 'blue';
     const zProjectionArrowNode = new DashedArrowNode( 0, 0, 0, -0.9 * axisLength,
-      { stroke: zProjectionColor, fill: zProjectionColor, visibleProperty: DerivedProperty.and( [ blochSphere.showZProjectionProperty, isCustomExperiment ] ) }
+      { stroke: zProjectionColor, fill: zProjectionColor, visibleProperty: DerivedProperty.and( [ blochSphere.zProjectionVisibleProperty, isCustomExperiment ] ) }
     );
 
     this.addChild( xProjectionArrowNode );
