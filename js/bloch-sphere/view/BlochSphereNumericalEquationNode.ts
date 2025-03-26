@@ -54,134 +54,138 @@ export default class BlochSphereNumericalEquationNode extends HBox {
       basisProperty: new Property( StateDirection.Z_PLUS )
     }, providedOptions );
 
-    const equationNode = new RichText( new DerivedStringProperty(
-      [
-        blochSphere.polarAngleProperty,
-        blochSphere.azimuthalAngleProperty,
-        blochSphere.rotatingSpeedProperty,
-        options.basisProperty,
-        QuantumMeasurementPreferences.showGlobalPhaseProperty
-      ],
-      ( polarAngle, azimuthalAngle, rotatingSpeed, basis, showGlobalPhase ) => {
+    const equationNode = new RichText(
+      new DerivedStringProperty(
+        [
+          blochSphere.polarAngleProperty,
+          blochSphere.azimuthalAngleProperty,
+          blochSphere.rotatingSpeedProperty,
+          options.basisProperty,
+          QuantumMeasurementPreferences.showGlobalPhaseProperty
+        ],
+        ( polarAngle, azimuthalAngle, rotatingSpeed, basis, showGlobalPhase ) => {
 
-        azimuthalAngle = equalsEpsilon( azimuthalAngle, 0, ZERO ) ? 0 : azimuthalAngle;
-        polarAngle = equalsEpsilon( polarAngle, 0, ZERO ) ? 0 : polarAngle;
+          azimuthalAngle = equalsEpsilon( azimuthalAngle, 0, ZERO ) ? 0 : azimuthalAngle;
+          polarAngle = equalsEpsilon( polarAngle, 0, ZERO ) ? 0 : polarAngle;
 
-        // Helper function that maps from projection space [-1,1], temporarily to probability space [0,1],
-        // and finally to coefficient space [0,1], which is the square root of the probability.
-        const projectionToCoefficient = ( value: number ) => {
-          // Convert [-1, 1] projection to [0,1] probability, then take sqrt => amplitude
-          return Math.sqrt( ( value + 1 ) / 2 );
-        };
+          // Helper function that maps from projection space [-1,1], temporarily to probability space [0,1],
+          // and finally to coefficient space [0,1], which is the square root of the probability.
+          const projectionToCoefficient = ( value: number ) => {
 
-        // Equation coefficients in the Z basis
-        const a = cos( polarAngle / 2 );
-        const b = sin( polarAngle / 2 );
+            // Convert [-1, 1] projection to [0,1] probability, then take sqrt => amplitude.
+            return Math.sqrt( ( value + 1 ) / 2 );
+          };
 
-        let upCoefficientValue = 0;
-        let downCoefficientValue = 0;
-        let azimuthalCoefficientValue = 0;
+          // Equation coefficients in the Z basis
+          const a = cos( polarAngle / 2 );
+          const b = sin( polarAngle / 2 );
 
-        // phiPlus, phiMinus for factoring out the global phase in X or Y directions
-        let phiPlus = 0;
-        let phiMinus = 0;
+          let upCoefficientValue = 0;
+          let downCoefficientValue = 0;
+          let azimuthalCoefficientValue = 0;
 
-        // These calculations are better described and discussed in https://github.com/phetsims/quantum-measurement/issues/82
-        switch( basis ) {
+          // phiPlus, phiMinus for factoring out the global phase in X or Y directions
+          let phiPlus = 0;
+          let phiMinus = 0;
 
-          case StateDirection.X_PLUS:
-            upCoefficientValue = projectionToCoefficient( cos( azimuthalAngle ) * sin( polarAngle ) );
-            downCoefficientValue = projectionToCoefficient( -cos( azimuthalAngle ) * sin( polarAngle ) );
+          // These calculations are better described and discussed in https://github.com/phetsims/quantum-measurement/issues/82
+          switch( basis ) {
 
-            // These come from the spherical/bloch geometry for X
-            phiPlus = atan2( b * sin( azimuthalAngle ), a + b * cos( azimuthalAngle ) ) / Math.PI;
-            phiMinus = atan2( -b * sin( azimuthalAngle ), a - b * cos( azimuthalAngle ) ) / Math.PI;
+            case StateDirection.X_PLUS:
+              upCoefficientValue = projectionToCoefficient( cos( azimuthalAngle ) * sin( polarAngle ) );
+              downCoefficientValue = projectionToCoefficient( -cos( azimuthalAngle ) * sin( polarAngle ) );
 
-            // The relative phase used in the second ket component
-            azimuthalCoefficientValue = phiMinus - phiPlus;
-            break;
+              // These come from the spherical/bloch geometry for X
+              phiPlus = atan2( b * sin( azimuthalAngle ), a + b * cos( azimuthalAngle ) ) / Math.PI;
+              phiMinus = atan2( -b * sin( azimuthalAngle ), a - b * cos( azimuthalAngle ) ) / Math.PI;
 
-          case StateDirection.Y_PLUS:
-            upCoefficientValue = projectionToCoefficient( sin( azimuthalAngle ) * sin( polarAngle ) );
-            downCoefficientValue = projectionToCoefficient( -sin( azimuthalAngle ) * sin( polarAngle ) );
+              // The relative phase used in the second ket component
+              azimuthalCoefficientValue = phiMinus - phiPlus;
+              break;
 
-            // These come from the spherical/bloch geometry for Y
-            phiPlus = atan2( b * cos( azimuthalAngle ), a + b * sin( azimuthalAngle ) ) / Math.PI;
-            phiMinus = atan2( -b * cos( azimuthalAngle ), a - b * sin( azimuthalAngle ) ) / Math.PI;
+            case StateDirection.Y_PLUS:
+              upCoefficientValue = projectionToCoefficient( sin( azimuthalAngle ) * sin( polarAngle ) );
+              downCoefficientValue = projectionToCoefficient( -sin( azimuthalAngle ) * sin( polarAngle ) );
 
-            // The relative phase used in the second ket component
-            azimuthalCoefficientValue = phiMinus - phiPlus;
-            break;
+              // These come from the spherical/bloch geometry for Y
+              phiPlus = atan2( b * cos( azimuthalAngle ), a + b * sin( azimuthalAngle ) ) / Math.PI;
+              phiMinus = atan2( -b * cos( azimuthalAngle ), a - b * sin( azimuthalAngle ) ) / Math.PI;
 
-          default: // StateDirection.Z_PLUS
-            upCoefficientValue = Math.abs( cos( polarAngle / 2 ) );
-            downCoefficientValue = Math.abs( sin( polarAngle / 2 ) );
-            azimuthalCoefficientValue = azimuthalAngle / Math.PI;
-            break;
+              // The relative phase used in the second ket component
+              azimuthalCoefficientValue = phiMinus - phiPlus;
+              break;
+
+            default: // StateDirection.Z_PLUS
+              upCoefficientValue = Math.abs( cos( polarAngle / 2 ) );
+              downCoefficientValue = Math.abs( sin( polarAngle / 2 ) );
+              azimuthalCoefficientValue = azimuthalAngle / Math.PI;
+              break;
+          }
+
+          // Normalize the relative phase to be between 0 and 2, so it doesn't appear negative
+          if ( azimuthalCoefficientValue < 0 ) {
+            azimuthalCoefficientValue += 2;
+          }
+
+          // Convert numbers to strings
+          const upCoefficientString = toFixed( upCoefficientValue, 2 );
+          const downCoefficientString = toFixed( downCoefficientValue, 2 );
+          const azimuthalCoefficientString = toFixed( azimuthalCoefficientValue, 2 );
+
+          // Basis letter: e.g. "X_PLUS" => 'X', "Z_PLUS" => 'Z', etc.
+          const direction = basis.description.split( '' )[ 1 ];
+
+          // Construct the usual "up + down e^{i phase}" parts
+          let upComponent = `${upCoefficientString} |${UP}<sub>${direction}</sub> ${KET}`;
+          let downComponent = `${downCoefficientString}e<sup>i${azimuthalCoefficientString}${PI}</sup> |${DOWN}<sub>${direction}</sub> ${KET}`;
+          let plus = ' + ';
+
+          // If rotatingSpeed === 0, we allow simplification of near-zero or near-1 coefficients
+          if ( rotatingSpeed === 0 ) {
+
+            // Hide an entire term if its amplitude is ~ 0
+            if ( upCoefficientValue < ZERO ) {
+              upComponent = '';
+            }
+            if ( downCoefficientValue < ZERO ) {
+              downComponent = '';
+            }
+
+            // Hide the plus sign if one term is omitted
+            if ( upCoefficientValue < ZERO || downCoefficientValue < ZERO ) {
+              plus = '';
+            }
+
+            // If amplitude ~ 1, we omit the numeric coefficient
+            if ( upCoefficientValue > ONE ) {
+              upComponent = `|${UP}<sub>${direction}</sub> ${KET}`;
+            }
+            if ( downCoefficientValue > ONE ) {
+              downComponent = `|${DOWN}<sub>${direction}</sub> ${KET}`;
+            }
+          }
+
+          // If showGlobalPhaseProperty is true and basis is X or Y, show the factored out global phase e^{i phiPlus pi}
+          // over the entire state.
+          let globalPhasePart = '';
+          let finalEquation = `|${PSI}⟩ = ${upComponent}${plus}${downComponent}`;
+          if ( showGlobalPhase && ( basis === StateDirection.X_PLUS || basis === StateDirection.Y_PLUS ) ) {
+
+            // Format the global phase as e^{i phiPlus pi} (factored out in front).
+            phiPlus < 0 ? phiPlus += 2 : phiPlus;
+            const globalPhaseString = toFixed( phiPlus, 2 );
+            globalPhasePart = `e<sup>i${globalPhaseString}${PI}</sup> `;
+
+            finalEquation = `|${PSI}⟩ = (${upComponent}${plus}${downComponent})${globalPhasePart}`;
+          }
+
+          return finalEquation;
         }
-
-        // Normalize the relative phase to be between 0 and 2, so it doesn't appear negative
-        if ( azimuthalCoefficientValue < 0 ) {
-          azimuthalCoefficientValue += 2;
-        }
-
-        // Convert numbers to strings
-        const upCoefficientString = toFixed( upCoefficientValue, 2 );
-        const downCoefficientString = toFixed( downCoefficientValue, 2 );
-        const azimuthalCoefficientString = toFixed( azimuthalCoefficientValue, 2 );
-
-        // Basis letter: e.g. "X_PLUS" => 'X', "Z_PLUS" => 'Z', etc.
-        const direction = basis.description.split( '' )[ 1 ];
-
-        // Construct the usual "up + down e^{i phase}" parts
-        let upComponent = `${upCoefficientString} |${UP}<sub>${direction}</sub> ${KET}`;
-        let downComponent = `${downCoefficientString}e<sup>i${azimuthalCoefficientString}${PI}</sup> |${DOWN}<sub>${direction}</sub> ${KET}`;
-        let plus = ' + ';
-
-        // If rotatingSpeed === 0, we allow simplification of near-zero or near-1 coefficients
-        if ( rotatingSpeed === 0 ) {
-
-          // Hide an entire term if its amplitude is ~ 0
-          if ( upCoefficientValue < ZERO ) {
-            upComponent = '';
-          }
-          if ( downCoefficientValue < ZERO ) {
-            downComponent = '';
-          }
-
-          // Hide the plus sign if one term is omitted
-          if ( upCoefficientValue < ZERO || downCoefficientValue < ZERO ) {
-            plus = '';
-          }
-
-          // If amplitude ~ 1, we omit the numeric coefficient
-          if ( upCoefficientValue > ONE ) {
-            upComponent = `|${UP}<sub>${direction}</sub> ${KET}`;
-          }
-          if ( downCoefficientValue > ONE ) {
-            downComponent = `|${DOWN}<sub>${direction}</sub> ${KET}`;
-          }
-        }
-
-        // If showGlobalPhaseProperty is true and basis is X or Y, show the factored out global phase e^{i phiPlus pi}
-        // over the entire state.
-        let globalPhasePart = '';
-        let finalEquation = `|${PSI}⟩ = ${upComponent}${plus}${downComponent}`;
-        if ( showGlobalPhase && ( basis === StateDirection.X_PLUS || basis === StateDirection.Y_PLUS ) ) {
-
-          // Format the global phase as e^{i phiPlus pi} (factored out in front).
-          phiPlus < 0 ? phiPlus += 2 : phiPlus;
-          const globalPhaseString = toFixed( phiPlus, 2 );
-          globalPhasePart = `e<sup>i${globalPhaseString}${PI}</sup> `;
-
-          finalEquation = `|${PSI}⟩ = (${upComponent}${plus}${downComponent})${globalPhasePart}`;
-        }
-
-        return finalEquation;
+      ),
+      {
+        font: EQUATION_FONT
       }
-    ), {
-      font: EQUATION_FONT
-    } );
+    );
 
     super( options );
 

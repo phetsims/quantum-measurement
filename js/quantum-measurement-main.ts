@@ -39,7 +39,9 @@ simLauncher.launch( () => {
     preferencesModel: new PreferencesModel( {
       simulationOptions: {
         customPreferences: [ {
-          createContent: tandem => new QuantumMeasurementPreferencesNode( tandem.createTandem( 'simPreferences' ) )
+          createContent: tandem => new QuantumMeasurementPreferencesNode( {
+            tandem: tandem.createTandem( 'simPreferences' )
+          } )
         } ]
       }
     } )
