@@ -58,7 +58,8 @@ class CoinSet extends PhetioObject {
   // the type of this coin, either classical or quantum
   public readonly coinType: SystemType;
 
-  // wether coins are naturally shown on preparation or not. False for Quantum and for Classical if the preference is set
+  // Whether coins are revealed (i.e. not hidden) when moving from the preparation to measurement state.  This is never
+  // true for quantum coins, but is configurable for classical coins.
   public readonly initiallyRevealedProperty: Property<boolean>;
 
   // the state of the measurement for this coin set
@@ -162,16 +163,21 @@ class CoinSet extends PhetioObject {
       this.coinType === SystemType.QUANTUM || !QuantumMeasurementPreferences.classicalCoinsStartVisibleProperty.value
     );
 
-    // If the initial visibility of coins is changed by the preferences, update accordingly
-    QuantumMeasurementPreferences.classicalCoinsStartVisibleProperty.link( showClassicalCoins => {
-      if ( this.coinType === SystemType.CLASSICAL ) {
-        this.initiallyRevealedProperty.value = showClassicalCoins;
+    // If the initial visibility of coins is changed by the preferences, update accordingly.
+    QuantumMeasurementPreferences.classicalCoinsStartVisibleProperty.link( classicalCoinsStartVisible => {
 
-        // Change the initial value of measurement state so coins appear hidden initially
-        this.measurementStateProperty.setInitialValue( showClassicalCoins ? 'revealed' : 'measuredAndHidden' );
-        if ( this.measurementStateProperty.value === 'revealed' || this.measurementStateProperty.value === 'measuredAndHidden' ) {
-          // This is to hide or show the coins when the preference is changed
-          this.measurementStateProperty.value = showClassicalCoins ? 'revealed' : 'measuredAndHidden';
+      // This only applies to classical coins.
+      if ( this.coinType === SystemType.CLASSICAL ) {
+        this.initiallyRevealedProperty.value = classicalCoinsStartVisible;
+
+        // Change the initial value of measurement state so coins appear hidden initially.
+        this.measurementStateProperty.setInitialValue( classicalCoinsStartVisible ? 'revealed' : 'measuredAndHidden' );
+
+        if ( this.measurementStateProperty.value === 'revealed' ||
+             this.measurementStateProperty.value === 'measuredAndHidden' ) {
+
+          // Update the measurement state to reflect the new initial visibility.
+          this.measurementStateProperty.value = classicalCoinsStartVisible ? 'revealed' : 'measuredAndHidden';
         }
       }
       else {
