@@ -38,16 +38,9 @@ type SternGerlachNodeOptions = SelfOptions & PickRequired<NodeOptions, 'tandem'>
 
 export default class SternGerlachNode extends Node {
 
-  public constructor(
-    sternGerlach: SternGerlach,
-    modelViewTransform: ModelViewTransform2,
-    providedOptions: SternGerlachNodeOptions
-  ) {
-
-    const options = optionize<SternGerlachNodeOptions, SelfOptions, NodeOptions>()( {
-      isBlockable: false,
-      phetioFeatured: true
-    }, providedOptions );
+  public constructor( sternGerlach: SternGerlach,
+                      modelViewTransform: ModelViewTransform2,
+                      providedOptions: SternGerlachNodeOptions ) {
 
     // Transformed constants
     const STERN_GERLACH_WIDTH = modelViewTransform.modelToViewDeltaX( SternGerlach.STERN_GERLACH_WIDTH );
@@ -100,7 +93,7 @@ export default class SternGerlachNode extends Node {
     const sternGerlachControls = new VBox( {
       align: 'left',
       spacing: 10,
-      tandem: options.tandem.createTandem( 'sternGerlachControls' )
+      tandem: providedOptions.tandem.createTandem( 'sternGerlachControls' )
     } );
 
     const radioButtonTextOptions: RichTextOptions = {
@@ -135,6 +128,42 @@ export default class SternGerlachNode extends Node {
     );
     sternGerlachControls.addChild( orientationRadioButtonGroup );
 
+    const mainApparatusNode = new Node( {
+      children: [
+
+        // main body of the SG sternGerlach
+        mainApparatus,
+
+        // curved paths for the particle to follow
+        curveUpPath,
+        curveDownPath,
+
+        // particle entry point
+        particleEntrance,
+
+        // particle exit points
+        topParticleExit,
+        bottomParticleExit,
+
+        // text for the experiment name
+        experimentLabel
+      ]
+    } );
+
+    const options = optionize<SternGerlachNodeOptions, SelfOptions, NodeOptions>()( {
+      children: [
+        mainApparatusNode,
+        sternGerlachControls
+      ],
+      isBlockable: false,
+      visibleProperty: sternGerlach.isVisibleProperty,
+      phetioFeatured: true
+    }, providedOptions );
+
+    super( options );
+
+    this.addLinkedElement( sternGerlach );
+
     if ( options.isBlockable ) {
       const blockingRadioButtonGroupTandem = sternGerlachControls.tandem.createTandem( 'blockingRadioButtonGroup' );
       const blockingRadioButtonGroup = new AquaRadioButtonGroup(
@@ -163,39 +192,6 @@ export default class SternGerlachNode extends Node {
       );
       sternGerlachControls.addChild( blockingRadioButtonGroup );
     }
-
-    const mainApparatusNode = new Node( {
-      children: [
-
-        // main body of the SG sternGerlach
-        mainApparatus,
-
-        // curved paths for the particle to follow
-        curveUpPath,
-        curveDownPath,
-
-        // particle entry point
-        particleEntrance,
-
-        // particle exit points
-        topParticleExit,
-        bottomParticleExit,
-
-        // text for the experiment name
-        experimentLabel
-      ]
-    } );
-
-    super( {
-      tandem: options.tandem,
-      visibleProperty: sternGerlach.isVisibleProperty,
-      children: [
-        mainApparatusNode,
-        sternGerlachControls
-      ]
-    } );
-
-    this.addLinkedElement( sternGerlach );
 
     Multilink.multilink(
       [ sternGerlach.positionProperty, sternGerlach.isDirectionControllableProperty, sternGerlach.blockingModeProperty ],
