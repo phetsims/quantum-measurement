@@ -18,7 +18,6 @@ import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransfo
 import VBox, { VBoxOptions } from '../../../../scenery/js/layout/nodes/VBox.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
@@ -38,8 +37,9 @@ export default class MeasurementDeviceNode extends VBox {
                       modelViewTransform: ModelViewTransform2,
                       providedOptions: MeasurementDeviceNodeOptions ) {
 
-    const simpleBlochSphereNode = new BlochSphereNode( measurementDevice.simpleBlochSphere, {
-      tandem: Tandem.OPT_OUT,
+    const blochSphereNode = new BlochSphereNode( measurementDevice.simpleBlochSphere, {
+      tandem: providedOptions.tandem.createTandem( 'blochSphereNode' ),
+      phetioVisiblePropertyInstrumented: false,
       drawKets: false,
       drawTitle: false,
       scale: 0.5,
@@ -61,17 +61,17 @@ export default class MeasurementDeviceNode extends VBox {
       scale: 0.7
     } );
 
-    simpleBlochSphereNode.stateVectorVisibleProperty.value = false;
+    blochSphereNode.stateVectorVisibleProperty.value = false;
 
     let stateVectorVisibleTimeout: null | TimerListener = null;
     let cameraPathFillTimeout: null | TimerListener = null;
 
     measurementDevice.measurementEmitter.addListener( () => {
-      simpleBlochSphereNode.stateVectorVisibleProperty.value = false;
+      blochSphereNode.stateVectorVisibleProperty.value = false;
       cameraPath.fill = QuantumMeasurementColors.particleColorProperty;
 
       stateVectorVisibleTimeout = stepTimer.setTimeout( () => {
-        simpleBlochSphereNode.stateVectorVisibleProperty.value = true;
+        blochSphereNode.stateVectorVisibleProperty.value = true;
       }, 100 );
 
       cameraPathFillTimeout = stepTimer.setTimeout( () => {
@@ -89,7 +89,7 @@ export default class MeasurementDeviceNode extends VBox {
 
     const options = optionize<MeasurementDeviceNodeOptions, SelfOptions, VBoxOptions>()( {
       children: [
-        simpleBlochSphereNode,
+        blochSphereNode,
         cameraNode
       ],
       spacing: 30,
@@ -99,7 +99,7 @@ export default class MeasurementDeviceNode extends VBox {
 
     super( options );
 
-    this.simpleBlochSphereNode = simpleBlochSphereNode;
+    this.simpleBlochSphereNode = blochSphereNode;
 
     measurementDevice.positionProperty.link( position => {
       this.center = modelViewTransform.modelToViewPosition( position );

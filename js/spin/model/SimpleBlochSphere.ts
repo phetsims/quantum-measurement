@@ -15,21 +15,16 @@ import AbstractBlochSphere, { AbstractBlochSphereOptions } from '../../common/mo
 import quantumMeasurement from '../../quantumMeasurement.js';
 
 type SelfOptions = EmptySelfOptions;
-
 export type SimpleBlochSphereOptions = SelfOptions & AbstractBlochSphereOptions;
-
 
 export default class SimpleBlochSphere extends AbstractBlochSphere {
 
   public readonly zProjectionVisibleProperty: BooleanProperty;
   public readonly xProjectionVisibleProperty: BooleanProperty;
 
-  // Spin state property is in XZ coordinates
   public constructor( spinStateProperty: TReadOnlyProperty<Vector2>, providedOptions?: SimpleBlochSphereOptions ) {
 
-    const options = optionize<SimpleBlochSphereOptions, SelfOptions, PhetioObjectOptions>()( {
-
-    }, providedOptions );
+    const options = optionize<SimpleBlochSphereOptions, SelfOptions, PhetioObjectOptions>()( {}, providedOptions );
 
     super( options );
 
