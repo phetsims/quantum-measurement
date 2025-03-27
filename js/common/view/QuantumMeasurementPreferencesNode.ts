@@ -48,7 +48,7 @@ export default class QuantumMeasurementPreferencesNode extends VBox {
 
     if ( options.hasCoins ) {
       this.addChild( new ClassicalCoinsStartVisibleControl(
-        options.tandem.createTandem( 'classicalCoinsStartVisibleControl' ) )
+        options.tandem.createTandem( 'classicalCoinsStartHiddenControl' ) )
       );
     }
 
@@ -67,15 +67,15 @@ class ClassicalCoinsStartVisibleControl extends PreferencesControl {
     super( {
       isDisposable: false,
       labelNode: new Text(
-        QuantumMeasurementStrings.preferences.classicalCoinsStartVisible.titleStringProperty,
+        QuantumMeasurementStrings.preferences.classicalCoinsStartHidden.titleStringProperty,
         PreferencesDialogConstants.CONTROL_LABEL_OPTIONS
       ),
       descriptionNode: new RichText(
-        QuantumMeasurementStrings.preferences.classicalCoinsStartVisible.descriptionStringProperty,
+        QuantumMeasurementStrings.preferences.classicalCoinsStartHidden.descriptionStringProperty,
         PreferencesDialogConstants.CONTROL_DESCRIPTION_OPTIONS
       ),
       controlNode: new ToggleSwitch(
-        QuantumMeasurementPreferences.classicalCoinsStartVisibleProperty,
+        QuantumMeasurementPreferences.classicalCoinsStartHiddenProperty,
         false,
         true,
         PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS
@@ -88,7 +88,7 @@ class ClassicalCoinsStartVisibleControl extends PreferencesControl {
       }
     } );
 
-    this.addLinkedElement( QuantumMeasurementPreferences.classicalCoinsStartVisibleProperty );
+    this.addLinkedElement( QuantumMeasurementPreferences.classicalCoinsStartHiddenProperty );
   }
 }
 

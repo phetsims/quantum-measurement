@@ -20,8 +20,8 @@ const QuantumMeasurementPreferences = {
     phetioFeatured: true
   } ),
 
-  classicalCoinsStartVisibleProperty: new BooleanProperty( QuantumMeasurementQueryParameters.classicalCoinsStartVisible, {
-    tandem: Tandem.PREFERENCES.createTandem( 'classicalCoinsStartVisibleProperty' ),
+  classicalCoinsStartHiddenProperty: new BooleanProperty( QuantumMeasurementQueryParameters.classicalCoinsStartHidden, {
+    tandem: Tandem.PREFERENCES.createTandem( 'classicalCoinsStartHiddenProperty' ),
     phetioFeatured: true
   } )
 };

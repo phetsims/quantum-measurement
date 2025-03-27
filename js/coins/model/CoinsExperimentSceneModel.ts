@@ -160,9 +160,9 @@ class CoinsExperimentSceneModel extends PhetioObject {
         this.singleCoin.prepareNow();
         this.coinSet.prepareNow();
 
-        // If this is a classical system, reveal the coins after preparing them.  This is a design choice that was made
-        // to make the classical behavior more distinct from the quantum behavior.
-        if ( this.systemType === SystemType.CLASSICAL && this.coinSet.initiallyRevealedProperty.value ) {
+        // If this is a classical system, we potentially reveal the coins immediately after preparing them.  This is a
+        // design choice that was made to make the classical behavior more distinct from the quantum behavior.
+        if ( this.systemType === SystemType.CLASSICAL && !this.coinSet.initiallyHiddenProperty.value ) {
           this.singleCoin.reveal();
           this.coinSet.reveal();
         }
@@ -195,6 +195,32 @@ class CoinsExperimentSceneModel extends PhetioObject {
         }
         else {
           this.initialCoinStateProperty.value = bias === 1 ? 'up' : 'down';
+        }
+      } );
+    }
+
+    // If this is a classical system, listeners need to be set up to a preferences item that controls whether the coins
+    // are initially hidden.  These listeners update the state so that the test boxes appear open or closed as
+    // appropriate.
+    if ( this.systemType === SystemType.CLASSICAL ) {
+      this.singleCoin.initiallyHiddenProperty.lazyLink( initiallyHidden => {
+        if ( this.preparingExperimentProperty.value ) {
+          if ( initiallyHidden ) {
+            this.singleCoin.hide();
+          }
+          else {
+            this.singleCoin.reveal();
+          }
+        }
+      } );
+      this.coinSet.initiallyHiddenProperty.lazyLink( initiallyHidden => {
+        if ( this.preparingExperimentProperty.value ) {
+          if ( initiallyHidden ) {
+            this.coinSet.hide();
+          }
+          else {
+            this.coinSet.reveal();
+          }
         }
       } );
     }

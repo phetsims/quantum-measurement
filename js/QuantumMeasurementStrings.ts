@@ -111,7 +111,7 @@ type StringsType = {
       'titleStringProperty': LocalizedStringProperty;
       'descriptionStringProperty': LocalizedStringProperty;
     };
-    'classicalCoinsStartVisible': {
+    'classicalCoinsStartHidden': {
       'titleStringProperty': LocalizedStringProperty;
       'descriptionStringProperty': LocalizedStringProperty;
     }

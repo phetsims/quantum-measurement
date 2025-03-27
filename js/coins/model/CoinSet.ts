@@ -58,9 +58,10 @@ class CoinSet extends PhetioObject {
   // the type of this coin, either classical or quantum
   public readonly coinType: SystemType;
 
-  // Whether coins are revealed (i.e. not hidden) when moving from the preparation to measurement state.  This is never
-  // true for quantum coins, but is configurable for classical coins.
-  public readonly initiallyRevealedProperty: Property<boolean>;
+  // Whether coins are initially hidden (i.e. not revealed) after moving from the preparation area into the measurement
+  // area. This is always true for quantum coins since they can't be revealed until measured, but is configurable for
+  // classical coins.
+  public readonly initiallyHiddenProperty: Property<boolean>;
 
   // the state of the measurement for this coin set
   public readonly measurementStateProperty: Property<ExperimentMeasurementState>;
@@ -145,8 +146,20 @@ class CoinSet extends PhetioObject {
 
     let alternativeDisplayCounter = 0;
 
-    // The initial system state differs for classical versus quantum systems.
-    const initialMeasurementState = this.coinType === SystemType.CLASSICAL ? 'revealed' : 'readyToBeMeasured';
+    // The initial system state differs for classical versus quantum systems and based on preferences.
+    let initialMeasurementState: ExperimentMeasurementState;
+    if ( this.coinType === SystemType.QUANTUM ) {
+
+      // Quantum systems are always initially hidden, since they have to be observed before their values are defined.
+      initialMeasurementState = 'readyToBeMeasured';
+    }
+    else {
+
+      // Classical systems can be initially hidden or revealed based on preferences.
+      initialMeasurementState = QuantumMeasurementPreferences.classicalCoinsStartHiddenProperty.value ?
+                                'measuredAndHidden' :
+                                'revealed';
+    }
     this.measurementStateProperty = new Property<ExperimentMeasurementState>( initialMeasurementState, {
       tandem: options.tandem.createTandem( 'measurementStateProperty' ),
       phetioValueType: StringUnionIO( ExperimentMeasurementStateValues ),
@@ -159,29 +172,21 @@ class CoinSet extends PhetioObject {
                    ExperimentMeasurementStateValues
     } );
 
-    this.initiallyRevealedProperty = new BooleanProperty(
-      this.coinType === SystemType.QUANTUM || !QuantumMeasurementPreferences.classicalCoinsStartVisibleProperty.value
+    this.initiallyHiddenProperty = new BooleanProperty(
+      this.coinType === SystemType.QUANTUM || QuantumMeasurementPreferences.classicalCoinsStartHiddenProperty.value
     );
 
     // If the initial visibility of coins is changed by the preferences, update accordingly.
-    QuantumMeasurementPreferences.classicalCoinsStartVisibleProperty.link( classicalCoinsStartVisible => {
+    QuantumMeasurementPreferences.classicalCoinsStartHiddenProperty.link( classicalCoinsStartHidden => {
 
-      // This only applies to classical coins.
+      // This preference only applies to classical coins.
       if ( this.coinType === SystemType.CLASSICAL ) {
-        this.initiallyRevealedProperty.value = classicalCoinsStartVisible;
-
-        // Change the initial value of measurement state so coins appear hidden initially.
-        this.measurementStateProperty.setInitialValue( classicalCoinsStartVisible ? 'revealed' : 'measuredAndHidden' );
-
-        if ( this.measurementStateProperty.value === 'revealed' ||
-             this.measurementStateProperty.value === 'measuredAndHidden' ) {
-
-          // Update the measurement state to reflect the new initial visibility.
-          this.measurementStateProperty.value = classicalCoinsStartVisible ? 'revealed' : 'measuredAndHidden';
-        }
+        this.initiallyHiddenProperty.value = classicalCoinsStartHidden;
       }
       else {
-        this.initiallyRevealedProperty.value = false;
+
+        // Quantum coins are always initially hidden.
+        this.initiallyHiddenProperty.value = true;
       }
     } );
 
@@ -393,15 +398,25 @@ class CoinSet extends PhetioObject {
     assert && assert( valueIndex === 0 || valueIndex === 1 );
     this.seedProperty.value = valueIndex;
 
-    // Update the measurement state.
-    this.measurementStateProperty.value = this.initiallyRevealedProperty.value ? 'revealed' :
-                                          this.coinType === SystemType.CLASSICAL ? 'measuredAndHidden' : 'readyToBeMeasured';
+    // Update the measurement state now that the values have been set.  The state depends on the type of system and the
+    // preferences.
+    if ( this.coinType === SystemType.CLASSICAL ) {
+      this.measurementStateProperty.value = this.initiallyHiddenProperty.value ? 'measuredAndHidden' : 'revealed';
+    }
+    else {
+      this.measurementStateProperty.value = 'readyToBeMeasured';
+    }
   }
 
   public reset(): void {
-    this.measurementStateProperty.reset();
     this.numberOfCoinsProperty.reset();
     this.seedProperty.reset();
+    if ( this.coinType === SystemType.CLASSICAL ) {
+      this.measurementStateProperty.value = this.initiallyHiddenProperty.value ? 'measuredAndHidden' : 'revealed';
+    }
+    else {
+      this.measurementStateProperty.value = 'readyToBeMeasured';
+    }
   }
 }
 

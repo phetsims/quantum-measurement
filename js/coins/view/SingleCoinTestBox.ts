@@ -67,8 +67,8 @@ class SingleCoinTestBox extends Node {
     );
 
     // Make the box cover transparent when the state of the measurement indicates that the coin is revealed to the user.
-    measurementStateProperty.link( singleCoinMeasurementState => {
-      testBoxRectangle.fill = singleCoinMeasurementState === 'revealed' ?
+    measurementStateProperty.link( measurementState => {
+      testBoxRectangle.fill = measurementState === 'revealed' ?
                               Color.TRANSPARENT :
                               CONTENTS_HIDDEN_FILL;
     } );
