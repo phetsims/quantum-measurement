@@ -28,7 +28,7 @@ import QuantumMeasurementPreferences from '../../common/model/QuantumMeasurement
 import { SystemType } from '../../common/model/SystemType.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import { ClassicalCoinStateValues } from './ClassicalCoinStates.js';
-import { MULTI_COIN_EXPERIMENT_QUANTITIES } from './CoinsExperimentSceneModel.js';
+import { MAX_COINS, MULTI_COIN_EXPERIMENT_QUANTITIES } from './CoinsExperimentSceneModel.js';
 import { CoinStates } from './CoinStates.js';
 import { ExperimentMeasurementState, ExperimentMeasurementStateValues } from './ExperimentMeasurementState.js';
 import { QuantumCoinStateValues } from './QuantumCoinStates.js';
@@ -97,7 +97,9 @@ class CoinSet extends PhetioObject {
   // of the information being presented to the user is needed.
   public readonly measuredDataChangedEmitter: TEmitter = new Emitter();
 
-  public validateAlternativeDisplay: boolean;
+  // A record of some of the times when the state transitions to being ready for measurement, useful for debugging.
+  public readonly toReadyTransitionTimes: number[] = [];
+  public validateAlternativeDisplay = false;
 
   /**
    * @param coinType - The type of system that is being modeled by this set of coins, either classical or quantum.
@@ -141,10 +143,6 @@ class CoinSet extends PhetioObject {
         phetioReadOnly: true
       } );
     }
-
-    this.validateAlternativeDisplay = false;
-
-    let alternativeDisplayCounter = 0;
 
     // The initial system state differs for classical versus quantum systems and based on preferences.
     let initialMeasurementState: ExperimentMeasurementState;
@@ -190,11 +188,23 @@ class CoinSet extends PhetioObject {
       }
     } );
 
-    const maximumAlternativeDisplayCounter = 8; // determined empirically
-    this.measurementStateProperty.link( measurementState => {
-      if ( ( measurementState === 'readyToBeMeasured' ) && ( coinType === SystemType.QUANTUM ) ) {
-        alternativeDisplayCounter++;
-        this.validateAlternativeDisplay = alternativeDisplayCounter === maximumAlternativeDisplayCounter;
+    const alternativeDisplayCountThreshold = 8; // determined empirically
+    this.measurementStateProperty.lazyLink( ( measurementState, previousMeasurementState ) => {
+
+      if ( coinType === SystemType.QUANTUM &&
+           this.numberOfCoinsProperty.value === MAX_COINS &&
+           measurementState === 'readyToBeMeasured' ) {
+
+        this.validateAlternativeDisplay = false;
+        if ( this.toReadyTransitionTimes.length <= alternativeDisplayCountThreshold ) {
+          this.toReadyTransitionTimes.push( Date.now() );
+          if ( this.toReadyTransitionTimes.length === alternativeDisplayCountThreshold ) {
+            const diffTime = Date.now() - this.toReadyTransitionTimes[ 0 ];
+            if ( diffTime / 1000 < 20 ) {
+              this.validateAlternativeDisplay = true;
+            }
+          }
+        }
       }
     } );
 
@@ -411,12 +421,16 @@ class CoinSet extends PhetioObject {
   public reset(): void {
     this.numberOfCoinsProperty.reset();
     this.seedProperty.reset();
+
+    // The initial measurement state could have changed if preferences have changed, so it needs to be explicitly set
+    // here instead of being reset to its initial value.
     if ( this.coinType === SystemType.CLASSICAL ) {
       this.measurementStateProperty.value = this.initiallyHiddenProperty.value ? 'measuredAndHidden' : 'revealed';
     }
     else {
-      this.measurementStateProperty.value = 'readyToBeMeasured';
+      this.measurementStateProperty.reset();
     }
+    this.toReadyTransitionTimes.length = 0;
   }
 }
 
