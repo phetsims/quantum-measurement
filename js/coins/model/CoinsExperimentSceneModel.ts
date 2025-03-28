@@ -199,30 +199,40 @@ class CoinsExperimentSceneModel extends PhetioObject {
       } );
     }
 
-    // If this is a classical system, listeners need to be set up to a preferences item that controls whether the coins
-    // are initially hidden.  These listeners update the state so that the test boxes appear open or closed as
-    // appropriate.
+    // If this is a classical system, listeners need to be set up to a preference item that controls whether the coins
+    // are initially hidden.  These listeners potentially update the measurement state so that the test boxes appear
+    // initially open or closed as appropriate.
     if ( this.systemType === SystemType.CLASSICAL ) {
       this.singleCoin.initiallyHiddenProperty.lazyLink( initiallyHidden => {
         if ( this.preparingExperimentProperty.value ) {
-          if ( initiallyHidden ) {
+
+          // A fair amount of state checking is done here.  This was necessary to avoid problems when setting phet-io
+          // state and race conditions that were occasionally occurring in CT.
+          if ( initiallyHidden && this.singleCoin.measurementStateProperty.value === 'revealed' ) {
             this.singleCoin.hide();
           }
-          else {
+          else if ( this.singleCoin.measurementStateProperty.value === 'measuredAndHidden' ||
+                    this.singleCoin.measurementStateProperty.value === 'readyToBeMeasured' ) {
             this.singleCoin.reveal();
           }
         }
       } );
+
       this.coinSet.initiallyHiddenProperty.lazyLink( initiallyHidden => {
+
+        // A fair amount of state checking is done here.  This was necessary to avoid problems when setting phet-io
+        // state and race conditions that were occasionally occurring in CT.
         if ( this.preparingExperimentProperty.value ) {
-          if ( initiallyHidden ) {
+          if ( initiallyHidden && this.coinSet.measurementStateProperty.value === 'revealed' ) {
             this.coinSet.hide();
           }
-          else {
+          else if ( this.coinSet.measurementStateProperty.value === 'measuredAndHidden' ||
+                    this.coinSet.measurementStateProperty.value === 'readyToBeMeasured' ) {
             this.coinSet.reveal();
           }
         }
       } );
+
     }
   }
 
