@@ -42,6 +42,8 @@ const UP = QuantumMeasurementConstants.SPIN_UP_ARROW_CHARACTER;
 const DOWN = QuantumMeasurementConstants.SPIN_DOWN_ARROW_CHARACTER;
 const KET = QuantumMeasurementConstants.KET;
 const MAGNITUDE_OF_ALPHA_SQUARED = `|${ALPHA}|<sup>2`;
+const TITLE_NODE_HBOX_SPACING = 5;
+const TITLE_NODE_MAX_WIDTH = 250;
 
 export default class OutcomeProbabilityControl extends VBox {
 
@@ -140,17 +142,25 @@ export default class OutcomeProbabilityControl extends VBox {
     if ( systemType === SystemType.CLASSICAL ) {
 
       const upProbabilityTitleNode = new HBox( {
-        spacing: 5,
+        spacing: TITLE_NODE_HBOX_SPACING,
+        maxWidth: TITLE_NODE_MAX_WIDTH,
         children: [
-          new Text( QuantumMeasurementStrings.probabilityStringProperty, QuantumMeasurementConstants.NUMBER_CONTROL_TITLE_OPTIONS ),
+          new Text(
+            QuantumMeasurementStrings.probabilityStringProperty,
+            QuantumMeasurementConstants.NUMBER_CONTROL_TITLE_OPTIONS
+          ),
           new ProbabilityOfSymbolBox( 'heads' )
         ]
       } );
 
       const downProbabilityTitleNode = new HBox( {
-        spacing: 5,
+        spacing: TITLE_NODE_HBOX_SPACING,
+        maxWidth: TITLE_NODE_MAX_WIDTH,
         children: [
-          new Text( QuantumMeasurementStrings.probabilityStringProperty, QuantumMeasurementConstants.NUMBER_CONTROL_TITLE_OPTIONS ),
+          new Text(
+            QuantumMeasurementStrings.probabilityStringProperty,
+            QuantumMeasurementConstants.NUMBER_CONTROL_TITLE_OPTIONS
+          ),
           new ProbabilityOfSymbolBox( 'tails' )
         ]
       } );

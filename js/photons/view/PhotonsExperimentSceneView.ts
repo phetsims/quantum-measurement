@@ -238,7 +238,6 @@ class PhotonsExperimentSceneView extends Node {
 
     // Create a play/pause/step time control.
     const timeControlNode = new TimeControlNode( model.isPlayingProperty, {
-      // optional Normal/Slow radio buttons
       timeSpeedProperty: model.timeSpeedProperty,
       flowBoxSpacing: 15,
       playPauseStepButtonOptions: {
@@ -251,6 +250,11 @@ class PhotonsExperimentSceneView extends Node {
       },
       centerX: experimentArea.x + 70,
       bottom: photonPolarizationAngleControl.bottom - 6, // vertically aligned with reset all button
+      speedRadioButtonGroupOptions: {
+        radioButtonOptions: {
+          maxWidth: 100
+        }
+      },
       tandem: providedOptions.tandem.createTandem( 'timeControlNode' )
     } );
 
