@@ -62,19 +62,6 @@ class PhotonsExperimentSceneView extends Node {
       phetioFeatured: true
     } );
 
-    const probabilityAccordionBox = new PhotonDetectionProbabilityPanel(
-      model.laser.polarizationAngleProperty,
-      model.probabilityExpandedProperty,
-      {
-
-        // Position empirically determined to match design doc.
-        left: 55,
-        top: 20,
-
-        tandem: providedOptions.tandem.createTandem( 'probabilityAccordionBox' )
-      }
-    );
-
     const experimentArea = new PhotonTestingArea( model, {
 
       // center position empirically determined to match design doc
@@ -82,6 +69,18 @@ class PhotonsExperimentSceneView extends Node {
       phetioVisiblePropertyInstrumented: false,
       tandem: providedOptions.tandem.createTandem( 'experimentArea' )
     } );
+
+    const probabilityAccordionBox = new PhotonDetectionProbabilityPanel(
+      model.laser.polarizationAngleProperty,
+      model.probabilityExpandedProperty,
+      {
+        // Center this horizontally between the left edge of the view and the experiment area.
+        centerX: ( QuantumMeasurementConstants.SCREEN_VIEW_X_MARGIN + experimentArea.left ) / 2,
+        top: 20,
+
+        tandem: providedOptions.tandem.createTandem( 'probabilityAccordionBox' )
+      }
+    );
 
     const polarizationIndicatorNode = new ObliquePolarizationAngleIndicator( model.laser.polarizationAngleProperty, {
       scale: 1.5,
