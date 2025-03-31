@@ -9,7 +9,9 @@
 import CoinsModel from 'model/CoinsModel.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import Property from '../../../../axon/js/Property.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
+import AlignBox from '../../../../scenery/js/layout/nodes/AlignBox.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import { SystemType } from '../../common/model/SystemType.js';
@@ -37,12 +39,18 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
     // Add the radio buttons at the top of the screen that will allow users to pick between classical and quantum coins.
     const experimentModeRadioButtonGroup = new SceneSelectorRadioButtonGroup<SystemType>(
       model.experimentModeProperty,
-      {
-        centerX: QuantumMeasurementConstants.LAYOUT_BOUNDS.centerX,
-        top: QuantumMeasurementConstants.SCREEN_VIEW_Y_MARGIN,
-        tandem: tandem.createTandem( 'experimentModeRadioButtonGroup' )
-      }
+      { tandem: tandem.createTandem( 'experimentModeRadioButtonGroup' ) }
     );
+
+    // Put the radio button group in an align box so that it will stay centered horizontally when strings change.
+    const experimentModeRadioButtonGroupAlignBox = new AlignBox( experimentModeRadioButtonGroup, {
+      alignBounds: new Bounds2(
+        QuantumMeasurementConstants.SCREEN_VIEW_X_MARGIN,
+        QuantumMeasurementConstants.SCREEN_VIEW_Y_MARGIN,
+        QuantumMeasurementConstants.LAYOUT_BOUNDS.maxX - QuantumMeasurementConstants.SCREEN_VIEW_X_MARGIN,
+        QuantumMeasurementConstants.SCREEN_VIEW_Y_MARGIN + experimentModeRadioButtonGroup.height
+      )
+    } );
 
     // Change the background color based on the experiment mode.  This was a design request to make it more obvious to
     // the user when they are in the classical or quantum mode.
@@ -62,7 +70,6 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
       }
     );
 
-
     // Add the views for the two scenes that can be shown on this screen.
     const classicalCoinsExperimentSceneView = new CoinsExperimentSceneView( model.classicalCoinExperimentSceneModel, {
       translation: SCENE_POSITION,
@@ -76,7 +83,7 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
     super( {
       tandem: tandem,
       children: [
-        experimentModeRadioButtonGroup,
+        experimentModeRadioButtonGroupAlignBox,
         classicalCoinsExperimentSceneView,
         quantumCoinsExperimentSceneView
       ]
@@ -89,7 +96,7 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
     this.pdomPlayAreaNode.pdomOrder = [
       classicalCoinsExperimentSceneView,
       quantumCoinsExperimentSceneView,
-      experimentModeRadioButtonGroup
+      experimentModeRadioButtonGroupAlignBox
     ];
   }
 
