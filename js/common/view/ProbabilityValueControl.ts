@@ -56,7 +56,6 @@ class ProbabilityValueControl extends NumberControl {
       numberDisplayOptions: { // Although we don't use a numberDisplay, these options are for a11y
         decimalPlaces: 2
       },
-      useRichText: true,
       titleNodeOptions: {
         tandem: Tandem.OPT_OUT
       },
