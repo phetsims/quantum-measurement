@@ -95,9 +95,11 @@ class PhotonDetector extends PhetioObject implements TPhotonInteraction {
     this.detectionRateProperty = new AveragingCounterNumberProperty( {
       range: PhotonDetector.RATE_RANGE,
       tandem: options.displayMode === 'rate' ?
-              options.tandem.createTandem( 'detectionRateProperty' ) :
+              options.tandem.createTandem( '' +
+                                           'detectionRateProperty' ) :
               Tandem.OPT_OUT,
-      phetioReadOnly: true
+      phetioReadOnly: true,
+      phetioFeatured: true
     } );
 
     this.detectionCountProperty = new NumberProperty( 0, {
@@ -105,7 +107,8 @@ class PhotonDetector extends PhetioObject implements TPhotonInteraction {
       tandem: options.displayMode === 'count' ?
               options.tandem.createTandem( 'detectionCountProperty' ) :
               Tandem.OPT_OUT,
-      phetioReadOnly: true
+      phetioReadOnly: true,
+      phetioFeatured: true
     } );
   }
 

@@ -84,6 +84,7 @@ export default class SpinStatePreparationArea extends VBox {
       model.isCustomExperimentProperty,
       {
         tandem: tandem.createTandem( 'blochSphereNode' ),
+        phetioFeatured: true,
         scale: 0.9
       }
     );
@@ -140,7 +141,10 @@ export default class SpinStatePreparationArea extends VBox {
       {
         tandem: projectionsCheckboxesTandem.createTandem( 'zProjectionCheckbox' ),
         boxWidth: QuantumMeasurementConstants.CHECKBOX_BOX_WIDTH,
-        visibleProperty: model.isCustomExperimentProperty
+        visibleProperty: model.isCustomExperimentProperty,
+        visiblePropertyOptions: {
+          phetioFeatured: true
+        }
       }
     );
 

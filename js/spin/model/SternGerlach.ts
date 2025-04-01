@@ -122,7 +122,8 @@ export default class SternGerlach extends PhetioObject {
 
     this.upProbabilityProperty = new NumberProperty( 0.5, {
       tandem: tandem.createTandem( 'upProbabilityProperty' ),
-      phetioReadOnly: true
+      phetioReadOnly: true,
+      phetioFeatured: true
     } );
 
     this.downProbabilityProperty = new DerivedProperty( [ this.upProbabilityProperty ], upProbability => 1 - upProbability );

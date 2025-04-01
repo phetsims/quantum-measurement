@@ -45,7 +45,8 @@ class PhotonTestingArea extends Node {
     );
 
     const laserNode = new LaserNode( model.laser, photonTestingAreaModelViewTransform, {
-      tandem: providedOptions.tandem.createTandem( 'laserNode' )
+      tandem: providedOptions.tandem.createTandem( 'laserNode' ),
+      phetioFeatured: true
     } );
 
     const photonBehaviorControlTandem = providedOptions.tandem.createTandem( 'photonBehaviorControl' );
@@ -66,7 +67,10 @@ class PhotonTestingArea extends Node {
       {
         spacing: 10,
         tandem: photonBehaviorControlTandem.createTandem( 'photonBehaviorModeRadioButtonGroup' ),
-        phetioVisiblePropertyInstrumented: false
+        phetioVisiblePropertyInstrumented: false,
+        visiblePropertyOptions: {
+          phetioFeatured: true
+        }
       }
     );
     const photonBehaviorModeBox = new VBox( {
@@ -90,13 +94,15 @@ class PhotonTestingArea extends Node {
     const verticalPolarizationDetectorNode = new PhotonDetectorNode(
       model.verticalPolarizationDetector,
       photonTestingAreaModelViewTransform, {
-        tandem: providedOptions.tandem.createTandem( 'verticalPolarizationDetectorNode' )
+        tandem: providedOptions.tandem.createTandem( 'verticalPolarizationDetectorNode' ),
+        phetioFeatured: true
       }
     );
     const horizontalPolarizationDetectorNode = new PhotonDetectorNode(
       model.horizontalPolarizationDetector,
       photonTestingAreaModelViewTransform, {
-        tandem: providedOptions.tandem.createTandem( 'horizontalPolarizationDetectorNode' )
+        tandem: providedOptions.tandem.createTandem( 'horizontalPolarizationDetectorNode' ),
+        phetioFeatured: true
       }
     );
 

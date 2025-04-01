@@ -86,7 +86,10 @@ class PhotonsExperimentSceneView extends Node {
       scale: 1.5,
       centerX: probabilityAccordionBox.centerX,
       y: experimentArea.y,
-      tandem: providedOptions.tandem.createTandem( 'polarizationIndicatorNode' )
+      tandem: providedOptions.tandem.createTandem( 'polarizationIndicatorNode' ),
+      visiblePropertyOptions: {
+        phetioFeatured: true
+      }
     } );
 
     const photonPolarizationAngleControl = new PhotonPolarizationAngleControl( model.laser, {
@@ -95,7 +98,10 @@ class PhotonsExperimentSceneView extends Node {
                 providedOptions.translation.y -
                 QuantumMeasurementConstants.SCREEN_VIEW_Y_MARGIN,
         tandem: providedOptions.tandem.createTandem( 'photonPolarizationAngleControl' ),
-        phetioFeatured: true
+        phetioFeatured: true,
+        visiblePropertyOptions: {
+          phetioFeatured: true
+        }
       }
     );
 
@@ -125,7 +131,10 @@ class PhotonsExperimentSceneView extends Node {
 
     const equationsNode = new PhotonsEquationNode( verticalValueProperty, horizontalValueProperty, {
       tandem: providedOptions.tandem.createTandem( 'equationsNode' ),
-      phetioFeatured: true
+      phetioFeatured: true,
+      visiblePropertyOptions: {
+        phetioFeatured: true
+      }
     } );
 
     // Put the title and the equations together in a vertical box.
@@ -142,7 +151,13 @@ class PhotonsExperimentSceneView extends Node {
       model.normalizedOutcomeValueProperty,
       model.normalizedExpectationValueProperty,
       decimalValuesVisibleProperty,
-      providedOptions.tandem.createTandem( 'normalizedOutcomeVectorGraph' )
+      {
+        tandem: providedOptions.tandem.createTandem( 'normalizedOutcomeVectorGraph' ),
+        visiblePropertyOptions: {
+          phetioFeatured: true
+        }
+
+      }
     );
 
     const histogramTickMarkLabelProperty = model.laser.emissionMode === ExperimentModeValues.SINGLE_PHOTON ?
@@ -181,6 +196,9 @@ class PhotonsExperimentSceneView extends Node {
         topTickMarkTextProperty: histogramTickMarkLabelProperty,
         barPositionProportion: 0.75,
         tandem: providedOptions.tandem.createTandem( 'histogramNode' ),
+        visiblePropertyOptions: {
+          phetioFeatured: true
+        },
         leftPercentagePropertyPhetioDocumentation: 'The percentage of photons detected with vertical polarization.',
         rightPercentagePropertyPhetioDocumentation: 'The percentage of photons detected with horizontal polarization.'
       }
@@ -231,7 +249,10 @@ class PhotonsExperimentSceneView extends Node {
       {
         left: titleAndEquationsBox.left,
         top: dynamicDataDisplayBox.bottom + 30,
-        tandem: providedOptions.tandem.createTandem( 'averagePolarizationCheckboxGroup' )
+        tandem: providedOptions.tandem.createTandem( 'averagePolarizationCheckboxGroup' ),
+        visiblePropertyOptions: {
+          phetioFeatured: true
+        }
       }
     );
 

@@ -122,6 +122,9 @@ class CoinsExperimentSceneView extends Node {
       touchAreaYDilation: 5,
       soundPlayer: startMeasurementSoundPlayer,
       tandem: startMeasurementButtonTandem,
+      visiblePropertyOptions: {
+        phetioFeatured: true
+      },
       accessibleName: QuantumMeasurementStrings.a11y.coinsScreen.startMeasurementStringProperty,
       accessibleHelpText: QuantumMeasurementStrings.a11y.coinsScreen.startMeasurementHelpTextStringProperty
     } );
@@ -198,6 +201,9 @@ class CoinsExperimentSceneView extends Node {
       },
       soundPlayer: sharedSoundPlayers.get( 'erase' ),
       tandem: newCoinButtonTandem,
+      visiblePropertyOptions: {
+        phetioFeatured: true
+      },
       accessibleName: QuantumMeasurementStrings.newCoinStringProperty,
       accessibleHelpText: QuantumMeasurementStrings.a11y.coinsScreen.prepareNewCoinHelpTextStringProperty
     } );

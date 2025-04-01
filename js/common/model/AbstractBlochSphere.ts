@@ -47,14 +47,16 @@ export default abstract class AbstractBlochSphere extends PhetioObject {
       range: new Range( 0, 2 * Math.PI ),
       tandem: options.tandem.createTandem( 'azimuthalAngleProperty' ),
       units: 'radians',
-      phetioReadOnly: options.azimuthalAnglePhetioReadOnly
+      phetioReadOnly: options.azimuthalAnglePhetioReadOnly,
+      phetioFeatured: true
     } );
 
     this.polarAngleProperty = new NumberProperty( options.initialPolarAngle, {
       range: new Range( 0, Math.PI ),
       tandem: options.tandem.createTandem( 'polarAngleProperty' ),
       units: 'radians',
-      phetioReadOnly: options.polarAnglePhetioReadOnly
+      phetioReadOnly: options.polarAnglePhetioReadOnly,
+      phetioFeatured: true
     } );
   }
 

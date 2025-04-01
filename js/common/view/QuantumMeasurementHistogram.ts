@@ -326,12 +326,14 @@ class QuantumMeasurementHistogram extends Node {
 
     const leftPercentageProperty = new NumberProperty( 0, combineOptions<NumberPropertyOptions>( {
       tandem: options.tandem.createTandem( 'leftPercentageProperty' ),
-      phetioDocumentation: options.leftPercentagePropertyPhetioDocumentation
+      phetioDocumentation: options.leftPercentagePropertyPhetioDocumentation,
+      phetioFeatured: true
     }, PERCENTAGE_PROPERTY_DEFAULT_OPTIONS ) );
 
     const rightPercentageProperty = new NumberProperty( 0, combineOptions<NumberPropertyOptions>( {
       tandem: options.tandem.createTandem( 'rightPercentageProperty' ),
-      phetioDocumentation: options.rightPercentagePropertyPhetioDocumentation
+      phetioDocumentation: options.rightPercentagePropertyPhetioDocumentation,
+      phetioFeatured: true
     }, PERCENTAGE_PROPERTY_DEFAULT_OPTIONS ) );
 
     Multilink.multilink(

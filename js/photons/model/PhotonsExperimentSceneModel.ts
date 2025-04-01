@@ -116,7 +116,8 @@ class PhotonsExperimentSceneModel {
     // Create the laser that will emit the photons that will be sent toward the polarizing beam splitter.
     this.laser = new Laser( new Vector2( -LASER_TO_BEAM_SPLITTER_DISTANCE, 0 ), this.photonCollection, {
       emissionMode: providedOptions.photonEmissionMode,
-      tandem: experimentTandem.createTandem( 'laser' )
+      tandem: experimentTandem.createTandem( 'laser' ),
+      phetioFeatured: true
     } );
 
     // The mirror that reflects the photons that pass through the beam splitter downward to the detector.
@@ -129,7 +130,8 @@ class PhotonsExperimentSceneModel {
       'up',
       {
         displayMode: this.laser.emissionMode === ExperimentModeValues.SINGLE_PHOTON ? 'count' : 'rate',
-        tandem: experimentTandem.createTandem( 'verticalPolarizationDetector' )
+        tandem: experimentTandem.createTandem( 'verticalPolarizationDetector' ),
+        phetioFeatured: true
       }
     );
     this.horizontalPolarizationDetector = new PhotonDetector(
@@ -140,7 +142,8 @@ class PhotonsExperimentSceneModel {
       'down',
       {
         displayMode: this.laser.emissionMode === ExperimentModeValues.SINGLE_PHOTON ? 'count' : 'rate',
-        tandem: experimentTandem.createTandem( 'horizontalPolarizationDetector' )
+        tandem: experimentTandem.createTandem( 'horizontalPolarizationDetector' ),
+        phetioFeatured: true
       }
     );
 
@@ -170,7 +173,8 @@ class PhotonsExperimentSceneModel {
       },
       {
         tandem: providedOptions.tandem.createTandem( 'normalizedExpectationValueProperty' ),
-        phetioValueType: NullableIO( NumberIO )
+        phetioValueType: NullableIO( NumberIO ),
+        phetioFeatured: true
       }
     );
 
@@ -190,7 +194,8 @@ class PhotonsExperimentSceneModel {
                                             ( verticalValue - horizontalValue ) / ( verticalValue + horizontalValue ),
       {
         tandem: providedOptions.tandem.createTandem( 'normalizedOutcomeValueProperty' ),
-        phetioValueType: NumberIO
+        phetioValueType: NumberIO,
+        phetioFeatured: true
       }
     );
 

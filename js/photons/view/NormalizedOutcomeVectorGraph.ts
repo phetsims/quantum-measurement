@@ -11,13 +11,14 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Range from '../../../../dot/js/Range.js';
+import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import NumberDisplay from '../../../../scenery-phet/js/NumberDisplay.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
+import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
@@ -27,6 +28,10 @@ const TICK_MARK_LENGTH = 20;
 const TICK_MARK_LINE_WIDTH = 1.5;
 const EXPECTATION_VALUE_LINE_LENGTH = TICK_MARK_LENGTH * 1.5;
 const LABEL_SPACING = 7;
+
+type SelfOptions = EmptySelfOptions;
+
+type NormalizedOutcomeVectorGraphOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
 
 export default class NormalizedOutcomeVectorGraph extends Node {
 
@@ -39,7 +44,9 @@ export default class NormalizedOutcomeVectorGraph extends Node {
   public constructor( normalizedOutcomeValueProperty: TReadOnlyProperty<number>,
                       normalizedExpectationValueProperty: TReadOnlyProperty<number | null>,
                       displayNumericValueProperty: TReadOnlyProperty<boolean>,
-                      tandem: Tandem ) {
+                      providedOptions: NormalizedOutcomeVectorGraphOptions ) {
+
+    const tandem = providedOptions.tandem;
 
     const expectationValueVisibleProperty = new BooleanProperty( false, {
       tandem: tandem.createTandem( 'expectationValueVisibleProperty' ),
@@ -156,7 +163,7 @@ export default class NormalizedOutcomeVectorGraph extends Node {
       );
     } );
 
-    super( {
+    const options = optionize<NormalizedOutcomeVectorGraphOptions, SelfOptions, NodeOptions>()( {
       children: [
         verticalAxis,
         expectationValueLine,
@@ -169,9 +176,10 @@ export default class NormalizedOutcomeVectorGraph extends Node {
         normalizedOutcomeVector,
         lineToValueDisplay,
         normalizedOutcomeValueDisplay
-      ],
-      tandem: tandem
-    } );
+      ]
+    }, providedOptions );
+
+    super( options );
 
     this.expectationValueVisibleProperty = expectationValueVisibleProperty;
     this.vectorRepresentationVisibleProperty = vectorRepresentationVisibleProperty;

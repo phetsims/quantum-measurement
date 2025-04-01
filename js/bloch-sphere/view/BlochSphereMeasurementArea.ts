@@ -81,7 +81,11 @@ export default class BlochSphereMeasurementArea extends Node {
           phetioVisiblePropertyInstrumented: false // visibility controlled by parent node
         } )
       ],
-      tandem: equationBasisRadioButtonControlTandem
+      tandem: equationBasisRadioButtonControlTandem,
+      phetioFeatured: true,
+      visiblePropertyOptions: {
+        phetioFeatured: true
+      }
     } );
 
     const equationNode = new BlochSphereNumericalEquationNode( model.singleMeasurementBlochSphere, {
@@ -96,7 +100,10 @@ export default class BlochSphereMeasurementArea extends Node {
         equationBasisRadioButtonControl
       ],
       tandem: equationPanelTandem,
-      visibleProperty: new GatedVisibleProperty( model.isSingleMeasurementModeProperty, equationPanelTandem )
+      visibleProperty: new GatedVisibleProperty( model.isSingleMeasurementModeProperty, equationPanelTandem ),
+      visiblePropertyOptions: {
+        phetioFeatured: true
+      }
     } ), QuantumMeasurementConstants.PANEL_OPTIONS );
 
     // Keep the equation node panel centered based on its initial position.
@@ -156,6 +163,9 @@ export default class BlochSphereMeasurementArea extends Node {
       model.downMeasurementCountProperty,
       model.measurementAxisProperty, {
         tandem: providedOptions.tandem.createTandem( 'histogramNode' ),
+        visiblePropertyOptions: {
+          phetioFeatured: true
+        },
         phetioFeatured: true
       }
     );
@@ -246,7 +256,10 @@ export default class BlochSphereMeasurementArea extends Node {
         numberOfAtomsRadioButtonGroup
       ],
       align: 'left',
-      tandem: numberOfAtomsControlTandem
+      tandem: numberOfAtomsControlTandem,
+      visiblePropertyOptions: {
+        phetioFeatured: true
+      }
     } );
     const spinMeasurementAxisControl = new VBox( {
       spacing: titleToControlSpacing,
@@ -255,7 +268,10 @@ export default class BlochSphereMeasurementArea extends Node {
         measurementAxisRadioButtonGroup
       ],
       align: 'left',
-      tandem: measurementAxisControlTandem
+      tandem: measurementAxisControlTandem,
+      visiblePropertyOptions: {
+        phetioFeatured: true
+      }
     } );
     const measurementDelayControl = new VBox( {
       spacing: titleToControlSpacing,
@@ -279,7 +295,10 @@ export default class BlochSphereMeasurementArea extends Node {
         align: 'left',
         tandem: measurementControlsTandem,
         minContentWidth: panelWidth,
-        children: [ numberOfAtomsControl, spinMeasurementAxisControl, measurementDelayControl ]
+        children: [ numberOfAtomsControl, spinMeasurementAxisControl, measurementDelayControl ],
+        visiblePropertyOptions: {
+          phetioFeatured: true
+        }
       } ),
       QuantumMeasurementConstants.PANEL_OPTIONS
     );
@@ -385,7 +404,10 @@ export default class BlochSphereMeasurementArea extends Node {
       model.isSingleMeasurementModeProperty,
       model.measurementStateProperty,
       {
-        tandem: providedOptions.tandem.createTandem( 'systemUnderTestNode' )
+        tandem: providedOptions.tandem.createTandem( 'systemUnderTestNode' ),
+        visiblePropertyOptions: {
+          phetioFeatured: true
+        }
       }
     );
 

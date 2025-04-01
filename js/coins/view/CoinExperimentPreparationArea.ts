@@ -140,7 +140,10 @@ class CoinExperimentPreparationArea extends VBox {
       {
         maxWidth: 150, // empirically determined to work well with layout
         tandem: tandem.createTandem( 'probabilityEquationsNode' ),
-        phetioVisiblePropertyInstrumented: true
+        phetioVisiblePropertyInstrumented: true,
+        visiblePropertyOptions: {
+          phetioFeatured: true
+        }
       }
     );
 

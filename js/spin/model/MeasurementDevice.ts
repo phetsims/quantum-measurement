@@ -56,7 +56,8 @@ export default class MeasurementDevice extends PhetioObject {
       tandem: options.tandem.createTandem( 'spinStateProperty' ),
       phetioDocumentation: 'Indicates the axis and orientation of the spin state for the particle that last crossed' +
                            'the measurement line.  The y-coordinate corresponds to the z-axis',
-      phetioReadOnly: true
+      phetioReadOnly: true,
+      phetioFeatured: true
     } );
 
     this.measurementEmitter = new Emitter();
@@ -65,7 +66,8 @@ export default class MeasurementDevice extends PhetioObject {
 
     this.isActiveProperty = new BooleanProperty( originallyActive, {
       tandem: options.tandem.createTandem( 'isActiveProperty' ),
-      phetioReadOnly: true
+      phetioReadOnly: true,
+      phetioFeatured: true
     } );
 
     this.simpleBlochSphere = new SimpleBlochSphere( this.spinStateProperty, {

@@ -85,7 +85,8 @@ class CoinsExperimentSceneModel extends PhetioObject {
       phetioReadOnly: true
     } );
     this.preparingExperimentProperty = new BooleanProperty( true, {
-      tandem: options.tandem.createTandem( 'preparingExperimentProperty' )
+      tandem: options.tandem.createTandem( 'preparingExperimentProperty' ),
+      phetioFeatured: true
     } );
     this.upProbabilityProperty = new NumberProperty( options.initialBias, {
       range: new Range( 0, 1 ),

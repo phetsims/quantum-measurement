@@ -93,6 +93,7 @@ class SpinModel implements TModel {
     // Preparation Area properties
     this.alphaSquaredProperty = new NumberProperty( 1, {
       tandem: providedOptions.tandem.createTandem( 'alphaSquaredProperty' ),
+      phetioFeatured: true,
       range: new Range( 0, 1 )
     } );
 
@@ -130,7 +131,8 @@ class SpinModel implements TModel {
     );
 
     this.blochSphere = new SimpleBlochSphere( this.derivedSpinStateProperty, {
-      tandem: providedOptions.tandem.createTandem( 'blochSphere' )
+      tandem: providedOptions.tandem.createTandem( 'blochSphere' ),
+      phetioFeatured: true
     } );
 
     const sternGerlachsTandem = providedOptions.tandem.createTandem( 'sternGerlachs' );

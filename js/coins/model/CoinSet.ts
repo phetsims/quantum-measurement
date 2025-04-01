@@ -161,6 +161,7 @@ class CoinSet extends PhetioObject {
     this.measurementStateProperty = new Property<ExperimentMeasurementState>( initialMeasurementState, {
       tandem: options.tandem.createTandem( 'measurementStateProperty' ),
       phetioValueType: StringUnionIO( ExperimentMeasurementStateValues ),
+      phetioFeatured: true,
       phetioReadOnly: true,
 
       // Set the valid values for the measurement state.  Note that there is one value that is only used in the quantum

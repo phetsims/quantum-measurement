@@ -14,7 +14,7 @@ import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import StringUtils from '../../../../phetcommon/js/util/StringUtils.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import NumberDisplay from '../../../../scenery-phet/js/NumberDisplay.js';
@@ -34,7 +34,7 @@ import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import PhotonDetector, { DetectionDirection } from '../model/PhotonDetector.js';
 
 type SelfOptions = EmptySelfOptions;
-type PhotonDetectorNodeOptions = SelfOptions & PickRequired<NodeOptions, 'tandem'>;
+type PhotonDetectorNodeOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
 
 // The size of the detector body.  The width is for the dimension perpendicular to the detection direction, and the
 // height (which is really more like the depth) is for the dimension parallel to the detection direction.

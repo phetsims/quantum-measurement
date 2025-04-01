@@ -93,7 +93,8 @@ export default class SternGerlachNode extends Node {
     const sternGerlachControls = new VBox( {
       align: 'left',
       spacing: 10,
-      tandem: providedOptions.tandem.createTandem( 'sternGerlachControls' )
+      tandem: providedOptions.tandem.createTandem( 'sternGerlachControls' ),
+      phetioFeatured: true
     } );
 
     const radioButtonTextOptions: RichTextOptions = {

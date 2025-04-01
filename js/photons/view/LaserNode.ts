@@ -13,7 +13,7 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import { roundToInterval } from '../../../../dot/js/util/roundToInterval.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
+import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
 import LaserPointerNode from '../../../../scenery-phet/js/LaserPointerNode.js';
 import AlignBox from '../../../../scenery/js/layout/nodes/AlignBox.js';
@@ -32,7 +32,7 @@ import ExperimentModeValues from '../model/ExperimentModeValues.js';
 import Laser from '../model/Laser.js';
 
 type SelfOptions = EmptySelfOptions;
-type LaserNodeOptions = SelfOptions & PickRequired<NodeOptions, 'tandem'>;
+type LaserNodeOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
 
 // constants
 const LASER_BODY_SIZE = new Dimension2( 95, 55 );

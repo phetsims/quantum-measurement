@@ -115,7 +115,8 @@ class BlochSphereModel implements TModel {
     this.measurementStateProperty = new EnumerationProperty( SpinMeasurementState.PREPARED, {
       phetioReadOnly: true,
       phetioDocumentation: 'For internal use only.',
-      tandem: measurementAreaTandem.createTandem( 'measurementStateProperty' )
+      tandem: measurementAreaTandem.createTandem( 'measurementStateProperty' ),
+      phetioFeatured: true
     } );
 
     // Selected Equation Basis
@@ -172,7 +173,8 @@ class BlochSphereModel implements TModel {
 
     this.magneticFieldStrengthProperty = new NumberProperty( 1, {
       tandem: magneticFieldControlsTandem.createTandem( 'magneticFieldStrengthProperty' ),
-      range: new Range( -1, 1 )
+      range: new Range( -1, 1 ),
+      phetioFeatured: true
     } );
 
     let selectingStateDirection = false;
