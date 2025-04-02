@@ -171,7 +171,8 @@ export default class PhotonPolarizationAngleControl extends Panel {
         new VectorTailNode( 6 ),
         new RichText( QuantumMeasurementStrings.propagationIntoPageStringProperty, {
           font: QuantumMeasurementConstants.SMALL_LABEL_FONT,
-          maxWidth: 150
+          maxWidth: 150,
+          maxHeight: 40
         } )
       ],
       spacing: 5,

@@ -288,6 +288,7 @@ class PhotonRateDisplay extends NumberDisplay {
       maxWidth: maxWidth,
       textOptions: {
         font: DISPLAY_FONT,
+        maxWidth: maxWidth / 2,
         fill: detectionDirection === 'up' ?
               QuantumMeasurementColors.verticalPolarizationColorProperty :
               QuantumMeasurementColors.horizontalPolarizationColorProperty

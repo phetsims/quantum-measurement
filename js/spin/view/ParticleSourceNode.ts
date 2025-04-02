@@ -125,7 +125,7 @@ export default class ParticleSourceNode extends Node {
     } );
 
     // major ticks at 0%, 33%, 66%, 100%
-    const tickLabelOptions = { font: QuantumMeasurementConstants.SMALL_LABEL_FONT, maxWidth: 40 };
+    const tickLabelOptions = { font: QuantumMeasurementConstants.SMALL_LABEL_FONT, maxWidth: 30 };
     particleAmountSlider.addMajorTick( sliderRange.min, new Text( QuantumMeasurementStrings.noneStringProperty, tickLabelOptions ) );
     particleAmountSlider.addMajorTick( sliderRange.max, new Text( QuantumMeasurementStrings.lotsStringProperty, tickLabelOptions ) );
     particleAmountSlider.addMinorTick( sliderRange.min + ( sliderRange.max - sliderRange.min ) / 4 );
