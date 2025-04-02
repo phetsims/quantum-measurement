@@ -22,7 +22,6 @@ import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import CoinSet from '../model/CoinSet.js';
 import { MULTI_COIN_ANIMATION_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
-import { ExperimentMeasurementState } from '../model/ExperimentMeasurementState.js';
 import CoinSetPixelRepresentation from './CoinSetPixelRepresentation.js';
 import SmallCoinNode, { SmallCoinDisplayMode } from './SmallCoinNode.js';
 
@@ -86,7 +85,7 @@ class MultiCoinTestBox extends Node {
                                           CONTENTS_HIDDEN_FILL;
 
       // Update the appearance of the coin nodes.
-      this.updateCoinNodes( coinSet, measurementState );
+      this.updateCoinNodes( coinSet );
     } );
 
     // Update the appearance of the coin nodes when the data changes.
@@ -95,7 +94,7 @@ class MultiCoinTestBox extends Node {
       // When phet-io state is being set, the measured data can change without any change to the measurement state of
       // the coin set. This makes sure that the coin nodes are updated in that situation.
       if ( isSettingPhetioStateProperty.value ) {
-        this.updateCoinNodes( coinSet, coinSet.measurementStateProperty.value );
+        this.updateCoinNodes( coinSet );
       }
     } );
   }
@@ -105,7 +104,10 @@ class MultiCoinTestBox extends Node {
    * nodes that automatically update because there can be many thousands of coins, so an approach like this is needed to
    * get reasonable performance.
    */
-  private updateCoinNodes( coinSet: CoinSet, measurementState: ExperimentMeasurementState ): void {
+  private updateCoinNodes( coinSet: CoinSet ): void {
+
+    const measurementState = coinSet.measurementStateProperty.value;
+
     this.residentCoinNodes.forEach( ( coinNode, index ) => {
 
       if ( measurementState === 'revealed' ) {
@@ -120,7 +122,14 @@ class MultiCoinTestBox extends Node {
       }
       else if ( measurementState === 'preparingToBeMeasured' ) {
 
-        assert && assert( !coinNode.isFlipping, 'coin node should not already be flipping' );
+        if ( coinNode.isFlipping ) {
+
+          // During normal, non-phet-io-state-setting interactions, the coin node should not be flipping when in this
+          // state.  If it is, then we have a problem.
+          assert && assert( !isSettingPhetioStateProperty.value, 'coin node should not already be flipping' );
+
+          coinNode.stopFlipping();
+        }
 
         // Hide the faces of the coin.
         coinNode.displayModeProperty.value = 'hidden';
