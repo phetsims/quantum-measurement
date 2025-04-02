@@ -50,7 +50,7 @@ export class PhotonCollection extends PhetioObject {
    * Please see https://github.com/phetsims/phet-io/blob/main/doc/phet-io-instrumentation-technical-guide.md#serialization
    * for more information on the different serialization types.
    */
-  public static readonly PhotonCollectionIO = new IOType<PhotonCollection>( 'PhotonCollectionIO', {
+  public static readonly PhotonCollectionIO = new IOType<PhotonCollection, PhotonCollectionState>( 'PhotonCollectionIO', {
     valueType: PhotonCollection,
     documentation: 'The PhotonCollection is a model element that represents a collection of photons.',
     stateSchema: {
@@ -58,5 +58,9 @@ export class PhotonCollection extends PhetioObject {
     }
   } );
 }
+
+type PhotonCollectionState = {
+  photons: [];
+};
 
 quantumMeasurement.register( 'PhotonCollection', PhotonCollection );

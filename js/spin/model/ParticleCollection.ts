@@ -244,7 +244,7 @@ export class ParticleCollection extends PhetioObject {
    * Please see https://github.com/phetsims/phet-io/blob/main/doc/phet-io-instrumentation-technical-guide.md#serialization
    * for more information on the different serialization types.
    */
-  public static readonly ParticleCollectionIO = new IOType<ParticleCollection>( 'ParticleCollectionIO', {
+  public static readonly ParticleCollectionIO = new IOType<ParticleCollection, ParticleCollectionState>( 'ParticleCollectionIO', {
     valueType: ParticleCollection,
     documentation: 'The ParticleCollection is a model element that represents a collection of particles.',
     stateSchema: {
@@ -252,5 +252,9 @@ export class ParticleCollection extends PhetioObject {
     }
   } );
 }
+
+type ParticleCollectionState = {
+  particles: [];
+};
 
 quantumMeasurement.register( 'ParticleCollection', ParticleCollection );
