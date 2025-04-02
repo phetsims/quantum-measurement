@@ -40,7 +40,7 @@ class ProbabilityValueControl extends NumberControl {
 
       // Creating our own layout function because NumberControl doesn't have a native support for
       //  < ------|------ >, and we want to use a Node for the title, which isn't currently supported.
-      layoutFunction: ( existingTitleNode, numberDisplay, slider, leftArrowButton, rightArrowButton ) => {
+      layoutFunction: ( titleNode, numberDisplay, slider, leftArrowButton, rightArrowButton ) => {
         assert && assert( leftArrowButton && rightArrowButton );
         const buttonsAndSlider = new HBox( {
           spacing: 8,
@@ -74,7 +74,7 @@ class ProbabilityValueControl extends NumberControl {
       tandem: tandem
     }, providedOptions );
 
-    super( '', probabilityProperty, RANGE, options );
+    super( titleNode, probabilityProperty, RANGE, options );
   }
 }
 
