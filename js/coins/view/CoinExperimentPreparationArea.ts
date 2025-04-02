@@ -109,20 +109,9 @@ class CoinExperimentPreparationArea extends VBox {
         accessibleName: preparationAreaAccessibleNameStringProperty,
         accessibleParagraph: classicalAccessibleParagraphPatternStringProperty,
         textColor: textColorProperty,
-        maxWidth: 250
+        maxWidth: 170
       }
     );
-
-    // Limit the max width of the preparation area header based on whether the user is preparing an experiment or not.
-    // This is necessary because the preparation area is significantly narrower when in measurement (i.e.
-    // non-preparation) mode.
-    const maxHeadingWidthDuringMeasurement = 150;
-    sceneModel.preparingExperimentProperty.link( preparingExperiment => {
-      const scale = preparationAreaHeader.width > maxHeadingWidthDuringMeasurement && !preparingExperiment ?
-                    maxHeadingWidthDuringMeasurement / preparationAreaHeader.width :
-                    1;
-      preparationAreaHeader.setScaleMagnitude( scale );
-    } );
 
     // Create the UI element that will allow the user to specify the initial state of the coin.
     const initialCoinStateSelectorNode = new InitialCoinStateSelectorNode(

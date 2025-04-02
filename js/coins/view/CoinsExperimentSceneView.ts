@@ -233,6 +233,8 @@ class CoinsExperimentSceneView extends Node {
       startMeasurementButton,
       this.newCoinButton
     ];
+
+    this.preparationArea.localBoundsProperty.link( () => this.updateActivityAreaPositions() );
   }
 
   /**
