@@ -62,7 +62,7 @@ class SystemUnderTestNode extends Panel {
       ],
       ( ( isSingleMode, atomString, atomsString ) => isSingleMode ? atomString : atomsString )
     );
-    const titleNode = new Text( titleStringProperty, { font: TITLE_FONT, maxWidth: 70 } );
+    const titleNode = new Text( titleStringProperty, { font: TITLE_FONT, maxWidth: 100 } );
 
     // Create the magnetic field node, which is only visible when the magnetic field is enabled.
     const magneticFieldNode = new MagneticFieldNode( magneticFieldStrengthProperty, measurementStateProperty, {
@@ -114,8 +114,7 @@ class SystemUnderTestNode extends Panel {
     // Combine the title and the other elements into a single node for the content.
     const titledTestArea = new VBox( {
       children: [ titleNode, fieldAndAtomsNode ],
-      spacing: 5,
-      resize: false
+      spacing: 5
     } );
 
     // Create an icon that will be used to indicate that a measurement has been made.
