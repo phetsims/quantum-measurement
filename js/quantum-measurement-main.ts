@@ -44,7 +44,9 @@ simLauncher.launch( () => {
           } )
         } ]
       }
-    } )
+    } ),
+
+    phetioDesigned: true
   };
 
   const sim = new Sim( titleStringProperty, screens, options );
