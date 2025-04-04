@@ -73,7 +73,9 @@ export default class ParticleSourceModel {
       phetioFeatured: true
     } );
 
-    this.customSpinStateProperty = new Vector2Property( SpinDirection.spinToVector( initialSpinState ) );
+    this.customSpinStateProperty = new Vector2Property( SpinDirection.spinToVector( initialSpinState ), {
+      tandem: tandem.createTandem( 'customSpinStateProperty' )
+    } );
   }
 
   public reset(): void {
