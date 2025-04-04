@@ -18,7 +18,6 @@ import TModel from '../../../../joist/js/TModel.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
-import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import ComplexBlochSphere from './ComplexBlochSphere.js';
@@ -142,9 +141,8 @@ class BlochSphereModel implements TModel {
       units: 'ns'
     } );
 
-    this.measurementAxisProperty = new Property( MeasurementAxis.Z_PLUS, {
+    this.measurementAxisProperty = new EnumerationProperty( MeasurementAxis.Z_PLUS, {
       tandem: measurementControlsTandem.createTandem( 'measurementAxisProperty' ),
-      phetioValueType: EnumerationIO( MeasurementAxis ),
       phetioFeatured: true
     } );
 
