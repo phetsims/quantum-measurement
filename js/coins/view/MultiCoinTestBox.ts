@@ -76,7 +76,7 @@ class MultiCoinTestBox extends Node {
     this.testBoxWithClipArea = testBoxWithClipArea;
     this.numberOfActiveCoinsProperty = coinSet.numberOfCoinsProperty;
 
-    // Update the fill for the rectangle based on the measurement state.
+    // Update the appearance of the box and the coin nodes when the measurement state changes.
     coinSet.measurementStateProperty.link( measurementState => {
 
       // Make the box look hazy when the measurement is not revealed.
@@ -147,7 +147,11 @@ class MultiCoinTestBox extends Node {
     } );
 
     // Handle the pixel-based representation of the coin set if present.
-    if ( this.pixelRepresentation && measurementState === 'preparingToBeMeasured' ) {
+    if ( this.pixelRepresentation &&
+         coinSet.coinType === SystemType.CLASSICAL &&
+         measurementState === 'preparingToBeMeasured' &&
+         !isSettingPhetioStateProperty.value ) {
+
       this.pixelRepresentation.startFlippingAnimation();
     }
   }
