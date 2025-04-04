@@ -305,7 +305,7 @@ class CoinExperimentMeasurementArea extends VBox {
     // but during phet-io state setting it can.  The following linkage handles this case, and makes sure that the view
     // reflects the state of the model.
     sceneModel.coinSet.numberOfCoinsProperty.lazyLink( () => {
-      if ( isSettingPhetioStateProperty.value ) {
+      if ( isSettingPhetioStateProperty.value && !sceneModel.preparingExperimentProperty.value ) {
         const multiCoinViewManager = sceneModel.coinSet.numberOfCoinsProperty.value === MAX_COINS ?
                                      maxCoinsViewManager :
                                      multipleCoinsViewManager;
