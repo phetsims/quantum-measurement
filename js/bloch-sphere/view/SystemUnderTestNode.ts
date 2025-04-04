@@ -22,6 +22,7 @@ import Path from '../../../../scenery/js/nodes/Path.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
+import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
@@ -146,7 +147,7 @@ class SystemUnderTestNode extends Panel {
     // when a measurement is made, then faded out.
     let iconFadeAnimation: Animation | null = null;
     measurementStateProperty.link( state => {
-      measurementIconNode.visible = state === SpinMeasurementState.OBSERVED;
+      measurementIconNode.visible = state === SpinMeasurementState.OBSERVED && !isSettingPhetioStateProperty.value;
       if ( state === SpinMeasurementState.OBSERVED ) {
 
         // Finish any existing animation.
@@ -154,18 +155,20 @@ class SystemUnderTestNode extends Panel {
           iconFadeAnimation.stop();
         }
 
-        // Start an animation to fade out the icon.
-        iconFadeAnimation = new Animation( {
-          from: 1,
-          to: 0,
-          delay: 0.5,
-          getValue: () => measurementIconNode.opacity,
-          setValue: opacity => { measurementIconNode.opacity = opacity; },
-          duration: 0.5
-        } );
-        measurementIconNode.opacity = 1;
-        iconFadeAnimation.start();
-        iconFadeAnimation.endedEmitter.addListener( () => { iconFadeAnimation = null; } );
+        // Start an animation to fade out the icon (unless this state change is due to setting phet-io state).
+        if ( !isSettingPhetioStateProperty.value ) {
+          iconFadeAnimation = new Animation( {
+            from: 1,
+            to: 0,
+            delay: 0.5,
+            getValue: () => measurementIconNode.opacity,
+            setValue: opacity => { measurementIconNode.opacity = opacity; },
+            duration: 0.5
+          } );
+          measurementIconNode.opacity = 1;
+          iconFadeAnimation.start();
+          iconFadeAnimation.endedEmitter.addListener( () => { iconFadeAnimation = null; } );
+        }
       }
       else if ( state === SpinMeasurementState.PREPARED ) {
 
