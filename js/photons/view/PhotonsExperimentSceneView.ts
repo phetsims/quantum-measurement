@@ -211,7 +211,7 @@ class PhotonsExperimentSceneView extends Node {
       spacing: 20,
       align: 'center',
       resize: false,
-      left: titleAndEquationsBox.left - 20,
+      left: titleAndEquationsBox.left - 40,
       centerY: experimentArea.y
     } );
 
