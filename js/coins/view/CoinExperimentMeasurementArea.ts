@@ -66,7 +66,7 @@ class CoinExperimentMeasurementArea extends VBox {
             sceneModel.singleCoin.measuredValueProperty
           ],
           ( coinMeasurementState, measurementValue ) => {
-            // TODO: Make this a translatable pattern!! Also add all the possibilities to the stringLink https://github.com/phetsims/scenery/issues/1673
+            // TODO: Make this a translatable pattern!! Also add all the possibilities to the stringLink https://github.com/phetsims/quantum-measurement/issues/92
             return `${coinMeasurementState}, ${measurementValue}`;
           }
         )
