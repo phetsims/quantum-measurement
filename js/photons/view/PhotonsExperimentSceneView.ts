@@ -199,6 +199,11 @@ class PhotonsExperimentSceneView extends Node {
         visiblePropertyOptions: {
           phetioFeatured: true
         },
+        numberDisplayOptions: {
+          textOptions: {
+            maxWidth: 60
+          }
+        },
         leftPercentagePropertyPhetioDocumentation: 'The percentage of photons detected with vertical polarization.',
         rightPercentagePropertyPhetioDocumentation: 'The percentage of photons detected with horizontal polarization.'
       }
