@@ -86,6 +86,11 @@ class SceneSelectorRadioButtonGroup<T extends EnumerationValueWithTitle> extends
     } );
 
     super( property, items, options );
+
+    const originalCenterX = this.centerX;
+    this.localBoundsProperty.link( () => {
+      this.centerX = originalCenterX;
+    } );
   }
 }
 

@@ -251,6 +251,10 @@ class PhotonCountDisplay extends HBox {
       spacing: 8,
       center: center
     } );
+
+    this.localBoundsProperty.link( () => {
+      this.center = center;
+    } );
   }
 
   private static readonly INDICATOR_RADIUS = 10;
@@ -293,6 +297,10 @@ class PhotonRateDisplay extends NumberDisplay {
               QuantumMeasurementColors.verticalPolarizationColorProperty :
               QuantumMeasurementColors.horizontalPolarizationColorProperty
       }
+    } );
+
+    this.localBoundsProperty.link( () => {
+      this.center = center;
     } );
   }
 }
