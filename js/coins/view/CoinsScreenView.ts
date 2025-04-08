@@ -95,8 +95,8 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
 
     this.pdomPlayAreaNode.pdomOrder = [
       classicalCoinsExperimentSceneView,
-      quantumCoinsExperimentSceneView,
-      experimentModeRadioButtonGroupAlignBox
+      experimentModeRadioButtonGroupAlignBox,
+      quantumCoinsExperimentSceneView
     ];
   }
 
