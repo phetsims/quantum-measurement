@@ -29,6 +29,10 @@ import OutcomeProbabilityControl from './OutcomeProbabilityControl.js';
 import ProbabilityEquationsNode from './ProbabilityEquationsNode.js';
 import SceneSectionHeader from './SceneSectionHeader.js';
 
+// Constants
+const MAX_HEADER_WIDTH_DURING_MEASUREMENT = 150;
+const MAX_HEADER_WIDTH_DURING_PREPARATION = 250;
+
 class CoinExperimentPreparationArea extends VBox {
 
   private readonly initialCoinStateSelectorNode: InitialCoinStateSelectorNode;
@@ -108,8 +112,28 @@ class CoinExperimentPreparationArea extends VBox {
       {
         accessibleName: preparationAreaAccessibleNameStringProperty,
         accessibleParagraph: classicalAccessibleParagraphPatternStringProperty,
-        textColor: textColorProperty,
-        maxWidth: 170
+        textColor: textColorProperty
+      }
+    );
+
+    // Limit the max width of the preparation area header based on whether the user is preparing an experiment or not.
+    // This is necessary because the preparation area is significantly narrower when in measurement (i.e.
+    // non-preparation) mode.
+    Multilink.multilink(
+      [
+        sceneModel.preparingExperimentProperty,
+        preparationAreaHeadingTextProperty
+      ],
+      ( preparingExperiment, text ) => {
+        const maxWidth = preparingExperiment ? MAX_HEADER_WIDTH_DURING_PREPARATION : MAX_HEADER_WIDTH_DURING_MEASUREMENT;
+
+        // Setting the scale to 1 first to compare against the original width
+        preparationAreaHeader.setScaleMagnitude( 1 );
+
+        const scale = preparationAreaHeader.width > maxWidth ?
+                maxWidth / preparationAreaHeader.width :
+                1;
+        preparationAreaHeader.setScaleMagnitude( scale );
       }
     );
 
