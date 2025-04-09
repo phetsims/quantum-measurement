@@ -94,7 +94,11 @@ export default class SternGerlachNode extends Node {
       align: 'left',
       spacing: 10,
       tandem: providedOptions.tandem.createTandem( 'sternGerlachControls' ),
-      phetioFeatured: true
+      phetioFeatured: true,
+      phetioVisiblePropertyInstrumented: true,
+      visiblePropertyOptions: {
+        phetioFeatured: true
+      }
     } );
 
     const radioButtonTextOptions: RichTextOptions = {

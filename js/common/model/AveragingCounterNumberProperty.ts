@@ -49,10 +49,7 @@ class AveragingCounterNumberProperty extends NumberProperty {
     assert && assert( options.totalAveragingPeriod >= options.countSamplePeriod, 'total period should be greater than sample period' );
 
     const initialValue = 0;
-    super( initialValue, {
-      tandem: options.tandem,
-      phetioReadOnly: true
-    } );
+    super( initialValue, options );
 
     this.totalAveragingPeriod = options.totalAveragingPeriod;
     this.countSamplePeriod = options.countSamplePeriod;

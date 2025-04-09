@@ -78,8 +78,11 @@ class PhotonTestingArea extends Node {
       align: 'left',
       left: laserNode.left,
       bottom: laserNode.top - 15,
-      phetioFeatured: true,
       tandem: photonBehaviorControlTandem,
+      phetioFeatured: true,
+      visiblePropertyOptions: {
+        phetioFeatured: true
+      },
       accessibleName: QuantumMeasurementStrings.a11y.photonsScreen.photonBehaviorModeStringProperty,
       tagName: 'div',
       children: [

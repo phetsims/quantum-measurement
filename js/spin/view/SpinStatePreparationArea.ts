@@ -167,7 +167,10 @@ export default class SpinStatePreparationArea extends VBox {
     const projectionCheckboxes = new HBox( {
       spacing: 20,
       tandem: projectionsCheckboxesTandem,
-      excludeInvisibleChildrenFromBounds: false,
+      phetioVisiblePropertyInstrumented: true,
+      visiblePropertyOptions: {
+        phetioFeatured: true
+      },
       children: [
         new Text( QuantumMeasurementStrings.projectionStringProperty, {
           font: QuantumMeasurementConstants.CONTROL_FONT,
