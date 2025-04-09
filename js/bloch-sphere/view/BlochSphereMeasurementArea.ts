@@ -103,10 +103,7 @@ export default class BlochSphereMeasurementArea extends Node {
       visibleProperty: new GatedVisibleProperty( model.isSingleMeasurementModeProperty, equationPanelTandem ),
       visiblePropertyOptions: {
         phetioFeatured: true
-      },
-      // Uninstrumenting visible property might seem weird since we're saying it's also featured,
-      // but since we're using the GatedVisibleProperty we need to uninstrument the normal one
-      phetioVisiblePropertyInstrumented: false
+      }
     } ), QuantumMeasurementConstants.PANEL_OPTIONS );
 
     // Keep the equation node panel centered based on its initial position.
