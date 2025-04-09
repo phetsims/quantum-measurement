@@ -100,10 +100,9 @@ export default class BlochSphereMeasurementArea extends Node {
         equationBasisRadioButtonControl
       ],
       tandem: equationPanelTandem,
-      visibleProperty: new GatedVisibleProperty( model.isSingleMeasurementModeProperty, equationPanelTandem ),
-      visiblePropertyOptions: {
+      visibleProperty: new GatedVisibleProperty( model.isSingleMeasurementModeProperty, equationPanelTandem, {
         phetioFeatured: true
-      }
+      } )
     } ), QuantumMeasurementConstants.PANEL_OPTIONS );
 
     // Keep the equation node panel centered based on its initial position.
