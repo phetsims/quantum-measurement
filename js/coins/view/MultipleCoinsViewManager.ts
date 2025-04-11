@@ -65,7 +65,7 @@ class MultipleCoinsViewManager extends CoinViewManager {
     // so it is safe to call as a preventative measure.
     this.abortIngressAnimationForCoinSet = () => {
 
-      // Get the scene view, since we'll need to remove any coin nodes that were previously added by this manager.
+      // Get the scene view, since we'll need to remove any coin nodes that were previously added to it by this manager.
       const coinsExperimentSceneView = this.getSceneView();
 
       // Stop any of the animations that exist.
@@ -87,6 +87,10 @@ class MultipleCoinsViewManager extends CoinViewManager {
     };
 
     this.startIngressAnimationForCoinSet = ( forReprepare: boolean ) => {
+
+      // Abort any existing animations that are in progress before starting new ones. The code has been designed such
+      // that this should not be necessary during normal operation, but it can come up during phet-io state setting.
+      this.abortIngressAnimationForCoinSet();
 
       assert && assert(
         coinNodeSets.has( sceneModel.coinSet.numberOfCoinsProperty.value ),
