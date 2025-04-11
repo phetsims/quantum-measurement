@@ -76,7 +76,8 @@ class MaxCoinsViewManager extends CoinViewManager {
 
     this.startIngressAnimationForCoinSet = ( forReprepare: boolean ) => {
 
-      // Create a typed reference to the parent node, since we'll need to invoke some methods on it.
+      // Make sure the parent node in the scene graph is the expected type, since some subtle interactions with it are
+      // necessary to make the animations work.
       assert && assert( measurementArea.getParent() instanceof CoinsExperimentSceneView );
 
       // Make sure the test box is empty.
