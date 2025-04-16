@@ -153,8 +153,7 @@ class CoinExperimentMeasurementArea extends VBox {
         tandem: numberOfCoinsControlTandem.createTandem( 'radioButtonGroup' ),
         phetioVisiblePropertyInstrumented: false,
         accessibleName: QuantumMeasurementStrings.a11y.coinsScreen.identicalCoinsStringProperty,
-        accessibleHelpText: QuantumMeasurementStrings.a11y.coinsScreen.identicalCoinsHelpTextStringProperty,
-        labelTagName: 'h4'
+        accessibleHelpText: QuantumMeasurementStrings.a11y.coinsScreen.identicalCoinsHelpTextStringProperty
       }
     );
 
@@ -314,6 +313,13 @@ class CoinExperimentMeasurementArea extends VBox {
     } );
 
     this.manyCoinsAnimations = maxCoinsViewManager;
+
+    // TODO: Use pdomOrder to define the reading order and the heading structure.
+    // See https://github.com/phetsims/quantum-measurement/issues/92
+    this.pdomOrder = [
+      singleCoinSectionHeader // (...add items under this header)
+      // ... more here
+    ];
   }
 }
 

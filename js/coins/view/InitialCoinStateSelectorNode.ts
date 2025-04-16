@@ -119,7 +119,6 @@ export default class InitialCoinStateSelectorNode extends VBox {
         tandem: initialOrientationControlTandem.createTandem( 'initialOrientationRadioButtonGroup' ),
         orientation: 'horizontal',
         phetioVisiblePropertyInstrumented: false,
-        labelTagName: 'h4',
         accessibleName: titleStringProperty,
         accessibleHelpText: QuantumMeasurementStrings.a11y.coinsScreen.initialOrientationHelpTextStringProperty,
         radioButtonOptions: {

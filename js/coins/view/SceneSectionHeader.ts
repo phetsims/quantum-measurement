@@ -56,8 +56,7 @@ export default class SceneSectionHeader extends VBox {
     super( {
       children: [ heading, line ],
       accessibleHeading: options.accessibleName ? options.accessibleName : textProperty,
-      accessibleParagraph: options.accessibleParagraph,
-      tagName: 'div'
+      accessibleParagraph: options.accessibleParagraph
     } );
   }
 }
