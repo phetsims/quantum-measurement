@@ -55,12 +55,8 @@ export default class SceneSectionHeader extends VBox {
 
     super( {
       children: [ heading, line ],
-      accessibleName: options.accessibleName ? options.accessibleName : textProperty,
+      accessibleHeading: options.accessibleName ? options.accessibleName : textProperty,
       accessibleParagraph: options.accessibleParagraph,
-
-      // TODO: Implement accessible header https://github.com/phetsims/scenery/issues/855
-      // TODO: The header API should make tagName unnecessary too, https://github.com/phetsims/scenery/issues/855
-      labelTagName: 'h3',
       tagName: 'div'
     } );
   }
