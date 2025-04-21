@@ -115,7 +115,12 @@ class SystemUnderTestNode extends Panel {
     // Combine the title and the other elements into a single node for the content.
     const titledTestArea = new VBox( {
       children: [ titleNode, fieldAndAtomsNode ],
-      spacing: 5
+      spacing: 5,
+      resize: false
+    } );
+
+    titleNode.localBoundsProperty.link( () => {
+      titleNode.centerX = titledTestArea.centerX;
     } );
 
     // Create an icon that will be used to indicate that a measurement has been made.
