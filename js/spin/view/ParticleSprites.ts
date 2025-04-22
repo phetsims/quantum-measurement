@@ -102,6 +102,7 @@ export default class ParticleSprites extends Sprites {
         1,
         this.modelViewTransform.modelToViewY( particle.position.y )
       );
+      spriteInstance.alpha = 1; // always fully opaque
     }
 
     // Free up any unused sprite instances.

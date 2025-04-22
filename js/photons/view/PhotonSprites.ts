@@ -147,13 +147,13 @@ class PhotonSprites extends Sprites {
           const interiorSpriteInstance = this.spriteInstances[ ( numberOfPhotonsDisplayed - 1 ) * 2 ];
           interiorSpriteInstance.sprite = this.photonInteriorSprite;
           interiorSpriteInstance.matrix.setToAffine( scale, 0, xPos, 0, scale, yPos );
-          interiorSpriteInstance.alpha = photonMotionState.probability; // Probability based opacity
+          interiorSpriteInstance.alpha = photonMotionState.probability; // probability-based opacity
 
           // Update the matrix for the photon outline.
           const outlineSpriteInstance = this.spriteInstances[ ( numberOfPhotonsDisplayed - 1 ) * 2 + 1 ];
           outlineSpriteInstance.sprite = this.photonOutlineSprite;
           outlineSpriteInstance.matrix.setToAffine( scale, 0, xPos, 0, scale, yPos );
-          outlineSpriteInstance.alpha = 1; // Always fully opaque
+          outlineSpriteInstance.alpha = 1; // always fully opaque
         }
       }
     }
