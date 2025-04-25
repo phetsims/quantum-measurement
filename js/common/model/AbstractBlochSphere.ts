@@ -19,6 +19,7 @@ type SelfOptions = {
   polarAnglePhetioReadOnly?: boolean;
   initialAzimuthalAngle?: number;
   azimuthalAnglePhetioReadOnly?: boolean;
+  azimuthalRange?: Range; // Range for azimuthal angle, in Spin Screen should be [0,0]
 };
 
 export type AbstractBlochSphereOptions = SelfOptions & WithRequired<PhetioObjectOptions, 'tandem'>;
@@ -38,13 +39,14 @@ export default abstract class AbstractBlochSphere extends PhetioObject {
       initialPolarAngle: 0,
       polarAnglePhetioReadOnly: true,
       initialAzimuthalAngle: Math.PI / 2,
-      azimuthalAnglePhetioReadOnly: true
+      azimuthalAnglePhetioReadOnly: true,
+      azimuthalRange: new Range( 0, 2 * Math.PI )
     }, providedOptions );
 
     super( options );
 
     this.azimuthalAngleProperty = new NumberProperty( options.initialAzimuthalAngle, {
-      range: new Range( 0, 2 * Math.PI ),
+      range: options.azimuthalRange,
       tandem: options.tandem.createTandem( 'azimuthalAngleProperty' ),
       units: 'radians',
       phetioReadOnly: options.azimuthalAnglePhetioReadOnly,

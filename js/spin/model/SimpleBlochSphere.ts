@@ -8,9 +8,9 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import AbstractBlochSphere, { AbstractBlochSphereOptions } from '../../common/model/AbstractBlochSphere.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 
@@ -24,7 +24,10 @@ export default class SimpleBlochSphere extends AbstractBlochSphere {
 
   public constructor( spinStateProperty: TReadOnlyProperty<Vector2>, providedOptions?: SimpleBlochSphereOptions ) {
 
-    const options = optionize<SimpleBlochSphereOptions, SelfOptions, PhetioObjectOptions>()( {}, providedOptions );
+    const options = optionize<SimpleBlochSphereOptions, SelfOptions, AbstractBlochSphereOptions>()( {
+      azimuthalRange: new Range( 0, 0 ),
+      initialAzimuthalAngle: 0
+    }, providedOptions );
 
     super( options );
 
@@ -41,7 +44,7 @@ export default class SimpleBlochSphere extends AbstractBlochSphere {
     } );
 
     spinStateProperty.link( spinState => {
-      this.azimuthalAngleProperty.value = spinState.x > 0 ? 0 : Math.PI;
+      this.azimuthalAngleProperty.value = spinState.x >= 0 ? 0 : Math.PI;
       this.polarAngleProperty.value = Math.acos( spinState.y );
     } );
 
