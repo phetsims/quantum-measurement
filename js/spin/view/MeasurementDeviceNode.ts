@@ -66,17 +66,21 @@ export default class MeasurementDeviceNode extends VBox {
     let stateVectorVisibleTimeout: null | TimerListener = null;
     let cameraPathFillTimeout: null | TimerListener = null;
 
+    const stateVectorVisibleCallback = () => {
+      blochSphereNode.stateVectorVisibleProperty.value = true;
+    };
+
+    const cameraPathFillCallback = () => {
+      cameraPath.fill = QuantumMeasurementColors.cameraIdleFillProperty;
+    };
+
     measurementDevice.measurementEmitter.addListener( () => {
       blochSphereNode.stateVectorVisibleProperty.value = false;
       cameraPath.fill = QuantumMeasurementColors.particleColorProperty;
 
-      stateVectorVisibleTimeout = stepTimer.setTimeout( () => {
-        blochSphereNode.stateVectorVisibleProperty.value = true;
-      }, 100 );
+      stateVectorVisibleTimeout = stepTimer.setTimeout( stateVectorVisibleCallback, 100 );
 
-      cameraPathFillTimeout = stepTimer.setTimeout( () => {
-        cameraPath.fill = 'black';
-      }, 500 );
+      cameraPathFillTimeout = stepTimer.setTimeout( cameraPathFillCallback, 500 );
     } );
 
     measurementDevice.resetEmitter.addListener( () => {
@@ -84,6 +88,10 @@ export default class MeasurementDeviceNode extends VBox {
       cameraPathFillTimeout && stepTimer.clearTimeout( cameraPathFillTimeout );
       stateVectorVisibleTimeout = null;
       cameraPathFillTimeout = null;
+
+      // If the timeouts are cleared, call the callbacks to reset the state
+      stateVectorVisibleCallback();
+      cameraPathFillCallback();
       this.reset();
     } );
 

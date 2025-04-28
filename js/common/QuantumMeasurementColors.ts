@@ -217,6 +217,11 @@ const QuantumMeasurementColors = {
     default: '#000'
   } ),
 
+  // idle camera color, used for the Measurement Device Node
+  cameraIdleFillProperty: new ProfileColorProperty( quantumMeasurement, 'cameraIdleFill', {
+    default: '#000'
+  } ),
+
   magneticFieldThumbFillProperty: new ProfileColorProperty( quantumMeasurement, 'magneticFieldThumbFill', {
     default: '#EE0'
   } ),
