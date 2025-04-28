@@ -25,7 +25,7 @@ export default class SimpleBlochSphere extends AbstractBlochSphere {
   public constructor( spinStateProperty: TReadOnlyProperty<Vector2>, providedOptions?: SimpleBlochSphereOptions ) {
 
     const options = optionize<SimpleBlochSphereOptions, SelfOptions, AbstractBlochSphereOptions>()( {
-      azimuthalRange: new Range( 0, 0 ),
+      azimuthalRange: new Range( 0, Math.PI ),
       initialAzimuthalAngle: 0
     }, providedOptions );
 
