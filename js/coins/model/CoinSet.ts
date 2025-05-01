@@ -237,6 +237,7 @@ class CoinSet extends PhetioObject {
           const valueSetIndex = random.nextDouble() < this.biasProperty.value ? 0 : 1;
           this.measuredValues[ i ] = this.validValues[ valueSetIndex ];
         } );
+        random.dispose();
       }
 
       // Fire the emitter that signals a change to the data.
