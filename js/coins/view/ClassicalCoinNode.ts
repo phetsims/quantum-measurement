@@ -25,6 +25,8 @@ const TAILS_STROKE_AND_LETTER_COLOR_PROPERTY = QuantumMeasurementColors.tailsCol
 
 export default class ClassicalCoinNode extends CoinNode {
 
+  private readonly disposeClassicalCoinNode: () => void;
+
   public constructor( coinStateProperty: TReadOnlyProperty<ClassicalCoinStates>, radius: number, tandem: Tandem ) {
 
     const headsOptions: CoinFaceParameters = {
@@ -46,6 +48,15 @@ export default class ClassicalCoinNode extends CoinNode {
     );
 
     super( radius, crossFadeProperty, [ headsOptions, tailsOptions ], { tandem: tandem } );
+
+    this.disposeClassicalCoinNode = () => {
+      crossFadeProperty.dispose();
+    };
+  }
+
+  public override dispose(): void {
+    this.disposeClassicalCoinNode();
+    super.dispose();
   }
 }
 

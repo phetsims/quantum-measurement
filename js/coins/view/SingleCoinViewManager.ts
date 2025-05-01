@@ -100,6 +100,11 @@ class SingleCoinViewManager extends CoinViewManager {
         else {
           singleCoinMeasurementArea.clearCoinsFromTestBox();
         }
+
+        // Dispose of the coin node, since it is no longer needed.
+        if ( !singleCoinNode.isDisposed ) {
+          singleCoinNode.dispose();
+        }
         singleCoinNode = null;
       }
     };

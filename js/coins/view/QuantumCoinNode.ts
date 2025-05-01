@@ -24,6 +24,8 @@ export default class QuantumCoinNode extends CoinNode {
 
   public readonly showSuperpositionProperty: BooleanProperty;
 
+  private readonly disposeQuantumCoinNode: () => void;
+
   public constructor( coinStateProperty: TReadOnlyProperty<QuantumCoinStates>,
                       stateProbabilityProperty: TReadOnlyProperty<number>,
                       radius: number,
@@ -69,6 +71,15 @@ export default class QuantumCoinNode extends CoinNode {
     super( radius, crossFadeProperty, [ upFaceOptions, downFaceOptions ], { tandem: tandem } );
 
     this.showSuperpositionProperty = showSuperpositionProperty;
+
+    this.disposeQuantumCoinNode = () => {
+      crossFadeProperty.dispose();
+    };
+  }
+
+  public override dispose(): void {
+    this.disposeQuantumCoinNode();
+    super.dispose();
   }
 }
 
