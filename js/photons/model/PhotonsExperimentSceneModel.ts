@@ -205,9 +205,15 @@ class PhotonsExperimentSceneModel {
       Multilink.multilink(
         [ this.laser.presetPolarizationDirectionProperty, this.laser.customPolarizationAngleProperty ],
         () => {
-          this.photonCollection.clear();
           this.verticalPolarizationDetector.resetDetectionCount();
           this.horizontalPolarizationDetector.resetDetectionCount();
+
+          // Clear the photon collection when changing the polarization UNLESS we are setting phet-io state.  Otherwise,
+          // the photons can be disappeared when they shouldn't be.  See
+          // https://github.com/phetsims/quantum-measurement/issues/186.
+          if ( !isSettingPhetioStateProperty.value ) {
+            this.photonCollection.clear();
+          }
         }
       );
     }
