@@ -1,5 +1,5 @@
 {
-  "comment": "# quantum-measurement 1.0.0-rc.1 Fri Apr 11 2025 11:28:43 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# quantum-measurement 1.0.0-rc.2 Mon May 05 2025 15:49:31 GMT-0600 (Mountain Daylight Time)",
   "assert": {
     "sha": "f6d41b399ad32df2a00ab4b329981be0c574d77a",
     "branch": "HEAD"
@@ -57,7 +57,7 @@
     "branch": "HEAD"
   },
   "quantum-measurement": {
-    "sha": "fb3eea8529995b5ba50c139522e916a598d0fdc8",
+    "sha": "94fe42bc9653c115153b1920e498b6e13be385bf",
     "branch": "1.0"
   },
   "query-string-machine": {
