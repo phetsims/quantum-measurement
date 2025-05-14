@@ -24,8 +24,7 @@ export default class SpinScreen extends QuantumMeasurementScreen<SpinModel, Spin
     const options = {
       name: QuantumMeasurementStrings.screen.spinStringProperty,
       homeScreenIcon: createScreenIcon(),
-      // TODO: Fill this in with the real help text, see https://github.com/phetsims/quantum-measurement/issues/125
-      screenButtonsHelpText: 'fill me in',
+      screenButtonsHelpText: QuantumMeasurementStrings.a11y.spinScreen.screenButtonsHelpTextStringProperty,
 
       // Limit the max time step to 2x the nominal value.  This helps prevent add photon movements after screen changes.
       maxDT: 1 / 30,

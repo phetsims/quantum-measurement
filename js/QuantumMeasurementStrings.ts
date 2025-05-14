@@ -129,6 +129,7 @@ type StringsType = {
       'quantumAccessibleParagraphPatternStringProperty': LocalizedStringProperty;
     };
     'coinsScreen': {
+      'screenButtonsHelpTextStringProperty': LocalizedStringProperty;
       'coinStates': {
         'headsStringProperty': LocalizedStringProperty;
         'tailsStringProperty': LocalizedStringProperty;
@@ -154,8 +155,15 @@ type StringsType = {
       'identicalCoinsHelpTextStringProperty': LocalizedStringProperty;
     };
     'photonsScreen': {
+      'screenButtonsHelpTextStringProperty': LocalizedStringProperty;
       'photonBehaviorModeStringProperty': LocalizedStringProperty;
       'emitPhotonButtonStringProperty': LocalizedStringProperty;
+    };
+    'spinScreen': {
+      'screenButtonsHelpTextStringProperty': LocalizedStringProperty;
+    };
+    'blochSphereScreen': {
+      'screenButtonsHelpTextStringProperty': LocalizedStringProperty;
     }
   }
 };
