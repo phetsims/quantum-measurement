@@ -306,6 +306,9 @@
       }
     },
     "coinsScreen": {
+      "screenButtonsHelpText": {
+        "value": "Play with the Coins Screen"
+      },
       "coinStates": {
         "heads": {
           "value": "Heads"
@@ -369,11 +372,24 @@
       }
     },
     "photonsScreen": {
+      "screenButtonsHelpText": {
+        "value": "Play with the Photons Screen"
+      },
       "photonBehaviorMode": {
         "value": "Behavior of Photons"
       },
       "emitPhotonButton": {
         "value": "Photon Source"
+      }
+    },
+    "spinScreen": {
+      "screenButtonsHelpText": {
+        "value": "Play with the Spin Screen"
+      }
+    },
+    "blochSphereScreen": {
+      "screenButtonsHelpText": {
+        "value": "Play with the Bloch Sphere Screen"
       }
     }
   }
