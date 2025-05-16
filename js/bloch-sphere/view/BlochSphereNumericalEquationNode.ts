@@ -61,7 +61,7 @@ export default class BlochSphereNumericalEquationNode extends HBox {
           blochSphere.azimuthalAngleProperty,
           blochSphere.rotatingSpeedProperty,
           options.basisProperty,
-          QuantumMeasurementPreferences.showGlobalPhaseProperty
+          QuantumMeasurementPreferences.getInstance().showGlobalPhaseProperty
         ],
         ( polarAngle, azimuthalAngle, rotatingSpeed, basis, showGlobalPhase ) => {
 

@@ -144,6 +144,9 @@ class CoinSet extends PhetioObject {
       } );
     }
 
+    // Get the preferences.
+    const preferences = QuantumMeasurementPreferences.getInstance();
+
     // The initial system state differs for classical versus quantum systems and based on preferences.
     let initialMeasurementState: ExperimentMeasurementState;
     if ( this.coinType === SystemType.QUANTUM ) {
@@ -154,7 +157,7 @@ class CoinSet extends PhetioObject {
     else {
 
       // Classical systems can be initially hidden or revealed based on preferences.
-      initialMeasurementState = QuantumMeasurementPreferences.classicalCoinsStartHiddenProperty.value ?
+      initialMeasurementState = preferences.classicalCoinsStartHiddenProperty.value ?
                                 'measuredAndHidden' :
                                 'revealed';
     }
@@ -172,11 +175,11 @@ class CoinSet extends PhetioObject {
     } );
 
     this.initiallyHiddenProperty = new BooleanProperty(
-      this.coinType === SystemType.QUANTUM || QuantumMeasurementPreferences.classicalCoinsStartHiddenProperty.value
+      this.coinType === SystemType.QUANTUM || preferences.classicalCoinsStartHiddenProperty.value
     );
 
     // If the initial visibility of coins is changed by the preferences, update accordingly.
-    QuantumMeasurementPreferences.classicalCoinsStartHiddenProperty.link( classicalCoinsStartHidden => {
+    preferences.classicalCoinsStartHiddenProperty.link( classicalCoinsStartHidden => {
 
       // This preference only applies to classical coins.
       if ( this.coinType === SystemType.CLASSICAL ) {
@@ -190,7 +193,7 @@ class CoinSet extends PhetioObject {
     } );
 
     const alternativeDisplayCountThreshold = 8; // determined empirically
-    this.measurementStateProperty.lazyLink( ( measurementState, previousMeasurementState ) => {
+    this.measurementStateProperty.lazyLink( measurementState => {
 
       if ( coinType === SystemType.QUANTUM &&
            this.numberOfCoinsProperty.value === MAX_COINS &&

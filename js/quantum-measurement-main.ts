@@ -12,12 +12,16 @@ import simLauncher from '../../joist/js/simLauncher.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import BlochSphereScreen from './bloch-sphere/BlochSphereScreen.js';
 import CoinsScreen from './coins/CoinsScreen.js';
+import QuantumMeasurementPreferences from './common/model/QuantumMeasurementPreferences.js';
 import QuantumMeasurementConstants from './common/QuantumMeasurementConstants.js';
 import QuantumMeasurementPreferencesNode from './common/view/QuantumMeasurementPreferencesNode.js';
 import PhotonsScreen from './photons/PhotonsScreen.js';
 import QuantumMeasurementStrings from './QuantumMeasurementStrings.js';
 import './common/QuantumMeasurementQueryParameters.js';
 import SpinScreen from './spin/SpinScreen.js';
+
+// Initialize the preferences.  This supports variations of the sim with different preference configurations.
+QuantumMeasurementPreferences.initialize( true );
 
 // Launch the sim. Beware that scenery Image nodes created outside simLauncher.launch() will have zero bounds until the
 // images are fully loaded, see https://github.com/phetsims/coulombs-law/issues/70#issuecomment-429037461.

@@ -75,7 +75,7 @@ class ClassicalCoinsStartVisibleControl extends PreferencesControl {
         PreferencesDialogConstants.CONTROL_DESCRIPTION_OPTIONS
       ),
       controlNode: new ToggleSwitch(
-        QuantumMeasurementPreferences.classicalCoinsStartHiddenProperty,
+        QuantumMeasurementPreferences.getInstance().classicalCoinsStartHiddenProperty,
         false,
         true,
         PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS
@@ -88,7 +88,7 @@ class ClassicalCoinsStartVisibleControl extends PreferencesControl {
       }
     } );
 
-    this.addLinkedElement( QuantumMeasurementPreferences.classicalCoinsStartHiddenProperty );
+    this.addLinkedElement( QuantumMeasurementPreferences.getInstance().classicalCoinsStartHiddenProperty );
   }
 }
 
@@ -107,7 +107,7 @@ class ShowGlobalPhaseControl extends PreferencesControl {
         PreferencesDialogConstants.CONTROL_DESCRIPTION_OPTIONS
       ),
       controlNode: new ToggleSwitch(
-        QuantumMeasurementPreferences.showGlobalPhaseProperty,
+        QuantumMeasurementPreferences.getInstance().showGlobalPhaseProperty,
         false,
         true,
         PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS
@@ -120,7 +120,7 @@ class ShowGlobalPhaseControl extends PreferencesControl {
       }
     } );
 
-    this.addLinkedElement( QuantumMeasurementPreferences.showGlobalPhaseProperty );
+    this.addLinkedElement( QuantumMeasurementPreferences.getInstance().showGlobalPhaseProperty );
   }
 }
 
