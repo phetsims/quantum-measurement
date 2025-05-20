@@ -13,7 +13,7 @@
     "branch": "HEAD"
   },
   "chipper": {
-    "sha": "bfd2efaceeadd25f56de7262e376d2110815a219",
+    "sha": "e80c4182c32607d80f5f7fd8aaa1acf69d973238",
     "branch": "HEAD"
   },
   "dot": {
@@ -57,7 +57,7 @@
     "branch": "HEAD"
   },
   "quantum-measurement": {
-    "sha": "0c8a2389f85e52678d7844dd1d62be6d11c3dbde",
+    "sha": "5e5b0ab8ecfacd2f7488edd5424dad512ddf0b3a",
     "branch": "1.0"
   },
   "query-string-machine": {
