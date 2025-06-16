@@ -11,7 +11,7 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
-import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
+import GatedVisibleProperty from '../../../../axon/js/GatedVisibleProperty.js';
 import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';

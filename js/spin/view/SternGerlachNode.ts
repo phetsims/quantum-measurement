@@ -7,7 +7,7 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
+import GatedVisibleProperty from '../../../../axon/js/GatedVisibleProperty.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';

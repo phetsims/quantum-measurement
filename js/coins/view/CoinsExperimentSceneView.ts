@@ -8,7 +8,7 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
+import GatedVisibleProperty from '../../../../axon/js/GatedVisibleProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import TProperty from '../../../../axon/js/TProperty.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';

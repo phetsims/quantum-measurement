@@ -8,7 +8,7 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
+import GatedVisibleProperty from '../../../../axon/js/GatedVisibleProperty.js';
 import type PhetioProperty from '../../../../axon/js/PhetioProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
 import LocalizedStringProperty from '../../../../chipper/js/browser/LocalizedStringProperty.js';

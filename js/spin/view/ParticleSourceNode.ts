@@ -8,7 +8,7 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
+import GatedVisibleProperty from '../../../../axon/js/GatedVisibleProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import { roundToInterval } from '../../../../dot/js/util/roundToInterval.js';
 import Shape from '../../../../kite/js/Shape.js';

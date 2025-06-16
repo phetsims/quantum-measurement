@@ -8,7 +8,7 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
+import GatedVisibleProperty from '../../../../axon/js/GatedVisibleProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import { toFixed } from '../../../../dot/js/util/toFixed.js';
 import Vector2 from '../../../../dot/js/Vector2.js';

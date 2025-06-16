@@ -7,7 +7,7 @@
  * @author Agustín Vallejo
  */
 
-import { GatedVisibleProperty } from '../../../../axon/js/GatedBooleanProperty.js';
+import GatedVisibleProperty from '../../../../axon/js/GatedVisibleProperty.js';
 import stepTimer from '../../../../axon/js/stepTimer.js';
 import { TimerListener } from '../../../../axon/js/Timer.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
