@@ -11,7 +11,6 @@
 import GatedVisibleProperty from '../../../../axon/js/GatedVisibleProperty.js';
 import type PhetioProperty from '../../../../axon/js/PhetioProperty.js';
 import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import LocalizedStringProperty from '../../../../chipper/js/browser/LocalizedStringProperty.js';
 import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
@@ -27,7 +26,7 @@ type SelfOptions = EmptySelfOptions;
 type AveragePolarizationCheckboxGroupOptions = SelfOptions & WithRequired<VBoxOptions, 'tandem'>;
 export type AveragePolarizationCheckboxGroupItem = {
   property: PhetioProperty<boolean>; // Property associated with the checkbox
-  labelStringProperty: LocalizedStringProperty; // Property that defines the label for the checkbox
+  labelStringProperty: TReadOnlyProperty<string>; // Property that defines the label for the checkbox
   tandemControlName: string; // tandem name for the control containing the checkbox
   decorationNode?: Node; // optional node that can be added to the right of the checkbox
   visibleProperty?: TReadOnlyProperty<boolean>; // optional property that can be used to control the visibility of the checkbox
