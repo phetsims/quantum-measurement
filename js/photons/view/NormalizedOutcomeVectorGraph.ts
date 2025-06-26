@@ -30,7 +30,6 @@ const EXPECTATION_VALUE_LINE_LENGTH = TICK_MARK_LENGTH * 1.5;
 const LABEL_SPACING = 7;
 
 type SelfOptions = EmptySelfOptions;
-
 type NormalizedOutcomeVectorGraphOptions = SelfOptions & WithRequired<NodeOptions, 'tandem'>;
 
 export default class NormalizedOutcomeVectorGraph extends Node {
