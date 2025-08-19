@@ -25,7 +25,6 @@ export default class QuantumMeasurementScreen<M extends TModel, V extends Screen
     const options = optionize<QuantumMeasurementScreenOptions, SelfOptions, ScreenOptions>()( {
 
       // ScreenOptions
-      isDisposable: false,
       backgroundColorProperty: QuantumMeasurementColors.screenBackgroundColorProperty,
       showUnselectedHomeScreenIconFrame: true,
       showScreenIconFrameForNavigationBarFill: 'black',
