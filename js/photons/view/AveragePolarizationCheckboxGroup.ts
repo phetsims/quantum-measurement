@@ -10,7 +10,7 @@
 
 import GatedVisibleProperty from '../../../../axon/js/GatedVisibleProperty.js';
 import type PhetioProperty from '../../../../axon/js/PhetioProperty.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import { TReadOnlyProperty } from '../../../../axon/js/TReadOnlyProperty.js';
 import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';

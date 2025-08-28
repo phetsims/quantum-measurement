@@ -9,7 +9,7 @@
  */
 
 import PhetioProperty from '../../../../axon/js/PhetioProperty.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import { TReadOnlyProperty } from '../../../../axon/js/TReadOnlyProperty.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';

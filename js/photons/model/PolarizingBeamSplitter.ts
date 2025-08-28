@@ -7,7 +7,7 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import { TReadOnlyProperty } from '../../../../axon/js/TReadOnlyProperty.js';
 import Dimension2 from '../../../../dot/js/Dimension2.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import { toRadians } from '../../../../dot/js/util/toRadians.js';

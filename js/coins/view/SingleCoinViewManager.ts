@@ -14,7 +14,7 @@
 import stepTimer from '../../../../axon/js/stepTimer.js';
 import { TEmitterListener } from '../../../../axon/js/TEmitter.js';
 import TProperty from '../../../../axon/js/TProperty.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import { TReadOnlyProperty } from '../../../../axon/js/TReadOnlyProperty.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Circle from '../../../../scenery/js/nodes/Circle.js';
