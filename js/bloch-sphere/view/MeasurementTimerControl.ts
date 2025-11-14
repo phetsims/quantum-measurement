@@ -111,7 +111,7 @@ export default class MeasurementTimerControl extends Node {
       minorTickLength: 5,
 
       constrainValue: mappingValue,
-      pdomMapValue: mappingValue,
+      mapPropertyValue: mappingValue,
       keyboardStep: sliderStep,
       shiftKeyboardStep: sliderStep,
       pageKeyboardStep: sliderStep * 2,
