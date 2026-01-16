@@ -6,7 +6,7 @@
  * @author Agustín Vallejo
  */
 
-import BlochSphereModel from 'model/BlochSphereModel.js';
+import BlochSphereModel from '../model/BlochSphereModel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import ExperimentDividingLine from '../../common/view/ExperimentDividingLine.js';

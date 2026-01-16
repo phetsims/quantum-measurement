@@ -6,7 +6,7 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import CoinsModel from 'model/CoinsModel.js';
+import CoinsModel from '../model/CoinsModel.js';
 import Multilink from '../../../../axon/js/Multilink.js';
 import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';

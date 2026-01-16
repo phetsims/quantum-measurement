@@ -7,7 +7,7 @@
  * @author Agustín Vallejo
  */
 
-import BlochSphereModel from 'model/BlochSphereModel.js';
+import BlochSphereModel from '../model/BlochSphereModel.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
 import { roundToInterval } from '../../../../dot/js/util/roundToInterval.js';
