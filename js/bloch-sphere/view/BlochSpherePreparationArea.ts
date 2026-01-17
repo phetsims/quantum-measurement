@@ -1,4 +1,4 @@
-// Copyright 2024-2025, University of Colorado Boulder
+// Copyright 2024-2026, University of Colorado Boulder
 
 /**
  * Zone where the Bloch Sphere direction is set by the user. It includes sliders for the polar and azimuthal angles and
