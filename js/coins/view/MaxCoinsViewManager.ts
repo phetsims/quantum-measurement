@@ -9,7 +9,7 @@
  * represent the coins as they move from the preparation area to the measurement area.
  *
  * @author John Blanco (PhET Interactive Simulations)
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import TProperty from '../../../../axon/js/TProperty.js';

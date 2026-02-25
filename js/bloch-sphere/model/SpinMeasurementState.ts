@@ -3,7 +3,7 @@
 /**
  * SpinMeasurementStates is an enumeration of possible spin measurement states.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  * @author John Blanco (PhET Interactive Simulations)
  */
 

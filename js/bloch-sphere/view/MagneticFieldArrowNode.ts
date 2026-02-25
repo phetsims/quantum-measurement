@@ -3,7 +3,7 @@
 /**
  * Arrow node that listens to the magnetic field strength.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';

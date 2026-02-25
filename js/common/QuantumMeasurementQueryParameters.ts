@@ -5,7 +5,7 @@
  * Run with ?log to print query parameters and their values to the browser console at startup.
  *
  * @author John Blanco, PhET Interactive Simulations
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import logGlobal from '../../../phet-core/js/logGlobal.js';

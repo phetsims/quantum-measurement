@@ -3,7 +3,7 @@
 /**
  * Array of Magnetic Field Arrow Nodes that represent the bulk of the magnetic field.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  * @author John Blanco (PhET Interactive Simulations)
  */
 

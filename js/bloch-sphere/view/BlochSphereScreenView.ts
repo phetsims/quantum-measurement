@@ -3,15 +3,15 @@
 /**
  * Main screen view class for the "Bloch Sphere" screen.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
-import BlochSphereModel from '../model/BlochSphereModel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import ExperimentDividingLine from '../../common/view/ExperimentDividingLine.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
+import BlochSphereModel from '../model/BlochSphereModel.js';
 import BlochSphereMeasurementArea from './BlochSphereMeasurementArea.js';
 import BlochSpherePreparationArea from './BlochSpherePreparationArea.js';
 

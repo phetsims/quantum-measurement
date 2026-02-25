@@ -7,7 +7,7 @@
  * This class also implements animations for populating the pixel grid and for flipping the coins.
  *
  * @author John Blanco (PhET Interactive Simulations)
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import Property from '../../../../axon/js/Property.js';

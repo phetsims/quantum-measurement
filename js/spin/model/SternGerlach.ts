@@ -6,7 +6,7 @@
  * - The state of the incoming particles
  * - The state of the particles after the experiment
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';

@@ -22,7 +22,7 @@
  * - Stage 1: From SG0, across possibly MD1 and possibly into SG1 or SG2.
  * - Stage 2: From SG1 or SG2, across possibly MD2 and shot into infinity.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import dotRandom from '../../../../dot/js/dotRandom.js';

@@ -4,7 +4,7 @@
  * HistogramWithExpectedValue is an extension of QuantumMeasurementHistogram but this time including the expected
  * statistical outcome (probability), as well as the real number counts.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import { TReadOnlyProperty } from '../../../../axon/js/TReadOnlyProperty.js';

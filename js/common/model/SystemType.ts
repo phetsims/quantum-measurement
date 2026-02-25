@@ -6,7 +6,7 @@
  * something that is very small and exhibits characteristics such as superpositions of internal state.
  *
  * @author John Blanco (PhET Interactive Simulations)
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import { TReadOnlyProperty } from '../../../../axon/js/TReadOnlyProperty.js';

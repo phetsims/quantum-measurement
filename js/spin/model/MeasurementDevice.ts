@@ -3,7 +3,7 @@
 /**
  * MeasurementDevice is a component that will hold the spin state of particles that cross along its position.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';

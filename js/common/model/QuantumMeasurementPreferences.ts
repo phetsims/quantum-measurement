@@ -5,7 +5,7 @@
  * the Preferences dialog.  This uses the singleton pattern, so only one instance of this class will exist, and so that
  * the preference values can be customized based on the sim configuration.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  * @author John Blanco (PhET Interactive Simulations)
  */
 

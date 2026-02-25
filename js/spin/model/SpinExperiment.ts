@@ -4,7 +4,7 @@
  * SpinExperiment is an enumeration that contains the details for all possible Stern-Gerlach configurations used on the
  * Spin Screen.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';

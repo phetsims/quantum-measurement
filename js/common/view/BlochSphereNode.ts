@@ -3,7 +3,7 @@
 /**
  * Visual representation of the Bloch Sphere, meaning an orb with X, Y, and Z axes and a state vector.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  * @author John Blanco (PhET Interactive Simulations)
  */
 

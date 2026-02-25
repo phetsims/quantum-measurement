@@ -4,7 +4,7 @@
  * Controls whether Stern Gerlach (SG) apparatus is blocked and which exit would be blocked.
  * When a SG is blocked, one of its exits will display a wall that will prevent particles from exiting through it.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import Enumeration from '../../../../phet-core/js/Enumeration.js';

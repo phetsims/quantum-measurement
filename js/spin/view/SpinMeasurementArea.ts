@@ -4,7 +4,7 @@
  * SpinMeasurementArea is a composite UI component that allows users to configure a Stern-Gerlach experiment.
  * A comboBox allows to choose between a number of experimental configurations.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';

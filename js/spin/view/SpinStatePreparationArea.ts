@@ -4,7 +4,7 @@
  * SpinStatePreparationArea is a composite UI component that allows users to prepare the spin state of a quantum system
  * between three options: Z+, X+, Z-. It also shows a Bloch Sphere that represents the quantum state of the system.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';

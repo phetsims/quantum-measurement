@@ -3,7 +3,7 @@
 /**
  * A common diving line that is used to separate the preparation and measurement areas.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import Line from '../../../../scenery/js/nodes/Line.js';

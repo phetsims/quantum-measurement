@@ -3,7 +3,7 @@
 /**
  * Represents the possible preset directions the state vector within the Bloch Sphere can have.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import Vector3 from '../../../../dot/js/Vector3.js';

@@ -4,7 +4,7 @@
  * MeasurementTimerControl is the node that contains the UI elements for controlling the time at which the Bloch Sphere
  * is measured.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  * @author John Blanco (PhET Interactive Simulations)
  */
 

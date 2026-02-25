@@ -4,10 +4,9 @@
  * Zone where the Bloch Sphere direction is set by the user. It includes sliders for the polar and azimuthal angles and
  * a ComboBox to select the direction.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
-import BlochSphereModel from '../model/BlochSphereModel.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
 import { roundToInterval } from '../../../../dot/js/util/roundToInterval.js';
@@ -25,6 +24,7 @@ import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstant
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
 import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
+import BlochSphereModel from '../model/BlochSphereModel.js';
 import { StateDirection } from '../model/StateDirection.js';
 import BlochSphereNumericalEquationNode from './BlochSphereNumericalEquationNode.js';
 import BlochSphereSymbolicEquationNode from './BlochSphereSymbolicEquationNode.js';

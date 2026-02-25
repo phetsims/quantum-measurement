@@ -4,7 +4,7 @@
  * ParticleSourceNode contains the UI elements of the particle source, including the particle-shooter,
  * and other UI elements to control the source mode between 'single particle' and 'continuous' ray.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';

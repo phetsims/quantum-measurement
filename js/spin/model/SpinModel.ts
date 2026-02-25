@@ -7,7 +7,7 @@
  *
  * This model is responsible for managing the selected spin state, or the experiment.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';

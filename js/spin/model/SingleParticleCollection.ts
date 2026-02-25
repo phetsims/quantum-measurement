@@ -3,7 +3,7 @@
 /**
  * SingleParticleCollection is handles the behavior of particles in the single shooting mode.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import Tandem from '../../../../tandem/js/Tandem.js';

@@ -7,7 +7,7 @@
  * The function spinToVector is used to convert a SpinDirection to a Vector2, which is used in some
  * cases to represent a spin state in the XZ plane for easier dot product calculations. *
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';

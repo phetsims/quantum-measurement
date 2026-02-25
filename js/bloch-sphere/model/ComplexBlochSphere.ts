@@ -4,7 +4,7 @@
  * ComplexBlochSphere is a Quantum State representation that supports more sophisticated angles and equation
  * coefficients, such as complex numbers and euler representations.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  * @author John Blanco (PhET Interactive Simulations)
  */
 

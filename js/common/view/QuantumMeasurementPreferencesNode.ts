@@ -7,7 +7,7 @@
  * The Preferences dialog is created on demand by joist, using a PhetioCapsule, so QuantumMeasurementPreferencesNode
  * must implement dispose, and all elements of QuantumMeasurementPreferencesNode that have tandems must be disposed.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  * @author John Blanco (PhET Interactive Simulations)
  */
 

@@ -3,7 +3,7 @@
 /**
  * BlochSphereSymbolicEquationNode displays the equation that is used to calculate the expected value of polarization.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  * @author John Blanco (PhET Interactive Simulations)
  */
 

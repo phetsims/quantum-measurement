@@ -3,7 +3,7 @@
 /**
  * BlochSphereWithProjectionNode is an extension of BlochSphereNode with vector projections on X and Z.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';

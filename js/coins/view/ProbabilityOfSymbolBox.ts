@@ -3,7 +3,7 @@
 /**
  * A class that will display P(X) where X is a provided symbol. This is used to display the probability of a coin result.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';

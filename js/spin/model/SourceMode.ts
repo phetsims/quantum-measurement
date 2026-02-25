@@ -3,7 +3,7 @@
 /**
  * SpinVector is a simple EnumerationValue class to switch between Single Particle and Continuous source modes.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import { TReadOnlyProperty } from '../../../../axon/js/TReadOnlyProperty.js';

@@ -3,7 +3,7 @@
 /**
  * Main screen view class for the "Spin" screen.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import Tandem from '../../../../tandem/js/Tandem.js';

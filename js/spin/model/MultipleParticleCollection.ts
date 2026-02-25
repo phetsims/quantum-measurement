@@ -3,7 +3,7 @@
 /**
  * MultipleParticleCollection handles the nuances of the continuous mode, where particles are created at a certain rate.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import Tandem from '../../../../tandem/js/Tandem.js';

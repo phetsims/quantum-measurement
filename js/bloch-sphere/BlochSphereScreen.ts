@@ -3,7 +3,7 @@
 /**
  * Screen for the Bloch Sphere representation of a Quantum system.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import ScreenIcon from '../../../joist/js/ScreenIcon.js';

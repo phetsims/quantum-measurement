@@ -4,7 +4,7 @@
  * Main model for the Bloch Sphere screen. This contains the Bloch Sphere representation and the logic for
  * measurements, equations and rotation under magnetic field.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  * @author John Blanco (PhET Interactive Simulations)
  */
 

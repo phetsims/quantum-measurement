@@ -4,7 +4,7 @@
  * MeasurementDeviceNode contains the UI elements of the single particle measurement zone. It includes a simple bloch
  * sphere, and a camera node which lights on trigger.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import GatedVisibleProperty from '../../../../axon/js/GatedVisibleProperty.js';

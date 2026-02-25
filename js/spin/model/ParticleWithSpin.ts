@@ -7,7 +7,7 @@
  * Particles advance from their startPosition to their endPositions, which will be assigned by the Collection they
  * belong to.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';

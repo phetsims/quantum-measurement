@@ -4,7 +4,7 @@
  * BlochSphereMeasurementArea is the Scenery Node that contains the measurement area for the Bloch Sphere screen. It
  * contains the UI elements for controlling various aspects of the measurement that is to be performed.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  * @author John Blanco (PhET Interactive Simulations)
  */
 

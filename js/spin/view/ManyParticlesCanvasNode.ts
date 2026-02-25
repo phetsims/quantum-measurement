@@ -3,7 +3,7 @@
 /**
  * ManyParticlesCanvasNode displays the rays of particles shot by the particle source.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';

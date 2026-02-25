@@ -3,7 +3,7 @@
 /**
  * SimpleBlochSphere is a Quantum State representation that supports three states: +Z, -Z and +X
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';

@@ -4,7 +4,7 @@
  * The ParticleSourceModel contains the primary properties of the particle source,
  * such as the position, source mode (single vs continuous), and the amount of particles it's going to be shooting.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';

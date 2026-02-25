@@ -4,7 +4,7 @@
  * AbstractBlochSphere is a base class that represents in geometrical terms the pure state space of a two-level quantum
  * mechanical system.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';

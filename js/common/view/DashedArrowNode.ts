@@ -3,7 +3,7 @@
 /**
  * A Node that displays a dashed line with an arrow head at the tip.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';

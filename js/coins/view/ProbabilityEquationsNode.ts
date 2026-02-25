@@ -3,7 +3,7 @@
 /**
  * ProbabilityEquationsNode shows the probability settings (aka the bias) for the classical or quantum coins.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  * @author John Blanco, PhET Interactive Simulations
  */
 

@@ -3,7 +3,7 @@
 /**
  * SternGerlachNode is the visual representation of a Stern Gerlach node in the UI.
  *
- * @author Agustín Vallejo
+ * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
