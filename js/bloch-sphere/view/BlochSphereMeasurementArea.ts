@@ -1,4 +1,4 @@
-// Copyright 2025, University of Colorado Boulder
+// Copyright 2025-2026, University of Colorado Boulder
 
 /**
  * BlochSphereMeasurementArea is the Scenery Node that contains the measurement area for the Bloch Sphere screen. It

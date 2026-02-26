@@ -1,4 +1,4 @@
-// Copyright 2024-2025, University of Colorado Boulder
+// Copyright 2024-2026, University of Colorado Boulder
 
 /**
  * CoinSetPixelRepresentation represents a set of classical or quantum coins as a grid of pixels.  The pixels are

@@ -1,4 +1,4 @@
-// Copyright 2025, University of Colorado Boulder
+// Copyright 2025-2026, University of Colorado Boulder
 
 /**
  * MeasurementTimerControl is the node that contains the UI elements for controlling the time at which the Bloch Sphere

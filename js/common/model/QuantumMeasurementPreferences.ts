@@ -1,4 +1,4 @@
-// Copyright 2025, University of Colorado Boulder
+// Copyright 2025-2026, University of Colorado Boulder
 
 /**
  * QuantumMeasurementPreferences is the model for sim-specific preferences.  The values declared here can be updated via

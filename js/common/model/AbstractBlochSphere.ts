@@ -1,4 +1,4 @@
-// Copyright 2024-2025, University of Colorado Boulder
+// Copyright 2024-2026, University of Colorado Boulder
 
 /**
  * AbstractBlochSphere is a base class that represents in geometrical terms the pure state space of a two-level quantum

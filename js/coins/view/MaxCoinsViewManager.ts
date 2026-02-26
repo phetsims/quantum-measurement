@@ -1,4 +1,4 @@
-// Copyright 2025, University of Colorado Boulder
+// Copyright 2025-2026, University of Colorado Boulder
 
 /**
  * MaxCoinsViewManager creates and manages the node that is used to represent the set of 10k coins in the experiment. It

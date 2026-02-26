@@ -1,4 +1,4 @@
-// Copyright 2024-2025, University of Colorado Boulder
+// Copyright 2024-2026, University of Colorado Boulder
 
 /**
  * ParticleCollection is the model for a set of particles where each has a predetermined spin. It provides an API that
