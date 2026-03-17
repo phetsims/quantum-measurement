@@ -9,7 +9,7 @@
     "branch": "HEAD"
   },
   "brand": {
-    "sha": "bb4357c3d02e0488ba10d396b8a62b0acb8290af",
+    "sha": "548529c5dcea32acd94497a9789d8c954a22dc6e",
     "branch": "HEAD"
   },
   "chipper": {
@@ -57,7 +57,7 @@
     "branch": "HEAD"
   },
   "quantum-measurement": {
-    "sha": "9565ce39f1aad31ebb0220f641cdd32482cdec9d",
+    "sha": "cb384e50bfa74ccbc3e8e44b48ae2ae9c9193644",
     "branch": "1.0"
   },
   "query-string-machine": {
