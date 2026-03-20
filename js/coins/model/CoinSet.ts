@@ -26,7 +26,6 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import QuantumMeasurementPreferences from '../../common/model/QuantumMeasurementPreferences.js';
 import { SystemType } from '../../common/model/SystemType.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import { ClassicalCoinStateValues } from './ClassicalCoinStates.js';
 import { MAX_COINS, MULTI_COIN_EXPERIMENT_QUANTITIES } from './CoinsExperimentSceneModel.js';
 import { CoinStates } from './CoinStates.js';
@@ -437,7 +436,5 @@ class CoinSet extends PhetioObject {
     this.toReadyTransitionTimes.length = 0;
   }
 }
-
-quantumMeasurement.register( 'CoinSet', CoinSet );
 
 export default CoinSet;

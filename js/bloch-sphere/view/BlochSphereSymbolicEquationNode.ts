@@ -15,7 +15,6 @@ import HBox, { HBoxOptions } from '../../../../scenery/js/layout/nodes/HBox.js';
 import RichText, { RichTextOptions } from '../../../../scenery/js/nodes/RichText.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import FractionNode from '../../common/view/FractionNode.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 
 type SelfOptions = EmptySelfOptions;
 type BlochSphereSymbolicEquationNodeOptions = SelfOptions & WithRequired<HBoxOptions, 'tandem'>;
@@ -62,5 +61,3 @@ export default class BlochSphereSymbolicEquationNode extends HBox {
     super( options );
   }
 }
-
-quantumMeasurement.register( 'BlochSphereSymbolicEquationNode', BlochSphereSymbolicEquationNode );

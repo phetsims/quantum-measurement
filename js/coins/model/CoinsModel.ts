@@ -13,7 +13,6 @@ import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import { SystemType } from '../../common/model/SystemType.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import CoinsExperimentSceneModel from './CoinsExperimentSceneModel.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -59,5 +58,3 @@ export default class CoinsModel implements TModel {
     this.experimentModeProperty.reset();
   }
 }
-
-quantumMeasurement.register( 'CoinsModel', CoinsModel );

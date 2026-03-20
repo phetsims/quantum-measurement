@@ -28,7 +28,6 @@ import Panel from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import BlochSphereModel from '../model/BlochSphereModel.js';
 import { MeasurementAxis } from '../model/MeasurementAxis.js';
@@ -462,5 +461,3 @@ export default class BlochSphereMeasurementArea extends Node {
     ];
   }
 }
-
-quantumMeasurement.register( 'BlochSphereMeasurementArea', BlochSphereMeasurementArea );

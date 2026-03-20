@@ -23,7 +23,6 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import { SystemType } from '../../common/model/SystemType.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
 import { MEASUREMENT_PREPARATION_TIME } from '../model/CoinSet.js';
 import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
@@ -317,7 +316,5 @@ class SingleCoinViewManager extends CoinViewManager {
   }
 
 }
-
-quantumMeasurement.register( 'SingleCoinViewManager', SingleCoinViewManager );
 
 export default SingleCoinViewManager;

@@ -19,7 +19,6 @@ import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import ComplexBlochSphere from './ComplexBlochSphere.js';
 import { MeasurementAxis } from './MeasurementAxis.js';
 import { SpinMeasurementState } from './SpinMeasurementState.js';
@@ -362,7 +361,5 @@ class BlochSphereModel implements TModel {
     }
   }
 }
-
-quantumMeasurement.register( 'BlochSphereModel', BlochSphereModel );
 
 export default BlochSphereModel;

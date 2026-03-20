@@ -9,7 +9,6 @@
 
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 
 export class BlockingMode extends EnumerationValue {
 
@@ -23,4 +22,3 @@ export class BlockingMode extends EnumerationValue {
     super();
   }
 }
-quantumMeasurement.register( 'BlockingMode', BlockingMode );

@@ -11,7 +11,6 @@ import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-co
 import ArrowNode, { ArrowNodeOptions } from '../../../../scenery-phet/js/ArrowNode.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -63,5 +62,3 @@ export default class DashedArrowNode extends Node {
     this.setTailAndTip( this.arrowLine.x1, this.arrowLine.y1, tipX, tipY );
   }
 }
-
-quantumMeasurement.register( 'DashedArrowNode', DashedArrowNode );

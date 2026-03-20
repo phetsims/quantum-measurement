@@ -26,7 +26,6 @@ import SpriteImage from '../../../../scenery/js/util/SpriteImage.js';
 import SpriteInstance, { SpriteInstanceTransformType } from '../../../../scenery/js/util/SpriteInstance.js';
 import greenPhoton_png from '../../../images/greenPhoton_png.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import Photon from '../model/Photon.js';
 
 class PhotonSprites extends Sprites {
@@ -168,7 +167,5 @@ class PhotonSprites extends Sprites {
     this.invalidatePaint();
   }
 }
-
-quantumMeasurement.register( 'PhotonSprites', PhotonSprites );
 
 export default PhotonSprites;

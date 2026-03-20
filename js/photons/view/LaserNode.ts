@@ -26,7 +26,6 @@ import sharedSoundPlayers from '../../../../tambo/js/sharedSoundPlayers.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import ExperimentModeValues from '../model/ExperimentModeValues.js';
 import Laser from '../model/Laser.js';
@@ -137,5 +136,3 @@ export default class LaserNode extends Node {
     this.addLinkedElement( model );
   }
 }
-
-quantumMeasurement.register( 'LaserNode', LaserNode );

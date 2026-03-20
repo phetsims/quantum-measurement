@@ -13,7 +13,6 @@ import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import TPaint from '../../../../scenery/js/util/TPaint.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 
 type SelfOptions = {
   stroke?: TPaint;
@@ -50,5 +49,3 @@ export default class MeasurementSymbolNode extends Node {
     super( options );
   }
 }
-
-quantumMeasurement.register( 'MeasurementSymbolNode', MeasurementSymbolNode );

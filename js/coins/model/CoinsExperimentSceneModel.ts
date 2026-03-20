@@ -18,7 +18,6 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import { SystemType } from '../../common/model/SystemType.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import { ClassicalCoinStateValues } from './ClassicalCoinStates.js';
 import Coin from './Coin.js';
 import CoinSet from './CoinSet.js';
@@ -245,7 +244,5 @@ class CoinsExperimentSceneModel extends PhetioObject {
     this.coinSet.reset();
   }
 }
-
-quantumMeasurement.register( 'CoinsExperimentSceneModel', CoinsExperimentSceneModel );
 
 export default CoinsExperimentSceneModel;

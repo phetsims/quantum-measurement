@@ -16,7 +16,6 @@ import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import ProfileColorProperty from '../../../../scenery/js/util/ProfileColorProperty.js';
 import RectangularRadioButtonGroup, { RectangularRadioButtonGroupItem, RectangularRadioButtonGroupOptions } from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementColors from '../QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../QuantumMeasurementConstants.js';
 
@@ -94,5 +93,4 @@ class SceneSelectorRadioButtonGroup<T extends EnumerationValueWithTitle> extends
   }
 }
 
-quantumMeasurement.register( 'SceneSelectorRadioButtonGroup', SceneSelectorRadioButtonGroup );
 export default SceneSelectorRadioButtonGroup;

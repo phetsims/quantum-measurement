@@ -24,7 +24,6 @@ import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import QuantumMeasurementHistogram from '../../common/view/QuantumMeasurementHistogram.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import ExperimentModeValues from '../model/ExperimentModeValues.js';
 import PhotonsExperimentSceneModel from '../model/PhotonsExperimentSceneModel.js';
@@ -323,7 +322,5 @@ class PhotonsExperimentSceneView extends Node {
     this.decimalValuesVisibleProperty.reset();
   }
 }
-
-quantumMeasurement.register( 'PhotonsExperimentSceneView', PhotonsExperimentSceneView );
 
 export default PhotonsExperimentSceneView;

@@ -31,7 +31,6 @@ import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import ReferenceArrayIO from '../../../../tandem/js/types/ReferenceArrayIO.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import { BlockingMode } from './BlockingMode.js';
 import { ParticleWithSpin } from './ParticleWithSpin.js';
 import { SpinDirection } from './SpinDirection.js';
@@ -256,5 +255,3 @@ export class ParticleCollection extends PhetioObject {
 type ParticleCollectionState = {
   particles: [];
 };
-
-quantumMeasurement.register( 'ParticleCollection', ParticleCollection );

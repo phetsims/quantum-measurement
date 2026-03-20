@@ -32,7 +32,6 @@ import Easing from '../../../../twixt/js/Easing.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import ExperimentDividingLine from '../../common/view/ExperimentDividingLine.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
 import CoinExperimentMeasurementArea from './CoinExperimentMeasurementArea.js';
@@ -299,7 +298,5 @@ class CoinsExperimentSceneView extends Node {
     }
   }
 }
-
-quantumMeasurement.register( 'CoinsExperimentSceneView', CoinsExperimentSceneView );
 
 export default CoinsExperimentSceneView;

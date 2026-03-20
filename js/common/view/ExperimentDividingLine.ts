@@ -7,7 +7,6 @@
  */
 
 import Line from '../../../../scenery/js/nodes/Line.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementColors from '../QuantumMeasurementColors.js';
 
 const DIVIDER_HEIGHT = 525; // empirically determined
@@ -23,5 +22,3 @@ export default class ExperimentDividingLine extends Line {
     this.centerX = x;
   }
 }
-
-quantumMeasurement.register( 'ExperimentDividingLine', ExperimentDividingLine );

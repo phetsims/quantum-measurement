@@ -10,7 +10,6 @@
 
 import logGlobal from '../../../phet-core/js/logGlobal.js';
 import { QueryStringMachine } from '../../../query-string-machine/js/QueryStringMachineModule.js';
-import quantumMeasurement from '../quantumMeasurement.js';
 
 const QuantumMeasurementQueryParameters = QueryStringMachine.getAll( {
   showGlobalPhase: {
@@ -24,8 +23,6 @@ const QuantumMeasurementQueryParameters = QueryStringMachine.getAll( {
     public: true
   }
 } );
-
-quantumMeasurement.register( 'QuantumMeasurementQueryParameters', QuantumMeasurementQueryParameters );
 
 // Log query parameters
 logGlobal( 'phet.chipper.queryParameters' );

@@ -15,7 +15,6 @@ import Path, { PathOptions } from '../../../../scenery/js/nodes/Path.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import QuantumMeasurementHistogram, { DEFAULT_HISTOGRAM_SIZE, QuantumMeasurementHistogramOptions } from '../../common/view/QuantumMeasurementHistogram.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 
 export default class HistogramWithExpectedValue extends QuantumMeasurementHistogram {
 
@@ -46,5 +45,3 @@ export default class HistogramWithExpectedValue extends QuantumMeasurementHistog
     } );
   }
 }
-
-quantumMeasurement.register( 'HistogramWithExpectedValue', HistogramWithExpectedValue );

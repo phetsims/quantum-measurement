@@ -15,7 +15,6 @@ import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import QuantumMeasurementHistogram, { QuantumMeasurementHistogramOptions } from '../../common/view/QuantumMeasurementHistogram.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import { MeasurementAxis } from '../model/MeasurementAxis.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -62,5 +61,3 @@ export default class BlochSphereHistogram extends QuantumMeasurementHistogram {
     this.addLinkedElement( downCountProperty );
   }
 }
-
-quantumMeasurement.register( 'BlochSphereHistogram', BlochSphereHistogram );

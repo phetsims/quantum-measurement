@@ -11,7 +11,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import { Line } from '../../../../kite/js/segments/Segment.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import Photon from './Photon.js';
 import { PhotonMotionState } from './PhotonMotionState.js';
 import { PhotonInteractionTestResult, PhotonInteractionValues } from './PhotonsModel.js';
@@ -76,7 +75,5 @@ class Mirror extends PhetioObject implements TPhotonInteraction {
     return mapOfStatesToInteractions;
   }
 }
-
-quantumMeasurement.register( 'Mirror', Mirror );
 
 export default Mirror;

@@ -11,7 +11,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import ArrayIO from '../../../../tandem/js/types/ArrayIO.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import { PhotonMotionState } from './PhotonMotionState.js';
 
 class Photon {
@@ -134,7 +133,5 @@ export type PhotonStateObject = {
   polarizationAngle: number;
   possibleMotionStates: PhotonMotionState[];
 };
-
-quantumMeasurement.register( 'Photon', Photon );
 
 export default Photon;

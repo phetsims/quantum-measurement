@@ -10,7 +10,6 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import ExperimentDividingLine from '../../common/view/ExperimentDividingLine.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import SpinModel from '../model/SpinModel.js';
 import SpinMeasurementArea from './SpinMeasurementArea.js';
 import SpinStatePreparationArea from './SpinStatePreparationArea.js';
@@ -68,5 +67,3 @@ export default class SpinScreenView extends QuantumMeasurementScreenView {
     this.spinMeasurementArea.step( dt );
   }
 }
-
-quantumMeasurement.register( 'SpinScreenView', SpinScreenView );

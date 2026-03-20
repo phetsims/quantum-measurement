@@ -21,7 +21,6 @@ import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { ClassicalCoinStates, ClassicalCoinStateValues } from '../model/ClassicalCoinStates.js';
 import { CoinStates } from '../model/CoinStates.js';
@@ -181,5 +180,3 @@ export default class InitialCoinStateSelectorNode extends VBox {
   // radius of the state indicator coin
   public static readonly INDICATOR_COIN_NODE_RADIUS = INDICATOR_COIN_NODE_RADIUS;
 }
-
-quantumMeasurement.register( 'InitialCoinStateSelectorNode', InitialCoinStateSelectorNode );

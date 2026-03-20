@@ -17,7 +17,6 @@ import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import { ExperimentMeasurementState } from '../model/ExperimentMeasurementState.js';
 
 // constants
@@ -100,7 +99,5 @@ class SingleCoinTestBox extends Node {
 
   public static readonly SIZE = SIZE;
 }
-
-quantumMeasurement.register( 'SingleCoinTestBox', SingleCoinTestBox );
 
 export default SingleCoinTestBox;

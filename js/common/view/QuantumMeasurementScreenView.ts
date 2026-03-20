@@ -11,7 +11,6 @@ import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import ResetAllButton from '../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 
 type SelfOptions = EmptySelfOptions;
 type QuantumMeasurementScreenViewOptions = SelfOptions & WithRequired<ScreenViewOptions, 'tandem'>;
@@ -42,5 +41,3 @@ export default class QuantumMeasurementScreenView extends ScreenView {
     // Does nothing in base class.
   }
 }
-
-quantumMeasurement.register( 'QuantumMeasurementScreenView', QuantumMeasurementScreenView );

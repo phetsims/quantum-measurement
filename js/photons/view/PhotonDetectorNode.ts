@@ -29,7 +29,6 @@ import RadialGradient from '../../../../scenery/js/util/RadialGradient.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import PhotonDetector, { DetectionDirection } from '../model/PhotonDetector.js';
 
@@ -304,5 +303,3 @@ class PhotonRateDisplay extends NumberDisplay {
     } );
   }
 }
-
-quantumMeasurement.register( 'PhotonDetectorNode', PhotonDetectorNode );

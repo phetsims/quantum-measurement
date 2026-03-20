@@ -17,7 +17,6 @@ import Text from '../../../../scenery/js/nodes/Text.js';
 import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import PhotonsExperimentSceneModel from '../model/PhotonsExperimentSceneModel.js';
 import LaserNode from './LaserNode.js';
@@ -153,5 +152,4 @@ class PhotonTestingArea extends Node {
   }
 }
 
-quantumMeasurement.register( 'PhotonTestingArea', PhotonTestingArea );
 export default PhotonTestingArea;

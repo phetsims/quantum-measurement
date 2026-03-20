@@ -11,7 +11,6 @@ import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js'
 import { TReadOnlyProperty } from '../../../../axon/js/TReadOnlyProperty.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 
 type SternGerlachExperimentSetting = {
@@ -83,5 +82,3 @@ export default class SpinExperiment extends EnumerationValue {
     this.usingSingleApparatus = this.experimentSetting.length === 1;
   }
 }
-
-quantumMeasurement.register( 'SpinExperiment', SpinExperiment );

@@ -19,7 +19,6 @@ import Color from '../../../../scenery/js/util/Color.js';
 import TPaint from '../../../../scenery/js/util/TPaint.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 
 type SelfOptions = {
   textColor?: TPaint;
@@ -60,5 +59,3 @@ export default class SceneSectionHeader extends VBox {
     } );
   }
 }
-
-quantumMeasurement.register( 'SceneSectionHeader', SceneSectionHeader );

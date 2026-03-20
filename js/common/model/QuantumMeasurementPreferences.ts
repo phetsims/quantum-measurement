@@ -11,7 +11,6 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementQueryParameters from '../QuantumMeasurementQueryParameters.js';
 
 class QuantumMeasurementPreferences {
@@ -65,5 +64,4 @@ class QuantumMeasurementPreferences {
   }
 }
 
-quantumMeasurement.register( 'QuantumMeasurementPreferences', QuantumMeasurementPreferences );
 export default QuantumMeasurementPreferences;

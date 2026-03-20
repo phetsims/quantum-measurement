@@ -16,7 +16,6 @@ import optionize from '../../../../phet-core/js/optionize.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import AbstractBlochSphere, { AbstractBlochSphereOptions } from '../../common/model/AbstractBlochSphere.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import { MeasurementAxis } from './MeasurementAxis.js';
 import { StateDirection } from './StateDirection.js';
 
@@ -100,5 +99,3 @@ export default class ComplexBlochSphere extends AbstractBlochSphere {
     super.reset();
   }
 }
-
-quantumMeasurement.register( 'ComplexBlochSphere', ComplexBlochSphere );

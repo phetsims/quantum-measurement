@@ -16,7 +16,6 @@ import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import AveragingCounterNumberProperty from '../../common/model/AveragingCounterNumberProperty.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import Laser from './Laser.js';
 import Photon from './Photon.js';
 import { PhotonMotionState } from './PhotonMotionState.js';
@@ -175,7 +174,5 @@ class PhotonDetector extends PhetioObject implements TPhotonInteraction {
     this.detectionCountProperty.reset();
   }
 }
-
-quantumMeasurement.register( 'PhotonDetector', PhotonDetector );
 
 export default PhotonDetector;

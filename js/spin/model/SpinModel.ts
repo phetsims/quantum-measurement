@@ -25,7 +25,6 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import EnumerationIO from '../../../../tandem/js/types/EnumerationIO.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import { BlockingMode } from './BlockingMode.js';
 import MeasurementDevice from './MeasurementDevice.js';
 import { MultipleParticleCollection } from './MultipleParticleCollection.js';
@@ -383,5 +382,4 @@ class SpinModel implements TModel {
 
 }
 
-quantumMeasurement.register( 'SpinModel', SpinModel );
 export default SpinModel;

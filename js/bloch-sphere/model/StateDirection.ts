@@ -9,7 +9,6 @@
 import Vector3 from '../../../../dot/js/Vector3.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import { MeasurementAxis } from './MeasurementAxis.js';
 
 export class StateDirection extends EnumerationValue {
@@ -50,5 +49,3 @@ export class StateDirection extends EnumerationValue {
       Math.cos( polarAngle ) );
   }
 }
-
-quantumMeasurement.register( 'StateDirection', StateDirection );

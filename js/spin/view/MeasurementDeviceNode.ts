@@ -22,7 +22,6 @@ import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
 import MeasurementSymbolNode from '../../common/view/MeasurementSymbolNode.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import MeasurementDevice from '../model/MeasurementDevice.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -121,5 +120,3 @@ export default class MeasurementDeviceNode extends VBox {
     this.simpleBlochSphereNode.stateVectorVisibleProperty.value = false;
   }
 }
-
-quantumMeasurement.register( 'MeasurementDeviceNode', MeasurementDeviceNode );

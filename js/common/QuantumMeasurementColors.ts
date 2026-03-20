@@ -259,5 +259,4 @@ const QuantumMeasurementColors = {
 
 };
 
-quantumMeasurement.register( 'QuantumMeasurementColors', QuantumMeasurementColors );
 export default QuantumMeasurementColors;

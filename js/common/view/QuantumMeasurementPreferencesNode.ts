@@ -20,7 +20,6 @@ import RichText from '../../../../scenery/js/nodes/RichText.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import ToggleSwitch from '../../../../sun/js/ToggleSwitch.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import QuantumMeasurementPreferences from '../model/QuantumMeasurementPreferences.js';
 
@@ -123,5 +122,3 @@ class ShowGlobalPhaseControl extends PreferencesControl {
     this.addLinkedElement( QuantumMeasurementPreferences.getInstance().showGlobalPhaseProperty );
   }
 }
-
-quantumMeasurement.register( 'QuantumMeasurementPreferencesNode', QuantumMeasurementPreferencesNode );

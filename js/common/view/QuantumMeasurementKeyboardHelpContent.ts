@@ -11,7 +11,6 @@ import BasicActionsKeyboardHelpSection from '../../../../scenery-phet/js/keyboar
 import SliderControlsKeyboardHelpSection from '../../../../scenery-phet/js/keyboard/help/SliderControlsKeyboardHelpSection.js';
 import TimeControlsKeyboardHelpSection from '../../../../scenery-phet/js/keyboard/help/TimeControlsKeyboardHelpSection.js';
 import TwoColumnKeyboardHelpContent from '../../../../scenery-phet/js/keyboard/help/TwoColumnKeyboardHelpContent.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 
 export type QuantumMeasurementKeyboardHelpContentOptions = {
   includeTimeControlsKeyboardHelp?: boolean;
@@ -51,5 +50,3 @@ export default class QuantumMeasurementKeyboardHelpContent extends TwoColumnKeyb
     } );
   }
 }
-
-quantumMeasurement.register( 'QuantumMeasurementKeyboardHelpContent', QuantumMeasurementKeyboardHelpContent );

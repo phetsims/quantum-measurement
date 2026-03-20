@@ -20,7 +20,6 @@ import Color from '../../../../scenery/js/util/Color.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import ProbabilityOfSymbolBox from './ProbabilityOfSymbolBox.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -79,5 +78,3 @@ export default class ProbabilityEquationsNode extends VBox {
     return `<span style="color: ${color.toCSS()};">${text}</span>`;
   }
 }
-
-quantumMeasurement.register( 'ProbabilityEquationsNode', ProbabilityEquationsNode );

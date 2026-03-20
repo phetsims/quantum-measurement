@@ -27,7 +27,6 @@ import Animation from '../../../../twixt/js/Animation.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import MeasurementSymbolNode from '../../common/view/MeasurementSymbolNode.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { SpinMeasurementState } from '../model/SpinMeasurementState.js';
 import MagneticFieldNode from './MagneticFieldNode.js';
@@ -198,7 +197,5 @@ class SystemUnderTestNode extends Panel {
     super( content, options );
   }
 }
-
-quantumMeasurement.register( 'SystemUnderTestNode', SystemUnderTestNode );
 
 export default SystemUnderTestNode;

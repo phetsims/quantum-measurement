@@ -15,7 +15,6 @@ import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import AbstractBlochSphere from '../../common/model/AbstractBlochSphere.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import SimpleBlochSphere from './SimpleBlochSphere.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -95,5 +94,3 @@ export default class MeasurementDevice extends PhetioObject {
     this.resetEmitter.emit();
   }
 }
-
-quantumMeasurement.register( 'MeasurementDevice', MeasurementDevice );

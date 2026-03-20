@@ -22,7 +22,6 @@ import RichText, { RichTextOptions } from '../../../../scenery/js/nodes/RichText
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import FractionNode from '../../common/view/FractionNode.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import AveragePolarizationInfoDialog from './AveragePolarizationInfoDialog.js';
 
@@ -139,5 +138,3 @@ export default class PhotonsEquationNode extends HBox {
     super( options );
   }
 }
-
-quantumMeasurement.register( 'PhotonsEquationNode', PhotonsEquationNode );

@@ -12,7 +12,6 @@ import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
 import { VBoxOptions } from '../../../../scenery/js/layout/nodes/VBox.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 
 type SelfOptions = {
   fractionLineMargin?: number;
@@ -46,5 +45,3 @@ export default class FractionNode extends Node {
       } );
   }
 }
-
-quantumMeasurement.register( 'FractionNode', FractionNode );

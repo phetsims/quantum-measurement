@@ -15,7 +15,6 @@ import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 
 export default class ExpectationValueCheckboxDecorationNode extends HBox {
 
@@ -48,5 +47,3 @@ export default class ExpectationValueCheckboxDecorationNode extends HBox {
     } );
   }
 }
-
-quantumMeasurement.register( 'ExpectationValueCheckboxDecorationNode', ExpectationValueCheckboxDecorationNode );

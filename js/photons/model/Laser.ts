@@ -20,7 +20,6 @@ import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
 import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import ExperimentModeValues from './ExperimentModeValues.js';
 import Photon from './Photon.js';
 import { PhotonCollection } from './PhotonCollection.js';
@@ -199,5 +198,4 @@ class Laser extends PhetioObject {
   }
 }
 
-quantumMeasurement.register( 'Laser', Laser );
 export default Laser;

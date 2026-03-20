@@ -19,7 +19,6 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Checkbox, { CheckboxOptions } from '../../../../sun/js/Checkbox.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 
 // types
 type SelfOptions = EmptySelfOptions;
@@ -111,5 +110,4 @@ class AveragePolarizationCheckboxGroup extends VBox {
   }
 }
 
-quantumMeasurement.register( 'AveragePolarizationCheckboxGroup', AveragePolarizationCheckboxGroup );
 export default AveragePolarizationCheckboxGroup;

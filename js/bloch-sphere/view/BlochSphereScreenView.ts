@@ -10,7 +10,6 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import ExperimentDividingLine from '../../common/view/ExperimentDividingLine.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import BlochSphereModel from '../model/BlochSphereModel.js';
 import BlochSphereMeasurementArea from './BlochSphereMeasurementArea.js';
 import BlochSpherePreparationArea from './BlochSpherePreparationArea.js';
@@ -64,7 +63,5 @@ class BlochSphereScreenView extends QuantumMeasurementScreenView {
     super.reset();
   }
 }
-
-quantumMeasurement.register( 'BlochSphereScreenView', BlochSphereScreenView );
 
 export default BlochSphereScreenView;

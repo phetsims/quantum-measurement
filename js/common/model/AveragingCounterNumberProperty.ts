@@ -11,7 +11,6 @@
 import NumberProperty, { NumberPropertyOptions } from '../../../../axon/js/NumberProperty.js';
 import { toFixedNumber } from '../../../../dot/js/util/toFixedNumber.js';
 import optionize from '../../../../phet-core/js/optionize.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 
 type SelfOptions = {
   totalAveragingPeriod?: number;
@@ -117,7 +116,5 @@ class AveragingCounterNumberProperty extends NumberProperty {
     this.timeSinceLastCountSample = 0;
   }
 }
-
-quantumMeasurement.register( 'AveragingCounterNumberProperty', AveragingCounterNumberProperty );
 
 export default AveragingCounterNumberProperty;

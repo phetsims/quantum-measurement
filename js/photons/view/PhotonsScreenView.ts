@@ -12,7 +12,6 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
 import SceneSelectorRadioButtonGroup from '../../common/view/SceneSelectorRadioButtonGroup.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import ExperimentModeValues from '../model/ExperimentModeValues.js';
 import PhotonsModel from '../model/PhotonsModel.js';
 import PhotonsExperimentSceneView from './PhotonsExperimentSceneView.js';
@@ -84,7 +83,5 @@ class PhotonsScreenView extends QuantumMeasurementScreenView {
     this.manyPhotonsExperimentSceneView.update();
   }
 }
-
-quantumMeasurement.register( 'PhotonsScreenView', PhotonsScreenView );
 
 export default PhotonsScreenView;

@@ -11,7 +11,6 @@ import Tandem from '../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../common/QuantumMeasurementColors.js';
 import BlochSphereNode from '../common/view/BlochSphereNode.js';
 import QuantumMeasurementScreen from '../common/view/QuantumMeasurementScreen.js';
-import quantumMeasurement from '../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../QuantumMeasurementStrings.js';
 import BlochSphereModel from './model/BlochSphereModel.js';
 import ComplexBlochSphere from './model/ComplexBlochSphere.js';
@@ -56,6 +55,3 @@ const createScreenIcon = (): ScreenIcon => {
     fill: QuantumMeasurementColors.screenBackgroundColorProperty
   } );
 };
-
-
-quantumMeasurement.register( 'BlochSphereScreen', BlochSphereScreen );

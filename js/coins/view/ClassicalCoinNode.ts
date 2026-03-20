@@ -14,7 +14,6 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import classicalCoinHeads_svg from '../../../images/classicalCoinHeads_svg.js';
 import classicalCoinTails_svg from '../../../images/classicalCoinTails_svg.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
 import CoinNode, { CoinFaceParameters } from './CoinNode.js';
 
@@ -59,5 +58,3 @@ export default class ClassicalCoinNode extends CoinNode {
     super.dispose();
   }
 }
-
-quantumMeasurement.register( 'ClassicalCoinNode', ClassicalCoinNode );

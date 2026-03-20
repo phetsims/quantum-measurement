@@ -18,7 +18,6 @@ import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementConstants from '../QuantumMeasurementConstants.js';
 
 const TICK_MARK_FONT = QuantumMeasurementConstants.CONTROL_FONT;
@@ -78,7 +77,5 @@ class ProbabilityValueControl extends NumberControl {
     super( titleNode, probabilityProperty, RANGE, options );
   }
 }
-
-quantumMeasurement.register( 'ProbabilityValueControl', ProbabilityValueControl );
 
 export default ProbabilityValueControl;

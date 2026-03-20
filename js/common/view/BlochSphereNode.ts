@@ -25,7 +25,6 @@ import Path from '../../../../scenery/js/nodes/Path.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import AbstractBlochSphere from '../model/AbstractBlochSphere.js';
 import QuantumMeasurementColors from '../QuantumMeasurementColors.js';
@@ -325,5 +324,3 @@ export default class BlochSphereNode extends Node {
     this.addLinkedElement( blochSphere );
   }
 }
-
-quantumMeasurement.register( 'BlochSphereNode', BlochSphereNode );

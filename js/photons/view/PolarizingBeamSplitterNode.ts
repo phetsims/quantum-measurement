@@ -17,7 +17,6 @@ import Rectangle, { RectangleOptions } from '../../../../scenery/js/nodes/Rectan
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import PolarizingBeamSplitter from '../model/PolarizingBeamSplitter.js';
 
@@ -67,5 +66,3 @@ export default class PolarizingBeamSplitterNode extends Node {
     super( options );
   }
 }
-
-quantumMeasurement.register( 'PolarizingBeamSplitterNode', PolarizingBeamSplitterNode );

@@ -15,7 +15,6 @@ import ArrayIO from '../../../../tandem/js/types/ArrayIO.js';
 import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 
 export class ParticleWithSpin {
 
@@ -131,5 +130,3 @@ type ParticleWithSpinStateObject = {
   endPosition: Vector2;
   offset: Vector2;
 };
-
-quantumMeasurement.register( 'ParticleWithSpin', ParticleWithSpin );

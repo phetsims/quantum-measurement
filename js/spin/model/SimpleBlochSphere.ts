@@ -12,7 +12,6 @@ import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import AbstractBlochSphere, { AbstractBlochSphereOptions } from '../../common/model/AbstractBlochSphere.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 
 type SelfOptions = EmptySelfOptions;
 export type SimpleBlochSphereOptions = SelfOptions & AbstractBlochSphereOptions;
@@ -64,5 +63,3 @@ export default class SimpleBlochSphere extends AbstractBlochSphere {
   }
 
 }
-
-quantumMeasurement.register( 'SimpleBlochSphere', SimpleBlochSphere );

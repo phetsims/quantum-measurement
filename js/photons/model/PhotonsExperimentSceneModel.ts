@@ -22,7 +22,6 @@ import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import NullableIO from '../../../../tandem/js/types/NullableIO.js';
 import NumberIO from '../../../../tandem/js/types/NumberIO.js';
 import { SystemType } from '../../common/model/SystemType.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import ExperimentModeValues from './ExperimentModeValues.js';
 import Laser from './Laser.js';
 import Mirror from './Mirror.js';
@@ -392,7 +391,5 @@ class PhotonsExperimentSceneModel {
     }
   }
 }
-
-quantumMeasurement.register( 'PhotonsExperimentSceneModel', PhotonsExperimentSceneModel );
 
 export default PhotonsExperimentSceneModel;

@@ -17,7 +17,6 @@ import Text from '../../../../scenery/js/nodes/Text.js';
 import Dialog from '../../../../sun/js/Dialog.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 
 // constants
@@ -132,5 +131,3 @@ export default class AveragePolarizationInfoDialog extends Dialog {
     } );
   }
 }
-
-quantumMeasurement.register( 'AveragePolarizationInfoDialog', AveragePolarizationInfoDialog );

@@ -12,7 +12,6 @@ import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import IOType from '../../../../tandem/js/types/IOType.js';
 import ReferenceArrayIO from '../../../../tandem/js/types/ReferenceArrayIO.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import Photon from './Photon.js';
 
 export class PhotonCollection extends PhetioObject {
@@ -62,5 +61,3 @@ export class PhotonCollection extends PhetioObject {
 type PhotonCollectionState = {
   photons: [];
 };
-
-quantumMeasurement.register( 'PhotonCollection', PhotonCollection );

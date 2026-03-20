@@ -21,7 +21,6 @@ import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 
 const HEIGHT = 150;
 const TICK_MARK_LENGTH = 20;
@@ -189,5 +188,3 @@ export default class NormalizedOutcomeVectorGraph extends Node {
     this.vectorRepresentationVisibleProperty.reset();
   }
 }
-
-quantumMeasurement.register( 'NormalizedOutcomeVectorGraph', NormalizedOutcomeVectorGraph );

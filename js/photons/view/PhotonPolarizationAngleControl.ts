@@ -23,7 +23,6 @@ import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
 import { SliderOptions } from '../../../../sun/js/Slider.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import Laser from '../model/Laser.js';
 import FlatPolarizationAngleIndicator from './FlatPolarizationAngleIndicator.js';
@@ -201,5 +200,3 @@ export default class PhotonPolarizationAngleControl extends Panel {
     super( content, options );
   }
 }
-
-quantumMeasurement.register( 'PhotonPolarizationAngleControl', PhotonPolarizationAngleControl );

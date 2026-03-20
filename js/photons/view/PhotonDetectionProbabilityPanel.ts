@@ -21,7 +21,6 @@ import Color from '../../../../scenery/js/util/Color.js';
 import AccordionBox, { AccordionBoxOptions } from '../../../../sun/js/AccordionBox.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -113,5 +112,3 @@ export default class PhotonDetectionProbabilityPanel extends AccordionBox {
 const getColoredString = ( text: string, color: Color ): string => {
   return `<span style="font-weight: bold; color: ${color.toCSS()};">${text}</span>`;
 };
-
-quantumMeasurement.register( 'PhotonDetectionProbabilityPanel', PhotonDetectionProbabilityPanel );

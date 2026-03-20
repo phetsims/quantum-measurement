@@ -19,7 +19,6 @@ import TextPushButton, { TextPushButtonOptions } from '../../../../sun/js/button
 import { SystemType } from '../../common/model/SystemType.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import CoinSet from '../model/CoinSet.js';
 
@@ -158,5 +157,3 @@ export default class CoinExperimentButtonSet extends VBox {
     };
   }
 }
-
-quantumMeasurement.register( 'CoinExperimentButtonSet', CoinExperimentButtonSet );

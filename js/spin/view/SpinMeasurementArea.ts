@@ -28,7 +28,6 @@ import ComboBox, { ComboBoxItem } from '../../../../sun/js/ComboBox.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { BlockingMode } from '../model/BlockingMode.js';
 import { SourceMode } from '../model/SourceMode.js';
@@ -315,5 +314,3 @@ export default class SpinMeasurementArea extends VBox {
     this.measurementDevices.forEach( device => device.reset() );
   }
 }
-
-quantumMeasurement.register( 'SpinMeasurementArea', SpinMeasurementArea );

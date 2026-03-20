@@ -20,7 +20,6 @@ import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import PhetioObject from '../../../../tandem/js/PhetioObject.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import AveragingCounterNumberProperty from '../../common/model/AveragingCounterNumberProperty.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import { BlockingMode } from './BlockingMode.js';
 
 export default class SternGerlach extends PhetioObject {
@@ -200,5 +199,3 @@ export default class SternGerlach extends PhetioObject {
   }
 
 }
-
-quantumMeasurement.register( 'SternGerlach', SternGerlach );

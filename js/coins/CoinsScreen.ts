@@ -12,7 +12,6 @@ import Color from '../../../scenery/js/util/Color.js';
 import Tandem from '../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../common/QuantumMeasurementColors.js';
 import QuantumMeasurementScreen, { QuantumMeasurementScreenOptions } from '../common/view/QuantumMeasurementScreen.js';
-import quantumMeasurement from '../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../QuantumMeasurementStrings.js';
 import CoinsModel from './model/CoinsModel.js';
 import { QuantumCoinStates } from './model/QuantumCoinStates.js';
@@ -54,5 +53,3 @@ const createScreenIcon = (): ScreenIcon => {
     fill: QuantumMeasurementColors.screenBackgroundColorProperty
   } );
 };
-
-quantumMeasurement.register( 'CoinsScreen', CoinsScreen );

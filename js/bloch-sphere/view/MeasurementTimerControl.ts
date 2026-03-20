@@ -28,7 +28,6 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import MeasurementSymbolNode from '../../common/view/MeasurementSymbolNode.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 
 type SelfOptions = EmptySelfOptions;
 export type MeasurementTimerControlOptions = SelfOptions & WithRequired<PanelOptions, 'tandem'>;
@@ -151,5 +150,3 @@ export default class MeasurementTimerControl extends Node {
     super( options );
   }
 }
-
-quantumMeasurement.register( 'MeasurementTimerControl', MeasurementTimerControl );

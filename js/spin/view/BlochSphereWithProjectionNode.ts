@@ -11,7 +11,6 @@ import { TReadOnlyProperty } from '../../../../axon/js/TReadOnlyProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import BlochSphereNode, { BlochSphereNodeOptions } from '../../common/view/BlochSphereNode.js';
 import DashedArrowNode from '../../common/view/DashedArrowNode.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import SimpleBlochSphere from '../model/SimpleBlochSphere.js';
 
 export default class BlochSphereWithProjectionNode extends BlochSphereNode {
@@ -63,5 +62,3 @@ export default class BlochSphereWithProjectionNode extends BlochSphereNode {
     } );
   }
 }
-
-quantumMeasurement.register( 'BlochSphereWithProjectionNode', BlochSphereWithProjectionNode );

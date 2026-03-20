@@ -18,7 +18,6 @@ import Text from '../../../../scenery/js/nodes/Text.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import QuantumMeasurementHistogram, { QuantumMeasurementHistogramOptions } from '../../common/view/QuantumMeasurementHistogram.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import CoinSet from '../model/CoinSet.js';
 import ProbabilityOfSymbolBox from './ProbabilityOfSymbolBox.js';
@@ -111,5 +110,3 @@ export default class CoinMeasurementHistogram extends QuantumMeasurementHistogra
     this.addChild( numberOfSystemsText );
   }
 }
-
-quantumMeasurement.register( 'CoinMeasurementHistogram', CoinMeasurementHistogram );

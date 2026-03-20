@@ -22,7 +22,6 @@ import Slider, { SliderOptions } from '../../../../sun/js/Slider.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import BlochSphereNode from '../../common/view/BlochSphereNode.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import BlochSphereModel from '../model/BlochSphereModel.js';
 import { StateDirection } from '../model/StateDirection.js';
@@ -174,5 +173,3 @@ export default class BlochSpherePreparationArea extends VBox {
     super( options );
   }
 }
-
-quantumMeasurement.register( 'BlochSpherePreparationArea', BlochSpherePreparationArea );

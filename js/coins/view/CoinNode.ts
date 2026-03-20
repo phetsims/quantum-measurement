@@ -14,7 +14,6 @@ import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import Circle from '../../../../scenery/js/nodes/Circle.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import TPaint from '../../../../scenery/js/util/TPaint.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 
 // constants
 const DEFAULT_MARGIN_FACTOR = 0.1;
@@ -83,5 +82,3 @@ export default class CoinNode extends Node {
     } );
   }
 }
-
-quantumMeasurement.register( 'CoinNode', CoinNode );

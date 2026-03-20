@@ -16,7 +16,6 @@ import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import { SourceMode } from './SourceMode.js';
 import { SpinDirection } from './SpinDirection.js';
 
@@ -86,5 +85,3 @@ export default class ParticleSourceModel {
     this.customSpinStateProperty.reset();
   }
 }
-
-quantumMeasurement.register( 'ParticleSourceModel', ParticleSourceModel );

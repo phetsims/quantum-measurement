@@ -11,7 +11,6 @@ import TProperty from '../../../../axon/js/TProperty.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
 import CoinExperimentButtonSet from './CoinExperimentButtonSet.js';
 import SingleCoinTestBox from './SingleCoinTestBox.js';
@@ -71,7 +70,5 @@ class SingleCoinMeasurementArea extends HBox {
     this.testBox.addCoinMaskNode( coinNodeMask );
   }
 }
-
-quantumMeasurement.register( 'SingleCoinMeasurementArea', SingleCoinMeasurementArea );
 
 export default SingleCoinMeasurementArea;

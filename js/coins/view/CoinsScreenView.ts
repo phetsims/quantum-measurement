@@ -19,7 +19,6 @@ import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import QuantumMeasurementScreenView from '../../common/view/QuantumMeasurementScreenView.js';
 import SceneSelectorRadioButtonGroup from '../../common/view/SceneSelectorRadioButtonGroup.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
 
 type ColorType = Property<Color> | Property<string> | Property<Color | string>;
@@ -107,5 +106,3 @@ export default class CoinsScreenView extends QuantumMeasurementScreenView {
     super.reset();
   }
 }
-
-quantumMeasurement.register( 'CoinsScreenView', CoinsScreenView );

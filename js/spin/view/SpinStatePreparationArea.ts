@@ -23,7 +23,6 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import DashedArrowNode from '../../common/view/DashedArrowNode.js';
 import ProbabilityValueControl from '../../common/view/ProbabilityValueControl.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { SpinDirection } from '../model/SpinDirection.js';
 import SpinExperiment from '../model/SpinExperiment.js';
@@ -206,5 +205,3 @@ export default class SpinStatePreparationArea extends VBox {
     ];
   }
 }
-
-quantumMeasurement.register( 'SpinStatePreparationArea', SpinStatePreparationArea );

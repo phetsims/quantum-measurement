@@ -16,7 +16,6 @@ import Property from '../../../../axon/js/Property.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import StringUnionIO from '../../../../tandem/js/types/StringUnionIO.js';
 import { SystemType } from '../../common/model/SystemType.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import CoinSet, { CoinSetOptions } from './CoinSet.js';
 import { CoinStates } from './CoinStates.js';
 
@@ -51,5 +50,3 @@ export default class Coin extends CoinSet {
     } );
   }
 }
-
-quantumMeasurement.register( 'Coin', Coin );

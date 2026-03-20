@@ -26,7 +26,6 @@ import sharedSoundPlayers from '../../../../tambo/js/sharedSoundPlayers.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import ParticleSourceModel from '../model/ParticleSourceModel.js';
 import { SingleParticleCollection } from '../model/SingleParticleCollection.js';
@@ -193,5 +192,3 @@ export default class ParticleSourceNode extends Node {
     } );
   }
 }
-
-quantumMeasurement.register( 'ParticleSourceNode', ParticleSourceNode );

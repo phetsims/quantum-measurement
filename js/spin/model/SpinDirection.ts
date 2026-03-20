@@ -14,7 +14,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 
 export class SpinDirection extends EnumerationValue {
   public static readonly Z_PLUS = new SpinDirection( `${MathSymbols.PLUS}Z`, 'ZPlus' );
@@ -37,5 +36,3 @@ export class SpinDirection extends EnumerationValue {
 
   }
 }
-
-quantumMeasurement.register( 'SpinDirection', SpinDirection );

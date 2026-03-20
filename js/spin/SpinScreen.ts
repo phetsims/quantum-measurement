@@ -12,7 +12,6 @@ import Tandem from '../../../tandem/js/Tandem.js';
 import spinScreenIcon_png from '../../images/spinScreenIcon_png.js';
 import QuantumMeasurementColors from '../common/QuantumMeasurementColors.js';
 import QuantumMeasurementScreen from '../common/view/QuantumMeasurementScreen.js';
-import quantumMeasurement from '../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../QuantumMeasurementStrings.js';
 import SpinModel from './model/SpinModel.js';
 import SpinScreenView from './view/SpinScreenView.js';
@@ -48,5 +47,3 @@ const createScreenIcon = (): ScreenIcon => {
     fill: QuantumMeasurementColors.screenBackgroundColorProperty
   } );
 };
-
-quantumMeasurement.register( 'SpinScreen', SpinScreen );

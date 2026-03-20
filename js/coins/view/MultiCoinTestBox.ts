@@ -19,7 +19,6 @@ import LinearGradient from '../../../../scenery/js/util/LinearGradient.js';
 import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import CoinSet from '../model/CoinSet.js';
 import { MULTI_COIN_ANIMATION_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
 import CoinSetPixelRepresentation from './CoinSetPixelRepresentation.js';
@@ -221,7 +220,5 @@ class MultiCoinTestBox extends Node {
 
   public static readonly SIZE = BOX_SIZE;
 }
-
-quantumMeasurement.register( 'MultiCoinTestBox', MultiCoinTestBox );
 
 export default MultiCoinTestBox;

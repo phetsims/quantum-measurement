@@ -15,7 +15,6 @@ import classicalCoinHeads_svg from '../../../images/classicalCoinHeads_svg.js';
 import classicalCoinTails_svg from '../../../images/classicalCoinTails_svg.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { CoinStates } from '../model/CoinStates.js';
 
@@ -63,5 +62,3 @@ export default class ProbabilityOfSymbolBox extends HBox {
     return shownNode;
   }
 }
-
-quantumMeasurement.register( 'ProbabilityOfSymbolBox', ProbabilityOfSymbolBox );

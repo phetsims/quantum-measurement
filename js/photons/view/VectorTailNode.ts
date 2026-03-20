@@ -10,7 +10,6 @@
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import Circle, { CircleOptions } from '../../../../scenery/js/nodes/Circle.js';
 import Line from '../../../../scenery/js/nodes/Line.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 
 export default class VectorTailNode extends Circle {
   public constructor( radius: number, providedOptions?: CircleOptions ) {
@@ -36,5 +35,3 @@ export default class VectorTailNode extends Circle {
     this.addChild( line2 );
   }
 }
-
-quantumMeasurement.register( 'VectorTailNode', VectorTailNode );

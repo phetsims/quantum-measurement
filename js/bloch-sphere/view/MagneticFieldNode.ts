@@ -14,7 +14,6 @@ import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import { SpinMeasurementState } from '../model/SpinMeasurementState.js';
 import MagneticFieldArrowNode from './MagneticFieldArrowNode.js';
 
@@ -64,5 +63,3 @@ export default class MagneticFieldNode extends Node {
     } );
   }
 }
-
-quantumMeasurement.register( 'MagneticFieldNode', MagneticFieldNode );

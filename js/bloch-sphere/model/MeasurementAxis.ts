@@ -8,7 +8,6 @@
 
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import { StateDirection } from './StateDirection.js';
 
 export class MeasurementAxis extends EnumerationValue {
@@ -32,5 +31,3 @@ export class MeasurementAxis extends EnumerationValue {
     super();
   }
 }
-
-quantumMeasurement.register( 'MeasurementAxis', MeasurementAxis );

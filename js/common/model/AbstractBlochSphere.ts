@@ -12,7 +12,6 @@ import Range from '../../../../dot/js/Range.js';
 import optionize from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
 import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 
 type SelfOptions = {
   initialPolarAngle?: number;
@@ -72,5 +71,3 @@ export default abstract class AbstractBlochSphere extends PhetioObject {
     this.polarAngleProperty.reset();
   }
 }
-
-quantumMeasurement.register( 'AbstractBlochSphere', AbstractBlochSphere );

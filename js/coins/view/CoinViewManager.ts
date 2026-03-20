@@ -6,7 +6,6 @@
  * @author John Blanco, PhET Interactive Simulations
  */
 
-import quantumMeasurement from '../../quantumMeasurement.js';
 import CoinExperimentMeasurementArea from './CoinExperimentMeasurementArea.js';
 import CoinsExperimentSceneView from './CoinsExperimentSceneView.js';
 
@@ -53,5 +52,3 @@ export default abstract class CoinViewManager {
    */
   public abstract abortIngressAnimation(): void;
 }
-
-quantumMeasurement.register( 'CoinViewManager', CoinViewManager );

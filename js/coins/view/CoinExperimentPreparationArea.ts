@@ -20,7 +20,6 @@ import Spacer from '../../../../scenery/js/nodes/Spacer.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
 import { getCoinAccessibleName } from '../model/CoinStates.js';
@@ -198,7 +197,5 @@ class CoinExperimentPreparationArea extends VBox {
     return orientationIndicatorGlobalBounds.center;
   }
 }
-
-quantumMeasurement.register( 'CoinExperimentPreparationArea', CoinExperimentPreparationArea );
 
 export default CoinExperimentPreparationArea;

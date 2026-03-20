@@ -16,7 +16,6 @@ import Node, { NodeOptions } from '../../../../scenery/js/nodes/Node.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import Mirror from '../model/Mirror.js';
 import PhotonSprites from './PhotonSprites.js';
@@ -60,5 +59,3 @@ export default class MirrorNode extends Node {
     super( options );
   }
 }
-
-quantumMeasurement.register( 'MirrorNode', MirrorNode );

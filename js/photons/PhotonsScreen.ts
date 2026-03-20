@@ -19,7 +19,6 @@ import greenPhoton_png from '../../images/greenPhoton_png.js';
 import QuantumMeasurementColors from '../common/QuantumMeasurementColors.js';
 import QuantumMeasurementKeyboardHelpContent from '../common/view/QuantumMeasurementKeyboardHelpContent.js';
 import QuantumMeasurementScreen from '../common/view/QuantumMeasurementScreen.js';
-import quantumMeasurement from '../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../QuantumMeasurementStrings.js';
 import PhotonsModel from './model/PhotonsModel.js';
 import PhotonsScreenView from './view/PhotonsScreenView.js';
@@ -130,5 +129,3 @@ const createScreenIcon = (): ScreenIcon => {
     fill: QuantumMeasurementColors.screenBackgroundColorProperty
   } );
 };
-
-quantumMeasurement.register( 'PhotonsScreen', PhotonsScreen );

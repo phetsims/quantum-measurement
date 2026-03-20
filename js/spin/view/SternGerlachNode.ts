@@ -25,7 +25,6 @@ import AquaRadioButtonGroup from '../../../../sun/js/AquaRadioButtonGroup.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import { BlockingMode } from '../model/BlockingMode.js';
 import SternGerlach from '../model/SternGerlach.js';
@@ -208,5 +207,3 @@ export default class SternGerlachNode extends Node {
     );
   }
 }
-
-quantumMeasurement.register( 'SternGerlachNode', SternGerlachNode );

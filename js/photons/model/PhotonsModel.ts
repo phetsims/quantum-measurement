@@ -20,7 +20,6 @@ import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
 import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import ExperimentModeValues from './ExperimentModeValues.js';
 import PhotonDetector from './PhotonDetector.js';
 import PhotonsExperimentSceneModel from './PhotonsExperimentSceneModel.js';
@@ -104,5 +103,3 @@ export default class PhotonsModel implements TModel {
     }
   }
 }
-
-quantumMeasurement.register( 'PhotonsModel', PhotonsModel );

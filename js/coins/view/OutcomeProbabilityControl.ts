@@ -27,7 +27,6 @@ import { SystemType } from '../../common/model/SystemType.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
 import ProbabilityValueControl from '../../common/view/ProbabilityValueControl.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import ProbabilityEquationsNode from './ProbabilityEquationsNode.js';
 import ProbabilityOfSymbolBox from './ProbabilityOfSymbolBox.js';
@@ -274,5 +273,3 @@ export default class OutcomeProbabilityControl extends VBox {
     super( options );
   }
 }
-
-quantumMeasurement.register( 'OutcomeProbabilityControl', OutcomeProbabilityControl );

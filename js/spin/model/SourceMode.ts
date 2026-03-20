@@ -9,7 +9,6 @@
 import { TReadOnlyProperty } from '../../../../axon/js/TReadOnlyProperty.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import EnumerationValue from '../../../../phet-core/js/EnumerationValue.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 
 export class SourceMode extends EnumerationValue {
@@ -23,4 +22,3 @@ export class SourceMode extends EnumerationValue {
     super();
   }
 }
-quantumMeasurement.register( 'SourceMode', SourceMode );

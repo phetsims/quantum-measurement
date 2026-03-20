@@ -16,7 +16,6 @@ import { Line } from '../../../../kite/js/segments/Segment.js';
 import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
 import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
 import { SystemType } from '../../common/model/SystemType.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import Photon from './Photon.js';
 import { PhotonMotionState } from './PhotonMotionState.js';
 import { PhotonInteractionTestResult, PhotonInteractionValues } from './PhotonsModel.js';
@@ -117,5 +116,4 @@ class PolarizingBeamSplitter implements TPhotonInteraction {
   }
 }
 
-quantumMeasurement.register( 'PolarizingBeamSplitter', PolarizingBeamSplitter );
 export default PolarizingBeamSplitter;

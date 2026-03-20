@@ -21,7 +21,6 @@ import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioS
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import { ClassicalCoinStates } from '../model/ClassicalCoinStates.js';
 import { MEASUREMENT_PREPARATION_TIME } from '../model/CoinSet.js';
 import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
@@ -180,7 +179,5 @@ class SmallCoinNode extends Node {
     }
   }
 }
-
-quantumMeasurement.register( 'SmallCoinNode', SmallCoinNode );
 
 export default SmallCoinNode;

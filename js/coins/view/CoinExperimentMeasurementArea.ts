@@ -25,7 +25,6 @@ import Tandem from '../../../../tandem/js/Tandem.js';
 import { SystemType } from '../../common/model/SystemType.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import CoinsExperimentSceneModel, { MAX_COINS, MULTI_COIN_EXPERIMENT_QUANTITIES } from '../model/CoinsExperimentSceneModel.js';
 import CoinExperimentButtonSet from './CoinExperimentButtonSet.js';
@@ -322,7 +321,5 @@ class CoinExperimentMeasurementArea extends VBox {
     ];
   }
 }
-
-quantumMeasurement.register( 'CoinExperimentMeasurementArea', CoinExperimentMeasurementArea );
 
 export default CoinExperimentMeasurementArea;

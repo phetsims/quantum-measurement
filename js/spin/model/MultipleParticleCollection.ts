@@ -7,7 +7,6 @@
  */
 
 import Tandem from '../../../../tandem/js/Tandem.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import { ParticleCollection } from './ParticleCollection.js';
 import SpinModel from './SpinModel.js';
 
@@ -68,6 +67,3 @@ export class MultipleParticleCollection extends ParticleCollection {
     } );
   }
 }
-
-
-quantumMeasurement.register( 'MultipleParticleCollection', MultipleParticleCollection );

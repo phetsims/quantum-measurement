@@ -17,7 +17,6 @@ import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioS
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import { SystemType } from '../../common/model/SystemType.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import { MEASUREMENT_PREPARATION_TIME } from '../model/CoinSet.js';
 import CoinsExperimentSceneModel from '../model/CoinsExperimentSceneModel.js';
 import CoinExperimentMeasurementArea from './CoinExperimentMeasurementArea.js';
@@ -141,7 +140,5 @@ class MaxCoinsViewManager extends CoinViewManager {
     this.abortIngressAnimationForCoinSet();
   }
 }
-
-quantumMeasurement.register( 'MaxCoinsViewManager', MaxCoinsViewManager );
 
 export default MaxCoinsViewManager;

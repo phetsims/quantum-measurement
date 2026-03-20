@@ -35,7 +35,6 @@ import Text from '../../../../scenery/js/nodes/Text.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -208,5 +207,3 @@ export default class ObliquePolarizationAngleIndicator extends Node {
     } );
   }
 }
-
-quantumMeasurement.register( 'ObliquePolarizationAngleIndicator', ObliquePolarizationAngleIndicator );

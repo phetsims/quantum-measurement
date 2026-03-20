@@ -20,7 +20,6 @@ import HBox, { HBoxOptions } from '../../../../scenery/js/layout/nodes/HBox.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import QuantumMeasurementPreferences from '../../common/model/QuantumMeasurementPreferences.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import ComplexBlochSphere from '../model/ComplexBlochSphere.js';
 import { StateDirection } from '../model/StateDirection.js';
 
@@ -196,5 +195,3 @@ export default class BlochSphereNumericalEquationNode extends HBox {
     this.minContentHeight = this.height;
   }
 }
-
-quantumMeasurement.register( 'BlochSphereNumericalEquationNode', BlochSphereNumericalEquationNode );

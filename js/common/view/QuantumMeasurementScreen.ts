@@ -11,7 +11,6 @@ import ScreenView from '../../../../joist/js/ScreenView.js';
 import TModel from '../../../../joist/js/TModel.js';
 import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
 import WithRequired from '../../../../phet-core/js/types/WithRequired.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementColors from '../QuantumMeasurementColors.js';
 import QuantumMeasurementKeyboardHelpContent from './QuantumMeasurementKeyboardHelpContent.js';
 
@@ -34,5 +33,3 @@ export default class QuantumMeasurementScreen<M extends TModel, V extends Screen
     super( createModel, createView, options );
   }
 }
-
-quantumMeasurement.register( 'QuantumMeasurementScreen', QuantumMeasurementScreen );

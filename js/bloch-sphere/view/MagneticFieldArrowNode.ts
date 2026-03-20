@@ -10,7 +10,6 @@ import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import ArrowNode, { ArrowNodeOptions } from '../../../../scenery-phet/js/ArrowNode.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 
 export default class MagneticFieldArrowNode extends ArrowNode {
 
@@ -30,5 +29,3 @@ export default class MagneticFieldArrowNode extends ArrowNode {
     } );
   }
 }
-
-quantumMeasurement.register( 'MagneticFieldArrowNode', MagneticFieldArrowNode );

@@ -22,7 +22,6 @@ import Sprite from '../../../../scenery/js/util/Sprite.js';
 import SpriteImage from '../../../../scenery/js/util/SpriteImage.js';
 import SpriteInstance, { SpriteInstanceTransformType } from '../../../../scenery/js/util/SpriteInstance.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import { ParticleWithSpin } from '../model/ParticleWithSpin.js';
 
 export default class ParticleSprites extends Sprites {
@@ -115,5 +114,3 @@ export default class ParticleSprites extends Sprites {
     this.invalidatePaint();
   }
 }
-
-quantumMeasurement.register( 'ParticleSprites', ParticleSprites );

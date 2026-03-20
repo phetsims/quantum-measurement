@@ -29,7 +29,6 @@ import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import RichText from '../../../../scenery/js/nodes/RichText.js';
 import Color from '../../../../scenery/js/util/Color.js';
 import { MAX_COINS } from '../../coins/model/CoinsExperimentSceneModel.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import QuantumMeasurementColors from '../QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../QuantumMeasurementConstants.js';
@@ -417,7 +416,5 @@ class QuantumMeasurementHistogram extends Node {
     this.maxBarHeight = maxBarHeight;
   }
 }
-
-quantumMeasurement.register( 'QuantumMeasurementHistogram', QuantumMeasurementHistogram );
 
 export default QuantumMeasurementHistogram;

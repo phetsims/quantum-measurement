@@ -27,7 +27,6 @@ import Slider from '../../../../sun/js/Slider.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
 import QuantumMeasurementConstants from '../../common/QuantumMeasurementConstants.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import QuantumMeasurementStrings from '../../QuantumMeasurementStrings.js';
 import MagneticFieldArrowNode from './MagneticFieldArrowNode.js';
 
@@ -128,5 +127,3 @@ export default class MagneticFieldControl extends Panel {
     super( new VBox( { children: vboxContentChildren } ), options );
   }
 }
-
-quantumMeasurement.register( 'MagneticFieldControl', MagneticFieldControl );

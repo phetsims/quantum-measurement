@@ -14,7 +14,6 @@ import { combineOptions } from '../../../../phet-core/js/optionize.js';
 import ArrowNode, { ArrowNodeOptions } from '../../../../scenery-phet/js/ArrowNode.js';
 import Tandem from '../../../../tandem/js/Tandem.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import { QuantumCoinStates } from '../model/QuantumCoinStates.js';
 import CoinNode, { CoinFaceParameters } from './CoinNode.js';
 
@@ -82,5 +81,3 @@ export default class QuantumCoinNode extends CoinNode {
     super.dispose();
   }
 }
-
-quantumMeasurement.register( 'QuantumCoinNode', QuantumCoinNode );

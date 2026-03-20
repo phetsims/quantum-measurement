@@ -22,7 +22,6 @@ import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioS
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import QuantumMeasurementColors from '../../common/QuantumMeasurementColors.js';
-import quantumMeasurement from '../../quantumMeasurement.js';
 import CoinSet, { MEASUREMENT_PREPARATION_TIME } from '../model/CoinSet.js';
 import { MAX_COINS } from '../model/CoinsExperimentSceneModel.js';
 
@@ -347,4 +346,3 @@ const coherentAlternativeTransactionData = [
 ];
 
 export default CoinSetPixelRepresentation;
-quantumMeasurement.register( 'CoinSetPixelRepresentation', CoinSetPixelRepresentation );
