@@ -30,6 +30,6 @@ quantumMeasurement.register( 'QuantumMeasurementQueryParameters', QuantumMeasure
 // Log query parameters
 logGlobal( 'phet.chipper.queryParameters' );
 logGlobal( 'phet.preloads.phetio.queryParameters' );
-logGlobal( 'phet.quantumMeasurement.QuantumMeasurementQueryParameters' );
+phet.log && phet.log( `QuantumMeasurementQueryParameters: ${JSON.stringify( QuantumMeasurementQueryParameters, null, 2 )}` );
 
 export default QuantumMeasurementQueryParameters;
