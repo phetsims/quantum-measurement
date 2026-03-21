@@ -1,4 +1,4 @@
-// Copyright 2024-2025, University of Colorado Boulder
+// Copyright 2024-2026, University of Colorado Boulder
 
 /**
  * MultipleCoinsViewManager creates and animates the sets of coin nodes that are configured in the preparation area, and

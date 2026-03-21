@@ -1,4 +1,4 @@
-// Copyright 2024-2025, University of Colorado Boulder
+// Copyright 2024-2026, University of Colorado Boulder
 
 /**
  * ProbabilityValueControl is a UI component that allows the user to control the value of a NumberProperty whose value

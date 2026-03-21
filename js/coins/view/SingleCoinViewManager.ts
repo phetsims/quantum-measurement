@@ -1,4 +1,4 @@
-// Copyright 2024-2025, University of Colorado Boulder
+// Copyright 2024-2026, University of Colorado Boulder
 
 /**
  * SingleCoinViewManager is responsible for creating and animating the motion of the single coin that is used in the

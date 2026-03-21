@@ -1,4 +1,4 @@
-// Copyright 2024-2025, University of Colorado Boulder
+// Copyright 2024-2026, University of Colorado Boulder
 
 /**
  * SmallCoinNode portrays the relatively small coins that are used in the "Multiple Coin Measurements" area on the Coins

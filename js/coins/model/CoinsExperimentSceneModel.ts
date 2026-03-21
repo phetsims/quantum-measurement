@@ -1,4 +1,4 @@
-// Copyright 2024-2025, University of Colorado Boulder
+// Copyright 2024-2026, University of Colorado Boulder
 
 /**
  * CoinsExperimentSceneModel is the main model class for the "Classical Coin" and "Quantum Coin" scenes on the "Coins"

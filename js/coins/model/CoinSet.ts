@@ -1,4 +1,4 @@
-// Copyright 2024-2025, University of Colorado Boulder
+// Copyright 2024-2026, University of Colorado Boulder
 
 /**
  * CoinSet models a set of classical or quantum coins.  The face of each of these coins can be in one of two states or,

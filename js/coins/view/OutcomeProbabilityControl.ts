@@ -1,4 +1,4 @@
-// Copyright 2024-2025, University of Colorado Boulder
+// Copyright 2024-2026, University of Colorado Boulder
 
 /**
  * OutcomeProbabilityControl is a UI component that allows the user to control the probability of the outcome for
