@@ -170,4 +170,6 @@ type StringsType = {
 
 const QuantumMeasurementStrings = getStringModule( 'QUANTUM_MEASUREMENT' ) as StringsType;
 
+quantumMeasurement.register( 'QuantumMeasurementStrings', QuantumMeasurementStrings );
+
 export default QuantumMeasurementStrings;
