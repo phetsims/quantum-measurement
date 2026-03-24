@@ -21,7 +21,7 @@
     "branch": "HEAD"
   },
   "joist": {
-    "sha": "44e15a069a1f080778502b1ef16ee8c7aa49f907",
+    "sha": "58999a36d1f98b1a601ba469c62efaf238780e62",
     "branch": "HEAD"
   },
   "kite": {
@@ -57,7 +57,7 @@
     "branch": "HEAD"
   },
   "quantum-measurement": {
-    "sha": "bdff4bcf5f26ddfebdc5ef79035735c3944d6813",
+    "sha": "adf6eca2163bf7b5e530a6c9bf3f09ce3106381b",
     "branch": "1.0"
   },
   "query-string-machine": {
