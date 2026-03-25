@@ -57,7 +57,7 @@
     "branch": "HEAD"
   },
   "quantum-measurement": {
-    "sha": "adf6eca2163bf7b5e530a6c9bf3f09ce3106381b",
+    "sha": "5b42a460c6153f2fd8867ac4bafde1d21f593e67",
     "branch": "1.0"
   },
   "query-string-machine": {
@@ -65,7 +65,7 @@
     "branch": "HEAD"
   },
   "scenery": {
-    "sha": "31ecb23a2146d1bd34615179bfe9e95eac23ac90",
+    "sha": "9c5bf8638d0c3634b2d8ecc1c5a1255822d3bf71",
     "branch": "HEAD"
   },
   "scenery-phet": {
