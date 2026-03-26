@@ -45,7 +45,7 @@
     "branch": "HEAD"
   },
   "phet-io-wrappers": {
-    "sha": "4169c3e77fcbc5a9d59c327b5be2c914e8815170",
+    "sha": "e45db62e488f060b816b5efb08ffda221ff24f25",
     "branch": "HEAD"
   },
   "phetcommon": {
@@ -57,7 +57,7 @@
     "branch": "HEAD"
   },
   "quantum-measurement": {
-    "sha": "8c11cfce478998af409dcf5499100570a002cde2",
+    "sha": "3c7c080c707cea75a56f25130d485979a749760e",
     "branch": "1.0"
   },
   "query-string-machine": {
