@@ -37,13 +37,13 @@ and to supplement the internal documentation (source code comments) and external
 
 Before reading this document, please read:
 
-* [model.md](https://github.com/phetsims/quantum-measurement/blob/main/doc/model.md), a high-level description of the
+* [model.md](model.md), a high-level description of the
   simulation model.
 
 You are also encouraged to read:
 
-* [PhET Development Overview](https://github.com/phetsims/phet-info/blob/main/doc/phet-development-overview.md)
-* [PhET Software Design Patterns](https://github.com/phetsims/phet-info/blob/main/doc/phet-software-design-patterns.md)
+* [PhET Development Overview](../../phet-info/doc/phet-development-overview.md)
+* [PhET Software Design Patterns](../../phet-info/doc/phet-software-design-patterns.md)
 * [Quantum Measurement HTML5](https://docs.google.com/document/d/1RRVAM0oqUhmORINl2s9Uyp_7tE7FAxunmZ_qMx7cv5c/edit?usp=sharing) (
   Parts of this are likely to be stale.)
 
